@@ -40,12 +40,16 @@
 
 #define I2C_HC_ADDR 0x55
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #ifdef _CH_
 #pragma package <chi2cio>
+#pragma package <chbluetooth>
+#include <i2c-io-api.h>
+#include <i2c.h>
+#include <i2c-api.h>
+#endif
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 typedef struct iMobot_s {
