@@ -40,9 +40,11 @@ extern "C" {
 typedef struct iMobot_s {
   int i2cDev;
   unsigned short enc[4];
+  int socket;
 } iMobot_t;
 
 int BR_init(iMobot_t* iMobot);
+int BR_initListenerBluetooth(iMobot_t* iMobot, int channel);
 int BR_pose(iMobot_t* iMobot, unsigned short enc[4], const char motorMask);
 int BR_poseJoint(iMobot_t* iMobot, unsigned short id, unsigned short enc);
 int BR_move(iMobot_t* iMobot, short enc[4], const char motorMask);
@@ -55,6 +57,9 @@ int BR_isBusy(iMobot_t* iMobot);
 int BR_getJointAngles(iMobot_t* iMobot, double angle[4]);
 int BR_setSpeed(iMobot_t* iMobot, double speed[4], const char motorMask);
 int BR_getSpeed(iMobot_t* iMobot, double speed[4]);
+int BR_listenerMainLoop(iMobot_t* iMobot);
+int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const char* buf);
+int BR_terminate(iMobot_t* iMobot);
 
 
 

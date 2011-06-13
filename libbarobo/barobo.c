@@ -6,6 +6,12 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <errno.h>
+
+#include <unistd.h>
+#include <sys/socket.h>
+#include <bluetooth/bluetooth.h>
+#include <bluetooth/rfcomm.h>
 
 int BR_init(iMobot_t* iMobot)
 {
@@ -28,6 +34,48 @@ int BR_init(iMobot_t* iMobot)
     I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORPOS(i)+1, &lobyte);
     iMobot->enc[i] = (hibyte << 8) + lobyte;
   }
+  return 0;
+}
+
+int BR_initListenerBluetooth(iMobot_t* iMobot, int channel)
+{
+  struct sockaddr_rc loc_addr = { 0 };
+  int err;
+
+  // allocate socket
+  iMobot->socket = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
+  if (iMobot->socket < 0) {
+    fprintf(stderr, "Error allocating socket.\n");
+    exit(-1);
+  }
+
+  // bind socket to port 1 of the first available 
+  // local bluetooth adapter
+  loc_addr.rc_family = AF_BLUETOOTH;
+#ifdef _CH_
+  loc_addr.rc_bdaddr.b[0] = 0;
+  loc_addr.rc_bdaddr.b[1] = 0;
+  loc_addr.rc_bdaddr.b[2] = 0;
+  loc_addr.rc_bdaddr.b[3] = 0;
+  loc_addr.rc_bdaddr.b[4] = 0;
+  loc_addr.rc_bdaddr.b[5] = 0;
+#else
+  loc_addr.rc_bdaddr = *BDADDR_ANY;
+#endif
+  loc_addr.rc_channel = (uint8_t) channel;
+  err = bind(iMobot->socket, (struct sockaddr *)&loc_addr, sizeof(loc_addr));
+  if(err < 0) {
+    fprintf(stderr, "error binding. %s:%d\n", strerror(errno), errno);
+    exit(-1);
+  }
+
+  // put socket into listening mode
+  err = listen(iMobot->socket, 1);
+  if(err < 0) {
+    fprintf(stderr, "error listen. %s \n", strerror(err));
+    exit(-1);
+  }
+
   return 0;
 }
 
@@ -94,6 +142,46 @@ int BR_isBusy(iMobot_t* iMobot)
 
 int BR_getJointAngles(iMobot_t* iMobot, double angle[4])
 {
+  return 0;
+}
+
+int BR_listenerMainLoop(iMobot_t* iMobot)
+{
+  struct sockaddr_rc rem_addr = { 0 };
+  char buf[1024] = { 0 };
+  int client, bytes_read, err;
+  socklen_t opt = sizeof(rem_addr);
+  // accept connections
+  while(1) {
+    client = accept(iMobot->socket, (struct sockaddr *)&rem_addr, &opt);
+    if (client < 0) {
+      fprintf(stderr, "Error accepting connection\n");
+      exit(-1);
+    }
+
+    ba2str( &rem_addr.rc_bdaddr, buf );
+    fprintf(stderr, "accepted connection from %s\n", buf);
+    memset(buf, 0, sizeof(buf));
+
+    // read data from the client
+    err = 0;
+    while (err == 0) {
+      bytes_read = read(client, buf, sizeof(buf));
+      if( bytes_read > 0 ) {
+        printf("received [%s]\n", buf);
+        err = BR_slaveProcessCommand(iMobot, client, bytes_read, buf);
+      } else {
+        err = -1;
+      }
+    }
+    if(err == -1) {
+      continue;
+    }
+
+    // close connection
+    close(client);
+  }
+  close(iMobot->socket);
   return 0;
 }
 

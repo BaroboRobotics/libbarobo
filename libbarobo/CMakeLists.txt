@@ -8,7 +8,7 @@ add_library(barobo
   barobo.c
   )
 
-target_link_libraries(barobo i2c)
+target_link_libraries(barobo i2c bluetooth)
 
 add_executable(test
   test.c
