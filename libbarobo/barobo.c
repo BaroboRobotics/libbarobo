@@ -39,7 +39,7 @@ int BR_pose(iMobot_t* iMobot, unsigned short enc[4], const char motorMask)
   int i;
   uint8_t data[2];
   for(i = 0; i < 4; i++) {
-    if((1<<i) & motorMask == 0) {
+    if(((1<<i) & motorMask) == 0) {
       continue;
     }
     memcpy(&data, &enc[i], 2);
