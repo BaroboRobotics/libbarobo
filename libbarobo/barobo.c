@@ -83,7 +83,6 @@ int BR_pose(iMobot_t* iMobot, unsigned short enc[4], const char motorMask)
 {
   /* Send the desired angles to the iMobot */
   /* Need to convert it to 2 bytes and send to motor*/
-  float _angle;
   int i;
   uint8_t data[2];
   for(i = 0; i < 4; i++) {
@@ -155,8 +154,27 @@ int BR_isBusy(iMobot_t* iMobot)
   return 0;
 }
 
+int BR_getJointAngle(iMobot_t* iMobot, int id,  double* angle)
+{
+  uint8_t hibyte, lobyte;
+  unsigned short s_angle;
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORPOS(id), &hibyte);
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORPOS(id)+1, &lobyte);
+  s_angle = (hibyte << 8) + lobyte;
+  *angle = (double)s_angle/10;
+  return 0;
+}
+
 int BR_getJointAngles(iMobot_t* iMobot, double angle[4])
 {
+  int i;
+  double _angle;
+  for(i = 0; i < 4; i++) {
+    BR_getJointAngle(iMobot, i, &_angle);
+    angle[i] = _angle;
+  }
   return 0;
 }
 
@@ -233,6 +251,7 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
   int16_t pos2[2]; /* Slave motor encoder positions */
   uint8_t bytes;
   char mybuf[80];
+  double angle;
 #if DEBUG
   printf("Slave recv: %s\n", buf);
 #endif
@@ -425,8 +444,14 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
   } 
 #endif
   else if (!strncmp("GET_ENC", buf, 7)) {
-    /* TODO */
-    write(socket, "TODO", strlen("TODO")+1);
+    sscanf(buf, "%*s %d", &id);
+    rc = BR_getJointAngle(iMobot, id, &angle);
+    if(rc) {
+      write(socket, "ERROR", strlen("ERROR")+1);
+    } else {
+      sprintf(mybuf, "%lf", angle);
+      write(socket, mybuf, strlen(mybuf)+1);
+    }
   } else if (!strncmp("SET_MOTOR_SPEED", buf, strlen("SET_MOTOR_SPEED"))) {
 #if 0
     int motor_num;
