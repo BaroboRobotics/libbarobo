@@ -135,6 +135,21 @@ int BR_moveWait(iMobot_t* iMobot)
   return 0;
 }
 
+int BR_setMotorSpeed(iMobot_t* iMobot, short enc[4], const char motorMask)
+{
+  int i;
+  uint8_t data[2];
+  for(i = 0; i < 4; i++) {
+    if(((1<<i) & motorMask) == 0) {
+      continue;
+    }
+    memcpy(&data, &enc[i], 2);
+    I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+    I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORSPEED(i), data[0]);
+    printf("Sent speed data 0x%x\n", data[0]);
+  }
+}
+
 int BR_isBusy(iMobot_t* iMobot)
 {
   return 0;
