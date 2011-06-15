@@ -7,7 +7,7 @@ void on_button_connect_clicked(GtkWidget* widget, gpointer data)
   GtkEntry* channel_entry;
   const char* address;
   const char* channel;
-  int c, err;
+  int c, err, i;
 
   address_entry = GTK_ENTRY( gtk_builder_get_object(builder, "entry_connect_address"));
   channel_entry = GTK_ENTRY( gtk_builder_get_object(builder, "entry_connect_channel"));
@@ -24,6 +24,13 @@ void on_button_connect_clicked(GtkWidget* widget, gpointer data)
     contextid = gtk_statusbar_get_context_id(status, "connection");
     gtk_statusbar_push(status, contextid, "Connected.");
     gtk_widget_hide(dialog_connect);
+
+    /* Get the motor speeds and set the sliders */
+    int speed;
+    for(i = 0; i < 4; i++) {
+      BRComms_getMotorSpeed(imobotComms, i, &speed);
+      gtk_range_set_value(GTK_RANGE(scale_motorSpeeds[i]), speed);
+    }
   }
 }
 

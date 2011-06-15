@@ -134,7 +134,7 @@ int BR_moveWait(iMobot_t* iMobot)
   return 0;
 }
 
-int BR_setMotorDirection(iMobot_t* iMobot, unsigned short dir[4], const char motorMask)
+int BR_setMotorDirections(iMobot_t* iMobot, unsigned short dir[4], const char motorMask)
 {
   int i;
   uint8_t data[2];
@@ -146,6 +146,15 @@ int BR_setMotorDirection(iMobot_t* iMobot, unsigned short dir[4], const char mot
     I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
     I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORDIR(i), data[0]);
   }
+}
+
+int BR_setMotorDirection(iMobot_t* iMobot, int id, unsigned short direction)
+{
+  int i;
+  uint8_t data[2];
+  memcpy(&data, &direction, 2);
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORDIR(id), data[0]);
 }
 
 int BR_getMotorDirection(iMobot_t* iMobot, int id, unsigned short *dir)
@@ -258,7 +267,7 @@ int BR_listenerMainLoop(iMobot_t* iMobot)
 }
 
 #define MATCHSTR(str) \
-!strncmp(str, buf, strlen(str))
+(strncmp(str, buf, strlen(str))==0)
 int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const char* buf)
 {
   /* Possible Commands:
@@ -309,7 +318,7 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
   } else if (MATCHSTR("SET_MOTOR_DIRECTION"))
   {
     sscanf(buf, "%*s %d %d", &id, &int32);
-    if(BR_poseJoint(iMobot, id, int32)) {
+    if(BR_setMotorDirection(iMobot, id, int32)) {
       write(socket, "ERROR", 6);
     } else {
       write(socket, "OK", 6);

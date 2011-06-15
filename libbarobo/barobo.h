@@ -52,6 +52,8 @@ int BR_moveRelative(iMobot_t* iMobot, double angle[4], const char motorMask);
 int BR_moveJoint(iMobot_t* iMobot, double angle, int motorNumber);
 int BR_moveJointRelative(iMobot_t* iMobot, double angle, int motorNumber);
 int BR_stop(iMobot_t* iMobot);
+int BR_setMotorDirection(iMobot_t* iMobot, int id, unsigned short direction);
+int BR_setMotorDirections(iMobot_t* iMobot, unsigned short dir[4], const char motorMask);
 int BR_moveWait(iMobot_t* iMobot);
 int BR_isBusy(iMobot_t* iMobot);
 int BR_getJointAngle(iMobot_t* iMobot, int id, double* angle);
