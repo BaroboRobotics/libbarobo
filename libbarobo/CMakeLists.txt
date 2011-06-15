@@ -2,7 +2,7 @@
 
 cmake_minimum_required(VERSION 2.6)
 #include_directories(../opende/sys/include)
-link_directories(../../libi2c)
+link_directories(../libi2c)
 
 add_library(barobo
   barobo.c
