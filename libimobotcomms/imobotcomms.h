@@ -29,6 +29,10 @@ typedef struct br_comms_s
   int socket;
 } br_comms_t;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 int BRComms_init(br_comms_t* comms);
 int BRComms_connect(br_comms_t* comms, const char* address, int channel);
 int BRComms_disconnect(br_comms_t* comms);
@@ -38,8 +42,13 @@ int BRComms_setMotorSpeed(br_comms_t* comms, int id, int speed);
 int BRComms_getMotorSpeed(br_comms_t* comms, int id, int *speed);
 int BRComms_setMotorPosition(br_comms_t* comms, int id, int pos);
 int BRComms_getMotorPosition(br_comms_t* comms, int id, int *pos);
+int BRComms_stop(br_comms_t* comms);
 #ifdef _WIN32
 void baswap(bdaddr_t *dst, const bdaddr_t *src);
 int str2ba(const char *str, bdaddr_t *ba);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 #endif

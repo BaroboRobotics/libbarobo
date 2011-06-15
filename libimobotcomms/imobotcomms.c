@@ -135,6 +135,17 @@ int BRComms_getMotorPosition(br_comms_t* comms, int id, int *pos)
   return 0;
 }
 
+int BRComms_stop(br_comms_t* comms)
+{
+  char buf[160];
+  int status;
+  int bytes_read;
+  status = write(comms->socket, "STOP", 5);
+  if(status < 0) return status;
+  bytes_read = read(comms->socket, buf, sizeof(buf));
+  if(!strcmp(buf, "ERROR")) return -1;
+  return 0;
+}
 
 #ifdef _WIN32
 void baswap(bdaddr_t *dst, const bdaddr_t *src)
