@@ -20,6 +20,13 @@ void on_button_connect_cancel_clicked(GtkWidget* widget, gpointer data);
 
 /* Movement Handlers */
 void on_button_forward_clicked(GtkWidget* widget, gpointer data);
+void on_button_backward_clicked(GtkWidget* widget, gpointer data);
+void on_button_rotateLeft_clicked(GtkWidget* widget, gpointer data);
+void on_button_rotateRight_clicked(GtkWidget* widget, gpointer data);
+void on_button_lfaceForward_clicked(GtkWidget* widget, gpointer data);
+void on_button_lfaceBackward_clicked(GtkWidget* widget, gpointer data);
+void on_button_rfaceForward_clicked(GtkWidget* widget, gpointer data);
+void on_button_rfaceBackward_clicked(GtkWidget* widget, gpointer data);
 void on_button_stop_clicked(GtkWidget* widget, gpointer data);
 void on_button_home_clicked(GtkWidget* widget, gpointer data);
 gboolean on_vscale_motorspeed0_change_value(

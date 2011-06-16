@@ -222,6 +222,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="on_button_rotateLeft_clicked"/>
                         <child>
                           <object class="GtkImage" id="image6">
                             <property name="visible">True</property>
@@ -239,6 +240,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="on_button_rotateRight_clicked"/>
                         <child>
                           <object class="GtkImage" id="image7">
                             <property name="visible">True</property>
@@ -294,6 +296,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="on_button_backward_clicked"/>
                         <child>
                           <object class="GtkImage" id="image5">
                             <property name="visible">True</property>
@@ -313,6 +316,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="on_button_lfaceForward_clicked"/>
                         <child>
                           <object class="GtkImage" id="image2">
                             <property name="visible">True</property>
@@ -326,6 +330,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="on_button_lfaceBackward_clicked"/>
                         <child>
                           <object class="GtkImage" id="image8">
                             <property name="visible">True</property>
@@ -343,6 +348,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="on_button_rfaceForward_clicked"/>
                         <child>
                           <object class="GtkImage" id="image9">
                             <property name="visible">True</property>
@@ -360,6 +366,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="on_button_rfaceBackward_clicked"/>
                         <child>
                           <object class="GtkImage" id="image10">
                             <property name="visible">True</property>
