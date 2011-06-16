@@ -10,6 +10,7 @@
 extern "C" {
 
 int initialize();
+int init_gaits();
 
 /* Main Dialog */
 void on_menuitem_connect_activate(GtkWidget* widget, gpointer data);
@@ -27,6 +28,8 @@ void on_button_lfaceForward_clicked(GtkWidget* widget, gpointer data);
 void on_button_lfaceBackward_clicked(GtkWidget* widget, gpointer data);
 void on_button_rfaceForward_clicked(GtkWidget* widget, gpointer data);
 void on_button_rfaceBackward_clicked(GtkWidget* widget, gpointer data);
+void on_button_inchLeft_clicked(GtkWidget* widget, gpointer data);
+void on_button_inchRight_clicked(GtkWidget* widget, gpointer data);
 void on_button_stop_clicked(GtkWidget* widget, gpointer data);
 void on_button_home_clicked(GtkWidget* widget, gpointer data);
 gboolean on_vscale_motorspeed0_change_value(
@@ -43,6 +46,9 @@ gboolean on_vscale_motorspeed3_button_release_event(GtkRange* range, GdkEvent* e
 /* Misc. */
 void quick_message (GtkWidget* parent, gchar *message);
 int getIterModelFromTreeSelection(GtkTreeView *treeView, GtkTreeModel **model, GtkTreeIter *iter);
+int addGait(Gait* gait);
+Gait* findGait(const char* name);
+int executeGait(Gait* gait);
 }
 
 extern GtkBuilder *builder;

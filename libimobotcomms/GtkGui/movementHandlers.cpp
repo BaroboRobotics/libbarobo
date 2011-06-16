@@ -76,6 +76,16 @@ void on_button_rfaceBackward_clicked(GtkWidget* widget, gpointer data)
   BRComms_setMotorSpeed(imobotComms, 2, speed);
 }
 
+void on_button_inchLeft_clicked(GtkWidget* widget, gpointer data)
+{
+  executeGait(findGait("Inch Left"));
+}
+
+void on_button_inchRight_clicked(GtkWidget* widget, gpointer data)
+{
+  executeGait(findGait("Inch Right"));
+}
+
 void on_button_stop_clicked(GtkWidget* widget, gpointer data)
 {
   BRComms_stop(imobotComms);

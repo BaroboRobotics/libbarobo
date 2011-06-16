@@ -23,6 +23,6 @@ find_package(GTK2 2.10 REQUIRED gtk glade)
 
 if(GTK2_FOUND)
   include_directories(${GTK2_INCLUDE_DIRS})
-  add_executable(GtkiMobotController GtkiMobotController.cpp menuHandlers.cpp connectHandlers.cpp movementHandlers.cpp)
+  add_executable(GtkiMobotController GtkiMobotController.cpp menuHandlers.cpp connectHandlers.cpp movementHandlers.cpp gait.cpp)
   target_link_libraries(GtkiMobotController ${EXTRA_LIBS} ${GTK2_LIBRARIES})
 endif()

@@ -186,6 +186,18 @@ int BR_getMotorSpeed(iMobot_t* iMobot, int id, unsigned short* speed)
   }
 }
 
+int BR_getMotorState(iMobot_t* iMobot, int id, unsigned short* state)
+{
+  uint8_t byte;
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  if(I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORSTATE(id), &byte)) {
+    return -1;
+  } else {
+    *state = byte;
+    return 0;
+  }
+}
+
 int BR_isBusy(iMobot_t* iMobot)
 {
   return 0;
@@ -278,6 +290,7 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
    * GET_MOTOR_SPEED    <id> -- returns uint8_t
    * SET_MOTOR_POSITION <id> <int32_t>
    * GET_MOTOR_POSITION <id> -- returns int32_t
+   * GET_MOTOR_STATE    <id> -- returns uint8_t
    * STOP -- Stop all motors
    */
   int id;
@@ -372,6 +385,15 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
       BR_setMotorSpeed(iMobot, id, 0);
     }
     write(socket, "OK", 3);
+  }  else if (MATCHSTR("GET_MOTOR_STATE")) 
+  {
+    sscanf(buf, "%*s %d", &id);
+    if(BR_getMotorState(iMobot, id, &myshort)) {
+      write(socket, "ERROR", 6);
+    } else {
+      sprintf(mybuf, "%u", myshort);
+      write(socket, mybuf, strlen(mybuf)+1);
+    }
   } else {
     fprintf(stderr, "Received unknown command from master: %s\n", buf);
     write(socket, "ERROR", 6);

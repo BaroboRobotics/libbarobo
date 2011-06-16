@@ -31,6 +31,13 @@
 #define I2C_REG_MOTORSPEED(m) \
   0x35 + 0x10*(m)
 
+#define I2C_REG_MOTORSTATE0 0x37
+#define I2C_REG_MOTORSTATE1 0x47
+#define I2C_REG_MOTORSTATE2 0x57
+#define I2C_REG_MOTORSTATE3 0x67
+#define I2C_REG_MOTORSTATE(m) \
+  0x37 + 0x10*(m)
+
 #define I2C_HC_ADDR 0x55
 
 #ifdef __cplusplus

@@ -16,6 +16,7 @@ int str2ba(const char *str, bdaddr_t *ba);
 int BRComms_init(br_comms_t* comms)
 {
   memset(&comms->addr, 0, sizeof(sockaddr_t));
+  comms->connected = 0;
 #ifdef _WIN32
   WSADATA wsd;
   WSAStartup (MAKEWORD(1,1), &wsd);
@@ -40,18 +41,27 @@ int BRComms_connect(br_comms_t* comms, const char* address, int channel)
 
   // connect to server
   status = connect(comms->socket, (const struct sockaddr *)&comms->addr, sizeof(comms->addr));
+  if(status == 0) {
+    comms->connected = 1;
+  }
   return status;
 }
 
 int BRComms_disconnect(br_comms_t* comms)
 {
 #ifndef _WIN32
-    close(comms->socket);
+  close(comms->socket);
 #else
-    closesocket(comms->socket);
-    CloseHandle((LPVOID)comms->socket);
+  closesocket(comms->socket);
+  CloseHandle((LPVOID)comms->socket);
 #endif
+  comms->connected = 0;
   return 0;
+}
+
+int BRComms_isConnected(br_comms_t* comms)
+{
+  return comms->connected;
 }
 
 int BRComms_setMotorDirection(br_comms_t* comms, int id, int dir)
@@ -133,6 +143,36 @@ int BRComms_getMotorPosition(br_comms_t* comms, int id, int *pos)
   if(!strcmp(buf, "ERROR")) return -1;
   sscanf(buf, "%d", pos);
   return 0;
+}
+
+int BRComms_getMotorState(br_comms_t* comms, int id, int *state)
+{
+  char buf[160];
+  int status;
+  int bytes_read;
+  sprintf(buf, "GET_MOTOR_STATE %d", id);
+  status = write(comms->socket, buf, strlen(buf)+1);
+  if(status < 0) return status;
+  bytes_read = read(comms->socket, buf, sizeof(buf));
+  if(!strcmp(buf, "ERROR")) return -1;
+  sscanf(buf, "%d", state);
+  return 0;
+}
+
+int BRComms_waitMotor(br_comms_t* comms, int id)
+{
+  int state;
+  while(1)
+  {
+    if(BRComms_getMotorState(comms, id, &state)) {
+      return -1;
+    }
+    if(state == 0) {
+      return 0;
+    } else {
+      usleep(100000);
+    }
+  }
 }
 
 int BRComms_stop(br_comms_t* comms)

@@ -17,7 +17,6 @@ int g_numGaits;
 int main(int argc, char* argv[])
 {
   GError     *error = NULL;
-  g_numGaits = 0;
 
   gtk_init(&argc, &argv);
 
@@ -96,6 +95,8 @@ int initialize()
   int i;
   int speed; 
 
+  /* Initialize the gaits */
+  init_gaits();
   imobotComms = (br_comms_t*)malloc(sizeof(br_comms_t));
   BRComms_init(imobotComms);
 
@@ -113,4 +114,199 @@ int initialize()
   int contextid;
   contextid = gtk_statusbar_get_context_id(status, "connection");
   gtk_statusbar_push(status, contextid, "Not connected.");
+}
+
+#define SET_ANGLES(angles, a, b, c, d) \
+	angles[0] = a; \
+	angles[1] = b; \
+	angles[2] = c; \
+	angles[3] = d
+
+int init_gaits()
+{
+  g_numGaits = 0;
+  Gait* gait;
+  float angles[4];
+  unsigned char motorMask;
+	/* Arch */
+	gait = new Gait("Arch");
+	SET_ANGLES(angles, 30, -30, 0, 0);
+	motorMask = 0;
+	motorMask |= (1<<0); motorMask |= (1<<1);
+	gait->addMotion( new Motion(
+		(motion_type_t)MOTION_POSE, angles, motorMask));
+	addGait(gait);
+
+	/* Inch Right */
+	gait = new Gait("Inch Right");
+	SET_ANGLES(angles, 50, 0, 0, 0);
+	motorMask = 0;
+	motorMask |= (1<<0); motorMask |= (1<<1);
+	gait->addMotion(new Motion(
+		(motion_type_t)MOTION_POSE, angles, motorMask));
+	SET_ANGLES(angles, 50, -50, 0, 0);
+	gait->addMotion(new Motion(
+		(motion_type_t)MOTION_POSE, angles, motorMask));
+	SET_ANGLES(angles, 0, -50, 0, 0);
+	gait->addMotion(new Motion(
+		(motion_type_t)MOTION_POSE, angles, motorMask));
+	SET_ANGLES(angles, 0, 0, 0, 0);
+	gait->addMotion(new Motion(
+		(motion_type_t)MOTION_POSE, angles, motorMask));
+	addGait(gait);
+
+	/* Inch Left */
+	gait = new Gait("Inch Left");
+	SET_ANGLES(angles, 0, -50, 0, 0);
+	motorMask = 0;
+	motorMask |= (1<<0); motorMask |= (1<<1);
+	gait->addMotion(new Motion(
+		(motion_type_t)MOTION_POSE, angles, motorMask));
+	SET_ANGLES(angles, 50, -50, 0, 0);
+	gait->addMotion(new Motion(
+		(motion_type_t)MOTION_POSE, angles, motorMask));
+	SET_ANGLES(angles, 50, 0, 0, 0);
+	gait->addMotion(new Motion(
+		(motion_type_t)MOTION_POSE, angles, motorMask));
+	SET_ANGLES(angles, 0, 0, 0, 0);
+	gait->addMotion(new Motion(
+		(motion_type_t)MOTION_POSE, angles, motorMask));
+	addGait(gait);
+
+	/* Stand */
+	gait = new Gait("Stand");
+	SET_ANGLES(angles, 0, 0, 0, 0);
+	motorMask = 0;
+	motorMask |= (1<<0); motorMask |= (1<<1);
+	gait->addMotion(new Motion(
+		(motion_type_t)MOTION_POSE, angles, motorMask));
+	SET_ANGLES(angles, 85, -85, 0, 0);
+	gait->addMotion(new Motion(
+		(motion_type_t)MOTION_POSE, angles, motorMask));
+	SET_ANGLES(angles, 0, 0, 45, 0);
+	motorMask = (1<<2);
+	gait->addMotion(new Motion(
+		(motion_type_t)MOTION_MOVE, angles, motorMask));
+	SET_ANGLES(angles, -20, 0, 0, 0);
+	motorMask = (1<<0);
+	gait->addMotion(new Motion(
+		(motion_type_t)MOTION_POSE, angles, motorMask));
+	addGait(gait);
+
+	/* Stand turn Right */
+	gait = new Gait("Stand Turn Right");
+	SET_ANGLES(angles, 0, 0, 30, 0);
+	motorMask = 1<<2;
+	gait->addMotion(new Motion(
+		(motion_type_t)MOTION_MOVE, angles, motorMask));
+	addGait(gait);
+
+	/* Stand turn left */
+	gait = new Gait("Stand Turn Left");
+	SET_ANGLES(angles, 0, 0, -30, 0);
+	gait->addMotion(new Motion(
+		(motion_type_t)MOTION_MOVE, angles, motorMask));
+	addGait(gait);
+
+	/* Right Faceplate Forward */
+	gait = new Gait("Right Face Forward");
+	SET_ANGLES(angles, 0, 0, 10, 0);
+	motorMask = 1<<2;
+	gait->addMotion(new Motion(
+		(motion_type_t)MOTION_MOVE, angles, motorMask));
+	addGait(gait);
+
+	/* Right Faceplate Backward */
+	gait = new Gait("Right Face Backward");
+	SET_ANGLES(angles, 0, 0, -10, 0);
+	motorMask = 1<<2;
+	gait->addMotion(new Motion(
+		(motion_type_t)MOTION_MOVE, angles, motorMask));
+	addGait(gait);
+
+	/* Left Faceplate Forward */
+	gait = new Gait("Left Face Backward");
+	SET_ANGLES(angles, 0, 0, 0, -10);
+	motorMask = 1<<3;
+	gait->addMotion(new Motion(
+		(motion_type_t)MOTION_MOVE, angles, motorMask));
+	addGait(gait);
+
+	/* Left Faceplate Backward */
+	gait = new Gait("Left Face Backward");
+	SET_ANGLES(angles, 0, 0, 0, 10);
+	motorMask = 1<<3;
+	gait->addMotion(new Motion(
+		(motion_type_t)MOTION_MOVE, angles, motorMask));
+	addGait(gait);
+
+	/* Unstand */
+	gait = new Gait("Unstand");
+	SET_ANGLES(angles, 85, -85, 0, 0);
+	motorMask = 1<<0; motorMask |= 1<<1;
+	gait->addMotion(new Motion(
+		(motion_type_t)MOTION_POSE, angles, motorMask));
+	SET_ANGLES(angles, 0, 0, 0, 0);
+	gait->addMotion(new Motion(
+		(motion_type_t)MOTION_POSE, angles, motorMask));
+	addGait(gait);
+
+	/* Skinny */
+	gait = new Gait("Skinny");
+	SET_ANGLES(angles, 85, 85, 0, 0);
+	motorMask = 1<<0; motorMask |= 1<<1;
+	gait->addMotion(new Motion(
+		(motion_type_t)MOTION_POSE, angles, motorMask));
+	addGait(gait);
+
+  return 0;
+}
+#undef SET_ANGLES
+
+int addGait(Gait* gait)
+{
+	g_gaits[g_numGaits] = gait;
+	g_numGaits++;
+	return 0;
+}
+
+Gait* findGait(const char* name)
+{
+  int i;
+  for(i = 0; i < g_numGaits; i++) {
+    if(!strcmp(name, g_gaits[i]->getName())) {
+      return g_gaits[i];
+    }
+  }
+  return NULL;
+}
+
+int executeGait(Gait* gait)
+{
+  int i,j;
+  const Motion* motion;
+  unsigned char motorMask;
+  const int* encs;
+  for(i = 0; i < gait->getNumMotions(); i++) {
+    motion = gait->getMotion(i);
+    switch(motion->getType()) {
+      case MOTION_MOVE:
+        printf("MOVE type motions not supported yet. %s:%d\n", __FILE__, __LINE__);
+        break;
+      case MOTION_POSE:
+        encs = motion->getEncs();
+        motorMask = motion->getMotorMask();
+        for(j = 0; j<4; j++) {
+          if((1<<j) & motorMask) {
+            BRComms_setMotorDirection(imobotComms, j, 0);
+            BRComms_setMotorSpeed(imobotComms, j, 
+                (int)gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[j])));
+            BRComms_setMotorPosition(imobotComms, j, encs[j]);
+            BRComms_waitMotor(imobotComms, j);
+          }
+        }
+        break;
+    }
+  }
+  return 0;
 }
