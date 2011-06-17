@@ -194,6 +194,7 @@ int BR_getMotorState(iMobot_t* iMobot, int id, unsigned short* state)
     return -1;
   } else {
     *state = byte;
+    printf("Got motor state: %u\n", *state);
     return 0;
   }
 }

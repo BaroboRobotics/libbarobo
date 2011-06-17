@@ -32,12 +32,27 @@ void on_button_inchLeft_clicked(GtkWidget* widget, gpointer data);
 void on_button_inchRight_clicked(GtkWidget* widget, gpointer data);
 void on_button_stop_clicked(GtkWidget* widget, gpointer data);
 void on_button_home_clicked(GtkWidget* widget, gpointer data);
+void on_button_playGait_clicked(GtkWidget* widget, gpointer data);
 gboolean on_vscale_motorspeed0_change_value(
     GtkRange* range,
     GtkScrollType scroll,
     gdouble value,
     gpointer user_data);
 void on_vscale_motorspeed0_value_changed(GtkRange* range, gpointer data);
+
+void on_button_motor0forward_clicked(GtkWidget* widget, gpointer data);
+void on_button_motor1forward_clicked(GtkWidget* widget, gpointer data);
+void on_button_motor2forward_clicked(GtkWidget* widget, gpointer data);
+void on_button_motor3forward_clicked(GtkWidget* widget, gpointer data);
+void on_button_motor0stop_clicked(GtkWidget* widget, gpointer data);
+void on_button_motor1stop_clicked(GtkWidget* widget, gpointer data);
+void on_button_motor2stop_clicked(GtkWidget* widget, gpointer data);
+void on_button_motor3stop_clicked(GtkWidget* widget, gpointer data);
+void on_button_motor0back_clicked(GtkWidget* widget, gpointer data);
+void on_button_motor1back_clicked(GtkWidget* widget, gpointer data);
+void on_button_motor2back_clicked(GtkWidget* widget, gpointer data);
+void on_button_motor3back_clicked(GtkWidget* widget, gpointer data);
+
 gboolean on_vscale_motorspeed0_button_release_event(GtkRange* range, GdkEvent* event, gpointer data);
 gboolean on_vscale_motorspeed1_button_release_event(GtkRange* range, GdkEvent* event, gpointer data);
 gboolean on_vscale_motorspeed2_button_release_event(GtkRange* range, GdkEvent* event, gpointer data);
@@ -49,6 +64,7 @@ int getIterModelFromTreeSelection(GtkTreeView *treeView, GtkTreeModel **model, G
 int addGait(Gait* gait);
 Gait* findGait(const char* name);
 int executeGait(Gait* gait);
+gboolean updateMotorAngles(gpointer data);
 }
 
 extern GtkBuilder *builder;

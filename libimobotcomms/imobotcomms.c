@@ -170,7 +170,7 @@ int BRComms_waitMotor(br_comms_t* comms, int id)
     if(state == 0) {
       return 0;
     } else {
-      usleep(100000);
+      usleep(200000);
     }
   }
 }

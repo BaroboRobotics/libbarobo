@@ -11,6 +11,8 @@ GtkWidget  *window;
 GtkWidget  *dialog_connect;
 GtkVScale* scale_motorSpeeds[4];
 
+GtkEntry* motorAngleEntries[4];
+
 Gait* g_gaits[100];
 int g_numGaits;
 
@@ -114,6 +116,15 @@ int initialize()
   int contextid;
   contextid = gtk_statusbar_get_context_id(status, "connection");
   gtk_statusbar_push(status, contextid, "Not connected.");
+
+  /* Get the motor angle entries */
+  motorAngleEntries[0] = GTK_ENTRY(gtk_builder_get_object(builder, "entry_motor0angle"));
+  motorAngleEntries[1] = GTK_ENTRY(gtk_builder_get_object(builder, "entry_motor1angle"));
+  motorAngleEntries[2] = GTK_ENTRY(gtk_builder_get_object(builder, "entry_motor2angle"));
+  motorAngleEntries[3] = GTK_ENTRY(gtk_builder_get_object(builder, "entry_motor3angle"));
+
+  /* Set up the motor angle entries handler */
+  g_timeout_add(333, updateMotorAngles, NULL);
 }
 
 #define SET_ANGLES(angles, a, b, c, d) \
@@ -180,13 +191,13 @@ int init_gaits()
 	motorMask |= (1<<0); motorMask |= (1<<1);
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, 85, -85, 0, 0);
+	SET_ANGLES(angles, 70, -80, 0, 0);
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_POSE, angles, motorMask));
 	SET_ANGLES(angles, 0, 0, 45, 0);
 	motorMask = (1<<2);
 	gait->addMotion(new Motion(
-		(motion_type_t)MOTION_MOVE, angles, motorMask));
+		(motion_type_t)MOTION_POSE, angles, motorMask));
 	SET_ANGLES(angles, -20, 0, 0, 0);
 	motorMask = (1<<0);
 	gait->addMotion(new Motion(
@@ -259,6 +270,18 @@ int init_gaits()
 		(motion_type_t)MOTION_POSE, angles, motorMask));
 	addGait(gait);
 
+  /* Add them to the liststore */
+  int i;
+  GtkTreeIter iter;
+  GtkListStore* gaits_liststore = 
+      GTK_LIST_STORE(gtk_builder_get_object(builder, "liststore_gaits"));
+  for(i = 0; i < g_numGaits; i++) {
+    gtk_list_store_append(gaits_liststore, &iter);
+    gtk_list_store_set(gaits_liststore, &iter, 
+      0, g_gaits[i]->getName(),
+      -1 );
+  }
+
   return 0;
 }
 #undef SET_ANGLES
@@ -287,26 +310,68 @@ int executeGait(Gait* gait)
   const Motion* motion;
   unsigned char motorMask;
   const int* encs;
+  int myencs[4];
+  int pos;
   for(i = 0; i < gait->getNumMotions(); i++) {
     motion = gait->getMotion(i);
+    encs = motion->getEncs();
+    for(j = 0; j < 4; j++) {
+      myencs[j] = encs[j];
+    }
+    motorMask = motion->getMotorMask();
+
     switch(motion->getType()) {
       case MOTION_MOVE:
-        printf("MOVE type motions not supported yet. %s:%d\n", __FILE__, __LINE__);
+        for(j = 0; j < 4; j++) {
+          if((1<<j) & motorMask) {
+            BRComms_getMotorPosition(imobotComms, j, &pos);
+            pos += encs[j];
+            BRComms_setMotorDirection(imobotComms, j, 0);
+            BRComms_setMotorSpeed(imobotComms, j, 
+                (int)gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[j])));
+            BRComms_setMotorPosition(imobotComms, j, pos);
+          }
+        }
         break;
       case MOTION_POSE:
-        encs = motion->getEncs();
-        motorMask = motion->getMotorMask();
         for(j = 0; j<4; j++) {
           if((1<<j) & motorMask) {
             BRComms_setMotorDirection(imobotComms, j, 0);
             BRComms_setMotorSpeed(imobotComms, j, 
                 (int)gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[j])));
             BRComms_setMotorPosition(imobotComms, j, encs[j]);
-            BRComms_waitMotor(imobotComms, j);
           }
         }
         break;
     }
+    for(j = 0; j<4; j++) {
+      if((1<<j) & motorMask) {
+        BRComms_waitMotor(imobotComms, j);
+      }
+    }
   }
   return 0;
+}
+
+gboolean updateMotorAngles(gpointer data)
+{
+  int pos;
+  float fpos;
+  int i;
+  char buf[40];
+  if(!BRComms_isConnected(imobotComms)) {
+    for(i = 0; i < 4; i++) {
+      gtk_entry_set_text(motorAngleEntries[i], "N/A");
+    }
+    return TRUE;
+  }
+  for(i = 0; i < 4; i++) {
+    BRComms_getMotorPosition(imobotComms, i, &pos);
+    fpos = (float)pos/10;
+    while(fpos > 180) fpos -= 360;
+    while(fpos < -180) fpos += 360;
+    sprintf(buf, "%.1f", fpos);
+    gtk_entry_set_text(motorAngleEntries[i], buf);
+  }
+  return TRUE;
 }

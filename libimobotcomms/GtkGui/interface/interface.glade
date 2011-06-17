@@ -7,11 +7,6 @@
       <!-- column-name Name -->
       <column type="gchararray"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Test</col>
-      </row>
-    </data>
   </object>
   <object class="GtkWindow" id="window1">
     <signal name="delete_event" handler="gtk_main_quit"/>
@@ -98,49 +93,365 @@
                       <object class="GtkHBox" id="hbox2">
                         <property name="visible">True</property>
                         <child>
-                          <object class="GtkVScale" id="vscale_motorspeed0">
+                          <object class="GtkVBox" id="vbox4">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="inverted">True</property>
-                            <property name="fill_level">100</property>
-                            <property name="digits">0</property>
-                            <signal name="button_release_event" handler="on_vscale_motorspeed0_button_release_event"/>
+                            <child>
+                              <object class="GtkVScale" id="vscale_motorspeed0">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="inverted">True</property>
+                                <property name="fill_level">100</property>
+                                <property name="digits">0</property>
+                                <signal name="button_release_event" handler="on_vscale_motorspeed0_button_release_event"/>
+                              </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="button_motor0forward">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="on_button_motor0forward_clicked"/>
+                                <child>
+                                  <object class="GtkImage" id="image13">
+                                    <property name="visible">True</property>
+                                    <property name="pixbuf">16px_move_forward.svg</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="button_motor0stop">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="on_button_motor0stop_clicked"/>
+                                <child>
+                                  <object class="GtkImage" id="image14">
+                                    <property name="visible">True</property>
+                                    <property name="pixbuf">16px_stop.svg</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="button_motor0back">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="on_button_motor0back_clicked"/>
+                                <child>
+                                  <object class="GtkImage" id="image15">
+                                    <property name="visible">True</property>
+                                    <property name="pixbuf">16px_move_back.svg</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="entry_motor0angle">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="editable">False</property>
+                                <property name="invisible_char">&#x25CF;</property>
+                                <property name="width_chars">5</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">4</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkVScale" id="vscale_motorspeed1">
+                          <object class="GtkVBox" id="vbox5">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="inverted">True</property>
-                            <property name="digits">0</property>
-                            <signal name="button_release_event" handler="on_vscale_motorspeed1_button_release_event"/>
+                            <child>
+                              <object class="GtkVScale" id="vscale_motorspeed1">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="inverted">True</property>
+                                <property name="digits">0</property>
+                                <signal name="button_release_event" handler="on_vscale_motorspeed1_button_release_event"/>
+                              </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="button_motor1forward">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="on_button_motor1forward_clicked"/>
+                                <child>
+                                  <object class="GtkImage" id="image16">
+                                    <property name="visible">True</property>
+                                    <property name="pixbuf">16px_move_forward.svg</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="button_motor1stop">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="on_button_motor1stop_clicked"/>
+                                <child>
+                                  <object class="GtkImage" id="image19">
+                                    <property name="visible">True</property>
+                                    <property name="pixbuf">16px_stop.svg</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="button_motor1back">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="on_button_motor1back_clicked"/>
+                                <child>
+                                  <object class="GtkImage" id="image22">
+                                    <property name="visible">True</property>
+                                    <property name="pixbuf">16px_move_back.svg</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="entry_motor1angle">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="editable">False</property>
+                                <property name="invisible_char">&#x25CF;</property>
+                                <property name="width_chars">5</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">4</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkVScale" id="vscale_motorspeed2">
+                          <object class="GtkVBox" id="vbox6">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="inverted">True</property>
-                            <property name="digits">0</property>
-                            <signal name="button_release_event" handler="on_vscale_motorspeed2_button_release_event"/>
+                            <child>
+                              <object class="GtkVScale" id="vscale_motorspeed2">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="inverted">True</property>
+                                <property name="digits">0</property>
+                                <signal name="button_release_event" handler="on_vscale_motorspeed2_button_release_event"/>
+                              </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="button_motor2forward">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="on_button_motor2forward_clicked"/>
+                                <child>
+                                  <object class="GtkImage" id="image17">
+                                    <property name="visible">True</property>
+                                    <property name="pixbuf">16px_move_forward.svg</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="button_motor2stop">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="on_button_motor2stop_clicked"/>
+                                <child>
+                                  <object class="GtkImage" id="image20">
+                                    <property name="visible">True</property>
+                                    <property name="pixbuf">16px_stop.svg</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="button_motor2back">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="on_button_motor2back_clicked"/>
+                                <child>
+                                  <object class="GtkImage" id="image23">
+                                    <property name="visible">True</property>
+                                    <property name="pixbuf">16px_move_back.svg</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="entry_motor2angle">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="editable">False</property>
+                                <property name="invisible_char">&#x25CF;</property>
+                                <property name="width_chars">5</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">4</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="position">2</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkVScale" id="vscale_motorspeed3">
+                          <object class="GtkVBox" id="vbox7">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="inverted">True</property>
-                            <property name="digits">0</property>
-                            <signal name="button_release_event" handler="on_vscale_motorspeed3_button_release_event"/>
+                            <child>
+                              <object class="GtkVScale" id="vscale_motorspeed3">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="inverted">True</property>
+                                <property name="digits">0</property>
+                                <signal name="button_release_event" handler="on_vscale_motorspeed3_button_release_event"/>
+                              </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="button_motor3forward">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="on_button_motor3forward_clicked"/>
+                                <child>
+                                  <object class="GtkImage" id="image18">
+                                    <property name="visible">True</property>
+                                    <property name="pixbuf">16px_move_forward.svg</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="button_motor3stop">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="on_button_motor3stop_clicked"/>
+                                <child>
+                                  <object class="GtkImage" id="image21">
+                                    <property name="visible">True</property>
+                                    <property name="pixbuf">16px_stop.svg</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="button_motor3back">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="on_button_motor3back_clicked"/>
+                                <child>
+                                  <object class="GtkImage" id="image24">
+                                    <property name="visible">True</property>
+                                    <property name="pixbuf">16px_move_back.svg</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="entry_motor3angle">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="editable">False</property>
+                                <property name="invisible_char">&#x25CF;</property>
+                                <property name="width_chars">5</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">4</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="position">3</property>
@@ -429,7 +740,7 @@
               <object class="GtkVBox" id="vbox3">
                 <property name="visible">True</property>
                 <child>
-                  <object class="GtkTreeView" id="treeview2">
+                  <object class="GtkTreeView" id="treeview_gaits">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="model">liststore_gaits</property>
@@ -455,11 +766,12 @@
                   <object class="GtkVButtonBox" id="vbuttonbox1">
                     <property name="visible">True</property>
                     <child>
-                      <object class="GtkButton" id="button12">
+                      <object class="GtkButton" id="button_playGait">
                         <property name="label" translatable="yes">Play</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="on_button_playGait_clicked"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
