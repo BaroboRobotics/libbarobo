@@ -14,6 +14,9 @@ add_executable(test
   test.c
   )
 
+add_executable(stresstest stresstest.c)
+
 add_executable(i2ctest i2ctest.c)
 
 target_link_libraries(test barobo)
+target_link_libraries(stresstest barobo)

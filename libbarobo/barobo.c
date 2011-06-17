@@ -93,10 +93,8 @@ int BR_pose(iMobot_t* iMobot, short enc[4], const char motorMask)
     /* We should send the high byte first */
     I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
     I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORPOS(i), data[1]);
-    printf("Sent data 0x%x\n", data[1]);
     I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
     I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORPOS(i)+1, data[0]);
-    printf("Sent data 0x%x\n", data[0]);
     iMobot->enc[i] = enc[i];
   }
   
@@ -194,13 +192,24 @@ int BR_getMotorState(iMobot_t* iMobot, int id, unsigned short* state)
     return -1;
   } else {
     *state = byte;
-    printf("Got motor state: %u\n", *state);
     return 0;
   }
 }
 
 int BR_isBusy(iMobot_t* iMobot)
 {
+  int i;
+  uint8_t byte;
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  for(i = 0; i < 4; i++) {
+    if(I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORSTATE(i), &byte)) {
+      return -1;
+    } else {
+      if(byte) {
+        return 1;
+      }
+    }
+  }
   return 0;
 }
 
