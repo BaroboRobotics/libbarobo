@@ -2,6 +2,7 @@
 #define _GTKIMOBOTCONTROLLER_H_
 
 #include <gtk/gtk.h>
+#include <barobo.h>
 #include "gait.h"
 #define MOTION_POSE 0
 #define MOTION_MOVE 1
@@ -65,14 +66,21 @@ int addGait(Gait* gait);
 Gait* findGait(const char* name);
 int executeGait(Gait* gait);
 gboolean updateMotorAngles(gpointer data);
+int setMotorDirection(int motor, int direction);
+int setMotorSpeed(int motor, int speed);
+int stop();
+int setMotorPosition(int motor, int position);
 }
 
 extern GtkBuilder *builder;
 extern br_comms_t *imobotComms;
+extern iMobot_t *iMobot;
 extern GtkWidget  *window;
 extern GtkWidget  *dialog_connect;
 extern Gait* g_gaits[100];
 extern int g_numGaits;
 extern GtkVScale* scale_motorSpeeds[4];
+extern int g_isConnected;
+extern int g_localInit;
 
 #endif

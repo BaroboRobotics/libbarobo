@@ -3,78 +3,78 @@
 
 void on_button_forward_clicked(GtkWidget* widget, gpointer data)
 {
-  BRComms_setMotorDirection(imobotComms, 2, 2);
-  BRComms_setMotorDirection(imobotComms, 3, 1);
+  setMotorDirection(2, 2);
+  setMotorDirection(3, 1);
   int speeds[2];
   speeds[0] = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[2]));
   speeds[1] = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[3]));
-  BRComms_setMotorSpeed(imobotComms, 2, speeds[0]);
-  BRComms_setMotorSpeed(imobotComms, 3, speeds[1]);
+  setMotorSpeed(2, speeds[0]);
+  setMotorSpeed(3, speeds[1]);
 }
 
 void on_button_backward_clicked(GtkWidget* widget, gpointer data)
 {
-  BRComms_setMotorDirection(imobotComms, 2, 1);
-  BRComms_setMotorDirection(imobotComms, 3, 2);
+  setMotorDirection(2, 1);
+  setMotorDirection(3, 2);
   int speeds[2];
   speeds[0] = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[2]));
   speeds[1] = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[3]));
-  BRComms_setMotorSpeed(imobotComms, 2, speeds[0]);
-  BRComms_setMotorSpeed(imobotComms, 3, speeds[1]);
+  setMotorSpeed(2, speeds[0]);
+  setMotorSpeed(3, speeds[1]);
 }
 
 void on_button_rotateLeft_clicked(GtkWidget* widget, gpointer data)
 {
-  BRComms_setMotorDirection(imobotComms, 2, 2);
-  BRComms_setMotorDirection(imobotComms, 3, 2);
+  setMotorDirection(2, 2);
+  setMotorDirection(3, 2);
   int speeds[2];
   speeds[0] = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[2]));
   speeds[1] = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[3]));
-  BRComms_setMotorSpeed(imobotComms, 2, speeds[0]);
-  BRComms_setMotorSpeed(imobotComms, 3, speeds[1]);
+  setMotorSpeed(2, speeds[0]);
+  setMotorSpeed(3, speeds[1]);
 }
 
 void on_button_rotateRight_clicked(GtkWidget* widget, gpointer data)
 {
-  BRComms_setMotorDirection(imobotComms, 2, 1);
-  BRComms_setMotorDirection(imobotComms, 3, 1);
+  setMotorDirection(2, 1);
+  setMotorDirection(3, 1);
   int speeds[2];
   speeds[0] = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[2]));
   speeds[1] = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[3]));
-  BRComms_setMotorSpeed(imobotComms, 2, speeds[0]);
-  BRComms_setMotorSpeed(imobotComms, 3, speeds[1]);
+  setMotorSpeed(2, speeds[0]);
+  setMotorSpeed(3, speeds[1]);
 }
 
 void on_button_lfaceForward_clicked(GtkWidget* widget, gpointer data)
 {
-  BRComms_setMotorDirection(imobotComms, 3, 1);
+  setMotorDirection(3, 1);
   int speed;
   speed = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[3]));
-  BRComms_setMotorSpeed(imobotComms, 3, speed);
+  setMotorSpeed(3, speed);
 }
 
 void on_button_lfaceBackward_clicked(GtkWidget* widget, gpointer data)
 {
-  BRComms_setMotorDirection(imobotComms, 3, 2);
+  setMotorDirection(3, 2);
   int speed;
   speed = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[3]));
-  BRComms_setMotorSpeed(imobotComms, 3, speed);
+  setMotorSpeed(3, speed);
 }
 
 void on_button_rfaceForward_clicked(GtkWidget* widget, gpointer data)
 {
-  BRComms_setMotorDirection(imobotComms, 2, 2);
+  setMotorDirection(2, 2);
   int speed;
   speed = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[2]));
-  BRComms_setMotorSpeed(imobotComms, 2, speed);
+  setMotorSpeed(2, speed);
 }
 
 void on_button_rfaceBackward_clicked(GtkWidget* widget, gpointer data)
 {
-  BRComms_setMotorDirection(imobotComms, 2, 1);
+  setMotorDirection(2, 1);
   int speed;
   speed = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[2]));
-  BRComms_setMotorSpeed(imobotComms, 2, speed);
+  setMotorSpeed(2, speed);
 }
 
 void on_button_inchLeft_clicked(GtkWidget* widget, gpointer data)
@@ -89,12 +89,12 @@ void on_button_inchRight_clicked(GtkWidget* widget, gpointer data)
 
 void on_button_stop_clicked(GtkWidget* widget, gpointer data)
 {
-  BRComms_stop(imobotComms);
+  stop();
   int i;
 
   for(i = 0; i < 4; i++) {
     /* Make all motor direction modes back to auto */
-    BRComms_setMotorDirection(imobotComms, i, 0);
+    setMotorDirection(i, 0);
   }
 }
 
@@ -109,9 +109,9 @@ void on_button_home_clicked(GtkWidget* widget, gpointer data)
     if(speed < 30) {
       speed = 30;
     }
-    BRComms_setMotorSpeed(imobotComms, i, speed);
-    BRComms_setMotorDirection(imobotComms, i, 0);
-    BRComms_setMotorPosition(imobotComms, i, 0);
+    setMotorSpeed(i, speed);
+    setMotorDirection(i, 0);
+    setMotorPosition(i, 0);
   }
 }
 
@@ -145,24 +145,24 @@ void on_button_playGait_clicked(GtkWidget* widget, gpointer data)
 
 void motor_forward(int id)
 {
-  BRComms_setMotorDirection(imobotComms, id, 1);
+  setMotorDirection(id, 1);
   int speed;
   speed = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[id]));
-  BRComms_setMotorSpeed(imobotComms, id, speed);
+  setMotorSpeed(id, speed);
 }
 
 void motor_stop(int id)
 {
-  BRComms_setMotorSpeed(imobotComms, id, 0);
-  BRComms_setMotorDirection(imobotComms, id, 0);
+  setMotorSpeed(id, 0);
+  setMotorDirection(id, 0);
 }
 
 void motor_back(int id)
 {
-  BRComms_setMotorDirection(imobotComms, id, 2);
+  setMotorDirection(id, 2);
   int speed;
   speed = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[id]));
-  BRComms_setMotorSpeed(imobotComms, id, speed);
+  setMotorSpeed(id, speed);
 }
 
 #define ON_MOTOR_BUTTON_CLICKED(id, motion) \
@@ -188,28 +188,28 @@ ON_MOTOR_BUTTON_CLICKED(3, back)
 gboolean on_vscale_motorspeed0_button_release_event(GtkRange* range, GdkEvent* event, gpointer data)
 {
   int speed = (int)gtk_range_get_value(range);
-  BRComms_setMotorSpeed(imobotComms, 0, speed);
+  setMotorSpeed(0, speed);
   return FALSE;
 }
 
 gboolean on_vscale_motorspeed1_button_release_event(GtkRange* range, GdkEvent* event, gpointer data)
 {
   int speed = (int)gtk_range_get_value(range);
-  BRComms_setMotorSpeed(imobotComms, 1, speed);
+  setMotorSpeed(1, speed);
   return FALSE;
 }
 
 gboolean on_vscale_motorspeed2_button_release_event(GtkRange* range, GdkEvent* event, gpointer data)
 {
   int speed = (int)gtk_range_get_value(range);
-  BRComms_setMotorSpeed(imobotComms, 2, speed);
+  setMotorSpeed(2, speed);
   return FALSE;
 }
 
 gboolean on_vscale_motorspeed3_button_release_event(GtkRange* range, GdkEvent* event, gpointer data)
 {
   int speed = (int)gtk_range_get_value(range);
-  BRComms_setMotorSpeed(imobotComms, 3, speed);
+  setMotorSpeed(3, speed);
   return FALSE;
 }
 

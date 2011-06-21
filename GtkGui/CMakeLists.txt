@@ -15,14 +15,14 @@ configure_file (
 include_directories("${PROJECT_BINARY_DIR}")
 
 # Add CiMobotSim library subdirectory and stuff
-include_directories("../")
-link_directories("../")
-set (EXTRA_LIBS ${EXTRA_LIBS} imobotcomms bluetooth)
+include_directories("../libimobotcomms" "../libbarobo" "../libi2c")
+link_directories("../libimobotcomms" "../libbarobo" "../libi2c")
+set (EXTRA_LIBS ${EXTRA_LIBS} imobotcomms barobo i2c bluetooth)
 
 find_package(GTK2 2.10 REQUIRED gtk glade)
 
 if(GTK2_FOUND)
   include_directories(${GTK2_INCLUDE_DIRS})
-  add_executable(GtkiMobotController GtkiMobotController.cpp menuHandlers.cpp connectHandlers.cpp movementHandlers.cpp gait.cpp)
+  add_executable(GtkiMobotController GtkiMobotController.cpp menuHandlers.cpp connectHandlers.cpp movementFunctions.cpp movementHandlers.cpp gait.cpp)
   target_link_libraries(GtkiMobotController ${EXTRA_LIBS} ${GTK2_LIBRARIES})
 endif()

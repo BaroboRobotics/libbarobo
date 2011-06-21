@@ -19,6 +19,7 @@ void on_button_connect_clicked(GtkWidget* widget, gpointer data)
   if(err == 0) {
     /* Change the status bar */
     /* Set the status bar */
+    g_isConnected = 1;
     GtkStatusbar* status = GTK_STATUSBAR(gtk_builder_get_object(builder, "statusbar1"));
     int contextid;
     contextid = gtk_statusbar_get_context_id(status, "connection");

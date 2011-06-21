@@ -34,6 +34,13 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkMenuItem" id="menuitem_localInit">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Init Local I2C bus</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
                         <property name="visible">True</property>
                       </object>
@@ -695,15 +702,6 @@
                       </packing>
                     </child>
                     <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
                       <object class="GtkButton" id="button_home">
                         <property name="label" translatable="yes">Home</property>
                         <property name="visible">True</property>
@@ -715,6 +713,15 @@
                         <property name="top_attach">2</property>
                         <property name="bottom_attach">3</property>
                       </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </object>
                   <packing>

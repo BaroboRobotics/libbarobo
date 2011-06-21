@@ -1,12 +1,14 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
-#include "../imobotcomms.h"
+#include <imobotcomms.h>
+#include <barobo.h>
 #include "gait.h"
 #include "GtkiMobotController.h"
 
 /* Keep the builder global so we can find any widget from anywhere */
 GtkBuilder *builder;
 br_comms_t *imobotComms;
+iMobot_t *iMobot;
 GtkWidget  *window;
 GtkWidget  *dialog_connect;
 GtkVScale* scale_motorSpeeds[4];
@@ -15,6 +17,8 @@ GtkEntry* motorAngleEntries[4];
 
 Gait* g_gaits[100];
 int g_numGaits;
+int g_isConnected;
+int g_localInit;
 
 int main(int argc, char* argv[])
 {
@@ -101,6 +105,8 @@ int initialize()
   init_gaits();
   imobotComms = (br_comms_t*)malloc(sizeof(br_comms_t));
   BRComms_init(imobotComms);
+  g_isConnected = 0;
+  g_localInit = 0;
 
   /* Set up the motor speed VScales */
   scale_motorSpeeds[0] = GTK_VSCALE(gtk_builder_get_object( builder, "vscale_motorspeed0"));
