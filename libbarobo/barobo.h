@@ -44,6 +44,10 @@
 extern "C" {
 #endif
 
+#ifdef _CH_
+#pragma package <chi2cio>
+#endif
+
 typedef struct iMobot_s {
   int i2cDev;
   short enc[4];
@@ -75,6 +79,10 @@ int BR_terminate(iMobot_t* iMobot);
 
 #ifdef __cplusplus
 }
+#endif
+
+#ifdef _CH_
+#pragma importf "barobo.c"
 #endif
 
 #endif
