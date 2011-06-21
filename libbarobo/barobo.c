@@ -144,6 +144,7 @@ int BR_setMotorDirections(iMobot_t* iMobot, unsigned short dir[4], const char mo
     I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
     I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORDIR(i), data[0]);
   }
+  return 0;
 }
 
 int BR_setMotorDirection(iMobot_t* iMobot, int id, unsigned short direction)
@@ -153,6 +154,7 @@ int BR_setMotorDirection(iMobot_t* iMobot, int id, unsigned short direction)
   memcpy(&data, &direction, 2);
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
   I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORDIR(id), data[0]);
+  return 0;
 }
 
 int BR_getMotorDirection(iMobot_t* iMobot, int id, unsigned short *dir)
@@ -170,6 +172,7 @@ int BR_setMotorSpeed(iMobot_t* iMobot, int id, unsigned short speed)
   memcpy(&data, &speed, 2);
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
   I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORSPEED(id), data[0]);
+  return 0;
 }
 
 int BR_getMotorSpeed(iMobot_t* iMobot, int id, unsigned short* speed)
