@@ -292,6 +292,21 @@ int BR_listenerMainLoop(iMobot_t* iMobot)
   return 0;
 }
 
+int BR_waitMotor(iMobot_t* iMobot, int id)
+{
+  unsigned short state;
+  if(BR_getMotorState(iMobot, id, &state)) {
+    return -1;
+  }
+  while(state != 0) {
+    usleep(100000);
+    if(BR_getMotorState(iMobot, id, &state)) {
+      return -1;
+    }
+  }
+  return 0;
+}
+
 #define MATCHSTR(str) \
 (strncmp(str, buf, strlen(str))==0)
 int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const char* buf)

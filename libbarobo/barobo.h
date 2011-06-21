@@ -75,6 +75,8 @@ int BR_getJointAngle(iMobot_t* iMobot, int id, double* angle);
 int BR_getJointAngles(iMobot_t* iMobot, double angle[4]);
 int BR_setMotorSpeed(iMobot_t* iMobot, int id, unsigned short speed);
 int BR_getMotorSpeed(iMobot_t* iMobot, int id, unsigned short* speed);
+int BR_getMotorState(iMobot_t* iMobot, int id, unsigned short* state);
+int BR_waitMotor(iMobot_t* iMobot, int id);
 int BR_listenerMainLoop(iMobot_t* iMobot);
 int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const char* buf);
 int BR_terminate(iMobot_t* iMobot);
