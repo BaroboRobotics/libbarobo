@@ -163,6 +163,7 @@ int BR_getMotorDirection(iMobot_t* iMobot, int id, unsigned short *dir)
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
   I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORDIR(id), &byte);
   *dir = byte;
+  return 0;
 }
 
 int BR_setMotorSpeed(iMobot_t* iMobot, int id, unsigned short speed)
