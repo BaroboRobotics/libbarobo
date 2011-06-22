@@ -330,29 +330,29 @@ int executeGait(Gait* gait)
       case MOTION_MOVE:
         for(j = 0; j < 4; j++) {
           if((1<<j) & motorMask) {
-            BRComms_getMotorPosition(imobotComms, j, &pos);
+            getMotorPosition(j, &pos);
             pos += encs[j];
-            BRComms_setMotorDirection(imobotComms, j, 0);
-            BRComms_setMotorSpeed(imobotComms, j, 
+            setMotorDirection(j, 0);
+            setMotorSpeed(j, 
                 (int)gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[j])));
-            BRComms_setMotorPosition(imobotComms, j, pos);
+            setMotorPosition(j, pos);
           }
         }
         break;
       case MOTION_POSE:
         for(j = 0; j<4; j++) {
           if((1<<j) & motorMask) {
-            BRComms_setMotorDirection(imobotComms, j, 0);
-            BRComms_setMotorSpeed(imobotComms, j, 
+            setMotorDirection(j, 0);
+            setMotorSpeed(j, 
                 (int)gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[j])));
-            BRComms_setMotorPosition(imobotComms, j, encs[j]);
+            setMotorPosition(j, encs[j]);
           }
         }
         break;
     }
     for(j = 0; j<4; j++) {
       if((1<<j) & motorMask) {
-        BRComms_waitMotor(imobotComms, j);
+        waitMotor(j);
       }
     }
   }
@@ -365,14 +365,14 @@ gboolean updateMotorAngles(gpointer data)
   float fpos;
   int i;
   char buf[40];
-  if(!BRComms_isConnected(imobotComms)) {
+  if(!BRComms_isConnected(imobotComms) && !g_localInit) {
     for(i = 0; i < 4; i++) {
       gtk_entry_set_text(motorAngleEntries[i], "N/A");
     }
     return TRUE;
   }
   for(i = 0; i < 4; i++) {
-    BRComms_getMotorPosition(imobotComms, i, &pos);
+    getMotorPosition(i, &pos);
     fpos = (float)pos/10;
     while(fpos > 180) fpos -= 360;
     while(fpos < -180) fpos += 360;

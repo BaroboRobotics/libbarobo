@@ -73,6 +73,8 @@ int BR_moveWait(iMobot_t* iMobot);
 int BR_isBusy(iMobot_t* iMobot);
 int BR_getJointAngle(iMobot_t* iMobot, int id, double* angle);
 int BR_getJointAngles(iMobot_t* iMobot, double angle[4]);
+int BR_setMotorPosition(iMobot_t* iMobot, int id, short position);
+int BR_getMotorPosition(iMobot_t* iMobot, int id, short* enc);
 int BR_setMotorSpeed(iMobot_t* iMobot, int id, unsigned short speed);
 int BR_getMotorSpeed(iMobot_t* iMobot, int id, unsigned short* speed);
 int BR_getMotorState(iMobot_t* iMobot, int id, unsigned short* state);

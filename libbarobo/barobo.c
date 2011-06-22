@@ -200,6 +200,36 @@ int BR_getMotorState(iMobot_t* iMobot, int id, unsigned short* state)
   }
 }
 
+int BR_setMotorPosition(iMobot_t* iMobot, int id, short position)
+{
+  /* Send the desired angles to the iMobot */
+  /* Need to convert it to 2 bytes and send to motor*/
+  int i;
+  uint8_t data[2];
+  memcpy(&data, &position, 2);
+  /* We should send the high byte first */
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORPOS(i), data[1]);
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORPOS(i)+1, data[0]);
+  iMobot->enc[id] = position;
+
+  return 0;
+}
+
+int BR_getMotorPosition(iMobot_t* iMobot, int id, short *position)
+{
+  uint8_t hibyte, lobyte;
+  short s_angle;
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORPOS(id), &hibyte);
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORPOS(id)+1, &lobyte);
+  s_angle = (hibyte << 8) + lobyte;
+  *position = s_angle;
+  return 0;
+}
+
 int BR_isBusy(iMobot_t* iMobot)
 {
   int i;

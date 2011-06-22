@@ -47,3 +47,31 @@ int setMotorPosition(int motor, int position)
     return -1;
   }
 }
+
+int getMotorPosition(int motor, int *position)
+{
+  short pos;
+  int code;
+  if(g_isConnected) {
+    return BRComms_getMotorPosition(imobotComms, motor, position);
+  } else if (g_localInit) {
+    code = BR_getMotorPosition(iMobot, motor, &pos);
+    *position = pos;
+    return code;
+  } else {
+    fprintf(stderr, "Error: Not initialized or connected.\n");
+    return -1;
+  }
+}
+
+int waitMotor(int motor)
+{
+  if(g_isConnected) {
+    return BRComms_waitMotor(imobotComms, motor);
+  } else if (g_localInit) {
+    return BR_waitMotor(iMobot, motor);
+  } else {
+    fprintf(stderr, "Error: Not initialized or connected.\n");
+    return -1;
+  }
+}
