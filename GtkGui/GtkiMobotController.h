@@ -15,6 +15,7 @@ int init_gaits();
 
 /* Main Dialog */
 void on_menuitem_connect_activate(GtkWidget* widget, gpointer data);
+void on_menuitem_localInit_activate(GtkWidget* widget, gpointer data);
 
 /* Connect Dialog */
 void on_button_connect_clicked(GtkWidget* widget, gpointer data);
