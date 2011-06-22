@@ -38,6 +38,7 @@
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Init Local I2C bus</property>
                         <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_menuitem_localInit_activate"/>
                       </object>
                     </child>
                     <child>
