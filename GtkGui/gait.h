@@ -12,11 +12,9 @@ typedef enum motion_type_e {
 /* A Motion may be a pose or a move */
 class Motion {
   public:
-  Motion(enum motion_type_e motion_type , int enc[4]);
-  Motion(enum motion_type_e motion_type, float angles[4]);
-  Motion(enum motion_type_e motion_type , int enc[4], unsigned char motorMask);
-  Motion(enum motion_type_e motion_type, float angles[4], unsigned char motorMask);
-  const int* getEncs() const;
+  Motion(enum motion_type_e motion_type, double angles[4]);
+  Motion(enum motion_type_e motion_type, double angles[4], unsigned char motorMask);
+  const double* getAngles() const;
   enum motion_type_e getType() const;
   inline unsigned char getMotorMask() const {return _motor_mask;}
 
@@ -24,7 +22,7 @@ class Motion {
 
   private:
   motion_type_t _motion_type;
-  int _enc[4];
+  double _angles[4];
   unsigned char _motor_mask;
 };
 

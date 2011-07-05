@@ -143,7 +143,7 @@ int init_gaits()
 {
   g_numGaits = 0;
   Gait* gait;
-  float angles[4];
+  double angles[4];
   unsigned char motorMask;
 	/* Arch */
 	gait = new Gait("Arch");
@@ -315,15 +315,11 @@ int executeGait(Gait* gait)
   int i,j;
   const Motion* motion;
   unsigned char motorMask;
-  const int* encs;
-  int myencs[4];
-  int pos;
+  const double* angles;
+  double pos;
   for(i = 0; i < gait->getNumMotions(); i++) {
     motion = gait->getMotion(i);
-    encs = motion->getEncs();
-    for(j = 0; j < 4; j++) {
-      myencs[j] = encs[j];
-    }
+    angles = motion->getAngles();
     motorMask = motion->getMotorMask();
 
     switch(motion->getType()) {
@@ -331,7 +327,7 @@ int executeGait(Gait* gait)
         for(j = 0; j < 4; j++) {
           if((1<<j) & motorMask) {
             getMotorPosition(j, &pos);
-            pos += encs[j];
+            pos += angles[j];
             setMotorDirection(j, 0);
             setMotorSpeed(j, 
                 (int)gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[j])));
@@ -345,7 +341,7 @@ int executeGait(Gait* gait)
             setMotorDirection(j, 0);
             setMotorSpeed(j, 
                 (int)gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[j])));
-            setMotorPosition(j, encs[j]);
+            setMotorPosition(j, angles[j]);
           }
         }
         break;
@@ -361,8 +357,7 @@ int executeGait(Gait* gait)
 
 gboolean updateMotorAngles(gpointer data)
 {
-  int pos;
-  float fpos;
+  double position;
   int i;
   char buf[40];
   if(!BRComms_isConnected(imobotComms) && !g_localInit) {
@@ -372,11 +367,10 @@ gboolean updateMotorAngles(gpointer data)
     return TRUE;
   }
   for(i = 0; i < 4; i++) {
-    getMotorPosition(i, &pos);
-    fpos = (float)pos/10;
-    while(fpos > 180) fpos -= 360;
-    while(fpos < -180) fpos += 360;
-    sprintf(buf, "%.1f", fpos);
+    getMotorPosition(i, &position);
+    while(position > 180) position -= 360;
+    while(position < -180) position += 360;
+    sprintf(buf, "%.1f", position);
     gtk_entry_set_text(motorAngleEntries[i], buf);
   }
   return TRUE;

@@ -6,8 +6,8 @@ void terminate();
 int main()
 {
   int i;
-  unsigned short pos1[4] = {640, 0, 0, 0};
-  unsigned short pos2[4] = {-640, 0, 0, 0};
+  double pos1[4] = {64, 0, 0, 0};
+  double pos2[4] = {-64, 0, 0, 0};
   FILE *logfile;
   iMobot_t robot;
   int counter = 0;

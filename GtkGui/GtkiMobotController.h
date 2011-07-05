@@ -71,8 +71,8 @@ gboolean updateMotorAngles(gpointer data);
 int setMotorDirection(int motor, int direction);
 int setMotorSpeed(int motor, int speed);
 int stop();
-int setMotorPosition(int motor, int position);
-int getMotorPosition(int motor, int *position);
+int setMotorPosition(int motor, double position);
+int getMotorPosition(int motor, double *position);
 int waitMotor(int motor);
 }
 

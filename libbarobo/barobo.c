@@ -79,13 +79,18 @@ int BR_initListenerBluetooth(iMobot_t* iMobot, int channel)
   return 0;
 }
 
-int BR_pose(iMobot_t* iMobot, short enc[4], const char motorMask)
+int BR_pose(iMobot_t* iMobot, double angles[4], const char motorMask)
 {
   /* Send the desired angles to the iMobot */
   /* Need to convert it to 2 bytes and send to motor*/
   int i;
   uint8_t data[2];
+  short enc[4];
   for(i = 0; i < 4; i++) {
+    /* Internally, the motor angles are stored as shorts, where each unit
+     * represents 0.1 degrees. Thus, we must multiply this angle value by ten
+     * before sending it to the motor controller. */
+    enc[i] = (short)(angles[i]*10);
     if(((1<<i) & motorMask) == 0) {
       continue;
     }
@@ -101,17 +106,17 @@ int BR_pose(iMobot_t* iMobot, short enc[4], const char motorMask)
   return 0;
 }
 
-int BR_poseJoint(iMobot_t* iMobot, unsigned short id, short enc)
+int BR_poseJoint(iMobot_t* iMobot, unsigned short id, double angle)
 {
-  short _enc[4];
+  double _enc[4];
   if(id > 3) {
     return -1;
   }
-  iMobot->enc[id] = enc;
-  return BR_pose(iMobot, iMobot->enc, (1<<id));
+  _enc[id] = angle;
+  return BR_pose(iMobot, _enc, (1<<id));
 }
 
-int BR_move(iMobot_t* iMobot, short enc[4], const char motorMask)
+int BR_move(iMobot_t* iMobot, double angles[4], const char motorMask)
 {
   return 0;
 }
@@ -200,12 +205,15 @@ int BR_getMotorState(iMobot_t* iMobot, int id, unsigned short* state)
   }
 }
 
-int BR_setMotorPosition(iMobot_t* iMobot, int id, short position)
+int BR_setMotorPosition(iMobot_t* iMobot, int id, double angle)
 {
   /* Send the desired angles to the iMobot */
   /* Need to convert it to 2 bytes and send to motor*/
   int i;
   uint8_t data[2];
+  /* Multiply by 10 to convert to 10*degrees, which are the units used by the
+   * daughterboard. */
+  short position = (short) angle*10;
   memcpy(&data, &position, 2);
   /* We should send the high byte first */
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
@@ -217,7 +225,7 @@ int BR_setMotorPosition(iMobot_t* iMobot, int id, short position)
   return 0;
 }
 
-int BR_getMotorPosition(iMobot_t* iMobot, int id, short *position)
+int BR_getMotorPosition(iMobot_t* iMobot, int id, double *angle)
 {
   uint8_t hibyte, lobyte;
   short s_angle;
@@ -226,7 +234,7 @@ int BR_getMotorPosition(iMobot_t* iMobot, int id, short *position)
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
   I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORPOS(id)+1, &lobyte);
   s_angle = (hibyte << 8) + lobyte;
-  *position = s_angle;
+  *angle = (double)s_angle/10.0;
   return 0;
 }
 
@@ -256,7 +264,7 @@ int BR_getJointAngle(iMobot_t* iMobot, int id,  double* angle)
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
   I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORPOS(id)+1, &lobyte);
   s_angle = (hibyte << 8) + lobyte;
-  *angle = (double)s_angle/10;
+  *angle = (double)s_angle/10.0;
   return 0;
 }
 

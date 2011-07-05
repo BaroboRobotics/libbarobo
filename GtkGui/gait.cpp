@@ -1,39 +1,28 @@
 #include "gait.h"
 #include <stdlib.h>
 
-Motion::Motion(enum motion_type_e motion_type, int enc[4])
+Motion::Motion(enum motion_type_e motion_type, double angles[4])
 {
-  for(int i = 0; i < 4; i++) {
-    _enc[i] = enc[i];
+  int i;
+  for(i = 0; i < 4; i++) {
+    _angles[i] = angles[i];
   }
   _motion_type = motion_type;
 }
 
-Motion::Motion(enum motion_type_e motion_type, float angles[4])
+Motion::Motion(enum motion_type_e motion_type, double angles[4], unsigned char motorMask)
 {
-  DEGREE2ENC(angles, _enc);
-  _motion_type = motion_type;
-}
-
-Motion::Motion(enum motion_type_e motion_type, int enc[4], unsigned char motorMask)
-{
-  for(int i = 0; i < 4; i++) {
-    _enc[i] = enc[i];
+  int i;
+  for(i = 0; i < 4; i++) {
+    _angles[i] = angles[i];
   }
   _motion_type = motion_type;
   _motor_mask = motorMask;
 }
 
-Motion::Motion(enum motion_type_e motion_type, float angles[4], unsigned char motorMask)
+const double* Motion::getAngles() const
 {
-  DEGREE2ENC(angles, _enc);
-  _motion_type = motion_type;
-  _motor_mask = motorMask;
-}
-
-const int* Motion::getEncs() const
-{
-  return _enc;
+  return _angles;
 }
 
 enum motion_type_e Motion::getType() const
@@ -45,7 +34,7 @@ Motion & Motion::operator= (const Motion &rhs)
 {
   _motion_type = rhs._motion_type;
   for(int i = 0; i < 4; i++) {
-    _enc[i] = rhs._enc[i];
+    _angles[i] = rhs._angles[i];
   }
   _motor_mask = rhs._motor_mask;
   return *this;
