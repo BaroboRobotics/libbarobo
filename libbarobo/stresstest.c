@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "barobo.h"
+#include "imobot.h"
 
 void terminate();
 int main()
