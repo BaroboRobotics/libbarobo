@@ -2,7 +2,7 @@
 #define _GTKIMOBOTCONTROLLER_H_
 
 #include <gtk/gtk.h>
-#include <barobo.h>
+#include <imobot.h>
 #include "gait.h"
 #define MOTION_POSE 0
 #define MOTION_MOVE 1

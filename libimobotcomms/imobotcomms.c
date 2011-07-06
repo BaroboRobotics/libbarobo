@@ -123,10 +123,7 @@ int BRComms_setMotorPosition(br_comms_t* comms, int id, double position)
   char buf[160];
   int status;
   int bytes_read;
-  int pos;
-  /* Convert to degrees*10 */
-  pos = position*10;
-  sprintf(buf, "SET_MOTOR_POSITION %d %d", id, pos);
+  sprintf(buf, "SET_MOTOR_POSITION %d %lf", id, position);
   status = write(comms->socket, buf, strlen(buf)+1);
   if(status < 0) return status;
   bytes_read = read(comms->socket, buf, sizeof(buf));
@@ -139,14 +136,12 @@ int BRComms_getMotorPosition(br_comms_t* comms, int id, double *position)
   char buf[160];
   int status;
   int bytes_read;
-  int pos;
   sprintf(buf, "GET_MOTOR_POSITION %d", id);
   status = write(comms->socket, buf, strlen(buf)+1);
   if(status < 0) return status;
   bytes_read = read(comms->socket, buf, sizeof(buf));
   if(!strcmp(buf, "ERROR")) return -1;
-  sscanf(buf, "%d", &pos);
-  *position = (double)pos/10.0;
+  sscanf(buf, "%lf", &position);
   return 0;
 }
 

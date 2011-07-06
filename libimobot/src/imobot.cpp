@@ -355,8 +355,8 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
    * GET_MOTOR_DIRECTION -- returns uint8_t
    * SET_MOTOR_SPEED    <id> <uint8_t speed>
    * GET_MOTOR_SPEED    <id> -- returns uint8_t
-   * SET_MOTOR_POSITION <id> <int32_t>
-   * GET_MOTOR_POSITION <id> -- returns int32_t
+   * SET_MOTOR_POSITION <id> <double>
+   * GET_MOTOR_POSITION <id> -- returns double 
    * GET_MOTOR_STATE    <id> -- returns uint8_t
    * STOP -- Stop all motors
    */
@@ -364,6 +364,7 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
   int32_t int32;
   char mybuf[80];
   unsigned short myshort;
+  double mydouble;
 #if DEBUG
   printf("Slave recv: %s\n", buf);
 #endif
@@ -431,8 +432,8 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
     }
   } else if (MATCHSTR("SET_MOTOR_POSITION"))
   {
-    sscanf(buf, "%*s %d %d", &id, &int32);
-    if(BR_poseJoint(iMobot, id, int32)) {
+    sscanf(buf, "%*s %d %lf", &id, &mydouble);
+    if(BR_poseJoint(iMobot, id, mydouble)) {
       write(socket, "ERROR", 6);
     } else {
       write(socket, "OK", 3);
@@ -440,10 +441,10 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
   } else if (MATCHSTR("GET_MOTOR_POSITION"))
   {
     sscanf(buf, "%*s %d", &id);
-    if(BR_getJointEnc(iMobot, id, &myshort)) {
+    if(BR_getMotorPosition(iMobot, id, &mydouble)) {
       write(socket, "ERROR", 6);
     } else {
-      sprintf(mybuf, "%u", myshort);
+      sprintf(mybuf, "%lf", mydouble);
       write(socket, mybuf, strlen(mybuf)+1);
     }
   } else if (MATCHSTR("STOP")) 
@@ -472,4 +473,107 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
 int BR_terminate(iMobot_t* iMobot)
 {
   return close(iMobot->i2cDev);
+}
+
+/* C++ class function wrappers */
+CiMobot::CiMobot() {
+  BR_init(&_iMobot);
+}
+
+CiMobot::~CiMobot() {
+}
+
+int CiMobot::initListenerBluetooth(int channel)
+{
+  return BR_initListenerBluetooth(&_iMobot, channel);
+}
+
+int CiMobot::pose(double angles[4], const char motorMask)
+{
+  return BR_pose(&_iMobot, angles, motorMask);
+}
+
+int CiMobot::poseJoint(unsigned short id, double angle)
+{
+  return BR_poseJoint(&_iMobot, id, angle);
+}
+
+int CiMobot::move(double angles[4], const char motorMask)
+{
+  return BR_move(&_iMobot, angles, motorMask);
+}
+
+int CiMobot::stop()
+{
+  return BR_stop(&_iMobot);
+}
+
+int CiMobot::setMotorDirection(int id, unsigned short direction)
+{
+  return BR_setMotorDirection(&_iMobot, id, direction);
+}
+
+int CiMobot::setMotorDirections(unsigned short dir[4], const char motorMask)
+{
+  return BR_setMotorDirections(&_iMobot, dir, motorMask);
+}
+
+int CiMobot::moveWait()
+{
+  return BR_moveWait(&_iMobot);
+}
+
+int CiMobot::isBusy()
+{
+  return BR_isBusy(&_iMobot);
+}
+
+int CiMobot::getJointAngle(int id, double* angle)
+{
+  return BR_getJointAngle(&_iMobot, id, angle);
+}
+
+int CiMobot::getJointAngles(double angle[4])
+{
+  return BR_getJointAngles(&_iMobot, angle);
+}
+
+int CiMobot::setMotorPosition(int id, double angle)
+{
+  return BR_setMotorPosition(&_iMobot, id, angle);
+}
+
+int CiMobot::getMotorPosition(int id, double* angle)
+{
+  return BR_getMotorPosition(&_iMobot, id, angle);
+}
+
+int CiMobot::setMotorSpeed(int id, unsigned short speed)
+{
+  return BR_setMotorSpeed(&_iMobot, id, speed);
+}
+
+int CiMobot::getMotorSpeed(int id, unsigned short* speed)
+{
+  return BR_getMotorSpeed(&_iMobot, id, speed);
+}
+
+int CiMobot::getMotorState(int id, unsigned short* state)
+{
+  return BR_getMotorState(&_iMobot, id, state);
+}
+
+int CiMobot::waitMotor(int id)
+{
+  return BR_waitMotor(&_iMobot, id);
+}
+
+int CiMobot::listenerMainLoop()
+{
+  return BR_listenerMainLoop(&_iMobot);
+}
+
+int CiMobot::terminate()
+{
+  return BR_terminate(&_iMobot);
 }
