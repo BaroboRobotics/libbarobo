@@ -61,4 +61,27 @@ int str2ba(const char *str, bdaddr_t *ba);
 #ifdef __cplusplus
 }
 #endif
+
+#if defined (__cplusplus) || defined (_CH_)
+class BRComms {
+  public:
+    BRComms();
+    ~BRComms();
+    int connect(const char* address, int channel);
+    int disconnect();
+    int isConnected();
+    int setMotorDirection(int id, int dir);
+    int getMotorDirection(int id, int *dir);
+    int setMotorSpeed(int id, int speed);
+    int getMotorSpeed(int id, int *speed);
+    int setMotorPosition(int id, double position);
+    int getMotorPosition(int id, double *position);
+    int getMotorState(int id, int *state);
+    int waitMotor(int id);
+    int stop();
+  private:
+    br_comms_t _comms;
+};
+#endif
+
 #endif

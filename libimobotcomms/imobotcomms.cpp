@@ -216,3 +216,69 @@ int str2ba(const char *str, bdaddr_t *ba)
 	return 0;
 }
 #endif
+
+BRComms::BRComms()
+{
+  BRComms_init(&_comms);
+}
+
+int BRComms::connect(const char* address, int channel)
+{
+  return BRComms_connect(&_comms, address, channel);
+}
+
+int BRComms::disconnect()
+{
+  return BRComms_disconnect(&_comms);
+}
+
+int BRComms::isConnected()
+{
+  return BRComms_isConnected(&_comms);
+}
+
+int BRComms::setMotorDirection(int id, int dir)
+{
+  return BRComms_setMotorDirection(&_comms, id, dir);
+}
+
+int BRComms::getMotorDirection(int id, int *dir)
+{
+  return BRComms_getMotorDirection(&_comms, id, dir);
+}
+
+int BRComms::setMotorSpeed(int id, int speed)
+{
+  return BRComms_setMotorSpeed(&_comms, id, speed);
+}
+
+int BRComms::getMotorSpeed(int id, int *speed)
+{
+  return BRComms_getMotorSpeed(&_comms, id, speed);
+}
+
+int BRComms::setMotorPosition(int id, double position)
+{
+  return BRComms_setMotorPosition(&_comms, id, position);
+}
+
+int BRComms::getMotorPosition(int id, double *position)
+{
+  return BRComms_getMotorPosition(&_comms, id, position);
+}
+
+int BRComms::getMotorState(int id, int *state)
+{
+  return BRComms_getMotorState(&_comms, id, state);
+}
+
+int BRComms::waitMotor(int id)
+{
+  return BRComms_waitMotor(&_comms, id);
+}
+
+int BRComms::stop()
+{
+  return BRComms_stop(&_comms);
+}
+
