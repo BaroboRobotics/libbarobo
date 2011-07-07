@@ -1,4 +1,7 @@
-#include "imobot.h"
+#ifdef _CH_
+#pragma package <chimobot>
+#endif
+#include <imobot.h>
 
 int main()
 {
