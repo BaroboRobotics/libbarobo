@@ -25,4 +25,8 @@ if(GTK2_FOUND)
   include_directories(${GTK2_INCLUDE_DIRS})
   add_executable(GtkiMobotController GtkiMobotController.cpp menuHandlers.cpp connectHandlers.cpp movementFunctions.cpp movementHandlers.cpp gait.cpp)
   target_link_libraries(GtkiMobotController ${EXTRA_LIBS} ${GTK2_LIBRARIES})
+  install(TARGETS GtkiMobotController
+          RUNTIME DESTINATION bin)
+  install(FILES GtkiMobotController.desktop DESTINATION /usr/share/applications)
+  install(FILES images/iMobot.png DESTINATION /usr/share/pixmaps)
 endif()

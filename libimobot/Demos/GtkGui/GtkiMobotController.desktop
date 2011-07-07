@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=0.1
+Name=iMobot Controller
+Comment=Control the iMobot
+GenericName=Graphical iMobot Controller
+Type=Application
+Exec=GtkiMobotController
+Icon=iMobot.png
+Terminal=false
+StartupNotify=true
+Categories=Gnome;GTK;Application;Utility;X-Red-Hat-Base
