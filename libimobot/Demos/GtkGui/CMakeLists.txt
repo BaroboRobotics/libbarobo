@@ -33,4 +33,19 @@ if(GTK2_FOUND)
           RUNTIME DESTINATION bin)
   install(FILES GtkiMobotController.desktop DESTINATION /usr/share/applications)
   install(FILES images/iMobot.png DESTINATION /usr/share/pixmaps)
+  install(FILES 
+          interface/16px_move_back.svg     
+          interface/16px_stop.svg      
+          interface/imobot_diagram.svg  
+          interface/inch_right.svg     
+          interface/move_back.svg     
+          interface/rotate_left.svg   
+          interface/stop.svg
+          interface/16px_move_forward.svg  
+          interface/face_backward.svg  
+          interface/inch_left.svg       
+          interface/lface_forward.svg  
+          interface/move_forward.svg  
+          interface/rotate_right.svg
+          DESTINATION /usr/share/gtkimobotcontroller/pixmaps)
 endif()
