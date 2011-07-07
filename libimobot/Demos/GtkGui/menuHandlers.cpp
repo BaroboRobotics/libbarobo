@@ -15,7 +15,6 @@ void on_menuitem_localInit_activate(GtkWidget* widget, gpointer data)
     gtk_range_set_value(GTK_RANGE(scale_motorSpeeds[i]), 30);
   }
   /* Set the status bar */
-  g_isConnected = 1;
   GtkStatusbar* status = GTK_STATUSBAR(gtk_builder_get_object(builder, "statusbar1"));
   int contextid;
   contextid = gtk_statusbar_get_context_id(status, "connection");
