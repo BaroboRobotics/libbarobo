@@ -141,7 +141,7 @@ int BRComms_getMotorPosition(br_comms_t* comms, int id, double *position)
   if(status < 0) return status;
   bytes_read = read(comms->socket, buf, sizeof(buf));
   if(!strcmp(buf, "ERROR")) return -1;
-  sscanf(buf, "%lf", &position);
+  sscanf(buf, "%lf", position);
   return 0;
 }
 
