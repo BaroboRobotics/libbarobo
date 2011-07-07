@@ -8,6 +8,14 @@
 #include <fcntl.h>
 #include <errno.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include "libi2c/i2c-api.h"
+#ifdef __cplusplus
+}
+#endif
+
 #include <unistd.h>
 #include <sys/socket.h>
 #include <bluetooth/bluetooth.h>
@@ -118,7 +126,26 @@ int BR_poseJoint(iMobot_t* iMobot, unsigned short id, double angle)
 
 int BR_move(iMobot_t* iMobot, double angles[4], const char motorMask)
 {
+  int i;
+  for(i = 0; i < 4; i++) {
+    if(((1<<i) & motorMask) == 0) {
+      continue;
+    }
+    if( BR_moveJoint(iMobot, i, angles[i]) ) {
+      return -1;
+    }
+  }
   return 0;
+}
+
+int BR_moveJoint(iMobot_t* iMobot, unsigned short id, double angle)
+{
+  double cur_angle;
+  /* Get the joint's current angle */
+  if(BR_getJointAngle(iMobot, id, &cur_angle)) {
+    return -1;
+  }
+  return BR_poseJoint(iMobot, id, cur_angle + angle);
 }
 
 int BR_stop(iMobot_t* iMobot)
@@ -501,6 +528,11 @@ int CiMobot::poseJoint(unsigned short id, double angle)
 int CiMobot::move(double angles[4], const char motorMask)
 {
   return BR_move(&_iMobot, angles, motorMask);
+}
+
+int CiMobot::moveJoint(unsigned short id, double angle)
+{
+  return BR_moveJoint(&_iMobot, id, angle);
 }
 
 int CiMobot::stop()

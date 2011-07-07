@@ -52,8 +52,6 @@
 extern "C" {
 #endif
 
-#include "libi2c/i2c-api.h"
-
 typedef struct iMobot_s {
   int i2cDev;
   short enc[4];
@@ -65,6 +63,7 @@ int BR_initListenerBluetooth(iMobot_t* iMobot, int channel);
 int BR_pose(iMobot_t* iMobot, double angles[4], const char motorMask);
 int BR_poseJoint(iMobot_t* iMobot, unsigned short id, double angle);
 int BR_move(iMobot_t* iMobot, double angles[4], const char motorMask);
+int BR_moveJoint(iMobot_t* iMobot, unsigned short id, double angle);
 int BR_stop(iMobot_t* iMobot);
 int BR_setMotorDirection(iMobot_t* iMobot, int id, unsigned short direction);
 int BR_setMotorDirections(iMobot_t* iMobot, unsigned short dir[4], const char motorMask);
@@ -94,10 +93,10 @@ class CiMobot {
   public:
     CiMobot();
     ~CiMobot();
-    int initListenerBluetooth(int channel);
     int pose(double angles[4], const char motorMask);
     int poseJoint(unsigned short id, double angle);
     int move(double angles[4], const char motorMask);
+    int moveJoint(unsigned short id, double angle);
     int stop();
     int setMotorDirection(int id, unsigned short direction);
     int setMotorDirections(unsigned short dir[4], const char motorMask);
@@ -111,6 +110,7 @@ class CiMobot {
     int getMotorSpeed(int id, unsigned short* speed);
     int getMotorState(int id, unsigned short* state);
     int waitMotor(int id);
+    int initListenerBluetooth(int channel);
     int listenerMainLoop();
     int terminate();
   private:
