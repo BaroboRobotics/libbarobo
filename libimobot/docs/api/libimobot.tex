@@ -15,23 +15,27 @@ may be used to control the robot.
 Function & Description \\
 \hline
 %\texttt{pose()} \dotfill & Pose multiple joints of the iMobot. \\
-\texttt{poseJoint()} \dotfill & Pose a single joint of the iMobot. \\
-%\texttt{move()} \dotfill & Move joints of the imobot by some amount from their current location. \\
-\texttt{moveJoint()} \dotfill & Move a joint of the imobot by some amount from its current location. \\
-\texttt{stop()} \dotfill & Stop all currently executing motions of the iMobot. \\
-\texttt{setMotorDirection()} \dotfill & Set the motor direction of a motor. Set
-to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
-\texttt{moveWait()} \dotfill & Wait until all motors have stopped moving. \\
-\texttt{isBusy()} \dotfill & See if the robot is currently moving. \\
+\texttt{CiMobot()} \dotfill & The CiMobot constructor function. This function
+is called automatically and should not be called explicitly. \\
+\texttt{\textasciitilde CiMobot()} \dotfill & The CiMobot destructor function. This function
+is called automatically and should not be called explicitly. \\
+& \\
 \texttt{getJointAngle()} \dotfill & Gets a joint's angle. \\
 \texttt{getJointAngles()} \dotfill & Gets all joint angles. \\
 \texttt{getMotorSpeed()} \dotfill & Gets a motor's speed. \\
-\texttt{setMotorSpeed()} \dotfill & Sets a motor's speed. \\
-\texttt{waitMotor()} \dotfill & Wait until the specified motor has stopped moving. \\
 \texttt{initListenerBluetooth()} \dotfill & Initialize the Bluetooth module to
 listen for incoming commands. \\
+\texttt{isBusy()} \dotfill & See if the robot is currently moving. \\
 \texttt{listenerMainLoop()} \dotfill & Main execution loop for the Bluetooth listener. \\
+\texttt{moveJoint()} \dotfill & Move a joint of the imobot by some amount from its current location. \\
+\texttt{moveWait()} \dotfill & Wait until all motors have stopped moving. \\
+\texttt{poseJoint()} \dotfill & Pose a single joint of the iMobot. \\
+\texttt{setMotorDirection()} \dotfill & Set the motor direction of a motor. Set
+to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
+\texttt{setMotorSpeed()} \dotfill & Sets a motor's speed. \\
+\texttt{stop()} \dotfill & Stop all currently executing motions of the iMobot. \\
 \texttt{terminate()} \dotfill & Terminate the robotic control. \\
+\texttt{waitMotor()} \dotfill & Wait until the specified motor has stopped moving. \\
 \hline
 \end{tabular}
 \end{center}
@@ -39,30 +43,30 @@ listen for incoming commands. \\
 \end{table}
 
 \newpage
-\input{api/poseJoint}
-\pagebreak
-\input{api/moveJoint}
-\pagebreak
-\input{api/stop}
-\pagebreak
-\input{api/setMotorDirection}
-\pagebreak
-\input{api/moveWait}
-\pagebreak
-\input{api/isBusy}
-\pagebreak
 \input{api/getJointAngle}
 \pagebreak
 \input{api/getJointAngles}
 \pagebreak
 \input{api/getMotorSpeed}
 \pagebreak
-\input{api/setMotorSpeed}
-\pagebreak
-\input{api/waitMotor}
-\pagebreak
 \input{api/initListenerBluetooth}
+\pagebreak
+\input{api/isBusy}
 \pagebreak
 \input{api/listenerMainLoop}
 \pagebreak
+\input{api/moveJoint}
+\pagebreak
+\input{api/moveWait}
+\pagebreak
+\input{api/poseJoint}
+\pagebreak
+\input{api/setMotorDirection}
+\pagebreak
+\input{api/setMotorSpeed}
+\pagebreak
+\input{api/stop}
+\pagebreak
 \input{api/terminate}
+\pagebreak
+\input{api/waitMotor}
