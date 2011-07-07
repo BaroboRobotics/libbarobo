@@ -1,0 +1,3 @@
+This directory contains the libimobot library and some small demo programs. To
+compile the programs, simply type "cmake ." and "make". The demo programs are
+located in the "Demos/" directory.
