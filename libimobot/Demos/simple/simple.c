@@ -1,3 +1,6 @@
+#ifdef _CH_
+#pragma package <chimobot>
+#endif
 #include <stdio.h>
 #include "imobot.h"
 

@@ -11,7 +11,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#ifdef _CH_
+#pragma package <chi2cio>
+#include <i2c-api.h>
+#else
 #include "libi2c/i2c-api.h"
+#endif
+
 #ifdef __cplusplus
 }
 #endif

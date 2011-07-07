@@ -88,7 +88,7 @@ int BR_terminate(iMobot_t* iMobot);
 #endif
 
 /* The C++ interface for the imobot class */
-#ifdef __cplusplus
+#if defined (__cplusplus) || defined (_CH_)
 class CiMobot {
   public:
     CiMobot();
