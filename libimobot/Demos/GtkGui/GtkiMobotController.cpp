@@ -5,6 +5,11 @@
 #include "gait.h"
 #include "GtkiMobotController.h"
 
+/* These store the embedded glade xml file */                                                             
+extern const char _binary_interface_interface_glade_start[];
+extern size_t _binary_interface_interface_glade_size;
+extern const char _binary_interface_interface_glade_end[];
+
 /* Keep the builder global so we can find any widget from anywhere */
 GtkBuilder *builder;
 br_comms_t *imobotComms;
@@ -30,7 +35,7 @@ int main(int argc, char* argv[])
   builder = gtk_builder_new();
 
   /* Load the UI from the file */
-  if( ! gtk_builder_add_from_file(builder, "interface/interface.glade", &error) )
+  if( ! gtk_builder_add_from_string(builder, _binary_interface_interface_glade_start, strlen(_binary_interface_interface_glade_start), &error) )
   {
     g_warning("%s", error->message);
     g_free(error);

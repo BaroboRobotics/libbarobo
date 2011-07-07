@@ -83,50 +83,21 @@ robotic module.
 % }}} Introduction
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% iMobot Library Installation {{{
-\chapter{iMobot Library Package Contents}
-The contents of the package should include a header file named
-\texttt{imobot.h}, a static library named \texttt{libimobot.a},
-this documentation, a Makefile, and a test program named \texttt{simple.cpp}.
-
-\chapter{Installation}
+\chapter{Quickstart Guide}
+This quickstart guide will enable you to run the provided demo program,
+``simple.cpp'', on the iMobot.
 \begin{enumerate}
-\item Copy the package archive onto the iMobot. One way to do this is to use the
-built in web browser.
-  \begin{enumerate}
-  \item Use a VNC client to connect to the imobot. The default IP address of the iMobot is 192.168.0.123.
-  \item Log in as yourself with your password.
-  \item Left click on the background to open the menu.
-  \item Click on the item \texttt{Applications -> Internet -> Midori}, which is the built in web-browser.
-  \item Go to the address: http://snake.engr.ucdavis.edu/~dko/
-  \item Download the package, named \texttt{libimobot-X.X.zip}, where the \texttt{X}'s represent the latest version number.
-  \end{enumerate}
-\item Open a terminal by entering the menu and selecting \texttt{Applications -> Accessories -> xterm}.
-\item In the terminal, traverse to the directory where you downloaded the zip
-file. Use the command \texttt{ls} to list the files and directories in your
-current directory, \texttt{cd <dir\_name>} to go to an existing directory, \texttt{pwd} to print
-your current directory, and \texttt{cd ..} to go to the parent directory.
-\item Unzip the package with the command \texttt{unzip libimobot-X.X.zip}, replacing the X's with the version number that you downloaded.
-\item Enter the unzipped directory, \texttt{cd libimobot-X.X.zip}. 
-\item Compile the test program with the command \texttt{make}.
+\item Log in to the imobot. In order to do this, you will need a VNC client. 
+  \begin{itemize}
+  \item For Windows, you may download and install TightVNC from \texttt{http://www.tightvnc.com}.
+  \item For Mac OS X, you may download and install Chicken of the VNC from \texttt{http://sourceforge.net/projects/cotvnc/}.
+  \end{itemize}
+\item Connect to the iMobot with your VNC client. The default address of the iMobot is \texttt{192.168.0.123}.
+\item Copy the demo program to your home directory with the command ``\texttt{cp /usr/local/ch/package/chimobot/demos/simple.cpp ~/}''.
+\item Open the demo program with ChIDE. You may left click on the desktop to open the menu, and select \texttt{Applications -> Accessories -> ChIDE}.
+\item Click on \texttt{File -> Open} within ChIDE and open the program, \texttt{simple.cpp}. 
+\item Click on the ``Run'' button, located near the top right of the ChIDE Window. The robot should now run the program.
 \end{enumerate}
-
-\chapter{Compiling Your Applications}
-The following steps present a simple way to get your program up and running. In
-the following steps, the text \texttt{<PROGRAM>} should be replaced with the
-name of your program. All commands should be executed in a terminal.
-\begin{enumerate}
-\item Create a new directory for your project. \texttt{mkdir <PROGRAM>}
-\item Enter the new directory. \texttt{cd <PROGRAM>}
-\item Copy the iMobot library and header file into the directory. \texttt{"cp
-<LIBIMOBOT\_PATH>/libimobot.a <LIBIMOBOT\_PATH>/imobot.h ."} Make sure to
-replace the string \texttt{<LIBIMOBOT\_PATH>} with the full path to the
-libimobot-X.X directory.
-\item Create your robotic control program. \texttt{chide <PROGRAM>.cpp}
-\item Once you have written your program, compile it with the command \texttt{g++ <PROGRAM>.cpp -limobot -o <PROGRAM>} 
-\end{enumerate}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SUB: Overview of Sample Application Programs {{{
