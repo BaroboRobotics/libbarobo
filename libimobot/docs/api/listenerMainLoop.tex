@@ -1,0 +1,37 @@
+\noindent
+\vspace{5pt}
+\rule{6.5in}{0.015in}
+\noindent
+{\LARGE \texttt{listenerMainLoop()}\index{listenerMainLoop()}}\\
+\phantomsection
+\addcontentsline{toc}{section}{listenerMainLoop()}
+
+\noindent
+{\bf Synopsis}\\
+\begin{verbatim}
+#include "imobot.h"
+int CiMobot::listenerMainLoop();
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Put the iMobot into Bluetooth listening mode.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Description}\\
+This function puts the iMobot into Bluetooth listening mode. This function will
+not return until it receives a Bluetooth "quit" command.
+
+\noindent
+{\bf Example}\\
+See the sample program in Section \ref{subsec:simple.cpp} on page \pageref{subsec:simple.cpp}.
+\noindent
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\
