@@ -48,8 +48,7 @@
 %\phantomsection
 %\addcontentsline{toc}{chapter}{Abstract}
 \begin{abstract} 
-This library implements control functions for controlling an iMobot
-robotic module.
+This user's guide describes how to control an iMobot robotic module.
 
 \end{abstract}
 \pagebreak
@@ -87,21 +86,25 @@ robotic module.
 This short guide will enable you to run the provided demo program,
 ``simple.cpp'', on the iMobot.
 \begin{enumerate}
-\item Log in to the imobot. In order to do this, you will need a VNC client. 
+\item Download and install a VNC client
   \begin{itemize}
   \item For Windows, you may download and install TightVNC from \texttt{http://www.tightvnc.com}.
   \item For Mac OS X, you may download and install Chicken of the VNC from\\
   \texttt{http://sourceforge.net/projects/cotvnc/}
   \end{itemize}
+\item Log in to the imobot with a VNC client. 
 \item Connect to the iMobot with your VNC client. The default address of the iMobot is \texttt{192.168.0.123}.
-\item Copy the demo program to your home directory with the command\\
-\texttt{cp /usr/local/ch/package/chimobot/demos/simple.cpp \textasciitilde/}
-\item Open the demo program with ChIDE. You may left click on the desktop to open the menu, and select \texttt{Applications -> Accessories -> ChIDE}.
-\item Click on \texttt{File -> Open} within ChIDE and open the program, \texttt{simple.cpp}. 
-\item Click on the ``Run'' button, located near the top right of the ChIDE Window. The robot should now run the program.
+\item Open and execute the demo program.
+  \begin{enumerate}
+  \item Copy the demo program to your home directory with the command\\
+  \texttt{cp /usr/local/ch/package/chimobot/demos/simple.cpp \textasciitilde/}
+  \item Open the demo program with ChIDE. You may left click on the desktop to open the menu, and select \texttt{Applications -> Accessories -> ChIDE}.
+  \item Click on \texttt{File -> Open} within ChIDE and open the program, \texttt{simple.cpp}. 
+  \item Click on the ``Run'' button, located near the top right of the ChIDE Window. The robot should now run the program.
+  \end{enumerate}
 \end{enumerate}
 
-\chapter{Gtk iMobot Controller Guide}
+\chapter{Graphical Control Interface}
 \begin{figure}
 \begin{center}
 \includegraphics[width=4in]{gui_screenshot.png}
@@ -180,7 +183,7 @@ which listens for Bluetooth remote commands and controls the robot accordingly.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Appendix {{{
 \appendix
-\chapter{libimobot API}
+\chapter{iMobot API}
 \input{api/libimobot}
 \pagebreak
 % }}} Appendix 
