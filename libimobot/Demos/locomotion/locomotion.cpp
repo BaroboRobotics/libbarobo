@@ -66,6 +66,8 @@ void stand(CiMobot* robot)
     robot->poseJoint(i, 0);
   }
   robot->moveWait();
+  printf("Home.\n");
+  sleep(2);
 
   /* Arch the robot */
   robot->poseJoint(0, -85);
@@ -96,7 +98,10 @@ int main()
     robot.poseJoint(i, 0);
   }
   robot.moveWait();
-
+  sleep(2);
+  stand(&robot);
+  sleep(2);
+  return 0;
   /* Rotate each of the faceplates by 90 degrees */
   robot.poseJoint(2, 90);
   robot.poseJoint(3, 90);
