@@ -13,9 +13,9 @@
    height="167.75175"
    id="svg2920"
    version="1.1"
-   inkscape:version="0.47 r22583"
+   inkscape:version="0.48.1 r9760"
    sodipodi:docname="imobot_diagram.svg"
-   inkscape:export-filename="/home/dko/Projects/Barobo/iMobot_gumstix_api/libimobotcomms/GtkGui/images/imobot_diagram.png"
+   inkscape:export-filename="/home/dko/Projects/Barobo/iMobot_gumstix_api/libimobot/Demos/GtkGui/interface/imobot_diagram.png"
    inkscape:export-xdpi="300.0108"
    inkscape:export-ydpi="300.0108">
   <defs
@@ -89,9 +89,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="209.21997"
-     inkscape:cy="135.1193"
+     inkscape:zoom="2.8"
+     inkscape:cx="157.7914"
+     inkscape:cy="81.905014"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -108,7 +108,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -220,5 +220,59 @@
            id="tspan4511"
            sodipodi:role="line">Forward</tspan></text>
     </g>
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="282.20862"
+       y="482.80103"
+       id="text3009"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3011"
+         x="282.20862"
+         y="482.80103">1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="319.70862"
+       y="462.80103"
+       id="text3013"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3015"
+         x="319.70862"
+         y="462.80103">2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="215.78004"
+       y="494.94388"
+       id="text3017"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3019"
+         x="215.78004"
+         y="494.94388">3</tspan></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3021"
+       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:Bitstream Vera Sans;font-style:normal;font-weight:normal;font-size:40;line-height:125%;letter-spacing:0px;word-spacing:0px"><flowRegion
+         id="flowRegion3023"><rect
+           id="rect3025"
+           width="31.785715"
+           height="103.92857"
+           x="22.5"
+           y="35.608898" /></flowRegion><flowPara
+         id="flowPara3027"></flowPara></flowRoot>    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="338.99432"
+       y="412.08673"
+       id="text3029"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3031"
+         x="338.99432"
+         y="412.08673">4</tspan></text>
   </g>
 </svg>
