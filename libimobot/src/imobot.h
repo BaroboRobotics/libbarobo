@@ -1,6 +1,10 @@
 #ifndef _BAROBO_H_
 #define _BAROBO_H_
 
+#ifdef _CH_
+#pragma package <chimobot>
+#endif
+
 /* Motor home position, 2 bytes, R/W */
 #define I2C_REG_MOTORHOME0 0x30
 #define I2C_REG_MOTORHOME1 0x40
@@ -116,7 +120,7 @@ class CiMobot {
 #endif
 
 #ifdef _CH_
-#pragma importf "imobot.cpp"
+#pragma importf <imobot.cpp>
 #endif
 
 #endif
