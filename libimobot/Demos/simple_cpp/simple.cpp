@@ -22,10 +22,5 @@ int main()
   robot.waitMotor(2);
   robot.waitMotor(3);
 
-  /* The following 2 lines set up the robot to listen to Bluetooth remote
-   * control commands */
-  robot.initListenerBluetooth(20);
-  robot.listenerMainLoop();
-
   return 0;
 }

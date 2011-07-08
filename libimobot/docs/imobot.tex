@@ -154,25 +154,41 @@ before initializing the robot to listen for incoming Bluetooth commands.
 \listinginput{1}{../Demos/simple_cpp/simple.cpp}
 \subsection{Explanation of simple.cpp}
 \begin{itemize}
-\item Lines 5-7 declare some local variables that are used throughout the program.
-\item Line 7 declares the \texttt{robot} object, which represents the
+\item 
+\begin{verbatim}
+  int i;
+  double enc;
+\end{verbatim}
+These lines declare some local variables that are used throughout the program.
+\item 
+\begin{verbatim}
+  CiMobot robot;
+\end{verbatim}
+This line declares the \texttt{robot} object, which represents the
 capabilities of the iMobot module. This object contains various member
 functions which may be executed by the user.
-\item Lines 10-13 send commands to the iMobot to move all the joints to their
-zero position.
-\item Line 14 causes the program to wait until all the joints have stopped moving. 
-\item Lines 17 and 18 instruct the robot to rotate joints 2 and 3 to rotate 90
+\item 
+\begin{verbatim}
+  robot.poseZero();
+  robot.moveWait();
+\end{verbatim}
+These commands command the iMobot to move all motors to their zero positions
+and wait until the motion is finished.
+\item 
+\begin{verbatim}
+  robot.poseJoint(2, 90);
+  robot.poseJoint(3, 90);
+\end{verbatim}
+These lines instruct the robot to rotate joints 2 and 3 to rotate 90
 degrees. Note that the joint numbers start at 0, so joints 2 and 3 are the
 third and fourth joints, respectively. 
-\item Lines 20 and 21 cause the program to wait until the third and fourth
+\item 
+\begin{verbatim}
+  robot.waitMotor(2);
+  robot.waitMotor(3);
+\end{verbatim}
+This code causes the program to wait until the third and fourth
 joints have stopped moving.
-\item Lines 23 and 24 instruct the robot to turn the third and fourth joints
-back to their original zero position.
-\item Lines 25 and 26 cause the program to wait until the third and fourth
-joints have stopped moving.
-\item Lines 30 and 31 start the Bluetooth listening service on channel 20,
-which listens for Bluetooth remote commands and controls the robot accordingly. 
-\item Line 34 terminates the robot control.
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
