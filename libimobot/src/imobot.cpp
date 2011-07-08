@@ -204,12 +204,12 @@ int BR_setMotorDirection(iMobot_t* iMobot, int id, int direction)
   return 0;
 }
 
-int BR_getMotorDirection(iMobot_t* iMobot, int id, int &dir)
+int BR_getMotorDirection(iMobot_t* iMobot, int id, int *dir)
 {
   uint8_t byte;
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
   I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORDIR(id), &byte);
-  dir = byte;
+  *dir = byte;
   return 0;
 }
 
@@ -449,7 +449,7 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
   } else if (MATCHSTR("GET_MOTOR_DIRECTION"))
   {
     sscanf(buf, "%*s %d", &id);
-    if(BR_getMotorDirection(iMobot, id, int32)) {
+    if(BR_getMotorDirection(iMobot, id, &int32)) {
       write(socket, "ERROR", 6);
     } else {
       sprintf(mybuf, "%d", int32);
