@@ -59,9 +59,10 @@ void rotate_left(CiMobot* robot)
 
 void stand(CiMobot* robot)
 {
+  int i;
   unsigned short speed;
   /* Go to home position first */
-  for(int i = 0; i < 4; i++) {
+  for(i = 0; i < 4; i++) {
     robot->poseJoint(i, 0);
   }
   robot->moveWait();
