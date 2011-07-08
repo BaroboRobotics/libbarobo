@@ -1,4 +1,5 @@
-add_subdirectory(GtkGui)
+#add_subdirectory(GtkGui)
 add_subdirectory(simple)
 add_subdirectory(simple_cpp)
 add_subdirectory(stresstest)
+add_subdirectory(locomotion)

@@ -1,6 +1,9 @@
 #ifdef _CH_
 #pragma package <chimobot>
 #endif
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include <imobot.h>
 
 void move_forward(CiMobot* robot)
@@ -60,7 +63,7 @@ void rotate_left(CiMobot* robot)
 void stand(CiMobot* robot)
 {
   int i;
-  unsigned short speed;
+  int speed;
   /* Go to home position first */
   for(i = 0; i < 4; i++) {
     robot->poseJoint(i, 0);
@@ -80,7 +83,7 @@ void stand(CiMobot* robot)
 
   /* Stand the robot up slowly */
   /* First, save the speed */
-  robot->getMotorSpeed(0, &speed);
+  robot->getMotorSpeed(0, speed);
   robot->setMotorSpeed(0, 25);
   robot->poseJoint(0, 20);
   robot->waitMotor(0);

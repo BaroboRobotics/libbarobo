@@ -21,8 +21,10 @@ set (EXTRA_LIBS ${EXTRA_LIBS} imobotcomms imobot i2c bluetooth interface)
 
 find_package(GTK2 2.10 REQUIRED gtk glade)
 
-add_custom_target(interface.o ld -r -b binary -o interface.o interface/interface.glade)
-add_custom_target(libinterface.a ar rcs libinterface.a interface.o DEPENDS interface.o)
+add_custom_target(interface.o ld -r -b binary -o interface.o interface/interface.glade 
+                  DEPENDS interface/interface.glade)
+add_custom_target(libinterface.a ar rcs libinterface.a interface.o 
+                  DEPENDS interface.o)
 
 if(GTK2_FOUND)
   include_directories(${GTK2_INCLUDE_DIRS})
