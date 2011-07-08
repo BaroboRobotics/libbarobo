@@ -7,10 +7,7 @@ int main()
   CiMobot robot;
 
   /* Set the robot to "home" position, where all joint angles are 0 degrees. */
-  for(i = 0; i < 4; i++) {
-    enc = 0;
-    robot.poseJoint(i, enc);
-  }
+  robot.poseZero();
   robot.moveWait();
 
   /* Rotate each of the faceplates by 90 degrees */

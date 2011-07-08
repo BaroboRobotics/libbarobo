@@ -82,6 +82,7 @@ int BR_setMotorSpeed(iMobot_t* iMobot, int id, int speed);
 int BR_getMotorSpeed(iMobot_t* iMobot, int id, int *speed);
 int BR_getMotorState(iMobot_t* iMobot, int id, int *state);
 int BR_waitMotor(iMobot_t* iMobot, int id);
+int BR_poseZero(iMobot_t* iMobot);
 int BR_listenerMainLoop(iMobot_t* iMobot);
 int BR_terminate(iMobot_t* iMobot);
 
@@ -111,6 +112,7 @@ class CiMobot {
     int getMotorSpeed(int id, int &speed);
     int getMotorState(int id, int &state);
     int waitMotor(int id);
+    int poseZero();
     int initListenerBluetooth(int channel);
     int listenerMainLoop();
     int terminate();

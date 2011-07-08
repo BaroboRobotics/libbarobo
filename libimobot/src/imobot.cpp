@@ -387,6 +387,17 @@ int BR_waitMotor(iMobot_t* iMobot, int id)
   return 0;
 }
 
+int BR_poseZero(iMobot_t* iMobot)
+{
+  int i;
+  for(i = 0; i < 4; i++) {
+    if(BR_poseJoint(iMobot, i, 0)) {
+      return -1;
+    }
+  }
+  return 0;
+}
+
 #define MATCHSTR(str) \
 (strncmp(str, buf, strlen(str))==0)
 int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const char* buf)
@@ -598,6 +609,11 @@ int CiMobot::getMotorState(int id, int &state)
 int CiMobot::waitMotor(int id)
 {
   return BR_waitMotor(&_iMobot, id);
+}
+
+int CiMobot::poseZero()
+{
+  return BR_poseZero(&_iMobot);
 }
 
 int CiMobot::listenerMainLoop()

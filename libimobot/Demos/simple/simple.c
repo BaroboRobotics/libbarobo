@@ -18,10 +18,8 @@ int main()
   sleep(2);
 
   /* Set the robot to "home" position, where all joint angles are 0 degrees. */
-  for(i = 0; i < 4; i++) {
-    enc = 0;
-    BR_poseJoint(&robot, i, enc);
-  }
+  BR_poseZero(&robot);
+  BR_moveWait(&robot);
 
   /* Rotate each of the faceplates by 90 degrees */
   BR_poseJoint(&robot, 2, 90);
