@@ -66,7 +66,6 @@ void stand(CiMobot &robot)
     robot.poseJoint(i, 0);
   }
   robot.moveWait();
-  printf("Home.\n");
   sleep(2);
 
   /* Arch the robot */
@@ -99,18 +98,23 @@ int main()
 
   /* Roll the robot forward */
   move_forward(robot);
+  robot.moveWait();
 
   /* Rotate left */
   rotate_left(robot);
+  robot.moveWait();
 
   /* Roll the robot backward */
   move_backward(robot);
+  robot.moveWait();
 
   /* Rotate right */
   rotate_right(robot);
+  robot.moveWait();
 
   /* Stand the robot up */
   stand(robot);
+  robot.moveWait();
 
   /* Terminate control of the robot */
   robot.terminate();
