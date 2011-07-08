@@ -49,6 +49,10 @@ int BR_init(iMobot_t* iMobot)
     I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORPOS(i)+1, &lobyte);
     iMobot->enc[i] = (hibyte << 8) + lobyte;
   }
+  /* Set default speeds for the motors */
+  for(i = 0; i < 4; i++) {
+    BR_setMotorSpeed(iMobot, i, 30);
+  }
   return 0;
 }
 
@@ -168,6 +172,10 @@ int BR_stop(iMobot_t* iMobot)
 
 int BR_moveWait(iMobot_t* iMobot)
 {
+  int i;
+  for(i = 0; i < 4; i++) {
+    BR_waitMotor(iMobot, i);
+  }
   return 0;
 }
 
