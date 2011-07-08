@@ -16,6 +16,8 @@ int init_gaits();
 /* Main Dialog */
 void on_menuitem_connect_activate(GtkWidget* widget, gpointer data);
 void on_menuitem_localInit_activate(GtkWidget* widget, gpointer data);
+void on_button_connectRemote_clicked(GtkWidget* widget, gpointer data);
+void on_button_connectLocal_clicked(GtkWidget* widget, gpointer data);
 
 /* Connect Dialog */
 void on_button_connect_clicked(GtkWidget* widget, gpointer data);
@@ -81,6 +83,7 @@ extern br_comms_t *imobotComms;
 extern iMobot_t *iMobot;
 extern GtkWidget  *window;
 extern GtkWidget  *dialog_connect;
+extern GtkWidget  *dialog_intro;
 extern Gait* g_gaits[100];
 extern int g_numGaits;
 extern GtkVScale* scale_motorSpeeds[4];

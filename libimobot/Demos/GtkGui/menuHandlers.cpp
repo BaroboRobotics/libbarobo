@@ -20,3 +20,17 @@ void on_menuitem_localInit_activate(GtkWidget* widget, gpointer data)
   contextid = gtk_statusbar_get_context_id(status, "connection");
   gtk_statusbar_push(status, contextid, "Connected.");
 }
+
+void on_button_connectRemote_clicked(GtkWidget* widget, gpointer data)
+{
+  gtk_widget_hide(dialog_intro);
+  gtk_widget_show(window);
+  gtk_widget_show(dialog_connect);
+}
+
+void on_button_connectLocal_clicked(GtkWidget* widget, gpointer data)
+{
+  on_menuitem_localInit_activate(widget, data);
+  gtk_widget_hide(dialog_intro);
+  gtk_widget_show(window);
+}

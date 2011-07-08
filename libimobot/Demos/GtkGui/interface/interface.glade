@@ -1,7 +1,235 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
+  <object class="GtkDialog" id="dialog_connect">
+    <property name="can_focus">False</property>
+    <property name="border_width">5</property>
+    <property name="type_hint">normal</property>
+    <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
+    <child internal-child="vbox">
+      <object class="GtkVBox" id="dialog-vbox1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkHButtonBox" id="dialog-action_area1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="button_connect">
+                <property name="label">gtk-connect</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_button_connect_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="button_connect_cancel">
+                <property name="label">gtk-cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_button_connect_cancel_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkTable" id="table2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="n_rows">2</property>
+            <property name="n_columns">2</property>
+            <child>
+              <object class="GtkLabel" id="label2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Address:</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="entry_connect_address">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="invisible_char">●</property>
+                <property name="text" translatable="yes">00:19:88:19:FB:9E</property>
+                <property name="primary_icon_activatable">False</property>
+                <property name="secondary_icon_activatable">False</property>
+                <property name="primary_icon_sensitive">True</property>
+                <property name="secondary_icon_sensitive">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="right_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">channel:</property>
+              </object>
+              <packing>
+                <property name="top_attach">1</property>
+                <property name="bottom_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="entry_connect_channel">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="invisible_char">●</property>
+                <property name="text" translatable="yes">20</property>
+                <property name="primary_icon_activatable">False</property>
+                <property name="secondary_icon_activatable">False</property>
+                <property name="primary_icon_sensitive">True</property>
+                <property name="secondary_icon_sensitive">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="right_attach">2</property>
+                <property name="top_attach">1</property>
+                <property name="bottom_attach">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="0">button_connect</action-widget>
+      <action-widget response="0">button_connect_cancel</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkWindow" id="dialog_intro">
+    <property name="can_focus">False</property>
+    <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
+    <child>
+      <object class="GtkTable" id="table3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="n_rows">3</property>
+        <property name="n_columns">2</property>
+        <child>
+          <object class="GtkHSeparator" id="hseparator1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+          </object>
+          <packing>
+            <property name="top_attach">1</property>
+            <property name="bottom_attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHSeparator" id="hseparator2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="top_attach">1</property>
+            <property name="bottom_attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="button_connectRemote">
+            <property name="label" translatable="yes">Connect to Remote Module</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="use_action_appearance">False</property>
+            <signal name="clicked" handler="on_button_connectRemote_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="x_options"></property>
+            <property name="y_options"></property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label4">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">Click this button to connect
+to a remote iMobot module
+via Bluetooth.</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="x_options">GTK_FILL</property>
+            <property name="y_options">GTK_EXPAND</property>
+            <property name="x_padding">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="button_connectLocal">
+            <property name="label" translatable="yes">Connect to Local Module</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="use_action_appearance">False</property>
+            <signal name="clicked" handler="on_button_connectLocal_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="top_attach">2</property>
+            <property name="bottom_attach">3</property>
+            <property name="x_options"></property>
+            <property name="y_options"></property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label5">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">Click this button if this 
+program is running on an
+iMobot module that you 
+wish to control.</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="top_attach">2</property>
+            <property name="bottom_attach">3</property>
+            <property name="x_options">GTK_FILL</property>
+            <property name="y_options">GTK_EXPAND</property>
+            <property name="x_padding">3</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
   <object class="GtkListStore" id="liststore_gaits">
     <columns>
       <!-- column-name Name -->
@@ -9,50 +237,63 @@
     </columns>
   </object>
   <object class="GtkWindow" id="window1">
-    <signal name="delete_event" handler="gtk_main_quit"/>
+    <property name="can_focus">False</property>
+    <signal name="delete-event" handler="gtk_main_quit" swapped="no"/>
     <child>
       <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <child>
           <object class="GtkMenuBar" id="menubar1">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <child>
               <object class="GtkMenuItem" id="menuitem1">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">_File</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu1">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
                       <object class="GtkImageMenuItem" id="menuitem_connect">
                         <property name="label">gtk-connect</property>
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="activate" handler="on_menuitem_connect_activate"/>
+                        <signal name="activate" handler="on_menuitem_connect_activate" swapped="no"/>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="menuitem_localInit">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
                         <property name="label" translatable="yes">Init Local I2C bus</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="on_menuitem_localInit_activate"/>
+                        <signal name="activate" handler="on_menuitem_localInit_activate" swapped="no"/>
                       </object>
                     </child>
                     <child>
                       <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="menuitem_quit">
                         <property name="label">gtk-quit</property>
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="activate" handler="gtk_main_quit"/>
+                        <signal name="activate" handler="gtk_main_quit" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -62,15 +303,20 @@
             <child>
               <object class="GtkMenuItem" id="menuitem4">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">_Help</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu3">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem10">
                         <property name="label">gtk-about</property>
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -82,27 +328,33 @@
           </object>
           <packing>
             <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkHBox" id="hbox1">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <child>
               <object class="GtkFrame" id="frame1">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
                   <object class="GtkAlignment" id="alignment1">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="left_padding">12</property>
                     <child>
                       <object class="GtkHBox" id="hbox2">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <child>
                           <object class="GtkVBox" id="vbox4">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <child>
                               <object class="GtkVScale" id="vscale_motorspeed0">
                                 <property name="visible">True</property>
@@ -110,9 +362,11 @@
                                 <property name="inverted">True</property>
                                 <property name="fill_level">100</property>
                                 <property name="digits">0</property>
-                                <signal name="button_release_event" handler="on_vscale_motorspeed0_button_release_event"/>
+                                <signal name="button-release-event" handler="on_vscale_motorspeed0_button_release_event" swapped="no"/>
                               </object>
                               <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
@@ -121,10 +375,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="clicked" handler="on_button_motor0forward_clicked"/>
+                                <property name="use_action_appearance">False</property>
+                                <signal name="clicked" handler="on_button_motor0forward_clicked" swapped="no"/>
                                 <child>
                                   <object class="GtkImage" id="image13">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/16px_move_forward.svg</property>
                                   </object>
                                 </child>
@@ -140,10 +396,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="clicked" handler="on_button_motor0stop_clicked"/>
+                                <property name="use_action_appearance">False</property>
+                                <signal name="clicked" handler="on_button_motor0stop_clicked" swapped="no"/>
                                 <child>
                                   <object class="GtkImage" id="image14">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/16px_stop.svg</property>
                                   </object>
                                 </child>
@@ -159,10 +417,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="clicked" handler="on_button_motor0back_clicked"/>
+                                <property name="use_action_appearance">False</property>
+                                <signal name="clicked" handler="on_button_motor0back_clicked" swapped="no"/>
                                 <child>
                                   <object class="GtkImage" id="image15">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/16px_move_back.svg</property>
                                   </object>
                                 </child>
@@ -178,8 +438,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="editable">False</property>
-                                <property name="invisible_char">&#x25CF;</property>
+                                <property name="invisible_char">●</property>
                                 <property name="width_chars">5</property>
+                                <property name="primary_icon_activatable">False</property>
+                                <property name="secondary_icon_activatable">False</property>
+                                <property name="primary_icon_sensitive">True</property>
+                                <property name="secondary_icon_sensitive">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -189,21 +453,26 @@
                             </child>
                           </object>
                           <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkVBox" id="vbox5">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <child>
                               <object class="GtkVScale" id="vscale_motorspeed1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="inverted">True</property>
                                 <property name="digits">0</property>
-                                <signal name="button_release_event" handler="on_vscale_motorspeed1_button_release_event"/>
+                                <signal name="button-release-event" handler="on_vscale_motorspeed1_button_release_event" swapped="no"/>
                               </object>
                               <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
@@ -212,10 +481,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="clicked" handler="on_button_motor1forward_clicked"/>
+                                <property name="use_action_appearance">False</property>
+                                <signal name="clicked" handler="on_button_motor1forward_clicked" swapped="no"/>
                                 <child>
                                   <object class="GtkImage" id="image16">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/16px_move_forward.svg</property>
                                   </object>
                                 </child>
@@ -231,10 +502,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="clicked" handler="on_button_motor1stop_clicked"/>
+                                <property name="use_action_appearance">False</property>
+                                <signal name="clicked" handler="on_button_motor1stop_clicked" swapped="no"/>
                                 <child>
                                   <object class="GtkImage" id="image19">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/16px_stop.svg</property>
                                   </object>
                                 </child>
@@ -250,10 +523,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="clicked" handler="on_button_motor1back_clicked"/>
+                                <property name="use_action_appearance">False</property>
+                                <signal name="clicked" handler="on_button_motor1back_clicked" swapped="no"/>
                                 <child>
                                   <object class="GtkImage" id="image22">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/16px_move_back.svg</property>
                                   </object>
                                 </child>
@@ -269,8 +544,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="editable">False</property>
-                                <property name="invisible_char">&#x25CF;</property>
+                                <property name="invisible_char">●</property>
                                 <property name="width_chars">5</property>
+                                <property name="primary_icon_activatable">False</property>
+                                <property name="secondary_icon_activatable">False</property>
+                                <property name="primary_icon_sensitive">True</property>
+                                <property name="secondary_icon_sensitive">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -280,21 +559,26 @@
                             </child>
                           </object>
                           <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkVBox" id="vbox6">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <child>
                               <object class="GtkVScale" id="vscale_motorspeed2">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="inverted">True</property>
                                 <property name="digits">0</property>
-                                <signal name="button_release_event" handler="on_vscale_motorspeed2_button_release_event"/>
+                                <signal name="button-release-event" handler="on_vscale_motorspeed2_button_release_event" swapped="no"/>
                               </object>
                               <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
@@ -303,10 +587,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="clicked" handler="on_button_motor2forward_clicked"/>
+                                <property name="use_action_appearance">False</property>
+                                <signal name="clicked" handler="on_button_motor2forward_clicked" swapped="no"/>
                                 <child>
                                   <object class="GtkImage" id="image17">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/16px_move_forward.svg</property>
                                   </object>
                                 </child>
@@ -322,10 +608,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="clicked" handler="on_button_motor2stop_clicked"/>
+                                <property name="use_action_appearance">False</property>
+                                <signal name="clicked" handler="on_button_motor2stop_clicked" swapped="no"/>
                                 <child>
                                   <object class="GtkImage" id="image20">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/16px_stop.svg</property>
                                   </object>
                                 </child>
@@ -341,10 +629,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="clicked" handler="on_button_motor2back_clicked"/>
+                                <property name="use_action_appearance">False</property>
+                                <signal name="clicked" handler="on_button_motor2back_clicked" swapped="no"/>
                                 <child>
                                   <object class="GtkImage" id="image23">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/16px_move_back.svg</property>
                                   </object>
                                 </child>
@@ -360,8 +650,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="editable">False</property>
-                                <property name="invisible_char">&#x25CF;</property>
+                                <property name="invisible_char">●</property>
                                 <property name="width_chars">5</property>
+                                <property name="primary_icon_activatable">False</property>
+                                <property name="secondary_icon_activatable">False</property>
+                                <property name="primary_icon_sensitive">True</property>
+                                <property name="secondary_icon_sensitive">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -371,21 +665,26 @@
                             </child>
                           </object>
                           <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
                             <property name="position">2</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkVBox" id="vbox7">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <child>
                               <object class="GtkVScale" id="vscale_motorspeed3">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="inverted">True</property>
                                 <property name="digits">0</property>
-                                <signal name="button_release_event" handler="on_vscale_motorspeed3_button_release_event"/>
+                                <signal name="button-release-event" handler="on_vscale_motorspeed3_button_release_event" swapped="no"/>
                               </object>
                               <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
@@ -394,10 +693,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="clicked" handler="on_button_motor3forward_clicked"/>
+                                <property name="use_action_appearance">False</property>
+                                <signal name="clicked" handler="on_button_motor3forward_clicked" swapped="no"/>
                                 <child>
                                   <object class="GtkImage" id="image18">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/16px_move_forward.svg</property>
                                   </object>
                                 </child>
@@ -413,10 +714,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="clicked" handler="on_button_motor3stop_clicked"/>
+                                <property name="use_action_appearance">False</property>
+                                <signal name="clicked" handler="on_button_motor3stop_clicked" swapped="no"/>
                                 <child>
                                   <object class="GtkImage" id="image21">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/16px_stop.svg</property>
                                   </object>
                                 </child>
@@ -432,10 +735,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="clicked" handler="on_button_motor3back_clicked"/>
+                                <property name="use_action_appearance">False</property>
+                                <signal name="clicked" handler="on_button_motor3back_clicked" swapped="no"/>
                                 <child>
                                   <object class="GtkImage" id="image24">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/16px_move_back.svg</property>
                                   </object>
                                 </child>
@@ -451,8 +756,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="editable">False</property>
-                                <property name="invisible_char">&#x25CF;</property>
+                                <property name="invisible_char">●</property>
                                 <property name="width_chars">5</property>
+                                <property name="primary_icon_activatable">False</property>
+                                <property name="secondary_icon_activatable">False</property>
+                                <property name="primary_icon_sensitive">True</property>
+                                <property name="secondary_icon_sensitive">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -462,6 +771,8 @@
                             </child>
                           </object>
                           <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
                             <property name="position">3</property>
                           </packing>
                         </child>
@@ -472,30 +783,38 @@
                 <child type="label">
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes">&lt;b&gt;Motor Speeds&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                   </object>
                 </child>
               </object>
               <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkVBox" id="vbox2">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <child>
                   <object class="GtkImage" id="image1">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/imobot_diagram.svg</property>
                   </object>
                   <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkTable" id="table1">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="n_rows">3</property>
                     <property name="n_columns">5</property>
                     <child>
@@ -503,10 +822,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="on_button_forward_clicked"/>
+                        <property name="use_action_appearance">False</property>
+                        <signal name="clicked" handler="on_button_forward_clicked" swapped="no"/>
                         <child>
                           <object class="GtkImage" id="image3">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/move_forward.svg</property>
                           </object>
                         </child>
@@ -521,10 +842,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="on_button_stop_clicked"/>
+                        <property name="use_action_appearance">False</property>
+                        <signal name="clicked" handler="on_button_stop_clicked" swapped="no"/>
                         <child>
                           <object class="GtkImage" id="image4">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/stop.svg</property>
                           </object>
                         </child>
@@ -541,10 +864,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="on_button_rotateLeft_clicked"/>
+                        <property name="use_action_appearance">False</property>
+                        <signal name="clicked" handler="on_button_rotateLeft_clicked" swapped="no"/>
                         <child>
                           <object class="GtkImage" id="image6">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/rotate_left.svg</property>
                           </object>
                         </child>
@@ -559,10 +884,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="on_button_rotateRight_clicked"/>
+                        <property name="use_action_appearance">False</property>
+                        <signal name="clicked" handler="on_button_rotateRight_clicked" swapped="no"/>
                         <child>
                           <object class="GtkImage" id="image7">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/rotate_right.svg</property>
                           </object>
                         </child>
@@ -577,10 +904,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="on_button_inchLeft_clicked"/>
+                        <property name="use_action_appearance">False</property>
+                        <signal name="clicked" handler="on_button_inchLeft_clicked" swapped="no"/>
                         <child>
                           <object class="GtkImage" id="image12">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/inch_left.svg</property>
                           </object>
                         </child>
@@ -597,10 +926,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="on_button_inchRight_clicked"/>
+                        <property name="use_action_appearance">False</property>
+                        <signal name="clicked" handler="on_button_inchRight_clicked" swapped="no"/>
                         <child>
                           <object class="GtkImage" id="image11">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/inch_right.svg</property>
                           </object>
                         </child>
@@ -617,10 +948,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="on_button_backward_clicked"/>
+                        <property name="use_action_appearance">False</property>
+                        <signal name="clicked" handler="on_button_backward_clicked" swapped="no"/>
                         <child>
                           <object class="GtkImage" id="image5">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/move_back.svg</property>
                           </object>
                         </child>
@@ -637,10 +970,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="on_button_lfaceForward_clicked"/>
+                        <property name="use_action_appearance">False</property>
+                        <signal name="clicked" handler="on_button_lfaceForward_clicked" swapped="no"/>
                         <child>
                           <object class="GtkImage" id="image2">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/lface_forward.svg</property>
                           </object>
                         </child>
@@ -651,10 +986,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="on_button_lfaceBackward_clicked"/>
+                        <property name="use_action_appearance">False</property>
+                        <signal name="clicked" handler="on_button_lfaceBackward_clicked" swapped="no"/>
                         <child>
                           <object class="GtkImage" id="image8">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/face_backward.svg</property>
                           </object>
                         </child>
@@ -669,10 +1006,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="on_button_rfaceForward_clicked"/>
+                        <property name="use_action_appearance">False</property>
+                        <signal name="clicked" handler="on_button_rfaceForward_clicked" swapped="no"/>
                         <child>
                           <object class="GtkImage" id="image9">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/lface_forward.svg</property>
                           </object>
                         </child>
@@ -687,10 +1026,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="on_button_rfaceBackward_clicked"/>
+                        <property name="use_action_appearance">False</property>
+                        <signal name="clicked" handler="on_button_rfaceBackward_clicked" swapped="no"/>
                         <child>
                           <object class="GtkImage" id="image10">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="pixbuf">/usr/share/gtkimobotcontroller/pixmaps/face_backward.svg</property>
                           </object>
                         </child>
@@ -708,7 +1049,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="on_button_home_clicked"/>
+                        <property name="use_action_appearance">False</property>
+                        <signal name="clicked" handler="on_button_home_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="top_attach">2</property>
@@ -726,27 +1068,34 @@
                     </child>
                   </object>
                   <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkStatusbar" id="statusbar1">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="spacing">2</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="fill">True</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
               </object>
               <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkVBox" id="vbox3">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <child>
                   <object class="GtkTreeView" id="treeview_gaits">
                     <property name="visible">True</property>
@@ -767,19 +1116,23 @@
                     </child>
                   </object>
                   <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkVButtonBox" id="vbuttonbox1">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
                       <object class="GtkButton" id="button_playGait">
                         <property name="label" translatable="yes">Play</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="on_button_playGait_clicked"/>
+                        <property name="use_action_appearance">False</property>
+                        <signal name="clicked" handler="on_button_playGait_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -793,6 +1146,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="use_action_appearance">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -809,124 +1163,19 @@
                 </child>
               </object>
               <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
                 <property name="position">2</property>
               </packing>
             </child>
           </object>
           <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkDialog" id="dialog_connect">
-    <property name="border_width">5</property>
-    <property name="type_hint">normal</property>
-    <property name="has_separator">False</property>
-    <signal name="delete_event" handler="gtk_widget_hide_on_delete"/>
-    <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox1">
-        <property name="visible">True</property>
-        <property name="spacing">2</property>
-        <child>
-          <object class="GtkTable" id="table2">
-            <property name="visible">True</property>
-            <property name="n_rows">2</property>
-            <property name="n_columns">2</property>
-            <child>
-              <object class="GtkLabel" id="label2">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Address:</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkEntry" id="entry_connect_address">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="invisible_char">&#x25CF;</property>
-                <property name="text" translatable="yes">00:19:88:19:FB:9E</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label3">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">channel:</property>
-              </object>
-              <packing>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="entry_connect_channel">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="invisible_char">&#x25CF;</property>
-                <property name="text" translatable="yes">20</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area1">
-            <property name="visible">True</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="button_connect">
-                <property name="label">gtk-connect</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_button_connect_clicked"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="button_connect_cancel">
-                <property name="label">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_button_connect_cancel_clicked"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-    <action-widgets>
-      <action-widget response="0">button_connect</action-widget>
-      <action-widget response="0">button_connect_cancel</action-widget>
-    </action-widgets>
   </object>
 </interface>

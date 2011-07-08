@@ -14,8 +14,9 @@ extern const char _binary_interface_interface_glade_end[];
 GtkBuilder *builder;
 br_comms_t *imobotComms;
 iMobot_t *iMobot;
-GtkWidget  *window;
-GtkWidget  *dialog_connect;
+GtkWidget *window;
+GtkWidget *dialog_connect;
+GtkWidget *dialog_intro;
 GtkVScale* scale_motorSpeeds[4];
 
 GtkEntry* motorAngleEntries[4];
@@ -48,11 +49,13 @@ int main(int argc, char* argv[])
   /* Get the main window */
   window = GTK_WIDGET( gtk_builder_get_object( builder, "window1"));
   dialog_connect = GTK_WIDGET( gtk_builder_get_object(builder, "dialog_connect"));
+  dialog_intro = GTK_WIDGET( gtk_builder_get_object(builder, "dialog_intro"));
 
   /* Connect signals */
   gtk_builder_connect_signals(builder, NULL);
 
-  gtk_widget_show( window );
+  //gtk_widget_show( window );
+  gtk_widget_show( dialog_intro );
   
   gtk_main();
 
