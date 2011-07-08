@@ -27,8 +27,5 @@ int main()
   robot.initListenerBluetooth(20);
   robot.listenerMainLoop();
 
-  /* Terminate control of the robot */
-  robot.terminate();
-
   return 0;
 }

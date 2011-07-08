@@ -38,8 +38,5 @@ int main()
   BR_initListenerBluetooth(&robot, 20);
   BR_listenerMainLoop(&robot);
 
-  /* Terminate control of the robot */
-  BR_terminate(&robot);
-
   return 0;
 }

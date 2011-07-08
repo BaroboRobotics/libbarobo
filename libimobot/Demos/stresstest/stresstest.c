@@ -65,8 +65,6 @@ int main()
     printf("Done loop: %d\n", counter);
   }
 
-  BR_terminate(&robot);
-
   return 0;
 }
 

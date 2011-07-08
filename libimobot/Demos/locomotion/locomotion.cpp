@@ -116,8 +116,5 @@ int main()
   stand(robot);
   robot.moveWait();
 
-  /* Terminate control of the robot */
-  robot.terminate();
-
   return 0;
 }
