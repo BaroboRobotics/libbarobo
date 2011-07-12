@@ -4,7 +4,7 @@
 #include "imobotcomms.h"
 
 
-int BRComms_init(br_comms_t* comms)
+int iMobotComms_init(br_comms_t* comms)
 {
   memset(&comms->addr, 0, sizeof(sockaddr_t));
   comms->connected = 0;
@@ -15,7 +15,7 @@ int BRComms_init(br_comms_t* comms)
   return 0;
 }
 
-int BRComms_connect(br_comms_t* comms, const char* address, int channel)
+int iMobotComms_connect(br_comms_t* comms, const char* address, int channel)
 {
   int status;
   comms->socket = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
@@ -39,7 +39,7 @@ int BRComms_connect(br_comms_t* comms, const char* address, int channel)
   return status;
 }
 
-int BRComms_disconnect(br_comms_t* comms)
+int iMobotComms_disconnect(br_comms_t* comms)
 {
 #ifndef _WIN32
   close(comms->socket);
@@ -51,12 +51,12 @@ int BRComms_disconnect(br_comms_t* comms)
   return 0;
 }
 
-int BRComms_isConnected(br_comms_t* comms)
+int iMobotComms_isConnected(br_comms_t* comms)
 {
   return comms->connected;
 }
 
-int BRComms_setMotorDirection(br_comms_t* comms, int id, int dir)
+int iMobotComms_setMotorDirection(br_comms_t* comms, int id, int dir)
 {
   char buf[160];
   int status;
@@ -69,7 +69,7 @@ int BRComms_setMotorDirection(br_comms_t* comms, int id, int dir)
   return 0;
 }
 
-int BRComms_getMotorDirection(br_comms_t* comms, int id, int *dir)
+int iMobotComms_getMotorDirection(br_comms_t* comms, int id, int *dir)
 {
   char buf[160];
   int status;
@@ -83,7 +83,7 @@ int BRComms_getMotorDirection(br_comms_t* comms, int id, int *dir)
   return 0;
 }
 
-int BRComms_setMotorSpeed(br_comms_t* comms, int id, int speed)
+int iMobotComms_setMotorSpeed(br_comms_t* comms, int id, int speed)
 {
   char buf[160];
   int status;
@@ -96,7 +96,7 @@ int BRComms_setMotorSpeed(br_comms_t* comms, int id, int speed)
   return 0;
 }
 
-int BRComms_getMotorSpeed(br_comms_t* comms, int id, int *speed)
+int iMobotComms_getMotorSpeed(br_comms_t* comms, int id, int *speed)
 {
   char buf[160];
   int status;
@@ -110,7 +110,7 @@ int BRComms_getMotorSpeed(br_comms_t* comms, int id, int *speed)
   return 0;
 }
 
-int BRComms_setMotorPosition(br_comms_t* comms, int id, double position)
+int iMobotComms_setMotorPosition(br_comms_t* comms, int id, double position)
 {
   char buf[160];
   int status;
@@ -123,7 +123,7 @@ int BRComms_setMotorPosition(br_comms_t* comms, int id, double position)
   return 0;
 }
 
-int BRComms_getMotorPosition(br_comms_t* comms, int id, double *position)
+int iMobotComms_getMotorPosition(br_comms_t* comms, int id, double *position)
 {
   char buf[160];
   int status;
@@ -137,7 +137,7 @@ int BRComms_getMotorPosition(br_comms_t* comms, int id, double *position)
   return 0;
 }
 
-int BRComms_getMotorState(br_comms_t* comms, int id, int *state)
+int iMobotComms_getMotorState(br_comms_t* comms, int id, int *state)
 {
   char buf[160];
   int status;
@@ -151,12 +151,12 @@ int BRComms_getMotorState(br_comms_t* comms, int id, int *state)
   return 0;
 }
 
-int BRComms_waitMotor(br_comms_t* comms, int id)
+int iMobotComms_waitMotor(br_comms_t* comms, int id)
 {
   int state;
   while(1)
   {
-    if(BRComms_getMotorState(comms, id, &state)) {
+    if(iMobotComms_getMotorState(comms, id, &state)) {
       return -1;
     }
     if(state == 0) {
@@ -171,7 +171,7 @@ int BRComms_waitMotor(br_comms_t* comms, int id)
   }
 }
 
-int BRComms_stop(br_comms_t* comms)
+int iMobotComms_stop(br_comms_t* comms)
 {
   char buf[160];
   int status;
@@ -213,72 +213,72 @@ int str2ba(const char *str, bdaddr_t *ba)
 }
 #endif
 
-BRComms::BRComms()
+CiMobotComms::CiMobotComms()
 {
-  BRComms_init(&_comms);
+  iMobotComms_init(&_comms);
 }
 
-BRComms::~BRComms()
+CiMobotComms::~CiMobotComms()
 {
 }
 
-int BRComms::connect(const char* address, int channel)
+int CiMobotComms::connect(const char* address, int channel)
 {
-  return BRComms_connect(&_comms, address, channel);
+  return iMobotComms_connect(&_comms, address, channel);
 }
 
-int BRComms::disconnect()
+int CiMobotComms::disconnect()
 {
-  return BRComms_disconnect(&_comms);
+  return iMobotComms_disconnect(&_comms);
 }
 
-int BRComms::isConnected()
+int CiMobotComms::isConnected()
 {
-  return BRComms_isConnected(&_comms);
+  return iMobotComms_isConnected(&_comms);
 }
 
-int BRComms::setMotorDirection(int id, int dir)
+int CiMobotComms::setMotorDirection(int id, int dir)
 {
-  return BRComms_setMotorDirection(&_comms, id, dir);
+  return iMobotComms_setMotorDirection(&_comms, id, dir);
 }
 
-int BRComms::getMotorDirection(int id, int &dir)
+int CiMobotComms::getMotorDirection(int id, int &dir)
 {
-  return BRComms_getMotorDirection(&_comms, id, &dir);
+  return iMobotComms_getMotorDirection(&_comms, id, &dir);
 }
 
-int BRComms::setMotorSpeed(int id, int speed)
+int CiMobotComms::setMotorSpeed(int id, int speed)
 {
-  return BRComms_setMotorSpeed(&_comms, id, speed);
+  return iMobotComms_setMotorSpeed(&_comms, id, speed);
 }
 
-int BRComms::getMotorSpeed(int id, int &speed)
+int CiMobotComms::getMotorSpeed(int id, int &speed)
 {
-  return BRComms_getMotorSpeed(&_comms, id, &speed);
+  return iMobotComms_getMotorSpeed(&_comms, id, &speed);
 }
 
-int BRComms::setMotorPosition(int id, double position)
+int CiMobotComms::setMotorPosition(int id, double position)
 {
-  return BRComms_setMotorPosition(&_comms, id, position);
+  return iMobotComms_setMotorPosition(&_comms, id, position);
 }
 
-int BRComms::getMotorPosition(int id, double &position)
+int CiMobotComms::getMotorPosition(int id, double &position)
 {
-  return BRComms_getMotorPosition(&_comms, id, &position);
+  return iMobotComms_getMotorPosition(&_comms, id, &position);
 }
 
-int BRComms::getMotorState(int id, int &state)
+int CiMobotComms::getMotorState(int id, int &state)
 {
-  return BRComms_getMotorState(&_comms, id, &state);
+  return iMobotComms_getMotorState(&_comms, id, &state);
 }
 
-int BRComms::waitMotor(int id)
+int CiMobotComms::waitMotor(int id)
 {
-  return BRComms_waitMotor(&_comms, id);
+  return iMobotComms_waitMotor(&_comms, id);
 }
 
-int BRComms::stop()
+int CiMobotComms::stop()
 {
-  return BRComms_stop(&_comms);
+  return iMobotComms_stop(&_comms);
 }
 

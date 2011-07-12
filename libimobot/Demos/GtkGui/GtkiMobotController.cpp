@@ -112,7 +112,7 @@ int initialize()
   /* Initialize the gaits */
   init_gaits();
   imobotComms = (br_comms_t*)malloc(sizeof(br_comms_t));
-  BRComms_init(imobotComms);
+  iMobotComms_init(imobotComms);
   g_isConnected = 0;
   g_localInit = 0;
 
@@ -368,7 +368,7 @@ gboolean updateMotorAngles(gpointer data)
   double position;
   int i;
   char buf[40];
-  if(!BRComms_isConnected(imobotComms) && !g_localInit) {
+  if(!iMobotComms_isConnected(imobotComms) && !g_localInit) {
     for(i = 0; i < 4; i++) {
       gtk_entry_set_text(motorAngleEntries[i], "N/A");
     }

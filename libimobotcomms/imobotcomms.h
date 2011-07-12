@@ -40,19 +40,19 @@ typedef struct br_comms_s
 extern "C" {
 #endif
 
-int BRComms_init(br_comms_t* comms);
-int BRComms_connect(br_comms_t* comms, const char* address, int channel);
-int BRComms_disconnect(br_comms_t* comms);
-int BRComms_isConnected(br_comms_t* comms);
-int BRComms_setMotorDirection(br_comms_t* comms, int id, int dir);
-int BRComms_getMotorDirection(br_comms_t* comms, int id, int *dir);
-int BRComms_setMotorSpeed(br_comms_t* comms, int id, int speed);
-int BRComms_getMotorSpeed(br_comms_t* comms, int id, int *speed);
-int BRComms_setMotorPosition(br_comms_t* comms, int id, double position);
-int BRComms_getMotorPosition(br_comms_t* comms, int id, double *position);
-int BRComms_getMotorState(br_comms_t* comms, int id, int *state);
-int BRComms_waitMotor(br_comms_t* comms, int id);
-int BRComms_stop(br_comms_t* comms);
+int iMobotComms_init(br_comms_t* comms);
+int iMobotComms_connect(br_comms_t* comms, const char* address, int channel);
+int iMobotComms_disconnect(br_comms_t* comms);
+int iMobotComms_isConnected(br_comms_t* comms);
+int iMobotComms_setMotorDirection(br_comms_t* comms, int id, int dir);
+int iMobotComms_getMotorDirection(br_comms_t* comms, int id, int *dir);
+int iMobotComms_setMotorSpeed(br_comms_t* comms, int id, int speed);
+int iMobotComms_getMotorSpeed(br_comms_t* comms, int id, int *speed);
+int iMobotComms_setMotorPosition(br_comms_t* comms, int id, double position);
+int iMobotComms_getMotorPosition(br_comms_t* comms, int id, double *position);
+int iMobotComms_getMotorState(br_comms_t* comms, int id, int *state);
+int iMobotComms_waitMotor(br_comms_t* comms, int id);
+int iMobotComms_stop(br_comms_t* comms);
 #ifdef _WIN32
 typedef struct bdaddr_s {
   UINT8 b[6];
@@ -70,10 +70,10 @@ int str2ba(const char *str, bdaddr_t *ba);
 #endif
 
 #if defined (__cplusplus) || defined (_CH_)
-class BRComms {
+class CiMobotComms {
   public:
-    BRComms();
-    ~BRComms();
+    CiMobotComms();
+    ~CiMobotComms();
     int connect(const char* address, int channel);
     int disconnect();
     int isConnected();

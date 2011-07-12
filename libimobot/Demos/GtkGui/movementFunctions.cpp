@@ -3,7 +3,7 @@
 int setMotorDirection(int motor, int direction)
 {
   if(g_isConnected) {
-    return BRComms_setMotorDirection(imobotComms, motor, direction);
+    return iMobotComms_setMotorDirection(imobotComms, motor, direction);
   } else if (g_localInit) {
     return BR_setMotorDirection(iMobot, motor, direction);
   } else {
@@ -15,7 +15,7 @@ int setMotorDirection(int motor, int direction)
 int setMotorSpeed(int motor, int speed)
 {
   if(g_isConnected) {
-    return BRComms_setMotorSpeed(imobotComms, motor, speed);
+    return iMobotComms_setMotorSpeed(imobotComms, motor, speed);
   } else if (g_localInit) {
     return BR_setMotorSpeed(iMobot, motor, speed);
   } else {
@@ -27,7 +27,7 @@ int setMotorSpeed(int motor, int speed)
 int stop()
 {
   if(g_isConnected) {
-    return BRComms_stop(imobotComms);
+    return iMobotComms_stop(imobotComms);
   } else if (g_localInit) {
     return BR_stop(iMobot);
   } else {
@@ -39,7 +39,7 @@ int stop()
 int setMotorPosition(int motor, double position)
 {
   if(g_isConnected) {
-    return BRComms_setMotorPosition(imobotComms, motor, position);
+    return iMobotComms_setMotorPosition(imobotComms, motor, position);
   } else if (g_localInit) {
     return BR_poseJoint(iMobot, motor, position);
   } else {
@@ -52,7 +52,7 @@ int getMotorPosition(int motor, double *position)
 {
   int code;
   if(g_isConnected) {
-    code = BRComms_getMotorPosition(imobotComms, motor, position);
+    code = iMobotComms_getMotorPosition(imobotComms, motor, position);
     return code;
   } else if (g_localInit) {
     code = BR_getMotorPosition(iMobot, motor, position);
@@ -66,7 +66,7 @@ int getMotorPosition(int motor, double *position)
 int waitMotor(int motor)
 {
   if(g_isConnected) {
-    return BRComms_waitMotor(imobotComms, motor);
+    return iMobotComms_waitMotor(imobotComms, motor);
   } else if (g_localInit) {
     return BR_waitMotor(iMobot, motor);
   } else {
