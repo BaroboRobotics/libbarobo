@@ -218,6 +218,10 @@ BRComms::BRComms()
   BRComms_init(&_comms);
 }
 
+BRComms::~BRComms()
+{
+}
+
 int BRComms::connect(const char* address, int channel)
 {
   return BRComms_connect(&_comms, address, channel);
