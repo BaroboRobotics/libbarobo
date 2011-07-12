@@ -3,15 +3,6 @@
 #include <stdlib.h>
 #include "imobotcomms.h"
 
-#ifdef _WIN32
-typedef struct bdaddr_s {
-  UINT8 b[6];
-} bdaddr_t;
-int str2ba(const char *str, bdaddr_t *ba);
-#define write(sock, buf, len) send(sock, buf, len, 0)
-#define read(sock, buf, len) \
-  recvfrom(sock, buf, len, 0, (struct sockaddr*)0, 0)
-#endif
 
 int BRComms_init(br_comms_t* comms)
 {
@@ -21,6 +12,7 @@ int BRComms_init(br_comms_t* comms)
   WSADATA wsd;
   WSAStartup (MAKEWORD(1,1), &wsd);
 #endif
+  return 0;
 }
 
 int BRComms_connect(br_comms_t* comms, const char* address, int channel)
@@ -170,7 +162,11 @@ int BRComms_waitMotor(br_comms_t* comms, int id)
     if(state == 0) {
       return 0;
     } else {
+#ifndef _WIN32
       usleep(200000);
+#else
+      Sleep(200);
+#endif
     }
   }
 }
@@ -220,6 +216,10 @@ int str2ba(const char *str, bdaddr_t *ba)
 BRComms::BRComms()
 {
   BRComms_init(&_comms);
+}
+
+BRComms::~BRComms()
+{
 }
 
 int BRComms::connect(const char* address, int channel)

@@ -1,0 +1,390 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resourceppc.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#include "resdefce.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_TEST1               ICON                    "test1.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU MENU 
+BEGIN
+    POPUP "Help"
+    BEGIN
+        MENUITEM "About",                       IDM_HELP_ABOUT
+        MENUITEM "Dialog2",                     ID_HELP_DIA1
+        MENUITEM "Dialog3",                     ID_HELP_DIA2
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDC_TEST1 ACCELERATORS 
+BEGIN
+    "A",            IDM_HELP_ABOUT,         VIRTKEY, CONTROL, NOINVERT
+    "Q",            IDM_OK,                 VIRTKEY, CONTROL, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG  0, 0, 156, 160
+STYLE DS_SETFONT | WS_POPUP | WS_CAPTION
+EXSTYLE 0x80000000L
+CAPTION "Control iMobot"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "QUIT",IDC_QUIT,119,135,31,18
+    PUSHBUTTON      "STOP",IDC_STOP,83,134,31,19
+    PUSHBUTTON      "PAUSE",IDC_PAUSE,44,134,35,19
+    PUSHBUTTON      "PLAY",IDC_PLAY,6,133,35,20
+    LTEXT           "Pose #",IDC_STATIC,41,22,24,8
+    PUSHBUTTON      "Move",IDC_MOVE,6,25,28,19
+    PUSHBUTTON      "Set Pose",IDC_SETPOSE,6,105,36,20
+    EDITTEXT        IDC_POSENO2,40,31,27,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "CONNECT",IDC_CONNECT,104,7,46,14
+    PUSHBUTTON      "GAIT",IDC_GAIT,7,54,40,14
+    EDITTEXT        IDC_GAITBOX,49,55,89,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ENC5,51,82,17,13,ES_AUTOHSCROLL
+    LTEXT           "E1",IDC_STATIC,55,74,10,8
+    EDITTEXT        IDC_ENC6,72,82,17,12,ES_AUTOHSCROLL
+    LTEXT           "E2",IDC_STATIC,76,74,10,8
+    EDITTEXT        IDC_ENC7,94,82,17,12,ES_AUTOHSCROLL
+    LTEXT           "E3",IDC_STATIC,98,74,10,8
+    EDITTEXT        IDC_ENC8,116,82,17,12,ES_AUTOHSCROLL
+    LTEXT           "E4",IDC_STATIC,120,74,10,8
+    PUSHBUTTON      "Get Pos",IDC_GETPOS,6,77,37,21
+    LTEXT           "READY",IDC_STATIC,111,30,29,8
+    EDITTEXT        IDC_POSENO,48,111,17,12,ES_AUTOHSCROLL
+    LTEXT           "#",IDC_STATIC,53,100,10,8
+    EDITTEXT        IDC_ENC1,70,111,17,12,ES_AUTOHSCROLL
+    LTEXT           "E1",IDC_STATIC,74,102,10,8
+    EDITTEXT        IDC_ENC2,91,111,17,12,ES_AUTOHSCROLL
+    LTEXT           "E2",IDC_STATIC,95,101,10,8
+    EDITTEXT        IDC_ENC3,110,111,17,12,ES_AUTOHSCROLL
+    LTEXT           "E3",IDC_STATIC,114,101,10,8
+    EDITTEXT        IDC_ENC4,129,111,17,12,ES_AUTOHSCROLL
+    LTEXT           "E4",IDC_STATIC,134,102,10,8
+END
+
+IDD_ABOUTBOX_WIDE DIALOG  0, 0, 210, 129
+STYLE DS_SETFONT | WS_POPUP | WS_CAPTION
+EXSTYLE 0x80000000L
+CAPTION "About test1"
+FONT 8, "MS Sans Serif"
+BEGIN
+    ICON            IDI_TEST1,IDC_STATIC_1,12,12,21,20,SS_REALSIZEIMAGE
+    LTEXT           "test1 Version 1.0",IDC_STATIC_2,48,12,66,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2010",IDC_STATIC_3,48,24,66,8
+END
+
+IDD_DIA3 DIALOG  0, 0, 156, 177
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Pose Control"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    EDITTEXT        IDC_POSENO,10,33,17,12,ES_AUTOHSCROLL
+    LTEXT           "#",IDC_STATIC,12,22,10,8
+    EDITTEXT        IDC_ENC1,29,33,17,12,ES_AUTOHSCROLL
+    LTEXT           "E1",IDC_STATIC,33,22,10,8
+    EDITTEXT        IDC_ENC2,48,33,17,12,ES_AUTOHSCROLL
+    LTEXT           "E2",IDC_STATIC,52,22,10,8
+    EDITTEXT        IDC_ENC3,67,33,17,12,ES_AUTOHSCROLL
+    LTEXT           "E3",IDC_STATIC,71,22,10,8
+    EDITTEXT        IDC_ENC4,87,33,17,12,ES_AUTOHSCROLL
+    LTEXT           "E4",IDC_STATIC,91,22,10,8
+    PUSHBUTTON      "Save Pose",IDC_SETPOSE,15,49,54,21
+    PUSHBUTTON      "Save Current Pos",IDC_BUTTON1,74,49,70,21
+    PUSHBUTTON      "List Saved Poses and Routines",IDC_BUTTON2,7,145,143,22
+    EDITTEXT        IDC_POSENAME,107,33,35,12,ES_AUTOHSCROLL
+    LTEXT           "Name",IDC_STATIC,111,22,18,8
+    GROUPBOX        "Set Pose",IDC_STATIC,7,7,143,67
+    EDITTEXT        IDC_LISTPOSES,15,100,76,14,ES_AUTOHSCROLL
+    LTEXT           "List Poses",IDC_STATIC,28,90,50,8
+    LTEXT           "Routine Name",IDC_STATIC,99,89,46,8
+    PUSHBUTTON      "Save Routine",IDC_BUTTON3,42,119,70,21
+    EDITTEXT        IDC_ROUTINE,97,100,45,14,ES_AUTOHSCROLL
+END
+
+IDD_DIA2 DIALOG  0, 0, 156, 177
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    PUSHBUTTON      "QUIT",IDC_QUIT,111,56,41,19
+    PUSHBUTTON      "STOP",IDC_STOP,61,56,42,19
+    PUSHBUTTON      "PAUSE",IDC_PAUSE,7,56,46,19
+    PUSHBUTTON      "PLAY",IDC_PLAY,7,34,35,20
+    LTEXT           "Pose #",IDC_STATIC,51,7,24,8
+    PUSHBUTTON      "Move",IDC_MOVE,7,10,35,19
+    EDITTEXT        IDC_POSENO2,49,16,27,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "CONNECT",IDC_CONNECT,104,7,46,14
+    EDITTEXT        IDC_ENC5,55,84,17,13,ES_AUTOHSCROLL
+    LTEXT           "E1",IDC_STATIC,59,76,10,8
+    EDITTEXT        IDC_ENC6,75,84,17,12,ES_AUTOHSCROLL
+    LTEXT           "E2",IDC_STATIC,79,76,10,8
+    EDITTEXT        IDC_ENC7,97,84,17,12,ES_AUTOHSCROLL
+    LTEXT           "E3",IDC_STATIC,101,76,10,8
+    EDITTEXT        IDC_ENC8,119,84,17,12,ES_AUTOHSCROLL
+    LTEXT           "E4",IDC_STATIC,123,76,10,8
+    PUSHBUTTON      "Get Pos",IDC_GETPOS,7,79,37,21
+    LTEXT           "READY",IDC_STATIC,114,26,29,8
+    PUSHBUTTON      "Manage Poses",IDC_MANAGEPOSE,7,126,144,22
+    LTEXT           "Routine Name",IDC_STATIC,49,31,46,8
+    EDITTEXT        IDC_POSENO3,46,41,48,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "Manage Moves",IDC_MANAGEMOVE,7,148,143,22
+    PUSHBUTTON      "Manage Gaits",IDC_BUTTON1,7,105,143,21
+    PUSHBUTTON      "DEMO",IDC_BUTTON2,100,40,50,14
+END
+
+IDD_POSE DIALOG  0, 0, 159, 177
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LISTBOX         IDC_LIST2,7,7,145,51,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Saved Pose",IDC_BUTTON4,54,57,50,14
+    EDITTEXT        IDC_EDIT2,24,89,23,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT3,52,89,23,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT4,80,89,23,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT5,108,89,23,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Custom Pose",IDC_BUTTON5,53,106,50,14
+    EDITTEXT        IDC_EDIT6,58,134,94,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Save As",IDC_BUTTON6,7,134,50,14
+    PUSHBUTTON      "Close",IDC_BUTTON7,102,156,50,14
+END
+
+IDD_MOVE DIALOG  0, 0, 159, 177
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LISTBOX         IDC_LIST2,7,7,145,51,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Saved Move",IDC_BUTTON4,54,57,50,14
+    EDITTEXT        IDC_EDIT2,25,87,23,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT3,53,87,23,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT4,81,87,23,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT5,109,87,23,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Custom Move",IDC_BUTTON5,53,106,50,14
+    EDITTEXT        IDC_EDIT6,58,134,94,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Save As",IDC_BUTTON6,7,134,50,14
+    PUSHBUTTON      "Close",IDC_BUTTON7,102,156,50,14
+END
+
+IDD_NEWGAIT DIALOG  0, 0, 159, 177
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    PUSHBUTTON      "Add",IDC_BUTTON2,7,26,25,14
+    PUSHBUTTON      "Add",IDC_BUTTON3,7,72,25,14
+    LISTBOX         IDC_LIST2,33,14,119,40,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    LISTBOX         IDC_LIST3,34,59,118,42,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    LISTBOX         IDC_LIST4,7,102,145,38,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Name:",IDC_STATIC,7,142,22,8
+    EDITTEXT        IDC_EDIT1,33,142,119,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Cancel",IDC_BUTTON4,102,156,50,14
+    PUSHBUTTON      "Save",IDC_BUTTON5,51,156,50,14
+    LTEXT           "Poses",IDC_STATIC,7,18,20,8
+    LTEXT           "Moves",IDC_STATIC,7,64,22,8
+END
+
+IDD_GAIT DIALOG  0, 0, 160, 180
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LTEXT           "Gaits:",IDC_STATIC,7,7,20,8
+    LISTBOX         IDC_LIST1,7,16,146,107,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Play Gait",IDC_BUTTON1,7,122,146,17
+    PUSHBUTTON      "New Gait",IDC_BUTTON2,7,139,146,17
+    PUSHBUTTON      "Cancel",IDC_BUTTON3,103,159,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 150
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 153
+    END
+
+    IDD_ABOUTBOX_WIDE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 203
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 122
+    END
+
+    IDD_DIA3, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 150
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 170
+    END
+
+    IDD_DIA2, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 150
+        VERTGUIDE, 134
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 170
+    END
+
+    IDD_POSE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 152
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 170
+    END
+
+    IDD_MOVE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 152
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 170
+    END
+
+    IDD_NEWGAIT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 152
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 170
+    END
+
+    IDD_GAIT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 153
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 173
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resourceppc.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""windows.h""\r\n"
+    "#include ""resdefce.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#include ""test1ppc.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_APP_TITLE           "Control iMobot"
+    IDC_TEST1               "TEST1"
+    IDS_TESTCOMB            "3"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_OK                  "OK"
+    IDS_HELP                "HELP"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#include "test1ppc.rc2"  // non-Microsoft Visual C++ edited resources
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

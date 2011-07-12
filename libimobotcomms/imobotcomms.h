@@ -54,6 +54,13 @@ int BRComms_getMotorState(br_comms_t* comms, int id, int *state);
 int BRComms_waitMotor(br_comms_t* comms, int id);
 int BRComms_stop(br_comms_t* comms);
 #ifdef _WIN32
+typedef struct bdaddr_s {
+  UINT8 b[6];
+} bdaddr_t;
+int str2ba(const char *str, bdaddr_t *ba);
+#define write(sock, buf, len) send(sock, buf, len, 0)
+#define read(sock, buf, len) \
+  recvfrom(sock, buf, len, 0, (struct sockaddr*)0, 0)
 void baswap(bdaddr_t *dst, const bdaddr_t *src);
 int str2ba(const char *str, bdaddr_t *ba);
 #endif
