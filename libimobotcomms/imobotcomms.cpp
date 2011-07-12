@@ -242,9 +242,9 @@ int BRComms::setMotorDirection(int id, int dir)
   return BRComms_setMotorDirection(&_comms, id, dir);
 }
 
-int BRComms::getMotorDirection(int id, int *dir)
+int BRComms::getMotorDirection(int id, int &dir)
 {
-  return BRComms_getMotorDirection(&_comms, id, dir);
+  return BRComms_getMotorDirection(&_comms, id, &dir);
 }
 
 int BRComms::setMotorSpeed(int id, int speed)
@@ -252,9 +252,9 @@ int BRComms::setMotorSpeed(int id, int speed)
   return BRComms_setMotorSpeed(&_comms, id, speed);
 }
 
-int BRComms::getMotorSpeed(int id, int *speed)
+int BRComms::getMotorSpeed(int id, int &speed)
 {
-  return BRComms_getMotorSpeed(&_comms, id, speed);
+  return BRComms_getMotorSpeed(&_comms, id, &speed);
 }
 
 int BRComms::setMotorPosition(int id, double position)
@@ -262,14 +262,14 @@ int BRComms::setMotorPosition(int id, double position)
   return BRComms_setMotorPosition(&_comms, id, position);
 }
 
-int BRComms::getMotorPosition(int id, double *position)
+int BRComms::getMotorPosition(int id, double &position)
 {
-  return BRComms_getMotorPosition(&_comms, id, position);
+  return BRComms_getMotorPosition(&_comms, id, &position);
 }
 
-int BRComms::getMotorState(int id, int *state)
+int BRComms::getMotorState(int id, int &state)
 {
-  return BRComms_getMotorState(&_comms, id, state);
+  return BRComms_getMotorState(&_comms, id, &state);
 }
 
 int BRComms::waitMotor(int id)

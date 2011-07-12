@@ -71,16 +71,12 @@ int BR_initListenerBluetooth(iMobot_t* iMobot, int channel)
   // bind socket to port 1 of the first available 
   // local bluetooth adapter
   loc_addr.rc_family = AF_BLUETOOTH;
-#ifdef _CH_
   loc_addr.rc_bdaddr.b[0] = 0;
   loc_addr.rc_bdaddr.b[1] = 0;
   loc_addr.rc_bdaddr.b[2] = 0;
   loc_addr.rc_bdaddr.b[3] = 0;
   loc_addr.rc_bdaddr.b[4] = 0;
   loc_addr.rc_bdaddr.b[5] = 0;
-#else
-  loc_addr.rc_bdaddr = *BDADDR_ANY;
-#endif
   loc_addr.rc_channel = (uint8_t) channel;
   err = bind(iMobot->socket, (struct sockaddr *)&loc_addr, sizeof(loc_addr));
   if(err < 0) {

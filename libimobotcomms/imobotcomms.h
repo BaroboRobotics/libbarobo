@@ -71,12 +71,12 @@ class BRComms {
     int disconnect();
     int isConnected();
     int setMotorDirection(int id, int dir);
-    int getMotorDirection(int id, int *dir);
+    int getMotorDirection(int id, int &dir);
     int setMotorSpeed(int id, int speed);
-    int getMotorSpeed(int id, int *speed);
+    int getMotorSpeed(int id, int &speed);
     int setMotorPosition(int id, double position);
-    int getMotorPosition(int id, double *position);
-    int getMotorState(int id, int *state);
+    int getMotorPosition(int id, double &position);
+    int getMotorState(int id, int &state);
     int waitMotor(int id);
     int stop();
   private:
