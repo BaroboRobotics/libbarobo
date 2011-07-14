@@ -220,7 +220,7 @@ int init_gaits()
 
 	/* Stand turn Right */
 	gait = new Gait("Stand Turn Right");
-	SET_ANGLES(angles, 0, 0, 30, 0);
+	SET_ANGLES(angles, 0, 0, -30, 0);
 	motorMask = 1<<2;
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_MOVE, angles, motorMask));
@@ -228,7 +228,7 @@ int init_gaits()
 
 	/* Stand turn left */
 	gait = new Gait("Stand Turn Left");
-	SET_ANGLES(angles, 0, 0, -30, 0);
+	SET_ANGLES(angles, 0, 0, 30, 0);
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_MOVE, angles, motorMask));
 	addGait(gait);
