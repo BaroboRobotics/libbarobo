@@ -1108,7 +1108,7 @@ int initGaits()
 
 	/* Arch */
 	gait = new Gait(L"Arch");
-	SET_ANGLES(angles, 30, -30, 0, 0);
+	SET_ANGLES(angles, -30, 30, 0, 0);
 	motorMask = 0;
 	motorMask |= (1<<0); motorMask |= (1<<1);
 	gait->addMotion( new Motion(
@@ -1124,15 +1124,15 @@ int initGaits()
 
 	/* Inch Right */
 	gait = new Gait(L"Inch Right");
-	SET_ANGLES(angles, 50, 0, 0, 0);
+	SET_ANGLES(angles, -50, 0, 0, 0);
 	motorMask = 0;
 	motorMask |= (1<<0); motorMask |= (1<<1);
 	gait->addMotion(new Motion(
 		MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, 50, -50, 0, 0);
+	SET_ANGLES(angles, -50, 50, 0, 0);
 	gait->addMotion(new Motion(
 		MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, 0, -50, 0, 0);
+	SET_ANGLES(angles, 0, 50, 0, 0);
 	gait->addMotion(new Motion(
 		MOTION_POSE, angles, motorMask));
 	SET_ANGLES(angles, 0, 0, 0, 0);
@@ -1142,15 +1142,15 @@ int initGaits()
 
 	/* Inch Left */
 	gait = new Gait(L"Inch Left");
-	SET_ANGLES(angles, 0, -50, 0, 0);
+	SET_ANGLES(angles, 0, 50, 0, 0);
 	motorMask = 0;
 	motorMask |= (1<<0); motorMask |= (1<<1);
 	gait->addMotion(new Motion(
 		MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, 50, -50, 0, 0);
+	SET_ANGLES(angles, -50, 50, 0, 0);
 	gait->addMotion(new Motion(
 		MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, 50, 0, 0, 0);
+	SET_ANGLES(angles, -50, 0, 0, 0);
 	gait->addMotion(new Motion(
 		MOTION_POSE, angles, motorMask));
 	SET_ANGLES(angles, 0, 0, 0, 0);
@@ -1165,14 +1165,14 @@ int initGaits()
 	motorMask |= (1<<0); motorMask |= (1<<1);
 	gait->addMotion(new Motion(
 		MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, 85, -85, 0, 0);
+	SET_ANGLES(angles, -85, 80, 0, 0);
 	gait->addMotion(new Motion(
 		MOTION_POSE, angles, motorMask));
 	SET_ANGLES(angles, 0, 0, 45, 0);
 	motorMask = (1<<2);
 	gait->addMotion(new Motion(
 		MOTION_MOVE, angles, motorMask));
-	SET_ANGLES(angles, -20, 0, 0, 0);
+	SET_ANGLES(angles, 20, 0, 0, 0);
 	motorMask = (1<<0);
 	gait->addMotion(new Motion(
 		MOTION_POSE, angles, motorMask));
@@ -1238,7 +1238,7 @@ int initGaits()
 
 	/* Skinny */
 	gait = new Gait(L"Skinny");
-	SET_ANGLES(angles, 85, 85, 0, 0);
+	SET_ANGLES(angles, 85, 80, 0, 0);
 	motorMask = 1<<0; motorMask |= 1<<1;
 	gait->addMotion(new Motion(
 		MOTION_POSE, angles, motorMask));
