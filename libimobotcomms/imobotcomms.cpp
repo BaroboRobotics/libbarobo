@@ -151,6 +151,17 @@ int iMobotComms_getMotorState(br_comms_t* comms, int id, int *state)
   return 0;
 }
 
+int iMobotComms_poseZero(br_comms_t* comms)
+{
+  int i;
+  for(i = 0; i < 4; i++) {
+    if(iMobotComms_setMotorPosition(comms, i, 0)) {
+      return -1;
+    }
+  }
+  return 0;
+}
+
 int iMobotComms_waitMotor(br_comms_t* comms, int id)
 {
   int state;
@@ -270,6 +281,11 @@ int CiMobotComms::getMotorPosition(int id, double &position)
 int CiMobotComms::getMotorState(int id, int &state)
 {
   return iMobotComms_getMotorState(&_comms, id, &state);
+}
+
+int CiMobotComms::poseZero()
+{
+  return iMobotComms_poseZero(&_comms);
 }
 
 int CiMobotComms::waitMotor(int id)

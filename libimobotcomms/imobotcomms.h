@@ -51,6 +51,7 @@ int iMobotComms_getMotorSpeed(br_comms_t* comms, int id, int *speed);
 int iMobotComms_setMotorPosition(br_comms_t* comms, int id, double position);
 int iMobotComms_getMotorPosition(br_comms_t* comms, int id, double *position);
 int iMobotComms_getMotorState(br_comms_t* comms, int id, int *state);
+int iMobotComms_poseZero(br_comms_t* comms);
 int iMobotComms_waitMotor(br_comms_t* comms, int id);
 int iMobotComms_stop(br_comms_t* comms);
 #ifdef _WIN32
@@ -84,6 +85,7 @@ class CiMobotComms {
     int setMotorPosition(int id, double position);
     int getMotorPosition(int id, double &position);
     int getMotorState(int id, int &state);
+    int poseZero();
     int waitMotor(int id);
     int stop();
   private:
