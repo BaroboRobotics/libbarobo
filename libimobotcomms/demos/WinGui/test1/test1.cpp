@@ -29,7 +29,7 @@ typedef struct imobotMotion_s {
 //define serial/bluetooth connection
 Serial bluetooth;
 BthUtils objBthUtils;
-BRComms samplebt ; 
+CiMobotComms samplebt ; 
 
 imobotMotion_t g_imobotPoses[50];
 int g_numPoses;
@@ -425,25 +425,25 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 					double tempenc ;
 					
-					samplebt.getMotorPosition(0,&tempenc);
+					samplebt.getMotorPosition(0,tempenc);
 					swprintf(readdata,L"%lf",tempenc);
 					SetDlgItemText(hDlg, IDC_ENC5, readdata);
 					SetDlgItemText(hDlg, IDC_ENC1, readdata);
 					Sleep(500);
 					
-					samplebt.getMotorPosition(1,&tempenc);
+					samplebt.getMotorPosition(1,tempenc);
 					swprintf(readdata,L"%lf",tempenc);
 					SetDlgItemText(hDlg, IDC_ENC6, readdata);
 					SetDlgItemText(hDlg, IDC_ENC2, readdata);
 					Sleep(500);
 
-					samplebt.getMotorPosition(2,&tempenc);
+					samplebt.getMotorPosition(2,tempenc);
 					swprintf(readdata,L"lf",tempenc);
 					SetDlgItemText(hDlg, IDC_ENC7, readdata);
 					SetDlgItemText(hDlg, IDC_ENC3, readdata);
 					Sleep(500);
 
-					samplebt.getMotorPosition(3,&tempenc);
+					samplebt.getMotorPosition(3,tempenc);
 					swprintf(readdata,L"lf",tempenc);
 					SetDlgItemText(hDlg, IDC_ENC8, readdata);
 					SetDlgItemText(hDlg, IDC_ENC4, readdata);
@@ -614,22 +614,22 @@ INT_PTR CALLBACK first_dia(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
 
 					double tempenc ;
 					
-					samplebt.getMotorPosition(0,&tempenc);
+					samplebt.getMotorPosition(0,tempenc);
 					swprintf(readdata,L"%lf",tempenc);
 					SetDlgItemText(hDlg, IDC_ENC5, readdata);
 					
 					
-					samplebt.getMotorPosition(1,&tempenc);
+					samplebt.getMotorPosition(1,tempenc);
 					swprintf(readdata,L"%lf",tempenc);
 					SetDlgItemText(hDlg, IDC_ENC6, readdata);
 					
 
-					samplebt.getMotorPosition(2,&tempenc);
+					samplebt.getMotorPosition(2,tempenc);
 					swprintf(readdata,L"%lf",tempenc);
 					SetDlgItemText(hDlg, IDC_ENC7, readdata);
 					
 
-					samplebt.getMotorPosition(3,&tempenc);
+					samplebt.getMotorPosition(3,tempenc);
 					swprintf(readdata,L"%lf",tempenc);
 					SetDlgItemText(hDlg, IDC_ENC8, readdata);
 					
@@ -791,7 +791,7 @@ INT_PTR CALLBACK move_dia(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 						
 						for(i = 0; i < 4; i++) {
 							if((1<<i) & motorMask) {
-								samplebt.getMotorPosition(i, &angle);
+								samplebt.getMotorPosition(i, angle);
 								angle += angles[i];
 								samplebt.setMotorPosition(i, angle);
 							}
@@ -829,7 +829,7 @@ INT_PTR CALLBACK move_dia(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 						double angle;
 						for(i = 0; i < 4; i++) {
 							if((1<<i) & g_imobotMoves[index].motorMask) {
-								samplebt.getMotorPosition(i, &angle);
+								samplebt.getMotorPosition(i, angle);
 								angle += g_imobotMoves[index].angles[i];
 								samplebt.setMotorPosition(i, angle);
 							}
@@ -1227,7 +1227,7 @@ int initGaits()
 
 	/* Unstand */
 	gait = new Gait(L"Unstand");
-	SET_ANGLES(angles, 85, -85, 0, 0);
+	SET_ANGLES(angles, -85, 80, 0, 0);
 	motorMask = 1<<0; motorMask |= 1<<1;
 	gait->addMotion(new Motion(
 		MOTION_POSE, angles, motorMask));
@@ -1264,7 +1264,7 @@ int moveJoints(const double *angles, unsigned char motorMask)
 	double angle;
 	for(i = 0; i < 4; i++) {
 		if((1<<i) & motorMask) {
-			samplebt.getMotorPosition(i, &angle);
+			samplebt.getMotorPosition(i, angle);
 			angle += angles[i];
 			samplebt.setMotorPosition(i, angle);
 		}

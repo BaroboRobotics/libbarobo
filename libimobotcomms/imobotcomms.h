@@ -53,6 +53,7 @@ int iMobotComms_getMotorPosition(br_comms_t* comms, int id, double *position);
 int iMobotComms_getMotorState(br_comms_t* comms, int id, int *state);
 int iMobotComms_poseZero(br_comms_t* comms);
 int iMobotComms_waitMotor(br_comms_t* comms, int id);
+int iMobotComms_moveWait(br_comms_t* comms);
 int iMobotComms_stop(br_comms_t* comms);
 #ifdef _WIN32
 typedef struct bdaddr_s {
@@ -87,6 +88,7 @@ class CiMobotComms {
     int getMotorState(int id, int &state);
     int poseZero();
     int waitMotor(int id);
+    int moveWait();
     int stop();
   private:
     br_comms_t _comms;
