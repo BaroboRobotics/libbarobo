@@ -1195,7 +1195,7 @@ int initGaits()
 
 	/* Right Faceplate Forward */
 	gait = new Gait(L"Right Face Forward");
-	SET_ANGLES(angles, 0, 0, 10, 0);
+	SET_ANGLES(angles, 0, 0, -10, 0);
 	motorMask = 1<<2;
 	gait->addMotion(new Motion(
 		MOTION_MOVE, angles, motorMask));
@@ -1203,7 +1203,7 @@ int initGaits()
 
 	/* Right Faceplate Backward */
 	gait = new Gait(L"Right Face Backward");
-	SET_ANGLES(angles, 0, 0, -10, 0);
+	SET_ANGLES(angles, 0, 0, 10, 0);
 	motorMask = 1<<2;
 	gait->addMotion(new Motion(
 		MOTION_MOVE, angles, motorMask));
