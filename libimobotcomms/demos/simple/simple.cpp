@@ -3,8 +3,6 @@
 
 int main()
 {
-  int i;
-  double enc;
   CiMobotComms robot;
   /* Connect to the iMobot with bluetooth address "00:19:88:19:FB:9E" */
   if(robot.connect("00:19:88:19:FB:9E", 20)) {
@@ -13,7 +11,7 @@ int main()
 
   /* Set the robot to "home" position, where all joint angles are 0 degrees. */
   robot.poseZero();
-  sleep(2);
+  robot.moveWait();
 
   /* Rotate each of the faceplates by 90 degrees */
   robot.setMotorPosition(2, 90);
