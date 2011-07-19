@@ -18,6 +18,7 @@ void on_menuitem_connect_activate(GtkWidget* widget, gpointer data);
 void on_menuitem_localInit_activate(GtkWidget* widget, gpointer data);
 void on_button_connectRemote_clicked(GtkWidget* widget, gpointer data);
 void on_button_connectLocal_clicked(GtkWidget* widget, gpointer data);
+void on_checkmenuitem_motorPos_toggled(GtkWidget* widget, gpointer data);
 
 /* Connect Dialog */
 void on_button_connect_clicked(GtkWidget* widget, gpointer data);
@@ -61,6 +62,8 @@ gboolean on_vscale_motorspeed0_button_release_event(GtkRange* range, GdkEvent* e
 gboolean on_vscale_motorspeed1_button_release_event(GtkRange* range, GdkEvent* event, gpointer data);
 gboolean on_vscale_motorspeed2_button_release_event(GtkRange* range, GdkEvent* event, gpointer data);
 gboolean on_vscale_motorspeed3_button_release_event(GtkRange* range, GdkEvent* event, gpointer data);
+gboolean on_vscale_motorPos_button_press_event(GtkRange* range, GdkEvent* event, gpointer data);
+gboolean on_vscale_motorPos_button_release_event(GtkRange* range, GdkEvent* event, gpointer data);
 
 /* Misc. */
 void quick_message (GtkWidget* parent, gchar *message);
@@ -89,5 +92,7 @@ extern int g_numGaits;
 extern GtkVScale* scale_motorSpeeds[4];
 extern int g_isConnected;
 extern int g_localInit;
+extern GtkVScale* scale_motorPositions[4];
+extern int motor_position_scale_pressed[4];
 
 #endif
