@@ -80,7 +80,7 @@ void stand(CiMobot &robot)
   /* Stand the robot up slowly */
   /* First, save the speed */
   robot.getMotorSpeed(0, speed);
-  robot.setMotorSpeed(0, 25);
+  robot.setMotorSpeed(0, 30);
   robot.poseJoint(0, 20);
   robot.waitMotor(0);
   /* Reset the old speed */

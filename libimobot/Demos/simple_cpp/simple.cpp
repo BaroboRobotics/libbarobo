@@ -2,8 +2,6 @@
 
 int main()
 {
-  int i;
-  double enc;
   CiMobot robot;
 
   /* Set the robot to "home" position, where all joint angles are 0 degrees. */

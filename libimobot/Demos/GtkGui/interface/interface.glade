@@ -301,6 +301,32 @@ wish to control.</property>
               </object>
             </child>
             <child>
+              <object class="GtkMenuItem" id="menuitem_View">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_action_appearance">False</property>
+                <property name="label" translatable="yes">_View</property>
+                <property name="use_underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="menu2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkCheckMenuItem" id="checkmenuitem_motorPos">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Display the motor position slider dialog.</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="label" translatable="yes">Motor Position Sliders</property>
+                        <property name="use_underline">True</property>
+                        <signal name="toggled" handler="on_checkmenuitem_motorPos_toggled" swapped="no"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
               <object class="GtkMenuItem" id="menuitem4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -1173,6 +1199,139 @@ wish to control.</property>
             <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkWindow" id="window_motorPos">
+    <property name="can_focus">False</property>
+    <property name="default_height">250</property>
+    <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
+    <child>
+      <object class="GtkTable" id="table4">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="n_rows">2</property>
+        <property name="n_columns">4</property>
+        <child>
+          <object class="GtkLabel" id="label6">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="xpad">6</property>
+            <property name="label" translatable="yes">Joint 0</property>
+          </object>
+          <packing>
+            <property name="x_options"></property>
+            <property name="y_options"></property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label7">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="xpad">6</property>
+            <property name="label" translatable="yes">Joint 1</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="x_options"></property>
+            <property name="y_options"></property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label8">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="xpad">6</property>
+            <property name="label" translatable="yes">Joint 2</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="right_attach">3</property>
+            <property name="x_options"></property>
+            <property name="y_options"></property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label9">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="xpad">6</property>
+            <property name="label" translatable="yes">Joint 3</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="right_attach">4</property>
+            <property name="x_options"></property>
+            <property name="y_options"></property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkVScale" id="vscale_motorPos0">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="inverted">True</property>
+            <property name="round_digits">1</property>
+            <signal name="button-press-event" handler="on_vscale_motorPos_button_press_event" swapped="no"/>
+            <signal name="button-release-event" handler="on_vscale_motorPos_button_release_event" swapped="no"/>
+          </object>
+          <packing>
+            <property name="top_attach">1</property>
+            <property name="bottom_attach">2</property>
+            <property name="x_options">GTK_FILL</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkVScale" id="vscale_motorPos1">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="inverted">True</property>
+            <property name="round_digits">1</property>
+            <signal name="button-press-event" handler="on_vscale_motorPos_button_press_event" swapped="no"/>
+            <signal name="button-release-event" handler="on_vscale_motorPos_button_release_event" swapped="no"/>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="top_attach">1</property>
+            <property name="bottom_attach">2</property>
+            <property name="x_options">GTK_FILL</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkVScale" id="vscale_motorPos2">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="inverted">True</property>
+            <property name="round_digits">1</property>
+            <signal name="button-press-event" handler="on_vscale_motorPos_button_press_event" swapped="no"/>
+            <signal name="button-release-event" handler="on_vscale_motorPos_button_release_event" swapped="no"/>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="right_attach">3</property>
+            <property name="top_attach">1</property>
+            <property name="bottom_attach">2</property>
+            <property name="x_options">GTK_FILL</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkVScale" id="vscale_motorPos3">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="inverted">True</property>
+            <property name="round_digits">1</property>
+            <signal name="button-press-event" handler="on_vscale_motorPos_button_press_event" swapped="no"/>
+            <signal name="button-release-event" handler="on_vscale_motorPos_button_release_event" swapped="no"/>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="right_attach">4</property>
+            <property name="top_attach">1</property>
+            <property name="bottom_attach">2</property>
+            <property name="x_options">GTK_FILL</property>
           </packing>
         </child>
       </object>

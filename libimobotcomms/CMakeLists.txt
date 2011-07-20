@@ -5,7 +5,11 @@ cmake_minimum_required(VERSION 2.6)
 
 project(LIBIMOBOTCOMMS)
 
-add_library(imobotcomms SHARED
+#add_library(imobotcomms SHARED
+#  imobotcomms.cpp
+#  )
+
+add_library(imobotcomms STATIC
   imobotcomms.cpp
   )
 

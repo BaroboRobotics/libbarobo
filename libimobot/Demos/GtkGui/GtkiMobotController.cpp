@@ -18,6 +18,8 @@ GtkWidget *window;
 GtkWidget *dialog_connect;
 GtkWidget *dialog_intro;
 GtkVScale* scale_motorSpeeds[4];
+GtkVScale* scale_motorPositions[4];
+int motor_position_scale_pressed[4];
 
 GtkEntry* motorAngleEntries[4];
 
@@ -137,8 +139,18 @@ int initialize()
   motorAngleEntries[2] = GTK_ENTRY(gtk_builder_get_object(builder, "entry_motor2angle"));
   motorAngleEntries[3] = GTK_ENTRY(gtk_builder_get_object(builder, "entry_motor3angle"));
 
+  /* Set the ranges on the motor position adjustment vscales */
+  scale_motorPositions[0] = GTK_VSCALE(gtk_builder_get_object( builder, "vscale_motorPos0"));
+  scale_motorPositions[1] = GTK_VSCALE(gtk_builder_get_object( builder, "vscale_motorPos1"));
+  scale_motorPositions[2] = GTK_VSCALE(gtk_builder_get_object( builder, "vscale_motorPos2"));
+  scale_motorPositions[3] = GTK_VSCALE(gtk_builder_get_object( builder, "vscale_motorPos3"));
+  gtk_range_set_range(GTK_RANGE(scale_motorPositions[0]), -90, 90);
+  gtk_range_set_range(GTK_RANGE(scale_motorPositions[1]), -90, 90);
+  gtk_range_set_range(GTK_RANGE(scale_motorPositions[2]), -180, 180);
+  gtk_range_set_range(GTK_RANGE(scale_motorPositions[3]), -180, 180);
+
   /* Set up the motor angle entries handler */
-  g_timeout_add(333, updateMotorAngles, NULL);
+  g_timeout_add(250, updateMotorAngles, NULL);
 }
 
 #define SET_ANGLES(angles, a, b, c, d) \
@@ -220,7 +232,7 @@ int init_gaits()
 
 	/* Stand turn Right */
 	gait = new Gait("Stand Turn Right");
-	SET_ANGLES(angles, 0, 0, 30, 0);
+	SET_ANGLES(angles, 0, 0, -30, 0);
 	motorMask = 1<<2;
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_MOVE, angles, motorMask));
@@ -228,7 +240,7 @@ int init_gaits()
 
 	/* Stand turn left */
 	gait = new Gait("Stand Turn Left");
-	SET_ANGLES(angles, 0, 0, -30, 0);
+	SET_ANGLES(angles, 0, 0, 30, 0);
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_MOVE, angles, motorMask));
 	addGait(gait);
@@ -380,6 +392,16 @@ gboolean updateMotorAngles(gpointer data)
     while(position < -180) position += 360;
     sprintf(buf, "%.1f", position);
     gtk_entry_set_text(motorAngleEntries[i], buf);
+
+    /* Update the motor position sliders */
+    if(motor_position_scale_pressed[i]) {
+      /* Send a set motor position to the appropriate motor */
+      setMotorPosition(i, (double)gtk_range_get_value(GTK_RANGE(scale_motorPositions[i])));
+    } else {
+      while(position > 180) position -= 360;
+      while(position < -180) position += 360;
+      gtk_range_set_value(GTK_RANGE(scale_motorPositions[i]), position);
+    }
   }
   return TRUE;
 }

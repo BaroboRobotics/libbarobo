@@ -182,6 +182,17 @@ int iMobotComms_waitMotor(br_comms_t* comms, int id)
   }
 }
 
+int iMobotComms_moveWait(br_comms_t* comms)
+{
+  int i;
+  for(i = 0; i < 4; i++) {
+    if(iMobotComms_waitMotor(comms, i)) {
+      return -1;
+    }
+  }
+  return 0;
+}
+
 int iMobotComms_stop(br_comms_t* comms)
 {
   char buf[160];
@@ -291,6 +302,11 @@ int CiMobotComms::poseZero()
 int CiMobotComms::waitMotor(int id)
 {
   return iMobotComms_waitMotor(&_comms, id);
+}
+
+int CiMobotComms::moveWait()
+{
+  return iMobotComms_moveWait(&_comms);
 }
 
 int CiMobotComms::stop()

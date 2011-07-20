@@ -34,3 +34,14 @@ void on_button_connectLocal_clicked(GtkWidget* widget, gpointer data)
   gtk_widget_hide(dialog_intro);
   gtk_widget_show(window);
 }
+
+void on_checkmenuitem_motorPos_toggled(GtkWidget* widget, gpointer data)
+{
+  GtkWidget* motorPosSliderWindow = GTK_WIDGET(gtk_builder_get_object(builder, "window_motorPos"));
+  if(gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
+  {
+    gtk_widget_show(motorPosSliderWindow);
+  } else {
+    gtk_widget_hide(motorPosSliderWindow);
+  }
+}

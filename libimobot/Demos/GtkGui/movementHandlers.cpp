@@ -213,3 +213,36 @@ gboolean on_vscale_motorspeed3_button_release_event(GtkRange* range, GdkEvent* e
   return FALSE;
 }
 
+gboolean on_vscale_motorPos_button_press_event(GtkRange* range, GdkEvent* event, gpointer data)
+{
+  int i;
+  /* Figure out which scale has been pressed */
+  for(i = 0; i < 4; i++) {
+    if(range == GTK_RANGE(scale_motorPositions[i])) {
+      break;
+    }
+  }
+  if(i == 4) {
+    return FALSE;
+  }
+  
+  motor_position_scale_pressed[i] = 1;
+  return FALSE;
+}
+
+gboolean on_vscale_motorPos_button_release_event(GtkRange* range, GdkEvent* event, gpointer data)
+{
+  int i;
+  /* Figure out which scale has been pressed */
+  for(i = 0; i < 4; i++) {
+    if(range == GTK_RANGE(scale_motorPositions[i])) {
+      break;
+    }
+  }
+  if(i == 4) {
+    return FALSE;
+  }
+  
+  motor_position_scale_pressed[i] = 0;
+  return FALSE;
+}
