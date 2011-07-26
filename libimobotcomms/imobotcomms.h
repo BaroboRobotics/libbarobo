@@ -86,6 +86,10 @@ int str2ba(const char *str, bdaddr_t *ba);
 #endif
 #endif
 
+/* Utility Functions */
+int SendToIMobot(br_comms_t* comms, const char* str, int len);
+int RecvFromIMobot(br_comms_t* comms, char* buf, int size);
+
 #ifndef C_ONLY
 #if defined (__cplusplus) || defined (_CH_)
 class CiMobotComms {
