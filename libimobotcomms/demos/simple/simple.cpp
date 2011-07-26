@@ -5,7 +5,7 @@ int main()
 {
   CiMobotComms robot;
   /* Connect to the iMobot with bluetooth address "00:19:88:19:FB:9E" */
-  if(robot.connect("00:19:88:19:FB:9E", 20)) {
+  if(robot.connectAddress("00:19:88:19:FB:9E", 20)) {
     printf("Error connecting.\n");
   }
 

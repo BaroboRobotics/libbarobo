@@ -15,7 +15,82 @@ int iMobotComms_init(br_comms_t* comms)
   return 0;
 }
 
-int iMobotComms_connect(br_comms_t* comms, const char* address, int channel)
+int iMobotComms_connect(br_comms_t* comms)
+{
+#ifndef _WIN32
+  fprintf(stderr, 
+      "ERROR; Function iMobotComms_connect() is not yet implemented "
+      "on non-Windows systems. Please use iMobotComms_connectAddress() "
+      "instead.");
+  return -1;
+#else
+  char buf[80];
+  /* Search comm ports 1 through 15 for the one connected to the iMobot */
+  int i;
+  for(i = 1; i < 16; i++) {
+    sprintf(buf, "COM%d", i);
+    comms->hSerial = CreateFile(buf, 
+        GENERIC_READ | GENERIC_WRITE,
+        0,
+        0,
+        OPEN_EXISTING,
+        FILE_ATTRIBUTE_NORMAL,
+        0);
+    if(comms->hSerial == INVALID_HANDLE_VALUE) {
+      continue;
+    }
+    /* Set up the properties */
+    DCB dcbSerialParams = {0};
+    dcbSerialParams.DCBlength=sizeof(dcbSerialParams);
+    if(!GetCommState(comms->hSerial, &dcbSerialParams)) {
+      // error getting state
+      continue;
+    }
+    dcbSerialParams.BaudRate = CBR_19200;
+    dcbSerialParams.ByteSize = 8;
+    dcbSerialParams.StopBits = ONESTOPBIT;
+    dcbSerialParams.Parity = NOPARITY;
+    if(!SetCommState(comms->hSerial, &dcbSerialParams)) {
+      // error setting state
+      continue;
+    }
+
+    /* Set up timeouts */
+    COMMTIMEOUTS timeouts = {0};
+    timeouts.ReadIntervalTimeout = 50;
+    timeouts.ReadTotalTimeoutConstant = 50;
+    timeouts.ReadTotalTimeoutMultiplier = 10;
+    timeouts.WriteTotalTimeoutConstant = 50;
+    timeouts.WriteTotalTimeoutMultiplier = 10;
+    if(!SetCommTimeouts(comms->hSerial, &timeouts)) {
+      // Error setting timeouts
+      continue;
+    }
+
+    /* Send status request message to the iMobot */
+    DWORD bytes;
+    if(!WriteFile(comms->hSerial, "GET_IMOBOT_STATUS", strlen("GET_IMOBOT_STATUS")+1, &bytes, NULL)) {
+      continue;
+    }
+
+    /* Check response message */
+    if(!ReadFile(comms->hSerial, buf, 79, &bytes, NULL)) {
+      continue;
+    }
+    if(strcmp(buf, "IMOBOT READY")) {
+      continue;
+    }
+  }
+  /* At this point, we _should_ be connected */
+  if(i != 16) {
+    return 0;
+  } else {
+    return -1;
+  }
+#endif
+}
+
+int iMobotComms_connectAddress(br_comms_t* comms, const char* address, int channel)
 {
   int status;
   comms->socket = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
@@ -235,6 +310,8 @@ int str2ba(const char *str, bdaddr_t *ba)
 }
 #endif
 
+#ifndef C_ONLY
+
 CiMobotComms::CiMobotComms()
 {
   iMobotComms_init(&_comms);
@@ -244,9 +321,15 @@ CiMobotComms::~CiMobotComms()
 {
 }
 
-int CiMobotComms::connect(const char* address, int channel)
+
+int CiMobotComms::connect()
 {
-  return iMobotComms_connect(&_comms, address, channel);
+  return iMobotComms_connect(&_comms);
+}
+
+int CiMobotComms::connectAddress(const char* address, int channel)
+{
+  return iMobotComms_connectAddress(&_comms, address, channel);
 }
 
 int CiMobotComms::disconnect()
@@ -313,4 +396,4 @@ int CiMobotComms::stop()
 {
   return iMobotComms_stop(&_comms);
 }
-
+#endif

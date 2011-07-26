@@ -408,6 +408,7 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
    * GET_MOTOR_POSITION <id> -- returns double 
    * GET_MOTOR_STATE    <id> -- returns uint8_t
    * STOP -- Stop all motors
+   * GET_IMOBOT_STATUS -- Should return the string "IMOBOT READY"
    */
   int id;
   int32_t int32;
@@ -511,6 +512,9 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
       sprintf(mybuf, "%d", int32);
       write(socket, mybuf, strlen(mybuf)+1);
     }
+  } else if (MATCHSTR("GET_IMOBOT_STATUS"))
+  {
+    write(socket, "IMOBOT READY", strlen("IMOBOT READY") + 1);
   } else {
     fprintf(stderr, "Received unknown command from master: %s\n", buf);
     write(socket, "ERROR", 6);
