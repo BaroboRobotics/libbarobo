@@ -15,7 +15,97 @@ int iMobotComms_init(br_comms_t* comms)
   return 0;
 }
 
-int iMobotComms_connect(br_comms_t* comms, const char* address, int channel)
+int iMobotComms_connect(br_comms_t* comms)
+{
+#ifndef _WIN32
+  fprintf(stderr, 
+      "ERROR; Function iMobotComms_connect() is not yet implemented "
+      "on non-Windows systems. Please use iMobotComms_connectAddress() "
+      "instead.");
+  return -1;
+#else
+  char buf[80];
+  /* Search comm ports 1 through 15 for the one connected to the iMobot */
+  int i;
+  for(i = 1; i < 16; i++) {
+    sprintf(buf, "\\\\.\\COM%d", i);
+    printf("Trying %s...\n", buf);
+    comms->hSerial = CreateFile(buf, 
+        GENERIC_READ | GENERIC_WRITE,
+        0,
+        0,
+        OPEN_EXISTING,
+        FILE_ATTRIBUTE_NORMAL,
+        0);
+    if(comms->hSerial == INVALID_HANDLE_VALUE) {
+      printf("Could not open serial handle.\n");
+      continue;
+    }
+    /* Set up the properties */
+    DCB dcbSerialParams = {0};
+    dcbSerialParams.DCBlength=sizeof(dcbSerialParams);
+    if(!GetCommState(comms->hSerial, &dcbSerialParams)) {
+      // error getting state
+      printf("Could not get serial properties.\n");
+      continue;
+    }
+    dcbSerialParams.BaudRate = CBR_115200;
+    dcbSerialParams.ByteSize = 8;
+    dcbSerialParams.StopBits = ONESTOPBIT;
+    dcbSerialParams.Parity = NOPARITY;
+    if(!SetCommState(comms->hSerial, &dcbSerialParams)) {
+      // error setting state
+      printf("Could not set serial properties.\n");
+      continue;
+    }
+
+    /* Set up timeouts */
+    COMMTIMEOUTS timeouts = {0};
+    timeouts.ReadIntervalTimeout = 50;
+    timeouts.ReadTotalTimeoutConstant = 50;
+    timeouts.ReadTotalTimeoutMultiplier = 10;
+    timeouts.WriteTotalTimeoutConstant = 50;
+    timeouts.WriteTotalTimeoutMultiplier = 10;
+    if(!SetCommTimeouts(comms->hSerial, &timeouts)) {
+      // Error setting timeouts
+      printf("Could not set timeouts.\n");
+      continue;
+    }
+
+    /* Send status request message to the iMobot */
+    DWORD bytes;
+    if(!WriteFile(comms->hSerial, "GET_IMOBOT_STATUS", strlen("GET_IMOBOT_STATUS")+1, &bytes, NULL)) {
+      printf("Could not send status request message.\n");
+      CloseHandle(comms->hSerial);
+      continue;
+    }
+    printf("Wrote %d bytes.\n", bytes);
+    Sleep(250);
+    /* Check response message */
+    if(!ReadFile(comms->hSerial, buf, 79, &bytes, NULL)) {
+      printf("Could not receive response message.\n");
+      CloseHandle(comms->hSerial);
+      continue;
+    }
+    if(strcmp(buf, "IMOBOT READY")) {
+      printf("Incorrect response message: %s.\n", buf);
+      CloseHandle(comms->hSerial);
+      continue;
+    } else {
+      comms->connected = 2;
+      break;
+    }
+  }
+  /* At this point, we _should_ be connected */
+  if(i != 16) {
+    return 0;
+  } else {
+    return -1;
+  }
+#endif
+}
+
+int iMobotComms_connectAddress(br_comms_t* comms, const char* address, int channel)
 {
   int status;
   comms->socket = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
@@ -62,9 +152,9 @@ int iMobotComms_setMotorDirection(br_comms_t* comms, int id, int dir)
   int status;
   int bytes_read;
   sprintf(buf, "SET_MOTOR_DIRECTION %d %d", id, dir);
-  status = write(comms->socket, buf, strlen(buf)+1);
+  status = SendToIMobot(comms, buf, strlen(buf)+1);
   if(status < 0) return status;
-  bytes_read = read(comms->socket, buf, sizeof(buf));
+  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
   if(strcmp(buf, "OK")) return -1;
   return 0;
 }
@@ -75,9 +165,9 @@ int iMobotComms_getMotorDirection(br_comms_t* comms, int id, int *dir)
   int status;
   int bytes_read;
   sprintf(buf, "GET_MOTOR_DIRECTION %d", id);
-  status = write(comms->socket, buf, strlen(buf)+1);
+  status = SendToIMobot(comms, buf, strlen(buf)+1);
   if(status < 0) return status;
-  bytes_read = read(comms->socket, buf, sizeof(buf));
+  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
   if(!strcmp(buf, "ERROR")) return -1;
   sscanf(buf, "%d", dir);
   return 0;
@@ -89,9 +179,9 @@ int iMobotComms_setMotorSpeed(br_comms_t* comms, int id, int speed)
   int status;
   int bytes_read;
   sprintf(buf, "SET_MOTOR_SPEED %d %d", id, speed);
-  status = write(comms->socket, buf, strlen(buf)+1);
+  status = SendToIMobot(comms, buf, strlen(buf)+1);
   if(status < 0) return status;
-  bytes_read = read(comms->socket, buf, sizeof(buf));
+  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
   if(strcmp(buf, "OK")) return -1;
   return 0;
 }
@@ -102,9 +192,9 @@ int iMobotComms_getMotorSpeed(br_comms_t* comms, int id, int *speed)
   int status;
   int bytes_read;
   sprintf(buf, "GET_MOTOR_SPEED %d", id);
-  status = write(comms->socket, buf, strlen(buf)+1);
+  status = SendToIMobot(comms, buf, strlen(buf)+1);
   if(status < 0) return status;
-  bytes_read = read(comms->socket, buf, sizeof(buf));
+  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
   if(!strcmp(buf, "ERROR")) return -1;
   sscanf(buf, "%d", speed);
   return 0;
@@ -116,9 +206,9 @@ int iMobotComms_setMotorPosition(br_comms_t* comms, int id, double position)
   int status;
   int bytes_read;
   sprintf(buf, "SET_MOTOR_POSITION %d %lf", id, position);
-  status = write(comms->socket, buf, strlen(buf)+1);
+  status = SendToIMobot(comms, buf, strlen(buf)+1);
   if(status < 0) return status;
-  bytes_read = read(comms->socket, buf, sizeof(buf));
+  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
   if(strcmp(buf, "OK")) return -1;
   return 0;
 }
@@ -129,9 +219,9 @@ int iMobotComms_getMotorPosition(br_comms_t* comms, int id, double *position)
   int status;
   int bytes_read;
   sprintf(buf, "GET_MOTOR_POSITION %d", id);
-  status = write(comms->socket, buf, strlen(buf)+1);
+  status = SendToIMobot(comms, buf, strlen(buf)+1);
   if(status < 0) return status;
-  bytes_read = read(comms->socket, buf, sizeof(buf));
+  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
   if(!strcmp(buf, "ERROR")) return -1;
   sscanf(buf, "%lf", position);
   return 0;
@@ -143,9 +233,9 @@ int iMobotComms_getMotorState(br_comms_t* comms, int id, int *state)
   int status;
   int bytes_read;
   sprintf(buf, "GET_MOTOR_STATE %d", id);
-  status = write(comms->socket, buf, strlen(buf)+1);
+  status = SendToIMobot(comms, buf, strlen(buf)+1);
   if(status < 0) return status;
-  bytes_read = read(comms->socket, buf, sizeof(buf));
+  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
   if(!strcmp(buf, "ERROR")) return -1;
   sscanf(buf, "%d", state);
   return 0;
@@ -198,9 +288,9 @@ int iMobotComms_stop(br_comms_t* comms)
   char buf[160];
   int status;
   int bytes_read;
-  status = write(comms->socket, "STOP", 5);
+  status = SendToIMobot(comms, "STOP", 5);
   if(status < 0) return status;
-  bytes_read = read(comms->socket, buf, sizeof(buf));
+  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
   if(!strcmp(buf, "ERROR")) return -1;
   return 0;
 }
@@ -235,6 +325,48 @@ int str2ba(const char *str, bdaddr_t *ba)
 }
 #endif
 
+int SendToIMobot(br_comms_t* comms, const char* str, int len)
+{
+  if(comms->connected == 1) {
+    return write(comms->socket, str, len);
+  } else if (comms->connected == 2) {
+#ifdef _WIN32
+    DWORD bytes;
+    if(!WriteFile(comms->hSerial, str, len, &bytes, NULL)) {
+      return -1;
+    }
+#else
+    return -1;
+#endif
+  } else {
+    return -1;
+  }
+  return 0;
+}
+
+int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
+{
+#ifdef _WIN32
+  DWORD bytes;
+#endif
+  if(comms->connected == 1) {
+    return read(comms->socket, buf, size);
+  } else if (comms->connected == 2) {
+#ifdef _WIN32
+    if(!ReadFile(comms->hSerial, buf, size, &bytes, NULL)) {
+      return -1;
+    }
+#else
+    return -1;
+#endif
+  } else {
+    return -1;
+  }
+  return bytes;
+}
+
+#ifndef C_ONLY
+
 CiMobotComms::CiMobotComms()
 {
   iMobotComms_init(&_comms);
@@ -244,9 +376,15 @@ CiMobotComms::~CiMobotComms()
 {
 }
 
-int CiMobotComms::connect(const char* address, int channel)
+
+int CiMobotComms::connect()
 {
-  return iMobotComms_connect(&_comms, address, channel);
+  return iMobotComms_connect(&_comms);
+}
+
+int CiMobotComms::connectAddress(const char* address, int channel)
+{
+  return iMobotComms_connectAddress(&_comms, address, channel);
 }
 
 int CiMobotComms::disconnect()
@@ -313,4 +451,4 @@ int CiMobotComms::stop()
 {
   return iMobotComms_stop(&_comms);
 }
-
+#endif

@@ -34,27 +34,40 @@ typedef struct br_comms_s
   sockaddr_t addr;
   int socket;
   int connected;
+#ifdef _WIN32
+  HANDLE hSerial;
+#endif
 } br_comms_t;
 
+#ifndef C_ONLY
 #ifdef __cplusplus
 extern "C" {
 #endif
+#endif
 
-int iMobotComms_init(br_comms_t* comms);
-int iMobotComms_connect(br_comms_t* comms, const char* address, int channel);
-int iMobotComms_disconnect(br_comms_t* comms);
-int iMobotComms_isConnected(br_comms_t* comms);
-int iMobotComms_setMotorDirection(br_comms_t* comms, int id, int dir);
-int iMobotComms_getMotorDirection(br_comms_t* comms, int id, int *dir);
-int iMobotComms_setMotorSpeed(br_comms_t* comms, int id, int speed);
-int iMobotComms_getMotorSpeed(br_comms_t* comms, int id, int *speed);
-int iMobotComms_setMotorPosition(br_comms_t* comms, int id, double position);
-int iMobotComms_getMotorPosition(br_comms_t* comms, int id, double *position);
-int iMobotComms_getMotorState(br_comms_t* comms, int id, int *state);
-int iMobotComms_poseZero(br_comms_t* comms);
-int iMobotComms_waitMotor(br_comms_t* comms, int id);
-int iMobotComms_moveWait(br_comms_t* comms);
-int iMobotComms_stop(br_comms_t* comms);
+#ifdef _WIN32
+#define DLLIMPORT __declspec(dllexport)
+#else
+#define DLLIMPORT
+#endif
+
+DLLIMPORT int iMobotComms_init(br_comms_t* comms);
+DLLIMPORT int iMobotComms_connect(br_comms_t* comms);
+DLLIMPORT int iMobotComms_connectAddress(
+    br_comms_t* comms, const char* address, int channel);
+DLLIMPORT int iMobotComms_disconnect(br_comms_t* comms);
+DLLIMPORT int iMobotComms_isConnected(br_comms_t* comms);
+DLLIMPORT int iMobotComms_setMotorDirection(br_comms_t* comms, int id, int dir);
+DLLIMPORT int iMobotComms_getMotorDirection(br_comms_t* comms, int id, int *dir);
+DLLIMPORT int iMobotComms_setMotorSpeed(br_comms_t* comms, int id, int speed);
+DLLIMPORT int iMobotComms_getMotorSpeed(br_comms_t* comms, int id, int *speed);
+DLLIMPORT int iMobotComms_setMotorPosition(br_comms_t* comms, int id, double position);
+DLLIMPORT int iMobotComms_getMotorPosition(br_comms_t* comms, int id, double *position);
+DLLIMPORT int iMobotComms_getMotorState(br_comms_t* comms, int id, int *state);
+DLLIMPORT int iMobotComms_poseZero(br_comms_t* comms);
+DLLIMPORT int iMobotComms_waitMotor(br_comms_t* comms, int id);
+DLLIMPORT int iMobotComms_moveWait(br_comms_t* comms);
+DLLIMPORT int iMobotComms_stop(br_comms_t* comms);
 #ifdef _WIN32
 typedef struct bdaddr_s {
   UINT8 b[6];
@@ -67,16 +80,24 @@ void baswap(bdaddr_t *dst, const bdaddr_t *src);
 int str2ba(const char *str, bdaddr_t *ba);
 #endif
 
+#ifndef C_ONLY
 #ifdef __cplusplus
 }
 #endif
+#endif
 
+/* Utility Functions */
+int SendToIMobot(br_comms_t* comms, const char* str, int len);
+int RecvFromIMobot(br_comms_t* comms, char* buf, int size);
+
+#ifndef C_ONLY
 #if defined (__cplusplus) || defined (_CH_)
 class CiMobotComms {
   public:
     CiMobotComms();
     ~CiMobotComms();
-    int connect(const char* address, int channel);
+    int connect();
+    int connectAddress(const char* address, int channel);
     int disconnect();
     int isConnected();
     int setMotorDirection(int id, int dir);
@@ -93,6 +114,7 @@ class CiMobotComms {
   private:
     br_comms_t _comms;
 };
+#endif
 #endif
 
 #endif
