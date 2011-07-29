@@ -61,6 +61,7 @@ int BR_init(iMobot_t* iMobot)
 sdp_session_t* register_service(uint8_t rfcomm_channel)
 {
     //const char *service_uuid_string = "d1b58fd0-b3be-11e0-aff2-0800200c9a66";
+    sdp_profile_desc_t profile[1];
     uint32_t service_uuid_int[] = { 0xd1b58fd0, 0xb3be11e0, 0xaff20800, 0x200c9a66};
     const char *service_name = "iMobot Control";
     const char *service_dsc = "The iMobot Bluetooth control connection";
@@ -71,7 +72,8 @@ sdp_session_t* register_service(uint8_t rfcomm_channel)
                *rfcomm_list = 0,
                *root_list = 0,
                *proto_list = 0, 
-               *access_proto_list = 0;
+               *access_proto_list = 0,
+               *pfseq = 0;
     sdp_data_t *channel = 0, *psm = 0;
 
     sdp_record_t *record = sdp_record_alloc();
@@ -100,6 +102,12 @@ sdp_session_t* register_service(uint8_t rfcomm_channel)
     // attach protocol information to service record
     access_proto_list = sdp_list_append( 0, proto_list );
     sdp_set_access_protos( record, access_proto_list );
+
+    // Set profile information
+    sdp_uuid16_create(&profile[0].uuid, SERIAL_PORT_PROFILE_ID);
+    profile[0].version = 0x0100;
+    pfseq = sdp_list_append(NULL, &profile[0]);
+    sdp_set_profile_descs(record, pfseq);
 
     // set the name, provider, and description
     sdp_set_info_attr(record, service_name, service_prov, service_dsc);
