@@ -19,6 +19,6 @@ else(CMAKE_HOST_WIN32)
 target_link_libraries(imobotcomms bluetooth)
 endif(CMAKE_HOST_WIN32)
 
-install(TARGETS imobotcomms LIBRARY DESTINATION lib)
+#install(TARGETS imobotcomms LIBRARY DESTINATION lib)
 
 add_subdirectory(demos)

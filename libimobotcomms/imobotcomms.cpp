@@ -25,9 +25,10 @@ int iMobotComms_connect(br_comms_t* comms)
   return -1;
 #else
   char buf[80];
+#define NUM_PORTS 30
   /* Search comm ports 1 through 15 for the one connected to the iMobot */
   int i;
-  for(i = 1; i < 16; i++) {
+  for(i = 1; i < NUM_PORTS; i++) {
     sprintf(buf, "\\\\.\\COM%d", i);
     printf("Trying %s...\n", buf);
     comms->hSerial = CreateFile(buf, 
@@ -97,7 +98,7 @@ int iMobotComms_connect(br_comms_t* comms)
     }
   }
   /* At this point, we _should_ be connected */
-  if(i != 16) {
+  if(i != NUM_PORTS) {
     return 0;
   } else {
     return -1;
@@ -356,13 +357,13 @@ int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
     if(!ReadFile(comms->hSerial, buf, size, &bytes, NULL)) {
       return -1;
     }
+    return bytes;
 #else
     return -1;
 #endif
   } else {
     return -1;
   }
-  return bytes;
 }
 
 #ifndef C_ONLY

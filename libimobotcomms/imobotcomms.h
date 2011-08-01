@@ -29,6 +29,14 @@ enc[1] = angles[1] * 10; \
 enc[2] = angles[2] * 10; \
 enc[3] = angles[3] * 10
 
+enum iMobot_motors_e {
+  IMOBOT_MOTOR1 = 0,
+  IMOBOT_MOTOR2,
+  IMOBOT_MOTOR3,
+  IMOBOT_MOTOR4,
+  IMOBOT_NUM_MOTORS 
+};
+
 typedef struct br_comms_s
 {
   sockaddr_t addr;
