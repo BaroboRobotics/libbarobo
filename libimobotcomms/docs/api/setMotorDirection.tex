@@ -1,0 +1,54 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CiMobotComms::setMotorDirection()}\index{setMotorDirection()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{setMotorDirection()}
+
+\noindent
+{\bf Synopsis}\\
+\begin{verbatim}
+#include <imobot.h>
+int CiMobotComms::setMotorDirection(int id, int direction);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Set's a motor's direction. In conjunction with \texttt{setMotorSpeed()}, this
+function may be used to cause a motor to turn indefinitely.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{20 mm}p{145 mm}}
+\texttt{id} & The joint number to move. \\
+\texttt{direction} & A value indicating the desired direction.
+\end{tabular}
+\end{description}
+
+\noindent
+{\bf Description}\\
+This function is used to set a motor's turn direction. Possible values for the
+direction are:
+\begin{itemize}
+\item 0: Automatic direction. This is the default setting. 
+\item 1: Forward. If this value is used with a non-zero speed set using the
+\texttt{setMotorSpeed()} function, the motor will turn forward indefinitely.
+\time 2: Backward. Similar to "1", except the motor will spin backward.
+\end{itemize}
+
+\noindent
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

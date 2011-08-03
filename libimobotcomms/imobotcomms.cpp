@@ -25,8 +25,10 @@ int iMobotComms_connect(br_comms_t* comms)
   return -1;
 #else
   char buf[80];
+
+/* NUM_PORTS indicates the number of Windows COM ports to check for connections
+ * to the robot. */
 #define NUM_PORTS 30
-  /* Search comm ports 1 through 15 for the one connected to the iMobot */
   int i;
   for(i = 1; i < NUM_PORTS; i++) {
     sprintf(buf, "\\\\.\\COM%d", i);

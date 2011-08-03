@@ -1,0 +1,37 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CiMobotComms::stop()}\index{stop()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{stop()}
+
+\noindent
+{\bf Synopsis}\\
+\begin{verbatim}
+#include <imobot.h>
+int CiMobotComms::stop();
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Stop all current motions on the iMobot.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Description}\\
+This function stops all currently occuring movements on the iMobot. Internally, this function simply sets all motor speeds to zero. If it is only required to stop a single motor, use the 
+\texttt{setMotorSpeed()} function to set the motor's speed to zero. \\
+
+\noindent
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+\texttt{setMotorSpeed()}
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

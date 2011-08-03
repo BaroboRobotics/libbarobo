@@ -1,0 +1,156 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{amsmath}
+
+\begin{document}
+\title{Setup for Remote iMobot Control in Ch}  
+\author{David Ko\\Mechanical and Aerospace Engineering}
+\date{\today} 
+\maketitle
+
+\section{The \texttt{imobotcomms} iMobot Remote Control Library}
+The \texttt{imobotcomms} library is a collection of functions geared towards
+controlling the motors and reading sensor values of an iMobot module via the
+Bluetooth wireless protocol. The functions are designed to be intuitive
+and easy to use. Various functions are provided to control or obtain the speed,
+direction, and position of the motors. The API includes C-style functions as well
+as a C++ class called \texttt{CiMobotComms} to facilitate C++ style api function
+calls. 
+
+This documentation introduces the basic computer setup required for controlling 
+the iMobot, as well as several demo programs and a complete reference for all
+API function provided with the \texttt{imobotcomms} library.
+
+\section{Bluetooth Pairing with the iMobot}
+To control the iMobot with the Bluetooth wireless protocol, the controlling 
+computer must be equipped with Bluetooth. If the computer does not have
+Bluetooth built-in, an external USB Bluetooth dongle may be used. The following
+instructions are for a Windows 7 computer with built-in Bluetooth. The basic
+process is the same for Windows XP and Vista, although the screenshots may
+appear different. 
+
+The first step is to open the Bluetooth applet by double-clicking the Bluetooth
+icon in the applet tray normally found at the bottom right of the screen, as
+shown highlighted in red in the following figure.
+
+\begin{center}
+\includegraphics[width=3in]{images/imobot_connect_1.png}
+\end{center}
+
+After double-clicking the icon, a new window will appear similar to the following.
+
+\begin{center}
+\includegraphics[width=5in]{images/imobot_connect_1a.png}
+\end{center}
+
+Next, click on the
+button labeled "Add Wireless Device" towards the top of the window. This 
+will bring up the following dialog.
+
+\begin{center}
+\includegraphics[width=5in]{images/imobot_connect_2.png}
+\end{center}
+
+This dialog shows a list of all Bluetooth wireless devices that are in range.
+Among them should be the iMobot you wish to connect to. If the iMobot does not
+appear on this list, please ensure that the iMobot is within 10 meters of the
+connecting computer and that the iMobot is powered on. Double click on the icon
+representing the iMobot to proceed. Once you have double-clicked the icon, the
+following dialog box should appear.
+
+\begin{center}
+\includegraphics[width=5in]{images/imobot_connect_3.png}
+\end{center}
+
+Select the second option, labeled ``Enter the device's pairing code''. iMobot
+modules come hard-coded with a default pairing code. When prompted for the
+pairing code, enter ``1234''. Once the computer is paired with the iMobot,
+the following dialog box may pop up asking to install drivers.
+
+\begin{center}
+\includegraphics[width=5in]{images/imobot_connect_4.png}
+\end{center}
+
+If the previously illustrated dialog box appears, just click the ``cancel''
+button at the bottom right. No extra drivers are necessary for controlling the
+iMobot module.
+
+At this point, the following dialog should be shown.
+
+\begin{center}
+\includegraphics[width=5in]{images/imobot_connect_6.png}
+\end{center}
+
+The next step is to enable the iMobot control service. 
+Double-click on the icon denoting the
+iMobot module to bring up the following dialog:
+
+\begin{center}
+\includegraphics[width=5in]{images/imobot_connect_7.png}
+\end{center}
+
+Click on the tab labeled ``Services''
+
+\begin{center}
+\includegraphics[width=5in]{images/imobot_connect_8.png}
+\end{center}
+
+Ensure that the service titled ``iMobot Control'' is enabled. If it is not
+enabled, click on the check-box to enable it. Click on the ``Ok'' button to
+accept the changes and close the dialogs. The iMobot is now ready to be
+controlled with the iMobotComms library.
+
+\section{Basics of a Ch iMobot Program}
+To help the user become acquainted with the iMobot control programs, one sample
+program will be presented to illustrate the basics and minimum requirements of
+an iMobot control program. 
+
+The beginning of every iMobot control program will include header files. Each
+header file imports functions used for a number of tasks, such as printing
+data onto the screen or controlling the iMobot. 
+
+\begin{verbatim}
+#include <stdio.h>       // Required for printf()
+#include <imobotcomms.h> // Required for iMobot control functions
+\end{verbatim}
+
+Next, we must initialize the C++ class used to control the iMobot. This line
+initializes a new variable named \texttt{robot} which represents the remote
+iMobot module which we wish to control. This special variable is actually an
+instance of the \texttt{CiMobotComms} class, which contains its own set of
+functions called ``methods'' or ``member functions''.
+\begin{verbatim}
+CiMobotComms robot;
+\end{verbatim}
+
+The next line will use the \texttt{poseZero} member function. The
+\texttt{poseZero} function causes the iMobot to move all of its motors to the
+zero position.
+\begin{verbatim}
+robot.poseZero();
+\end{verbatim}
+
+The majority of iMobot control functions do not wait for the robotic motions to
+complete before continuing. As such, if we want to wait for the robot to fully
+complete the requested motion before continuing with the rest of the program,
+we must use the \texttt{moveWait} function, as such.
+\begin{verbatim}
+robot.moveWait();
+\end{verbatim}
+
+The next four lines of code command motors 3 and 4 to rotate 90 degrees, and
+then waits for the motors to stop moving.
+\begin{verbatim}
+robot.setMotorPosition(IMOBOT_MOTOR3, 90);
+robot.setMotorPosition(IMOBOT_MOTOR4, 90);
+robot.waitMotor(IMOBOT_MOTOR3);
+robot.waitMotor(IMOBOT_MOTOR4);
+\end{verbatim}
+
+\newpage
+\appendix
+\section{iMobotComms API}
+\input{api/libimobotcomms.tex}
+
+\end{document}

@@ -1,0 +1,44 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CiMobotComms::moveWait()}\index{moveWait()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{moveWait()}
+
+\noindent
+{\bf Synopsis}\\
+\begin{verbatim}
+#include <imobot.h>
+int CiMobotComms::moveWait();
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Wait for all joints to stop moving.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Description}\\
+This function is used to wait for all joint motions to finish. Functions such as
+\texttt{poseJoint()} and \texttt{moveJoint()} do not wait for a joint to finish
+moving before continuing to allow multiple joints to move at the same time. The
+\texttt{moveWait()} or \texttt{waitMotor()} functions are used to wait for
+robotic motions to complete.
+
+Please note that if this function is called after a motor has been commanded to
+turn indefinitely, this function may never return and your program may hang.\\
+
+\noindent
+{\bf Example}\\
+See the sample program in Section \ref{subsec:simple.cpp} on page \pageref{subsec:simple.cpp}.
+\noindent
+
+\noindent
+{\bf See Also}\\
+\texttt{moveWait(), waitMotor()}
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\
