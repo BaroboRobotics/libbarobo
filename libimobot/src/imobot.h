@@ -56,6 +56,17 @@
 extern "C" {
 #endif
 
+#ifndef IMOBOT_MOTORS_E
+#define IMOBOT_MOTORS_E
+enum iMobot_motors_e {
+  IMOBOT_MOTOR1 = 0,
+  IMOBOT_MOTOR2,
+  IMOBOT_MOTOR3,
+  IMOBOT_MOTOR4,
+  IMOBOT_NUM_MOTORS 
+};
+#endif
+
 typedef struct iMobot_s {
   int i2cDev;
   short enc[4];

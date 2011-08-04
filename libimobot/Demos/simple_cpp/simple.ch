@@ -7,13 +7,13 @@ robot.poseZero();
 robot.moveWait();
 
 /* Rotate each of the faceplates by 90 degrees */
-robot.poseJoint(2, 90);
-robot.poseJoint(3, 90);
+robot.poseJoint(IMOBOT_MOTOR3, 90);
+robot.poseJoint(IMOBOT_MOTOR4, 90);
 /* Wait for the movement to complete */
-robot.waitMotor(2);
-robot.waitMotor(3);
+robot.waitMotor(IMOBOT_MOTOR3);
+robot.waitMotor(IMOBOT_MOTOR4);
 /* Move the motors back to where they were */
-robot.poseJoint(2, 0);
-robot.poseJoint(3, 0);
-robot.waitMotor(2);
-robot.waitMotor(3);
+robot.poseJoint(IMOBOT_MOTOR3, 0);
+robot.poseJoint(IMOBOT_MOTOR4, 0);
+robot.waitMotor(IMOBOT_MOTOR3);
+robot.waitMotor(IMOBOT_MOTOR4);

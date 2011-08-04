@@ -22,16 +22,16 @@ int main()
   iMobot_moveWait(&robot);
 
   /* Rotate each of the faceplates by 90 degrees */
-  iMobot_setMotorPosition(&robot, 2, 90);
-  iMobot_setMotorPosition(&robot, 3, 90);
+  iMobot_setMotorPosition(&robot, IMOBOT_MOTOR3, 90);
+  iMobot_setMotorPosition(&robot, IMOBOT_MOTOR4, 90);
   /* Wait for the movement to complete */
-  iMobot_waitMotor(&robot, 2);
-  iMobot_waitMotor(&robot, 3);
+  iMobot_waitMotor(&robot, IMOBOT_MOTOR3);
+  iMobot_waitMotor(&robot, IMOBOT_MOTOR4);
   /* Move the motors back to where they were */
-  iMobot_setMotorPosition(&robot, 2, 0);
-  iMobot_setMotorPosition(&robot, 3, 0);
-  iMobot_waitMotor(&robot, 2);
-  iMobot_waitMotor(&robot, 3);
+  iMobot_setMotorPosition(&robot, IMOBOT_MOTOR3, 0);
+  iMobot_setMotorPosition(&robot, IMOBOT_MOTOR4, 0);
+  iMobot_waitMotor(&robot, IMOBOT_MOTOR3);
+  iMobot_waitMotor(&robot, IMOBOT_MOTOR4);
 
   /* The following 2 lines set up the robot to listen to Bluetooth remote
    * control commands */

@@ -170,16 +170,16 @@ These commands command the iMobot to move all motors to their zero positions
 and wait until the motion is finished.
 \item 
 \begin{verbatim}
-  robot.poseJoint(2, 90);
-  robot.poseJoint(3, 90);
+  robot.setMotorPosition(IMOBOT_MOTOR3, 90);
+  robot.setMotorPosition(IMOBOT_MOTOR4, 90);
 \end{verbatim}
 These lines instruct the robot to rotate joints 2 and 3 to rotate 90
 degrees. Note that the joint numbers start at 0, so joints 2 and 3 are the
 third and fourth joints, respectively. 
 \item 
 \begin{verbatim}
-  robot.waitMotor(2);
-  robot.waitMotor(3);
+  robot.waitMotor(IMOBOT_MOTOR3);
+  robot.waitMotor(IMOBOT_MOTOR4);
 \end{verbatim}
 This code causes the program to wait until the third and fourth
 joints have stopped moving.
