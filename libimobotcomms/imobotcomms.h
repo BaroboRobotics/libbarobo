@@ -39,12 +39,12 @@ enum iMobot_motors_e {
 
 typedef struct br_comms_s
 {
-  sockaddr_t addr;
   int socket;
   int connected;
 #ifdef _WIN32
   HANDLE hSerial;
 #endif
+  sockaddr_t addr;
 } br_comms_t;
 
 #ifndef C_ONLY
