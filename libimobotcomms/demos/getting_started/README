@@ -1,0 +1,9 @@
+There are two methods to run this demo. You may run it from a ChIDE or from the
+Ch Terminal.
+
+1. From ChIDE, simply open this file and click on the "Run" or "Start" button
+located in the toolbar at the top of the ChIDE Window.
+
+2. From the Ch Terminal, navigate to this directory using the "cd" command, and
+type "getting_started.ch" to run the program. Please see the Ch User's Guide
+for more information regarding navigating to directories from the terminal.
