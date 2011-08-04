@@ -2,6 +2,7 @@
 \usepackage{graphicx}
 \usepackage{wrapfig}
 \usepackage{amsmath}
+\usepackage{verbatim}
 
 \begin{document}
 \title{Setup for Remote iMobot Control in Ch}  
@@ -106,6 +107,10 @@ To help the user become acquainted with the iMobot control programs, one sample
 program will be presented to illustrate the basics and minimum requirements of
 an iMobot control program. 
 
+\subsection{\texttt{getting\_started.ch} Source Code}
+\verbatiminput{../demos/getting_started/getting_started.ch}
+
+\subsection{\label{sec:democode}Demo Code for \texttt{getting\_started.ch} Explained}
 The beginning of every iMobot control program will include header files. Each
 header file imports functions used for a number of tasks, such as printing
 data onto the screen or controlling the iMobot. 
