@@ -30,7 +30,7 @@ extern "C" {
 #include <bluetooth/sdp.h>
 #include <bluetooth/sdp_lib.h>
 
-int BR_getMotorDirection(iMobot_t* iMobot, int id, int *dir)
+int iMobot_getMotorDirection(iMobot_t* iMobot, int id, int *dir)
 {
   uint8_t byte;
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
@@ -39,7 +39,7 @@ int BR_getMotorDirection(iMobot_t* iMobot, int id, int *dir)
   return 0;
 }
 
-int BR_getMotorPosition(iMobot_t* iMobot, int id, double *angle)
+int iMobot_getMotorPosition(iMobot_t* iMobot, int id, double *angle)
 {
   uint8_t hibyte, lobyte;
   short s_angle;
@@ -52,7 +52,7 @@ int BR_getMotorPosition(iMobot_t* iMobot, int id, double *angle)
   return 0;
 }
 
-int BR_getMotorSpeed(iMobot_t* iMobot, int id, int *speed)
+int iMobot_getMotorSpeed(iMobot_t* iMobot, int id, int *speed)
 {
   uint8_t byte;
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
@@ -64,7 +64,7 @@ int BR_getMotorSpeed(iMobot_t* iMobot, int id, int *speed)
   }
 }
 
-int BR_getMotorState(iMobot_t* iMobot, int id, int *state)
+int iMobot_getMotorState(iMobot_t* iMobot, int id, int *state)
 {
   uint8_t byte;
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
@@ -76,7 +76,7 @@ int BR_getMotorState(iMobot_t* iMobot, int id, int *state)
   }
 }
 
-int BR_init(iMobot_t* iMobot)
+int iMobot_init(iMobot_t* iMobot)
 {
   const char *m_i2cDevName = "/dev/i2c-3";
   int i;
@@ -99,7 +99,7 @@ int BR_init(iMobot_t* iMobot)
   }
   /* Set default speeds for the motors */
   for(i = 0; i < 4; i++) {
-    BR_setMotorSpeed(iMobot, i, 30);
+    iMobot_setMotorSpeed(iMobot, i, 30);
   }
   return 0;
 }
@@ -175,7 +175,7 @@ sdp_session_t* register_service(uint8_t rfcomm_channel)
     return session;
 }
 
-int BR_initListenerBluetooth(iMobot_t* iMobot, int channel)
+int iMobot_initListenerBluetooth(iMobot_t* iMobot, int channel)
 {
   struct sockaddr_rc loc_addr = { 0 };
   int err;
@@ -216,7 +216,7 @@ int BR_initListenerBluetooth(iMobot_t* iMobot, int channel)
   return 0;
 }
 
-int BR_isBusy(iMobot_t* iMobot)
+int iMobot_isBusy(iMobot_t* iMobot)
 {
   int i;
   uint8_t byte;
@@ -233,7 +233,7 @@ int BR_isBusy(iMobot_t* iMobot)
   return 0;
 }
 
-int BR_listenerMainLoop(iMobot_t* iMobot)
+int iMobot_listenerMainLoop(iMobot_t* iMobot)
 {
   struct sockaddr_rc rem_addr = { 0 };
   char buf[1024] = { 0 };
@@ -257,7 +257,7 @@ int BR_listenerMainLoop(iMobot_t* iMobot)
       bytes_read = read(client, buf, sizeof(buf));
       if( bytes_read > 0 ) {
         printf("received [%s]\n", buf);
-        err = BR_slaveProcessCommand(iMobot, client, bytes_read, buf);
+        err = iMobot_slaveProcessCommand(iMobot, client, bytes_read, buf);
       } else {
         err = -1;
       }
@@ -273,27 +273,27 @@ int BR_listenerMainLoop(iMobot_t* iMobot)
   return 0;
 }
 
-int BR_moveWait(iMobot_t* iMobot)
+int iMobot_moveWait(iMobot_t* iMobot)
 {
   int i;
   for(i = 0; i < 4; i++) {
-    BR_waitMotor(iMobot, i);
+    iMobot_waitMotor(iMobot, i);
   }
   return 0;
 }
 
-int BR_poseZero(iMobot_t* iMobot)
+int iMobot_poseZero(iMobot_t* iMobot)
 {
   int i;
   for(i = 0; i < 4; i++) {
-    if(BR_setMotorPosition(iMobot, i, 0)) {
+    if(iMobot_setMotorPosition(iMobot, i, 0)) {
       return -1;
     }
   }
   return 0;
 }
 
-int BR_setMotorDirection(iMobot_t* iMobot, int id, int direction)
+int iMobot_setMotorDirection(iMobot_t* iMobot, int id, int direction)
 {
   int i;
   uint8_t data[2];
@@ -303,7 +303,7 @@ int BR_setMotorDirection(iMobot_t* iMobot, int id, int direction)
   return 0;
 }
 
-int BR_setMotorPosition(iMobot_t* iMobot, int id, double angle)
+int iMobot_setMotorPosition(iMobot_t* iMobot, int id, double angle)
 {
   /* Send the desired angles to the iMobot */
   /* Need to convert it to 2 bytes and send to motor*/
@@ -323,7 +323,7 @@ int BR_setMotorPosition(iMobot_t* iMobot, int id, double angle)
   return 0;
 }
 
-int BR_setMotorSpeed(iMobot_t* iMobot, int id, int speed)
+int iMobot_setMotorSpeed(iMobot_t* iMobot, int id, int speed)
 {
   int i;
   uint8_t data[2];
@@ -333,7 +333,7 @@ int BR_setMotorSpeed(iMobot_t* iMobot, int id, int speed)
   return 0;
 }
 
-int BR_stop(iMobot_t* iMobot)
+int iMobot_stop(iMobot_t* iMobot)
 { 
   /* Immediately set motor speeds to zero */
   int i;
@@ -344,20 +344,20 @@ int BR_stop(iMobot_t* iMobot)
   return 0;
 }
 
-int BR_terminate(iMobot_t* iMobot)
+int iMobot_terminate(iMobot_t* iMobot)
 {
   return close(iMobot->i2cDev);
 }
 
-int BR_waitMotor(iMobot_t* iMobot, int id)
+int iMobot_waitMotor(iMobot_t* iMobot, int id)
 {
   int state;
-  if(BR_getMotorState(iMobot, id, &state)) {
+  if(iMobot_getMotorState(iMobot, id, &state)) {
     return -1;
   }
   while(state != 0) {
     usleep(100000);
-    if(BR_getMotorState(iMobot, id, &state)) {
+    if(iMobot_getMotorState(iMobot, id, &state)) {
       return -1;
     }
   }
@@ -366,7 +366,7 @@ int BR_waitMotor(iMobot_t* iMobot, int id)
 
 #define MATCHSTR(str) \
 (strncmp(str, buf, strlen(str))==0)
-int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const char* buf)
+int iMobot_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const char* buf)
 {
   /* Possible Commands:
    * DEMO -- Run through a preprogrammed demo routine
@@ -419,7 +419,7 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
   } else if (MATCHSTR("SET_MOTOR_DIRECTION"))
   {
     sscanf(buf, "%*s %d %d", &id, &int32);
-    if(BR_setMotorDirection(iMobot, id, int32)) {
+    if(iMobot_setMotorDirection(iMobot, id, int32)) {
       write(socket, "ERROR", 6);
     } else {
       write(socket, "OK", 6);
@@ -427,7 +427,7 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
   } else if (MATCHSTR("GET_MOTOR_DIRECTION"))
   {
     sscanf(buf, "%*s %d", &id);
-    if(BR_getMotorDirection(iMobot, id, &int32)) {
+    if(iMobot_getMotorDirection(iMobot, id, &int32)) {
       write(socket, "ERROR", 6);
     } else {
       sprintf(mybuf, "%d", int32);
@@ -436,7 +436,7 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
   } else if (MATCHSTR("SET_MOTOR_SPEED"))
   {
     sscanf(buf, "%*s %d %d", &id, &int32);
-    if(BR_setMotorSpeed(iMobot, id, int32)) {
+    if(iMobot_setMotorSpeed(iMobot, id, int32)) {
       write(socket, "ERROR", 6);
     } else {
       write(socket, "OK", 3);
@@ -444,7 +444,7 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
   } else if (MATCHSTR("GET_MOTOR_SPEED"))
   {
     sscanf(buf, "%*s %d", &id);
-    if(BR_getMotorSpeed(iMobot, id, &int32)) {
+    if(iMobot_getMotorSpeed(iMobot, id, &int32)) {
       write(socket, "ERROR", 6);
     } else {
       sprintf(mybuf, "%d", int32);
@@ -453,7 +453,7 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
   } else if (MATCHSTR("SET_MOTOR_POSITION"))
   {
     sscanf(buf, "%*s %d %lf", &id, &mydouble);
-    if(BR_setMotorPosition(iMobot, id, mydouble)) {
+    if(iMobot_setMotorPosition(iMobot, id, mydouble)) {
       write(socket, "ERROR", 6);
     } else {
       write(socket, "OK", 3);
@@ -461,7 +461,7 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
   } else if (MATCHSTR("GET_MOTOR_POSITION"))
   {
     sscanf(buf, "%*s %d", &id);
-    if(BR_getMotorPosition(iMobot, id, &mydouble)) {
+    if(iMobot_getMotorPosition(iMobot, id, &mydouble)) {
       write(socket, "ERROR", 6);
     } else {
       sprintf(mybuf, "%lf", mydouble);
@@ -470,13 +470,13 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
   } else if (MATCHSTR("STOP")) 
   {
     for(id = 0; id < 4; id++) {
-      BR_setMotorSpeed(iMobot, id, 0);
+      iMobot_setMotorSpeed(iMobot, id, 0);
     }
     write(socket, "OK", 3);
   }  else if (MATCHSTR("GET_MOTOR_STATE")) 
   {
     sscanf(buf, "%*s %d", &id);
-    if(BR_getMotorState(iMobot, id, &int32)) {
+    if(iMobot_getMotorState(iMobot, id, &int32)) {
       write(socket, "ERROR", 6);
     } else {
       sprintf(mybuf, "%d", int32);
@@ -495,7 +495,7 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
 
 /* C++ class function wrappers */
 CiMobot::CiMobot() {
-  BR_init(&_iMobot);
+  iMobot_init(&_iMobot);
 }
 
 CiMobot::~CiMobot() {
@@ -503,76 +503,76 @@ CiMobot::~CiMobot() {
 
 int CiMobot::getMotorDirection(int id, int &direction)
 {
-  return BR_getMotorDirection(&_iMobot, id, &direction);
+  return iMobot_getMotorDirection(&_iMobot, id, &direction);
 }
 
 int CiMobot::getMotorPosition(int id, double &angle)
 {
-  return BR_getMotorPosition(&_iMobot, id, &angle);
+  return iMobot_getMotorPosition(&_iMobot, id, &angle);
 }
 
 int CiMobot::getMotorSpeed(int id, int &speed)
 {
-  return BR_getMotorSpeed(&_iMobot, id, &speed);
+  return iMobot_getMotorSpeed(&_iMobot, id, &speed);
 }
 
 int CiMobot::getMotorState(int id, int &state)
 {
-  return BR_getMotorState(&_iMobot, id, &state);
+  return iMobot_getMotorState(&_iMobot, id, &state);
 }
 
 int CiMobot::initListenerBluetooth(int channel)
 {
-  return BR_initListenerBluetooth(&_iMobot, channel);
+  return iMobot_initListenerBluetooth(&_iMobot, channel);
 }
 
 int CiMobot::isBusy()
 {
-  return BR_isBusy(&_iMobot);
+  return iMobot_isBusy(&_iMobot);
 }
 
 int CiMobot::listenerMainLoop()
 {
-  return BR_listenerMainLoop(&_iMobot);
+  return iMobot_listenerMainLoop(&_iMobot);
 }
 
 int CiMobot::moveWait()
 {
-  return BR_moveWait(&_iMobot);
+  return iMobot_moveWait(&_iMobot);
 }
 
 int CiMobot::poseZero()
 {
-  return BR_poseZero(&_iMobot);
+  return iMobot_poseZero(&_iMobot);
 }
 
 int CiMobot::setMotorDirection(int id, int direction)
 {
-  return BR_setMotorDirection(&_iMobot, id, direction);
+  return iMobot_setMotorDirection(&_iMobot, id, direction);
 }
 
 int CiMobot::setMotorPosition(int id, double angle)
 {
-  return BR_setMotorPosition(&_iMobot, id, angle);
+  return iMobot_setMotorPosition(&_iMobot, id, angle);
 }
 
 int CiMobot::setMotorSpeed(int id, int speed)
 {
-  return BR_setMotorSpeed(&_iMobot, id, speed);
+  return iMobot_setMotorSpeed(&_iMobot, id, speed);
 }
 
 int CiMobot::stop()
 {
-  return BR_stop(&_iMobot);
+  return iMobot_stop(&_iMobot);
 }
 
 int CiMobot::terminate()
 {
-  return BR_terminate(&_iMobot);
+  return iMobot_terminate(&_iMobot);
 }
 
 int CiMobot::waitMotor(int id)
 {
-  return BR_waitMotor(&_iMobot, id);
+  return iMobot_waitMotor(&_iMobot, id);
 }
 

@@ -10,7 +10,7 @@ void on_menuitem_localInit_activate(GtkWidget* widget, gpointer data)
   int i;
   g_localInit = 1;
   iMobot = (iMobot_t*)malloc(sizeof(iMobot_t));
-  BR_init(iMobot);
+  iMobot_init(iMobot);
   for(i = 0; i < 4; i++) {
     gtk_range_set_value(GTK_RANGE(scale_motorSpeeds[i]), 30);
   }

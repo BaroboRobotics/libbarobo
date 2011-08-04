@@ -14,7 +14,7 @@ int main()
   int counter = 0;
   int sleep_time = 4;
 
-  if(BR_init(&robot)) {
+  if(iMobot_init(&robot)) {
     printf("Error initializing i2c.\n");
     return -1;
   }
@@ -27,39 +27,39 @@ int main()
 
   /* Set motor speeds and directions */
   for(i = 0; i < 4; i++) {
-    BR_setMotorDirection(&robot, i, 0);
-    BR_setMotorSpeed(&robot, i, 30);
+    iMobot_setMotorDirection(&robot, i, 0);
+    iMobot_setMotorSpeed(&robot, i, 30);
   }
 
   while(1) {
     printf("Pose1...\n");
     pose(&robot, pos1, 0x0F);
     sleep(sleep_time);
-    if(BR_isBusy(&robot)) { terminate(); }
+    if(iMobot_isBusy(&robot)) { terminate(); }
 
     printf("Pose2...\n");
     pose(&robot, pos2, 0x01);
     sleep(sleep_time);
-    if(BR_isBusy(&robot)) { terminate(); }
+    if(iMobot_isBusy(&robot)) { terminate(); }
 
     printf("Pose3...\n");
     pose(&robot, pos1, 0x01);
     sleep(sleep_time);
-    if(BR_isBusy(&robot)) { terminate(); }
+    if(iMobot_isBusy(&robot)) { terminate(); }
 
     /* Rotate the robot */
     printf("Rotate1...\n");
     for(i = 1; i < 5; i++) {
-      BR_setMotorPosition(&robot, 2, (90*i)*10);
+      iMobot_setMotorPosition(&robot, 2, (90*i)*10);
       sleep(sleep_time);
-      if(BR_isBusy(&robot)) { terminate(); }
+      if(iMobot_isBusy(&robot)) { terminate(); }
     }
     /* Now rotate back */
     printf("Rotate2...\n");
     for(i = 1; i < 5; i++) {
-      BR_setMotorPosition(&robot, 2, (-90*i)*10);
+      iMobot_setMotorPosition(&robot, 2, (-90*i)*10);
       sleep(sleep_time);
-      if(BR_isBusy(&robot)) { terminate(); }
+      if(iMobot_isBusy(&robot)) { terminate(); }
     }
 
     counter++;
@@ -80,7 +80,7 @@ void pose(iMobot_t* robot, double* angles, unsigned char motorMask)
   int i;
   for(i = 0; i < 4; i++) {
     if((1<<i) & motorMask) {
-      BR_setMotorPosition(robot, i, angles[i]);
+      iMobot_setMotorPosition(robot, i, angles[i]);
     }
   }
 }

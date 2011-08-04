@@ -62,24 +62,24 @@ typedef struct iMobot_s {
   int socket;
 } iMobot_t;
 
-int BR_getMotorDirection(iMobot_t* iMobot, int id, int *dir);
-int BR_getMotorPosition(iMobot_t* iMobot, int id, double *angle);
-int BR_getMotorSpeed(iMobot_t* iMobot, int id, int *speed);
-int BR_getMotorState(iMobot_t* iMobot, int id, int *state);
-int BR_init(iMobot_t* iMobot);
-int BR_initListenerBluetooth(iMobot_t* iMobot, int channel);
-int BR_isBusy(iMobot_t* iMobot);
-int BR_listenerMainLoop(iMobot_t* iMobot);
-int BR_moveWait(iMobot_t* iMobot);
-int BR_poseZero(iMobot_t* iMobot);
-int BR_setMotorDirection(iMobot_t* iMobot, int id, int direction);
-int BR_setMotorPosition(iMobot_t* iMobot, int id, double angle);
-int BR_setMotorSpeed(iMobot_t* iMobot, int id, int speed);
-int BR_stop(iMobot_t* iMobot);
-int BR_terminate(iMobot_t* iMobot);
-int BR_waitMotor(iMobot_t* iMobot, int id);
+int iMobot_getMotorDirection(iMobot_t* iMobot, int id, int *dir);
+int iMobot_getMotorPosition(iMobot_t* iMobot, int id, double *angle);
+int iMobot_getMotorSpeed(iMobot_t* iMobot, int id, int *speed);
+int iMobot_getMotorState(iMobot_t* iMobot, int id, int *state);
+int iMobot_init(iMobot_t* iMobot);
+int iMobot_initListenerBluetooth(iMobot_t* iMobot, int channel);
+int iMobot_isBusy(iMobot_t* iMobot);
+int iMobot_listenerMainLoop(iMobot_t* iMobot);
+int iMobot_moveWait(iMobot_t* iMobot);
+int iMobot_poseZero(iMobot_t* iMobot);
+int iMobot_setMotorDirection(iMobot_t* iMobot, int id, int direction);
+int iMobot_setMotorPosition(iMobot_t* iMobot, int id, double angle);
+int iMobot_setMotorSpeed(iMobot_t* iMobot, int id, int speed);
+int iMobot_stop(iMobot_t* iMobot);
+int iMobot_terminate(iMobot_t* iMobot);
+int iMobot_waitMotor(iMobot_t* iMobot, int id);
 
-int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const char* buf);
+int iMobot_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const char* buf);
 
 #ifdef __cplusplus
 }
