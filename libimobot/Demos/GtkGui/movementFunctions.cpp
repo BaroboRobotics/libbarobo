@@ -41,7 +41,7 @@ int setMotorPosition(int motor, double position)
   if(g_isConnected) {
     return iMobotComms_setMotorPosition(imobotComms, motor, position);
   } else if (g_localInit) {
-    return BR_poseJoint(iMobot, motor, position);
+    return BR_setMotorPosition(iMobot, motor, position);
   } else {
     fprintf(stderr, "Error: Not initialized or connected.\n");
     return -1;

@@ -108,17 +108,17 @@ class CiMobotComms {
     int connectAddress(const char* address, int channel);
     int disconnect();
     int isConnected();
-    int setMotorDirection(int id, int dir);
     int getMotorDirection(int id, int &dir);
-    int setMotorSpeed(int id, int speed);
-    int getMotorSpeed(int id, int &speed);
-    int setMotorPosition(int id, double position);
     int getMotorPosition(int id, double &position);
+    int getMotorSpeed(int id, int &speed);
     int getMotorState(int id, int &state);
-    int poseZero();
-    int waitMotor(int id);
     int moveWait();
+    int poseZero();
+    int setMotorDirection(int id, int dir);
+    int setMotorPosition(int id, double position);
+    int setMotorSpeed(int id, int speed);
     int stop();
+    int waitMotor(int id);
   private:
     br_comms_t _comms;
 };

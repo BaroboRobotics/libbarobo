@@ -15,7 +15,7 @@ void on_button_connect_clicked(GtkWidget* widget, gpointer data)
   address = gtk_entry_get_text(address_entry); 
   channel = gtk_entry_get_text(channel_entry); 
   sscanf(channel, "%d", &c);
-  err = iMobotComms_connect(imobotComms, address, c);
+  err = iMobotComms_connectAddress(imobotComms, address, c);
   if(err == 0) {
     /* Change the status bar */
     /* Set the status bar */

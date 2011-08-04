@@ -30,6 +30,52 @@ extern "C" {
 #include <bluetooth/sdp.h>
 #include <bluetooth/sdp_lib.h>
 
+int BR_getMotorDirection(iMobot_t* iMobot, int id, int *dir)
+{
+  uint8_t byte;
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORDIR(id), &byte);
+  *dir = byte;
+  return 0;
+}
+
+int BR_getMotorPosition(iMobot_t* iMobot, int id, double *angle)
+{
+  uint8_t hibyte, lobyte;
+  short s_angle;
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORPOS(id), &hibyte);
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORPOS(id)+1, &lobyte);
+  s_angle = (hibyte << 8) + lobyte;
+  *angle = (double)s_angle/10.0;
+  return 0;
+}
+
+int BR_getMotorSpeed(iMobot_t* iMobot, int id, int *speed)
+{
+  uint8_t byte;
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  if(I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORSPEED(id), &byte)) {
+    return -1;
+  } else {
+    *speed = byte;
+    return 0;
+  }
+}
+
+int BR_getMotorState(iMobot_t* iMobot, int id, int *state)
+{
+  uint8_t byte;
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  if(I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORSTATE(id), &byte)) {
+    return -1;
+  } else {
+    *state = byte;
+    return 0;
+  }
+}
+
 int BR_init(iMobot_t* iMobot)
 {
   const char *m_i2cDevName = "/dev/i2c-3";
@@ -170,188 +216,6 @@ int BR_initListenerBluetooth(iMobot_t* iMobot, int channel)
   return 0;
 }
 
-int BR_pose(iMobot_t* iMobot, double angles[4], const char motorMask)
-{
-  /* Send the desired angles to the iMobot */
-  /* Need to convert it to 2 bytes and send to motor*/
-  int i;
-  uint8_t data[2];
-  short enc[4];
-  for(i = 0; i < 4; i++) {
-    /* Internally, the motor angles are stored as shorts, where each unit
-     * represents 0.1 degrees. Thus, we must multiply this angle value by ten
-     * before sending it to the motor controller. */
-    enc[i] = (short)(angles[i]*10);
-    if(((1<<i) & motorMask) == 0) {
-      continue;
-    }
-    memcpy(&data, &enc[i], 2);
-    /* We should send the high byte first */
-    I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
-    I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORPOS(i), data[1]);
-    I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
-    I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORPOS(i)+1, data[0]);
-    iMobot->enc[i] = enc[i];
-  }
-  
-  return 0;
-}
-
-int BR_poseJoint(iMobot_t* iMobot, unsigned short id, double angle)
-{
-  double _enc[4];
-  if(id > 3) {
-    return -1;
-  }
-  _enc[id] = angle;
-  return BR_pose(iMobot, _enc, (1<<id));
-}
-
-int BR_move(iMobot_t* iMobot, double angles[4], const char motorMask)
-{
-  int i;
-  for(i = 0; i < 4; i++) {
-    if(((1<<i) & motorMask) == 0) {
-      continue;
-    }
-    if( BR_moveJoint(iMobot, i, angles[i]) ) {
-      return -1;
-    }
-  }
-  return 0;
-}
-
-int BR_moveJoint(iMobot_t* iMobot, unsigned short id, double angle)
-{
-  double cur_angle;
-  /* Get the joint's current angle */
-  if(BR_getJointAngle(iMobot, id, &cur_angle)) {
-    return -1;
-  }
-  return BR_poseJoint(iMobot, id, cur_angle + angle);
-}
-
-int BR_stop(iMobot_t* iMobot)
-{ 
-  /* Immediately set motor speeds to zero */
-  int i;
-  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
-  for(i = 0; i < 4; i++) {
-    I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORSPEED(i), 0);
-  }
-  return 0;
-}
-
-int BR_moveWait(iMobot_t* iMobot)
-{
-  int i;
-  for(i = 0; i < 4; i++) {
-    BR_waitMotor(iMobot, i);
-  }
-  return 0;
-}
-
-int BR_setMotorDirections(iMobot_t* iMobot, unsigned short dir[4], const char motorMask)
-{
-  int i;
-  uint8_t data[2];
-  for(i = 0; i < 4; i++) {
-    if(((1<<i) & motorMask) == 0) {
-      continue;
-    }
-    memcpy(&data, &dir[i], 2);
-    I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
-    I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORDIR(i), data[0]);
-  }
-  return 0;
-}
-
-int BR_setMotorDirection(iMobot_t* iMobot, int id, int direction)
-{
-  int i;
-  uint8_t data[2];
-  memcpy(&data, &direction, 2);
-  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
-  I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORDIR(id), data[0]);
-  return 0;
-}
-
-int BR_getMotorDirection(iMobot_t* iMobot, int id, int *dir)
-{
-  uint8_t byte;
-  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
-  I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORDIR(id), &byte);
-  *dir = byte;
-  return 0;
-}
-
-int BR_setMotorSpeed(iMobot_t* iMobot, int id, int speed)
-{
-  int i;
-  uint8_t data[2];
-  memcpy(&data, &speed, 2);
-  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
-  I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORSPEED(id), data[0]);
-  return 0;
-}
-
-int BR_getMotorSpeed(iMobot_t* iMobot, int id, int *speed)
-{
-  uint8_t byte;
-  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
-  if(I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORSPEED(id), &byte)) {
-    return -1;
-  } else {
-    *speed = byte;
-    return 0;
-  }
-}
-
-int BR_getMotorState(iMobot_t* iMobot, int id, int *state)
-{
-  uint8_t byte;
-  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
-  if(I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORSTATE(id), &byte)) {
-    return -1;
-  } else {
-    *state = byte;
-    return 0;
-  }
-}
-
-int BR_setMotorPosition(iMobot_t* iMobot, int id, double angle)
-{
-  /* Send the desired angles to the iMobot */
-  /* Need to convert it to 2 bytes and send to motor*/
-  int i;
-  uint8_t data[2];
-  /* Multiply by 10 to convert to 10*degrees, which are the units used by the
-   * daughterboard. */
-  short position = (short) angle*10;
-  memcpy(&data, &position, 2);
-  /* We should send the high byte first */
-  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
-  I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORPOS(i), data[1]);
-  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
-  I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORPOS(i)+1, data[0]);
-  iMobot->enc[id] = position;
-
-  return 0;
-}
-
-int BR_getMotorPosition(iMobot_t* iMobot, int id, double *angle)
-{
-  uint8_t hibyte, lobyte;
-  short s_angle;
-  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
-  I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORPOS(id), &hibyte);
-  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
-  I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORPOS(id)+1, &lobyte);
-  s_angle = (hibyte << 8) + lobyte;
-  *angle = (double)s_angle/10.0;
-  return 0;
-}
-
 int BR_isBusy(iMobot_t* iMobot)
 {
   int i;
@@ -366,41 +230,6 @@ int BR_isBusy(iMobot_t* iMobot)
       }
     }
   }
-  return 0;
-}
-
-int BR_getJointAngle(iMobot_t* iMobot, int id,  double *angle)
-{
-  uint8_t hibyte, lobyte;
-  short s_angle;
-  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
-  I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORPOS(id), &hibyte);
-  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
-  I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORPOS(id)+1, &lobyte);
-  s_angle = (hibyte << 8) + lobyte;
-  *angle = (double)s_angle/10.0;
-  return 0;
-}
-
-int BR_getJointAngles(iMobot_t* iMobot, double angle[4])
-{
-  int i;
-  double _angle;
-  for(i = 0; i < 4; i++) {
-    BR_getJointAngle(iMobot, i, &_angle);
-    angle[i] = _angle;
-  }
-  return 0;
-}
-
-int BR_getJointEnc(iMobot_t* iMobot, int id, short* enc)
-{
-  uint8_t hibyte, lobyte;
-  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
-  I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORPOS(id), &hibyte);
-  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
-  I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORPOS(id)+1, &lobyte);
-  *enc = (hibyte << 8) + lobyte;
   return 0;
 }
 
@@ -444,6 +273,82 @@ int BR_listenerMainLoop(iMobot_t* iMobot)
   return 0;
 }
 
+int BR_moveWait(iMobot_t* iMobot)
+{
+  int i;
+  for(i = 0; i < 4; i++) {
+    BR_waitMotor(iMobot, i);
+  }
+  return 0;
+}
+
+int BR_poseZero(iMobot_t* iMobot)
+{
+  int i;
+  for(i = 0; i < 4; i++) {
+    if(BR_setMotorPosition(iMobot, i, 0)) {
+      return -1;
+    }
+  }
+  return 0;
+}
+
+int BR_setMotorDirection(iMobot_t* iMobot, int id, int direction)
+{
+  int i;
+  uint8_t data[2];
+  memcpy(&data, &direction, 2);
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORDIR(id), data[0]);
+  return 0;
+}
+
+int BR_setMotorPosition(iMobot_t* iMobot, int id, double angle)
+{
+  /* Send the desired angles to the iMobot */
+  /* Need to convert it to 2 bytes and send to motor*/
+  int i;
+  uint8_t data[2];
+  /* Multiply by 10 to convert to 10*degrees, which are the units used by the
+   * daughterboard. */
+  short position = (short) angle*10;
+  memcpy(&data, &position, 2);
+  /* We should send the high byte first */
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORPOS(i), data[1]);
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORPOS(i)+1, data[0]);
+  iMobot->enc[id] = position;
+
+  return 0;
+}
+
+int BR_setMotorSpeed(iMobot_t* iMobot, int id, int speed)
+{
+  int i;
+  uint8_t data[2];
+  memcpy(&data, &speed, 2);
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORSPEED(id), data[0]);
+  return 0;
+}
+
+int BR_stop(iMobot_t* iMobot)
+{ 
+  /* Immediately set motor speeds to zero */
+  int i;
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  for(i = 0; i < 4; i++) {
+    I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORSPEED(i), 0);
+  }
+  return 0;
+}
+
+int BR_terminate(iMobot_t* iMobot)
+{
+  return close(iMobot->i2cDev);
+}
+
 int BR_waitMotor(iMobot_t* iMobot, int id)
 {
   int state;
@@ -453,17 +358,6 @@ int BR_waitMotor(iMobot_t* iMobot, int id)
   while(state != 0) {
     usleep(100000);
     if(BR_getMotorState(iMobot, id, &state)) {
-      return -1;
-    }
-  }
-  return 0;
-}
-
-int BR_poseZero(iMobot_t* iMobot)
-{
-  int i;
-  for(i = 0; i < 4; i++) {
-    if(BR_poseJoint(iMobot, i, 0)) {
       return -1;
     }
   }
@@ -559,7 +453,7 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
   } else if (MATCHSTR("SET_MOTOR_POSITION"))
   {
     sscanf(buf, "%*s %d %lf", &id, &mydouble);
-    if(BR_poseJoint(iMobot, id, mydouble)) {
+    if(BR_setMotorPosition(iMobot, id, mydouble)) {
       write(socket, "ERROR", 6);
     } else {
       write(socket, "OK", 3);
@@ -599,11 +493,6 @@ int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const ch
 }
 #undef MATCHSTR
 
-int BR_terminate(iMobot_t* iMobot)
-{
-  return close(iMobot->i2cDev);
-}
-
 /* C++ class function wrappers */
 CiMobot::CiMobot() {
   BR_init(&_iMobot);
@@ -612,64 +501,14 @@ CiMobot::CiMobot() {
 CiMobot::~CiMobot() {
 }
 
-int CiMobot::initListenerBluetooth(int channel)
+int CiMobot::getMotorDirection(int id, int &direction)
 {
-  return BR_initListenerBluetooth(&_iMobot, channel);
-}
-
-int CiMobot::poseJoint(int id, double angle)
-{
-  return BR_poseJoint(&_iMobot, id, angle);
-}
-
-int CiMobot::moveJoint(int id, double angle)
-{
-  return BR_moveJoint(&_iMobot, id, angle);
-}
-
-int CiMobot::stop()
-{
-  return BR_stop(&_iMobot);
-}
-
-int CiMobot::setMotorDirection(int id, int direction)
-{
-  return BR_setMotorDirection(&_iMobot, id, direction);
-}
-
-int CiMobot::moveWait()
-{
-  return BR_moveWait(&_iMobot);
-}
-
-int CiMobot::isBusy()
-{
-  return BR_isBusy(&_iMobot);
-}
-
-int CiMobot::getJointAngle(int id, double &angle)
-{
-  return BR_getJointAngle(&_iMobot, id, &angle);
-}
-
-int CiMobot::getJointAngles(double angle[4])
-{
-  return BR_getJointAngles(&_iMobot, angle);
-}
-
-int CiMobot::setMotorPosition(int id, double angle)
-{
-  return BR_setMotorPosition(&_iMobot, id, angle);
+  return BR_getMotorDirection(&_iMobot, id, &direction);
 }
 
 int CiMobot::getMotorPosition(int id, double &angle)
 {
   return BR_getMotorPosition(&_iMobot, id, &angle);
-}
-
-int CiMobot::setMotorSpeed(int id, int speed)
-{
-  return BR_setMotorSpeed(&_iMobot, id, speed);
 }
 
 int CiMobot::getMotorSpeed(int id, int &speed)
@@ -682,14 +521,14 @@ int CiMobot::getMotorState(int id, int &state)
   return BR_getMotorState(&_iMobot, id, &state);
 }
 
-int CiMobot::waitMotor(int id)
+int CiMobot::initListenerBluetooth(int channel)
 {
-  return BR_waitMotor(&_iMobot, id);
+  return BR_initListenerBluetooth(&_iMobot, channel);
 }
 
-int CiMobot::poseZero()
+int CiMobot::isBusy()
 {
-  return BR_poseZero(&_iMobot);
+  return BR_isBusy(&_iMobot);
 }
 
 int CiMobot::listenerMainLoop()
@@ -697,7 +536,43 @@ int CiMobot::listenerMainLoop()
   return BR_listenerMainLoop(&_iMobot);
 }
 
+int CiMobot::moveWait()
+{
+  return BR_moveWait(&_iMobot);
+}
+
+int CiMobot::poseZero()
+{
+  return BR_poseZero(&_iMobot);
+}
+
+int CiMobot::setMotorDirection(int id, int direction)
+{
+  return BR_setMotorDirection(&_iMobot, id, direction);
+}
+
+int CiMobot::setMotorPosition(int id, double angle)
+{
+  return BR_setMotorPosition(&_iMobot, id, angle);
+}
+
+int CiMobot::setMotorSpeed(int id, int speed)
+{
+  return BR_setMotorSpeed(&_iMobot, id, speed);
+}
+
+int CiMobot::stop()
+{
+  return BR_stop(&_iMobot);
+}
+
 int CiMobot::terminate()
 {
   return BR_terminate(&_iMobot);
 }
+
+int CiMobot::waitMotor(int id)
+{
+  return BR_waitMotor(&_iMobot, id);
+}
+

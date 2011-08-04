@@ -22,14 +22,14 @@ int main()
   BR_moveWait(&robot);
 
   /* Rotate each of the faceplates by 90 degrees */
-  BR_poseJoint(&robot, 2, 90);
-  BR_poseJoint(&robot, 3, 90);
+  BR_setMotorPosition(&robot, 2, 90);
+  BR_setMotorPosition(&robot, 3, 90);
   /* Wait for the movement to complete */
   BR_waitMotor(&robot, 2);
   BR_waitMotor(&robot, 3);
   /* Move the motors back to where they were */
-  BR_poseJoint(&robot, 2, 0);
-  BR_poseJoint(&robot, 3, 0);
+  BR_setMotorPosition(&robot, 2, 0);
+  BR_setMotorPosition(&robot, 3, 0);
   BR_waitMotor(&robot, 2);
   BR_waitMotor(&robot, 3);
 

@@ -3,58 +3,65 @@
 #include <unistd.h>
 #include <imobot.h>
 
+void moveJoint(CiMobot &robot, int id, double angle)
+{
+  double cur_angle;
+  robot.getMotorPosition(id, cur_angle);
+  robot.setMotorPosition(id, cur_angle + angle);
+}
+
 void move_forward(CiMobot &robot)
 {
-  robot.moveJoint(2, -90);
-  robot.moveJoint(3, 90);
+  moveJoint(robot, 2, -90);
+  moveJoint(robot, 3, 90);
 }
 
 void move_backward(CiMobot &robot)
 {
-  robot.moveJoint(2, 90);
-  robot.moveJoint(3, -90);
+  moveJoint(robot, 2, 90);
+  moveJoint(robot, 3, -90);
 }
 
 void arch(CiMobot &robot)
 {
-  robot.poseJoint(0, -30);
-  robot.poseJoint(1, 30);
+  robot.setMotorPosition(0, -30);
+  robot.setMotorPosition(1, 30);
 }
 
 void inch_right(CiMobot &robot)
 {
-  robot.poseJoint(0, -50);
+  robot.setMotorPosition(0, -50);
   robot.waitMotor(0);
-  robot.poseJoint(1, 50);
+  robot.setMotorPosition(1, 50);
   robot.waitMotor(1);
-  robot.poseJoint(0, 0);
+  robot.setMotorPosition(0, 0);
   robot.waitMotor(0);
-  robot.poseJoint(1, 0);
+  robot.setMotorPosition(1, 0);
   robot.waitMotor(1);
 }
 
 void inch_left(CiMobot &robot)
 {
-  robot.poseJoint(1, 50);
+  robot.setMotorPosition(1, 50);
   robot.waitMotor(1);
-  robot.poseJoint(0, -50);
+  robot.setMotorPosition(0, -50);
   robot.waitMotor(0);
-  robot.poseJoint(1, 0);
+  robot.setMotorPosition(1, 0);
   robot.waitMotor(1);
-  robot.poseJoint(0, 0);
+  robot.setMotorPosition(0, 0);
   robot.waitMotor(0);
 }
 
 void rotate_right(CiMobot &robot)
 {
-  robot.moveJoint(2, 90);
-  robot.moveJoint(3, 90);
+  moveJoint(robot, 2, 90);
+  moveJoint(robot, 3, 90);
 }
 
 void rotate_left(CiMobot &robot)
 {
-  robot.moveJoint(2, -90);
-  robot.moveJoint(3, -90);
+  moveJoint(robot, 2, -90);
+  moveJoint(robot, 3, -90);
 }
 
 void stand(CiMobot &robot)
@@ -63,25 +70,25 @@ void stand(CiMobot &robot)
   int speed;
   /* Go to home position first */
   for(i = 0; i < 4; i++) {
-    robot.poseJoint(i, 0);
+    robot.setMotorPosition(i, 0);
   }
   robot.moveWait();
   sleep(2);
 
   /* Arch the robot */
-  robot.poseJoint(0, -85);
-  robot.poseJoint(1, 80);
+  robot.setMotorPosition(0, -85);
+  robot.setMotorPosition(1, 80);
   robot.moveWait();
 
   /* Twist the bottom face */
-  robot.poseJoint(2, 45);
+  robot.setMotorPosition(2, 45);
   robot.waitMotor(2);
 
   /* Stand the robot up slowly */
   /* First, save the speed */
   robot.getMotorSpeed(0, speed);
   robot.setMotorSpeed(0, 30);
-  robot.poseJoint(0, 20);
+  robot.setMotorPosition(0, 20);
   robot.waitMotor(0);
   /* Reset the old speed */
   robot.setMotorSpeed(0, speed);
@@ -118,3 +125,5 @@ int main()
 
   return 0;
 }
+
+

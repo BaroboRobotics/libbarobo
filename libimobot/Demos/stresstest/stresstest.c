@@ -3,6 +3,7 @@
 #include "imobot.h"
 
 void terminate();
+void pose(iMobot_t* robot, double* angles, unsigned char motorMask);
 int main()
 {
   int i;
@@ -32,31 +33,31 @@ int main()
 
   while(1) {
     printf("Pose1...\n");
-    BR_pose(&robot, pos1, 0x0F);
+    pose(&robot, pos1, 0x0F);
     sleep(sleep_time);
     if(BR_isBusy(&robot)) { terminate(); }
 
     printf("Pose2...\n");
-    BR_pose(&robot, pos2, 0x01);
+    pose(&robot, pos2, 0x01);
     sleep(sleep_time);
     if(BR_isBusy(&robot)) { terminate(); }
 
     printf("Pose3...\n");
-    BR_pose(&robot, pos1, 0x01);
+    pose(&robot, pos1, 0x01);
     sleep(sleep_time);
     if(BR_isBusy(&robot)) { terminate(); }
 
     /* Rotate the robot */
     printf("Rotate1...\n");
     for(i = 1; i < 5; i++) {
-      BR_poseJoint(&robot, 2, (90*i)*10);
+      BR_setMotorPosition(&robot, 2, (90*i)*10);
       sleep(sleep_time);
       if(BR_isBusy(&robot)) { terminate(); }
     }
     /* Now rotate back */
     printf("Rotate2...\n");
     for(i = 1; i < 5; i++) {
-      BR_poseJoint(&robot, 2, (-90*i)*10);
+      BR_setMotorPosition(&robot, 2, (-90*i)*10);
       sleep(sleep_time);
       if(BR_isBusy(&robot)) { terminate(); }
     }
@@ -72,4 +73,14 @@ void terminate()
 {
   printf("Possible motor failure. %s:%d\n", __FILE__, __LINE__);
   exit(0);
+}
+
+void pose(iMobot_t* robot, double* angles, unsigned char motorMask)
+{
+  int i;
+  for(i = 0; i < 4; i++) {
+    if((1<<i) & motorMask) {
+      BR_setMotorPosition(robot, i, angles[i]);
+    }
+  }
 }

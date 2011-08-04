@@ -62,29 +62,22 @@ typedef struct iMobot_s {
   int socket;
 } iMobot_t;
 
-int BR_init(iMobot_t* iMobot);
-int BR_initListenerBluetooth(iMobot_t* iMobot, int channel);
-int BR_pose(iMobot_t* iMobot, double angles[4], const char motorMask);
-int BR_poseJoint(iMobot_t* iMobot, unsigned short id, double angle);
-int BR_move(iMobot_t* iMobot, double angles[4], const char motorMask);
-int BR_moveJoint(iMobot_t* iMobot, unsigned short id, double angle);
-int BR_stop(iMobot_t* iMobot);
-int BR_setMotorDirection(iMobot_t* iMobot, int id, int direction);
-int BR_setMotorDirections(iMobot_t* iMobot, unsigned short dir[4], const char motorMask);
 int BR_getMotorDirection(iMobot_t* iMobot, int id, int *dir);
-int BR_moveWait(iMobot_t* iMobot);
-int BR_isBusy(iMobot_t* iMobot);
-int BR_getJointAngle(iMobot_t* iMobot, int id, double* angle);
-int BR_getJointAngles(iMobot_t* iMobot, double angle[4]);
-int BR_setMotorPosition(iMobot_t* iMobot, int id, double angle);
 int BR_getMotorPosition(iMobot_t* iMobot, int id, double *angle);
-int BR_setMotorSpeed(iMobot_t* iMobot, int id, int speed);
 int BR_getMotorSpeed(iMobot_t* iMobot, int id, int *speed);
 int BR_getMotorState(iMobot_t* iMobot, int id, int *state);
-int BR_waitMotor(iMobot_t* iMobot, int id);
-int BR_poseZero(iMobot_t* iMobot);
+int BR_init(iMobot_t* iMobot);
+int BR_initListenerBluetooth(iMobot_t* iMobot, int channel);
+int BR_isBusy(iMobot_t* iMobot);
 int BR_listenerMainLoop(iMobot_t* iMobot);
+int BR_moveWait(iMobot_t* iMobot);
+int BR_poseZero(iMobot_t* iMobot);
+int BR_setMotorDirection(iMobot_t* iMobot, int id, int direction);
+int BR_setMotorPosition(iMobot_t* iMobot, int id, double angle);
+int BR_setMotorSpeed(iMobot_t* iMobot, int id, int speed);
+int BR_stop(iMobot_t* iMobot);
 int BR_terminate(iMobot_t* iMobot);
+int BR_waitMotor(iMobot_t* iMobot, int id);
 
 int BR_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const char* buf);
 
@@ -98,24 +91,21 @@ class CiMobot {
   public:
     CiMobot();
     ~CiMobot();
-    int poseJoint(int id, double angle);
-    int moveJoint(int id, double angle);
-    int stop();
-    int setMotorDirection(int id, int direction);
-    int moveWait();
-    int isBusy();
-    int getJointAngle(int id, double &angle);
-    int getJointAngles(double angle[4]);
-    int setMotorPosition(int id, double angle);
+    int getMotorDirection(int id, int &direction);
     int getMotorPosition(int id, double &angle);
-    int setMotorSpeed(int id, int speed);
     int getMotorSpeed(int id, int &speed);
     int getMotorState(int id, int &state);
-    int waitMotor(int id);
-    int poseZero();
     int initListenerBluetooth(int channel);
+    int isBusy();
     int listenerMainLoop();
+    int moveWait();
+    int poseZero();
+    int setMotorDirection(int id, int direction);
+    int setMotorPosition(int id, double angle);
+    int setMotorSpeed(int id, int speed);
+    int stop();
     int terminate();
+    int waitMotor(int id);
   private:
     iMobot_t _iMobot;
 };
