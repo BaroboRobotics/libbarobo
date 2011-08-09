@@ -38,15 +38,12 @@ int main()
   robot.setMotorPosition(IMOBOT_MOTOR1, 20);
   robot.moveWait();
 
-  /* Pan the robot around */
-  robot.setMotorPosition(IMOBOT_MOTOR3, 90);
-  robot.waitMotor(IMOBOT_MOTOR3);
-  robot.setMotorPosition(IMOBOT_MOTOR3, 180);
-  robot.waitMotor(IMOBOT_MOTOR3);
-  robot.setMotorPosition(IMOBOT_MOTOR3, 270);
-  robot.waitMotor(IMOBOT_MOTOR3);
-  robot.setMotorPosition(IMOBOT_MOTOR3, 0);
-  robot.waitMotor(IMOBOT_MOTOR3);
+  /* Pan the robot around for 3 seconds */
+  robot.setMotorSpeed(IMOBOT_MOTOR3, 0);
+  robot.setMotorDirection(IMOBOT_MOTOR3, IMOBOT_MOTOR_DIR_FORWARD);
+  robot.setMotorSpeed(IMOBOT_MOTOR3, 30);
+  sleep(3);
+  robot.setMotorSpeed(IMOBOT_MOTOR3, 0);
 
   return 0;
 }
