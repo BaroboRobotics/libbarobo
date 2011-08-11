@@ -40,6 +40,16 @@ enum iMobot_motors_e {
 };
 #endif
 
+#ifndef IMOBOT_MOTOR_DIRECTION_E
+#define IMOBOT_MOTOR_DIRECTION_E
+enum iMobot_motor_direction_e
+{
+  IMOBOT_MOTOR_DIR_AUTO,
+  IMOBOT_MOTOR_DIR_FORWARD,
+  IMOBOT_MOTOR_DIR_BACKWARD
+};
+#endif
+
 typedef struct br_comms_s
 {
   int socket;
