@@ -1,0 +1,51 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CiMobotComms::getMotorState()}\index{getMotorState()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{getMotorState()}
+
+\noindent
+{\bf Synopsis}\\
+\begin{verbatim}
+#include <imobotcomms.h>
+int CiMobotComms::getMotorState(int id, int &state);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Determine whether a motor is moving or not.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{10 mm}p{145 mm}}
+\texttt{id} & The joint number to pose. \\
+\texttt{state} & An integer variable which will be overwritten with the current state of the motor. 
+\end{tabular}
+\end{description}
+
+\noindent
+{\bf Description}\\
+This function is used to determine the current state of a motor. Valid states are:
+\begin{itemize}
+\item 0: The motor is idle.
+\item 1: The motor is moving.
+\item 2: The motor is heading towards a specified position.
+\end{itemize}
+
+\noindent
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

@@ -1,0 +1,94 @@
+%\lhead{libimobotcomms API Documentation}
+\noindent
+The header file {\bf libimobotcomms.h} defines all the data types, macros 
+and function prototypes for the iMobot API library. The header file
+declares a class called \texttt{CiMobotComms} which contains member functions which
+may be used to control the robot.
+
+\begin{table}[!hp]
+%\capstart
+\begin{center}
+\caption{CiMobotComms Member Functions.}
+\begin{tabular}{p{38 mm}p{77 mm}}
+%\begin{tabular}{ll}
+\hline
+Function & Description \\
+\hline
+%\texttt{pose()} \dotfill & Pose multiple joints of the iMobot. \\
+\texttt{CiMobotComms()} \dotfill & The CiMobotComms constructor function. This function
+is called automatically and should not be called explicitly. \\
+\texttt{\textasciitilde CiMobotComms()} \dotfill & The CiMobotComms destructor function. This function
+is called automatically and should not be called explicitly. \\
+& \\
+\texttt{connect()} \dotfill & Connect to a remote iMobot module. This function connects to an already-paired iMobot module in Microsoft Windows. This function does not currently work for non-Windows operating systems, such as Mac or Linux. For those operating systems, please use the \texttt{connectAddress()} function instead. \\
+\texttt{connectAddress()} \dotfill & Connect to an iMobot module by specifying its Bluetooth address. \\
+\texttt{disconnect()} \dotfill & Disconnect from an iMobot module. \\
+\texttt{getMotorDirection()} \dotfill & Gets a motor's currently assigned direction. \\
+\texttt{getMotorPosition()} \dotfill & Gets a joint's angle. \\
+\texttt{getMotorSpeed()} \dotfill & Gets a motor's speed. \\
+\texttt{getMotorState()} \dotfill & Gets a motor's current status. \\
+\texttt{isConnected()} \dotfill & This function is used to check the connection to an iMobot. \\
+\texttt{moveWait()} \dotfill & Wait until all motors have stopped moving. \\
+\texttt{pozeZero()} \dotfill & Instructs all motors to go to their zero positions. \\
+\texttt{setMotorDirection()} \dotfill & Set the motor direction of a motor. Set
+to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
+\texttt{setMotorPosition()} \dotfill & Set the desired motor position. \\
+\texttt{setMotorSpeed()} \dotfill & Sets a motor's speed. \\
+\texttt{stop()} \dotfill & Stop all currently executing motions of the iMobot. \\
+\texttt{waitMotor()} \dotfill & Wait until the specified motor has stopped moving. \\
+\hline
+\end{tabular}
+\end{center}
+\label{mobilec_api_cbinary}
+\end{table}
+
+\section{Constants and Enumerations}
+There are various macros and enumerations declared in the header file which 
+represent descriptive names for otherwise meaningless values. They are 
+presented in the following table and used throughout the API.
+
+\begin{tabular}{lp{3.7in}}
+Macro & Description \\
+\texttt{iMobot\_motors\_e} & \\\hline
+\texttt{IMOBOT\_MOTOR1} & This macro represents the first motor of an iMobot. \\
+\texttt{IMOBOT\_MOTOR2} & This macro represents the second motor of an iMobot. \\
+\texttt{IMOBOT\_MOTOR3} & This macro represents the third motor of an iMobot. \\
+\texttt{IMOBOT\_MOTOR4} & This macro represents the fourth motor of an iMobot. \\
+\texttt{IMOBOT\_NUM\_MOTORS} & This macro contains the number of motors on an iMobot. \\
+ & \\
+\texttt{iMobot\_motor\_direction\_e} & \\\hline
+\texttt{IMOBOT\_MOTOR\_DIR\_AUTO} & Set the iMobot direction to automatic. The iMobot will choose the best direction to turn the motor in order to get to the requested position. \\
+\texttt{IMOBOT\_MOTOR\_DIR\_FORWARD} & Force the motor to turn in the ``forward'' direction. \\
+\texttt{IMOBOT\_MOTOR\_DIR\_BACKWARD} & Force the motor to turn in the ``backward'' direction.
+\end{tabular}
+
+\newpage
+\input{libimobotcomms_api/connect}
+\pagebreak
+\input{libimobotcomms_api/connectAddress}
+\pagebreak
+\input{libimobotcomms_api/disconnect}
+\pagebreak
+\input{libimobotcomms_api/getMotorDirection}
+\pagebreak
+\input{libimobotcomms_api/getMotorPosition}
+\pagebreak
+\input{libimobotcomms_api/getMotorSpeed}
+\pagebreak
+\input{libimobotcomms_api/getMotorState}
+\pagebreak
+\input{libimobotcomms_api/isConnected}
+\pagebreak
+\input{libimobotcomms_api/moveWait}
+\pagebreak
+\input{libimobotcomms_api/poseZero}
+\pagebreak
+\input{libimobotcomms_api/setMotorDirection}
+\pagebreak
+\input{libimobotcomms_api/setMotorPosition}
+\pagebreak
+\input{libimobotcomms_api/setMotorSpeed}
+\pagebreak
+\input{libimobotcomms_api/stop}
+\pagebreak
+\input{libimobotcomms_api/waitMotor}

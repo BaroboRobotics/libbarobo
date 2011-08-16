@@ -1,0 +1,559 @@
+% Mobile-C Library 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Preamble {{{
+%\documentclass[11pt]{article}
+\documentclass[11pt]{report}
+\usepackage{varioref}
+\usepackage{times,verbatim,fancyheadings,makeidx}
+\usepackage{moreverb}
+%\usepackage{psfig}
+\usepackage[pdftex]{hyperref}
+\usepackage{hypcap}
+\usepackage{fullpage}
+\usepackage{amssymb,amsmath}
+\usepackage{graphicx}
+\usepackage{program}
+%\headrulewidth 0.0pt
+%\hoffset=-0.0625in
+%\voffset=0pt
+\setlength{\textheight}{9in}
+\setlength{\textwidth}{6.5in}
+\topmargin=0.05in
+\makeindex
+% }}} Preamble
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Title Page {{{
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+%\includegraphics[width=1.8in]{figure/mobilec_logo.png}
+
+
+\vspace{0.5in}
+{\Huge\sf\bf User's Guide for Programming iMobot} \\
+\vspace{2.0in}
+{\large\sf\bf\today}
+%September 20, 2007
+\end{center}
+
+\pagebreak
+% }}} Title Page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Abstract {{{
+%\phantomsection
+%\addcontentsline{toc}{chapter}{Abstract}
+\begin{abstract} 
+This user's guide describes how to control an iMobot robotic module. The iMobot
+robotic module has four controllable degrees of motion. Each module has two
+articulated body joints and two rotating faceplates at the ends of the module.
+\end{abstract}
+\pagebreak
+% Abstract }}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Table of Contents {{{
+\pagenumbering{roman}
+\setcounter{page}{1}
+\tableofcontents
+\pagebreak
+% }}} Table of Contents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Part 1 {{{
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\pagebreak
+% }}} Part 1 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Introduction {{{
+%\pagenumbering{arabic}
+%\setcounter{page}{1}
+%\pagestyle{fancy}
+%\section{Introduction}
+%\pagebreak
+% }}} Introduction
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{iMobot Module Orientation}
+The iMobot robotic module is a robotic system consisting of four controllable joints. Two
+of the joints are articulated body joints, each cabable of rotating 180 degrees. The other
+two joints are rotating faceplates located at either end of the module which are able to
+freely rotate like wheels. A diagram of the iMobot's joints and positive directions can
+be seen in Figure \ref{fig:joint_diagram}.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=3.5in]{images/joint_diagram.png}
+\caption{\label{fig:joint_diagram}An iMobot module's four joint locations and directions.}
+\end{center}
+\end{figure}
+
+\chapter{Logging in to the iMobot via WIFI}
+\section{Getting Started}
+This short guide will enable you to run the provided demo program,
+``simple.cpp'', on the iMobot.
+\begin{enumerate}
+\item Download and install a VNC client
+  \begin{itemize}
+  \item For Windows, you may download and install TightVNC from \texttt{http://www.tightvnc.com}.
+  \item For Mac OS X, you may download and install Chicken of the VNC from\\
+  \texttt{http://sourceforge.net/projects/cotvnc/}
+  \end{itemize}
+\item Log in to the imobot with a VNC client. Most VNC software will come with
+both a "client" program and also a "server" or "host" program. When starting
+your VNC program, please ensure that you are starting the "client" program and
+not the "server" or "host" program.
+\item Connect to the iMobot with your VNC client. The default address of the iMobot is \texttt{192.168.0.123}.
+\item Open and execute the demo program.
+  \begin{enumerate}
+  \item Copy the demo program to your home directory with the command\\
+  \texttt{cp /usr/local/ch/package/chimobot/demos/simple.cpp \textasciitilde/}
+  \item Open the demo program with ChIDE. You may left click on the desktop to open the menu, and select \texttt{Applications -> Accessories -> ChIDE}.
+  \item Click on \texttt{File -> Open} within ChIDE and open the program, \texttt{simple.cpp}. 
+  \item Click on the ``Run'' button, located near the top right of the ChIDE Window. The robot should now run the program.
+  \end{enumerate}
+\end{enumerate}
+
+\section{Graphical Control Interface}
+\begin{figure}
+\begin{center}
+\includegraphics[width=3in]{images/imobot_gui_splash.png}
+\caption{\label{fig:gui_splash}The iMobot Graphical Control Interface introductory dialog.}
+\end{center}
+\end{figure}
+
+The iMobot comes with a graphical control interface for controlling the iMobot.
+The control interface is able to perform simple locomotion tasks, and can be
+used to determine the joint angles of the iMobot. 
+
+The graphical interface can be found in the application menu of the iMobot. Once
+a VNC connection to the iMobot has been established, simply left click on the
+desktop to bring up the menu, and select the item \texttt{Applications ->
+Accessories -> iMobot Controller}. When the controller starts, you will be 
+presented with an introductory dialog as shown in Figure \ref{fig:gui_splash}.
+This dialog allows you to choose if you wish to connect to a remote module
+via Bluetooth, or if the program is currently running on the module you wish
+to control. Select the second option, which specifies that the gui is already
+running on an iMobot that you wish to control.
+ Ensure that 
+the application is connected by ensuring that the status bar at the bottom of the
+application displays ``Connected''. 
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=4in]{gui_screenshot.png}
+\caption{\label{fig:gui}The iMobot Graphical Control Interface.}
+\end{center}
+\end{figure}
+
+The graphical interface is composed of four basic components, as shown in
+Figure \ref{fig:gui}. The first section, labeled with the red ``1'',
+is a section of four sliders. Each slider controls the motor speed of a joint.
+
+The next section, labeled ``2'', are controls which can be used to move each
+joint independantly. The upward arrows indicate forward rotation, the stop
+buttons stop the motors, and the downward arrows indicate backward motion.
+Below the downward arrows are textboxes which display the current angle of each
+joint.
+
+The next section, labeled ``3'', contain buttons used for moving the iMobot. 
+The arrows indicate forwards and backwards motion, along with turning and
+sideways inchworming motions. The large stop sign button stops all motions
+on the iMobot. The button labeled ``Home'' causes the iMobot to move all joints
+back to their home position. 
+
+The final section, labeled ``4'', contain preprogramed gaits for the iMobot.
+To execute a gait, simply select the desired gait by left-clicking on its name,
+and click the ``Play'' button.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SUB: Overview of Sample Application Programs {{{
+\section{Overview of a Sample Application Program}
+The following program is a simple program which moves some joints on the iMobot
+before initializing the robot to listen for incoming Bluetooth commands.
+\subsection{simple.cpp \label{subsec:simple.cpp}}
+\listinginput{1}{../libimobot/Demos/simple_cpp/simple.cpp}
+\subsection{Explanation of simple.cpp}
+\begin{itemize}
+\item 
+\begin{verbatim}
+  CiMobot robot;
+\end{verbatim}
+This line declares the \texttt{robot} object, which represents the
+capabilities of the iMobot module. This object contains various member
+functions which may be executed by the user.
+\item 
+\begin{verbatim}
+  robot.poseZero();
+  robot.moveWait();
+\end{verbatim}
+These commands command the iMobot to move all motors to their zero positions
+and wait until the motion is finished.
+\item 
+\begin{verbatim}
+  robot.poseJoint(2, 90);
+  robot.poseJoint(3, 90);
+\end{verbatim}
+These lines instruct the robot to rotate joints 2 and 3 to rotate 90
+degrees. Note that the joint numbers start at 0, so joints 2 and 3 are the
+third and fourth joints, respectively. 
+\item 
+\begin{verbatim}
+  robot.waitMotor(2);
+  robot.waitMotor(3);
+\end{verbatim}
+This code causes the program to wait until the third and fourth
+joints have stopped moving.
+\end{itemize}
+
+\chapter{Controlling the iMobot via Bluetooth}
+\section{The \texttt{imobotcomms} iMobot Remote Control Library}
+The \texttt{imobotcomms} library is a collection of functions geared towards
+controlling the motors and reading sensor values of an iMobot module via the
+Bluetooth wireless protocol. The functions are designed to be intuitive
+and easy to use. Various functions are provided to control or obtain the speed,
+direction, and position of the motors. The API includes C-style functions as well
+as a C++ class called \texttt{CiMobotComms} to facilitate C++ style api function
+calls. 
+
+This documentation introduces the basic computer setup required for controlling 
+the iMobot, as well as several demo programs and a complete reference for all
+API function provided with the \texttt{imobotcomms} library.
+
+\section{Bluetooth Pairing with the iMobot}
+To control the iMobot with the Bluetooth wireless protocol, the controlling 
+computer must be equipped with Bluetooth. If the computer does not have
+Bluetooth built-in, an external USB Bluetooth dongle may be used. The following
+instructions are for a Windows 7 computer with built-in Bluetooth. The basic
+process is the same for Windows XP and Vista, although the screenshots may
+appear different. 
+
+The first step is to open the Bluetooth applet by double-clicking the Bluetooth
+icon in the applet tray normally found at the bottom right of the screen, as
+shown highlighted in red in the following figure.
+
+\begin{center}
+\includegraphics[width=3in]{images/imobot_connect_1.png}
+\end{center}
+
+After double-clicking the icon, a new window will appear similar to the following.
+
+\begin{center}
+\includegraphics[width=5in]{images/imobot_connect_1a.png}
+\end{center}
+
+Next, click on the
+button labeled "Add Wireless Device" towards the top of the window. This 
+will bring up the following dialog.
+
+\begin{center}
+\includegraphics[width=5in]{images/imobot_connect_2.png}
+\end{center}
+
+This dialog shows a list of all Bluetooth wireless devices that are in range.
+Among them should be the iMobot you wish to connect to. If the iMobot does not
+appear on this list, please ensure that the iMobot is within 10 meters of the
+connecting computer and that the iMobot is powered on. Double click on the icon
+representing the iMobot to proceed. Once you have double-clicked the icon, the
+following dialog box should appear.
+
+\begin{center}
+\includegraphics[width=5in]{images/imobot_connect_3.png}
+\end{center}
+
+Select the second option, labeled ``Enter the device's pairing code''. iMobot
+modules come hard-coded with a default pairing code. When prompted for the
+pairing code, enter ``1234''. Once the computer is paired with the iMobot,
+the following dialog box may pop up asking to install drivers.
+
+\begin{center}
+\includegraphics[width=5in]{images/imobot_connect_4.png}
+\end{center}
+
+If the previously illustrated dialog box appears, just click the ``cancel''
+button at the bottom right. No extra drivers are necessary for controlling the
+iMobot module.
+
+At this point, the following dialog should be shown.
+
+\begin{center}
+\includegraphics[width=5in]{images/imobot_connect_6.png}
+\end{center}
+
+The next step is to enable the iMobot control service. 
+Double-click on the icon denoting the
+iMobot module to bring up the following dialog:
+
+\begin{center}
+\includegraphics[width=5in]{images/imobot_connect_7.png}
+\end{center}
+
+Click on the tab labeled ``Services''
+
+\begin{center}
+\includegraphics[width=5in]{images/imobot_connect_8.png}
+\end{center}
+
+Ensure that the service titled ``iMobot Control'' is enabled. If it is not
+enabled, click on the check-box to enable it. Click on the ``Ok'' button to
+accept the changes and close the dialogs. The iMobot is now ready to be
+controlled with the iMobotComms library.
+
+\chapter{Demo Programs}
+\section{Basics of a Ch iMobot Program}
+To help the user become acquainted with the iMobot control programs, one sample
+program will be presented to illustrate the basics and minimum requirements of
+an iMobot control program. 
+
+\subsection{\texttt{getting\_started.ch} Source Code}
+\verbatiminput{../libimobotcomms/demos/getting_started/getting_started.ch}
+
+\subsection{\label{sec:democode}Demo Code for \texttt{getting\_started.ch} Explained}
+The beginning of every iMobot control program will include header files. Each
+header file imports functions used for a number of tasks, such as printing
+data onto the screen or controlling the iMobot. 
+
+\begin{verbatim}
+#include <stdio.h>       // Required for printf()
+#include <imobotcomms.h> // Required for iMobot control functions
+\end{verbatim}
+
+Next, we must initialize the C++ class used to control the iMobot. This line
+initializes a new variable named \texttt{robot} which represents the remote
+iMobot module which we wish to control. This special variable is actually an
+instance of the \texttt{CiMobotComms} class, which contains its own set of
+functions called ``methods'' or ``member functions''.
+\begin{verbatim}
+CiMobotComms robot;
+\end{verbatim}
+
+The next line will use the \texttt{poseZero} member function. The
+\texttt{poseZero} function causes the iMobot to move all of its motors to the
+zero position.
+\begin{verbatim}
+robot.poseZero();
+\end{verbatim}
+
+The majority of iMobot control functions do not wait for the robotic motions to
+complete before continuing. As such, if we want to wait for the robot to fully
+complete the requested motion before continuing with the rest of the program,
+we must use the \texttt{moveWait} function, as such.
+\begin{verbatim}
+robot.moveWait();
+\end{verbatim}
+
+The next four lines of code command motors 3 and 4 to rotate 90 degrees, and
+then waits for the motors to stop moving.
+\begin{verbatim}
+robot.setMotorPosition(IMOBOT_MOTOR3, 90);
+robot.setMotorPosition(IMOBOT_MOTOR4, 90);
+robot.waitMotor(IMOBOT_MOTOR3);
+robot.waitMotor(IMOBOT_MOTOR4);
+\end{verbatim}
+
+\section{Inchworm Demo Program}
+\subsection{\texttt{inchworm.ch} Source Code}
+\verbatiminput{../libimobotcomms/demos/inchworm/inchworm.ch}
+\subsection{Source Code Explanation}
+\begin{itemize}
+\item
+These first few lines, like the previous example, initialize the program,
+create a handle to the robot called \texttt{robot}, and connect to the remote
+iMobot.
+
+\begin{verbatim}
+#include <stdio.h>
+#include <imobotcomms.h>
+
+CiMobotComms robot;
+
+/* Connect to an already paired iMobot */
+if(robot.connect()) {
+  printf("Error connecting.\n");
+}
+\end{verbatim}
+
+\item
+The next lines of code set all of the motor speeds to a value of 50. The for loop
+cycles through each motor, starting at \texttt{IMOBOT\_MOTOR1} and the function
+\texttt{setMotorSpeed()} sets each motor's speed.
+\begin{verbatim}
+int i;
+for(i = IMOBOT_MOTOR1; i < IMOBOT_NUM_MOTORS; i++) {
+  robot.setMotorSpeed(i, 50);
+}
+\end{verbatim}
+
+\item
+The next lines of code cause the iMobot to move all of its motors to the zero position.
+\begin{verbatim}
+robot.poseZero();
+robot.moveWait();
+\end{verbatim}
+
+\includegraphics[width=3in]{images/inch1.png}
+
+\item
+The next lines of code cause the robot to perform an ``inch-worm'' gait four
+times. The inch-worm gait is executed by controlling the first and second motors of the iMobot in a timed fashion. In this example, the first motor is rotated by $-45$ degrees.
+\begin{verbatim}
+  robot.setMotorPosition(IMOBOT_MOTOR1, -45);
+  robot.waitMotor(IMOBOT_MOTOR1);
+\end{verbatim}
+At this point, the iMobot move to a pose as shown in the following figure.
+
+\includegraphics[width=3in]{images/inch2.png}
+
+\item
+Next, the second joint is also rotated by 45 degrees.
+\begin{verbatim}
+  robot.setMotorPosition(IMOBOT_MOTOR2, 45);
+  robot.waitMotor(IMOBOT_MOTOR2);
+\end{verbatim}
+The robot now looks like this:
+
+\includegraphics[width=3in]{images/inch3.png}
+
+\item
+Next, the first joint goes back to the zero position.
+\begin{verbatim}
+  robot.setMotorPosition(IMOBOT_MOTOR1, 0);
+  robot.waitMotor(IMOBOT_MOTOR1);
+\end{verbatim}
+This causes the robot to look like this:
+
+\includegraphics[width=3in]{images/inch4.png}
+
+\item
+Finally, the second joint also goes back to the zero position, causing the
+robot to resume its original ``flattened'' pose. 
+\begin{verbatim}
+  robot.setMotorPosition(IMOBOT_MOTOR2, 0);
+  robot.waitMotor(IMOBOT_MOTOR2);
+\end{verbatim}
+
+\includegraphics[width=3in]{images/inch1.png}
+
+\item
+This entire process repeats four times.
+\end{itemize}
+
+
+\section{iMobot Standing Demo Program}
+\subsection{\texttt{stand.ch} Source Code}
+\verbatiminput{../libimobotcomms/demos/stand/stand.ch}
+\subsection{Source Code Explanation}
+\begin{itemize}
+\item
+These first few lines, like the previous examples, initialize the program,
+create a handle to the robot called \texttt{robot}, and connect to the remote
+iMobot. Similar to the last example, this code also sets the motor speeds to 50,
+and poses each of the motors to their zero position.
+\begin{verbatim}
+#include <stdio.h>
+#include <imobotcomms.h>
+
+CiMobotComms robot;
+
+/* Connect to an already paired iMobot */
+if(robot.connect()) {
+  printf("Error connecting.\n");
+}
+
+/* Set robot motors to speed of 50 */
+int i;
+for(i = IMOBOT_MOTOR1; i < IMOBOT_NUM_MOTORS; i++) {
+  robot.setMotorSpeed(i, 50);
+}
+/* Set the robot to "home" position, where all joint angles are 0 degrees. */
+robot.poseZero();
+robot.moveWait();
+\end{verbatim}
+
+\item 
+In order for the iMobot to stand up, it first must go into a ``fetal
+position'', by rotating the first and second joints.
+\begin{verbatim}
+/* Move the robot into a fetal position */
+robot.setMotorPosition(IMOBOT_MOTOR1, -85);
+robot.setMotorPosition(IMOBOT_MOTOR2, 80);
+robot.moveWait();
+\end{verbatim}
+This causes the robot to look like this:
+
+\includegraphics[width=3in]{images/stand1.png}
+
+\item
+Next, the the iMobot needs to rotate the faceplate which will serve as the base
+of the standing robot by 45 degrees.
+\begin{verbatim}
+/* Rotate the bottom faceplate by 45 degrees */
+robot.setMotorPosition(IMOBOT_MOTOR3, 45);
+robot.moveWait();
+\end{verbatim}
+
+\includegraphics[width=3in]{images/stand2.png}
+
+\item 
+Now that there base is rotated the iMobot can lift itself up onto its end by
+rotating the first joint.
+\begin{verbatim}
+/* Lift the body up */
+robot.setMotorPosition(IMOBOT_MOTOR1, 20);
+robot.moveWait();
+\end{verbatim}
+
+\includegraphics[width=3in]{images/stand3.png}
+
+\item 
+Finally, we can pan the robot around on its base. The following code causes the
+robot to spin continuously on its base for three seconds. This is done by 
+changing the motor's direction from \texttt{IMOBOT\_MOTOR\_DIR\_AUTO}, which
+is the default setting, to a new value of \texttt{IMOBOT\_MOTOR\_DIR\_FORWARD}.
+With the new motor direction setting, when a non-zero speed is applied to the 
+motor, it will begin to spin continuously. The program then pauses for three
+seconds using the \texttt{sleep()} function before setting the motor speed back 
+to zero.
+\begin{verbatim}
+/* Pan the robot around for 3 seconds */
+robot.setMotorSpeed(IMOBOT_MOTOR3, 0);
+robot.setMotorDirection(IMOBOT_MOTOR3, IMOBOT_MOTOR_DIR_FORWARD);
+robot.setMotorSpeed(IMOBOT_MOTOR3, 30);
+sleep(3);
+robot.setMotorSpeed(IMOBOT_MOTOR3, 0);
+\end{verbatim}
+
+\includegraphics[width=3in]{images/stand4.png}
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SUB: Execution of Sample Applications {{{
+%\section{Execution of Sample Applications}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Appendix {{{
+\appendix
+\chapter{iMobot API}
+\input{libimobot_api/libimobot}
+\pagebreak
+
+\chapter{iMobotComms API}
+\input{libimobotcomms_api/libimobotcomms.tex}
+% }}} Appendix 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Index {{{
+\phantomsection
+\addcontentsline{toc}{chapter}{Index}
+\printindex
+% }}} Index 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}

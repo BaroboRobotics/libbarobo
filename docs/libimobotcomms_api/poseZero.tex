@@ -1,0 +1,43 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CiMobotComms::poseZero()}\index{poseZero()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{poseZero()}
+
+\noindent
+{\bf Synopsis}\\
+\begin{verbatim}
+#include <imobotcomms.h>
+int CiMobotComms::poseZero();
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Move all of the joints of an iMobot to their zero position.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+None.\\
+
+\noindent
+{\bf Description}\\
+This function moves all of the joints of an iMobot to their zero position.
+Please note that this function is non-blocking and will return immediately. Use
+this function in conjunction with the \texttt{moveWait()} function to block
+until the movement completes.\\
+
+\noindent
+{\bf Example}\\
+Please see the demo at Section \ref{sec:democode} on page \pageref{sec:democode}.\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

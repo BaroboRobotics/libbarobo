@@ -1,0 +1,51 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CiMobotComms::getMotorPosition()}\index{getMotorPosition()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{getMotorPosition()}
+
+\noindent
+{\bf Synopsis}\\
+\begin{verbatim}
+#include <imobotcomms.h>
+int CiMobotComms::getMotorPosition(int id, double &position);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Connect to a remote iMobot via Bluetooth.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{20 mm}p{145 mm}}
+\texttt{id} & The joint number to wait for. \\
+\texttt{position} & A variable to store the current position of the iMobot
+motor. The contents of this variable will be overwritten with a value that
+represents the motor's angle in degrees.  \\
+\end{tabular}
+\end{description}
+
+\noindent
+{\bf Description}\\
+This function gets the current motor position of an iMobot's motor. The
+position returned is in units of degrees and is accurate to roughly $\pm0.1$
+degrees. \\
+
+\noindent
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+\texttt{connectAddress()}
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\
