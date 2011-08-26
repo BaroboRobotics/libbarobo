@@ -37,6 +37,16 @@ to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
 \texttt{stop()} \dotfill & Stop all currently executing motions of the iMobot. \\
 \texttt{waitMotor()} \dotfill & Wait until the specified motor has stopped moving. \\
 \hline
+Compound Motions & These are convenience functions of commonly used compound motions. \\
+\hline
+\texttt{inchLeft()} \dotfill & Inchworm gait towards the left. \\
+\texttt{inchRight()} \dotfill & Inchworm gait towards the right. \\
+\texttt{rollBackward()} \dotfill & Roll on the faceplates toward the backward direction. \\
+\texttt{rollForward()} \dotfill & Roll on the faceplates forwards. \\
+\texttt{stand()} \dotfill & Stand the iMobot up on its end. \\
+\texttt{turnLeft()} \dotfill & Rotate the iMobot counterclockwise. \\
+\texttt{turnRight()} \dotfill & Rotate the iMobot clockwise. \\
+\hline
 \end{tabular}
 \end{center}
 \label{mobilec_api_cbinary}
@@ -57,11 +67,19 @@ to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
 \pagebreak
 \input{api/getMotorState}
 \pagebreak
+\input{api/inchLeft}
+\pagebreak
+\input{api/inchRight}
+\pagebreak
 \input{api/isConnected}
 \pagebreak
 \input{api/moveWait}
 \pagebreak
 \input{api/poseZero}
+\pagebreak
+\input{api/rollBackward}
+\pagebreak
+\input{api/rollForward}
 \pagebreak
 \input{api/setMotorDirection}
 \pagebreak
@@ -69,6 +87,12 @@ to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
 \pagebreak
 \input{api/setMotorSpeed}
 \pagebreak
+\input{api/stand}
+\pagebreak
 \input{api/stop}
+\pagebreak
+\input{api/turnLeft}
+\pagebreak
+\input{api/turnRight}
 \pagebreak
 \input{api/waitMotor}

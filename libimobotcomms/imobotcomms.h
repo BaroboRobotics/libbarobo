@@ -89,6 +89,16 @@ DLLIMPORT int iMobotComms_poseZero(br_comms_t* comms);
 DLLIMPORT int iMobotComms_waitMotor(br_comms_t* comms, int id);
 DLLIMPORT int iMobotComms_moveWait(br_comms_t* comms);
 DLLIMPORT int iMobotComms_stop(br_comms_t* comms);
+
+/* compound motion functions */
+DLLIMPORT int iMobotComms_inchLeft(br_comms_t* comms);
+DLLIMPORT int iMobotComms_inchRight(br_comms_t* comms);
+DLLIMPORT int iMobotComms_rollBackward(br_comms_t* comms);
+DLLIMPORT int iMobotComms_rollForward(br_comms_t* comms);
+DLLIMPORT int iMobotComms_stand(br_comms_t* comms);
+DLLIMPORT int iMobotComms_turnLeft(br_comms_t* comms);
+DLLIMPORT int iMobotComms_turnRight(br_comms_t* comms);
+
 #ifdef _WIN32
 typedef struct bdaddr_s {
   UINT8 b[6];
@@ -132,6 +142,14 @@ class CiMobotComms {
     int setMotorSpeed(int id, int speed);
     int stop();
     int waitMotor(int id);
+
+    int inchLeft();
+    int inchRight();
+    int rollBackward();
+    int rollForward();
+    int stand();
+    int turnLeft();
+    int turnRight();
   private:
     br_comms_t _comms;
 };

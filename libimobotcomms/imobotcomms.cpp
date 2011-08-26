@@ -298,6 +298,96 @@ int iMobotComms_stop(br_comms_t* comms)
   return 0;
 }
 
+int iMobotComms_rollForward(br_comms_t* comms)
+{
+  double motorPosition[2];
+  iMobotComms_getMotorPosition(comms, IMOBOT_MOTOR3, &motorPosition[0]);
+  iMobotComms_getMotorPosition(comms, IMOBOT_MOTOR4, &motorPosition[1]);
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR3, motorPosition[0] + 90);
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR4, motorPosition[1] - 90);
+  return 0;
+}
+
+int iMobotComms_rollBackward(br_comms_t* comms)
+{
+  double motorPosition[2];
+  iMobotComms_getMotorPosition(comms, IMOBOT_MOTOR3, &motorPosition[0]);
+  iMobotComms_getMotorPosition(comms, IMOBOT_MOTOR4, &motorPosition[1]);
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR3, motorPosition[0] - 90);
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR4, motorPosition[1] + 90);
+  return 0;
+}
+
+int iMobotComms_turnLeft(br_comms_t* comms)
+{
+  double motorPosition[2];
+  iMobotComms_getMotorPosition(comms, IMOBOT_MOTOR3, &motorPosition[0]);
+  iMobotComms_getMotorPosition(comms, IMOBOT_MOTOR4, &motorPosition[1]);
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR3, motorPosition[0] + 90);
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR4, motorPosition[1] + 90);
+  return 0;
+}
+
+int iMobotComms_turnRight(br_comms_t* comms)
+{
+  double motorPosition[2];
+  iMobotComms_getMotorPosition(comms, IMOBOT_MOTOR3, &motorPosition[0]);
+  iMobotComms_getMotorPosition(comms, IMOBOT_MOTOR4, &motorPosition[1]);
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR3, motorPosition[0] - 90);
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR4, motorPosition[1] - 90);
+  return 0;
+}
+
+int iMobotComms_inchLeft(br_comms_t* comms)
+{
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR1, 0);
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR2, 0);
+  iMobotComms_moveWait(comms);
+
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR2, 50);
+  iMobotComms_moveWait(comms);
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR1, -50);
+  iMobotComms_moveWait(comms);
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR2, 0);
+  iMobotComms_moveWait(comms);
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR1, 0);
+  iMobotComms_moveWait(comms);
+
+  return 0;
+}
+
+int iMobotComms_inchRight(br_comms_t* comms)
+{
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR1, 0);
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR2, 0);
+  iMobotComms_moveWait(comms);
+
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR1, -50);
+  iMobotComms_moveWait(comms);
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR2, 50);
+  iMobotComms_moveWait(comms);
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR1, 0);
+  iMobotComms_moveWait(comms);
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR2, 0);
+  iMobotComms_moveWait(comms);
+
+  return 0;
+}
+
+int iMobotComms_stand(br_comms_t* comms)
+{
+  iMobotComms_poseZero(comms);
+  iMobotComms_moveWait(comms);
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR1, -85);
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR2, 80);
+  iMobotComms_moveWait(comms);
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR3, 45);
+  iMobotComms_moveWait(comms);
+  iMobotComms_setMotorPosition(comms, IMOBOT_MOTOR1, 20);
+  iMobotComms_moveWait(comms);
+  return 0;
+}
+
 #ifdef _WIN32
 void baswap(bdaddr_t *dst, const bdaddr_t *src)
 {
@@ -454,4 +544,40 @@ int CiMobotComms::stop()
 {
   return iMobotComms_stop(&_comms);
 }
+
+int CiMobotComms::rollForward()
+{
+  return iMobotComms_rollForward(&_comms);
+}
+
+int CiMobotComms::rollBackward()
+{
+  return iMobotComms_rollBackward(&_comms);
+}
+
+int CiMobotComms::turnLeft()
+{
+  return iMobotComms_turnLeft(&_comms);
+}
+
+int CiMobotComms::turnRight()
+{
+  return iMobotComms_turnRight(&_comms);
+}
+
+int CiMobotComms::inchLeft()
+{
+  return iMobotComms_inchLeft(&_comms);
+}
+
+int CiMobotComms::inchRight()
+{
+  return iMobotComms_inchRight(&_comms);
+}
+
+int CiMobotComms::stand()
+{
+  return iMobotComms_stand(&_comms);
+}
+
 #endif
