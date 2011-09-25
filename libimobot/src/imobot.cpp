@@ -313,7 +313,6 @@ int iMobot_setMotorPosition(iMobot_t* iMobot, int id, double angle)
 {
   /* Send the desired angles to the iMobot */
   /* Need to convert it to 2 bytes and send to motor*/
-  int i;
   uint8_t data[2];
   /* Multiply by 10 to convert to 10*degrees, which are the units used by the
    * daughterboard. */
@@ -321,9 +320,9 @@ int iMobot_setMotorPosition(iMobot_t* iMobot, int id, double angle)
   memcpy(&data, &position, 2);
   /* We should send the high byte first */
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
-  I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORPOS(i), data[1]);
+  I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORPOS(id), data[1]);
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
-  I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORPOS(i)+1, data[0]);
+  I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORPOS(id)+1, data[0]);
   iMobot->enc[id] = position;
 
   return 0;
@@ -331,7 +330,6 @@ int iMobot_setMotorPosition(iMobot_t* iMobot, int id, double angle)
 
 int iMobot_setMotorSpeed(iMobot_t* iMobot, int id, int speed)
 {
-  int i;
   uint8_t data[2];
   memcpy(&data, &speed, 2);
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
