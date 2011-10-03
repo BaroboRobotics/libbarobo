@@ -84,4 +84,6 @@ public:
 	CSliderCtrl *m_slider_Speeds[4];
 	CSliderCtrl *m_slider_Positions[4];
 	afx_msg void OnBnClickedButtonMotor4forward();
+	afx_msg void OnLbnSelchangeListgaits();
+	afx_msg void OnEnChangeEditposition4();
 };

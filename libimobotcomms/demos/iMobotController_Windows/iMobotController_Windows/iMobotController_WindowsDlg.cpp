@@ -112,6 +112,8 @@ BEGIN_MESSAGE_MAP(CiMobotController_WindowsDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_play, &CiMobotController_WindowsDlg::OnBnClickedButtonplay)
 	ON_BN_CLICKED(IDC_BUTTON_connect, &CiMobotController_WindowsDlg::OnBnClickedButtonconnect)
 	ON_BN_CLICKED(IDC_BUTTON_Motor4Forward, &CiMobotController_WindowsDlg::OnBnClickedButtonMotor4forward)
+	ON_LBN_SELCHANGE(IDC_LIST_gaits, &CiMobotController_WindowsDlg::OnLbnSelchangeListgaits)
+	ON_EN_CHANGE(IDC_EDIT_position4, &CiMobotController_WindowsDlg::OnEnChangeEditposition4)
 END_MESSAGE_MAP()
 
 
@@ -430,7 +432,24 @@ int CiMobotController_WindowsDlg::addGait(Gait* gait)
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonplay()
 {
-	// TODO: Add your control notification handler code here
+	/* Get the index of the gait to play */
+	int index;
+	index = m_list_gaits.GetCurSel();
+	if(index == LB_ERR) {
+		return;
+	}
+
+	int numMotions = m_gaits[index]->getNumMotions();
+	const Motion *motion;
+	for(int i = 0; i < numMotions; i++) {
+		motion = m_gaits[index]->getMotion(i);
+		if(motion->getType() == MOTION_POSE) {
+			poseJoints(motion->getAngles(), motion->getMotorMask());
+		} else if (motion->getType() == MOTION_MOVE) {
+			moveJoints(motion->getAngles(), motion->getMotorMask());
+		}
+		iMobotComms.moveWait();
+	}
 }
 
 afx_msg void CiMobotController_WindowsDlg::OnTimer(UINT nIDEvent)
@@ -537,4 +556,42 @@ void CiMobotController_WindowsDlg::UpdateSliders()
 void CiMobotController_WindowsDlg::OnBnClickedButtonMotor4forward()
 {
 	// TODO: Add your control notification handler code here
+}
+
+void CiMobotController_WindowsDlg::OnLbnSelchangeListgaits()
+{
+	// TODO: Add your control notification handler code here
+}
+
+int CiMobotController_WindowsDlg::poseJoints(const double *angles, unsigned char motorMask)
+{
+	for(int i = 0; i < 4; i++) {
+		if(motorMask & (1<<i)) {
+			iMobotComms.setMotorPosition(i, angles[i]);
+		}
+	}
+	return 0;
+}
+
+int CiMobotController_WindowsDlg::moveJoints(const double *angles, unsigned char motorMask)
+{
+	double pos;
+	for(int i = 0; i < 4; i++) {
+		if(motorMask & (1<<i)) {
+			/* Get the motor position first */
+			iMobotComms.getMotorPosition(i, pos);
+			/* Set the motor to an offset position */
+			iMobotComms.setMotorPosition(i, pos + angles[i]);
+		}
+	}
+	return 0;
+}
+void CiMobotController_WindowsDlg::OnEnChangeEditposition4()
+{
+	// TODO:  If this is a RICHEDIT control, the control will not
+	// send this notification unless you override the CDialog::OnInitDialog()
+	// function and call CRichEditCtrl().SetEventMask()
+	// with the ENM_CHANGE flag ORed into the mask.
+
+	// TODO:  Add your control notification handler code here
 }
