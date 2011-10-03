@@ -33,7 +33,7 @@ int iMobotComms_connect(br_comms_t* comms)
   for(i = 1; i < NUM_PORTS; i++) {
     sprintf(buf, "\\\\.\\COM%d", i);
     printf("Trying %s...\n", buf);
-    comms->hSerial = CreateFile(buf, 
+    comms->hSerial = CreateFileA(buf, 
         GENERIC_READ | GENERIC_WRITE,
         0,
         0,
