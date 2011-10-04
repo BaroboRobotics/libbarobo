@@ -273,6 +273,7 @@ int iMobotComms_waitMotor(br_comms_t* comms, int id)
 #endif
     }
   }
+  return 0;
 }
 
 int iMobotComms_moveWait(br_comms_t* comms)
@@ -421,7 +422,11 @@ int str2ba(const char *str, bdaddr_t *ba)
 int SendToIMobot(br_comms_t* comms, const char* str, int len)
 {
   if(comms->connected == 1) {
+#ifdef _WIN32
     return write(comms->socket, str, len);
+#else
+    return send(comms->socket, str, len);
+#endif
   } else if (comms->connected == 2) {
 #ifdef _WIN32
     DWORD bytes;
@@ -443,7 +448,11 @@ int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
   DWORD bytes;
 #endif
   if(comms->connected == 1) {
+#ifdef _WIN32
     return read(comms->socket, buf, size);
+#else
+    return recvfrom(comms->socket, buf, size, 0, (struct sockaddr*)0, 0);
+#endif
   } else if (comms->connected == 2) {
 #ifdef _WIN32
     if(!ReadFile(comms->hSerial, buf, size, &bytes, NULL)) {

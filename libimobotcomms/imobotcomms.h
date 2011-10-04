@@ -5,14 +5,15 @@
 #pragma package <chbarobo>
 #ifdef _WIN32_
 #define _WIN32
-#include <stdint.h>
 #define UINT8 uint8_t
 #endif
 
 #endif
 
-#ifndef _WIN32
 #include <stdint.h>
+#include <stdio.h>
+
+#ifndef _WIN32
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -119,9 +120,6 @@ typedef struct bdaddr_s {
   UINT8 b[6];
 } bdaddr_t;
 int str2ba(const char *str, bdaddr_t *ba);
-#define write(sock, buf, len) send(sock, buf, len, 0)
-#define read(sock, buf, len) \
-  recvfrom(sock, buf, len, 0, (struct sockaddr*)0, 0)
 void baswap(bdaddr_t *dst, const bdaddr_t *src);
 int str2ba(const char *str, bdaddr_t *ba);
 #endif
