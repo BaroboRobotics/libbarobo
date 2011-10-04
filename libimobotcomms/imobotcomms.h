@@ -5,12 +5,13 @@
 #pragma package <chbarobo>
 #ifdef _WIN32_
 #define _WIN32
+#include <stdint.h>
 #define UINT8 uint8_t
 #endif
 
 #endif
 
-#include <stdint.h>
+
 #include <stdio.h>
 
 #ifndef _WIN32

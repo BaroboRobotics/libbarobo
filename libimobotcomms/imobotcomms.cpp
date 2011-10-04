@@ -423,9 +423,9 @@ int SendToIMobot(br_comms_t* comms, const char* str, int len)
 {
   if(comms->connected == 1) {
 #ifdef _WIN32
-    return write(comms->socket, str, len);
+	return send(comms->socket, str, len, 0);
 #else
-    return send(comms->socket, str, len);
+    return write(comms->socket, str, len);
 #endif
   } else if (comms->connected == 2) {
 #ifdef _WIN32
@@ -449,9 +449,9 @@ int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
 #endif
   if(comms->connected == 1) {
 #ifdef _WIN32
-    return read(comms->socket, buf, size);
+	return recvfrom(comms->socket, buf, size, 0, (struct sockaddr*)0, 0);
 #else
-    return recvfrom(comms->socket, buf, size, 0, (struct sockaddr*)0, 0);
+    return read(comms->socket, buf, size);
 #endif
   } else if (comms->connected == 2) {
 #ifdef _WIN32
