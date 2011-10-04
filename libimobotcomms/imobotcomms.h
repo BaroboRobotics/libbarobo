@@ -1,6 +1,16 @@
 #ifndef _IMOBOTCOMMS_H_
 #define _IMOBOTCOMMS_H_
 
+#ifdef _CH_
+#pragma package <chbarobo>
+#ifdef _WIN32_
+#define _WIN32
+#include <stdint.h>
+#define UINT8 uint8_t
+#endif
+
+#endif
+
 #ifndef _WIN32
 #include <stdint.h>
 #include <unistd.h>
@@ -20,7 +30,6 @@ typedef struct sockaddr_rc sockaddr_t;
 #define AF_BLUETOOTH AF_BTH
 #define BTPROTO_RFCOMM BTHPROTO_RFCOMM
 typedef SOCKADDR_BTH sockaddr_t;
-typedef unsigned char uint8_t;
 #endif
 
 #define DEGREE2ENC(angles, enc) \
@@ -67,10 +76,16 @@ extern "C" {
 #endif
 
 #ifdef _WIN32
-#define DLLIMPORT __declspec(dllexport)
-#else
+
+#ifdef _CH_
 #define DLLIMPORT
+#else
+#define DLLIMPORT __declspec(dllexport)
 #endif
+
+#else /* Not _WIN32 */
+#define DLLIMPORT
+#endif /* _WIN32 */
 
 DLLIMPORT int iMobotComms_init(br_comms_t* comms);
 DLLIMPORT int iMobotComms_connect(br_comms_t* comms);
@@ -153,7 +168,11 @@ class CiMobotComms {
   private:
     br_comms_t _comms;
 };
-#endif
+#endif /* If C++ or CH */
+#endif /* C_ONLY */
+
+#ifdef _CH_
+#pragma importf "imobotcomms.cpp"
 #endif
 
-#endif
+#endif /* Header Guard */

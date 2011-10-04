@@ -1,3 +1,8 @@
+
+#ifdef _CH_
+#pragma package <chbarobo>
+#endif
+
 #include <stdio.h>
 #include <imobotcomms.h>
 

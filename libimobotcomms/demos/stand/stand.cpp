@@ -42,7 +42,11 @@ int main()
   robot.setMotorSpeed(IMOBOT_MOTOR3, 0);
   robot.setMotorDirection(IMOBOT_MOTOR3, IMOBOT_MOTOR_DIR_FORWARD);
   robot.setMotorSpeed(IMOBOT_MOTOR3, 30);
+#ifndef _WIN32
   sleep(3);
+#else
+  Sleep(3000);
+#endif
   robot.setMotorSpeed(IMOBOT_MOTOR3, 0);
 
   return 0;
