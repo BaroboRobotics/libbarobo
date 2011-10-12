@@ -129,11 +129,11 @@ functions called ``methods'' or ``member functions''.
 CiMobotComms robot;
 \end{verbatim}
 
-The next line will use the \texttt{poseZero} member function. The
-\texttt{poseZero} function causes the iMobot to move all of its motors to the
+The next line will use the \texttt{moveZero} member function. The
+\texttt{moveZero} function causes the iMobot to move all of its motors to the
 zero position.
 \begin{verbatim}
-robot.poseZero();
+robot.moveZero();
 \end{verbatim}
 
 The majority of iMobot control functions do not wait for the robotic motions to
@@ -147,10 +147,10 @@ robot.moveWait();
 The next four lines of code command motors 3 and 4 to rotate 90 degrees, and
 then waits for the motors to stop moving.
 \begin{verbatim}
-robot.setMotorPosition(IMOBOT_MOTOR3, 90);
-robot.setMotorPosition(IMOBOT_MOTOR4, 90);
-robot.waitMotor(IMOBOT_MOTOR3);
-robot.waitMotor(IMOBOT_MOTOR4);
+robot.moveJointTo(IMOBOT_JOINT3, 90);
+robot.moveJointTo(IMOBOT_JOINT4, 90);
+robot.moveJointWait(IMOBOT_JOINT3);
+robot.moveJointWait(IMOBOT_JOINT4);
 \end{verbatim}
 
 \newpage

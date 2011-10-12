@@ -26,7 +26,7 @@ The function returns 0 on success and non-zero otherwise.\\
 This function is used to wait for all joint motions to finish. Functions such as
 \texttt{poseJoint()} and \texttt{moveJoint()} do not wait for a joint to finish
 moving before continuing to allow multiple joints to move at the same time. The
-\texttt{moveWait()} or \texttt{waitMotor()} functions are used to wait for
+\texttt{moveWait()} or \texttt{moveJointWait()} functions are used to wait for
 robotic motions to complete.
 
 Please note that if this function is called after a motor has been commanded to
@@ -39,6 +39,6 @@ See the sample program in Section \ref{sec:democode} on page \pageref{sec:democo
 
 \noindent
 {\bf See Also}\\
-\texttt{moveWait(), waitMotor()}
+\texttt{moveWait(), moveJointWait()}
 
 %\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

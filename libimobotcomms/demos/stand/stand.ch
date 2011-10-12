@@ -2,6 +2,6 @@
 #include <imobotcomms.h>
 
 CiMobotComms robot;
-/* Run the built-in stand function */
-robot.stand();
+/* Run the built-in motionStand function */
+robot.motionStand();
 

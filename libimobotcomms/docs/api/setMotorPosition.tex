@@ -2,15 +2,15 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CiMobotComms::setMotorPosition()}\index{setMotorPosition()}}\\
+{\LARGE \texttt{CiMobotComms::moveJointTo()}\index{moveJointTo()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{setMotorPosition()}
+\addcontentsline{toc}{section}{moveJointTo()}
 
 \noindent
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <imobot.h>
-int CiMobotComms::setMotorPosition(int id, double position);
+int CiMobotComms::moveJointTo(int id, double position);
 \end{verbatim}
 
 \noindent
@@ -36,9 +36,9 @@ The function returns 0 on success and non-zero otherwise.\\
 {\bf Description}\\
 This function commands the motor to move to a position specified in degrees at
 the current motor's speed. The current motor speed may be set with the
-\texttt{setMotorSpeed()} member function. Please note that if the motor speed
+\texttt{setJointSpeed()} member function. Please note that if the motor speed
 is set to zero, the motor will not move after calling the
-\texttt{setMotorPosition()} function. \\
+\texttt{moveJointTo()} function. \\
 
 \noindent
 {\bf Example}\\

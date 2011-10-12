@@ -23,29 +23,29 @@ is called automatically and should not be called explicitly. \\
 \texttt{connect()} \dotfill & Connect to a remote iMobot module. This function connects to an already-paired iMobot module in Microsoft Windows. This function does not currently work for non-Windows operating systems, such as Mac or Linux. For those operating systems, please use the \texttt{connectAddress()} function instead. \\
 \texttt{connectAddress()} \dotfill & Connect to an iMobot module by specifying its Bluetooth address. \\
 \texttt{disconnect()} \dotfill & Disconnect from an iMobot module. \\
-\texttt{getMotorDirection()} \dotfill & Gets a motor's currently assigned direction. \\
-\texttt{getMotorPosition()} \dotfill & Gets a joint's angle. \\
-\texttt{getMotorSpeed()} \dotfill & Gets a motor's speed. \\
-\texttt{getMotorState()} \dotfill & Gets a motor's current status. \\
+\texttt{getJointDirection()} \dotfill & Gets a motor's currently assigned direction. \\
+\texttt{getJointAngle()} \dotfill & Gets a joint's angle. \\
+\texttt{getJointSpeed()} \dotfill & Gets a motor's speed. \\
+\texttt{getJointState()} \dotfill & Gets a motor's current status. \\
 \texttt{isConnected()} \dotfill & This function is used to check the connection to an iMobot. \\
 \texttt{moveWait()} \dotfill & Wait until all motors have stopped moving. \\
 \texttt{pozeZero()} \dotfill & Instructs all motors to go to their zero positions. \\
-\texttt{setMotorDirection()} \dotfill & Set the motor direction of a motor. Set
+\texttt{setJointDirection()} \dotfill & Set the motor direction of a motor. Set
 to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
-\texttt{setMotorPosition()} \dotfill & Set the desired motor position. \\
-\texttt{setMotorSpeed()} \dotfill & Sets a motor's speed. \\
+\texttt{moveJointTo()} \dotfill & Set the desired motor position. \\
+\texttt{setJointSpeed()} \dotfill & Sets a motor's speed. \\
 \texttt{stop()} \dotfill & Stop all currently executing motions of the iMobot. \\
-\texttt{waitMotor()} \dotfill & Wait until the specified motor has stopped moving. \\
+\texttt{moveJointWait()} \dotfill & Wait until the specified motor has stopped moving. \\
 \hline
 Compound Motions & These are convenience functions of commonly used compound motions. \\
 \hline
-\texttt{inchLeft()} \dotfill & Inchworm gait towards the left. \\
-\texttt{inchRight()} \dotfill & Inchworm gait towards the right. \\
-\texttt{rollBackward()} \dotfill & Roll on the faceplates toward the backward direction. \\
-\texttt{rollForward()} \dotfill & Roll on the faceplates forwards. \\
-\texttt{stand()} \dotfill & Stand the iMobot up on its end. \\
-\texttt{turnLeft()} \dotfill & Rotate the iMobot counterclockwise. \\
-\texttt{turnRight()} \dotfill & Rotate the iMobot clockwise. \\
+\texttt{motionInchwormLeft()} \dotfill & Inchworm gait towards the left. \\
+\texttt{motionInchwormRight()} \dotfill & Inchworm gait towards the right. \\
+\texttt{motionRollBackward()} \dotfill & Roll on the faceplates toward the backward direction. \\
+\texttt{motionRollForward()} \dotfill & Roll on the faceplates forwards. \\
+\texttt{motionStand()} \dotfill & Stand the iMobot up on its end. \\
+\texttt{motionTurnLeft()} \dotfill & Rotate the iMobot counterclockwise. \\
+\texttt{motionTurnRight()} \dotfill & Rotate the iMobot clockwise. \\
 \hline
 \end{tabular}
 \end{center}
@@ -59,40 +59,40 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \pagebreak
 \input{api/disconnect}
 \pagebreak
-\input{api/getMotorDirection}
+\input{api/getJointDirection}
 \pagebreak
-\input{api/getMotorPosition}
+\input{api/getJointAngle}
 \pagebreak
-\input{api/getMotorSpeed}
+\input{api/getJointSpeed}
 \pagebreak
-\input{api/getMotorState}
+\input{api/getJointState}
 \pagebreak
-\input{api/inchLeft}
+\input{api/motionInchwormLeft}
 \pagebreak
-\input{api/inchRight}
+\input{api/motionInchwormRight}
 \pagebreak
 \input{api/isConnected}
 \pagebreak
 \input{api/moveWait}
 \pagebreak
-\input{api/poseZero}
+\input{api/moveZero}
 \pagebreak
-\input{api/rollBackward}
+\input{api/motionRollBackward}
 \pagebreak
-\input{api/rollForward}
+\input{api/motionRollForward}
 \pagebreak
-\input{api/setMotorDirection}
+\input{api/setJointDirection}
 \pagebreak
-\input{api/setMotorPosition}
+\input{api/moveJointTo}
 \pagebreak
-\input{api/setMotorSpeed}
+\input{api/setJointSpeed}
 \pagebreak
-\input{api/stand}
+\input{api/motionStand}
 \pagebreak
 \input{api/stop}
 \pagebreak
-\input{api/turnLeft}
+\input{api/motionTurnLeft}
 \pagebreak
-\input{api/turnRight}
+\input{api/motionTurnRight}
 \pagebreak
-\input{api/waitMotor}
+\input{api/moveJointWait}
