@@ -3,9 +3,9 @@
 int setMotorDirection(int motor, int direction)
 {
   if(g_isConnected) {
-    return iMobotComms_setMotorDirection(imobotComms, motor, direction);
+    return iMobotComms_setJointDirection(imobotComms, motor, direction);
   } else if (g_localInit) {
-    return iMobot_setMotorDirection(iMobot, motor, direction);
+    return iMobot_setJointDirection(iMobot, motor, direction);
   } else {
     fprintf(stderr, "Error: Not initialized or connected.\n");
     return -1;
@@ -15,9 +15,9 @@ int setMotorDirection(int motor, int direction)
 int setMotorSpeed(int motor, int speed)
 {
   if(g_isConnected) {
-    return iMobotComms_setMotorSpeed(imobotComms, motor, speed);
+    return iMobotComms_setJointSpeed(imobotComms, motor, speed);
   } else if (g_localInit) {
-    return iMobot_setMotorSpeed(iMobot, motor, speed);
+    return iMobot_setJointSpeed(iMobot, motor, speed);
   } else {
     fprintf(stderr, "Error: Not initialized or connected.\n");
     return -1;
@@ -39,9 +39,9 @@ int stop()
 int setMotorPosition(int motor, double position)
 {
   if(g_isConnected) {
-    return iMobotComms_setMotorPosition(imobotComms, motor, position);
+    return iMobotComms_moveJointTo(imobotComms, motor, position);
   } else if (g_localInit) {
-    return iMobot_setMotorPosition(iMobot, motor, position);
+    return iMobot_moveJointTo(iMobot, motor, position);
   } else {
     fprintf(stderr, "Error: Not initialized or connected.\n");
     return -1;
@@ -52,10 +52,10 @@ int getMotorPosition(int motor, double *position)
 {
   int code;
   if(g_isConnected) {
-    code = iMobotComms_getMotorPosition(imobotComms, motor, position);
+    code = iMobotComms_getJointAngle(imobotComms, motor, position);
     return code;
   } else if (g_localInit) {
-    code = iMobot_getMotorPosition(iMobot, motor, position);
+    code = iMobot_getJointAngle(iMobot, motor, position);
     return code;
   } else {
     fprintf(stderr, "Error: Not initialized or connected.\n");
@@ -66,7 +66,7 @@ int getMotorPosition(int motor, double *position)
 int waitMotor(int motor)
 {
   if(g_isConnected) {
-    return iMobotComms_waitMotor(imobotComms, motor);
+    return iMobotComms_moveJointWait(imobotComms, motor);
   } else if (g_localInit) {
     return iMobot_waitMotor(iMobot, motor);
   } else {

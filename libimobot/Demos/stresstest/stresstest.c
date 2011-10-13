@@ -27,8 +27,8 @@ int main()
 
   /* Set motor speeds and directions */
   for(i = 0; i < 4; i++) {
-    iMobot_setMotorDirection(&robot, i, 0);
-    iMobot_setMotorSpeed(&robot, i, 30);
+    iMobot_setJointDirection(&robot, i, 0);
+    iMobot_setJointSpeed(&robot, i, 30);
   }
 
   while(1) {
@@ -50,14 +50,14 @@ int main()
     /* Rotate the robot */
     printf("Rotate1...\n");
     for(i = 1; i < 5; i++) {
-      iMobot_setMotorPosition(&robot, 2, (90*i)*10);
+      iMobot_moveJointTo(&robot, 2, (90*i)*10);
       sleep(sleep_time);
       if(iMobot_isBusy(&robot)) { terminate(); }
     }
     /* Now rotate back */
     printf("Rotate2...\n");
     for(i = 1; i < 5; i++) {
-      iMobot_setMotorPosition(&robot, 2, (-90*i)*10);
+      iMobot_moveJointTo(&robot, 2, (-90*i)*10);
       sleep(sleep_time);
       if(iMobot_isBusy(&robot)) { terminate(); }
     }
@@ -80,7 +80,7 @@ void pose(iMobot_t* robot, double* angles, unsigned char motorMask)
   int i;
   for(i = 0; i < 4; i++) {
     if((1<<i) & motorMask) {
-      iMobot_setMotorPosition(robot, i, angles[i]);
+      iMobot_moveJointTo(robot, i, angles[i]);
     }
   }
 }
