@@ -263,24 +263,25 @@ DLLIMPORT int iMobotComms_move(br_comms_t* comms,
                                double angle3,
                                double angle4)
 {
+  double angles[4];
   double curAngles[4];
   int i;
+  angles[0] = angle1;
+  angles[1] = angle2;
+  angles[2] = angle3;
+  angles[3] = angle4;
   for(i = 0; i < 4; i++) {
     if(iMobotComms_getJointAngle(comms, i, &curAngles[i])) {
       return -1;
     }
   }
-  if(iMobotComms_moveJointTo(comms, IMOBOT_JOINT1, angle1 + curAngles[0])) {
-    return -1;
-  }
-  if(iMobotComms_moveJointTo(comms, IMOBOT_JOINT2, angle2 + curAngles[1])) {
-    return -1;
-  }
-  if(iMobotComms_moveJointTo(comms, IMOBOT_JOINT3, angle3 + curAngles[2])) {
-    return -1;
-  }
-  if(iMobotComms_moveJointTo(comms, IMOBOT_JOINT4, angle4 + curAngles[3])) {
-    return -1;
+  for(i = 0; i < 4; i++) {
+    if(angles[i] == 0) {
+      continue;
+    }
+    if(iMobotComms_moveJointTo(comms, i, angles[i] + curAngles[i])) {
+      return -1;
+    }
   }
   return 0;
 }

@@ -170,14 +170,14 @@ class CiMobotComms {
     int getJointSpeed(int id, double &speed);
     int getJointState(int id, int &state);
     int move(double angle1, double angle2, double angle3, double angle4);
+    int moveJointTo(int id, double angle);
+    int moveJointWait(int id);
     int moveTo(double angle1, double angle2, double angle3, double angle4);
     int moveWait();
     int moveZero();
     int setJointDirection(int id, int dir);
-    int moveJointTo(int id, double angle);
     int setJointSpeed(int id, double speed);
     int stop();
-    int moveJointWait(int id);
 
     int motionInchwormLeft();
     int motionInchwormRight();
