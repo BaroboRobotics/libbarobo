@@ -165,8 +165,8 @@ class CiMobotComms {
     int connectAddress(const char address[], int channel);
     int disconnect();
     int isConnected();
-    int getJointDirection(int id, int &dir);
     int getJointAngle(int id, double &angle);
+    int getJointDirection(int id, int &dir);
     int getJointSpeed(int id, double &speed);
     int getJointState(int id, int &state);
     int move(double angle1, double angle2, double angle3, double angle4);

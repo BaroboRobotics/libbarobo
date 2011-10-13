@@ -10,6 +10,12 @@
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <imobot.h>
+enum iMobot_motor_direction_e
+{
+  IMOBOT_JOINT_DIR_AUTO,
+  IMOBOT_JOINT_DIR_FORWARD,
+  IMOBOT_JOINT_DIR_BACKWARD
+};
 int CiMobotComms::setJointDirection(int id, int direction);
 \end{verbatim}
 
@@ -41,7 +47,7 @@ direction are:
 \item 0: Automatic direction. This is the default setting. 
 \item 1: Forward. If this value is used with a non-zero speed set using the
 \texttt{setJointSpeed()} function, the motor will turn forward indefinitely.
-\time 2: Backward. Similar to "1", except the motor will spin backward.
+\item 2: Backward. Similar to "1", except the motor will spin backward.
 \end{itemize}
 
 \noindent

@@ -144,12 +144,13 @@ we must use the \texttt{moveWait} function, as such.
 robot.moveWait();
 \end{verbatim}
 
-The next four lines of code command motors 3 and 4 to rotate 90 degrees, and
-then waits for the motors to stop moving.
+The next four lines of code command joints 1 and 4 to rotate 90 degrees, and
+then waits for the motors to stop moving. Joints 1 and 4 are the faceplates
+of the iMobot which are sometimes used to act as "wheels".
 \begin{verbatim}
-robot.moveJointTo(IMOBOT_JOINT3, 90);
+robot.moveJointTo(IMOBOT_JOINT1, 90);
 robot.moveJointTo(IMOBOT_JOINT4, 90);
-robot.moveJointWait(IMOBOT_JOINT3);
+robot.moveJointWait(IMOBOT_JOINT1);
 robot.moveJointWait(IMOBOT_JOINT4);
 \end{verbatim}
 

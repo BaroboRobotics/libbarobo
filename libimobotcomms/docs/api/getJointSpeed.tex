@@ -10,7 +10,7 @@
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <imobot.h>
-int CiMobotComms::getJointSpeed(int id, int &speed);
+int CiMobotComms::getJointSpeed(int id, double &speed);
 \end{verbatim}
 
 \noindent
@@ -28,14 +28,15 @@ The function returns 0 on success and non-zero otherwise.\\
 \item               
 \begin{tabular}{p{10 mm}p{145 mm}}
 \texttt{id} & The joint number to pose. \\
-\texttt{speed} & The address of an unsigned short variable. This variable will be overwritten
-with the current speed of the joint.
+\texttt{speed} & A variable of type \texttt{double}. The value of this variable
+will be overwritten with the current speed setting of the joint, which is a
+value between 0 and 1.
 \end{tabular}
 \end{description}
 
 \noindent
 {\bf Description}\\
-This function is used to find the speed of a joint.  This is the speed at which the joint will move when given motion commands. The values should be between 0 and 100. \\
+This function is used to find the speed of a joint.  This is the speed at which the joint will move when given motion commands. The values should be between 0 and 1. \\
 
 \noindent
 {\bf Example}\\

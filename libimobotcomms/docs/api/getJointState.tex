@@ -10,6 +10,12 @@
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <imobot.h>
+enum iMobot_joint_state_e
+{
+    IMOBOT_JOINT_IDLE = 0,
+    IMOBOT_JOINT_MOVING,
+    IMOBOT_JOINT_GOALSEEK,
+};
 int CiMobotComms::getJointState(int id, int &state);
 \end{verbatim}
 
@@ -36,9 +42,9 @@ The function returns 0 on success and non-zero otherwise.\\
 {\bf Description}\\
 This function is used to determine the current state of a motor. Valid states are:
 \begin{itemize}
-\item 0: The motor is idle.
-\item 1: The motor is moving.
-\item 2: The motor is heading towards a specified position.
+\item \texttt{IMOBOT\_JOINT\_IDLE} : 0: The motor is idle.
+\item \texttt{IMOBOT\_JOINT\_MOVING} : 1: The motor is moving.
+\item \texttt{IMOBOT\_JOINT\_GOALSEEK} : 2: The motor is heading towards a specified position.
 \end{itemize}
 
 \noindent

@@ -10,7 +10,7 @@
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <imobot.h>
-int CiMobotComms::setJointSpeed(int id, int speed);
+int CiMobotComms::setJointSpeed(int id, double speed);
 \end{verbatim}
 
 \noindent
@@ -28,15 +28,15 @@ The function returns 0 on success and non-zero otherwise.\\
 \item               
 \begin{tabular}{p{10 mm}p{145 mm}}
 \texttt{id} & The joint number to pose. \\
-\texttt{speed} & An unsigned short variable indicating the requested speed.
+\texttt{speed} & An variable of type \texttt{double} indicating the requested speed.
 \end{tabular}
 \end{description}
 
 \noindent
 {\bf Description}\\
 This function is used to set the speed of a joint of an iMobot. Valid speed
-values range from 0 to 100.
-\noindent
+values range from 0 to 1.
+\noindent\\
 {\bf Example}\\
 \noindent
 
