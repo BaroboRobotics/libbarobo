@@ -15,13 +15,13 @@ robot.moveWait();
 
 /* Do the inchworm gait four times */
 for(i = 0; i < 4; i++) {
-  robot.moveJointTo(IMOBOT_JOINT1, -45);
+  robot.moveJointTo(IMOBOT_JOINT2, -45);
   robot.moveJointWait(IMOBOT_JOINT1);
-  robot.moveJointTo(IMOBOT_JOINT2, 45);
+  robot.moveJointTo(IMOBOT_JOINT3, 45);
   robot.moveJointWait(IMOBOT_JOINT2);
-  robot.moveJointTo(IMOBOT_JOINT1, 0);
-  robot.moveJointWait(IMOBOT_JOINT1);
   robot.moveJointTo(IMOBOT_JOINT2, 0);
+  robot.moveJointWait(IMOBOT_JOINT1);
+  robot.moveJointTo(IMOBOT_JOINT3, 0);
   robot.moveJointWait(IMOBOT_JOINT2);
 }
 

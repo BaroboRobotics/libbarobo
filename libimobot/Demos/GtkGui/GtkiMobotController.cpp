@@ -144,9 +144,9 @@ int initialize()
   scale_motorPositions[1] = GTK_VSCALE(gtk_builder_get_object( builder, "vscale_motorPos1"));
   scale_motorPositions[2] = GTK_VSCALE(gtk_builder_get_object( builder, "vscale_motorPos2"));
   scale_motorPositions[3] = GTK_VSCALE(gtk_builder_get_object( builder, "vscale_motorPos3"));
-  gtk_range_set_range(GTK_RANGE(scale_motorPositions[0]), -90, 90);
+  gtk_range_set_range(GTK_RANGE(scale_motorPositions[0]), -180, 180);
   gtk_range_set_range(GTK_RANGE(scale_motorPositions[1]), -90, 90);
-  gtk_range_set_range(GTK_RANGE(scale_motorPositions[2]), -180, 180);
+  gtk_range_set_range(GTK_RANGE(scale_motorPositions[2]), -90, 90);
   gtk_range_set_range(GTK_RANGE(scale_motorPositions[3]), -180, 180);
 
   /* Set up the motor angle entries handler */
@@ -167,7 +167,7 @@ int init_gaits()
   unsigned char motorMask;
 	/* Arch */
 	gait = new Gait("Arch");
-	SET_ANGLES(angles, -30, 30, 0, 0);
+	SET_ANGLES(angles, 0, -30, 30, 0);
 	motorMask = 0;
 	motorMask |= (1<<0); motorMask |= (1<<1);
 	gait->addMotion( new Motion(
@@ -176,15 +176,15 @@ int init_gaits()
 
 	/* Inch Right */
 	gait = new Gait("Inch Right");
-	SET_ANGLES(angles, -50, 0, 0, 0);
+	SET_ANGLES(angles, 0, -50, 0, 0);
 	motorMask = 0;
 	motorMask |= (1<<0); motorMask |= (1<<1);
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, -50, 50, 0, 0);
+	SET_ANGLES(angles, 0, -50, 50, 0);
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, 0, 50, 0, 0);
+	SET_ANGLES(angles, 0, 0, 50, 0);
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_POSE, angles, motorMask));
 	SET_ANGLES(angles, 0, 0, 0, 0);
@@ -194,15 +194,15 @@ int init_gaits()
 
 	/* Inch Left */
 	gait = new Gait("Inch Left");
-	SET_ANGLES(angles, 0, 50, 0, 0);
+	SET_ANGLES(angles, 0, 0, 50, 0);
 	motorMask = 0;
 	motorMask |= (1<<0); motorMask |= (1<<1);
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, -50, 50, 0, 0);
+	SET_ANGLES(angles, 0, -50, 50, 0);
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, -50, 0, 0, 0);
+	SET_ANGLES(angles, 0, -50, 0, 0);
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_POSE, angles, motorMask));
 	SET_ANGLES(angles, 0, 0, 0, 0);
@@ -217,14 +217,14 @@ int init_gaits()
 	motorMask |= (1<<0); motorMask |= (1<<1);
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, -85, 80, 0, 0);
+	SET_ANGLES(angles, 0, -85, 80, 0);
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, 0, 0, 45, 0);
+	SET_ANGLES(angles, 45, 0, 0, 0);
 	motorMask = (1<<2);
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, 20, 0, 0, 0);
+	SET_ANGLES(angles, 0, 20, 0, 0);
 	motorMask = (1<<0);
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_POSE, angles, motorMask));
@@ -232,7 +232,7 @@ int init_gaits()
 
 	/* Stand turn Right */
 	gait = new Gait("Stand Turn Right");
-	SET_ANGLES(angles, 0, 0, -30, 0);
+	SET_ANGLES(angles, -30, 0, 0, 0);
 	motorMask = 1<<2;
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_MOVE, angles, motorMask));
@@ -240,14 +240,14 @@ int init_gaits()
 
 	/* Stand turn left */
 	gait = new Gait("Stand Turn Left");
-	SET_ANGLES(angles, 0, 0, 30, 0);
+	SET_ANGLES(angles, 30, 0, 0, 0);
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_MOVE, angles, motorMask));
 	addGait(gait);
 
 	/* Right Faceplate Forward */
 	gait = new Gait("Right Face Forward");
-	SET_ANGLES(angles, 0, 0, -10, 0);
+	SET_ANGLES(angles, -10, 0, 0, 0);
 	motorMask = 1<<2;
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_MOVE, angles, motorMask));
@@ -255,7 +255,7 @@ int init_gaits()
 
 	/* Right Faceplate Backward */
 	gait = new Gait("Right Face Backward");
-	SET_ANGLES(angles, 0, 0, 10, 0);
+	SET_ANGLES(angles, 10, 0, 0, 0);
 	motorMask = 1<<2;
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_MOVE, angles, motorMask));
@@ -279,7 +279,7 @@ int init_gaits()
 
 	/* Unstand */
 	gait = new Gait("Unstand");
-	SET_ANGLES(angles, -85, 85, 0, 0);
+	SET_ANGLES(angles, 0, -85, 85, 0);
 	motorMask = 1<<0; motorMask |= 1<<1;
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_POSE, angles, motorMask));
@@ -290,7 +290,7 @@ int init_gaits()
 
 	/* Skinny */
 	gait = new Gait("Skinny");
-	SET_ANGLES(angles, 85, 85, 0, 0);
+	SET_ANGLES(angles, 0, 85, 85, 0);
 	motorMask = 1<<0; motorMask |= 1<<1;
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_POSE, angles, motorMask));

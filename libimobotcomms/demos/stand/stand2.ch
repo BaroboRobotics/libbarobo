@@ -13,22 +13,22 @@ robot.moveZero();
 robot.moveWait();
 
 /* Move the robot into a fetal position */
-robot.moveJointTo(IMOBOT_JOINT1, -85);
-robot.moveJointTo(IMOBOT_JOINT2, 80);
+robot.moveJointTo(IMOBOT_JOINT2, -85);
+robot.moveJointTo(IMOBOT_JOINT3, 80);
 robot.moveWait();
 
 /* Rotate the bottom faceplate by 45 degrees */
-robot.moveJointTo(IMOBOT_JOINT3, 45);
+robot.moveJointTo(IMOBOT_JOINT4, 45);
 robot.moveWait();
 
 /* Lift the body up */
-robot.moveJointTo(IMOBOT_JOINT1, 20);
+robot.moveJointTo(IMOBOT_JOINT2, 20);
 robot.moveWait();
 
 /* Pan the robot around for 3 seconds */
-robot.setJointSpeed(IMOBOT_JOINT3, 0.0);
-robot.setJointDirection(IMOBOT_JOINT3, IMOBOT_JOINT_DIR_FORWARD);
-robot.setJointSpeed(IMOBOT_JOINT3, 0.30);
+robot.setJointSpeed(IMOBOT_JOINT4, 0.0);
+robot.setJointDirection(IMOBOT_JOINT4, IMOBOT_JOINT_DIR_FORWARD);
+robot.setJointSpeed(IMOBOT_JOINT4, 0.30);
 sleep(3);
-robot.setJointSpeed(IMOBOT_JOINT3, 0.0);
+robot.setJointSpeed(IMOBOT_JOINT4, 0.0);
 
