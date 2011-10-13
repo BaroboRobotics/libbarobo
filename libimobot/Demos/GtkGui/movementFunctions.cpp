@@ -14,10 +14,16 @@ int setMotorDirection(int motor, int direction)
 
 int setMotorSpeed(int motor, int speed)
 {
+  double lspeed;
+  /* Need to convert integer speed to double [0,1] */
+  if(speed < -100 || speed > 100) {
+    return -1;
+  }
+  lspeed = (double)speed / 100.0;
   if(g_isConnected) {
-    return iMobotComms_setJointSpeed(imobotComms, motor, speed);
+    return iMobotComms_setJointSpeed(imobotComms, motor, lspeed);
   } else if (g_localInit) {
-    return iMobot_setJointSpeed(iMobot, motor, speed);
+    return iMobot_setJointSpeed(iMobot, motor, lspeed);
   } else {
     fprintf(stderr, "Error: Not initialized or connected.\n");
     return -1;
