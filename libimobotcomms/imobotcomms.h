@@ -98,42 +98,42 @@ extern "C" {
 #define DLLIMPORT
 #endif /* _WIN32 */
 
-DLLIMPORT int iMobotComms_init(br_comms_t* comms);
-DLLIMPORT int iMobotComms_connect(br_comms_t* comms);
-DLLIMPORT int iMobotComms_connectAddress(
+DLLIMPORT int iMC_init(br_comms_t* comms);
+DLLIMPORT int iMC_connect(br_comms_t* comms);
+DLLIMPORT int iMC_connectAddress(
     br_comms_t* comms, const char* address, int channel);
-DLLIMPORT int iMobotComms_disconnect(br_comms_t* comms);
-DLLIMPORT int iMobotComms_isConnected(br_comms_t* comms);
-DLLIMPORT int iMobotComms_setJointDirection(br_comms_t* comms, int id, int dir);
-DLLIMPORT int iMobotComms_getJointDirection(br_comms_t* comms, int id, int *dir);
-DLLIMPORT int iMobotComms_setJointSpeed(br_comms_t* comms, int id, double speed);
-DLLIMPORT int iMobotComms_getJointSpeed(br_comms_t* comms, int id, double *speed);
-DLLIMPORT int iMobotComms_moveJointTo(br_comms_t* comms, int id, double angle);
-DLLIMPORT int iMobotComms_getJointAngle(br_comms_t* comms, int id, double *angle);
-DLLIMPORT int iMobotComms_getJointState(br_comms_t* comms, int id, int *state);
-DLLIMPORT int iMobotComms_move(br_comms_t* comms,
+DLLIMPORT int iMC_disconnect(br_comms_t* comms);
+DLLIMPORT int iMC_isConnected(br_comms_t* comms);
+DLLIMPORT int iMC_setJointDirection(br_comms_t* comms, int id, int dir);
+DLLIMPORT int iMC_getJointDirection(br_comms_t* comms, int id, int *dir);
+DLLIMPORT int iMC_setJointSpeed(br_comms_t* comms, int id, double speed);
+DLLIMPORT int iMC_getJointSpeed(br_comms_t* comms, int id, double *speed);
+DLLIMPORT int iMC_moveJointTo(br_comms_t* comms, int id, double angle);
+DLLIMPORT int iMC_getJointAngle(br_comms_t* comms, int id, double *angle);
+DLLIMPORT int iMC_getJointState(br_comms_t* comms, int id, int *state);
+DLLIMPORT int iMC_move(br_comms_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
                                double angle4);
-DLLIMPORT int iMobotComms_moveTo(br_comms_t* comms,
+DLLIMPORT int iMC_moveTo(br_comms_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
                                double angle4);
-DLLIMPORT int iMobotComms_moveZero(br_comms_t* comms);
-DLLIMPORT int iMobotComms_moveJointWait(br_comms_t* comms, int id);
-DLLIMPORT int iMobotComms_moveWait(br_comms_t* comms);
-DLLIMPORT int iMobotComms_stop(br_comms_t* comms);
+DLLIMPORT int iMC_moveZero(br_comms_t* comms);
+DLLIMPORT int iMC_moveJointWait(br_comms_t* comms, int id);
+DLLIMPORT int iMC_moveWait(br_comms_t* comms);
+DLLIMPORT int iMC_stop(br_comms_t* comms);
 
 /* compound motion functions */
-DLLIMPORT int iMobotComms_motionInchwormLeft(br_comms_t* comms);
-DLLIMPORT int iMobotComms_motionInchwormRight(br_comms_t* comms);
-DLLIMPORT int iMobotComms_motionRollBackward(br_comms_t* comms);
-DLLIMPORT int iMobotComms_motionRollForward(br_comms_t* comms);
-DLLIMPORT int iMobotComms_motionStand(br_comms_t* comms);
-DLLIMPORT int iMobotComms_motionTurnLeft(br_comms_t* comms);
-DLLIMPORT int iMobotComms_motionTurnRight(br_comms_t* comms);
+DLLIMPORT int iMC_motionInchwormLeft(br_comms_t* comms);
+DLLIMPORT int iMC_motionInchwormRight(br_comms_t* comms);
+DLLIMPORT int iMC_motionRollBackward(br_comms_t* comms);
+DLLIMPORT int iMC_motionRollForward(br_comms_t* comms);
+DLLIMPORT int iMC_motionStand(br_comms_t* comms);
+DLLIMPORT int iMC_motionTurnLeft(br_comms_t* comms);
+DLLIMPORT int iMC_motionTurnRight(br_comms_t* comms);
 
 #ifdef _WIN32
 typedef struct bdaddr_s {

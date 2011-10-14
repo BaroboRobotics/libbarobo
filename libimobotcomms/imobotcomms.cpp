@@ -4,7 +4,7 @@
 #include "imobotcomms.h"
 
 
-int iMobotComms_init(br_comms_t* comms)
+int iMC_init(br_comms_t* comms)
 {
   memset(&comms->addr, 0, sizeof(sockaddr_t));
   comms->connected = 0;
@@ -15,12 +15,12 @@ int iMobotComms_init(br_comms_t* comms)
   return 0;
 }
 
-int iMobotComms_connect(br_comms_t* comms)
+int iMC_connect(br_comms_t* comms)
 {
 #ifndef _WIN32
   fprintf(stderr, 
-      "ERROR; Function iMobotComms_connect() is not yet implemented "
-      "on non-Windows systems. Please use iMobotComms_connectAddress() "
+      "ERROR; Function iMC_connect() is not yet implemented "
+      "on non-Windows systems. Please use iMC_connectAddress() "
       "instead.");
   return -1;
 #else
@@ -108,7 +108,7 @@ int iMobotComms_connect(br_comms_t* comms)
 #endif
 }
 
-int iMobotComms_connectAddress(br_comms_t* comms, const char* address, int channel)
+int iMC_connectAddress(br_comms_t* comms, const char* address, int channel)
 {
   int status;
   comms->socket = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
@@ -132,7 +132,7 @@ int iMobotComms_connectAddress(br_comms_t* comms, const char* address, int chann
   return status;
 }
 
-int iMobotComms_disconnect(br_comms_t* comms)
+int iMC_disconnect(br_comms_t* comms)
 {
 #ifndef _WIN32
   close(comms->socket);
@@ -144,12 +144,12 @@ int iMobotComms_disconnect(br_comms_t* comms)
   return 0;
 }
 
-int iMobotComms_isConnected(br_comms_t* comms)
+int iMC_isConnected(br_comms_t* comms)
 {
   return comms->connected;
 }
 
-int iMobotComms_setJointDirection(br_comms_t* comms, int id, int dir)
+int iMC_setJointDirection(br_comms_t* comms, int id, int dir)
 {
   char buf[160];
   int status;
@@ -162,7 +162,7 @@ int iMobotComms_setJointDirection(br_comms_t* comms, int id, int dir)
   return 0;
 }
 
-int iMobotComms_getJointDirection(br_comms_t* comms, int id, int *dir)
+int iMC_getJointDirection(br_comms_t* comms, int id, int *dir)
 {
   char buf[160];
   int status;
@@ -176,7 +176,7 @@ int iMobotComms_getJointDirection(br_comms_t* comms, int id, int *dir)
   return 0;
 }
 
-int iMobotComms_setJointSpeed(br_comms_t* comms, int id, double speed)
+int iMC_setJointSpeed(br_comms_t* comms, int id, double speed)
 {
   char buf[160];
   int status;
@@ -189,7 +189,7 @@ int iMobotComms_setJointSpeed(br_comms_t* comms, int id, double speed)
   return 0;
 }
 
-int iMobotComms_getJointSpeed(br_comms_t* comms, int id, double *speed)
+int iMC_getJointSpeed(br_comms_t* comms, int id, double *speed)
 {
   char buf[160];
   int status;
@@ -205,7 +205,7 @@ int iMobotComms_getJointSpeed(br_comms_t* comms, int id, double *speed)
   return 0;
 }
 
-int iMobotComms_moveJointTo(br_comms_t* comms, int id, double angle)
+int iMC_moveJointTo(br_comms_t* comms, int id, double angle)
 {
   char buf[160];
   int status;
@@ -218,7 +218,7 @@ int iMobotComms_moveJointTo(br_comms_t* comms, int id, double angle)
   return 0;
 }
 
-int iMobotComms_getJointAngle(br_comms_t* comms, int id, double *angle)
+int iMC_getJointAngle(br_comms_t* comms, int id, double *angle)
 {
   char buf[160];
   int status;
@@ -232,7 +232,7 @@ int iMobotComms_getJointAngle(br_comms_t* comms, int id, double *angle)
   return 0;
 }
 
-int iMobotComms_getJointState(br_comms_t* comms, int id, int *state)
+int iMC_getJointState(br_comms_t* comms, int id, int *state)
 {
   char buf[160];
   int status;
@@ -246,18 +246,18 @@ int iMobotComms_getJointState(br_comms_t* comms, int id, int *state)
   return 0;
 }
 
-int iMobotComms_moveZero(br_comms_t* comms)
+int iMC_moveZero(br_comms_t* comms)
 {
   int i;
   for(i = 0; i < 4; i++) {
-    if(iMobotComms_moveJointTo(comms, i, 0)) {
+    if(iMC_moveJointTo(comms, i, 0)) {
       return -1;
     }
   }
   return 0;
 }
 
-DLLIMPORT int iMobotComms_move(br_comms_t* comms,
+DLLIMPORT int iMC_move(br_comms_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -271,7 +271,7 @@ DLLIMPORT int iMobotComms_move(br_comms_t* comms,
   angles[2] = angle3;
   angles[3] = angle4;
   for(i = 0; i < 4; i++) {
-    if(iMobotComms_getJointAngle(comms, i, &curAngles[i])) {
+    if(iMC_getJointAngle(comms, i, &curAngles[i])) {
       return -1;
     }
   }
@@ -279,40 +279,40 @@ DLLIMPORT int iMobotComms_move(br_comms_t* comms,
     if(angles[i] == 0) {
       continue;
     }
-    if(iMobotComms_moveJointTo(comms, i, angles[i] + curAngles[i])) {
+    if(iMC_moveJointTo(comms, i, angles[i] + curAngles[i])) {
       return -1;
     }
   }
   return 0;
 }
 
-DLLIMPORT int iMobotComms_moveTo(br_comms_t* comms,
+DLLIMPORT int iMC_moveTo(br_comms_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
                                double angle4)
 {
-  if(iMobotComms_moveJointTo(comms, IMOBOT_JOINT1, angle1)) {
+  if(iMC_moveJointTo(comms, IMOBOT_JOINT1, angle1)) {
     return -1;
   }
-  if(iMobotComms_moveJointTo(comms, IMOBOT_JOINT2, angle2)) {
+  if(iMC_moveJointTo(comms, IMOBOT_JOINT2, angle2)) {
     return -1;
   }
-  if(iMobotComms_moveJointTo(comms, IMOBOT_JOINT3, angle3)) {
+  if(iMC_moveJointTo(comms, IMOBOT_JOINT3, angle3)) {
     return -1;
   }
-  if(iMobotComms_moveJointTo(comms, IMOBOT_JOINT4, angle4)) {
+  if(iMC_moveJointTo(comms, IMOBOT_JOINT4, angle4)) {
     return -1;
   }
   return 0;
 }
 
-int iMobotComms_moveJointWait(br_comms_t* comms, int id)
+int iMC_moveJointWait(br_comms_t* comms, int id)
 {
   int state;
   while(1)
   {
-    if(iMobotComms_getJointState(comms, id, &state)) {
+    if(iMC_getJointState(comms, id, &state)) {
       return -1;
     }
     if(state == 0) {
@@ -328,18 +328,18 @@ int iMobotComms_moveJointWait(br_comms_t* comms, int id)
   return 0;
 }
 
-int iMobotComms_moveWait(br_comms_t* comms)
+int iMC_moveWait(br_comms_t* comms)
 {
   int i;
   for(i = 0; i < 4; i++) {
-    if(iMobotComms_moveJointWait(comms, i)) {
+    if(iMC_moveJointWait(comms, i)) {
       return -1;
     }
   }
   return 0;
 }
 
-int iMobotComms_stop(br_comms_t* comms)
+int iMC_stop(br_comms_t* comms)
 {
   char buf[160];
   int status;
@@ -351,93 +351,93 @@ int iMobotComms_stop(br_comms_t* comms)
   return 0;
 }
 
-int iMobotComms_motionRollForward(br_comms_t* comms)
+int iMC_motionRollForward(br_comms_t* comms)
 {
   double motorPosition[2];
-  iMobotComms_getJointAngle(comms, IMOBOT_JOINT3, &motorPosition[0]);
-  iMobotComms_getJointAngle(comms, IMOBOT_JOINT4, &motorPosition[1]);
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT3, motorPosition[0] + 90);
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT4, motorPosition[1] - 90);
+  iMC_getJointAngle(comms, IMOBOT_JOINT3, &motorPosition[0]);
+  iMC_getJointAngle(comms, IMOBOT_JOINT4, &motorPosition[1]);
+  iMC_moveJointTo(comms, IMOBOT_JOINT3, motorPosition[0] + 90);
+  iMC_moveJointTo(comms, IMOBOT_JOINT4, motorPosition[1] - 90);
   return 0;
 }
 
-int iMobotComms_motionRollBackward(br_comms_t* comms)
+int iMC_motionRollBackward(br_comms_t* comms)
 {
   double motorPosition[2];
-  iMobotComms_getJointAngle(comms, IMOBOT_JOINT3, &motorPosition[0]);
-  iMobotComms_getJointAngle(comms, IMOBOT_JOINT4, &motorPosition[1]);
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT3, motorPosition[0] - 90);
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT4, motorPosition[1] + 90);
+  iMC_getJointAngle(comms, IMOBOT_JOINT3, &motorPosition[0]);
+  iMC_getJointAngle(comms, IMOBOT_JOINT4, &motorPosition[1]);
+  iMC_moveJointTo(comms, IMOBOT_JOINT3, motorPosition[0] - 90);
+  iMC_moveJointTo(comms, IMOBOT_JOINT4, motorPosition[1] + 90);
   return 0;
 }
 
-int iMobotComms_motionTurnLeft(br_comms_t* comms)
+int iMC_motionTurnLeft(br_comms_t* comms)
 {
   double motorPosition[2];
-  iMobotComms_getJointAngle(comms, IMOBOT_JOINT3, &motorPosition[0]);
-  iMobotComms_getJointAngle(comms, IMOBOT_JOINT4, &motorPosition[1]);
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT3, motorPosition[0] + 90);
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT4, motorPosition[1] + 90);
+  iMC_getJointAngle(comms, IMOBOT_JOINT3, &motorPosition[0]);
+  iMC_getJointAngle(comms, IMOBOT_JOINT4, &motorPosition[1]);
+  iMC_moveJointTo(comms, IMOBOT_JOINT3, motorPosition[0] + 90);
+  iMC_moveJointTo(comms, IMOBOT_JOINT4, motorPosition[1] + 90);
   return 0;
 }
 
-int iMobotComms_motionTurnRight(br_comms_t* comms)
+int iMC_motionTurnRight(br_comms_t* comms)
 {
   double motorPosition[2];
-  iMobotComms_getJointAngle(comms, IMOBOT_JOINT3, &motorPosition[0]);
-  iMobotComms_getJointAngle(comms, IMOBOT_JOINT4, &motorPosition[1]);
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT3, motorPosition[0] - 90);
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT4, motorPosition[1] - 90);
+  iMC_getJointAngle(comms, IMOBOT_JOINT3, &motorPosition[0]);
+  iMC_getJointAngle(comms, IMOBOT_JOINT4, &motorPosition[1]);
+  iMC_moveJointTo(comms, IMOBOT_JOINT3, motorPosition[0] - 90);
+  iMC_moveJointTo(comms, IMOBOT_JOINT4, motorPosition[1] - 90);
   return 0;
 }
 
-int iMobotComms_motionInchwormLeft(br_comms_t* comms)
+int iMC_motionInchwormLeft(br_comms_t* comms)
 {
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT1, 0);
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT2, 0);
-  iMobotComms_moveWait(comms);
+  iMC_moveJointTo(comms, IMOBOT_JOINT1, 0);
+  iMC_moveJointTo(comms, IMOBOT_JOINT2, 0);
+  iMC_moveWait(comms);
 
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT2, 50);
-  iMobotComms_moveWait(comms);
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT1, -50);
-  iMobotComms_moveWait(comms);
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT2, 0);
-  iMobotComms_moveWait(comms);
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT1, 0);
-  iMobotComms_moveWait(comms);
-
-  return 0;
-}
-
-int iMobotComms_motionInchwormRight(br_comms_t* comms)
-{
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT1, 0);
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT2, 0);
-  iMobotComms_moveWait(comms);
-
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT1, -50);
-  iMobotComms_moveWait(comms);
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT2, 50);
-  iMobotComms_moveWait(comms);
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT1, 0);
-  iMobotComms_moveWait(comms);
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT2, 0);
-  iMobotComms_moveWait(comms);
+  iMC_moveJointTo(comms, IMOBOT_JOINT2, 50);
+  iMC_moveWait(comms);
+  iMC_moveJointTo(comms, IMOBOT_JOINT1, -50);
+  iMC_moveWait(comms);
+  iMC_moveJointTo(comms, IMOBOT_JOINT2, 0);
+  iMC_moveWait(comms);
+  iMC_moveJointTo(comms, IMOBOT_JOINT1, 0);
+  iMC_moveWait(comms);
 
   return 0;
 }
 
-int iMobotComms_motionStand(br_comms_t* comms)
+int iMC_motionInchwormRight(br_comms_t* comms)
 {
-  iMobotComms_moveZero(comms);
-  iMobotComms_moveWait(comms);
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT1, -85);
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT2, 80);
-  iMobotComms_moveWait(comms);
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT3, 45);
-  iMobotComms_moveWait(comms);
-  iMobotComms_moveJointTo(comms, IMOBOT_JOINT1, 20);
-  iMobotComms_moveWait(comms);
+  iMC_moveJointTo(comms, IMOBOT_JOINT1, 0);
+  iMC_moveJointTo(comms, IMOBOT_JOINT2, 0);
+  iMC_moveWait(comms);
+
+  iMC_moveJointTo(comms, IMOBOT_JOINT1, -50);
+  iMC_moveWait(comms);
+  iMC_moveJointTo(comms, IMOBOT_JOINT2, 50);
+  iMC_moveWait(comms);
+  iMC_moveJointTo(comms, IMOBOT_JOINT1, 0);
+  iMC_moveWait(comms);
+  iMC_moveJointTo(comms, IMOBOT_JOINT2, 0);
+  iMC_moveWait(comms);
+
+  return 0;
+}
+
+int iMC_motionStand(br_comms_t* comms)
+{
+  iMC_moveZero(comms);
+  iMC_moveWait(comms);
+  iMC_moveJointTo(comms, IMOBOT_JOINT1, -85);
+  iMC_moveJointTo(comms, IMOBOT_JOINT2, 80);
+  iMC_moveWait(comms);
+  iMC_moveJointTo(comms, IMOBOT_JOINT3, 45);
+  iMC_moveWait(comms);
+  iMC_moveJointTo(comms, IMOBOT_JOINT1, 20);
+  iMC_moveWait(comms);
   return 0;
 }
 
@@ -523,14 +523,14 @@ int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
 
 CiMobotComms::CiMobotComms()
 {
-  iMobotComms_init(&_comms);
+  iMC_init(&_comms);
   /* Try to connect */
   connect();
 }
 
 CiMobotComms::CiMobotComms(const char address[], int channel)
 {
-  iMobotComms_init(&_comms);
+  iMC_init(&_comms);
   /* Try to connect */
   connectAddress(address, channel);
 }
@@ -542,57 +542,57 @@ CiMobotComms::~CiMobotComms()
 
 int CiMobotComms::connect()
 {
-  return iMobotComms_connect(&_comms);
+  return iMC_connect(&_comms);
 }
 
 int CiMobotComms::connectAddress(const char* address, int channel)
 {
-  return iMobotComms_connectAddress(&_comms, address, channel);
+  return iMC_connectAddress(&_comms, address, channel);
 }
 
 int CiMobotComms::disconnect()
 {
-  return iMobotComms_disconnect(&_comms);
+  return iMC_disconnect(&_comms);
 }
 
 int CiMobotComms::isConnected()
 {
-  return iMobotComms_isConnected(&_comms);
+  return iMC_isConnected(&_comms);
 }
 
 int CiMobotComms::setJointDirection(int id, int dir)
 {
-  return iMobotComms_setJointDirection(&_comms, id, dir);
+  return iMC_setJointDirection(&_comms, id, dir);
 }
 
 int CiMobotComms::getJointDirection(int id, int &dir)
 {
-  return iMobotComms_getJointDirection(&_comms, id, &dir);
+  return iMC_getJointDirection(&_comms, id, &dir);
 }
 
 int CiMobotComms::setJointSpeed(int id, double speed)
 {
-  return iMobotComms_setJointSpeed(&_comms, id, speed);
+  return iMC_setJointSpeed(&_comms, id, speed);
 }
 
 int CiMobotComms::getJointSpeed(int id, double &speed)
 {
-  return iMobotComms_getJointSpeed(&_comms, id, &speed);
+  return iMC_getJointSpeed(&_comms, id, &speed);
 }
 
 int CiMobotComms::moveJointTo(int id, double angle)
 {
-  return iMobotComms_moveJointTo(&_comms, id, angle);
+  return iMC_moveJointTo(&_comms, id, angle);
 }
 
 int CiMobotComms::getJointAngle(int id, double &angle)
 {
-  return iMobotComms_getJointAngle(&_comms, id, &angle);
+  return iMC_getJointAngle(&_comms, id, &angle);
 }
 
 int CiMobotComms::getJointState(int id, int &state)
 {
-  return iMobotComms_getJointState(&_comms, id, &state);
+  return iMC_getJointState(&_comms, id, &state);
 }
 
 int CiMobotComms::move( double angle1,
@@ -600,7 +600,7 @@ int CiMobotComms::move( double angle1,
                         double angle3,
                         double angle4)
 {
-  return iMobotComms_move(&_comms, angle1, angle2, angle3, angle4);
+  return iMC_move(&_comms, angle1, angle2, angle3, angle4);
 }
 
 int CiMobotComms::moveTo( double angle1,
@@ -608,62 +608,62 @@ int CiMobotComms::moveTo( double angle1,
                           double angle3,
                           double angle4)
 {
-  return iMobotComms_moveTo(&_comms, angle1, angle2, angle3, angle4);
+  return iMC_moveTo(&_comms, angle1, angle2, angle3, angle4);
 }
 
 int CiMobotComms::moveZero()
 {
-  return iMobotComms_moveZero(&_comms);
+  return iMC_moveZero(&_comms);
 }
 
 int CiMobotComms::moveJointWait(int id)
 {
-  return iMobotComms_moveJointWait(&_comms, id);
+  return iMC_moveJointWait(&_comms, id);
 }
 
 int CiMobotComms::moveWait()
 {
-  return iMobotComms_moveWait(&_comms);
+  return iMC_moveWait(&_comms);
 }
 
 int CiMobotComms::stop()
 {
-  return iMobotComms_stop(&_comms);
+  return iMC_stop(&_comms);
 }
 
 int CiMobotComms::motionRollForward()
 {
-  return iMobotComms_motionRollForward(&_comms);
+  return iMC_motionRollForward(&_comms);
 }
 
 int CiMobotComms::motionRollBackward()
 {
-  return iMobotComms_motionRollBackward(&_comms);
+  return iMC_motionRollBackward(&_comms);
 }
 
 int CiMobotComms::motionTurnLeft()
 {
-  return iMobotComms_motionTurnLeft(&_comms);
+  return iMC_motionTurnLeft(&_comms);
 }
 
 int CiMobotComms::motionTurnRight()
 {
-  return iMobotComms_motionTurnRight(&_comms);
+  return iMC_motionTurnRight(&_comms);
 }
 
 int CiMobotComms::motionInchwormLeft()
 {
-  return iMobotComms_motionInchwormLeft(&_comms);
+  return iMC_motionInchwormLeft(&_comms);
 }
 
 int CiMobotComms::motionInchwormRight()
 {
-  return iMobotComms_motionInchwormRight(&_comms);
+  return iMC_motionInchwormRight(&_comms);
 }
 
 int CiMobotComms::motionStand()
 {
-  return iMobotComms_motionStand(&_comms);
+  return iMC_motionStand(&_comms);
 }
 
 #endif
