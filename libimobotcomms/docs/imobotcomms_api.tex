@@ -3,11 +3,14 @@
 \usepackage{wrapfig}
 \usepackage{amsmath}
 \usepackage{verbatim}
+\usepackage{makeidx}
+
+\title{Setup for Remote iMobot Control in Ch}  
+%\author{David Ko\\Mechanical and Aerospace Engineering}
+%\date{\today} 
+\makeindex
 
 \begin{document}
-\title{Setup for Remote iMobot Control in Ch}  
-\author{David Ko\\Mechanical and Aerospace Engineering}
-\date{\today} 
 \maketitle
 
 \section{The \texttt{imobotcomms} iMobot Remote Control Library}
@@ -158,5 +161,10 @@ robot.moveJointWait(IMOBOT_JOINT4);
 \appendix
 \section{iMobotComms API}
 \input{api/libimobotcomms.tex}
+
+% Index
+\section{Index}
+\addcontentsline{toc}{chapter}{Index}
+\printindex
 
 \end{document}

@@ -15,35 +15,35 @@ may be used to control the robot.
 Function & Description \\
 \hline
 %\texttt{pose()} \dotfill & Pose multiple joints of the iMobot. \\
-\texttt{CiMobotComms()} \dotfill & The CiMobotComms constructor function. This function
+\texttt{CiMobotComms()} & The CiMobotComms constructor function. This function
 is called automatically and should not be called explicitly. This constructor will 
 automatically try to connect with a paired iMobot using the \texttt{connect()} member
 function. To specify an address to connect to, please use the
 \texttt{CiMobotComms(const char address[], int channel);} constructor.\\
-\texttt{CiMobotComms(const char address[], int channel);} \dotfill & 
+\texttt{CiMobotComms(const char address[], int channel);} & 
 An alternate constructor which may be used to explicitly specify the address of an iMobot 
 to connect to. \\
-\texttt{\textasciitilde CiMobotComms()} \dotfill & The CiMobotComms destructor function. This function
+\texttt{\textasciitilde CiMobotComms()} & The CiMobotComms destructor function. This function
 is called automatically and should not be called explicitly. \\
 & \\
-\texttt{connect()} \dotfill & Connect to a remote iMobot module. This function connects to an already-paired iMobot module in Microsoft Windows. This function does not currently work for non-Windows operating systems, such as Mac or Linux. For those operating systems, please use the \texttt{connectAddress()} function instead. \\
-\texttt{connectAddress()} \dotfill & Connect to an iMobot module by specifying its Bluetooth address. \\
-\texttt{disconnect()} \dotfill & Disconnect from an iMobot module. \\
-\texttt{getJointAngle()} \dotfill & Gets a joint's angle. \\
-\texttt{getJointDirection()} \dotfill & Gets a motor's currently assigned direction. \\
-\texttt{getJointSpeed()} \dotfill & Gets a motor's speed. \\
-\texttt{getJointState()} \dotfill & Gets a motor's current status. \\
-\texttt{isConnected()} \dotfill & This function is used to check the connection to an iMobot. \\
-\texttt{move()} \dotfill & Move all four joints of the iMobot by specified angles. \\
-\texttt{moveTo()} \dotfill & Move all four joints of the iMobot to specified absolute angles. \\
-\texttt{moveJointTo()} \dotfill & Set the desired motor position. \\
-\texttt{moveJointWait()} \dotfill & Wait until the specified motor has stopped moving. \\
-\texttt{moveWait()} \dotfill & Wait until all motors have stopped moving. \\
-\texttt{pozeZero()} \dotfill & Instructs all motors to go to their zero positions. \\
-\texttt{setJointDirection()} \dotfill & Set the motor direction of a motor. Set
+\texttt{connect()} & Connect to a remote iMobot module. This function connects to an already-paired iMobot module in Microsoft Windows. This function does not currently work for non-Windows operating systems, such as Mac or Linux. For those operating systems, please use the \texttt{connectAddress()} function instead. \\
+\texttt{connectAddress()} & Connect to an iMobot module by specifying its Bluetooth address. \\
+\texttt{disconnect()} & Disconnect from an iMobot module. \\
+\texttt{getJointAngle()} & Gets a joint's angle. \\
+\texttt{getJointDirection()} & Gets a motor's currently assigned direction. \\
+\texttt{getJointSpeed()} & Gets a motor's speed. \\
+\texttt{getJointState()} & Gets a motor's current status. \\
+\texttt{isConnected()} & This function is used to check the connection to an iMobot. \\
+\texttt{move()} & Move all four joints of the iMobot by specified angles. \\
+\texttt{moveTo()} & Move all four joints of the iMobot to specified absolute angles. \\
+\texttt{moveJointTo()} & Set the desired motor position. \\
+\texttt{moveJointWait()} & Wait until the specified motor has stopped moving. \\
+\texttt{moveWait()} & Wait until all motors have stopped moving. \\
+\texttt{pozeZero()} & Instructs all motors to go to their zero positions. \\
+\texttt{setJointDirection()} & Set the motor direction of a motor. Set
 to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
-\texttt{setJointSpeed()} \dotfill & Sets a motor's speed. \\
-\texttt{stop()} \dotfill & Stop all currently executing motions of the iMobot. \\
+\texttt{setJointSpeed()} & Sets a motor's speed. \\
+\texttt{stop()} & Stop all currently executing motions of the iMobot. \\
 \hline
 \end{tabular}
 \end{center}
