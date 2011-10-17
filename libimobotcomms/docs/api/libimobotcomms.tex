@@ -2,28 +2,28 @@
 \noindent
 The header file {\bf libimobotcomms.h} defines all the data types, macros 
 and function prototypes for the iMobot API library. The header file
-declares a class called \texttt{CiMobotComms} which contains member functions which
+declares a class called \texttt{CMobot} which contains member functions which
 may be used to control the robot.
 
 \begin{table}[!hp]
 %\capstart
 \begin{center}
-\caption{CiMobotComms Member Functions.}
+\caption{CMobot Member Functions.}
 \begin{tabular}{p{38 mm}p{77 mm}}
 %\begin{tabular}{ll}
 \hline
 Function & Description \\
 \hline
 %\texttt{pose()} \dotfill & Pose multiple joints of the iMobot. \\
-\texttt{CiMobotComms()} & The CiMobotComms constructor function. This function
+\texttt{CMobot()} & The CMobot constructor function. This function
 is called automatically and should not be called explicitly. This constructor will 
 automatically try to connect with a paired iMobot using the \texttt{connect()} member
 function. To specify an address to connect to, please use the
-\texttt{CiMobotComms(const char address[], int channel);} constructor.\\
-\texttt{CiMobotComms(const char address[], int channel);} & 
+\texttt{CMobot(const char address[], int channel);} constructor.\\
+\texttt{CMobot(const char address[], int channel);} & 
 An alternate constructor which may be used to explicitly specify the address of an iMobot 
 to connect to. \\
-\texttt{\textasciitilde CiMobotComms()} & The CiMobotComms destructor function. This function
+\texttt{\textasciitilde CMobot()} & The CMobot destructor function. This function
 is called automatically and should not be called explicitly. \\
 & \\
 \texttt{connect()} & Connect to a remote iMobot module. This function connects to an already-paired iMobot module in Microsoft Windows. This function does not currently work for non-Windows operating systems, such as Mac or Linux. For those operating systems, please use the \texttt{connectAddress()} function instead. \\
@@ -53,7 +53,7 @@ to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
 \begin{table}[!h]
 %\capstart
 \begin{center}
-\caption{CiMobotComms Member Functions for Compound Motions.}
+\caption{CMobot Member Functions for Compound Motions.}
 \begin{tabular}{p{38 mm}p{77 mm}}
 Compound Motions & These are convenience functions of commonly used compound motions. \\
 \hline

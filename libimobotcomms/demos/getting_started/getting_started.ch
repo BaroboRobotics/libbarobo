@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <imobotcomms.h>
 
-CiMobotComms robot;
+CMobot robot;
 /* Set the robot to "home" position, where all joint angles are 0 degrees. */
 robot.moveZero();
 robot.moveWait();

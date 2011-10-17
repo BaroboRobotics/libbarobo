@@ -29,7 +29,7 @@ typedef struct imobotMotion_s {
 //define serial/bluetooth connection
 Serial bluetooth;
 BthUtils objBthUtils;
-CiMobotComms samplebt ; 
+CMobot samplebt ; 
 
 imobotMotion_t g_imobotPoses[50];
 int g_numPoses;

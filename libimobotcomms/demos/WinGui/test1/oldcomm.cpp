@@ -13,7 +13,7 @@ int str2ba(const char *str, bdaddr_t *ba);
   recvfrom(sock, buf, len, 0, (struct sockaddr*)0, 0)
 #endif
 
-CiMobotComms::CiMobotComms()
+CMobot::CMobot()
 {
   memset(&_addr, 0, sizeof(sockaddr_t));
   _connect_state = COMM_VOID;
@@ -23,7 +23,7 @@ CiMobotComms::CiMobotComms()
 #endif
 }
 
-int CiMobotComms::connectSlave(const char* address, int channel)
+int CMobot::connectSlave(const char* address, int channel)
 {
 #ifndef _WIN32
   _socket = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
@@ -56,7 +56,7 @@ int CiMobotComms::connectSlave(const char* address, int channel)
   return status;
 }
 
-int CiMobotComms::disconnect()
+int CMobot::disconnect()
 {
   if(_connect_state != COMM_VOID) {
 #ifndef _WIN32
@@ -70,7 +70,7 @@ int CiMobotComms::disconnect()
   return 0;
 }
 
-int CiMobotComms::pose(int m[5]) 
+int CMobot::pose(int m[5]) 
 {
   char buf[160];
   int status;
@@ -89,7 +89,7 @@ int CiMobotComms::pose(int m[5])
   return 0;
 }
 
-int CiMobotComms::gotopose(int poseno) 
+int CMobot::gotopose(int poseno) 
 {
   char buf[160];
   int status;
@@ -104,7 +104,7 @@ int CiMobotComms::gotopose(int poseno)
 
 }
 
-int CiMobotComms::move(int m[4])
+int CMobot::move(int m[4])
 {
   char buf[160];
   int status;
@@ -142,7 +142,7 @@ int CiMobotComms::move(int m[4])
 }
 
 
-int CiMobotComms::stop()
+int CMobot::stop()
 {
   char buf[80];
   int status;
@@ -156,7 +156,7 @@ int CiMobotComms::stop()
   return 0;
 }
 
-int CiMobotComms::play()
+int CMobot::play()
 {
   char buf[80];
   int status;
@@ -170,7 +170,7 @@ int CiMobotComms::play()
   return 0;
 }
 
-int CiMobotComms::pause()
+int CMobot::pause()
 {
   char buf[80];
   int status;
@@ -184,7 +184,7 @@ int CiMobotComms::pause()
   return 0;
 }
 
-int CiMobotComms::quit()
+int CMobot::quit()
 {
   char buf[80];
   int status;
@@ -198,7 +198,7 @@ int CiMobotComms::quit()
   return 0;
 }
 
-int CiMobotComms::moveWait()
+int CMobot::moveWait()
 {
   char buf[160];
   int status;
@@ -221,7 +221,7 @@ int CiMobotComms::moveWait()
   return 0;
 }
 
-int CiMobotComms::setJointPower(int motor, uint8_t speed)
+int CMobot::setJointPower(int motor, uint8_t speed)
 {
   int status, bytes_read;
   char buf[160];
@@ -233,7 +233,7 @@ int CiMobotComms::setJointPower(int motor, uint8_t speed)
   return 0;
 }
 
-int CiMobotComms::getJointEncoderCount(int jointID)
+int CMobot::getJointEncoderCount(int jointID)
 {
   char buf[160];
   int status;
@@ -248,7 +248,7 @@ int CiMobotComms::getJointEncoderCount(int jointID)
   return status;
 }
 
-int CiMobotComms::sendMessage(const char* message, char* reply, size_t sizeReply)
+int CMobot::sendMessage(const char* message, char* reply, size_t sizeReply)
 {
   int status;
   int bytes_read;

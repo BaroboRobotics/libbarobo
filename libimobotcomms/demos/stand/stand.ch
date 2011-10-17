@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <imobotcomms.h>
 
-CiMobotComms robot;
+CMobot robot;
 /* Run the built-in motionStand function */
 robot.motionStand();
 

@@ -19,7 +19,7 @@ controlling the motors and reading sensor values of an iMobot module via the
 Bluetooth wireless protocol. The functions are designed to be intuitive
 and easy to use. Various functions are provided to control or obtain the speed,
 direction, and position of the motors. The API includes C-style functions as well
-as a C++ class called \texttt{CiMobotComms} to facilitate C++ style api function
+as a C++ class called \texttt{CMobot} to facilitate C++ style api function
 calls. 
 
 This documentation introduces the basic computer setup required for controlling 
@@ -126,10 +126,10 @@ data onto the screen or controlling the iMobot.
 Next, we must initialize the C++ class used to control the iMobot. This line
 initializes a new variable named \texttt{robot} which represents the remote
 iMobot module which we wish to control. This special variable is actually an
-instance of the \texttt{CiMobotComms} class, which contains its own set of
+instance of the \texttt{CMobot} class, which contains its own set of
 functions called ``methods'' or ``member functions''.
 \begin{verbatim}
-CiMobotComms robot;
+CMobot robot;
 \end{verbatim}
 
 The next line will use the \texttt{moveZero} member function. The

@@ -25,7 +25,7 @@ public:
 
 // Implementation
 protected:
-  CiMobotComms iMobotComms;
+  CMobot iMobotComms;
 	HICON m_hIcon;
 
 	// Generated message map functions

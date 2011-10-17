@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <imobotcomms.h>
 
-CiMobotComms robot;
+CMobot robot;
 
 /* Set robot motors to speed of 0.50 */
 int i;
