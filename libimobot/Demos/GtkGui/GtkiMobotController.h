@@ -38,6 +38,7 @@ void on_button_inchRight_clicked(GtkWidget* widget, gpointer data);
 void on_button_stop_clicked(GtkWidget* widget, gpointer data);
 void on_button_home_clicked(GtkWidget* widget, gpointer data);
 void on_button_playGait_clicked(GtkWidget* widget, gpointer data);
+void on_button_moveJoints_clicked(GtkWidget* widget, gpointer data);
 gboolean on_vscale_motorspeed0_change_value(
     GtkRange* range,
     GtkScrollType scroll,

@@ -3,7 +3,7 @@
 int setMotorDirection(int motor, int direction)
 {
   if(g_isConnected) {
-    return iMobotComms_setJointDirection(imobotComms, motor, direction);
+    return Mobot_setJointDirection(imobotComms, motor, direction);
   } else if (g_localInit) {
     return iMobot_setJointDirection(iMobot, motor, direction);
   } else {
@@ -21,7 +21,7 @@ int setMotorSpeed(int motor, int speed)
   }
   lspeed = (double)speed / 100.0;
   if(g_isConnected) {
-    return iMobotComms_setJointSpeed(imobotComms, motor, lspeed);
+    return Mobot_setJointSpeed(imobotComms, motor, lspeed);
   } else if (g_localInit) {
     return iMobot_setJointSpeed(iMobot, motor, lspeed);
   } else {
@@ -33,7 +33,7 @@ int setMotorSpeed(int motor, int speed)
 int stop()
 {
   if(g_isConnected) {
-    return iMobotComms_stop(imobotComms);
+    return Mobot_stop(imobotComms);
   } else if (g_localInit) {
     return iMobot_stop(iMobot);
   } else {
@@ -45,7 +45,7 @@ int stop()
 int setMotorPosition(int motor, double position)
 {
   if(g_isConnected) {
-    return iMobotComms_moveJointTo(imobotComms, motor, position);
+    return Mobot_moveJointTo(imobotComms, motor, position);
   } else if (g_localInit) {
     return iMobot_moveJointTo(iMobot, motor, position);
   } else {
@@ -58,7 +58,7 @@ int getMotorPosition(int motor, double *position)
 {
   int code;
   if(g_isConnected) {
-    code = iMobotComms_getJointAngle(imobotComms, motor, position);
+    code = Mobot_getJointAngle(imobotComms, motor, position);
     return code;
   } else if (g_localInit) {
     code = iMobot_getJointAngle(iMobot, motor, position);
@@ -72,7 +72,7 @@ int getMotorPosition(int motor, double *position)
 int waitMotor(int motor)
 {
   if(g_isConnected) {
-    return iMobotComms_moveJointWait(imobotComms, motor);
+    return Mobot_moveJointWait(imobotComms, motor);
   } else if (g_localInit) {
     return iMobot_waitMotor(iMobot, motor);
   } else {

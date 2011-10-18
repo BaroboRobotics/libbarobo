@@ -143,6 +143,25 @@ void on_button_playGait_clicked(GtkWidget* widget, gpointer data)
   free(name);
 }
 
+void on_button_moveJoints_clicked(GtkWidget* widget, gpointer data)
+{
+  GtkEntry* entries[4];
+  double val;
+  const char* string;
+  entries[0] = GTK_ENTRY( gtk_builder_get_object(builder, "entry_motorPos0"));
+  entries[1] = GTK_ENTRY( gtk_builder_get_object(builder, "entry_motorPos1"));
+  entries[2] = GTK_ENTRY( gtk_builder_get_object(builder, "entry_motorPos2"));
+  entries[3] = GTK_ENTRY( gtk_builder_get_object(builder, "entry_motorPos3"));
+  for(int i = 0; i < 4; i++) {
+    string = gtk_entry_get_text(entries[i]);
+    if(strlen(string) == 0) {
+      continue;
+    }
+    sscanf(string, "%lf", &val);
+    setMotorPosition(i, val);
+  }
+}
+
 void motor_forward(int id)
 {
   setMotorDirection(id, 1);
@@ -247,3 +266,5 @@ gboolean on_vscale_motorPos_button_release_event(GtkRange* range, GdkEvent* even
   motor_position_scale_pressed[i] = 0;
   return FALSE;
 }
+
+
