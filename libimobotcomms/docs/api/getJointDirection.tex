@@ -2,20 +2,20 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CiMobotComms::getMotorState()}\index{getMotorState()}}\\
+{\LARGE \texttt{CMobot::getJointDirection()}\index{getJointDirection()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{getMotorState()}
+\addcontentsline{toc}{section}{getJointDirection()}
 
 \noindent
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <imobot.h>
-int CiMobotComms::getMotorState(int id, int &state);
+int CMobot::getJointDirection(int id, int &direction);
 \end{verbatim}
 
 \noindent
 {\bf Purpose}\\
-Determine whether a motor is moving or not.\\
+Get the speed of a joint on the iMobot.\\
 
 \noindent
 {\bf Return Value}\\
@@ -28,17 +28,19 @@ The function returns 0 on success and non-zero otherwise.\\
 \item               
 \begin{tabular}{p{10 mm}p{145 mm}}
 \texttt{id} & The joint number to pose. \\
-\texttt{state} & An integer variable which will be overwritten with the current state of the motor. 
+\texttt{direction} & An integer variable. This variable will be overwritten
+with the current speed of the joint.
 \end{tabular}
 \end{description}
 
 \noindent
 {\bf Description}\\
-This function is used to determine the current state of a motor. Valid states are:
+This function is used to retrieve the motor's direction status. The valid
+status directions are
 \begin{itemize}
-\item 0: The motor is idle.
-\item 1: The motor is moving.
-\item 2: The motor is heading towards a specified position.
+\item 0: Automatic direction
+\item 1: Forward direction
+\item 2: Backward direction
 \end{itemize}
 
 \noindent
@@ -47,5 +49,6 @@ This function is used to determine the current state of a motor. Valid states ar
 
 \noindent
 {\bf See Also}\\
+\texttt{setJointDirection()}
 
 %\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

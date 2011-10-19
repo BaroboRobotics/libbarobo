@@ -40,24 +40,34 @@ enc[1] = angles[1] * 10; \
 enc[2] = angles[2] * 10; \
 enc[3] = angles[3] * 10
 
-#ifndef IMOBOT_MOTORS_E
-#define IMOBOT_MOTORS_E
-enum iMobot_motors_e {
-  IMOBOT_MOTOR1 = 0,
-  IMOBOT_MOTOR2,
-  IMOBOT_MOTOR3,
-  IMOBOT_MOTOR4,
-  IMOBOT_NUM_MOTORS 
+#ifndef IMOBOT_JOINTS_E
+#define IMOBOT_JOINTS_E
+enum iMobot_joints_e {
+  IMOBOT_JOINT1 = 0,
+  IMOBOT_JOINT2,
+  IMOBOT_JOINT3,
+  IMOBOT_JOINT4,
+  IMOBOT_NUM_JOINTS 
 };
 #endif
 
-#ifndef IMOBOT_MOTOR_DIRECTION_E
-#define IMOBOT_MOTOR_DIRECTION_E
+#ifndef IMOBOT_JOINT_DIRECTION_E
+#define IMOBOT_JOINT_DIRECTION_E
 enum iMobot_motor_direction_e
 {
-  IMOBOT_MOTOR_DIR_AUTO,
-  IMOBOT_MOTOR_DIR_FORWARD,
-  IMOBOT_MOTOR_DIR_BACKWARD
+  IMOBOT_JOINT_DIR_AUTO,
+  IMOBOT_JOINT_DIR_FORWARD,
+  IMOBOT_JOINT_DIR_BACKWARD
+};
+#endif
+
+#ifndef IMOBOT_JOINT_STATE_E
+#define IMOBOT_JOINT_STATE_E
+enum iMobot_joint_state_e
+{
+    IMOBOT_JOINT_IDLE = 0,
+    IMOBOT_JOINT_MOVING,
+    IMOBOT_JOINT_GOALSEEK,
 };
 #endif
 
@@ -89,32 +99,42 @@ extern "C" {
 #define DLLIMPORT
 #endif /* _WIN32 */
 
-DLLIMPORT int iMobotComms_init(br_comms_t* comms);
-DLLIMPORT int iMobotComms_connect(br_comms_t* comms);
-DLLIMPORT int iMobotComms_connectAddress(
+DLLIMPORT int Mobot_init(br_comms_t* comms);
+DLLIMPORT int Mobot_connect(br_comms_t* comms);
+DLLIMPORT int Mobot_connectAddress(
     br_comms_t* comms, const char* address, int channel);
-DLLIMPORT int iMobotComms_disconnect(br_comms_t* comms);
-DLLIMPORT int iMobotComms_isConnected(br_comms_t* comms);
-DLLIMPORT int iMobotComms_setMotorDirection(br_comms_t* comms, int id, int dir);
-DLLIMPORT int iMobotComms_getMotorDirection(br_comms_t* comms, int id, int *dir);
-DLLIMPORT int iMobotComms_setMotorSpeed(br_comms_t* comms, int id, int speed);
-DLLIMPORT int iMobotComms_getMotorSpeed(br_comms_t* comms, int id, int *speed);
-DLLIMPORT int iMobotComms_setMotorPosition(br_comms_t* comms, int id, double position);
-DLLIMPORT int iMobotComms_getMotorPosition(br_comms_t* comms, int id, double *position);
-DLLIMPORT int iMobotComms_getMotorState(br_comms_t* comms, int id, int *state);
-DLLIMPORT int iMobotComms_poseZero(br_comms_t* comms);
-DLLIMPORT int iMobotComms_waitMotor(br_comms_t* comms, int id);
-DLLIMPORT int iMobotComms_moveWait(br_comms_t* comms);
-DLLIMPORT int iMobotComms_stop(br_comms_t* comms);
+DLLIMPORT int Mobot_disconnect(br_comms_t* comms);
+DLLIMPORT int Mobot_isConnected(br_comms_t* comms);
+DLLIMPORT int Mobot_setJointDirection(br_comms_t* comms, int id, int dir);
+DLLIMPORT int Mobot_getJointDirection(br_comms_t* comms, int id, int *dir);
+DLLIMPORT int Mobot_setJointSpeed(br_comms_t* comms, int id, double speed);
+DLLIMPORT int Mobot_getJointSpeed(br_comms_t* comms, int id, double *speed);
+DLLIMPORT int Mobot_moveJointTo(br_comms_t* comms, int id, double angle);
+DLLIMPORT int Mobot_getJointAngle(br_comms_t* comms, int id, double *angle);
+DLLIMPORT int Mobot_getJointState(br_comms_t* comms, int id, int *state);
+DLLIMPORT int Mobot_move(br_comms_t* comms,
+                               double angle1,
+                               double angle2,
+                               double angle3,
+                               double angle4);
+DLLIMPORT int Mobot_moveTo(br_comms_t* comms,
+                               double angle1,
+                               double angle2,
+                               double angle3,
+                               double angle4);
+DLLIMPORT int Mobot_moveZero(br_comms_t* comms);
+DLLIMPORT int Mobot_moveJointWait(br_comms_t* comms, int id);
+DLLIMPORT int Mobot_moveWait(br_comms_t* comms);
+DLLIMPORT int Mobot_stop(br_comms_t* comms);
 
 /* compound motion functions */
-DLLIMPORT int iMobotComms_inchLeft(br_comms_t* comms);
-DLLIMPORT int iMobotComms_inchRight(br_comms_t* comms);
-DLLIMPORT int iMobotComms_rollBackward(br_comms_t* comms);
-DLLIMPORT int iMobotComms_rollForward(br_comms_t* comms);
-DLLIMPORT int iMobotComms_stand(br_comms_t* comms);
-DLLIMPORT int iMobotComms_turnLeft(br_comms_t* comms);
-DLLIMPORT int iMobotComms_turnRight(br_comms_t* comms);
+DLLIMPORT int Mobot_motionInchwormLeft(br_comms_t* comms);
+DLLIMPORT int Mobot_motionInchwormRight(br_comms_t* comms);
+DLLIMPORT int Mobot_motionRollBackward(br_comms_t* comms);
+DLLIMPORT int Mobot_motionRollForward(br_comms_t* comms);
+DLLIMPORT int Mobot_motionStand(br_comms_t* comms);
+DLLIMPORT int Mobot_motionTurnLeft(br_comms_t* comms);
+DLLIMPORT int Mobot_motionTurnRight(br_comms_t* comms);
 
 #ifdef _WIN32
 typedef struct bdaddr_s {
@@ -137,33 +157,36 @@ int RecvFromIMobot(br_comms_t* comms, char* buf, int size);
 
 #ifndef C_ONLY
 #if defined (__cplusplus) || defined (_CH_)
-class CiMobotComms {
+class CMobot {
   public:
-    CiMobotComms();
-    ~CiMobotComms();
+    CMobot();
+    CMobot(const char address[], int channel);
+    ~CMobot();
     int connect();
-    int connectAddress(const char* address, int channel);
+    int connectAddress(const char address[], int channel);
     int disconnect();
     int isConnected();
-    int getMotorDirection(int id, int &dir);
-    int getMotorPosition(int id, double &position);
-    int getMotorSpeed(int id, int &speed);
-    int getMotorState(int id, int &state);
+    int getJointAngle(int id, double &angle);
+    int getJointDirection(int id, int &dir);
+    int getJointSpeed(int id, double &speed);
+    int getJointState(int id, int &state);
+    int move(double angle1, double angle2, double angle3, double angle4);
+    int moveJointTo(int id, double angle);
+    int moveJointWait(int id);
+    int moveTo(double angle1, double angle2, double angle3, double angle4);
     int moveWait();
-    int poseZero();
-    int setMotorDirection(int id, int dir);
-    int setMotorPosition(int id, double position);
-    int setMotorSpeed(int id, int speed);
+    int moveZero();
+    int setJointDirection(int id, int dir);
+    int setJointSpeed(int id, double speed);
     int stop();
-    int waitMotor(int id);
 
-    int inchLeft();
-    int inchRight();
-    int rollBackward();
-    int rollForward();
-    int stand();
-    int turnLeft();
-    int turnRight();
+    int motionInchwormLeft();
+    int motionInchwormRight();
+    int motionRollBackward();
+    int motionRollForward();
+    int motionStand();
+    int motionTurnLeft();
+    int motionTurnRight();
   private:
     br_comms_t _comms;
 };

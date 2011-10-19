@@ -2,15 +2,15 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CiMobotComms::getMotorPosition()}\index{getMotorPosition()}}\\
+{\LARGE \texttt{CMobot::moveJointTo()}\index{moveJointTo()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{getMotorPosition()}
+\addcontentsline{toc}{section}{moveJointTo()}
 
 \noindent
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <imobot.h>
-int CiMobotComms::getMotorPosition(int id, double &position);
+int CMobot::moveJointTo(int id, double position);
 \end{verbatim}
 
 \noindent
@@ -28,20 +28,21 @@ The function returns 0 on success and non-zero otherwise.\\
 \item               
 \begin{tabular}{p{10 mm}p{145 mm}}
 \texttt{id} & The joint number to wait for. \\
-\texttt{position} & A variable to store the current position of the iMobot
-motor. The contents of this variable will be overwritten with a value that
-represents the motor's angle in degrees.  \\
+\texttt{position} & The absolute angle to move the motor to.  \\
 \end{tabular}
 \end{description}
 
 \noindent
 {\bf Description}\\
-This function gets the current motor position of an iMobot's motor. The
-position returned is in units of degrees and is accurate to roughly $\pm0.1$
-degrees. \\
+This function commands the motor to move to a position specified in degrees at
+the current motor's speed. The current motor speed may be set with the
+\texttt{setJointSpeed()} member function. Please note that if the motor speed
+is set to zero, the motor will not move after calling the
+\texttt{moveJointTo()} function. \\
 
 \noindent
 {\bf Example}\\
+Please see the example in Section \ref{sec:democode} on page \pageref{sec:democode}.\\
 \noindent
 
 \noindent

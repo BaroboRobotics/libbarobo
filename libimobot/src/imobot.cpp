@@ -30,7 +30,7 @@ extern "C" {
 #include <bluetooth/sdp.h>
 #include <bluetooth/sdp_lib.h>
 
-int iMobot_getMotorDirection(iMobot_t* iMobot, int id, int *dir)
+int iMobot_getJointDirection(iMobot_t* iMobot, int id, int *dir)
 {
   uint8_t byte;
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
@@ -39,7 +39,7 @@ int iMobot_getMotorDirection(iMobot_t* iMobot, int id, int *dir)
   return 0;
 }
 
-int iMobot_getMotorPosition(iMobot_t* iMobot, int id, double *angle)
+int iMobot_getJointAngle(iMobot_t* iMobot, int id, double *angle)
 {
   uint8_t hibyte, lobyte;
   short s_angle;
@@ -52,7 +52,7 @@ int iMobot_getMotorPosition(iMobot_t* iMobot, int id, double *angle)
   return 0;
 }
 
-int iMobot_getMotorSpeed(iMobot_t* iMobot, int id, int *speed)
+int iMobot_getJointSpeed(iMobot_t* iMobot, int id, int *speed)
 {
   uint8_t byte;
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
@@ -64,7 +64,7 @@ int iMobot_getMotorSpeed(iMobot_t* iMobot, int id, int *speed)
   }
 }
 
-int iMobot_getMotorState(iMobot_t* iMobot, int id, int *state)
+int iMobot_getJointState(iMobot_t* iMobot, int id, int *state)
 {
   uint8_t byte;
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
@@ -99,7 +99,7 @@ int iMobot_init(iMobot_t* iMobot)
   }
   /* Set default speeds for the motors */
   for(i = 0; i < 4; i++) {
-    iMobot_setMotorSpeed(iMobot, i, 30);
+    iMobot_setJointSpeed(iMobot, i, 30);
   }
   return 0;
 }
@@ -288,18 +288,18 @@ int iMobot_moveWait(iMobot_t* iMobot)
   return 0;
 }
 
-int iMobot_poseZero(iMobot_t* iMobot)
+int iMobot_moveZero(iMobot_t* iMobot)
 {
   int i;
   for(i = 0; i < 4; i++) {
-    if(iMobot_setMotorPosition(iMobot, i, 0)) {
+    if(iMobot_moveJointTo(iMobot, i, 0)) {
       return -1;
     }
   }
   return 0;
 }
 
-int iMobot_setMotorDirection(iMobot_t* iMobot, int id, int direction)
+int iMobot_setJointDirection(iMobot_t* iMobot, int id, int direction)
 {
   int i;
   uint8_t data[2];
@@ -309,7 +309,7 @@ int iMobot_setMotorDirection(iMobot_t* iMobot, int id, int direction)
   return 0;
 }
 
-int iMobot_setMotorPosition(iMobot_t* iMobot, int id, double angle)
+int iMobot_moveJointTo(iMobot_t* iMobot, int id, double angle)
 {
   /* Send the desired angles to the iMobot */
   /* Need to convert it to 2 bytes and send to motor*/
@@ -328,7 +328,7 @@ int iMobot_setMotorPosition(iMobot_t* iMobot, int id, double angle)
   return 0;
 }
 
-int iMobot_setMotorSpeed(iMobot_t* iMobot, int id, int speed)
+int iMobot_setJointSpeed(iMobot_t* iMobot, int id, int speed)
 {
   uint8_t data[2];
   memcpy(&data, &speed, 2);
@@ -356,12 +356,12 @@ int iMobot_terminate(iMobot_t* iMobot)
 int iMobot_waitMotor(iMobot_t* iMobot, int id)
 {
   int state;
-  if(iMobot_getMotorState(iMobot, id, &state)) {
+  if(iMobot_getJointState(iMobot, id, &state)) {
     return -1;
   }
   while(state != 0) {
     usleep(100000);
-    if(iMobot_getMotorState(iMobot, id, &state)) {
+    if(iMobot_getJointState(iMobot, id, &state)) {
       return -1;
     }
   }
@@ -423,7 +423,7 @@ int iMobot_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, cons
   } else if (MATCHSTR("SET_MOTOR_DIRECTION"))
   {
     sscanf(buf, "%*s %d %d", &id, &int32);
-    if(iMobot_setMotorDirection(iMobot, id, int32)) {
+    if(iMobot_setJointDirection(iMobot, id, int32)) {
       write(socket, "ERROR", 6);
     } else {
       write(socket, "OK", 6);
@@ -431,7 +431,7 @@ int iMobot_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, cons
   } else if (MATCHSTR("GET_MOTOR_DIRECTION"))
   {
     sscanf(buf, "%*s %d", &id);
-    if(iMobot_getMotorDirection(iMobot, id, &int32)) {
+    if(iMobot_getJointDirection(iMobot, id, &int32)) {
       write(socket, "ERROR", 6);
     } else {
       sprintf(mybuf, "%d", int32);
@@ -440,7 +440,7 @@ int iMobot_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, cons
   } else if (MATCHSTR("SET_MOTOR_SPEED"))
   {
     sscanf(buf, "%*s %d %d", &id, &int32);
-    if(iMobot_setMotorSpeed(iMobot, id, int32)) {
+    if(iMobot_setJointSpeed(iMobot, id, int32)) {
       write(socket, "ERROR", 6);
     } else {
       write(socket, "OK", 3);
@@ -448,7 +448,7 @@ int iMobot_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, cons
   } else if (MATCHSTR("GET_MOTOR_SPEED"))
   {
     sscanf(buf, "%*s %d", &id);
-    if(iMobot_getMotorSpeed(iMobot, id, &int32)) {
+    if(iMobot_getJointSpeed(iMobot, id, &int32)) {
       write(socket, "ERROR", 6);
     } else {
       sprintf(mybuf, "%d", int32);
@@ -457,7 +457,7 @@ int iMobot_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, cons
   } else if (MATCHSTR("SET_MOTOR_POSITION"))
   {
     sscanf(buf, "%*s %d %lf", &id, &mydouble);
-    if(iMobot_setMotorPosition(iMobot, id, mydouble)) {
+    if(iMobot_moveJointTo(iMobot, id, mydouble)) {
       write(socket, "ERROR", 6);
     } else {
       write(socket, "OK", 3);
@@ -465,7 +465,7 @@ int iMobot_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, cons
   } else if (MATCHSTR("GET_MOTOR_POSITION"))
   {
     sscanf(buf, "%*s %d", &id);
-    if(iMobot_getMotorPosition(iMobot, id, &mydouble)) {
+    if(iMobot_getJointAngle(iMobot, id, &mydouble)) {
       write(socket, "ERROR", 6);
     } else {
       sprintf(mybuf, "%lf", mydouble);
@@ -474,13 +474,13 @@ int iMobot_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, cons
   } else if (MATCHSTR("STOP")) 
   {
     for(id = 0; id < 4; id++) {
-      iMobot_setMotorSpeed(iMobot, id, 0);
+      iMobot_setJointSpeed(iMobot, id, 0);
     }
     write(socket, "OK", 3);
   }  else if (MATCHSTR("GET_MOTOR_STATE")) 
   {
     sscanf(buf, "%*s %d", &id);
-    if(iMobot_getMotorState(iMobot, id, &int32)) {
+    if(iMobot_getJointState(iMobot, id, &int32)) {
       write(socket, "ERROR", 6);
     } else {
       sprintf(mybuf, "%d", int32);
@@ -505,24 +505,24 @@ CiMobot::CiMobot() {
 CiMobot::~CiMobot() {
 }
 
-int CiMobot::getMotorDirection(int id, int &direction)
+int CiMobot::getJointDirection(int id, int &direction)
 {
-  return iMobot_getMotorDirection(&_iMobot, id, &direction);
+  return iMobot_getJointDirection(&_iMobot, id, &direction);
 }
 
-int CiMobot::getMotorPosition(int id, double &angle)
+int CiMobot::getJointAngle(int id, double &angle)
 {
-  return iMobot_getMotorPosition(&_iMobot, id, &angle);
+  return iMobot_getJointAngle(&_iMobot, id, &angle);
 }
 
-int CiMobot::getMotorSpeed(int id, int &speed)
+int CiMobot::getJointSpeed(int id, int &speed)
 {
-  return iMobot_getMotorSpeed(&_iMobot, id, &speed);
+  return iMobot_getJointSpeed(&_iMobot, id, &speed);
 }
 
-int CiMobot::getMotorState(int id, int &state)
+int CiMobot::getJointState(int id, int &state)
 {
-  return iMobot_getMotorState(&_iMobot, id, &state);
+  return iMobot_getJointState(&_iMobot, id, &state);
 }
 
 int CiMobot::initListenerBluetooth(int channel)
@@ -545,24 +545,24 @@ int CiMobot::moveWait()
   return iMobot_moveWait(&_iMobot);
 }
 
-int CiMobot::poseZero()
+int CiMobot::moveZero()
 {
-  return iMobot_poseZero(&_iMobot);
+  return iMobot_moveZero(&_iMobot);
 }
 
-int CiMobot::setMotorDirection(int id, int direction)
+int CiMobot::setJointDirection(int id, int direction)
 {
-  return iMobot_setMotorDirection(&_iMobot, id, direction);
+  return iMobot_setJointDirection(&_iMobot, id, direction);
 }
 
-int CiMobot::setMotorPosition(int id, double angle)
+int CiMobot::moveJointTo(int id, double angle)
 {
-  return iMobot_setMotorPosition(&_iMobot, id, angle);
+  return iMobot_moveJointTo(&_iMobot, id, angle);
 }
 
-int CiMobot::setMotorSpeed(int id, int speed)
+int CiMobot::setJointSpeed(int id, int speed)
 {
-  return iMobot_setMotorSpeed(&_iMobot, id, speed);
+  return iMobot_setJointSpeed(&_iMobot, id, speed);
 }
 
 int CiMobot::stop()

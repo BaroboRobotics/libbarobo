@@ -3,25 +3,28 @@
 \usepackage{wrapfig}
 \usepackage{amsmath}
 \usepackage{verbatim}
+\usepackage{makeidx}
+
+\title{Setup for Remote iMobot Control in Ch}  
+%\author{David Ko\\Mechanical and Aerospace Engineering}
+%\date{\today} 
+\makeindex
 
 \begin{document}
-\title{Setup for Remote iMobot Control in Ch}  
-\author{David Ko\\Mechanical and Aerospace Engineering}
-\date{\today} 
 \maketitle
 
-\section{The \texttt{imobotcomms} iMobot Remote Control Library}
-The \texttt{imobotcomms} library is a collection of functions geared towards
+\section{The \texttt{CMobot} iMobot Remote Control Library}
+The \texttt{CMobot} library is a collection of functions geared towards
 controlling the motors and reading sensor values of an iMobot module via the
 Bluetooth wireless protocol. The functions are designed to be intuitive
 and easy to use. Various functions are provided to control or obtain the speed,
 direction, and position of the motors. The API includes C-style functions as well
-as a C++ class called \texttt{CiMobotComms} to facilitate C++ style api function
+as a C++ class called \texttt{CMobot} to facilitate C++ style api function
 calls. 
 
 This documentation introduces the basic computer setup required for controlling 
 the iMobot, as well as several demo programs and a complete reference for all
-API function provided with the \texttt{imobotcomms} library.
+API function provided with the \texttt{CMobot} library.
 
 \section{Bluetooth Pairing with the iMobot}
 To control the iMobot with the Bluetooth wireless protocol, the controlling 
@@ -123,17 +126,17 @@ data onto the screen or controlling the iMobot.
 Next, we must initialize the C++ class used to control the iMobot. This line
 initializes a new variable named \texttt{robot} which represents the remote
 iMobot module which we wish to control. This special variable is actually an
-instance of the \texttt{CiMobotComms} class, which contains its own set of
+instance of the \texttt{CMobot} class, which contains its own set of
 functions called ``methods'' or ``member functions''.
 \begin{verbatim}
-CiMobotComms robot;
+CMobot robot;
 \end{verbatim}
 
-The next line will use the \texttt{poseZero} member function. The
-\texttt{poseZero} function causes the iMobot to move all of its motors to the
+The next line will use the \texttt{moveZero} member function. The
+\texttt{moveZero} function causes the iMobot to move all of its motors to the
 zero position.
 \begin{verbatim}
-robot.poseZero();
+robot.moveZero();
 \end{verbatim}
 
 The majority of iMobot control functions do not wait for the robotic motions to
@@ -144,18 +147,24 @@ we must use the \texttt{moveWait} function, as such.
 robot.moveWait();
 \end{verbatim}
 
-The next four lines of code command motors 3 and 4 to rotate 90 degrees, and
-then waits for the motors to stop moving.
+The next four lines of code command joints 1 and 4 to rotate 90 degrees, and
+then waits for the motors to stop moving. Joints 1 and 4 are the faceplates
+of the iMobot which are sometimes used to act as "wheels".
 \begin{verbatim}
-robot.setMotorPosition(IMOBOT_MOTOR3, 90);
-robot.setMotorPosition(IMOBOT_MOTOR4, 90);
-robot.waitMotor(IMOBOT_MOTOR3);
-robot.waitMotor(IMOBOT_MOTOR4);
+robot.moveJointTo(IMOBOT_JOINT1, 90);
+robot.moveJointTo(IMOBOT_JOINT4, 90);
+robot.moveJointWait(IMOBOT_JOINT1);
+robot.moveJointWait(IMOBOT_JOINT4);
 \end{verbatim}
 
 \newpage
 \appendix
 \section{iMobotComms API}
 \input{api/libimobotcomms.tex}
+
+% Index
+\section{Index}
+\addcontentsline{toc}{chapter}{Index}
+\printindex
 
 \end{document}

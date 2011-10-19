@@ -398,8 +398,8 @@ void CiMobotController_WindowsDlg::InitGaits()
 		MOTION_MOVE, angles, motorMask));
 	addGait(gait);
 
-	/* Unstand */
-	gait = new Gait(L"Unstand");
+	/* UnmotionStand */
+	gait = new Gait(L"UnmotionStand");
 	SET_ANGLES(angles, -85, 80, 0, 0);
 	motorMask = 1<<0; motorMask |= 1<<1;
 	gait->addMotion(new Motion(
@@ -465,7 +465,7 @@ afx_msg void CiMobotController_WindowsDlg::OnTimer(UINT nIDEvent)
 	wchar_t buf[200];
 	for(int i = 0; i < 4; i++) {
 		/* Get all of the motor angles */
-		iMobotComms.getMotorPosition(i, value);
+		iMobotComms.getJointAngle(i, value);
 		swprintf(buf, L"%lf", value);
 		m_edit_MotorPositions[i]->SetWindowTextW(buf);
 	}
@@ -478,14 +478,14 @@ afx_msg void CiMobotController_WindowsDlg::OnTimer(UINT nIDEvent)
 		/* Check the position */
 		position = m_slider_Positions[i]->GetPos();
 		if(position != m_positions[i]) {
-			iMobotComms.setMotorPosition(i, (double) position);
+			iMobotComms.moveJointTo(i, (double) position);
 			m_positions[i] = position;
 		}
 
 		/* Check the speed */
 		speed = m_slider_Speeds[i]->GetPos();
 		if(speed != m_speeds[i]) {
-			iMobotComms.setMotorSpeed(i, speed);
+			iMobotComms.setJointSpeed(i, speed);
 			m_speeds[i] = speed;
 		}
 	}
@@ -544,11 +544,11 @@ void CiMobotController_WindowsDlg::UpdateSliders()
 	int speed;
 
 	for(int i = 0; i < 4; i++) {
-		iMobotComms.getMotorPosition(i, position);
+		iMobotComms.getJointAngle(i, position);
 		m_slider_Positions[i]->SetPos( (int) position );
 		m_positions[i] = (int) position;
 
-		iMobotComms.getMotorSpeed(i, speed);
+		iMobotComms.getJointSpeed(i, speed);
 		m_slider_Speeds[i]->SetPos( speed );
 		m_speeds[i] = speed;
 	}
@@ -567,7 +567,7 @@ int CiMobotController_WindowsDlg::poseJoints(const double *angles, unsigned char
 {
 	for(int i = 0; i < 4; i++) {
 		if(motorMask & (1<<i)) {
-			iMobotComms.setMotorPosition(i, angles[i]);
+			iMobotComms.moveJointTo(i, angles[i]);
 		}
 	}
 	return 0;
@@ -579,9 +579,9 @@ int CiMobotController_WindowsDlg::moveJoints(const double *angles, unsigned char
 	for(int i = 0; i < 4; i++) {
 		if(motorMask & (1<<i)) {
 			/* Get the motor position first */
-			iMobotComms.getMotorPosition(i, pos);
+			iMobotComms.getJointAngle(i, pos);
 			/* Set the motor to an offset position */
-			iMobotComms.setMotorPosition(i, pos + angles[i]);
+			iMobotComms.moveJointTo(i, pos + angles[i]);
 		}
 	}
 	return 0;

@@ -18,7 +18,7 @@
 
 
 //////////////////////////////////////////////////////////////////////
-// Include the standard header files
+// Include the motionStandard header files
 
 #define STRICT
 #include <crtdbg.h>

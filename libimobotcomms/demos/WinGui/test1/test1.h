@@ -13,7 +13,7 @@ int moveJoints(const double *angles, unsigned char motorMask);
 int moveWait();
 #if 0
 #include <imobotcomms.h>
-class CiMobotComms : public BRComms
+class CMobot : public BRComms
 {
 public:
 	int poseJoints(double angles[4], unsigned char motorMask);

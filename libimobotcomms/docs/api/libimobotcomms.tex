@@ -2,54 +2,72 @@
 \noindent
 The header file {\bf libimobotcomms.h} defines all the data types, macros 
 and function prototypes for the iMobot API library. The header file
-declares a class called \texttt{CiMobotComms} which contains member functions which
+declares a class called \texttt{CMobot} which contains member functions which
 may be used to control the robot.
 
 \begin{table}[!hp]
 %\capstart
 \begin{center}
-\caption{CiMobotComms Member Functions.}
+\caption{CMobot Member Functions.}
 \begin{tabular}{p{38 mm}p{77 mm}}
 %\begin{tabular}{ll}
 \hline
 Function & Description \\
 \hline
 %\texttt{pose()} \dotfill & Pose multiple joints of the iMobot. \\
-\texttt{CiMobotComms()} \dotfill & The CiMobotComms constructor function. This function
-is called automatically and should not be called explicitly. \\
-\texttt{\textasciitilde CiMobotComms()} \dotfill & The CiMobotComms destructor function. This function
+\texttt{CMobot()} & The CMobot constructor function. This function
+is called automatically and should not be called explicitly. This constructor will 
+automatically try to connect with a paired iMobot using the \texttt{connect()} member
+function. To specify an address to connect to, please use the
+\texttt{CMobot(const char address[], int channel);} constructor.\\
+\texttt{CMobot(const char address[], int channel);} & 
+An alternate constructor which may be used to explicitly specify the address of an iMobot 
+to connect to. \\
+\texttt{\textasciitilde CMobot()} & The CMobot destructor function. This function
 is called automatically and should not be called explicitly. \\
 & \\
-\texttt{connect()} \dotfill & Connect to a remote iMobot module. This function connects to an already-paired iMobot module in Microsoft Windows. This function does not currently work for non-Windows operating systems, such as Mac or Linux. For those operating systems, please use the \texttt{connectAddress()} function instead. \\
-\texttt{connectAddress()} \dotfill & Connect to an iMobot module by specifying its Bluetooth address. \\
-\texttt{disconnect()} \dotfill & Disconnect from an iMobot module. \\
-\texttt{getMotorDirection()} \dotfill & Gets a motor's currently assigned direction. \\
-\texttt{getMotorPosition()} \dotfill & Gets a joint's angle. \\
-\texttt{getMotorSpeed()} \dotfill & Gets a motor's speed. \\
-\texttt{getMotorState()} \dotfill & Gets a motor's current status. \\
-\texttt{isConnected()} \dotfill & This function is used to check the connection to an iMobot. \\
-\texttt{moveWait()} \dotfill & Wait until all motors have stopped moving. \\
-\texttt{pozeZero()} \dotfill & Instructs all motors to go to their zero positions. \\
-\texttt{setMotorDirection()} \dotfill & Set the motor direction of a motor. Set
+\texttt{connect()} & Connect to a remote iMobot module. This function connects to an already-paired iMobot module in Microsoft Windows. This function does not currently work for non-Windows operating systems, such as Mac or Linux. For those operating systems, please use the \texttt{connectAddress()} function instead. \\
+\texttt{connectAddress()} & Connect to an iMobot module by specifying its Bluetooth address. \\
+\texttt{disconnect()} & Disconnect from an iMobot module. \\
+\texttt{getJointAngle()} & Gets a joint's angle. \\
+\texttt{getJointDirection()} & Gets a motor's currently assigned direction. \\
+\texttt{getJointSpeed()} & Gets a motor's speed. \\
+\texttt{getJointState()} & Gets a motor's current status. \\
+\texttt{isConnected()} & This function is used to check the connection to an iMobot. \\
+\texttt{move()} & Move all four joints of the iMobot by specified angles. \\
+\texttt{moveTo()} & Move all four joints of the iMobot to specified absolute angles. \\
+\texttt{moveJointTo()} & Set the desired motor position. \\
+\texttt{moveJointWait()} & Wait until the specified motor has stopped moving. \\
+\texttt{moveWait()} & Wait until all motors have stopped moving. \\
+\texttt{pozeZero()} & Instructs all motors to go to their zero positions. \\
+\texttt{setJointDirection()} & Set the motor direction of a motor. Set
 to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
-\texttt{setMotorPosition()} \dotfill & Set the desired motor position. \\
-\texttt{setMotorSpeed()} \dotfill & Sets a motor's speed. \\
-\texttt{stop()} \dotfill & Stop all currently executing motions of the iMobot. \\
-\texttt{waitMotor()} \dotfill & Wait until the specified motor has stopped moving. \\
-\hline
-Compound Motions & These are convenience functions of commonly used compound motions. \\
-\hline
-\texttt{inchLeft()} \dotfill & Inchworm gait towards the left. \\
-\texttt{inchRight()} \dotfill & Inchworm gait towards the right. \\
-\texttt{rollBackward()} \dotfill & Roll on the faceplates toward the backward direction. \\
-\texttt{rollForward()} \dotfill & Roll on the faceplates forwards. \\
-\texttt{stand()} \dotfill & Stand the iMobot up on its end. \\
-\texttt{turnLeft()} \dotfill & Rotate the iMobot counterclockwise. \\
-\texttt{turnRight()} \dotfill & Rotate the iMobot clockwise. \\
+\texttt{setJointSpeed()} & Sets a motor's speed. \\
+\texttt{stop()} & Stop all currently executing motions of the iMobot. \\
 \hline
 \end{tabular}
 \end{center}
 \label{mobilec_api_cbinary}
+\end{table}
+
+\begin{table}[!h]
+%\capstart
+\begin{center}
+\caption{CMobot Member Functions for Compound Motions.}
+\begin{tabular}{p{38 mm}p{77 mm}}
+Compound Motions & These are convenience functions of commonly used compound motions. \\
+\hline
+\texttt{motionInchwormLeft()} \dotfill & Inchworm gait towards the left. \\
+\texttt{motionInchwormRight()} \dotfill & Inchworm gait towards the right. \\
+\texttt{motionRollBackward()} \dotfill & Roll on the faceplates toward the backward direction. \\
+\texttt{motionRollForward()} \dotfill & Roll on the faceplates forwards. \\
+\texttt{motionStand()} \dotfill & Stand the iMobot up on its end. \\
+\texttt{motionTurnLeft()} \dotfill & Rotate the iMobot counterclockwise. \\
+\texttt{motionTurnRight()} \dotfill & Rotate the iMobot clockwise. \\
+\hline
+\end{tabular}
+\end{center}
+\label{mobilec_api_compound}
 \end{table}
 
 \newpage
@@ -59,40 +77,44 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \pagebreak
 \input{api/disconnect}
 \pagebreak
-\input{api/getMotorDirection}
+\input{api/getJointAngle}
 \pagebreak
-\input{api/getMotorPosition}
+\input{api/getJointDirection}
 \pagebreak
-\input{api/getMotorSpeed}
+\input{api/getJointSpeed}
 \pagebreak
-\input{api/getMotorState}
-\pagebreak
-\input{api/inchLeft}
-\pagebreak
-\input{api/inchRight}
+\input{api/getJointState}
 \pagebreak
 \input{api/isConnected}
 \pagebreak
+\input{api/motionInchwormLeft}
+\pagebreak
+\input{api/motionInchwormRight}
+\pagebreak
+\input{api/motionRollBackward}
+\pagebreak
+\input{api/motionRollForward}
+\pagebreak
+\input{api/motionStand}
+\pagebreak
+\input{api/motionTurnLeft}
+\pagebreak
+\input{api/motionTurnRight}
+\pagebreak
+\input{api/move}
+\pagebreak
+\input{api/moveTo}
+\pagebreak
+\input{api/moveJointTo}
+\pagebreak
+\input{api/moveJointWait}
+\pagebreak
 \input{api/moveWait}
 \pagebreak
-\input{api/poseZero}
+\input{api/moveZero}
 \pagebreak
-\input{api/rollBackward}
+\input{api/setJointDirection}
 \pagebreak
-\input{api/rollForward}
-\pagebreak
-\input{api/setMotorDirection}
-\pagebreak
-\input{api/setMotorPosition}
-\pagebreak
-\input{api/setMotorSpeed}
-\pagebreak
-\input{api/stand}
+\input{api/setJointSpeed}
 \pagebreak
 \input{api/stop}
-\pagebreak
-\input{api/turnLeft}
-\pagebreak
-\input{api/turnRight}
-\pagebreak
-\input{api/waitMotor}

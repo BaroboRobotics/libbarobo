@@ -15,7 +15,7 @@ void on_button_connect_clicked(GtkWidget* widget, gpointer data)
   address = gtk_entry_get_text(address_entry); 
   channel = gtk_entry_get_text(channel_entry); 
   sscanf(channel, "%d", &c);
-  err = iMobotComms_connectAddress(imobotComms, address, c);
+  err = Mobot_connectAddress(imobotComms, address, c);
   if(err == 0) {
     /* Change the status bar */
     /* Set the status bar */
@@ -28,8 +28,10 @@ void on_button_connect_clicked(GtkWidget* widget, gpointer data)
 
     /* Get the motor speeds and set the sliders */
     int speed;
+    double lspeed;
     for(i = 0; i < 4; i++) {
-      iMobotComms_getMotorSpeed(imobotComms, i, &speed);
+      Mobot_getJointSpeed(imobotComms, i, &lspeed);
+      speed = lspeed * 100;
       gtk_range_set_value(GTK_RANGE(scale_motorSpeeds[i]), speed);
     }
   }

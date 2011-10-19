@@ -2,20 +2,20 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CiMobotComms::rollBackward()}\index{rollBackward()}}\\
+{\LARGE \texttt{CMobot::motionTurnLeft()}\index{motionTurnLeft()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{rollBackward()}
+\addcontentsline{toc}{section}{motionTurnLeft()}
 
 \noindent
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <imobot.h>
-int CiMobotComms::rollBackward();
+int CMobot::motionTurnLeft();
 \end{verbatim}
 
 \noindent
 {\bf Purpose}\\
-Use the faceplates as wheels to roll backward.\\
+Rotate the iMobot using the faceplates as wheels.\\
 
 \noindent
 {\bf Return Value}\\
@@ -27,11 +27,11 @@ None.\\
 
 \noindent
 {\bf Description}\\
-This function causes each of the faceplates to rotate 90 degrees to roll the
-robot backward.\\
+This function causes the iMobot to rotate the faceplates in opposite directions
+to cause the robot to rotate counter-clockwise.\\
 
 \noindent
 {\bf See Also}\\
-\texttt{rollBackward()}
+\texttt{motionTurnRight()}
 
 %\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

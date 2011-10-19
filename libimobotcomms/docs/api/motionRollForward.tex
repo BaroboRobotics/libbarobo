@@ -2,20 +2,20 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CiMobotComms::inchLeft()}\index{inchLeft()}}\\
+{\LARGE \texttt{CMobot::motionRollForward()}\index{motionRollForward()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{inchLeft()}
+\addcontentsline{toc}{section}{motionRollForward()}
 
 \noindent
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <imobot.h>
-int CiMobotComms::inchLeft();
+int CMobot::motionRollForward();
 \end{verbatim}
 
 \noindent
 {\bf Purpose}\\
-Perform the inch-worm gait to the left.\\
+Use the faceplates as wheels to roll forward.\\
 
 \noindent
 {\bf Return Value}\\
@@ -27,11 +27,11 @@ None.\\
 
 \noindent
 {\bf Description}\\
-This function causes the iMobot to perform a single cycle of the inchworm gait
-to the left.\\
+This function causes each of the faceplates to rotate 90 degrees to roll the
+robot forward.\\
 
 \noindent
 {\bf See Also}\\
-\texttt{inchRight()}
+\texttt{motionRollBackward()}
 
 %\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

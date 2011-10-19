@@ -2,20 +2,20 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CiMobotComms::turnRight()}\index{turnRight()}}\\
+{\LARGE \texttt{CMobot::motionInchwormRight()}\index{motionInchwormRight()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{turnRight()}
+\addcontentsline{toc}{section}{motionInchwormRight()}
 
 \noindent
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <imobot.h>
-int CiMobotComms::turnRight();
+int CMobot::motionInchwormRight();
 \end{verbatim}
 
 \noindent
 {\bf Purpose}\\
-Rotate the iMobot using the faceplates as wheels.\\
+Perform the inch-worm gait to the right.\\
 
 \noindent
 {\bf Return Value}\\
@@ -27,11 +27,11 @@ None.\\
 
 \noindent
 {\bf Description}\\
-This function causes the iMobot to rotate the faceplates in opposite directions
-to cause the robot to rotate clockwise.\\
+This function causes the iMobot to perform a single cycle of the inchworm gait
+to the right.\\
 
 \noindent
 {\bf See Also}\\
-\texttt{turnLeft()}
+\texttt{motionInchwormLeft()}
 
 %\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

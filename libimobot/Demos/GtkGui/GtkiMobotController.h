@@ -16,6 +16,7 @@ int init_gaits();
 /* Main Dialog */
 void on_menuitem_connect_activate(GtkWidget* widget, gpointer data);
 void on_menuitem_localInit_activate(GtkWidget* widget, gpointer data);
+void on_menuitem_quit_activate(GtkWidget* widget, gpointer data);
 void on_button_connectRemote_clicked(GtkWidget* widget, gpointer data);
 void on_button_connectLocal_clicked(GtkWidget* widget, gpointer data);
 void on_checkmenuitem_motorPos_toggled(GtkWidget* widget, gpointer data);
@@ -38,6 +39,7 @@ void on_button_inchRight_clicked(GtkWidget* widget, gpointer data);
 void on_button_stop_clicked(GtkWidget* widget, gpointer data);
 void on_button_home_clicked(GtkWidget* widget, gpointer data);
 void on_button_playGait_clicked(GtkWidget* widget, gpointer data);
+void on_button_moveJoints_clicked(GtkWidget* widget, gpointer data);
 gboolean on_vscale_motorspeed0_change_value(
     GtkRange* range,
     GtkScrollType scroll,

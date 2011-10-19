@@ -2,20 +2,20 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CiMobotComms::poseZero()}\index{poseZero()}}\\
+{\LARGE \texttt{CMobot::move()}\index{move()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{poseZero()}
+\addcontentsline{toc}{section}{move()}
 
 \noindent
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <imobot.h>
-int CiMobotComms::poseZero();
+int CMobot::move(double angle1, double angle2, double angle3, double angle4);
 \end{verbatim}
 
 \noindent
 {\bf Purpose}\\
-Move all of the joints of an iMobot to their zero position.\\
+Move all of the joints of an iMobot by specified angles.\\
 
 \noindent
 {\bf Return Value}\\
@@ -27,10 +27,8 @@ None.\\
 
 \noindent
 {\bf Description}\\
-This function moves all of the joints of an iMobot to their zero position.
-Please note that this function is non-blocking and will return immediately. Use
-this function in conjunction with the \texttt{moveWait()} function to block
-until the movement completes.\\
+This function moves all of the joints of an iMobot by the specified number of degrees
+from their current positions. \\
 
 \noindent
 {\bf Example}\\

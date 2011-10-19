@@ -2,20 +2,26 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CiMobotComms::setMotorDirection()}\index{setMotorDirection()}}\\
+{\LARGE \texttt{CMobot::setJointDirection()}\index{setJointDirection()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{setMotorDirection()}
+\addcontentsline{toc}{section}{setJointDirection()}
 
 \noindent
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <imobot.h>
-int CiMobotComms::setMotorDirection(int id, int direction);
+enum iMobot_motor_direction_e
+{
+  IMOBOT_JOINT_DIR_AUTO,
+  IMOBOT_JOINT_DIR_FORWARD,
+  IMOBOT_JOINT_DIR_BACKWARD
+};
+int CMobot::setJointDirection(int id, int direction);
 \end{verbatim}
 
 \noindent
 {\bf Purpose}\\
-Set's a motor's direction. In conjunction with \texttt{setMotorSpeed()}, this
+Set's a motor's direction. In conjunction with \texttt{setJointSpeed()}, this
 function may be used to cause a motor to turn indefinitely.\\
 
 \noindent
@@ -40,8 +46,8 @@ direction are:
 \begin{itemize}
 \item 0: Automatic direction. This is the default setting. 
 \item 1: Forward. If this value is used with a non-zero speed set using the
-\texttt{setMotorSpeed()} function, the motor will turn forward indefinitely.
-\time 2: Backward. Similar to "1", except the motor will spin backward.
+\texttt{setJointSpeed()} function, the motor will turn forward indefinitely.
+\item 2: Backward. Similar to "1", except the motor will spin backward.
 \end{itemize}
 
 \noindent

@@ -14,7 +14,7 @@ class CiMobotController_WindowsDlg : public CDialog
 {
 // Construction
 public:
-	CiMobotController_WindowsDlg(CWnd* pParent = NULL);	// standard constructor
+	CiMobotController_WindowsDlg(CWnd* pParent = NULL);	// motionStandard constructor
 
 // Dialog Data
 	enum { IDD = IDD_IMOBOTCONTROLLER_WINDOWS_DIALOG };
@@ -25,7 +25,7 @@ public:
 
 // Implementation
 protected:
-  CiMobotComms iMobotComms;
+  CMobot iMobotComms;
 	HICON m_hIcon;
 
 	// Generated message map functions

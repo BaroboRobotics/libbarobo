@@ -2,15 +2,15 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CiMobotComms::waitMotor()}\index{waitMotor()}}\\
+{\LARGE \texttt{CMobot::moveJointWait()}\index{moveJointWait()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{waitMotor()}
+\addcontentsline{toc}{section}{moveJointWait()}
 
 \noindent
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <imobot.h>
-int CiMobotComms::waitMotor(int id);
+int CMobot::moveJointWait(int id);
 \end{verbatim}
 
 \noindent
@@ -36,7 +36,7 @@ The function returns 0 on success and non-zero otherwise.\\
 This function is used to wait for a joint motion to finish. Functions such as
 \texttt{poseJoint()} and \texttt{moveJoint()} do not wait for a joint to finish
 moving before continuing to allow multiple joints to move at the same time. The
-\texttt{waitMotor()} or \texttt{waitMotor()} functions are used to wait for
+\texttt{moveJointWait()} or \texttt{moveJointWait()} functions are used to wait for
 robotic motions to complete.
 
 Please note that if this function is called after a motor has been commanded to

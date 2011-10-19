@@ -2,15 +2,15 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CiMobotComms::setMotorSpeed()}\index{setMotorSpeed()}}\\
+{\LARGE \texttt{CMobot::getJointSpeed()}\index{getJointSpeed()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{setMotorSpeed()}
+\addcontentsline{toc}{section}{getJointSpeed()}
 
 \noindent
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <imobot.h>
-int CiMobotComms::setMotorSpeed(int id, int speed);
+int CMobot::getJointSpeed(int id, double &speed);
 \end{verbatim}
 
 \noindent
@@ -28,14 +28,16 @@ The function returns 0 on success and non-zero otherwise.\\
 \item               
 \begin{tabular}{p{10 mm}p{145 mm}}
 \texttt{id} & The joint number to pose. \\
-\texttt{speed} & An unsigned short variable indicating the requested speed.
+\texttt{speed} & A variable of type \texttt{double}. The value of this variable
+will be overwritten with the current speed setting of the joint, which is a
+value between 0 and 1.
 \end{tabular}
 \end{description}
 
 \noindent
 {\bf Description}\\
-This function is used to set the speed of a joint of an iMobot. Valid speed
-values range from 0 to 100.
+This function is used to find the speed of a joint.  This is the speed at which the joint will move when given motion commands. The values should be between 0 and 1. \\
+
 \noindent
 {\bf Example}\\
 \noindent

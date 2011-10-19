@@ -3,20 +3,15 @@
 #include <stdio.h>
 #include <imobotcomms.h>
 
-CiMobotComms robot;
-/* Connect to an already paired iMobot */
-if(robot.connect()) {
-  printf("Error connecting.\n");
-}
-
+CMobot robot;
 /* Set the robot to "home" position, where all joint angles are 0 degrees. */
-robot.poseZero();
+robot.moveZero();
 robot.moveWait();
 
 /* Rotate each of the faceplates by 90 degrees */
-robot.setMotorPosition(IMOBOT_MOTOR3, 90);
-robot.setMotorPosition(IMOBOT_MOTOR4, 90);
+robot.moveJointTo(IMOBOT_JOINT1, 90);
+robot.moveJointTo(IMOBOT_JOINT4, 90);
 
 /* Wait for the movement to complete */
-robot.waitMotor(IMOBOT_MOTOR3);
-robot.waitMotor(IMOBOT_MOTOR4);
+robot.moveJointWait(IMOBOT_JOINT1);
+robot.moveJointWait(IMOBOT_JOINT4);

@@ -29,7 +29,7 @@ typedef struct imobotMotion_s {
 //define serial/bluetooth connection
 Serial bluetooth;
 BthUtils objBthUtils;
-CiMobotComms samplebt ; 
+CMobot samplebt ; 
 
 imobotMotion_t g_imobotPoses[50];
 int g_numPoses;
@@ -366,10 +366,10 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 					else
 						MessageBox(hDlg, L"Connected to Device", L"Success", MB_OK);
 
-					samplebt.setMotorSpeed(0, 40);
-					samplebt.setMotorSpeed(1, 40);
-					samplebt.setMotorSpeed(2, 40);
-					samplebt.setMotorSpeed(3, 40);
+					samplebt.setJointSpeed(0, 40);
+					samplebt.setJointSpeed(1, 40);
+					samplebt.setJointSpeed(2, 40);
+					samplebt.setJointSpeed(3, 40);
 
 
 					break;
@@ -425,25 +425,25 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 					double tempenc ;
 					
-					samplebt.getMotorPosition(0,tempenc);
+					samplebt.getJointAngle(0,tempenc);
 					swprintf(readdata,L"%lf",tempenc);
 					SetDlgItemText(hDlg, IDC_ENC5, readdata);
 					SetDlgItemText(hDlg, IDC_ENC1, readdata);
 					Sleep(500);
 					
-					samplebt.getMotorPosition(1,tempenc);
+					samplebt.getJointAngle(1,tempenc);
 					swprintf(readdata,L"%lf",tempenc);
 					SetDlgItemText(hDlg, IDC_ENC6, readdata);
 					SetDlgItemText(hDlg, IDC_ENC2, readdata);
 					Sleep(500);
 
-					samplebt.getMotorPosition(2,tempenc);
+					samplebt.getJointAngle(2,tempenc);
 					swprintf(readdata,L"lf",tempenc);
 					SetDlgItemText(hDlg, IDC_ENC7, readdata);
 					SetDlgItemText(hDlg, IDC_ENC3, readdata);
 					Sleep(500);
 
-					samplebt.getMotorPosition(3,tempenc);
+					samplebt.getJointAngle(3,tempenc);
 					swprintf(readdata,L"lf",tempenc);
 					SetDlgItemText(hDlg, IDC_ENC8, readdata);
 					SetDlgItemText(hDlg, IDC_ENC4, readdata);
@@ -614,22 +614,22 @@ INT_PTR CALLBACK first_dia(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
 
 					double tempenc ;
 					
-					samplebt.getMotorPosition(0,tempenc);
+					samplebt.getJointAngle(0,tempenc);
 					swprintf(readdata,L"%lf",tempenc);
 					SetDlgItemText(hDlg, IDC_ENC5, readdata);
 					
 					
-					samplebt.getMotorPosition(1,tempenc);
+					samplebt.getJointAngle(1,tempenc);
 					swprintf(readdata,L"%lf",tempenc);
 					SetDlgItemText(hDlg, IDC_ENC6, readdata);
 					
 
-					samplebt.getMotorPosition(2,tempenc);
+					samplebt.getJointAngle(2,tempenc);
 					swprintf(readdata,L"%lf",tempenc);
 					SetDlgItemText(hDlg, IDC_ENC7, readdata);
 					
 
-					samplebt.getMotorPosition(3,tempenc);
+					samplebt.getJointAngle(3,tempenc);
 					swprintf(readdata,L"%lf",tempenc);
 					SetDlgItemText(hDlg, IDC_ENC8, readdata);
 					
@@ -698,7 +698,7 @@ INT_PTR CALLBACK pose_dia(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 						//samplebt.poseJointAngles(angles, motorMask);
 						for(i = 0; i < 4; i++) {
 							if((1<<i) & motorMask) {
-								samplebt.setMotorPosition(i, angles[i]);
+								samplebt.moveJointTo(i, angles[i]);
 							}
 						}
 						return TRUE;
@@ -737,7 +737,7 @@ INT_PTR CALLBACK pose_dia(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 						for(i = 0; i < 4; i++) {
 							if((1<<i) & g_imobotPoses[index].motorMask)
 							{
-								samplebt.setMotorPosition(i,g_imobotPoses[index].angles[i]);
+								samplebt.moveJointTo(i,g_imobotPoses[index].angles[i]);
 							}
 						}
 						return TRUE;
@@ -791,9 +791,9 @@ INT_PTR CALLBACK move_dia(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 						
 						for(i = 0; i < 4; i++) {
 							if((1<<i) & motorMask) {
-								samplebt.getMotorPosition(i, angle);
+								samplebt.getJointAngle(i, angle);
 								angle += angles[i];
-								samplebt.setMotorPosition(i, angle);
+								samplebt.moveJointTo(i, angle);
 							}
 						}
 						return TRUE;
@@ -829,9 +829,9 @@ INT_PTR CALLBACK move_dia(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 						double angle;
 						for(i = 0; i < 4; i++) {
 							if((1<<i) & g_imobotMoves[index].motorMask) {
-								samplebt.getMotorPosition(i, angle);
+								samplebt.getJointAngle(i, angle);
 								angle += g_imobotMoves[index].angles[i];
-								samplebt.setMotorPosition(i, angle);
+								samplebt.moveJointTo(i, angle);
 							}
 						}
 						/*samplebt.moveJointAngles(
@@ -1225,8 +1225,8 @@ int initGaits()
 		MOTION_MOVE, angles, motorMask));
 	addGait(gait);
 
-	/* Unstand */
-	gait = new Gait(L"Unstand");
+	/* UnmotionStand */
+	gait = new Gait(L"UnmotionStand");
 	SET_ANGLES(angles, -85, 80, 0, 0);
 	motorMask = 1<<0; motorMask |= 1<<1;
 	gait->addMotion(new Motion(
@@ -1252,7 +1252,7 @@ int poseJoints(const double *angles, unsigned char motorMask)
 	int i;
 	for(i = 0; i < 4; i++) {
 		if((1<<i) & motorMask) {
-			samplebt.setMotorPosition(i, angles[i]);
+			samplebt.moveJointTo(i, angles[i]);
 		}
 	}
 	return 0;
@@ -1264,9 +1264,9 @@ int moveJoints(const double *angles, unsigned char motorMask)
 	double angle;
 	for(i = 0; i < 4; i++) {
 		if((1<<i) & motorMask) {
-			samplebt.getMotorPosition(i, angle);
+			samplebt.getJointAngle(i, angle);
 			angle += angles[i];
-			samplebt.setMotorPosition(i, angle);
+			samplebt.moveJointTo(i, angle);
 		}
 	}
 	return 0;
@@ -1276,7 +1276,7 @@ int moveWait()
 {
 	int i;
 	for(i = 0; i < 4; i++) {
-		samplebt.waitMotor(i);
+		samplebt.moveJointWait(i);
 	}
 	return 0;
 }

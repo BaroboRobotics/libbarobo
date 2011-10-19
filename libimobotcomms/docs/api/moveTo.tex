@@ -2,20 +2,20 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CMobot::disconnect()}\index{disconnect()}}\\
+{\LARGE \texttt{CMobot::moveTo()}\index{moveTo()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{disconnect()}
+\addcontentsline{toc}{section}{moveTo()}
 
 \noindent
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <imobot.h>
-int CMobot::disconnect();
+int CMobot::moveTo(double angle1, double angle2, double angle3, double angle4);
 \end{verbatim}
 
 \noindent
 {\bf Purpose}\\
-Disconnect from a remote iMobot.\\
+Move all of the joints of an iMobot to the specified positions.\\
 
 \noindent
 {\bf Return Value}\\
@@ -27,13 +27,11 @@ None.\\
 
 \noindent
 {\bf Description}\\
-This function is used from disconnect to an iMobot. A call to this function is
-not necessary before the termination of a program. It is only necessary if
-another connection will be established within the same program at a later time.
-\\
+This function moves all of the joints of an iMobot to the specified absolute positions. \\
 
 \noindent
 {\bf Example}\\
+Please see the demo at Section \ref{sec:democode} on page \pageref{sec:democode}.\\
 \noindent
 
 \noindent
