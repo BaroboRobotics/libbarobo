@@ -21,6 +21,11 @@ void on_menuitem_localInit_activate(GtkWidget* widget, gpointer data)
   gtk_statusbar_push(status, contextid, "Connected.");
 }
 
+void on_menuitem_quit_activate(GtkWidget* widget, gpointer data)
+{
+  gtk_main_quit();
+}
+
 void on_button_connectRemote_clicked(GtkWidget* widget, gpointer data)
 {
   gtk_widget_hide(dialog_intro);

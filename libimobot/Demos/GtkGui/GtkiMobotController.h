@@ -16,6 +16,7 @@ int init_gaits();
 /* Main Dialog */
 void on_menuitem_connect_activate(GtkWidget* widget, gpointer data);
 void on_menuitem_localInit_activate(GtkWidget* widget, gpointer data);
+void on_menuitem_quit_activate(GtkWidget* widget, gpointer data);
 void on_button_connectRemote_clicked(GtkWidget* widget, gpointer data);
 void on_button_connectLocal_clicked(GtkWidget* widget, gpointer data);
 void on_checkmenuitem_motorPos_toggled(GtkWidget* widget, gpointer data);

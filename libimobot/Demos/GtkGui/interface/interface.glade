@@ -266,6 +266,7 @@ wish to control.</property>
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="on_menuitem_connect_activate" swapped="no"/>
                       </object>
                     </child>
                     <child>
@@ -274,6 +275,7 @@ wish to control.</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
                         <property name="label" translatable="yes">Initialize Local I2C</property>
+                        <signal name="activate" handler="on_menuitem_localInit_activate" swapped="no"/>
                       </object>
                     </child>
                     <child>
@@ -290,6 +292,7 @@ wish to control.</property>
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="on_menuitem_quit_activate" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -359,7 +362,7 @@ wish to control.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="n_rows">4</property>
-                        <property name="n_columns">4</property>
+                        <property name="n_columns">5</property>
                         <child>
                           <object class="GtkButton" id="button_motor0back">
                             <property name="visible">True</property>
@@ -668,6 +671,31 @@ wish to control.</property>
                             <property name="y_options"></property>
                           </packing>
                         </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="button_home">
+                            <property name="label" translatable="yes">Home</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="use_action_appearance">False</property>
+                            <signal name="clicked" handler="on_button_home_clicked" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="left_attach">4</property>
+                            <property name="right_attach">5</property>
+                            <property name="top_attach">3</property>
+                            <property name="bottom_attach">4</property>
+                          </packing>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -882,7 +910,7 @@ wish to control.</property>
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Motor Speeds&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Joint Speeds&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                   </object>
                 </child>
@@ -1136,7 +1164,7 @@ wish to control.</property>
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Motor Positions&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Joint Positions&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                   </object>
                 </child>
@@ -1163,23 +1191,33 @@ wish to control.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
-                          <object class="GtkTreeView" id="treeview_gaits">
+                          <object class="GtkScrolledWindow" id="scrolledwindow1">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="model">liststore_gaits</property>
-                            <property name="enable_search">False</property>
+                            <property name="hscrollbar_policy">never</property>
+                            <property name="vscrollbar_policy">automatic</property>
                             <child>
-                              <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                                <property name="resizable">True</property>
-                                <property name="title" translatable="yes">Name</property>
+                              <object class="GtkTreeView" id="treeview_gaits">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="model">liststore_gaits</property>
+                                <property name="headers_clickable">False</property>
+                                <property name="enable_search">False</property>
+                                <property name="search_column">0</property>
                                 <child>
-                                  <object class="GtkCellRendererText" id="cellrenderertext1">
-                                    <property name="background_gdk">#ffffffffffff</property>
-                                    <property name="font">Normal</property>
+                                  <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                                    <property name="resizable">True</property>
+                                    <property name="title" translatable="yes">Name</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext1">
+                                        <property name="background_gdk">#ffffffffffff</property>
+                                        <property name="font">Normal</property>
+                                      </object>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
                                   </object>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                  </attributes>
                                 </child>
                               </object>
                             </child>
