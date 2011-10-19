@@ -454,7 +454,23 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
+				RelativePath=".\res\bitmap1.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\bitmap2.bmp"
+				>
+			</File>
+			<File
 				RelativePath=".\res\ico00001.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\res\ico00002.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\res\ico00003.ico"
 				>
 			</File>
 			<File
@@ -463,6 +479,14 @@
 			</File>
 			<File
 				RelativePath=".\res\icon2.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\iMobot_diagram.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\libimobot\Demos\GtkGui\interface\imobot_diagram.png"
 				>
 			</File>
 			<File

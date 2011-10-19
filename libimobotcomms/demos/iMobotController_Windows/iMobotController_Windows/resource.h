@@ -10,6 +10,12 @@
 #define IDI_ICON_up                     129
 #define IDI_ICON_down                   130
 #define IDI_ICON_stop                   131
+#define IDB_BITMAP1                     132
+#define IDB_BITMAP2                     133
+#define IDB_PNG1                        134
+#define IDI_ICON_right                  135
+#define IDI_ICON_left                   136
+#define IDB_BITMAP3                     137
 #define IDC_SLIDER_speed1               1000
 #define IDC_EDIT_speed1                 1001
 #define IDC_SLIDER_speed2               1002
@@ -42,15 +48,19 @@
 #define IDC_SLIDER_speed8               1029
 #define IDC_SLIDER_position4            1029
 #define IDC_BUTTON_connect              1031
-#define IDC_EDIT_channel                1032
+#define IDC_BUTTON_rollLeft             1034
+#define IDC_BUTTON_rollForward          1035
+#define IDC_BUTTON_rollRight            1036
+#define IDC_BUTTON_rollStop             1037
+#define IDC_BUTTON_rollBack             1038
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        132
+#define _APS_NEXT_RESOURCE_VALUE        138
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1033
+#define _APS_NEXT_CONTROL_VALUE         1035
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
