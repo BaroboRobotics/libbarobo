@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <imobotcomms.h>
+#include <mobot.h>
 
 CMobot robot;
 /* Run the built-in motionStand function */

@@ -26,7 +26,7 @@ This documentation introduces the basic computer setup required for controlling
 the iMobot, as well as several demo programs and a complete reference for all
 API function provided with the \texttt{CMobot} library.
 
-\section{Bluetooth Pairing with the iMobot}
+\section{\label{sec:pairing}Bluetooth Pairing with the iMobot}
 To control the iMobot with the Bluetooth wireless protocol, the controlling 
 computer must be equipped with Bluetooth. If the computer does not have
 Bluetooth built-in, an external USB Bluetooth dongle may be used. The following
@@ -120,7 +120,7 @@ data onto the screen or controlling the iMobot.
 
 \begin{verbatim}
 #include <stdio.h>       // Required for printf()
-#include <imobotcomms.h> // Required for iMobot control functions
+#include <mobot.h> // Required for iMobot control functions
 \end{verbatim}
 
 Next, we must initialize the C++ class used to control the iMobot. This line
@@ -131,6 +131,17 @@ functions called ``methods'' or ``member functions''.
 \begin{verbatim}
 CMobot robot;
 \end{verbatim}
+Note that there is an alternative way to create the \texttt{robot} variable.
+The alternate method takes the following syntax:
+\begin{verbatim}
+CMobot robot("12:34:56:78:90:12", 20);
+\end{verbatim}
+The alternate syntax instructs the new \texttt{CMobot} variable named 
+\texttt{robot} to explicitely connect to the robot with address
+\texttt{"12:34:56:78:90:12"} and channel \texttt{20}. This method allows
+the iMobot program to connect to an iMobot even if it has not been paired,
+as described in Section \ref{sec:pairing}. However, it requires the user
+to know the Bluetooth address of the iMobot in advance.
 
 The next line will use the \texttt{moveZero} member function. The
 \texttt{moveZero} function causes the iMobot to move all of its motors to the

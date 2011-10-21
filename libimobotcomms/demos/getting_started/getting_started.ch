@@ -1,7 +1,7 @@
 /* Filename: getting_started.ch */
 
 #include <stdio.h>
-#include <imobotcomms.h>
+#include <mobot.h>
 
 CMobot robot;
 /* Set the robot to "home" position, where all joint angles are 0 degrees. */

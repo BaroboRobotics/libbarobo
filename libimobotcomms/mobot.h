@@ -6,6 +6,8 @@
 #ifdef _WIN32_
 #define _WIN32
 #define UINT8 uint8_t
+#else
+#pragma package <chbluetooth>
 #endif
 
 #endif
@@ -158,8 +160,12 @@ int RecvFromIMobot(br_comms_t* comms, char* buf, int size);
 #if defined (__cplusplus) || defined (_CH_)
 class CMobot {
   public:
+#ifdef _CH_
+    CMobot(...);
+#else
     CMobot();
     CMobot(const char address[], int channel);
+#endif
     ~CMobot();
     int connect();
     int connectAddress(const char address[], int channel);

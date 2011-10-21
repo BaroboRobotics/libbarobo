@@ -1,7 +1,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "imobotcomms.h"
+#include "mobot.h"
+
+#ifdef _CH_
+#include <stdarg.h>
+#endif
 
 
 int Mobot_init(br_comms_t* comms)
@@ -521,6 +525,33 @@ int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
 
 #ifndef C_ONLY
 
+#ifdef _CH_
+CMobot::CMobot(...)
+{
+  int vacount;
+  va_list ap;
+  const char* address;
+  int channel;
+  va_start(ap, VA_NOARG);
+  vacount = va_count(ap);
+  if(vacount == 0) {
+    Mobot_init(&_comms);
+    /* Try to connect */
+    connect();
+  } else if (vacount == 2)
+  {
+    address = va_arg(ap, const char*);
+    channel = va_arg(ap, int);
+    Mobot_init(&_comms);
+    /* Try to connect */
+    connectAddress(address, channel);
+  } else {
+    fprintf(stderr, 
+    "Incorrect usage of CMobot constructor. Correct prototypes are\n"
+    "CMobot::CMobot(); and CMobot::CMobot(const char address[], int channel);\n" );
+  }
+}
+#else
 CMobot::CMobot()
 {
   Mobot_init(&_comms);
@@ -534,7 +565,7 @@ CMobot::CMobot(const char address[], int channel)
   /* Try to connect */
   connectAddress(address, channel);
 }
-
+#endif
 CMobot::~CMobot()
 {
 }

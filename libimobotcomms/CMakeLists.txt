@@ -7,17 +7,17 @@ project(LIBIMOBOTCOMMS)
 
 
 if(CMAKE_HOST_WIN32)
-	add_library(imobotcomms STATIC
-	  imobotcomms.cpp
+	add_library(mobot STATIC
+	  mobot.cpp
 	  )
-	target_link_libraries(imobotcomms Ws2_32)
+	target_link_libraries(mobot Ws2_32)
 else(CMAKE_HOST_WIN32)
-	add_library(imobotcomms SHARED
-	  imobotcomms.cpp
+	add_library(mobot SHARED
+	  mobot.cpp
 	  )
-	target_link_libraries(imobotcomms bluetooth)
+	target_link_libraries(mobot bluetooth)
 endif(CMAKE_HOST_WIN32)
 
-#install(TARGETS imobotcomms LIBRARY DESTINATION lib)
+#install(TARGETS mobot LIBRARY DESTINATION lib)
 
 add_subdirectory(demos)
