@@ -3,4 +3,4 @@ imobotcomms_api.pdf:
 	makeindex imobotcomms_api.idx
 	pdflatex imobotcomms_api.tex
 clean:
-	rm -rf imobotcomms_api.pdf
+	rm -rf imobotcomms_api.pdf imobotcomms_api.ind

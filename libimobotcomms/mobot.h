@@ -1,5 +1,5 @@
-#ifndef _IMOBOTCOMMS_H_
-#define _IMOBOTCOMMS_H_
+#ifndef _MOBOTCOMMS_H_
+#define _MOBOTCOMMS_H_
 
 #ifdef _CH_
 #pragma package <chbarobo>
@@ -41,34 +41,34 @@ enc[1] = angles[1] * 10; \
 enc[2] = angles[2] * 10; \
 enc[3] = angles[3] * 10
 
-#ifndef IMOBOT_JOINTS_E
-#define IMOBOT_JOINTS_E
-enum iMobot_joints_e {
-  IMOBOT_JOINT1 = 0,
-  IMOBOT_JOINT2,
-  IMOBOT_JOINT3,
-  IMOBOT_JOINT4,
-  IMOBOT_NUM_JOINTS 
-};
+#ifndef MOBOT_JOINTS_E
+#define MOBOT_JOINTS_E
+typedef enum mobot_joints_e {
+  MOBOT_JOINT1 = 0,
+  MOBOT_JOINT2,
+  MOBOT_JOINT3,
+  MOBOT_JOINT4,
+  MOBOT_NUM_JOINTS 
+} mobot_joints_t;
 #endif
 
-#ifndef IMOBOT_JOINT_DIRECTION_E
-#define IMOBOT_JOINT_DIRECTION_E
-enum iMobot_motor_direction_e
+#ifndef MOBOT_JOINT_DIRECTION_E
+#define MOBOT_JOINT_DIRECTION_E
+typedef enum mobot_motor_direction_e
 {
-  IMOBOT_JOINT_DIR_AUTO,
-  IMOBOT_JOINT_DIR_FORWARD,
-  IMOBOT_JOINT_DIR_BACKWARD
-};
+  MOBOT_JOINT_DIR_AUTO,
+  MOBOT_JOINT_DIR_FORWARD,
+  MOBOT_JOINT_DIR_BACKWARD
+} mobot_motor_direction_t;
 #endif
 
-#ifndef IMOBOT_JOINT_STATE_E
-#define IMOBOT_JOINT_STATE_E
-enum iMobot_joint_state_e
+#ifndef MOBOT_JOINT_STATE_E
+#define MOBOT_JOINT_STATE_E
+enum mobot_joint_state_e
 {
-    IMOBOT_JOINT_IDLE = 0,
-    IMOBOT_JOINT_MOVING,
-    IMOBOT_JOINT_GOALSEEK,
+    MOBOT_JOINT_IDLE = 0,
+    MOBOT_JOINT_MOVING,
+    MOBOT_JOINT_GOALSEEK,
 };
 #endif
 

@@ -1,4 +1,4 @@
-\documentclass{report}
+\documentclass{article}
 \usepackage{graphicx}
 \usepackage{wrapfig}
 \usepackage{amsmath}
@@ -173,6 +173,41 @@ robot.moveJointWait(IMOBOT_JOINT4);
 \section{iMobotComms API}
 \input{api/libimobotcomms.tex}
 
+\section{Macros}
+
+\subsection{\texttt{iMobot\_joints\_t}}
+\index{iMobot\_joints\_t}
+The data type \texttt{iMobot\_joints\_t} contains the following macro datatypes.\\
+
+\index{IMOBOT\_JOINT1}
+\index{IMOBOT\_JOINT2}
+\index{IMOBOT\_JOINT3}
+\index{IMOBOT\_JOINT4}
+\begin{tabular}{p{3cm}p{7cm}} \hline 
+Value & Description \\
+\hline 
+\texttt{IMOBOT\_JOINT1} & Joint number 1 on the iMobot, which is a faceplate joint. \\
+\texttt{IMOBOT\_JOINT2} & Joint number 1 on the iMobot, which is a body joint. \\
+\texttt{IMOBOT\_JOINT3} & Joint number 1 on the iMobot, which is a body joint. \\
+\texttt{IMOBOT\_JOINT3} & Joint number 1 on the iMobot, which is a faceplate joint. 
+\end{tabular}
+
+\subsection{\texttt{iMobot\_motor\_direction\_t}}
+\index{iMobot\_motor\_direction\_t}
+The data type \texttt{iMobot\_motor\_direction\_t} indicates the commanded direction 
+of a joint on the Mobot.
+
+\index{IMOBOT\_JOINT\_DIR\_AUTO}
+\index{IMOBOT\_JOINT\_DIR\_FORWARD}
+\index{IMOBOT\_JOINT\_DIR\_BACKWARD}
+\begin{tabular}{p{3cm}p{7cm}} \hline 
+Value & Description \\
+\hline 
+\texttt{IMOBOT\_JOINT\_DIR\_AUTO} & This value indicates automatic direction control for a joint. 
+The Mobot will choose the best direction to attain the commanded joint position. \\
+\texttt{IMOBOT\_JOINT\_DIR\_FORWARD} & Move the joint in the forward direction. \\
+\texttt{IMOBOT\_JOINT\_DIR\_BACKWARD} & Move the joint in the backward direction. \\
+\end{tabular}
 % Index
 \section{Index}
 \addcontentsline{toc}{chapter}{Index}

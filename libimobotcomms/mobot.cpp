@@ -79,9 +79,9 @@ int Mobot_connect(br_comms_t* comms)
       continue;
     }
 
-    /* Send status request message to the iMobot */
+    /* Send status request message to the mobot */
     DWORD bytes;
-    if(!WriteFile(comms->hSerial, "GET_IMOBOT_STATUS", strlen("GET_IMOBOT_STATUS")+1, &bytes, NULL)) {
+    if(!WriteFile(comms->hSerial, "GET_MOBOT_STATUS", strlen("GET_MOBOT_STATUS")+1, &bytes, NULL)) {
       printf("Could not send status request message.\n");
       CloseHandle(comms->hSerial);
       continue;
@@ -94,7 +94,7 @@ int Mobot_connect(br_comms_t* comms)
       CloseHandle(comms->hSerial);
       continue;
     }
-    if(strcmp(buf, "IMOBOT READY")) {
+    if(strcmp(buf, "MOBOT READY")) {
       printf("Incorrect response message: %s.\n", buf);
       CloseHandle(comms->hSerial);
       continue;
@@ -296,16 +296,16 @@ DLLIMPORT int Mobot_moveTo(br_comms_t* comms,
                                double angle3,
                                double angle4)
 {
-  if(Mobot_moveJointTo(comms, IMOBOT_JOINT1, angle1)) {
+  if(Mobot_moveJointTo(comms, MOBOT_JOINT1, angle1)) {
     return -1;
   }
-  if(Mobot_moveJointTo(comms, IMOBOT_JOINT2, angle2)) {
+  if(Mobot_moveJointTo(comms, MOBOT_JOINT2, angle2)) {
     return -1;
   }
-  if(Mobot_moveJointTo(comms, IMOBOT_JOINT3, angle3)) {
+  if(Mobot_moveJointTo(comms, MOBOT_JOINT3, angle3)) {
     return -1;
   }
-  if(Mobot_moveJointTo(comms, IMOBOT_JOINT4, angle4)) {
+  if(Mobot_moveJointTo(comms, MOBOT_JOINT4, angle4)) {
     return -1;
   }
   return 0;
@@ -358,56 +358,56 @@ int Mobot_stop(br_comms_t* comms)
 int Mobot_motionRollForward(br_comms_t* comms)
 {
   double motorPosition[2];
-  Mobot_getJointAngle(comms, IMOBOT_JOINT3, &motorPosition[0]);
-  Mobot_getJointAngle(comms, IMOBOT_JOINT4, &motorPosition[1]);
-  Mobot_moveJointTo(comms, IMOBOT_JOINT3, motorPosition[0] + 90);
-  Mobot_moveJointTo(comms, IMOBOT_JOINT4, motorPosition[1] - 90);
+  Mobot_getJointAngle(comms, MOBOT_JOINT3, &motorPosition[0]);
+  Mobot_getJointAngle(comms, MOBOT_JOINT4, &motorPosition[1]);
+  Mobot_moveJointTo(comms, MOBOT_JOINT3, motorPosition[0] + 90);
+  Mobot_moveJointTo(comms, MOBOT_JOINT4, motorPosition[1] - 90);
   return 0;
 }
 
 int Mobot_motionRollBackward(br_comms_t* comms)
 {
   double motorPosition[2];
-  Mobot_getJointAngle(comms, IMOBOT_JOINT3, &motorPosition[0]);
-  Mobot_getJointAngle(comms, IMOBOT_JOINT4, &motorPosition[1]);
-  Mobot_moveJointTo(comms, IMOBOT_JOINT3, motorPosition[0] - 90);
-  Mobot_moveJointTo(comms, IMOBOT_JOINT4, motorPosition[1] + 90);
+  Mobot_getJointAngle(comms, MOBOT_JOINT3, &motorPosition[0]);
+  Mobot_getJointAngle(comms, MOBOT_JOINT4, &motorPosition[1]);
+  Mobot_moveJointTo(comms, MOBOT_JOINT3, motorPosition[0] - 90);
+  Mobot_moveJointTo(comms, MOBOT_JOINT4, motorPosition[1] + 90);
   return 0;
 }
 
 int Mobot_motionTurnLeft(br_comms_t* comms)
 {
   double motorPosition[2];
-  Mobot_getJointAngle(comms, IMOBOT_JOINT3, &motorPosition[0]);
-  Mobot_getJointAngle(comms, IMOBOT_JOINT4, &motorPosition[1]);
-  Mobot_moveJointTo(comms, IMOBOT_JOINT3, motorPosition[0] + 90);
-  Mobot_moveJointTo(comms, IMOBOT_JOINT4, motorPosition[1] + 90);
+  Mobot_getJointAngle(comms, MOBOT_JOINT3, &motorPosition[0]);
+  Mobot_getJointAngle(comms, MOBOT_JOINT4, &motorPosition[1]);
+  Mobot_moveJointTo(comms, MOBOT_JOINT3, motorPosition[0] + 90);
+  Mobot_moveJointTo(comms, MOBOT_JOINT4, motorPosition[1] + 90);
   return 0;
 }
 
 int Mobot_motionTurnRight(br_comms_t* comms)
 {
   double motorPosition[2];
-  Mobot_getJointAngle(comms, IMOBOT_JOINT3, &motorPosition[0]);
-  Mobot_getJointAngle(comms, IMOBOT_JOINT4, &motorPosition[1]);
-  Mobot_moveJointTo(comms, IMOBOT_JOINT3, motorPosition[0] - 90);
-  Mobot_moveJointTo(comms, IMOBOT_JOINT4, motorPosition[1] - 90);
+  Mobot_getJointAngle(comms, MOBOT_JOINT3, &motorPosition[0]);
+  Mobot_getJointAngle(comms, MOBOT_JOINT4, &motorPosition[1]);
+  Mobot_moveJointTo(comms, MOBOT_JOINT3, motorPosition[0] - 90);
+  Mobot_moveJointTo(comms, MOBOT_JOINT4, motorPosition[1] - 90);
   return 0;
 }
 
 int Mobot_motionInchwormLeft(br_comms_t* comms)
 {
-  Mobot_moveJointTo(comms, IMOBOT_JOINT1, 0);
-  Mobot_moveJointTo(comms, IMOBOT_JOINT2, 0);
+  Mobot_moveJointTo(comms, MOBOT_JOINT1, 0);
+  Mobot_moveJointTo(comms, MOBOT_JOINT2, 0);
   Mobot_moveWait(comms);
 
-  Mobot_moveJointTo(comms, IMOBOT_JOINT2, 50);
+  Mobot_moveJointTo(comms, MOBOT_JOINT2, 50);
   Mobot_moveWait(comms);
-  Mobot_moveJointTo(comms, IMOBOT_JOINT1, -50);
+  Mobot_moveJointTo(comms, MOBOT_JOINT1, -50);
   Mobot_moveWait(comms);
-  Mobot_moveJointTo(comms, IMOBOT_JOINT2, 0);
+  Mobot_moveJointTo(comms, MOBOT_JOINT2, 0);
   Mobot_moveWait(comms);
-  Mobot_moveJointTo(comms, IMOBOT_JOINT1, 0);
+  Mobot_moveJointTo(comms, MOBOT_JOINT1, 0);
   Mobot_moveWait(comms);
 
   return 0;
@@ -415,17 +415,17 @@ int Mobot_motionInchwormLeft(br_comms_t* comms)
 
 int Mobot_motionInchwormRight(br_comms_t* comms)
 {
-  Mobot_moveJointTo(comms, IMOBOT_JOINT1, 0);
-  Mobot_moveJointTo(comms, IMOBOT_JOINT2, 0);
+  Mobot_moveJointTo(comms, MOBOT_JOINT1, 0);
+  Mobot_moveJointTo(comms, MOBOT_JOINT2, 0);
   Mobot_moveWait(comms);
 
-  Mobot_moveJointTo(comms, IMOBOT_JOINT1, -50);
+  Mobot_moveJointTo(comms, MOBOT_JOINT1, -50);
   Mobot_moveWait(comms);
-  Mobot_moveJointTo(comms, IMOBOT_JOINT2, 50);
+  Mobot_moveJointTo(comms, MOBOT_JOINT2, 50);
   Mobot_moveWait(comms);
-  Mobot_moveJointTo(comms, IMOBOT_JOINT1, 0);
+  Mobot_moveJointTo(comms, MOBOT_JOINT1, 0);
   Mobot_moveWait(comms);
-  Mobot_moveJointTo(comms, IMOBOT_JOINT2, 0);
+  Mobot_moveJointTo(comms, MOBOT_JOINT2, 0);
   Mobot_moveWait(comms);
 
   return 0;
@@ -435,12 +435,12 @@ int Mobot_motionStand(br_comms_t* comms)
 {
   Mobot_moveZero(comms);
   Mobot_moveWait(comms);
-  Mobot_moveJointTo(comms, IMOBOT_JOINT1, -85);
-  Mobot_moveJointTo(comms, IMOBOT_JOINT2, 80);
+  Mobot_moveJointTo(comms, MOBOT_JOINT1, -85);
+  Mobot_moveJointTo(comms, MOBOT_JOINT2, 80);
   Mobot_moveWait(comms);
-  Mobot_moveJointTo(comms, IMOBOT_JOINT3, 45);
+  Mobot_moveJointTo(comms, MOBOT_JOINT3, 45);
   Mobot_moveWait(comms);
-  Mobot_moveJointTo(comms, IMOBOT_JOINT1, 20);
+  Mobot_moveJointTo(comms, MOBOT_JOINT1, 20);
   Mobot_moveWait(comms);
   return 0;
 }
