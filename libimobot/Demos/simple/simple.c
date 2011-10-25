@@ -18,7 +18,7 @@ int main()
   sleep(2);
 
   /* Set the robot to "home" position, where all joint angles are 0 degrees. */
-  iMobot_moveZero(&robot);
+  iMobot_moveToZero(&robot);
   iMobot_moveWait(&robot);
 
   /* Rotate each of the faceplates by 90 degrees */

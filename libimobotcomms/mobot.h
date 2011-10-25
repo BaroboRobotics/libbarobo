@@ -59,7 +59,7 @@ typedef enum mobot_motor_direction_e
   MOBOT_JOINT_DIR_AUTO,
   MOBOT_JOINT_DIR_FORWARD,
   MOBOT_JOINT_DIR_BACKWARD
-} mobot_motor_direction_t;
+} motorDirection_t;
 #endif
 
 #ifndef MOBOT_JOINT_STATE_E

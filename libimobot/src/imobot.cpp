@@ -288,7 +288,7 @@ int iMobot_moveWait(iMobot_t* iMobot)
   return 0;
 }
 
-int iMobot_moveZero(iMobot_t* iMobot)
+int iMobot_moveToZero(iMobot_t* iMobot)
 {
   int i;
   for(i = 0; i < 4; i++) {
@@ -545,9 +545,9 @@ int CiMobot::moveWait()
   return iMobot_moveWait(&_iMobot);
 }
 
-int CiMobot::moveZero()
+int CiMobot::moveToZero()
 {
-  return iMobot_moveZero(&_iMobot);
+  return iMobot_moveToZero(&_iMobot);
 }
 
 int CiMobot::setJointDirection(int id, int direction)

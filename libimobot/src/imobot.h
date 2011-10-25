@@ -82,7 +82,7 @@ int iMobot_initListenerBluetooth(iMobot_t* iMobot, int channel);
 int iMobot_isBusy(iMobot_t* iMobot);
 int iMobot_listenerMainLoop(iMobot_t* iMobot);
 int iMobot_moveWait(iMobot_t* iMobot);
-int iMobot_moveZero(iMobot_t* iMobot);
+int iMobot_moveToZero(iMobot_t* iMobot);
 int iMobot_setJointDirection(iMobot_t* iMobot, int id, int direction);
 int iMobot_moveJointTo(iMobot_t* iMobot, int id, double angle);
 int iMobot_setJointSpeed(iMobot_t* iMobot, int id, int speed);
@@ -110,7 +110,7 @@ class CiMobot {
     int isBusy();
     int listenerMainLoop();
     int moveWait();
-    int moveZero();
+    int moveToZero();
     int setJointDirection(int id, int direction);
     int moveJointTo(int id, double angle);
     int setJointSpeed(int id, int speed);
