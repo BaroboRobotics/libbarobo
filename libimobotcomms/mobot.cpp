@@ -250,7 +250,7 @@ int Mobot_getJointState(br_comms_t* comms, int id, int *state)
   return 0;
 }
 
-int Mobot_moveZero(br_comms_t* comms)
+int Mobot_moveToZero(br_comms_t* comms)
 {
   int i;
   for(i = 0; i < 4; i++) {
@@ -433,7 +433,7 @@ int Mobot_motionInchwormRight(br_comms_t* comms)
 
 int Mobot_motionStand(br_comms_t* comms)
 {
-  Mobot_moveZero(comms);
+  Mobot_moveToZero(comms);
   Mobot_moveWait(comms);
   Mobot_moveJointTo(comms, MOBOT_JOINT1, -85);
   Mobot_moveJointTo(comms, MOBOT_JOINT2, 80);
@@ -642,9 +642,9 @@ int CMobot::moveTo( double angle1,
   return Mobot_moveTo(&_comms, angle1, angle2, angle3, angle4);
 }
 
-int CMobot::moveZero()
+int CMobot::moveToZero()
 {
-  return Mobot_moveZero(&_comms);
+  return Mobot_moveToZero(&_comms);
 }
 
 int CMobot::moveJointWait(int id)

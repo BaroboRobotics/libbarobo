@@ -5,7 +5,7 @@ int main()
   CMobot robot;
 
   /* Set the robot to "home" position, where all joint angles are 0 degrees. */
-  robot.moveZero();
+  robot.moveToZero();
   robot.moveWait();
 
   /* Rotate each of the faceplates by 90 degrees */

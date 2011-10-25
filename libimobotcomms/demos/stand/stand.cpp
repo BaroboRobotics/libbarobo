@@ -10,7 +10,7 @@ int main()
     robot.setJointSpeed(i, 0.50);
   }
   /* Set the robot to "home" position, where all joint angles are 0 degrees. */
-  robot.moveZero();
+  robot.moveToZero();
   robot.moveWait();
 
   /* Move the robot into a fetal position */

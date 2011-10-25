@@ -123,7 +123,7 @@ DLLIMPORT int Mobot_moveTo(br_comms_t* comms,
                                double angle2,
                                double angle3,
                                double angle4);
-DLLIMPORT int Mobot_moveZero(br_comms_t* comms);
+DLLIMPORT int Mobot_moveToZero(br_comms_t* comms);
 DLLIMPORT int Mobot_moveJointWait(br_comms_t* comms, int id);
 DLLIMPORT int Mobot_moveWait(br_comms_t* comms);
 DLLIMPORT int Mobot_stop(br_comms_t* comms);
@@ -180,7 +180,7 @@ class CMobot {
     int moveJointWait(int id);
     int moveTo(double angle1, double angle2, double angle3, double angle4);
     int moveWait();
-    int moveZero();
+    int moveToZero();
     int setJointDirection(int id, int dir);
     int setJointSpeed(int id, double speed);
     int stop();

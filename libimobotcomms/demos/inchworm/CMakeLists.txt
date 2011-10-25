@@ -5,4 +5,4 @@ include_directories( ${LIBIMOBOTCOMMS_SOURCE_DIR})
 link_directories( ${LIBIMOBOTCOMMS_BINARY_DIR})
 
 add_executable(inchworm inchworm.cpp)
-target_link_libraries(inchworm imobotcomms)
+target_link_libraries(inchworm mobot)
