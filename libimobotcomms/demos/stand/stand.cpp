@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <mobot.h>
 
 int main()
@@ -31,11 +30,7 @@ int main()
   robot.setJointSpeed(IMOBOT_JOINT1, 0.0);
   robot.setJointDirection(IMOBOT_JOINT1, IMOBOT_JOINT_DIR_FORWARD);
   robot.setJointSpeed(IMOBOT_JOINT1, 0.30);
-#ifndef _WIN32
   sleep(3);
-#else
-  Sleep(3000);
-#endif
   robot.setJointSpeed(IMOBOT_JOINT1, 0.0);
 
   return 0;

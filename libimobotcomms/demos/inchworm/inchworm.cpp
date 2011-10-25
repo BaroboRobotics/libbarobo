@@ -1,10 +1,8 @@
-#include <stdio.h>
 #include <mobot.h>
 
 int main()
 {
-  //CMobot robot;
-  CMobot robot("00:19:88:19:FB:9E", 20);
+  CMobot robot;
 
   /* Set robot motors to speed of 0.50 */
   int i;

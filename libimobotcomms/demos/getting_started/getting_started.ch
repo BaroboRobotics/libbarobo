@@ -1,6 +1,5 @@
 /* Filename: getting_started.ch */
 
-#include <stdio.h>
 #include <mobot.h>
 
 CMobot robot;
