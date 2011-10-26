@@ -23,9 +23,9 @@ int Mobot_connect(br_comms_t* comms)
 {
 #ifndef _WIN32
   fprintf(stderr, 
-      "ERROR; Function Mobot_connect() is not yet implemented "
-      "on non-Windows systems. Please use Mobot_connectAddress() "
-      "instead.");
+      "ERROR; Function Mobot_connect() is not yet implemented \n"
+      "on non-Windows systems. Please use Mobot_connectAddress() \n"
+      "instead.\n");
   return -1;
 #else
   char buf[80];

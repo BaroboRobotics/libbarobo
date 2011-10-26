@@ -199,7 +199,7 @@ class CMobot {
 #endif /* C_ONLY */
 
 #ifdef _CH_
-#pragma importf "imobotcomms.cpp"
+#pragma importf "mobot.cpp"
 #endif
 
 #endif /* Header Guard */
