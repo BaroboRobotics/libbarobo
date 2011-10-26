@@ -73,18 +73,29 @@ typedef struct iMobot_s {
   int socket;
 } iMobot_t;
 
-int iMobot_getJointDirection(iMobot_t* iMobot, int id, int *dir);
 int iMobot_getJointAngle(iMobot_t* iMobot, int id, double *angle);
+int iMobot_getJointDirection(iMobot_t* iMobot, int id, int *dir);
 int iMobot_getJointSpeed(iMobot_t* iMobot, int id, int *speed);
 int iMobot_getJointState(iMobot_t* iMobot, int id, int *state);
 int iMobot_init(iMobot_t* iMobot);
 int iMobot_initListenerBluetooth(iMobot_t* iMobot, int channel);
 int iMobot_isBusy(iMobot_t* iMobot);
 int iMobot_listenerMainLoop(iMobot_t* iMobot);
-int iMobot_moveWait(iMobot_t* iMobot);
-int iMobot_moveToZero(iMobot_t* iMobot);
-int iMobot_setJointDirection(iMobot_t* iMobot, int id, int direction);
+int iMobot_move(iMobot_t* iMobot,
+                double angle1,
+                double angle2,
+                double angle3,
+                double angle4 );
+int iMobot_moveTo(iMobot_t* iMobot,
+                double angle1,
+                double angle2,
+                double angle3,
+                double angle4 );
+int iMobot_moveJoint(iMobot_t* iMobot, int id, double angle);
 int iMobot_moveJointTo(iMobot_t* iMobot, int id, double angle);
+int iMobot_moveToZero(iMobot_t* iMobot);
+int iMobot_moveWait(iMobot_t* iMobot);
+int iMobot_setJointDirection(iMobot_t* iMobot, int id, int direction);
 int iMobot_setJointSpeed(iMobot_t* iMobot, int id, int speed);
 int iMobot_stop(iMobot_t* iMobot);
 int iMobot_terminate(iMobot_t* iMobot);
@@ -109,10 +120,19 @@ class CiMobot {
     int initListenerBluetooth(int channel);
     int isBusy();
     int listenerMainLoop();
+    int move( double angle1,
+              double angle2,
+              double angle3,
+              double angle4 );
+    int moveTo( double angle1,
+              double angle2,
+              double angle3,
+              double angle4 );
+    int moveJoint(int id, double angle);
+    int moveJointTo(int id, double angle);
     int moveWait();
     int moveToZero();
     int setJointDirection(int id, int direction);
-    int moveJointTo(int id, double angle);
     int setJointSpeed(int id, int speed);
     int stop();
     int terminate();
