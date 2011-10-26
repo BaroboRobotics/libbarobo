@@ -1,0 +1,15 @@
+int baprintf(char *format, ...) {
+    void *fptr;
+    va_list ap_ch;
+    int retval;
+
+    va_start(ap_ch, format);
+    fptr = dlsym(_Chbluetooth_handle, "baprintf_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, baprintf, format, ap_ch);
+    va_end(ap_ch);
+    return retval;
+}

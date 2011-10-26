@@ -1,0 +1,12 @@
+int str2ba(char *str, bdaddr_t *ba) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chbluetooth_handle, "str2ba_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, str2ba, str, ba);
+    return retval;
+}
