@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
-#include <imobotcomms.h>
+#include <mobot.h>
 #include <imobot.h>
 #include "gait.h"
 #include "GtkiMobotController.h"

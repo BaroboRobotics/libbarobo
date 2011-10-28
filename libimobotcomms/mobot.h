@@ -72,6 +72,13 @@ enum mobot_joint_state_e
 };
 #endif
 
+typedef enum mobot_joint_direction_e
+{
+  MOBOT_NEUTRAL,
+  MOBOT_FORWARD,
+  MOBOT_BACKWARD
+} mobotDirection_t;
+
 typedef struct br_comms_s
 {
   int socket;
@@ -80,7 +87,10 @@ typedef struct br_comms_s
   HANDLE hSerial;
 #endif
   sockaddr_t addr;
+  double jointSpeeds[4];
 } br_comms_t;
+
+#define DEF_MOTOR_SPEED 0.50
 
 #ifndef C_ONLY
 #ifdef __cplusplus
@@ -118,6 +128,17 @@ DLLIMPORT int Mobot_move(br_comms_t* comms,
                                double angle2,
                                double angle3,
                                double angle4);
+DLLIMPORT int Mobot_moveContinuous(br_comms_t* comms,
+                                  int dir1,
+                                  int dir2,
+                                  int dir3,
+                                  int dir4);
+DLLIMPORT int Mobot_moveContinuousTime(br_comms_t* comms,
+                                  int dir1,
+                                  int dir2,
+                                  int dir3,
+                                  int dir4,
+                                  int msecs);
 DLLIMPORT int Mobot_moveTo(br_comms_t* comms,
                                double angle1,
                                double angle2,
@@ -172,16 +193,16 @@ class CMobot {
     int disconnect();
     int isConnected();
     int getJointAngle(int id, double &angle);
-    int getJointDirection(int id, int &dir);
     int getJointSpeed(int id, double &speed);
     int getJointState(int id, int &state);
     int move(double angle1, double angle2, double angle3, double angle4);
+    int moveContinuous(int dir1, int dir2, int dir3, int dir4);
+    int moveContinuousTime(int dir1, int dir2, int dir3, int dir4, int msecs);
     int moveJointTo(int id, double angle);
     int moveJointWait(int id);
     int moveTo(double angle1, double angle2, double angle3, double angle4);
     int moveWait();
     int moveToZero();
-    int setJointDirection(int id, int dir);
     int setJointSpeed(int id, double speed);
     int stop();
 
@@ -193,6 +214,8 @@ class CMobot {
     int motionTurnLeft();
     int motionTurnRight();
   private:
+    int getJointDirection(int id, int &dir);
+    int setJointDirection(int id, int dir);
     br_comms_t _comms;
 };
 #endif /* If C++ or CH */

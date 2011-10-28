@@ -10,12 +10,16 @@
 
 int Mobot_init(br_comms_t* comms)
 {
+  int i;
   memset(&comms->addr, 0, sizeof(sockaddr_t));
   comms->connected = 0;
 #ifdef _WIN32
   WSADATA wsd;
   WSAStartup (MAKEWORD(1,1), &wsd);
 #endif
+  for(i = 0; i < 4; i++) {
+    comms->jointSpeeds[i] = DEF_MOTOR_SPEED;
+  }
   return 0;
 }
 
@@ -190,6 +194,7 @@ int Mobot_setJointSpeed(br_comms_t* comms, int id, double speed)
   if(status < 0) return status;
   bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
   if(strcmp(buf, "OK")) return -1;
+  comms->jointSpeeds[id] = speed;
   return 0;
 }
 
@@ -206,19 +211,6 @@ int Mobot_getJointSpeed(br_comms_t* comms, int id, double *speed)
   if(!strcmp(buf, "ERROR")) return -1;
   sscanf(buf, "%d", &ispeed);
   *speed = (double)ispeed/100.0;
-  return 0;
-}
-
-int Mobot_moveJointTo(br_comms_t* comms, int id, double angle)
-{
-  char buf[160];
-  int status;
-  int bytes_read;
-  sprintf(buf, "SET_MOTOR_POSITION %d %lf", id, angle);
-  status = SendToIMobot(comms, buf, strlen(buf)+1);
-  if(status < 0) return status;
-  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
-  if(strcmp(buf, "OK")) return -1;
   return 0;
 }
 
@@ -250,6 +242,19 @@ int Mobot_getJointState(br_comms_t* comms, int id, int *state)
   return 0;
 }
 
+int Mobot_moveJointTo(br_comms_t* comms, int id, double angle)
+{
+  char buf[160];
+  int status;
+  int bytes_read;
+  sprintf(buf, "SET_MOTOR_POSITION %d %lf", id, angle);
+  status = SendToIMobot(comms, buf, strlen(buf)+1);
+  if(status < 0) return status;
+  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
+  if(strcmp(buf, "OK")) return -1;
+  return 0;
+}
+
 int Mobot_moveToZero(br_comms_t* comms)
 {
   int i;
@@ -261,7 +266,7 @@ int Mobot_moveToZero(br_comms_t* comms)
   return 0;
 }
 
-DLLIMPORT int Mobot_move(br_comms_t* comms,
+int Mobot_move(br_comms_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -290,7 +295,52 @@ DLLIMPORT int Mobot_move(br_comms_t* comms,
   return 0;
 }
 
-DLLIMPORT int Mobot_moveTo(br_comms_t* comms,
+int Mobot_moveContinuous(br_comms_t* comms,
+                                  int dir1,
+                                  int dir2,
+                                  int dir3,
+                                  int dir4)
+{
+  int dirs[4];
+  int i;
+  dirs[0] = dir1;
+  dirs[1] = dir2;
+  dirs[2] = dir3;
+  dirs[3] = dir4;
+  for(i = 0; i < 4; i++) {
+    if(dirs[i] == MOBOT_FORWARD) {
+      Mobot_setJointSpeed(comms, i, comms->jointSpeeds[i]);
+      Mobot_setJointDirection(comms, i, MOBOT_JOINT_DIR_FORWARD);
+    } else if (dirs[i] == MOBOT_BACKWARD) {
+      Mobot_setJointSpeed(comms, i, comms->jointSpeeds[i]);
+      Mobot_setJointDirection(comms, i, MOBOT_JOINT_DIR_BACKWARD);
+    }
+  }
+  return 0;
+}
+
+int Mobot_moveContinuousTime(br_comms_t* comms,
+                                  int dir1,
+                                  int dir2,
+                                  int dir3,
+                                  int dir4,
+                                  int msecs)
+{
+  int i;
+  Mobot_moveContinuous(comms, dir1, dir2, dir3, dir4);
+#ifdef _WIN32
+  Sleep(msecs);
+#else
+  usleep(msecs * 1000);
+#endif
+  /* Stop the motors */
+  for(i = 0; i < 4; i++) {
+    Mobot_setJointDirection(comms, i, 0);
+  }
+  return 0;
+}
+
+int Mobot_moveTo(br_comms_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -632,6 +682,16 @@ int CMobot::move( double angle1,
                         double angle4)
 {
   return Mobot_move(&_comms, angle1, angle2, angle3, angle4);
+}
+
+int CMobot::moveContinuous( int dir1, int dir2, int dir3, int dir4)
+{
+  return Mobot_moveContinuous(&_comms, dir1, dir2, dir3, dir4);
+}
+
+int CMobot::moveContinuousTime( int dir1, int dir2, int dir3, int dir4, int msecs)
+{
+  return Mobot_moveContinuousTime(&_comms, dir1, dir2, dir3, dir4, msecs);
 }
 
 int CMobot::moveTo( double angle1,

@@ -67,7 +67,7 @@ void rotate_left(CiMobot &robot)
 void stand(CiMobot &robot)
 {
   int i;
-  int speed;
+  double speed;
   /* Go to home position first */
   for(i = IMOBOT_MOTOR1; i < IMOBOT_NUM_MOTORS; i++) {
     robot.moveJointTo(i, 0);

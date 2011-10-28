@@ -17,7 +17,7 @@ include_directories("${PROJECT_BINARY_DIR}")
 # Add CiMobotSim library subdirectory and stuff
 include_directories("../../../libimobotcomms" "../../src" "../../src/libi2c")
 link_directories("../../../libimobotcomms" "../../src" "../../src/libi2c" "./")
-set (EXTRA_LIBS ${EXTRA_LIBS} imobotcomms imobot i2c bluetooth interface)
+set (EXTRA_LIBS ${EXTRA_LIBS} mobot imobot i2c bluetooth interface)
 
 find_package(GTK2 2.10 REQUIRED gtk glade)
 

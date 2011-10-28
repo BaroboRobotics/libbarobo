@@ -52,14 +52,14 @@ int iMobot_getJointDirection(iMobot_t* iMobot, int id, int *dir)
   return 0;
 }
 
-int iMobot_getJointSpeed(iMobot_t* iMobot, int id, int *speed)
+int iMobot_getJointSpeed(iMobot_t* iMobot, int id, double *speed)
 {
   uint8_t byte;
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
   if(I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORSPEED(id), &byte)) {
     return -1;
   } else {
-    *speed = byte;
+    *speed = (double)byte/100.0;
     return 0;
   }
 }
@@ -299,6 +299,45 @@ int iMobot_move(iMobot_t* iMobot,
   return 0;
 }
 
+int iMobot_moveContinuous(iMobot_t* iMobot,
+                                  int dir1,
+                                  int dir2,
+                                  int dir3,
+                                  int dir4)
+{
+  int dirs[4];
+  int i;
+  dirs[0] = dir1;
+  dirs[1] = dir2;
+  dirs[2] = dir3;
+  dirs[3] = dir4;
+  for(i = 0; i < 4; i++) {
+    if(iMobot_setJointDirection(iMobot, i, dirs[i])) {
+      return -1;
+    }
+  }
+  return 0;
+}
+
+int iMobot_moveContinuousTime(iMobot_t* iMobot,
+                                  int dir1,
+                                  int dir2,
+                                  int dir3,
+                                  int dir4,
+                                  int msecs)
+{
+  int i;
+  iMobot_moveContinuous(iMobot, dir1, dir2, dir3, dir4);
+  usleep(msecs * 1000);
+  for(i = 0; i < 4; i++) {
+    if(iMobot_setJointDirection(iMobot, i, 0)) {
+      return -1;
+    }
+  }
+
+  return 0;
+}
+
 int iMobot_moveTo(iMobot_t* iMobot,
                 double angle1,
                 double angle2,
@@ -375,18 +414,24 @@ int iMobot_setJointDirection(iMobot_t* iMobot, int id, int direction)
 {
   int i;
   uint8_t data[2];
+  if(direction < 0 || direction > 2) {
+    return -1;
+  }
   memcpy(&data, &direction, 2);
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
   I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORDIR(id), data[0]);
   return 0;
 }
 
-int iMobot_setJointSpeed(iMobot_t* iMobot, int id, int speed)
+int iMobot_setJointSpeed(iMobot_t* iMobot, int id, double speed)
 {
   uint8_t data[2];
-  memcpy(&data, &speed, 2);
+  int ispeed;
+  ispeed = speed*100;
+  memcpy(&data, &ispeed, 2);
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
   I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORSPEED(id), data[0]);
+  iMobot->jointSpeed[id] = speed;
   return 0;
 }
 
@@ -501,9 +546,10 @@ int iMobot_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, cons
   } else if (MATCHSTR("GET_MOTOR_SPEED"))
   {
     sscanf(buf, "%*s %d", &id);
-    if(iMobot_getJointSpeed(iMobot, id, &int32)) {
+    if(iMobot_getJointSpeed(iMobot, id, &mydouble)) {
       write(socket, "ERROR", 6);
     } else {
+      int32 = mydouble * 100;
       sprintf(mybuf, "%d", int32);
       write(socket, mybuf, strlen(mybuf)+1);
     }
@@ -568,7 +614,7 @@ int CiMobot::getJointAngle(int id, double &angle)
   return iMobot_getJointAngle(&_iMobot, id, &angle);
 }
 
-int CiMobot::getJointSpeed(int id, int &speed)
+int CiMobot::getJointSpeed(int id, double &speed)
 {
   return iMobot_getJointSpeed(&_iMobot, id, &speed);
 }
@@ -634,7 +680,7 @@ int CiMobot::moveJointTo(int id, double angle)
   return iMobot_moveJointTo(&_iMobot, id, angle);
 }
 
-int CiMobot::setJointSpeed(int id, int speed)
+int CiMobot::setJointSpeed(int id, double speed)
 {
   return iMobot_setJointSpeed(&_iMobot, id, speed);
 }

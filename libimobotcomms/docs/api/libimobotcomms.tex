@@ -30,17 +30,19 @@ is called automatically and should not be called explicitly. \\
 \texttt{connectAddress()} & Connect to an iMobot module by specifying its Bluetooth address. \\
 \texttt{disconnect()} & Disconnect from an iMobot module. \\
 \texttt{getJointAngle()} & Gets a joint's angle. \\
-\texttt{getJointDirection()} & Gets a motor's currently assigned direction. \\
+%\texttt{getJointDirection()} & Gets a motor's currently assigned direction. \\
 \texttt{getJointSpeed()} & Gets a motor's speed. \\
 \texttt{getJointState()} & Gets a motor's current status. \\
 \texttt{isConnected()} & This function is used to check the connection to an iMobot. \\
 \texttt{move()} & Move all four joints of the iMobot by specified angles. \\
+\texttt{moveContinuous()} & Move joints continuously. Joints will move untill stopped.\\
+\texttt{moveContinuousTime()} & Move joints continuously for a certain amount of time.\\
 \texttt{moveTo()} & Move all four joints of the iMobot to specified absolute angles. \\
 \texttt{moveJointTo()} & Set the desired motor position. \\
 \texttt{moveJointWait()} & Wait until the specified motor has stopped moving. \\
 \texttt{moveWait()} & Wait until all motors have stopped moving. \\
 \texttt{moveToZero()} & Instructs all motors to go to their zero positions. \\
-\texttt{setJointDirection()} & Set the motor direction of a motor. Set
+%\texttt{setJointDirection()} & Set the motor direction of a motor. Set
 to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
 \texttt{setJointSpeed()} & Sets a motor's speed. \\
 \texttt{stop()} & Stop all currently executing motions of the iMobot. \\
@@ -79,8 +81,8 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \pagebreak
 \input{api/getJointAngle}
 \pagebreak
-\input{api/getJointDirection}
-\pagebreak
+%\input{api/getJointDirection}
+%\pagebreak
 \input{api/getJointSpeed}
 \pagebreak
 \input{api/getJointState}
@@ -103,6 +105,10 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \pagebreak
 \input{api/move}
 \pagebreak
+\input{api/moveContinuous}
+\pagebreak
+\input{api/moveContinuousTime}
+\pagebreak
 \input{api/moveTo}
 \pagebreak
 \input{api/moveJointTo}
@@ -113,8 +119,8 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \pagebreak
 \input{api/moveToZero}
 \pagebreak
-\input{api/setJointDirection}
-\pagebreak
+%\input{api/setJointDirection}
+%\pagebreak
 \input{api/setJointSpeed}
 \pagebreak
 \input{api/stop}
