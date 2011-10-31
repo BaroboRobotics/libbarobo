@@ -122,7 +122,7 @@ int initialize()
   scale_motorSpeeds[2] = GTK_VSCALE(gtk_builder_get_object( builder, "vscale_motorspeed2"));
   scale_motorSpeeds[3] = GTK_VSCALE(gtk_builder_get_object( builder, "vscale_motorspeed3"));
   for(i = 0; i < 4; i++) {
-    gtk_range_set_range(GTK_RANGE(scale_motorSpeeds[i]), 0, 100);
+    gtk_range_set_range(GTK_RANGE(scale_motorSpeeds[i]), 0, 1.0);
   }
 
   /* Set the ranges on the motor position adjustment vscales */

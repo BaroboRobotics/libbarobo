@@ -206,29 +206,28 @@ ON_MOTOR_BUTTON_CLICKED(3, back)
 
 gboolean on_vscale_motorspeed0_button_release_event(GtkRange* range, GdkEvent* event, gpointer data)
 {
-  int speed = (int)gtk_range_get_value(range);
-  printf("Set speed to %d\n", speed);
+  int speed = gtk_range_get_value(range)*100.0;
   setMotorSpeed(0, speed);
   return FALSE;
 }
 
 gboolean on_vscale_motorspeed1_button_release_event(GtkRange* range, GdkEvent* event, gpointer data)
 {
-  int speed = (int)gtk_range_get_value(range);
+  int speed = gtk_range_get_value(range)*100.0;
   setMotorSpeed(1, speed);
   return FALSE;
 }
 
 gboolean on_vscale_motorspeed2_button_release_event(GtkRange* range, GdkEvent* event, gpointer data)
 {
-  int speed = (int)gtk_range_get_value(range);
+  int speed = gtk_range_get_value(range)*100.0;
   setMotorSpeed(2, speed);
   return FALSE;
 }
 
 gboolean on_vscale_motorspeed3_button_release_event(GtkRange* range, GdkEvent* event, gpointer data)
 {
-  int speed = (int)gtk_range_get_value(range);
+  int speed = gtk_range_get_value(range)*100.0;
   setMotorSpeed(3, speed);
   return FALSE;
 }

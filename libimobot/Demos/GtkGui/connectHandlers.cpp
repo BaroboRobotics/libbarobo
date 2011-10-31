@@ -27,12 +27,10 @@ void on_button_connect_clicked(GtkWidget* widget, gpointer data)
     gtk_widget_hide(dialog_connect);
 
     /* Get the motor speeds and set the sliders */
-    int speed;
     double lspeed;
     for(i = 0; i < 4; i++) {
       Mobot_getJointSpeed(imobotComms, i, &lspeed);
-      speed = lspeed * 100;
-      gtk_range_set_value(GTK_RANGE(scale_motorSpeeds[i]), speed);
+      gtk_range_set_value(GTK_RANGE(scale_motorSpeeds[i]), lspeed);
     }
   }
 }
