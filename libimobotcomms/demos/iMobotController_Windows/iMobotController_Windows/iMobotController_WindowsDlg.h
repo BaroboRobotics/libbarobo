@@ -86,4 +86,22 @@ public:
 	afx_msg void OnBnClickedButtonMotor4forward();
 	afx_msg void OnLbnSelchangeListgaits();
 	afx_msg void OnEnChangeEditposition4();
+	// Picture of the iMobot joints
+	CStatic m_staticicon_iMobotPicture;
+	afx_msg void OnStnClickedStaticImobotPicture();
+	CButton m_button_rollForward;
+	CButton m_button_rollStop;
+	CButton m_button_rollBack;
+	CButton m_button_rollLeft;
+	CButton m_button_rollRight;
+	afx_msg void OnBnClickedButtonMotor2forward();
+	afx_msg void OnBnClickedButtonMotor3forward();
+	afx_msg void OnBnClickedButtonMotor1stop();
+	afx_msg void OnBnClickedButtonMotor2stop();
+	afx_msg void OnBnClickedButtonMotor3stop();
+	afx_msg void OnBnClickedButtonMotor4stop();
+	afx_msg void OnBnClickedButtonMotor1backward();
+	afx_msg void OnBnClickedButtonMotor2backward();
+	afx_msg void OnBnClickedButtonMotor3backward();
+	afx_msg void OnBnClickedButtonMotor4backward();
 };
