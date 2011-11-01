@@ -2,7 +2,10 @@
 
 int main()
 {
-  CMobot robot("00:19:88:19:FB:9E", 20);
+  CMobot robot;
+
+  /* Connect to the paired MoBot */
+  robot.connect();
 
   /* Set the robot to "home" position, where all joint angles are 0 degrees. */
   robot.moveToZero();

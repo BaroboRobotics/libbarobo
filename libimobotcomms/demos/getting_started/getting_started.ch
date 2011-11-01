@@ -4,6 +4,9 @@
 
 CMobot robot;
 
+/* Connect to the paired MoBot */
+robot.connect();
+
 /* Set the robot to "home" position, where all joint angles are 0 degrees. */
 robot.moveToZero();
 robot.moveWait();

@@ -4,6 +4,9 @@ int main()
 {
   CMobot robot;
 
+  /* Connect to the paired MoBot */
+  robot.connect();
+
   /* Set robot motors to speed of 0.50 */
   int i;
   for(i = MOBOT_JOINT1; i < MOBOT_NUM_JOINTS; i++) {
@@ -27,11 +30,12 @@ int main()
   robot.moveWait();
 
   /* Pan the robot around for 3 seconds */
-  robot.setJointSpeed(MOBOT_JOINT1, 0.0);
-  robot.setJointDirection(MOBOT_JOINT1, MOBOT_JOINT_DIR_FORWARD);
   robot.setJointSpeed(MOBOT_JOINT1, 0.30);
-  sleep(3);
-  robot.setJointSpeed(MOBOT_JOINT1, 0.0);
+  robot.moveContinuousTime( MOBOT_FORWARD,
+                            MOBOT_NEUTRAL,
+                            MOBOT_NEUTRAL,
+                            MOBOT_NEUTRAL,
+                            3000 );
 
   return 0;
 }

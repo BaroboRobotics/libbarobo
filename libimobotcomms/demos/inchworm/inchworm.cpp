@@ -4,6 +4,9 @@ int main()
 {
   CMobot robot;
 
+  /* Connect to the paired MoBot */
+  robot.connect();
+
   /* Set robot motors to speed of 0.50 */
   int i;
   for(i = MOBOT_JOINT1; i < MOBOT_NUM_JOINTS; i++) {
