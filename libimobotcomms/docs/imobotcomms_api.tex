@@ -105,6 +105,73 @@ enabled, click on the check-box to enable it. Click on the ``Ok'' button to
 accept the changes and close the dialogs. The iMobot is now ready to be
 controlled with the iMobotComms library.
 
+\section{ The MoBot Remote Control Program }
+\includegraphics[width=4.5in]{images/iMobot_controller_screenshot.png}
+
+The preceding figure shows the MoBot remote control program. The
+program displays a graphical interface which may be used to display
+information about the iMobot's joint positions, and also control the
+speeds and positions of the MoBot's joints. The interface is divided
+up into six sections; three on the top half of the interface, and three on 
+the bottom half. 
+
+\subsection{The iMobot Diagram and ``Move To Zero'' Button}
+The first section of the GUI located on the top left of the interface
+displays a schematic diagram of the iMobot, displaying motor positions.
+Underneath the diagram, there is a large button with the text 
+``Move To Zero''. When clicked, this button will command the connected
+MoBot to rotate all of its joints to a flat ``Zero'' position.
+
+\subsection{Individual Joint Control}
+The second section, located at the top-middle section of the interface,
+is the ``Individual Joint Control'' section. These buttons command the
+MoBot to move individual joints. When the up or down arrows are clicked,
+the MoBot begins to move the corresponding joint in either the positive,
+or negative direction. The joint will continue to move until the stop 
+button, located between the up and down arrows, is clicked. 
+
+\subsection{Rolling Control}
+This section contains buttons for controlling the iMobot as a 
+two wheeled mobile robot. The up and down buttons cause the MoBot to
+roll forward or backward. The left and right buttons cause the MoBot 
+to rotate towards the left, or towards the right. The stop button in the
+middle causes the MoBot to stop where it is.
+
+\subsection{Joint Speeds}
+The ``Joint Speeds'' section, located at the bottom left of the interface,
+displays and controls the current joint speeds of the MoBot. Joint speeds
+are a value between 0 and 1, with 1 meaning maximum joint power, and 0
+meaning zero joint power. The speed may be set by sliding the vertical 
+sliders to the desired positions. 
+
+\subsection{Joint Positions}
+This section, located in the bottom-middle of the interface, is used to display
+and control the positions of each of the four
+joints of a MoBot. The joint positions are displayed in the numerical
+text located above each vertical slider. The displayed joint positions are in
+units of degrees.  There are two methods to control
+the joints using this interface.
+
+The first method of controlling the joints is by using the vertical sliders.
+Each vertical slider's position represents a joint's angle. The sliders for the
+two end joints vary from -180 degrees to 180 degrees, representing one complete
+rotation. The angles for the two body joints vary from -90 to 90 degrees. When
+the position of the slider is moved, the MoBot will move its joints to match the 
+sliders. 
+
+The second method for moving the joints is by entering the exact angles for the
+joints. Below each of the four sliders lies a text entry box. Values in degrees
+may be typed into each of the four entry boxes. When the button on the lower
+right of the section labeled ``Move'' is clicked, the MoBot will move its joints
+to match the values typed into the boxes. If no value is typed into a box, that 
+joint will not move.
+
+\subsection{Motions}
+This section, located on the bottom right of the interface, contains a set of
+preprogrammed motions for the MoBot. To execute a preprogrammed motion, simply
+click on the name of the motion you wish to execute, and then click the button
+labeled ``Play''.
+
 \section{Basics of a Ch iMobot Program}
 To help the user become acquainted with the iMobot control programs, one sample
 program will be presented to illustrate the basics and minimum requirements of
@@ -119,7 +186,6 @@ header file imports functions used for a number of tasks, such as printing
 data onto the screen or controlling the iMobot. 
 
 \begin{verbatim}
-#include <stdio.h>       // Required for printf()
 #include <mobot.h> // Required for iMobot control functions
 \end{verbatim}
 
@@ -168,6 +234,63 @@ robot.moveJointWait(IMOBOT_JOINT1);
 robot.moveJointWait(IMOBOT_JOINT4);
 \end{verbatim}
 
+\section{Preprogrammed Motions}
+The MoBot API contains functions for executing preprogrammed motions. The 
+preprogrammed motions are motions which are commonly used for MoBot locomotion.
+Following is a list of available functions and a brief description about
+their effect on the MoBot.
+\begin{itemize}
+\item \texttt{motionInchwormLeft()}: This function causes the MoBot to perform
+  the inchworm gait once, moving the MoBot towards its left.
+\item \texttt{motionInchwormRight()}: This function causes the MoBot to perform
+  the inchworm gait once, moving the MoBot towards its right.
+\item \texttt{motionRollBackward()}: This function causes the MoBot to rotate
+  its faceplates, using them as wheels to roll backward.
+\item \texttt{motionRollForward()}: This function causes the MoBot to rotate
+  its faceplates, using them as wheels to roll forward.
+\item \texttt{motionStand()}: This function causes the MoBot to stand up onto a 
+  faceplate, assuming the camera platform position.
+\item \texttt{motionTurnLeft()}: Uses the MoBot's faceplates as wheels, turning
+  them in opposite directions in order to rotate the MoBot towards its left.
+\item \texttt{motionTurnRight()}: Uses the MoBot's faceplates as wheels, turning
+  them in opposite directions in order to rotate the MoBot towards its right.
+\end{itemize}
+
+\section{Blocking and Non-Blocking Functions}
+All of the MoBot movement functions may be designated as either ``blocking'' 
+functions or ``nonblocking'' functions. A blocking function is a function which
+does not return while operations are being performed. For instance, the
+\texttt{moveWait()} function is a blocking function. When called, the function
+will hang, or ``block'', until all the joints have stopped moving.
+
+The function \texttt{move()} is an example of a non-blocking function. When
+the \texttt{move()} function is called, the function immediately returns 
+as the joints begin moving. The next statement in the program is executed
+even before the movement has completed. 
+
+\subsection{List of Non-Blocking Movement Functions}
+\begin{itemize}
+\item \texttt{move()}
+\item \texttt{moveContinuous()}
+\item \texttt{moveJointTo()}
+\item \texttt{moveTo()}
+\item \texttt{moveToZero()}
+\end{itemize}
+
+\subsection{List of Blocking Movement Functions}
+\begin{itemize}
+\item \texttt{moveContinuousTime()}
+\item \texttt{moveJointWait()}
+\item \texttt{moveWait()}
+\item \texttt{motionInchwormLeft()}
+\item \texttt{motionInchwormRight()}
+\item \texttt{motionRollBackward()}
+\item \texttt{motionRollForward()}
+\item \texttt{motionStand()}
+\item \texttt{motionTurnLeft()}
+\item \texttt{motionTurnRight()}
+\end{itemize}
+
 \newpage
 \appendix
 \section{iMobotComms API}
@@ -187,15 +310,15 @@ The data type \texttt{iMobot\_joints\_t} contains the following macro datatypes.
 Value & Description \\
 \hline 
 \texttt{IMOBOT\_JOINT1} & Joint number 1 on the iMobot, which is a faceplate joint. \\
-\texttt{IMOBOT\_JOINT2} & Joint number 1 on the iMobot, which is a body joint. \\
-\texttt{IMOBOT\_JOINT3} & Joint number 1 on the iMobot, which is a body joint. \\
-\texttt{IMOBOT\_JOINT3} & Joint number 1 on the iMobot, which is a faceplate joint. 
+\texttt{IMOBOT\_JOINT2} & Joint number 2 on the iMobot, which is a body joint. \\
+\texttt{IMOBOT\_JOINT3} & Joint number 3 on the iMobot, which is a body joint. \\
+\texttt{IMOBOT\_JOINT3} & Joint number 4 on the iMobot, which is a faceplate joint. 
 \end{tabular}
 
 \subsection{\texttt{iMobot\_joint\_direction\_t}}
 \index{iMobot\_joint\_direction\_t}
 The data type \texttt{iMobot\_joint\_direction\_t} indicates the commanded direction 
-of a joint on the Mobot.
+of a joint on the MoBot.
 
 \index{IMOBOT\_NEUTRAL}
 \index{IMOBOT\_FORWARD}
@@ -204,7 +327,7 @@ of a joint on the Mobot.
 Value & Description \\
 \hline 
 \texttt{IMOBOT\_NEUTRAL} & This value indicates automatic direction control for a joint. 
-The Mobot will choose the best direction to attain the commanded joint position. \\
+The MoBot will choose the best direction to attain the commanded joint position. \\
 \texttt{IMOBOT\_FORWARD} & Move the joint in the forward direction. \\
 \texttt{IMOBOT\_BACKWARD} & Move the joint in the backward direction. \\
 \end{tabular}
