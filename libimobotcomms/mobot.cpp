@@ -364,6 +364,9 @@ int Mobot_moveTo(br_comms_t* comms,
 int Mobot_moveJointWait(br_comms_t* comms, int id)
 {
   int state;
+  /* Make sure there is no non-blocking function running */
+  THREAD_JOIN(comms->thread);
+
   while(1)
   {
     if(Mobot_getJointState(comms, id, &state)) {
@@ -385,6 +388,8 @@ int Mobot_moveJointWait(br_comms_t* comms, int id)
 int Mobot_moveWait(br_comms_t* comms)
 {
   int i;
+  /* Make sure there is no non-blocking function running */
+  THREAD_JOIN(comms->thread);
   for(i = 0; i < 4; i++) {
     if(Mobot_moveJointWait(comms, i)) {
       return -1;
@@ -492,6 +497,99 @@ int Mobot_motionStand(br_comms_t* comms)
   Mobot_moveWait(comms);
   Mobot_moveJointTo(comms, MOBOT_JOINT1, 20);
   Mobot_moveWait(comms);
+  return 0;
+}
+
+void* motionInchwormLeftThread(void* arg)
+{
+  br_comms_t* comms = (br_comms_t*)arg;
+  Mobot_motionInchwormLeft(comms);
+  return NULL;
+}
+
+int Mobot_motionInchwormLeftNB(br_comms_t* comms)
+{
+  /* Make sure the old thread has joined */
+  THREAD_JOIN(comms->thread);
+  THREAD_CREATE(&comms->thread, motionInchwormLeftThread, comms);
+  return 0;
+}
+
+void* motionInchwormRightThread(void* arg)
+{
+  Mobot_motionInchwormRight((br_comms_t*)arg);
+  return NULL;
+}
+
+int Mobot_motionInchwormRightNB(br_comms_t* comms)
+{
+  THREAD_JOIN(comms->thread);
+  THREAD_CREATE(&comms->thread, motionInchwormRightThread, comms);
+  return 0;
+}
+
+void* motionRollBackwardThread(void* arg)
+{
+  Mobot_motionRollBackward((br_comms_t*)arg);
+  return NULL;
+}
+
+int Mobot_motionRollBackwardNB(br_comms_t* comms)
+{
+  THREAD_JOIN(comms->thread);
+  THREAD_CREATE(&comms->thread, motionRollBackwardThread, comms);
+  return 0;
+}
+
+void* motionRollForwardThread(void* arg)
+{
+  Mobot_motionRollForward((br_comms_t*)arg);
+  return NULL;
+}
+
+int Mobot_motionRollForwardNB(br_comms_t* comms)
+{
+  THREAD_JOIN(comms->thread);
+  THREAD_CREATE(&comms->thread, motionRollForwardThread, comms);
+  return 0;
+}
+
+void* motionStandThread(void* arg)
+{
+  Mobot_motionStand((br_comms_t*)arg);
+  return NULL;
+}
+
+int Mobot_motionStandNB(br_comms_t* comms)
+{
+  THREAD_JOIN(comms->thread);
+  THREAD_CREATE(&comms->thread, motionStandThread, comms);
+  return 0;
+}
+
+void* motionTurnLeftThread(void* arg)
+{
+  Mobot_motionTurnLeft((br_comms_t*)arg);
+  return NULL;
+}
+
+int Mobot_motionTurnLeftNB(br_comms_t* comms)
+{
+  THREAD_JOIN(comms->thread);
+  THREAD_CREATE(&comms->thread, motionTurnLeftThread, comms);
+  return 0;
+}
+
+void* motionTurnRightThread(void* arg)
+{
+  Mobot_motionTurnRight((br_comms_t*)arg);
+  return NULL;
+}
+
+int Mobot_motionTurnRightNB(br_comms_t* comms)
+{
+  THREAD_JOIN(comms->thread);
+  THREAD_CREATE(&comms->thread, motionTurnRightThread, comms);
   return 0;
 }
 
@@ -720,5 +818,42 @@ int CMobot::motionStand()
 {
   return Mobot_motionStand(&_comms);
 }
+
+int CMobot::motionInchwormLeftNB()
+{
+  return Mobot_motionInchwormLeftNB(&_comms);
+}
+
+int CMobot::motionInchwormRightNB()
+{
+  return Mobot_motionInchwormRightNB(&_comms);
+}
+
+int CMobot::motionRollBackwardNB()
+{
+  return Mobot_motionRollBackwardNB(&_comms);
+}
+
+int CMobot::motionRollForwardNB()
+{
+  return Mobot_motionRollForwardNB(&_comms);
+}
+
+int CMobot::motionStandNB()
+{
+  return Mobot_motionStandNB(&_comms);
+}
+
+int CMobot::motionTurnLeftNB()
+{
+  return Mobot_motionTurnLeftNB(&_comms);
+}
+
+int CMobot::motionTurnRightNB()
+{
+  return Mobot_motionTurnRightNB(&_comms);
+}
+
+
 
 #endif

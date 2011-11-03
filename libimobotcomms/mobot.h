@@ -28,6 +28,8 @@
 #include <Ws2bth.h>
 #endif
 
+#include "thread_macros.h"
+
 #ifndef _WIN32
 typedef struct sockaddr_rc sockaddr_t;
 #else
@@ -89,6 +91,7 @@ typedef struct br_comms_s
 #endif
   sockaddr_t addr;
   double jointSpeeds[4];
+  THREAD_T thread;
 } br_comms_t;
 
 #define DEF_MOTOR_SPEED 0.50
@@ -159,6 +162,15 @@ DLLIMPORT int Mobot_motionStand(br_comms_t* comms);
 DLLIMPORT int Mobot_motionTurnLeft(br_comms_t* comms);
 DLLIMPORT int Mobot_motionTurnRight(br_comms_t* comms);
 
+/* Non-Blocking compound motion functions */
+DLLIMPORT int Mobot_motionInchwormLeftNB(br_comms_t* comms);
+DLLIMPORT int Mobot_motionInchwormRightNB(br_comms_t* comms);
+DLLIMPORT int Mobot_motionRollBackwardNB(br_comms_t* comms);
+DLLIMPORT int Mobot_motionRollForwardNB(br_comms_t* comms);
+DLLIMPORT int Mobot_motionStandNB(br_comms_t* comms);
+DLLIMPORT int Mobot_motionTurnLeftNB(br_comms_t* comms);
+DLLIMPORT int Mobot_motionTurnRightNB(br_comms_t* comms);
+
 #ifdef _WIN32
 typedef struct bdaddr_s {
   UINT8 b[6];
@@ -209,6 +221,15 @@ class CMobot {
     int motionStand();
     int motionTurnLeft();
     int motionTurnRight();
+
+    /* Non-Blocking motion functions */
+    int motionInchwormLeftNB();
+    int motionInchwormRightNB();
+    int motionRollBackwardNB();
+    int motionRollForwardNB();
+    int motionStandNB();
+    int motionTurnLeftNB();
+    int motionTurnRightNB();
   private:
     int getJointDirection(int id, int &dir);
     int setJointDirection(int id, int dir);
