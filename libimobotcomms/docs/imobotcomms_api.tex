@@ -263,6 +263,14 @@ does not return while operations are being performed. For instance, the
 \texttt{moveWait()} function is a blocking function. When called, the function
 will hang, or ``block'', until all the joints have stopped moving.
 
+Furthermore, some functions have both a blocking version and a non-blocking
+version. For these functions, the suffix \texttt{NB} denotes that the function
+is non-blocking. For instance, the function \texttt{motionStand()} is blocking,
+meaning the function will not return until the motion is completed, whereas
+the function \texttt{motionStandNB()} is non-blocking, meaning the function
+returns immediately and the robot performs the ``standing'' motion
+asynchronously.
+
 The function \texttt{move()} is an example of a non-blocking function. When
 the \texttt{move()} function is called, the function immediately returns 
 as the joints begin moving. The next statement in the program is executed
@@ -275,6 +283,13 @@ even before the movement has completed.
 \item \texttt{moveJointTo()}
 \item \texttt{moveTo()}
 \item \texttt{moveToZero()}
+\item \texttt{motionInchwormLeftNB()}
+\item \texttt{motionInchwormRightNB()}
+\item \texttt{motionRollBackwardNB()}
+\item \texttt{motionRollForwardNB()}
+\item \texttt{motionStandNB()}
+\item \texttt{motionTurnLeftNB()}
+\item \texttt{motionTurnRightNB()}
 \end{itemize}
 
 \subsection{List of Blocking Movement Functions}
@@ -290,6 +305,71 @@ even before the movement has completed.
 \item \texttt{motionTurnLeft()}
 \item \texttt{motionTurnRight()}
 \end{itemize}
+
+\section{Controlling Multiple Modules}
+The MoBot control software is designed to be able to control multiple modules
+simultaneously. There are a couple important differences in the program 
+which enable the control of multiple modules. A small demo program which
+controls two modules simultaneously will first be presented, followed by
+a detailed explanation of the program elements.
+
+\subsection{Multiple Module Demo Program}
+\verbatiminput{../demos/multiple_modules/multiple_modules.cpp}
+
+\subsection{Demo Explanation}
+The first two lines of interest appear as such:
+\begin{verbatim}
+  CMobot robot1;
+  CMobot robot2;
+\end{verbatim}
+These two lines declare two separate variables which will represent the
+two separate MoBot modules. Next, we need to connect each variable to
+a physically separate MoBot. This is done with the following lines.
+\begin{verbatim}
+  robot1.connectAddress("11:11:11:11:11:11", 20);
+  robot2.connectAddress("22:22:22:22:22:22", 20);
+\end{verbatim}
+These lines connect the first variable, \texttt{robot1}, to the MoBot with
+address \texttt{11:11:11:11:11:11}. When running this demo, this
+demo address will need to be replaced with the actual address of the MoBot.
+The second argument, \texttt{20}, is the channel to connect to. By default,
+the MoBot will listen on channel 20 for incoming connections.
+
+A similar process is done with \texttt{robot2}, causing it to connect
+to a second MoBot with address \texttt{22:22:22:22:22:22}.
+
+\begin{verbatim}
+  robot1.moveToZero();
+  robot2.moveToZero();
+\end{verbatim}
+These two lines command the two robots to move to their zero positions.
+Note that these functions are non-blocking. This means that the
+\texttt{moveToZero()} function will return immediately, and will not
+wait for the first robot to finish completing the motion before 
+commanding the second robot to begin. In a normal program, this effectively
+causes both robots to move to their zero positions simultaneously.
+
+\begin{verbatim}
+  robot1.moveWait();
+  robot2.moveWait();
+\end{verbatim}
+Since the \texttt{moveToZero()} functions are non-blocking, we would like
+the program to wait until the motions are complete before continuing. By
+calling \texttt{moveWait()} on both of the robots, we can be assured that
+the robots have finished moving before the program continues.
+
+\begin{verbatim}
+  robot1.motionStandNB();
+  robot2.motionStandNB();
+  robot1.moveWait();
+  robot2.moveWait();
+\end{verbatim}
+Similar to the calls to \texttt{moveToZero()}, this block of code instructs 
+the two MoBots to stand. Note that we call the non-blocking versions of the
+stand function, called \texttt{motionStandNB()}. Since these functions are
+non-blocking, both robots will effectively stand simultaneously. Again,
+we call the \texttt{moveWait()} function on both robots to ensure that 
+the robots have finished standing before the code continues.
 
 \newpage
 \appendix

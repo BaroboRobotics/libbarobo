@@ -686,7 +686,6 @@ CMobot::~CMobot()
 {
 }
 
-
 int CMobot::connect()
 {
   return Mobot_connect(&_comms);
