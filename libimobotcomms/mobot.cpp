@@ -417,6 +417,7 @@ int Mobot_motionRollForward(br_comms_t* comms)
   Mobot_getJointAngle(comms, MOBOT_JOINT4, &motorPosition[1]);
   Mobot_moveJointTo(comms, MOBOT_JOINT3, motorPosition[0] + 90);
   Mobot_moveJointTo(comms, MOBOT_JOINT4, motorPosition[1] - 90);
+  Mobot_moveWait(comms);
   return 0;
 }
 
@@ -427,6 +428,7 @@ int Mobot_motionRollBackward(br_comms_t* comms)
   Mobot_getJointAngle(comms, MOBOT_JOINT4, &motorPosition[1]);
   Mobot_moveJointTo(comms, MOBOT_JOINT3, motorPosition[0] - 90);
   Mobot_moveJointTo(comms, MOBOT_JOINT4, motorPosition[1] + 90);
+  Mobot_moveWait(comms);
   return 0;
 }
 
@@ -437,6 +439,7 @@ int Mobot_motionTurnLeft(br_comms_t* comms)
   Mobot_getJointAngle(comms, MOBOT_JOINT4, &motorPosition[1]);
   Mobot_moveJointTo(comms, MOBOT_JOINT3, motorPosition[0] + 90);
   Mobot_moveJointTo(comms, MOBOT_JOINT4, motorPosition[1] + 90);
+  Mobot_moveWait(comms);
   return 0;
 }
 
@@ -447,6 +450,7 @@ int Mobot_motionTurnRight(br_comms_t* comms)
   Mobot_getJointAngle(comms, MOBOT_JOINT4, &motorPosition[1]);
   Mobot_moveJointTo(comms, MOBOT_JOINT3, motorPosition[0] - 90);
   Mobot_moveJointTo(comms, MOBOT_JOINT4, motorPosition[1] - 90);
+  Mobot_moveWait(comms);
   return 0;
 }
 
