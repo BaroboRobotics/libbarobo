@@ -528,7 +528,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonconnect()
 	const size_t newsize = 200;
 	size_t convertedChars = 0;
 	wcstombs_s(&convertedChars, paddress, origsize, address, _TRUNCATE); 
-	//if(iMobotComms.connectAddress(paddress, chan)) {
+	//if(iMobotComms.connectWithAddress(paddress, chan)) {
 #endif
 	if(iMobotComms.connect()) {
 		/* Error connecting */

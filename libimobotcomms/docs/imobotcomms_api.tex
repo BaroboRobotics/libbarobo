@@ -326,8 +326,8 @@ These two lines declare two separate variables which will represent the
 two separate MoBot modules. Next, we need to connect each variable to
 a physically separate MoBot. This is done with the following lines.
 \begin{verbatim}
-  robot1.connectAddress("11:11:11:11:11:11", 20);
-  robot2.connectAddress("22:22:22:22:22:22", 20);
+  robot1.connectWithAddress("11:11:11:11:11:11", 20);
+  robot2.connectWithAddress("22:22:22:22:22:22", 20);
 \end{verbatim}
 These lines connect the first variable, \texttt{robot1}, to the MoBot with
 address \texttt{11:11:11:11:11:11}. When running this demo, this

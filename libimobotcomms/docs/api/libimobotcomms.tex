@@ -26,8 +26,8 @@ to connect to. \\
 \texttt{\textasciitilde CMobot()} & The CMobot destructor function. This function
 is called automatically and should not be called explicitly. \\
 & \\
-\texttt{connect()} & Connect to a remote iMobot module. This function connects to an already-paired iMobot module in Microsoft Windows. This function does not currently work for non-Windows operating systems, such as Mac or Linux. For those operating systems, please use the \texttt{connectAddress()} function instead. \\
-\texttt{connectAddress()} & Connect to an iMobot module by specifying its Bluetooth address. \\
+\texttt{connect()} & Connect to a remote iMobot module. This function connects to an already-paired iMobot module in Microsoft Windows. This function does not currently work for non-Windows operating systems, such as Mac or Linux. For those operating systems, please use the \texttt{connectWithAddress()} function instead. \\
+\texttt{connectWithAddress()} & Connect to an iMobot module by specifying its Bluetooth address. \\
 \texttt{disconnect()} & Disconnect from an iMobot module. \\
 \texttt{getJointAngle()} & Gets a joint's angle. \\
 %\texttt{getJointDirection()} & Gets a motor's currently assigned direction. \\
@@ -75,7 +75,7 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \newpage
 \input{api/connect}
 \pagebreak
-\input{api/connectAddress}
+\input{api/connectWithAddress}
 \pagebreak
 \input{api/disconnect}
 \pagebreak

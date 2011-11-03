@@ -28,7 +28,7 @@ int Mobot_connect(br_comms_t* comms)
 #ifndef _WIN32
   fprintf(stderr, 
       "ERROR; Function Mobot_connect() is not yet implemented \n"
-      "on non-Windows systems. Please use Mobot_connectAddress() \n"
+      "on non-Windows systems. Please use Mobot_connectWithAddress() \n"
       "instead.\n");
   return -1;
 #else
@@ -116,7 +116,7 @@ int Mobot_connect(br_comms_t* comms)
 #endif
 }
 
-int Mobot_connectAddress(br_comms_t* comms, const char* address, int channel)
+int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel)
 {
   int status;
   comms->socket = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
@@ -691,9 +691,9 @@ int CMobot::connect()
   return Mobot_connect(&_comms);
 }
 
-int CMobot::connectAddress(const char* address, int channel)
+int CMobot::connectWithAddress(const char* address, int channel)
 {
-  return Mobot_connectAddress(&_comms, address, channel);
+  return Mobot_connectWithAddress(&_comms, address, channel);
 }
 
 int CMobot::disconnect()

@@ -116,7 +116,7 @@ extern "C" {
 
 DLLIMPORT int Mobot_init(br_comms_t* comms);
 DLLIMPORT int Mobot_connect(br_comms_t* comms);
-DLLIMPORT int Mobot_connectAddress(
+DLLIMPORT int Mobot_connectWithAddress(
     br_comms_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_disconnect(br_comms_t* comms);
 DLLIMPORT int Mobot_isConnected(br_comms_t* comms);
@@ -197,7 +197,7 @@ class CMobot {
     CMobot();
     ~CMobot();
     int connect();
-    int connectAddress(const char address[], int channel);
+    int connectWithAddress(const char address[], int channel);
     int disconnect();
     int isConnected();
     int getJointAngle(int id, double &angle);

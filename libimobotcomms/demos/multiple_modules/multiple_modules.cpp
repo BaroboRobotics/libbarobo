@@ -5,12 +5,12 @@ int main()
   CMobot robot1;
   CMobot robot2;
 
-  /* For multiple robots, we need to use the "connectAddress" function to
+  /* For multiple robots, we need to use the "connectWithAddress" function to
    * connect to separate robots. Substitute the string "11:11:11:11:11:11" with
    * the address of the first MoBot and the string "22:22:22:22:22:22" with the
    * string of the second MoBot.*/
-  robot1.connectAddress("11:11:11:11:11:11", 20);
-  robot2.connectAddress("22:22:22:22:22:22", 20);
+  robot1.connectWithAddress("11:11:11:11:11:11", 20);
+  robot2.connectWithAddress("22:22:22:22:22:22", 20);
 
 
   /* Set the robot to "home" position, where all joint angles are 0 degrees. */
