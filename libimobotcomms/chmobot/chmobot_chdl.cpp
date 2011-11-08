@@ -255,6 +255,7 @@ EXPORTCH int moveWait_chdl(void *varg) {
     class CMobot *mobot;
     int retval;
 
+    Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobot *);
     retval = mobot->moveWait();
     Ch_VaEnd(interp, ap);
@@ -267,6 +268,7 @@ EXPORTCH int moveToZero_chdl(void *varg) {
     class CMobot *mobot;
     int retval;
 
+    Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobot *);
     retval = mobot->moveToZero();
     Ch_VaEnd(interp, ap);

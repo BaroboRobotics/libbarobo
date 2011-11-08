@@ -48,11 +48,11 @@ int CMobot::connect() {
     int retval;
 
     fptr = dlsym(g_chmobot_dlhandle, "connect_chdl");
-    if(fptr == null) {
+    if(fptr == NULL) {
         fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, this, connect);
+    dlrunfun(fptr, &retval, NULL, this, connect);
     return retval;
 }
 int CMobot::connectWithAddress(char *address, int channel) {

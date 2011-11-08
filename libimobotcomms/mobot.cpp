@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "mobot.h"
+#include "mobot_internal.h"
 
 #ifdef _CH_
 #include <stdarg.h>
