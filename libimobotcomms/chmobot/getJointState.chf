@@ -7,6 +7,6 @@ int CMobot::getJointState(int id, int & state) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, getJointState, this, id, state);
+    dlrunfun(fptr, &retval, NULL, this, id, &state);
     return retval;
 }

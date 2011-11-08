@@ -7,6 +7,6 @@ int CMobot::getJointSpeed(int id, double & speed) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, getJointSpeed, this, id, speed);
+    dlrunfun(fptr, &retval, NULL, this, id, &speed);
     return retval;
 }

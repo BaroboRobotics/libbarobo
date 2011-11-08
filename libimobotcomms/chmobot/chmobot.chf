@@ -1,0 +1,372 @@
+int CMobot::connect() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "connect_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, this, connect);
+    return retval;
+}
+int CMobot::connectWithAddress(char *address, int channel) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "connectWithAddress_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, connectWithAddress, this, address, channel);
+    return retval;
+}
+int CMobot::disconnect() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "disconnect_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, disconnect, this);
+    return retval;
+}
+int CMobot::getJointAngle(int id, double & angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "getJointAngle_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, &angle);
+    return retval;
+}
+int CMobot::getJointSpeed(int id, double & speed) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "getJointSpeed_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, &speed);
+    return retval;
+}
+int CMobot::getJointState(int id, int & state) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "getJointState_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, &state);
+    return retval;
+}
+int CMobot::isConnected() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "isConnected_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, isConnected, this);
+    return retval;
+}
+int CMobot::motionInchwormLeft() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "motionInchwormLeft_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, motionInchwormLeft, this);
+    return retval;
+}
+int CMobot::motionInchwormLeftNB() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "motionInchwormLeftNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, motionInchwormLeftNB, this);
+    return retval;
+}
+int CMobot::motionInchwormRight() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "motionInchwormRight_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, motionInchwormRight, this);
+    return retval;
+}
+int CMobot::motionInchwormRightNB() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "motionInchwormRightNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, motionInchwormRightNB, this);
+    return retval;
+}
+int CMobot::motionRollBackward() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "motionRollBackward_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, motionRollBackward, this);
+    return retval;
+}
+int CMobot::motionRollBackwardNB() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "motionRollBackwardNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, motionRollBackwardNB, this);
+    return retval;
+}
+int CMobot::motionRollForward() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "motionRollForward_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, motionRollForward, this);
+    return retval;
+}
+int CMobot::motionRollForwardNB() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "motionRollForwardNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, motionRollForwardNB, this);
+    return retval;
+}
+int CMobot::motionStand() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "motionStand_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, motionStand, this);
+    return retval;
+}
+int CMobot::motionStandNB() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "motionStandNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, motionStandNB, this);
+    return retval;
+}
+int CMobot::motionTurnLeft() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "motionTurnLeft_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, motionTurnLeft, this);
+    return retval;
+}
+int CMobot::motionTurnLeftNB() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "motionTurnLeftNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, motionTurnLeftNB, this);
+    return retval;
+}
+int CMobot::motionTurnRight() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "motionTurnRight_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, motionTurnRight, this);
+    return retval;
+}
+int CMobot::motionTurnRightNB() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "motionTurnRightNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, motionTurnRightNB, this);
+    return retval;
+}
+int CMobot::move(double angle1, double angle2, double angle3, double angle4) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "move_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, move, this, angle1, angle2, angle3, angle4);
+    return retval;
+}
+int CMobot::moveContinuous(int dir1, int dir2, int dir3, int dir4) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "moveContinuous_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveContinuous, this, dir1, dir2, dir3, dir4);
+    return retval;
+}
+int CMobot::moveContinuousTime(int dir1, int dir2, int dir3, int dir4, int msecs) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "moveContinuousTime_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveContinuousTime, this, dir1, dir2, dir3, dir4, msecs);
+    return retval;
+}
+int CMobot::moveJointTo(int id, double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "moveJointTo_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveJointTo, this, id, angle);
+    return retval;
+}
+int CMobot::moveJointWait(int id) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "moveJointWait_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveJointWait, this, id);
+    return retval;
+}
+int CMobot::moveTo(double angle1, double angle2, double angle3, double angle4) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "moveTo_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveTo, this, angle1, angle2, angle3, angle4);
+    return retval;
+}
+int CMobot::moveToZero() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "moveToZero_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveToZero, this);
+    return retval;
+}
+int CMobot::moveWait() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "moveWait_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveWait, this);
+    return retval;
+}
+int CMobot::setJointSpeed(int id, double speed) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "setJointSpeed_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setJointSpeed, this, id, speed);
+    return retval;
+}
+int CMobot::stop() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chchmobot_handle, "stop_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, stop, this);
+    return retval;
+}

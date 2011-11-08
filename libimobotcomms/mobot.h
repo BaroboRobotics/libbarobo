@@ -11,6 +11,20 @@
 #pragma package <chbluetooth>
 #endif
 
+/* Set up chdl stuff */
+void* g_mobot_dlhandle = dlopen("libcmobotclass.dl", RTLD_LAZY);
+if(g_mobot_dlhandle == NULL) {
+  fprintf(_stderr, "Error: dlopen(): %s\n", dlerror());
+  fprintf(_stderr, "       cannot get g_mobot_dlhandle in %s\n", __FILE__);
+  exit(-1);
+}
+
+void _dlclose_cmobotclass(void) {
+  dlclose(g_mobot_dlhandle);
+}
+
+atexit(_dlclose_cmobotclass);
+
 #endif
 
 
@@ -230,16 +244,18 @@ class CMobot {
     int motionStandNB();
     int motionTurnLeftNB();
     int motionTurnRightNB();
+#ifndef _CH_
   private:
     int getJointDirection(int id, int &dir);
     int setJointDirection(int id, int dir);
     br_comms_t _comms;
 };
+#endif /* Not _CH_*/
 #endif /* If C++ or CH */
 #endif /* C_ONLY */
 
 #ifdef _CH_
-#pragma importf "mobot.cpp"
+#pragma importf "chmobot.chf"
 #endif
 
 #endif /* Header Guard */

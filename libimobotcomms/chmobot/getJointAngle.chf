@@ -7,6 +7,6 @@ int CMobot::getJointAngle(int id, double & angle) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, getJointAngle, this, id, &angle);
+    dlrunfun(fptr, &retval, NULL, this, id, &angle);
     return retval;
 }
