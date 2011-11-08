@@ -12,7 +12,9 @@
 #endif
 
 /* Set up chdl stuff */
-void* g_mobot_dlhandle = dlopen("libcmobotclass.dl", RTLD_LAZY);
+#if 0
+#include <dlfcn.h>
+void* g_mobot_dlhandle = dlopen("libmobot.dl", RTLD_LAZY);
 if(g_mobot_dlhandle == NULL) {
   fprintf(_stderr, "Error: dlopen(): %s\n", dlerror());
   fprintf(_stderr, "       cannot get g_mobot_dlhandle in %s\n", __FILE__);
@@ -24,7 +26,7 @@ void _dlclose_cmobotclass(void) {
 }
 
 atexit(_dlclose_cmobotclass);
-
+#endif
 #endif
 
 
@@ -42,7 +44,9 @@ atexit(_dlclose_cmobotclass);
 #include <Ws2bth.h>
 #endif
 
+#ifndef _CH_
 #include "thread_macros.h"
+#endif
 
 #ifndef _WIN32
 typedef struct sockaddr_rc sockaddr_t;
@@ -95,6 +99,9 @@ typedef enum mobot_joint_direction_e
   MOBOT_FORWARD,
   MOBOT_BACKWARD
 } mobotDirection_t;
+
+/* Hide all of the C-style structs and API from CH */
+#ifndef _CH_
 
 typedef struct br_comms_s
 {
@@ -185,6 +192,12 @@ DLLIMPORT int Mobot_motionStandNB(br_comms_t* comms);
 DLLIMPORT int Mobot_motionTurnLeftNB(br_comms_t* comms);
 DLLIMPORT int Mobot_motionTurnRightNB(br_comms_t* comms);
 
+/* Utility Functions */
+int SendToIMobot(br_comms_t* comms, const char* str, int len);
+int RecvFromIMobot(br_comms_t* comms, char* buf, int size);
+
+#endif /* Not _CH_ */
+
 #ifdef _WIN32
 typedef struct bdaddr_s {
   UINT8 b[6];
@@ -199,10 +212,6 @@ int str2ba(const char *str, bdaddr_t *ba);
 }
 #endif
 #endif
-
-/* Utility Functions */
-int SendToIMobot(br_comms_t* comms, const char* str, int len);
-int RecvFromIMobot(br_comms_t* comms, char* buf, int size);
 
 #ifndef C_ONLY
 #if defined (__cplusplus) || defined (_CH_)
@@ -249,12 +258,18 @@ class CMobot {
     int getJointDirection(int id, int &dir);
     int setJointDirection(int id, int dir);
     br_comms_t _comms;
-};
+#else
+  private:
+    static void *g_chmobot_dlhandle;
+    static int g_chmobot_dlcount;
 #endif /* Not _CH_*/
+};
 #endif /* If C++ or CH */
 #endif /* C_ONLY */
 
 #ifdef _CH_
+void * CMobot::g_chmobot_dlhandle = NULL;
+int CMobot::g_chmobot_dlcount = 0;
 #pragma importf "chmobot.chf"
 #endif
 
