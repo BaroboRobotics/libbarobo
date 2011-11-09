@@ -5,7 +5,7 @@
 \usepackage{verbatim}
 \usepackage{makeidx}
 
-\title{Programming the iMobot}  
+\title{Programming the MoBot}  
 %\author{David Ko\\Mechanical and Aerospace Engineering}
 %\date{\today} 
 \makeindex
@@ -13,9 +13,9 @@
 \begin{document}
 \maketitle
 
-\section{The \texttt{CMobot} iMobot Remote Control Library}
+\section{The \texttt{CMobot} MoBot Remote Control Library}
 The \texttt{CMobot} library is a collection of functions geared towards
-controlling the motors and reading sensor values of an iMobot module via the
+controlling the motors and reading sensor values of a MoBot module via the
 Bluetooth wireless protocol. The functions are designed to be intuitive
 and easy to use. Various functions are provided to control or obtain the speed,
 direction, and position of the motors. The API includes C-style functions as well
@@ -23,11 +23,11 @@ as a C++ class called \texttt{CMobot} to facilitate C++ style api function
 calls. 
 
 This documentation introduces the basic computer setup required for controlling 
-the iMobot, as well as several demo programs and a complete reference for all
+the MoBot, as well as several demo programs and a complete reference for all
 API function provided with the \texttt{CMobot} library.
 
-\section{\label{sec:pairing}Bluetooth Pairing with the iMobot}
-To control the iMobot with the Bluetooth wireless protocol, the controlling 
+\section{\label{sec:pairing}Bluetooth Pairing with the MoBot}
+To control the MoBot with the Bluetooth wireless protocol, the controlling 
 computer must be equipped with Bluetooth. If the computer does not have
 Bluetooth built-in, an external USB Bluetooth dongle may be used. The following
 instructions are for a Windows 7 computer with built-in Bluetooth. The basic
@@ -57,19 +57,19 @@ will bring up the following dialog.
 \end{center}
 
 This dialog shows a list of all Bluetooth wireless devices that are in range.
-Among them should be the iMobot you wish to connect to. If the iMobot does not
-appear on this list, please ensure that the iMobot is within 10 meters of the
-connecting computer and that the iMobot is powered on. Double click on the icon
-representing the iMobot to proceed. Once you have double-clicked the icon, the
+Among them should be the MoBot you wish to connect to. If the MoBot does not
+appear on this list, please ensure that the MoBot is within 10 meters of the
+connecting computer and that the MoBot is powered on. Double click on the icon
+representing the MoBot to proceed. Once you have double-clicked the icon, the
 following dialog box should appear.
 
 \begin{center}
 \includegraphics[width=5in]{images/imobot_connect_3.png}
 \end{center}
 
-Select the second option, labeled ``Enter the device's pairing code''. iMobot
+Select the second option, labeled ``Enter the device's pairing code''. MoBot
 modules come hard-coded with a default pairing code. When prompted for the
-pairing code, enter ``1234''. Once the computer is paired with the iMobot,
+pairing code, enter ``1234''. Once the computer is paired with the MoBot,
 the following dialog box may pop up asking to install drivers.
 
 \begin{center}
@@ -78,7 +78,7 @@ the following dialog box may pop up asking to install drivers.
 
 If the previously illustrated dialog box appears, just click the ``cancel''
 button at the bottom right. No extra drivers are necessary for controlling the
-iMobot module.
+MoBot module.
 
 At this point, the following dialog should be shown.
 
@@ -86,9 +86,9 @@ At this point, the following dialog should be shown.
 \includegraphics[width=5in]{images/imobot_connect_6.png}
 \end{center}
 
-The next step is to enable the iMobot control service. 
+The next step is to enable the MoBot control service. 
 Double-click on the icon denoting the
-iMobot module to bring up the following dialog:
+MoBot module to bring up the following dialog:
 
 \begin{center}
 \includegraphics[width=5in]{images/imobot_connect_7.png}
@@ -100,24 +100,24 @@ Click on the tab labeled ``Services''
 \includegraphics[width=5in]{images/imobot_connect_8.png}
 \end{center}
 
-Ensure that the service titled ``iMobot Control'' is enabled. If it is not
+Ensure that the service titled ``MoBot Control'' is enabled. If it is not
 enabled, click on the check-box to enable it. Click on the ``Ok'' button to
-accept the changes and close the dialogs. The iMobot is now ready to be
-controlled with the iMobotComms library.
+accept the changes and close the dialogs. The MoBot is now ready to be
+controlled with the MoBotComms library.
 
 \section{ The MoBot Remote Control Program }
-\includegraphics[width=4.5in]{images/iMobot_controller_screenshot.png}
+\includegraphics[width=4.5in]{images/MoBot_controller_screenshot.png}
 
 The preceding figure shows the MoBot remote control program. The
 program displays a graphical interface which may be used to display
-information about the iMobot's joint positions, and also control the
+information about the MoBot's joint positions, and also control the
 speeds and positions of the MoBot's joints. The interface is divided
 up into six sections; three on the top half of the interface, and three on 
 the bottom half. 
 
-\subsection{The iMobot Diagram and ``Move To Zero'' Button}
+\subsection{The MoBot Diagram and ``Move To Zero'' Button}
 The first section of the GUI located on the top left of the interface
-displays a schematic diagram of the iMobot, displaying motor positions.
+displays a schematic diagram of the MoBot, displaying motor positions.
 Underneath the diagram, there is a large button with the text 
 ``Move To Zero''. When clicked, this button will command the connected
 MoBot to rotate all of its joints to a flat ``Zero'' position.
@@ -131,7 +131,7 @@ or negative direction. The joint will continue to move until the stop
 button, located between the up and down arrows, is clicked. 
 
 \subsection{Rolling Control}
-This section contains buttons for controlling the iMobot as a 
+This section contains buttons for controlling the MoBot as a 
 two wheeled mobile robot. The up and down buttons cause the MoBot to
 roll forward or backward. The left and right buttons cause the MoBot 
 to rotate towards the left, or towards the right. The stop button in the
@@ -172,26 +172,26 @@ preprogrammed motions for the MoBot. To execute a preprogrammed motion, simply
 click on the name of the motion you wish to execute, and then click the button
 labeled ``Play''.
 
-\section{Basics of a Ch iMobot Program}
-To help the user become acquainted with the iMobot control programs, one sample
+\section{Basics of a Ch MoBot Program}
+To help the user become acquainted with the MoBot control programs, one sample
 program will be presented to illustrate the basics and minimum requirements of
-an iMobot control program. 
+a MoBot control program. 
 
 \subsection{\texttt{getting\_started.ch} Source Code}
 \verbatiminput{../demos/getting_started/getting_started.ch}
 
 \subsection{\label{sec:democode}Demo Code for \texttt{getting\_started.ch} Explained}
-The beginning of every iMobot control program will include header files. Each
+The beginning of every MoBot control program will include header files. Each
 header file imports functions used for a number of tasks, such as printing
-data onto the screen or controlling the iMobot. 
+data onto the screen or controlling the MoBot. 
 
 \begin{verbatim}
-#include <mobot.h> // Required for iMobot control functions
+#include <mobot.h> // Required for MoBot control functions
 \end{verbatim}
 
-Next, we must initialize the C++ class used to control the iMobot. This line
+Next, we must initialize the C++ class used to control the MoBot. This line
 initializes a new variable named \texttt{robot} which represents the remote
-iMobot module which we wish to control. This special variable is actually an
+MoBot module which we wish to control. This special variable is actually an
 instance of the \texttt{CMobot} class, which contains its own set of
 functions called ``methods'' or ``member functions''.
 \begin{verbatim}
@@ -205,18 +205,18 @@ CMobot robot("12:34:56:78:90:12", 20);
 The alternate syntax instructs the new \texttt{CMobot} variable named 
 \texttt{robot} to explicitely connect to the robot with address
 \texttt{"12:34:56:78:90:12"} and channel \texttt{20}. This method allows
-the iMobot program to connect to an iMobot even if it has not been paired,
+the MoBot program to connect to a MoBot even if it has not been paired,
 as described in Section \ref{sec:pairing}. However, it requires the user
-to know the Bluetooth address of the iMobot in advance.
+to know the Bluetooth address of the MoBot in advance.
 
 The next line will use the \texttt{moveToZero} member function. The
-\texttt{moveToZero} function causes the iMobot to move all of its motors to the
+\texttt{moveToZero} function causes the MoBot to move all of its motors to the
 zero position.
 \begin{verbatim}
 robot.moveToZero();
 \end{verbatim}
 
-The majority of iMobot control functions do not wait for the robotic motions to
+The majority of MoBot control functions do not wait for the robotic motions to
 complete before continuing. As such, if we want to wait for the robot to fully
 complete the requested motion before continuing with the rest of the program,
 we must use the \texttt{moveWait} function, as such.
@@ -226,7 +226,7 @@ robot.moveWait();
 
 The next four lines of code command joints 1 and 4 to rotate 90 degrees, and
 then waits for the motors to stop moving. Joints 1 and 4 are the faceplates
-of the iMobot which are sometimes used to act as "wheels".
+of the MoBot which are sometimes used to act as "wheels".
 \begin{verbatim}
 robot.moveJointTo(IMOBOT_JOINT1, 90);
 robot.moveJointTo(IMOBOT_JOINT4, 90);
@@ -373,14 +373,14 @@ the robots have finished standing before the code continues.
 
 \newpage
 \appendix
-\section{iMobotComms API}
+\section{MoBotComms API}
 \input{api/libimobotcomms.tex}
 
 \section{Macros}
 
-\subsection{\texttt{iMobot\_joints\_t}}
-\index{iMobot\_joints\_t}
-The data type \texttt{iMobot\_joints\_t} contains the following macro datatypes.\\
+\subsection{\texttt{MoBot\_joints\_t}}
+\index{MoBot\_joints\_t}
+The data type \texttt{MoBot\_joints\_t} contains the following macro datatypes.\\
 
 \index{IMOBOT\_JOINT1}
 \index{IMOBOT\_JOINT2}
@@ -389,15 +389,15 @@ The data type \texttt{iMobot\_joints\_t} contains the following macro datatypes.
 \begin{tabular}{p{3cm}p{7cm}} \hline 
 Value & Description \\
 \hline 
-\texttt{IMOBOT\_JOINT1} & Joint number 1 on the iMobot, which is a faceplate joint. \\
-\texttt{IMOBOT\_JOINT2} & Joint number 2 on the iMobot, which is a body joint. \\
-\texttt{IMOBOT\_JOINT3} & Joint number 3 on the iMobot, which is a body joint. \\
-\texttt{IMOBOT\_JOINT3} & Joint number 4 on the iMobot, which is a faceplate joint. 
+\texttt{IMOBOT\_JOINT1} & Joint number 1 on the MoBot, which is a faceplate joint. \\
+\texttt{IMOBOT\_JOINT2} & Joint number 2 on the MoBot, which is a body joint. \\
+\texttt{IMOBOT\_JOINT3} & Joint number 3 on the MoBot, which is a body joint. \\
+\texttt{IMOBOT\_JOINT3} & Joint number 4 on the MoBot, which is a faceplate joint. 
 \end{tabular}
 
-\subsection{\texttt{iMobot\_joint\_direction\_t}}
-\index{iMobot\_joint\_direction\_t}
-The data type \texttt{iMobot\_joint\_direction\_t} indicates the commanded direction 
+\subsection{\texttt{MoBot\_joint\_direction\_t}}
+\index{MoBot\_joint\_direction\_t}
+The data type \texttt{MoBot\_joint\_direction\_t} indicates the commanded direction 
 of a joint on the MoBot.
 
 \index{IMOBOT\_NEUTRAL}

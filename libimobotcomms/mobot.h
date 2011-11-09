@@ -38,17 +38,17 @@ typedef enum mobot_joints_e {
   MOBOT_JOINT3,
   MOBOT_JOINT4,
   MOBOT_NUM_JOINTS 
-} mobot_joints_t;
+} mobotJointId_t;
 #endif
 
 #ifndef MOBOT_JOINT_STATE_E
 #define MOBOT_JOINT_STATE_E
-enum mobot_joint_state_e
+typedef enum mobot_joint_state_e
 {
     MOBOT_JOINT_IDLE = 0,
     MOBOT_JOINT_MOVING,
     MOBOT_JOINT_GOALSEEK,
-};
+} mobotJointState_t;
 #endif
 
 typedef enum mobot_joint_direction_e
@@ -56,7 +56,7 @@ typedef enum mobot_joint_direction_e
   MOBOT_NEUTRAL,
   MOBOT_FORWARD,
   MOBOT_BACKWARD
-} mobotDirection_t;
+} mobotJointDirection_t;
 
 #ifndef C_ONLY
 #if defined (__cplusplus) || defined (_CH_)
@@ -68,18 +68,25 @@ class CMobot {
     int connectWithAddress(const char address[], int channel);
     int disconnect();
     int isConnected();
-    int getJointAngle(int id, double &angle);
-    int getJointSpeed(int id, double &speed);
-    int getJointState(int id, int &state);
+    int getJointAngle(mobotJointId_t id, double &angle);
+    int getJointSpeed(mobotJointId_t id, double &speed);
+    int getJointState(mobotJointId_t id, mobotJointState_t &state);
     int move(double angle1, double angle2, double angle3, double angle4);
-    int moveContinuous(int dir1, int dir2, int dir3, int dir4);
-    int moveContinuousTime(int dir1, int dir2, int dir3, int dir4, int msecs);
-    int moveJointTo(int id, double angle);
-    int moveJointWait(int id);
+    int moveContinuous(mobotJointDirection_t dir1, 
+                       mobotJointDirection_t dir2, 
+                       mobotJointDirection_t dir3, 
+                       mobotJointDirection_t dir4);
+    int moveContinuousTime(mobotJointDirection_t dir1, 
+                           mobotJointDirection_t dir2, 
+                           mobotJointDirection_t dir3, 
+                           mobotJointDirection_t dir4, 
+                           int msecs);
+    int moveJointTo(mobotJointId_t id, double angle);
+    int moveJointWait(mobotJointId_t id);
     int moveTo(double angle1, double angle2, double angle3, double angle4);
     int moveWait();
     int moveToZero();
-    int setJointSpeed(int id, double speed);
+    int setJointSpeed(mobotJointId_t id, double speed);
     int stop();
 
     int motionInchwormLeft();
@@ -100,8 +107,8 @@ class CMobot {
     int motionTurnRightNB();
 #ifndef _CH_
   private:
-    int getJointDirection(int id, int &dir);
-    int setJointDirection(int id, int dir);
+    int getJointDirection(mobotJointId_t id, mobotJointDirection_t &dir);
+    int setJointDirection(mobotJointId_t id, mobotJointDirection_t dir);
     br_comms_t _comms;
 #else
   private:

@@ -1,7 +1,7 @@
 %\lhead{libimobotcomms API Documentation}
 \noindent
 The header file {\bf mobot.h} defines all the data types, macros 
-and function prototypes for the iMobot API library. The header file
+and function prototypes for the MoBot API library. The header file
 declares a class called \texttt{CMobot} which contains member functions which
 may be used to control the robot.
 
@@ -14,30 +14,30 @@ may be used to control the robot.
 \hline
 Function & Description \\
 \hline
-%\texttt{pose()} \dotfill & Pose multiple joints of the iMobot. \\
+%\texttt{pose()} \dotfill & Pose multiple joints of the MoBot. \\
 \texttt{CMobot()} & The CMobot constructor function. This function
 is called automatically and should not be called explicitly. This constructor will 
-automatically try to connect with a paired iMobot using the \texttt{connect()} member
+automatically try to connect with a paired MoBot using the \texttt{connect()} member
 function. To specify an address to connect to, please use the
 \texttt{CMobot(const char address[], int channel);} constructor.\\
 \texttt{CMobot(const char address[], int channel);} & 
-An alternate constructor which may be used to explicitly specify the address of an iMobot 
+An alternate constructor which may be used to explicitly specify the address of a MoBot 
 to connect to. \\
 \texttt{\textasciitilde CMobot()} & The CMobot destructor function. This function
 is called automatically and should not be called explicitly. \\
 & \\
-\texttt{connect()} & Connect to a remote iMobot module. This function connects to an already-paired iMobot module in Microsoft Windows. This function does not currently work for non-Windows operating systems, such as Mac or Linux. For those operating systems, please use the \texttt{connectWithAddress()} function instead. \\
-\texttt{connectWithAddress()} & Connect to an iMobot module by specifying its Bluetooth address. \\
-\texttt{disconnect()} & Disconnect from an iMobot module. \\
+\texttt{connect()} & Connect to a remote MoBot module. This function connects to an already-paired MoBot module in Microsoft Windows. This function does not currently work for non-Windows operating systems, such as Mac or Linux. For those operating systems, please use the \texttt{connectWithAddress()} function instead. \\
+\texttt{connectWithAddress()} & Connect to a MoBot module by specifying its Bluetooth address. \\
+\texttt{disconnect()} & Disconnect from a MoBot module. \\
 \texttt{getJointAngle()} & Gets a joint's angle. \\
 %\texttt{getJointDirection()} & Gets a motor's currently assigned direction. \\
 \texttt{getJointSpeed()} & Gets a motor's speed. \\
 \texttt{getJointState()} & Gets a motor's current status. \\
-\texttt{isConnected()} & This function is used to check the connection to an iMobot. \\
-\texttt{move()} & Move all four joints of the iMobot by specified angles. \\
+\texttt{isConnected()} & This function is used to check the connection to a MoBot. \\
+\texttt{move()} & Move all four joints of the MoBot by specified angles. \\
 \texttt{moveContinuous()} & Move joints continuously. Joints will move untill stopped.\\
 \texttt{moveContinuousTime()} & Move joints continuously for a certain amount of time.\\
-\texttt{moveTo()} & Move all four joints of the iMobot to specified absolute angles. \\
+\texttt{moveTo()} & Move all four joints of the MoBot to specified absolute angles. \\
 \texttt{moveJointTo()} & Set the desired motor position. \\
 \texttt{moveJointWait()} & Wait until the specified motor has stopped moving. \\
 \texttt{moveWait()} & Wait until all motors have stopped moving. \\
@@ -45,7 +45,7 @@ is called automatically and should not be called explicitly. \\
 %\texttt{setJointDirection()} & Set the motor direction of a motor. Set
 to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
 \texttt{setJointSpeed()} & Sets a motor's speed. \\
-\texttt{stop()} & Stop all currently executing motions of the iMobot. \\
+\texttt{stop()} & Stop all currently executing motions of the MoBot. \\
 \hline
 \end{tabular}
 \end{center}
@@ -63,9 +63,9 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \texttt{motionInchwormRight()} \dotfill & Inchworm gait towards the right. \\
 \texttt{motionRollBackward()} \dotfill & Roll on the faceplates toward the backward direction. \\
 \texttt{motionRollForward()} \dotfill & Roll on the faceplates forwards. \\
-\texttt{motionStand()} \dotfill & Stand the iMobot up on its end. \\
-\texttt{motionTurnLeft()} \dotfill & Rotate the iMobot counterclockwise. \\
-\texttt{motionTurnRight()} \dotfill & Rotate the iMobot clockwise. \\
+\texttt{motionStand()} \dotfill & Stand the MoBot up on its end. \\
+\texttt{motionTurnLeft()} \dotfill & Rotate the MoBot counterclockwise. \\
+\texttt{motionTurnRight()} \dotfill & Rotate the MoBot clockwise. \\
 \hline
 \end{tabular}
 \end{center}
