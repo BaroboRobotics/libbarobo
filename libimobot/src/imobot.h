@@ -17,7 +17,7 @@
 #define I2C_REG_MOTORPOS2 0x52
 #define I2C_REG_MOTORPOS3 0x62
 #define I2C_REG_MOTORPOS(m) \
-  0x32 + 0x10*(m)
+  0x32 + 0x10*(m-1)
 
 /* Motor direction register, 1 byte*/
 #define I2C_REG_MOTORDIR0 0x34
@@ -25,7 +25,7 @@
 #define I2C_REG_MOTORDIR2 0x54
 #define I2C_REG_MOTORDIR3 0x64
 #define I2C_REG_MOTORDIR(m) \
-  0x34 + 0x10*(m)
+  0x34 + 0x10*(m-1)
 
 /* Motor speed register, 1 byte*/
 #define I2C_REG_MOTORSPEED0 0x35
@@ -33,14 +33,14 @@
 #define I2C_REG_MOTORSPEED2 0x55
 #define I2C_REG_MOTORSPEED3 0x65
 #define I2C_REG_MOTORSPEED(m) \
-  0x35 + 0x10*(m)
+  0x35 + 0x10*(m-1)
 
 #define I2C_REG_MOTORSTATE0 0x38
 #define I2C_REG_MOTORSTATE1 0x48
 #define I2C_REG_MOTORSTATE2 0x58
 #define I2C_REG_MOTORSTATE3 0x68
 #define I2C_REG_MOTORSTATE(m) \
-  0x38 + 0x10*(m)
+  0x38 + 0x10*(m-1)
 
 #define I2C_HC_ADDR 0x55
 

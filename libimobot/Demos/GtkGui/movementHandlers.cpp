@@ -3,78 +3,78 @@
 
 void on_button_forward_clicked(GtkWidget* widget, gpointer data)
 {
-  setMotorDirection(2, 2);
-  setMotorDirection(3, 1);
+  setMotorDirection(1, 2);
+  setMotorDirection(4, 1);
   int speeds[2];
-  speeds[0] = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[2]));
+  speeds[0] = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[0]));
   speeds[1] = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[3]));
-  setMotorSpeed(2, speeds[0]);
-  setMotorSpeed(3, speeds[1]);
+  setMotorSpeed(1, speeds[0]);
+  setMotorSpeed(4, speeds[1]);
 }
 
 void on_button_backward_clicked(GtkWidget* widget, gpointer data)
 {
-  setMotorDirection(2, 1);
-  setMotorDirection(3, 2);
+  setMotorDirection(1, 1);
+  setMotorDirection(4, 2);
   int speeds[2];
-  speeds[0] = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[2]));
+  speeds[0] = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[0]));
   speeds[1] = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[3]));
-  setMotorSpeed(2, speeds[0]);
-  setMotorSpeed(3, speeds[1]);
+  setMotorSpeed(1, speeds[0]);
+  setMotorSpeed(4, speeds[1]);
 }
 
 void on_button_rotateLeft_clicked(GtkWidget* widget, gpointer data)
 {
-  setMotorDirection(2, 2);
-  setMotorDirection(3, 2);
+  setMotorDirection(1, 2);
+  setMotorDirection(4, 2);
   int speeds[2];
-  speeds[0] = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[2]));
+  speeds[0] = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[0]));
   speeds[1] = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[3]));
-  setMotorSpeed(2, speeds[0]);
-  setMotorSpeed(3, speeds[1]);
+  setMotorSpeed(1, speeds[0]);
+  setMotorSpeed(4, speeds[1]);
 }
 
 void on_button_rotateRight_clicked(GtkWidget* widget, gpointer data)
 {
-  setMotorDirection(2, 1);
-  setMotorDirection(3, 1);
+  setMotorDirection(1, 1);
+  setMotorDirection(4, 1);
   int speeds[2];
-  speeds[0] = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[2]));
+  speeds[0] = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[0]));
   speeds[1] = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[3]));
-  setMotorSpeed(2, speeds[0]);
-  setMotorSpeed(3, speeds[1]);
+  setMotorSpeed(1, speeds[0]);
+  setMotorSpeed(4, speeds[1]);
 }
 
 void on_button_lfaceForward_clicked(GtkWidget* widget, gpointer data)
 {
-  setMotorDirection(3, 1);
+  setMotorDirection(1, 1);
   int speed;
-  speed = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[3]));
-  setMotorSpeed(3, speed);
+  speed = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[0]));
+  setMotorSpeed(1, speed);
 }
 
 void on_button_lfaceBackward_clicked(GtkWidget* widget, gpointer data)
 {
-  setMotorDirection(3, 2);
+  setMotorDirection(1, 2);
   int speed;
-  speed = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[3]));
-  setMotorSpeed(3, speed);
+  speed = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[0]));
+  setMotorSpeed(1, speed);
 }
 
 void on_button_rfaceForward_clicked(GtkWidget* widget, gpointer data)
 {
-  setMotorDirection(2, 2);
+  setMotorDirection(4, 2);
   int speed;
-  speed = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[2]));
-  setMotorSpeed(2, speed);
+  speed = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[3]));
+  setMotorSpeed(4, speed);
 }
 
 void on_button_rfaceBackward_clicked(GtkWidget* widget, gpointer data)
 {
-  setMotorDirection(2, 1);
+  setMotorDirection(4, 1);
   int speed;
-  speed = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[2]));
-  setMotorSpeed(2, speed);
+  speed = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[3]));
+  setMotorSpeed(4, speed);
 }
 
 void on_button_inchLeft_clicked(GtkWidget* widget, gpointer data)
@@ -92,7 +92,7 @@ void on_button_stop_clicked(GtkWidget* widget, gpointer data)
   stop();
   int i;
 
-  for(i = 0; i < 4; i++) {
+  for(i = 1; i < 5; i++) {
     /* Make all motor direction modes back to auto */
     setMotorDirection(i, 0);
   }
@@ -103,7 +103,7 @@ void on_button_home_clicked(GtkWidget* widget, gpointer data)
   int i;
   GtkRange* range;
   int speed;
-  for(i = 0; i < 4; i++) {
+  for(i = 1; i < 5; i++) {
     range = GTK_RANGE(scale_motorSpeeds[i]);
     speed = gtk_range_get_value(range);
     if(speed < 30) {
@@ -158,7 +158,7 @@ void on_button_moveJoints_clicked(GtkWidget* widget, gpointer data)
       continue;
     }
     sscanf(string, "%lf", &val);
-    setMotorPosition(i, val);
+    setMotorPosition(i+1, val);
   }
 }
 
@@ -166,7 +166,7 @@ void motor_forward(int id)
 {
   setMotorDirection(id, 1);
   int speed;
-  speed = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[id]));
+  speed = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[id-1]));
   setMotorSpeed(id, speed);
 }
 
@@ -180,14 +180,14 @@ void motor_back(int id)
 {
   setMotorDirection(id, 2);
   int speed;
-  speed = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[id]));
+  speed = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[id-1]));
   setMotorSpeed(id, speed);
 }
 
 #define ON_MOTOR_BUTTON_CLICKED(id, motion) \
 void on_button_motor##id##motion##_clicked(GtkWidget* widget, gpointer data) \
 { \
-  motor_##motion (id); \
+  motor_##motion (id+1); \
 }
 ON_MOTOR_BUTTON_CLICKED(0, forward)
 ON_MOTOR_BUTTON_CLICKED(1, forward)

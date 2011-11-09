@@ -195,7 +195,7 @@ int Mobot_setJointSpeed(br_comms_t* comms, mobotJointId_t id, double speed)
   if(status < 0) return status;
   bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
   if(strcmp(buf, "OK")) return -1;
-  comms->jointSpeeds[id] = speed;
+  comms->jointSpeeds[id-1] = speed;
   return 0;
 }
 

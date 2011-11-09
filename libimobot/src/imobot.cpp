@@ -431,7 +431,7 @@ int iMobot_setJointSpeed(iMobot_t* iMobot, int id, double speed)
   memcpy(&data, &ispeed, 2);
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
   I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORSPEED(id), data[0]);
-  iMobot->jointSpeed[id] = speed;
+  iMobot->jointSpeed[id-1] = speed;
   return 0;
 }
 
@@ -572,7 +572,7 @@ int iMobot_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, cons
     }
   } else if (MATCHSTR("STOP")) 
   {
-    for(id = 0; id < 4; id++) {
+    for(id = 1; id < 5; id++) {
       iMobot_setJointSpeed(iMobot, id, 0);
     }
     write(socket, "OK", 3);
