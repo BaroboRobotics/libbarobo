@@ -3,14 +3,17 @@
 \rule{4.5in}{0.015in}\\
 \noindent
 {\LARGE \texttt{CMobot::motionTurnRight()}\index{motionTurnRight()}}\\
+{\LARGE \texttt{CMobot::motionTurnRightNB()}\index{motionTurnRightNB()}}\\
 %\phantomsection
 \addcontentsline{toc}{section}{motionTurnRight()}
+\addcontentsline{toc}{section}{motionTurnRightNB()}
 
 \noindent
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <mobot.h>
 int CMobot::motionTurnRight();
+int CMobot::motionTurnRightNB();
 \end{verbatim}
 
 \noindent
@@ -28,7 +31,12 @@ None.\\
 \noindent
 {\bf Description}\\
 This function causes the MoBot to rotate the faceplates in opposite directions
-to cause the robot to rotate clockwise.\\
+to cause the robot to rotate clockwise.
+
+This function has both a blocking and non-blocking version.
+The blocking version, \texttt{motionTurnRight()}, will block until the
+MoBot motion has completed. The non-blocking version, \texttt{motionTurnRightNB()},
+will return immediately, and the motion will be performed asynchronously.\\
 
 \noindent
 {\bf See Also}\\

@@ -3,14 +3,17 @@
 \rule{4.5in}{0.015in}\\
 \noindent
 {\LARGE \texttt{CMobot::motionStand()}\index{motionStand()}}\\
+{\LARGE \texttt{CMobot::motionStand()}\index{motionStandNB()}}\\
 %\phantomsection
 \addcontentsline{toc}{section}{motionStand()}
+\addcontentsline{toc}{section}{motionStandNB()}
 
 \noindent
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <mobot.h>
 int CMobot::motionStand();
+int CMobot::motionStandNB();
 \end{verbatim}
 
 \noindent
@@ -27,7 +30,12 @@ None.\\
 
 \noindent
 {\bf Description}\\
-This function causes the robot to motionStand up into the camera platform.\\
+This function causes the robot to motionStand up into the camera platform.
+
+This function has both a blocking and non-blocking version.
+The blocking version, \texttt{motionStand()}, will block until the
+MoBot motion has completed. The non-blocking version, \texttt{motionStandNB()},
+will return immediately, and the motion will be performed asynchronously.\\
 
 \noindent
 {\bf See Also}\\

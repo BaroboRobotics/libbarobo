@@ -3,14 +3,17 @@
 \rule{4.5in}{0.015in}\\
 \noindent
 {\LARGE \texttt{CMobot::motionRollBackward()}\index{motionRollBackward()}}\\
+{\LARGE \texttt{CMobot::motionRollBackwardNB()}\index{motionRollBackwardNB()}}\\
 %\phantomsection
 \addcontentsline{toc}{section}{motionRollBackward()}
+\addcontentsline{toc}{section}{motionRollBackwardNB()}
 
 \noindent
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <mobot.h>
 int CMobot::motionRollBackward();
+int CMobot::motionRollBackwardNB();
 \end{verbatim}
 
 \noindent
@@ -28,10 +31,16 @@ None.\\
 \noindent
 {\bf Description}\\
 This function causes each of the faceplates to rotate 90 degrees to roll the
-robot backward.\\
+robot backward.
+
+This function has both a blocking and non-blocking version.
+The blocking version, \texttt{motionRollBackward()}, will block until the
+MoBot motion has completed. The non-blocking version, \texttt{motionRollBackwardNB()},
+will return immediately, and the motion will be performed asynchronously.\\
+\\
 
 \noindent
 {\bf See Also}\\
-\texttt{motionRollBackward()}
+\texttt{motionRollForward()}
 
 %\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

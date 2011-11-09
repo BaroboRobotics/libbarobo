@@ -3,14 +3,17 @@
 \rule{4.5in}{0.015in}\\
 \noindent
 {\LARGE \texttt{CMobot::motionInchwormLeft()}\index{motionInchwormLeft()}}\\
+{\LARGE \texttt{CMobot::motionInchwormLeftNB()}\index{motionInchwormLeft()}}\\
 %\phantomsection
 \addcontentsline{toc}{section}{motionInchwormLeft()}
+\addcontentsline{toc}{section}{motionInchwormLeftNB()}
 
 \noindent
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <mobot.h>
 int CMobot::motionInchwormLeft();
+int CMobot::motionInchwormLeftNB();
 \end{verbatim}
 
 \noindent
@@ -28,7 +31,10 @@ None.\\
 \noindent
 {\bf Description}\\
 This function causes the MoBot to perform a single cycle of the inchworm gait
-to the left.\\
+to the left. This function comes in two flavors; a blocking and a non blocking
+version. The function \texttt{motionInchwormLeft()} is blocking, and the function
+will hang until the motion has finished. The alternative function, \texttt{motionInchwormLeftNB()} 
+will return immediately, and the motion will execute asynchronously. \\
 
 \noindent
 {\bf See Also}\\

@@ -106,7 +106,7 @@ accept the changes and close the dialogs. The MoBot is now ready to be
 controlled with the MoBotComms library.
 
 \section{ The MoBot Remote Control Program }
-\includegraphics[width=4.5in]{images/MoBot_controller_screenshot.png}
+\includegraphics[width=4.5in]{images/iMobot_controller_screenshot.png}
 
 The preceding figure shows the MoBot remote control program. The
 program displays a graphical interface which may be used to display
@@ -197,17 +197,9 @@ functions called ``methods'' or ``member functions''.
 \begin{verbatim}
 CMobot robot;
 \end{verbatim}
-Note that there is an alternative way to create the \texttt{robot} variable.
-The alternate method takes the following syntax:
-\begin{verbatim}
-CMobot robot("12:34:56:78:90:12", 20);
-\end{verbatim}
-The alternate syntax instructs the new \texttt{CMobot} variable named 
-\texttt{robot} to explicitely connect to the robot with address
-\texttt{"12:34:56:78:90:12"} and channel \texttt{20}. This method allows
-the MoBot program to connect to a MoBot even if it has not been paired,
-as described in Section \ref{sec:pairing}. However, it requires the user
-to know the Bluetooth address of the MoBot in advance.
+
+The next line will connect our new variable, \texttt{robot}, to a
+MoBot that has been 
 
 The next line will use the \texttt{moveToZero} member function. The
 \texttt{moveToZero} function causes the MoBot to move all of its motors to the

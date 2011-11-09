@@ -3,14 +3,17 @@
 \rule{4.5in}{0.015in}\\
 \noindent
 {\LARGE \texttt{CMobot::motionRollForward()}\index{motionRollForward()}}\\
+{\LARGE \texttt{CMobot::motionRollForwardNB()}\index{motionRollForwardNB()}}\\
 %\phantomsection
 \addcontentsline{toc}{section}{motionRollForward()}
+\addcontentsline{toc}{section}{motionRollForwardNB()}
 
 \noindent
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <mobot.h>
 int CMobot::motionRollForward();
+int CMobot::motionRollForwardNB();
 \end{verbatim}
 
 \noindent
@@ -28,7 +31,12 @@ None.\\
 \noindent
 {\bf Description}\\
 This function causes each of the faceplates to rotate 90 degrees to roll the
-robot forward.\\
+robot forward.
+
+This function has both a blocking and non-blocking version.
+The blocking version, \texttt{motionRollForward()}, will block until the
+MoBot motion has completed. The non-blocking version, \texttt{motionRollForwardNB()},
+will return immediately, and the motion will be performed asynchronously.\\
 
 \noindent
 {\bf See Also}\\
