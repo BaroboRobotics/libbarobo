@@ -1,3 +1,5 @@
+/* File: inchworm.ch */
+
 #include <mobot.h>
 
 CMobot robot;

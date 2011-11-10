@@ -13,18 +13,8 @@ typedef struct sockaddr_rc sockaddr_t;
 typedef SOCKADDR_BTH sockaddr_t;
 #endif
 
-#ifndef MOBOT_JOINT_DIRECTION_E
-#define MOBOT_JOINT_DIRECTION_E
-typedef enum mobot_motor_direction_e
-{
-  MOBOT_JOINT_DIR_AUTO,
-  MOBOT_JOINT_DIR_FORWARD,
-  MOBOT_JOINT_DIR_BACKWARD
-} motorDirection_t;
-#endif
-
-#ifndef _CH_
-
+#ifndef BR_COMMS_S
+#define BR_COMMS_S
 typedef struct br_comms_s
 {
   int socket;
@@ -36,6 +26,51 @@ typedef struct br_comms_s
   double jointSpeeds[4];
   THREAD_T thread;
 } br_comms_t;
+#endif
+
+#ifndef MOBOT_JOINTS_E
+#define MOBOT_JOINTS_E
+typedef enum mobot_joints_e {
+  MOBOT_JOINT1 = 0,
+  MOBOT_JOINT2,
+  MOBOT_JOINT3,
+  MOBOT_JOINT4,
+  MOBOT_NUM_JOINTS 
+} mobotJointId_t;
+#endif
+
+#ifndef MOBOT_JOINT_STATE_E
+#define MOBOT_JOINT_STATE_E
+typedef enum mobot_joint_state_e
+{
+    MOBOT_JOINT_IDLE = 0,
+    MOBOT_JOINT_MOVING,
+    MOBOT_JOINT_GOALSEEK,
+} mobotJointState_t;
+#endif
+
+#ifndef MOBOT_JOINT_DIRECTION_T
+#define MOBOT_JOINT_DIRECTION_T
+typedef enum mobot_joint_direction_e
+{
+  MOBOT_NEUTRAL,
+  MOBOT_FORWARD,
+  MOBOT_BACKWARD
+} mobotJointDirection_t;
+#endif
+
+
+#ifndef MOBOT_JOINT_DIRECTION_E
+#define MOBOT_JOINT_DIRECTION_E
+typedef enum mobot_motor_direction_e
+{
+  MOBOT_JOINT_DIR_AUTO,
+  MOBOT_JOINT_DIR_FORWARD,
+  MOBOT_JOINT_DIR_BACKWARD
+} motorDirection_t;
+#endif
+
+#ifndef _CH_
 
 #define DEF_MOTOR_SPEED 0.50
 
@@ -69,7 +104,7 @@ DLLIMPORT int Mobot_setJointSpeed(br_comms_t* comms, mobotJointId_t id, double s
 DLLIMPORT int Mobot_getJointSpeed(br_comms_t* comms, mobotJointId_t id, double *speed);
 DLLIMPORT int Mobot_moveJointTo(br_comms_t* comms, mobotJointId_t id, double angle);
 DLLIMPORT int Mobot_getJointAngle(br_comms_t* comms, mobotJointId_t id, double *angle);
-DLLIMPORT int Mobot_getJointState(br_comms_t* comms, mobotJointId_t id, int *state);
+DLLIMPORT int Mobot_getJointState(br_comms_t* comms, mobotJointId_t id, mobotJointState_t *state);
 DLLIMPORT int Mobot_move(br_comms_t* comms,
                                double angle1,
                                double angle2,

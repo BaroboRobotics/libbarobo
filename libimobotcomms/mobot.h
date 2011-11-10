@@ -51,12 +51,15 @@ typedef enum mobot_joint_state_e
 } mobotJointState_t;
 #endif
 
+#ifndef MOBOT_JOINT_DIRECTION_T
+#define MOBOT_JOINT_DIRECTION_T
 typedef enum mobot_joint_direction_e
 {
   MOBOT_NEUTRAL,
   MOBOT_FORWARD,
   MOBOT_BACKWARD
 } mobotJointDirection_t;
+#endif
 
 #ifndef C_ONLY
 #if defined (__cplusplus) || defined (_CH_)

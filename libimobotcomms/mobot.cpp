@@ -181,7 +181,7 @@ int Mobot_getJointDirection(br_comms_t* comms, mobotJointId_t id, mobotJointDire
   if(status < 0) return status;
   bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
   if(!strcmp(buf, "ERROR")) return -1;
-  sscanf(buf, "%d", dir);
+  sscanf(buf, "%d", (int*)dir);
   return 0;
 }
 
@@ -239,7 +239,7 @@ int Mobot_getJointState(br_comms_t* comms, mobotJointId_t id, mobotJointState_t 
   if(status < 0) return status;
   bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
   if(!strcmp(buf, "ERROR")) return -1;
-  sscanf(buf, "%d", state);
+  sscanf(buf, "%d", (int*)state);
   return 0;
 }
 
@@ -259,8 +259,8 @@ int Mobot_moveJointTo(br_comms_t* comms, mobotJointId_t id, double angle)
 int Mobot_moveToZero(br_comms_t* comms)
 {
   int i;
-  for(i = 0; i < 4; i++) {
-    if(Mobot_moveJointTo(comms, i, 0)) {
+  for(i = 1; i < 5; i++) {
+    if(Mobot_moveJointTo(comms, (mobotJointId_t)i, 0)) {
       return -1;
     }
   }
@@ -281,7 +281,7 @@ int Mobot_move(br_comms_t* comms,
   angles[2] = angle3;
   angles[3] = angle4;
   for(i = 0; i < 4; i++) {
-    if(Mobot_getJointAngle(comms, i, &curAngles[i])) {
+    if(Mobot_getJointAngle(comms, (mobotJointId_t)(i+1), &curAngles[i])) {
       return -1;
     }
   }
@@ -289,7 +289,7 @@ int Mobot_move(br_comms_t* comms,
     if(angles[i] == 0) {
       continue;
     }
-    if(Mobot_moveJointTo(comms, i, angles[i] + curAngles[i])) {
+    if(Mobot_moveJointTo(comms, (mobotJointId_t)(i+1), angles[i] + curAngles[i])) {
       return -1;
     }
   }
@@ -310,11 +310,11 @@ int Mobot_moveContinuous(br_comms_t* comms,
   dirs[3] = dir4;
   for(i = 0; i < 4; i++) {
     if(dirs[i] == MOBOT_FORWARD) {
-      Mobot_setJointSpeed(comms, i, comms->jointSpeeds[i]);
-      Mobot_setJointDirection(comms, i, MOBOT_JOINT_DIR_FORWARD);
+      Mobot_setJointSpeed(comms, (mobotJointId_t)(i+1), comms->jointSpeeds[i]);
+      Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), MOBOT_FORWARD);
     } else if (dirs[i] == MOBOT_BACKWARD) {
-      Mobot_setJointSpeed(comms, i, comms->jointSpeeds[i]);
-      Mobot_setJointDirection(comms, i, MOBOT_JOINT_DIR_BACKWARD);
+      Mobot_setJointSpeed(comms, (mobotJointId_t)(i+1), comms->jointSpeeds[i]);
+      Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), MOBOT_BACKWARD);
     }
   }
   return 0;
@@ -336,7 +336,7 @@ int Mobot_moveContinuousTime(br_comms_t* comms,
 #endif
   /* Stop the motors */
   for(i = 0; i < 4; i++) {
-    Mobot_setJointDirection(comms, i, 0);
+    Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), MOBOT_NEUTRAL);
   }
   return 0;
 }
@@ -364,7 +364,7 @@ int Mobot_moveTo(br_comms_t* comms,
 
 int Mobot_moveJointWait(br_comms_t* comms, mobotJointId_t id)
 {
-  int state;
+  mobotJointState_t state;
   /* Make sure there is no non-blocking function running */
   THREAD_JOIN(comms->thread);
 
@@ -392,7 +392,7 @@ int Mobot_moveWait(br_comms_t* comms)
   /* Make sure there is no non-blocking function running */
   THREAD_JOIN(comms->thread);
   for(i = 0; i < 4; i++) {
-    if(Mobot_moveJointWait(comms, i)) {
+    if(Mobot_moveJointWait(comms, (mobotJointId_t)(i+1))) {
       return -1;
     }
   }
