@@ -103,9 +103,15 @@ DLLIMPORT int Mobot_getJointDirection(br_comms_t* comms, mobotJointId_t id, mobo
 DLLIMPORT int Mobot_setJointSpeed(br_comms_t* comms, mobotJointId_t id, double speed);
 DLLIMPORT int Mobot_getJointSpeed(br_comms_t* comms, mobotJointId_t id, double *speed);
 DLLIMPORT int Mobot_moveJointTo(br_comms_t* comms, mobotJointId_t id, double angle);
+DLLIMPORT int Mobot_moveJointToNB(br_comms_t* comms, mobotJointId_t id, double angle);
 DLLIMPORT int Mobot_getJointAngle(br_comms_t* comms, mobotJointId_t id, double *angle);
 DLLIMPORT int Mobot_getJointState(br_comms_t* comms, mobotJointId_t id, mobotJointState_t *state);
 DLLIMPORT int Mobot_move(br_comms_t* comms,
+                               double angle1,
+                               double angle2,
+                               double angle3,
+                               double angle4);
+DLLIMPORT int Mobot_moveNB(br_comms_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -126,7 +132,13 @@ DLLIMPORT int Mobot_moveTo(br_comms_t* comms,
                                double angle2,
                                double angle3,
                                double angle4);
+DLLIMPORT int Mobot_moveToNB(br_comms_t* comms,
+                               double angle1,
+                               double angle2,
+                               double angle3,
+                               double angle4);
 DLLIMPORT int Mobot_moveToZero(br_comms_t* comms);
+DLLIMPORT int Mobot_moveToZeroNB(br_comms_t* comms);
 DLLIMPORT int Mobot_moveJointWait(br_comms_t* comms, mobotJointId_t id);
 DLLIMPORT int Mobot_moveWait(br_comms_t* comms);
 DLLIMPORT int Mobot_stop(br_comms_t* comms);

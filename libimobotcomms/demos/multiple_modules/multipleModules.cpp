@@ -17,8 +17,8 @@ int main()
 
 
   /* Set the robot to "home" position, where all joint angles are 0 degrees. */
-  robot1.moveToZero();
-  robot2.moveToZero();
+  robot1.moveToZeroNB();
+  robot2.moveToZeroNB();
 
   robot1.moveWait();
   robot2.moveWait();

@@ -253,6 +253,20 @@ int Mobot_moveJointTo(br_comms_t* comms, mobotJointId_t id, double angle)
   if(status < 0) return status;
   bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
   if(strcmp(buf, "OK")) return -1;
+  /* Wait for the motion to finish */
+  return Mobot_moveJointWait(comms, id);
+}
+
+int Mobot_moveJointToNB(br_comms_t* comms, mobotJointId_t id, double angle)
+{
+  char buf[160];
+  int status;
+  int bytes_read;
+  sprintf(buf, "SET_MOTOR_POSITION %d %lf", id, angle);
+  status = SendToIMobot(comms, buf, strlen(buf)+1);
+  if(status < 0) return status;
+  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
+  if(strcmp(buf, "OK")) return -1;
   return 0;
 }
 
@@ -264,10 +278,52 @@ int Mobot_moveToZero(br_comms_t* comms)
       return -1;
     }
   }
+  /* Wait for the motion to finish */
+  return Mobot_moveWait(comms);
+}
+
+int Mobot_moveToZeroNB(br_comms_t* comms)
+{
+  int i;
+  for(i = 1; i < 5; i++) {
+    if(Mobot_moveJointTo(comms, (mobotJointId_t)i, 0)) {
+      return -1;
+    }
+  }
   return 0;
 }
 
 int Mobot_move(br_comms_t* comms,
+                               double angle1,
+                               double angle2,
+                               double angle3,
+                               double angle4)
+{
+  double angles[4];
+  double curAngles[4];
+  int i;
+  angles[0] = angle1;
+  angles[1] = angle2;
+  angles[2] = angle3;
+  angles[3] = angle4;
+  for(i = 0; i < 4; i++) {
+    if(Mobot_getJointAngle(comms, (mobotJointId_t)(i+1), &curAngles[i])) {
+      return -1;
+    }
+  }
+  for(i = 0; i < 4; i++) {
+    if(angles[i] == 0) {
+      continue;
+    }
+    if(Mobot_moveJointTo(comms, (mobotJointId_t)(i+1), angles[i] + curAngles[i])) {
+      return -1;
+    }
+  }
+  /* Wait for the motion to complete */
+  return Mobot_moveWait(comms);
+}
+
+int Mobot_moveNB(br_comms_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -342,6 +398,28 @@ int Mobot_moveContinuousTime(br_comms_t* comms,
 }
 
 int Mobot_moveTo(br_comms_t* comms,
+                               double angle1,
+                               double angle2,
+                               double angle3,
+                               double angle4)
+{
+  if(Mobot_moveJointTo(comms, MOBOT_JOINT1, angle1)) {
+    return -1;
+  }
+  if(Mobot_moveJointTo(comms, MOBOT_JOINT2, angle2)) {
+    return -1;
+  }
+  if(Mobot_moveJointTo(comms, MOBOT_JOINT3, angle3)) {
+    return -1;
+  }
+  if(Mobot_moveJointTo(comms, MOBOT_JOINT4, angle4)) {
+    return -1;
+  }
+  /* Wait for motion to finish */
+  return Mobot_moveWait(comms);
+}
+
+int Mobot_moveToNB(br_comms_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -732,6 +810,11 @@ int CMobot::moveJointTo(mobotJointId_t id, double angle)
   return Mobot_moveJointTo(&_comms, id, angle);
 }
 
+int CMobot::moveJointToNB(mobotJointId_t id, double angle)
+{
+  return Mobot_moveJointToNB(&_comms, id, angle);
+}
+
 int CMobot::getJointAngle(mobotJointId_t id, double &angle)
 {
   return Mobot_getJointAngle(&_comms, id, &angle);
@@ -748,6 +831,14 @@ int CMobot::move( double angle1,
                         double angle4)
 {
   return Mobot_move(&_comms, angle1, angle2, angle3, angle4);
+}
+
+int CMobot::moveNB( double angle1,
+                        double angle2,
+                        double angle3,
+                        double angle4)
+{
+  return Mobot_moveNB(&_comms, angle1, angle2, angle3, angle4);
 }
 
 int CMobot::moveContinuous( mobotJointDirection_t dir1, mobotJointDirection_t dir2, mobotJointDirection_t dir3, mobotJointDirection_t dir4)
@@ -768,9 +859,22 @@ int CMobot::moveTo( double angle1,
   return Mobot_moveTo(&_comms, angle1, angle2, angle3, angle4);
 }
 
+int CMobot::moveToNB( double angle1,
+                          double angle2,
+                          double angle3,
+                          double angle4)
+{
+  return Mobot_moveToNB(&_comms, angle1, angle2, angle3, angle4);
+}
+
 int CMobot::moveToZero()
 {
   return Mobot_moveToZero(&_comms);
+}
+
+int CMobot::moveToZeroNB()
+{
+  return Mobot_moveToZeroNB(&_comms);
 }
 
 int CMobot::moveJointWait(mobotJointId_t id)
