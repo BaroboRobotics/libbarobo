@@ -199,7 +199,27 @@ CMobot robot;
 \end{verbatim}
 
 The next line will connect our new variable, \texttt{robot}, to a
-MoBot that has been 
+MoBot that has been previously paired with the computer.
+\begin{verbatim}
+robot.connect();
+\end{verbatim}
+
+Note that there are two common methods to connect to a remote MoBot. 
+The most common method, demonstrated in the previous line of code, is
+used to connect to a MoBot that is already paired to the computer. It
+is also possible to connect to MoBots which are not paired with the 
+computer. This method is necessary for connecting to multiple
+MoBots simultaneously, as only a single MoBot may be paired with the
+computer at a time. The second method uses the function
+\texttt{connectWithAddress()}, and its default usage is as such:
+\begin{verbatim}
+robot.connectWithAddress("11:22:33:44:55:66", 20);
+\end{verbatim}
+The string \texttt{"11:22:33:44:55:66"} represents the Bluetooth address
+of the MoBot, which must be known in advance. The number \texttt{20} 
+represents the Bluetooth channel to connect to. Channel \texttt{20}
+is the default channel MoBots listen on for incoming connections, but
+may be set to other values.
 
 The next line will use the \texttt{moveToZero} member function. The
 \texttt{moveToZero} function causes the MoBot to move all of its motors to the
@@ -365,6 +385,56 @@ the robots have finished standing before the code continues.
 
 \newpage
 \appendix
+\section{Data Types}
+There are data types which are used by the MoBot library to represent 
+certain values, such as joint id's and motor directions.
+
+\begin{tabular}{p{3.5cm}p{7cm}} \hline 
+Data Type& Description \\
+\hline 
+\texttt{mobotJointId\_t} & An enumerated value that indicates a MoBot joint. \\
+\texttt{mobotJointState\_t} & The current state of a MoBot joint. \\
+\texttt{mobotJointDirection\_t} & The current motion direction of a MoBot joint. 
+\end{tabular}
+
+\subsection{\label{sec:mobotJointId_t}\texttt{mobotJointId\_t}}
+This datatype is an enumerated type used to identify a joint on the MoBot. Valid
+values for this type are:
+\begin{verbatim}
+typedef enum mobot_joints_e {
+  MOBOT_JOINT1 = 1,
+  MOBOT_JOINT2 = 2,
+  MOBOT_JOINT3 = 3,
+  MOBOT_JOINT4 = 4
+} mobotJointId_t;
+\end{verbatim}
+The joints are enumerated in order from one side of the MoBot to the other. Joints 1 and 4
+are faceplate joints, and joints 2 and 3 are body joints.
+
+\subsection{\label{sec:mobotJointState_t}\texttt{mobotJointState\_t}}
+This datatype is an enumerated type used to designate the current 
+movement state of a joint. Valid values are:
+\begin{itemize}
+\item \texttt{MOBOT\_JOINT\_IDLE}: This value indicates that the joint is not moving.
+\item \texttt{MOBOT\_JOINT\_MOVING}: This value indicates that the joint is currently moving.
+\item \texttt{MOBOT\_JOINT\_GOALSEEK}: This value indicates that the joint is currently moving
+  towards a predefined goal.
+\end{itemize}
+
+\subsection{\label{sec:mobotJointDirection_t}\texttt{mobotJointDirection\_t}}
+This datatype designates a MoBot joint's commanded direction of travel. Valid values
+are
+\begin{itemize}
+\item \texttt{MOBOT\_NEUTRAL}: There is no predesignated direction for the
+joint. If the joint is commanded to move to a specific location, the MoBot will
+decide the best direction to move the joint in order to achieve the goal with
+the smallest motion.
+\item \texttt{MOBOT\_FORWARD}: Move the joint in the direction which increases its 
+angular position.
+\item \texttt{MOBOT\_BACKWARD}: Move the joint in the direction which decreases
+its angular position.
+\end{itemize}
+
 \section{MoBotComms API}
 \input{api/libimobotcomms.tex}
 

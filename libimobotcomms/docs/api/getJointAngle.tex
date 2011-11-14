@@ -10,7 +10,7 @@
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::getJointAngle(int id, double &position);
+int CMobot::getJointAngle(mobotJointId_t id, double &position);
 \end{verbatim}
 
 \noindent
@@ -26,8 +26,10 @@ The function returns 0 on success and non-zero otherwise.\\
 \vspace{-0.1in}
 \begin{description}
 \item               
-\begin{tabular}{p{10 mm}p{145 mm}}
-\texttt{id} & The joint number to wait for. \\
+\begin{tabular}{p{15 mm}p{105 mm}}
+\texttt{id} & The joint number to wait for. This is an enumerated type 
+discussed in Section \ref{sec:mobotJointId_t} on page
+\pageref{sec:mobotJointId_t}.\\
 \texttt{position} & A variable to store the current position of the MoBot
 motor. The contents of this variable will be overwritten with a value that
 represents the motor's angle in degrees.  \\

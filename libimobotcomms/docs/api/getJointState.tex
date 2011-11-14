@@ -10,13 +10,7 @@
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <mobot.h>
-enum MoBot_joint_state_e
-{
-    IMOBOT_JOINT_IDLE = 0,
-    IMOBOT_JOINT_MOVING,
-    IMOBOT_JOINT_GOALSEEK,
-};
-int CMobot::getJointState(int id, int &state);
+int CMobot::getJointState(mobotJointId_t id, mobotJointState_t &state);
 \end{verbatim}
 
 \noindent
@@ -33,8 +27,13 @@ The function returns 0 on success and non-zero otherwise.\\
 \begin{description}
 \item               
 \begin{tabular}{p{10 mm}p{145 mm}}
-\texttt{id} & The joint number to pose. \\
+\texttt{id} & The joint number to pose. This is an enumerated type 
+discussed in Section \ref{sec:mobotJointId_t} on page
+\pageref{sec:mobotJointId_t}.\\
 \texttt{state} & An integer variable which will be overwritten with the current state of the motor. 
+This is an enumerated type 
+discussed in Section \ref{sec:mobotJointState_t} on page
+\pageref{sec:mobotJointState_t}.
 \end{tabular}
 \end{description}
 

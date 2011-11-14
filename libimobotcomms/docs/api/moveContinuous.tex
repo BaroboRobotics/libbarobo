@@ -10,7 +10,11 @@
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::moveContinuous(int dir1, int dir2, int dir3, int dir4);
+int CMobot::moveContinuous(
+  mobotJointDirection_t dir1, 
+  mobotJointDirection_t dir2, 
+  mobotJointDirection_t dir3, 
+  mobotJointDirection_t dir4);
 \end{verbatim}
 
 \noindent
@@ -30,6 +34,9 @@ are enumerated in \texttt{mobot.h} and have the following values:
 \item \texttt{MOBOT\_FORWARD} : The joint will begin moving in the positive direction.
 \item \texttt{MOBOT\_BACKWARD}: The joint will begin moving in the negative direction.
 \end{itemize}
+More documentation about these types may be found at Section
+\ref{sec:mobotJointDirection_t} on page
+\pageref{sec:mobotJointDirection_t}.
 
 \noindent
 {\bf Description}\\
