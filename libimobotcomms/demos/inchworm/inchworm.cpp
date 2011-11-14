@@ -1,4 +1,5 @@
-/* File: inchworm.cpp */
+/* File: inchworm.cpp 
+ * Perform the "inchworm" gait four times */
 
 #include <mobot.h>
 

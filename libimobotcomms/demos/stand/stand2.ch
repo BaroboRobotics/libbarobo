@@ -1,3 +1,6 @@
+/* Filename: stand2.ch 
+ * Make a MoBot stand up on a faceplate */
+
 #include <mobot.h>
 
 CMobot robot;

@@ -1,3 +1,5 @@
+/* Filename: stand2.cpp
+ * Make a MoBot stand up on a faceplate */
 #include <mobot.h>
 
 int main()

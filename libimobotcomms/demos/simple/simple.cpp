@@ -1,3 +1,5 @@
+/* Filename: simple.cpp
+ * Rotate the faceplates by 90 degrees */
 #include <mobot.h>
 
 int main()
