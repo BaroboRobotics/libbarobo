@@ -33,11 +33,11 @@
 #ifndef MOBOT_JOINTS_E
 #define MOBOT_JOINTS_E
 typedef enum mobot_joints_e {
-  MOBOT_JOINT1 = 0,
+  MOBOT_JOINT1 = 1,
   MOBOT_JOINT2,
   MOBOT_JOINT3,
   MOBOT_JOINT4,
-  MOBOT_NUM_JOINTS 
+  MOBOT_NUM_JOINTS = 4
 } mobotJointId_t;
 #endif
 
