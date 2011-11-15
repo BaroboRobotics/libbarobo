@@ -3,14 +3,17 @@
 \rule{4.5in}{0.015in}\\
 \noindent
 {\LARGE \texttt{CMobot::moveTo()}\index{moveTo()}}\\
+{\LARGE \texttt{CMobot::moveToNB()}\index{moveToNB()}}\\
 %\phantomsection
 \addcontentsline{toc}{section}{moveTo()}
+\addcontentsline{toc}{section}{moveToNB()}
 
 \noindent
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <mobot.h>
 int CMobot::moveTo(double angle1, double angle2, double angle3, double angle4);
+int CMobot::moveToNB(double angle1, double angle2, double angle3, double angle4);
 \end{verbatim}
 
 \noindent
@@ -27,7 +30,15 @@ None.\\
 
 \noindent
 {\bf Description}\\
-This function moves all of the joints of a MoBot to the specified absolute positions. \\
+This function moves all of the joints of a MoBot to the specified absolute positions. 
+
+The function \texttt{moveTo()} is a blocking function, which means that 
+the function will not return until the commanded motion is 
+completed. The function \texttt{moveToNB()} is the non-blocking version of
+the \texttt{moveTo()} function, which means that the function will return
+immediately and the physical robot motion will occur asynchronously. For
+more details on blocking and non-blocking functions, please refer to 
+Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\
 
 \noindent
 {\bf Example}\\

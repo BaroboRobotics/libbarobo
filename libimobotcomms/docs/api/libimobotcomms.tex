@@ -5,7 +5,7 @@ and function prototypes for the MoBot API library. The header file
 declares a class called \texttt{CMobot} which contains member functions which
 may be used to control the robot.
 
-\begin{table}[!hp]
+\begin{table}[!h]
 %\capstart
 \begin{center}
 \caption{CMobot Member Functions.}
@@ -35,13 +35,33 @@ is called automatically and should not be called explicitly. \\
 \texttt{getJointState()} & Gets a motor's current status. \\
 \texttt{isConnected()} & This function is used to check the connection to a MoBot. \\
 \texttt{move()} & Move all four joints of the MoBot by specified angles. \\
-\texttt{moveContinuous()} & Move joints continuously. Joints will move untill stopped.\\
+\texttt{moveNB()} & Identical to \texttt{move()} but non-blocking. \\
+\hline
+\end{tabular}
+\end{center}
+\label{mobilec_api_cbinary}
+\end{table}
+
+\addtocounter{table}{-1}
+\begin{table}[!H]
+%\capstart
+\begin{center}
+\caption{CMobot Member Functions (Continued).}
+\begin{tabular}{p{38 mm}p{77 mm}}
+%\begin{tabular}{ll}
+\hline
+Function & Description \\
+\hline
+\texttt{moveContinuousNB()} & Move joints continuously. Joints will move untill stopped.\\
 \texttt{moveContinuousTime()} & Move joints continuously for a certain amount of time.\\
 \texttt{moveTo()} & Move all four joints of the MoBot to specified absolute angles. \\
+\texttt{moveToNB()} & Identical to \texttt{moveTo()} but non-blocking. \\
 \texttt{moveJointTo()} & Set the desired motor position. \\
+\texttt{moveJointToNB()} & Identical to \texttt{moveJointTo()} but non-blocking. \\
 \texttt{moveJointWait()} & Wait until the specified motor has stopped moving. \\
 \texttt{moveWait()} & Wait until all motors have stopped moving. \\
 \texttt{moveToZero()} & Instructs all motors to go to their zero positions. \\
+\texttt{moveToZeroNB()} & Identical to \texttt{moveToZero()} but non-blocking. \\
 %\texttt{setJointDirection()} & Set the motor direction of a motor. Set
 to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
 \texttt{setJointSpeed()} & Sets a motor's speed. \\
@@ -60,18 +80,26 @@ to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
 Compound Motions & These are convenience functions of commonly used compound motions. \\
 \hline
 \texttt{motionInchwormLeft()} \dotfill & Inchworm gait towards the left. \\
+\texttt{motionInchwormLeftNB()} \dotfill & Identical to \texttt{motionInchwormLeft} but non-blocking. \\
 \texttt{motionInchwormRight()} \dotfill & Inchworm gait towards the right. \\
+\texttt{motionInchwormRightNB()} \dotfill & Identical to \texttt{motionInchwormRight} but non-blocking. \\
 \texttt{motionRollBackward()} \dotfill & Roll on the faceplates toward the backward direction. \\
+\texttt{motionRollBackwardNB()} \dotfill & Identical to \texttt{motionRollBackward()} but non-blocking. \\
 \texttt{motionRollForward()} \dotfill & Roll on the faceplates forwards. \\
+\texttt{motionRollForwardNB()} \dotfill & Identical to \texttt{motionRollForward()} but non-blocking. \\
 \texttt{motionStand()} \dotfill & Stand the MoBot up on its end. \\
+\texttt{motionStandNB()} \dotfill & Identical to \texttt{motionStandNB()} but non-blocking. \\
 \texttt{motionTurnLeft()} \dotfill & Rotate the MoBot counterclockwise. \\
+\texttt{motionTurnLeftNB()} \dotfill & Identical to \texttt{motionTurnLeft()} but non-blocking. \\
 \texttt{motionTurnRight()} \dotfill & Rotate the MoBot clockwise. \\
+\texttt{motionTurnRightNB()} \dotfill & Identical to \texttt{motionTurnRight()} but non-blocking. \\
 \hline
 \end{tabular}
 \end{center}
 \label{mobilec_api_compound}
 \end{table}
 
+\clearpage
 \newpage
 \input{api/connect}
 \pagebreak
@@ -105,7 +133,7 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \pagebreak
 \input{api/move}
 \pagebreak
-\input{api/moveContinuous}
+\input{api/moveContinuousNB}
 \pagebreak
 \input{api/moveContinuousTime}
 \pagebreak

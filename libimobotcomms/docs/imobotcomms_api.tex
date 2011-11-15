@@ -12,6 +12,7 @@
 
 \begin{document}
 \maketitle
+\tableofcontents
 
 \section{The \texttt{CMobot} MoBot Remote Control Library}
 The \texttt{CMobot} library is a collection of functions geared towards
@@ -172,15 +173,19 @@ preprogrammed motions for the MoBot. To execute a preprogrammed motion, simply
 click on the name of the motion you wish to execute, and then click the button
 labeled ``Play''.
 
-\section{Basics of a Ch MoBot Program}
-To help the user become acquainted with the MoBot control programs, one sample
-program will be presented to illustrate the basics and minimum requirements of
+\section{Sample Ch MoBot Programs}
+To help the user become acquainted with the MoBot control programs, sample
+programs will be presented to illustrate the basics and minimum requirements of
 a MoBot control program. 
 
-\subsection{\texttt{getting\_started.ch} Source Code}
-\verbatiminput{../demos/getting_started/getting_started.ch}
+\subsection{Basics of a Ch MoBot Program}
+The first demo presents a minimal program which connects to a MoBot and
+moves some joints.
 
-\subsection{\label{sec:democode}Demo Code for \texttt{getting\_started.ch} Explained}
+\subsubsection{\texttt{gettingStarted.ch} Source Code}
+\verbatiminput{../demos/getting_started/gettingStarted.ch}
+
+\subsubsection{\label{sec:democode}Demo Code for \texttt{gettingStarted.ch} Explained}
 The beginning of every MoBot control program will include header files. Each
 header file imports functions used for a number of tasks, such as printing
 data onto the screen or controlling the MoBot. 
@@ -196,6 +201,12 @@ instance of the \texttt{CMobot} class, which contains its own set of
 functions called ``methods'' or ``member functions''.
 \begin{verbatim}
 CMobot robot;
+\end{verbatim}
+
+Next, we initialize two \texttt{double} type variables called 
+``angle1'' and ``angle4'', which we will use to store some joint angles.
+\begin{verbatim}
+double angle1, angle4;
 \end{verbatim}
 
 The next line will connect our new variable, \texttt{robot}, to a
@@ -228,22 +239,76 @@ zero position.
 robot.moveToZero();
 \end{verbatim}
 
-The majority of MoBot control functions do not wait for the robotic motions to
-complete before continuing. As such, if we want to wait for the robot to fully
-complete the requested motion before continuing with the rest of the program,
-we must use the \texttt{moveWait} function, as such.
-\begin{verbatim}
-robot.moveWait();
-\end{verbatim}
-
-The next four lines of code command joints 1 and 4 to rotate 90 degrees, and
-then waits for the motors to stop moving. Joints 1 and 4 are the faceplates
+The next lines of code command joints 1 and 4 to rotate 90 degrees.
+Joints 1 and 4 are the faceplates
 of the MoBot which are sometimes used to act as "wheels".
 \begin{verbatim}
-robot.moveJointTo(IMOBOT_JOINT1, 90);
-robot.moveJointTo(IMOBOT_JOINT4, 90);
-robot.moveJointWait(IMOBOT_JOINT1);
-robot.moveJointWait(IMOBOT_JOINT4);
+angle1 = 90;
+angle4 = 90;
+robot.move(angle1, 0, 0, angle4);
+\end{verbatim}
+
+\subsection{Inchworm Gait Demo}
+The next demo will demonstrate a simple gait known as the ``Inchworm'' gait.
+
+\subsubsection{\texttt{inchworm.ch} Source Code}
+\verbatiminput{../demos/inchworm/inchworm.ch}
+
+\subsubsection{Demo Code for \texttt{inchworm.ch} Explained}
+The first portion of the code is identical to the previous demo, and performs
+the same function of declaring a MoBot variable and connecting to a 
+paired MoBot.
+\begin{verbatim}
+#include <mobot.h>
+
+CMobot robot;
+
+/* Connect to the paired MoBot */
+robot.connect();
+\end{verbatim}
+
+The next lines of code set the joint speeds for the two body joints, joints 
+two and three, to 50\% speed. They are set to fify percent speed in order to 
+slow the gait down in order to minimize slippage.
+
+\begin{verbatim}
+/* Set robot motors to speed of 0.50 */
+robot.setJointSpeed(MOBOT_JOINT2, 0.50);
+robot.setJointSpeed(MOBOT_JOINT3, 0.50);
+\end{verbatim}
+
+Next, we move the robot into a flat ``zero'' position.
+
+\begin{verbatim}
+/* Set the robot to "home" position, where all joint angles are 0 degrees. */
+robot.moveToZero();
+\end{verbatim}
+
+Finally, we perform the actual inchworm gait. The inchworm gait is a gait defined
+by a sequence of motions performed by the body joints. The motions are as such:
+\begin{enumerate}
+\item The first body joint, referred to as joint A, rotates towards the ground.
+This drags the MoBot towards the direction of joint A.
+\item The other body joint, joint B, rotates towards the ground. Since the center
+of gravity is currently positioned over joint A, this causes the trailing body 
+joint to slide toward joint A.
+\item Joint A moves back to a flat position.
+\item Joint B moves back to a flat position.
+\item Repeat, if desired.
+\end{enumerate}
+The direction of travel depends on the selection of the initial body joint. In
+the following code example, joint 2 is chosen as the initial body joint to move.
+In this case, the MoBot will traverse towards joint 2. The entire gait is
+encapsulated in a ``for'' loop which executes the entire gait four times.
+\begin{verbatim}
+/* Do the inchworm gait four times */
+int i;
+for(i = 0; i < 4; i++) {
+  robot.moveJointTo(MOBOT_JOINT2, -45);
+  robot.moveJointTo(MOBOT_JOINT3, 45);
+  robot.moveJointTo(MOBOT_JOINT2, 0);
+  robot.moveJointTo(MOBOT_JOINT3, 0);
+}
 \end{verbatim}
 
 \section{Preprogrammed Motions}
@@ -268,12 +333,36 @@ their effect on the MoBot.
   them in opposite directions in order to rotate the MoBot towards its right.
 \end{itemize}
 
-\section{Blocking and Non-Blocking Functions}
+Note that all of the functions listed above are ``blocking'' functions, meaning
+they will not return until the motion has completed. These functions also
+have non-blocking equivalents which are discussed in Section
+\ref{sec:blocking}.
+
+\subsection{\texttt{stand.ch}: A Demo Using the \texttt{motionStand()} Preprogrammed
+Motion}
+This demo is a simple demonstration of the \texttt{motionStand()} member function.
+\subsubsection{\texttt{stand.ch} Source Code}
+\verbatiminput{../demos/stand/stand.ch}
+\subsubsection{\texttt{stand.ch} Explained}
+The source code for this demo is straightforward. After the initialization and 
+connection as seen in previous demos, it executes the following line of
+code:
+\begin{verbatim}
+robot.motionStand();
+\end{verbatim}
+This line of code causes the MoBot to perform a sequence of motions causing it to
+stand up on a faceplate. The function is a blocking function and will wait until
+the entire motion sequence is completed before continuing. There are also non-blocking
+versions of the motion functions, documented in Section \ref{sec:blocking}.
+
+\section{\label{sec:blocking}Blocking and Non-Blocking Functions}
 All of the MoBot movement functions may be designated as either ``blocking'' 
-functions or ``nonblocking'' functions. A blocking function is a function which
+functions or ``non-blocking'' functions. A blocking function is a function which
 does not return while operations are being performed. For instance, the
 \texttt{moveWait()} function is a blocking function. When called, the function
-will hang, or ``block'', until all the joints have stopped moving.
+will hang, or ``block'', until all the joints have stopped moving. After all
+joints have stopped moving, the \texttt{moveWait()} function will return, and 
+the rest of the program will execute.
 
 Furthermore, some functions have both a blocking version and a non-blocking
 version. For these functions, the suffix \texttt{NB} denotes that the function
@@ -285,28 +374,17 @@ asynchronously.
 
 The function \texttt{move()} is an example of a non-blocking function. When
 the \texttt{move()} function is called, the function immediately returns 
-as the joints begin moving. The next statement in the program is executed
-even before the movement has completed. 
-
-\subsection{List of Non-Blocking Movement Functions}
-\begin{itemize}
-\item \texttt{move()}
-\item \texttt{moveContinuous()}
-\item \texttt{moveJointTo()}
-\item \texttt{moveTo()}
-\item \texttt{moveToZero()}
-\item \texttt{motionInchwormLeftNB()}
-\item \texttt{motionInchwormRightNB()}
-\item \texttt{motionRollBackwardNB()}
-\item \texttt{motionRollForwardNB()}
-\item \texttt{motionStandNB()}
-\item \texttt{motionTurnLeftNB()}
-\item \texttt{motionTurnRightNB()}
-\end{itemize}
+as the joints begin moving. Any lines of code following the call to 
+\texttt{move()} will be executed even if the current motion is still in
+progress. 
 
 \subsection{List of Blocking Movement Functions}
 \begin{itemize}
+\item \texttt{move()}
 \item \texttt{moveContinuousTime()}
+\item \texttt{moveJointTo()}
+\item \texttt{moveTo()}
+\item \texttt{moveToZero()}
 \item \texttt{moveJointWait()}
 \item \texttt{moveWait()}
 \item \texttt{motionInchwormLeft()}
@@ -318,6 +396,22 @@ even before the movement has completed.
 \item \texttt{motionTurnRight()}
 \end{itemize}
 
+\subsection{List of Non-Blocking Movement Functions}
+\begin{itemize}
+\item \texttt{moveNB()}
+\item \texttt{moveContinuousNB()}
+\item \texttt{moveJointToNB()}
+\item \texttt{moveToNB()}
+\item \texttt{moveToZeroNB()}
+\item \texttt{motionInchwormLeftNB()}
+\item \texttt{motionInchwormRightNB()}
+\item \texttt{motionRollBackwardNB()}
+\item \texttt{motionRollForwardNB()}
+\item \texttt{motionStandNB()}
+\item \texttt{motionTurnLeftNB()}
+\item \texttt{motionTurnRightNB()}
+\end{itemize}
+
 \section{Controlling Multiple Modules}
 The MoBot control software is designed to be able to control multiple modules
 simultaneously. There are a couple important differences in the program 
@@ -326,7 +420,7 @@ controls two modules simultaneously will first be presented, followed by
 a detailed explanation of the program elements.
 
 \subsection{Multiple Module Demo Program}
-\verbatiminput{../demos/multiple_modules/multiple_modules.cpp}
+\verbatiminput{../demos/multiple_modules/multipleModules.cpp}
 
 \subsection{Demo Explanation}
 The first two lines of interest appear as such:
@@ -351,12 +445,12 @@ A similar process is done with \texttt{robot2}, causing it to connect
 to a second MoBot with address \texttt{22:22:22:22:22:22}.
 
 \begin{verbatim}
-  robot1.moveToZero();
-  robot2.moveToZero();
+  robot1.moveToZeroNB();
+  robot2.moveToZeroNB();
 \end{verbatim}
 These two lines command the two robots to move to their zero positions.
 Note that these functions are non-blocking. This means that the
-\texttt{moveToZero()} function will return immediately, and will not
+\texttt{moveToZeroNB()} function will return immediately, and will not
 wait for the first robot to finish completing the motion before 
 commanding the second robot to begin. In a normal program, this effectively
 causes both robots to move to their zero positions simultaneously.
@@ -365,7 +459,7 @@ causes both robots to move to their zero positions simultaneously.
   robot1.moveWait();
   robot2.moveWait();
 \end{verbatim}
-Since the \texttt{moveToZero()} functions are non-blocking, we would like
+Since the \texttt{moveToZeroNB()} functions are non-blocking, we would like
 the program to wait until the motions are complete before continuing. By
 calling \texttt{moveWait()} on both of the robots, we can be assured that
 the robots have finished moving before the program continues.
@@ -376,7 +470,7 @@ the robots have finished moving before the program continues.
   robot1.moveWait();
   robot2.moveWait();
 \end{verbatim}
-Similar to the calls to \texttt{moveToZero()}, this block of code instructs 
+Similar to the calls to \texttt{moveToZeroNB()}, this block of code instructs 
 the two MoBots to stand. Note that we call the non-blocking versions of the
 stand function, called \texttt{motionStandNB()}. Since these functions are
 non-blocking, both robots will effectively stand simultaneously. Again,
@@ -435,9 +529,6 @@ angular position.
 its angular position.
 \end{itemize}
 
-\section{MoBotComms API}
-\input{api/libimobotcomms.tex}
-
 \section{Macros}
 
 \subsection{\texttt{MoBot\_joints\_t}}
@@ -473,8 +564,11 @@ The MoBot will choose the best direction to attain the commanded joint position.
 \texttt{IMOBOT\_FORWARD} & Move the joint in the forward direction. \\
 \texttt{IMOBOT\_BACKWARD} & Move the joint in the backward direction. \\
 \end{tabular}
+
+\section{MoBotComms API}
+\input{api/libimobotcomms.tex}
+
 % Index
-\section{Index}
 \addcontentsline{toc}{chapter}{Index}
 \printindex
 

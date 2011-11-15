@@ -3,19 +3,22 @@
 \rule{4.5in}{0.015in}\\
 \noindent
 {\LARGE \texttt{CMobot::moveJointTo()}\index{moveJointTo()}}\\
+{\LARGE \texttt{CMobot::moveJointToNB()}\index{moveJointToNB()}}\\
 %\phantomsection
 \addcontentsline{toc}{section}{moveJointTo()}
+\addcontentsline{toc}{section}{moveJointToNB()}
 
 \noindent
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <mobot.h>
 int CMobot::moveJointTo(int id, double position);
+int CMobot::moveJointToNB(int id, double position);
 \end{verbatim}
 
 \noindent
 {\bf Purpose}\\
-Connect to a remote MoBot via Bluetooth.\\
+Move a joint on the MoBot to an absolute position.\\
 
 \noindent
 {\bf Return Value}\\
@@ -38,7 +41,15 @@ This function commands the motor to move to a position specified in degrees at
 the current motor's speed. The current motor speed may be set with the
 \texttt{setJointSpeed()} member function. Please note that if the motor speed
 is set to zero, the motor will not move after calling the
-\texttt{moveJointTo()} function. \\
+\texttt{moveJointTo()} function. 
+
+The function \texttt{moveJointTo()} is a blocking function, which means that 
+the function will not return until the commanded motion is 
+completed. The function \texttt{moveJointToNB()} is the non-blocking version of
+the \texttt{moveJointTo()} function, which means that the function will return
+immediately and the physical robot motion will occur asynchronously. For
+more details on blocking and non-blocking functions, please refer to 
+Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\
 
 \noindent
 {\bf Example}\\

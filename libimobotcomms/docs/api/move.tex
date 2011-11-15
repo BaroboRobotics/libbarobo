@@ -3,14 +3,17 @@
 \rule{4.5in}{0.015in}\\
 \noindent
 {\LARGE \texttt{CMobot::move()}\index{move()}}\\
+{\LARGE \texttt{CMobot::moveNB()}\index{moveNB()}}\\
 %\phantomsection
 \addcontentsline{toc}{section}{move()}
+\addcontentsline{toc}{section}{moveNB()}
 
 \noindent
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <mobot.h>
 int CMobot::move(double angle1, double angle2, double angle3, double angle4);
+int CMobot::moveNB(double angle1, double angle2, double angle3, double angle4);
 \end{verbatim}
 
 \noindent
@@ -28,7 +31,15 @@ None.\\
 \noindent
 {\bf Description}\\
 This function moves all of the joints of a MoBot by the specified number of degrees
-from their current positions. \\
+from their current positions. 
+
+The function \texttt{move()} is a blocking function,
+which means that the function will not return until the commanded motion is 
+completed. The function \texttt{moveNB()} is the non-blocking version of
+the \texttt{move()} function, which means that the function will return
+immediately and the physical robot motion will occur asynchronously. For 
+more information on blocking and non-blocking functions, please refer to 
+Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\
 
 \noindent
 {\bf Example}\\
