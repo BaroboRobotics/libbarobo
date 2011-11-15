@@ -307,16 +307,28 @@ int CMobot::move(double angle1, double angle2, double angle3, double angle4) {
     dlrunfun(fptr, &retval, move, this, angle1, angle2, angle3, angle4);
     return retval;
 }
-int CMobot::moveContinuous(int dir1, int dir2, int dir3, int dir4) {
+int CMobot::moveNB(double angle1, double angle2, double angle3, double angle4) {
     void *fptr;
     int retval;
 
-    fptr = dlsym(g_chmobot_dlhandle, "moveContinuous_chdl");
+    fptr = dlsym(g_chmobot_dlhandle, "moveNB_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, moveContinuous, this, dir1, dir2, dir3, dir4);
+    dlrunfun(fptr, &retval, moveNB, this, angle1, angle2, angle3, angle4);
+    return retval;
+}
+int CMobot::moveContinuousNB(int dir1, int dir2, int dir3, int dir4) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "moveContinuousNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveContinuousNB, this, dir1, dir2, dir3, dir4);
     return retval;
 }
 int CMobot::moveContinuousTime(int dir1, int dir2, int dir3, int dir4, int msecs) {
@@ -343,6 +355,18 @@ int CMobot::moveJointTo(int id, double angle) {
     dlrunfun(fptr, &retval, moveJointTo, this, id, angle);
     return retval;
 }
+int CMobot::moveJointToNB(int id, double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "moveJointToNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveJointToNB, this, id, angle);
+    return retval;
+}
 int CMobot::moveJointWait(int id) {
     void *fptr;
     int retval;
@@ -367,6 +391,18 @@ int CMobot::moveTo(double angle1, double angle2, double angle3, double angle4) {
     dlrunfun(fptr, &retval, moveTo, this, angle1, angle2, angle3, angle4);
     return retval;
 }
+int CMobot::moveToNB(double angle1, double angle2, double angle3, double angle4) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "moveToNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveToNB, this, angle1, angle2, angle3, angle4);
+    return retval;
+}
 int CMobot::moveToZero() {
     void *fptr;
     int retval;
@@ -377,6 +413,18 @@ int CMobot::moveToZero() {
         return -1;
     }
     dlrunfun(fptr, &retval, moveToZero, this);
+    return retval;
+}
+int CMobot::moveToZeroNB() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "moveToZeroNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveToZeroNB, this);
     return retval;
 }
 int CMobot::moveWait() {
