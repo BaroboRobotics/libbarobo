@@ -4,6 +4,7 @@
 #include <mobot.h>
 
 CMobot robot;
+double angle1, angle4;
 
 /* Connect to the paired MoBot */
 robot.connect();
@@ -12,6 +13,7 @@ robot.connect();
 robot.moveToZero();
 
 /* Rotate each of the faceplates by 90 degrees */
-robot.moveJointTo(MOBOT_JOINT1, 90);
-robot.moveJointTo(MOBOT_JOINT4, 90);
+angle1 = 90;
+angle4 = 90;
+robot.move(angle1, 0, 0, angle4);
 
