@@ -352,7 +352,7 @@ int Mobot_moveNB(br_comms_t* comms,
   return 0;
 }
 
-int Mobot_moveContinuous(br_comms_t* comms,
+int Mobot_moveContinuousNB(br_comms_t* comms,
                                   mobotJointDirection_t dir1,
                                   mobotJointDirection_t dir2,
                                   mobotJointDirection_t dir3,
@@ -384,7 +384,7 @@ int Mobot_moveContinuousTime(br_comms_t* comms,
                                   int msecs)
 {
   int i;
-  Mobot_moveContinuous(comms, dir1, dir2, dir3, dir4);
+  Mobot_moveContinuousNB(comms, dir1, dir2, dir3, dir4);
 #ifdef _WIN32
   Sleep(msecs);
 #else
@@ -841,9 +841,9 @@ int CMobot::moveNB( double angle1,
   return Mobot_moveNB(&_comms, angle1, angle2, angle3, angle4);
 }
 
-int CMobot::moveContinuous( mobotJointDirection_t dir1, mobotJointDirection_t dir2, mobotJointDirection_t dir3, mobotJointDirection_t dir4)
+int CMobot::moveContinuousNB( mobotJointDirection_t dir1, mobotJointDirection_t dir2, mobotJointDirection_t dir3, mobotJointDirection_t dir4)
 {
-  return Mobot_moveContinuous(&_comms, dir1, dir2, dir3, dir4);
+  return Mobot_moveContinuousNB(&_comms, dir1, dir2, dir3, dir4);
 }
 
 int CMobot::moveContinuousTime( mobotJointDirection_t dir1, mobotJointDirection_t dir2, mobotJointDirection_t dir3, mobotJointDirection_t dir4, int msecs)
@@ -961,7 +961,5 @@ int CMobot::motionTurnRightNB()
 {
   return Mobot_motionTurnRightNB(&_comms);
 }
-
-
 
 #endif

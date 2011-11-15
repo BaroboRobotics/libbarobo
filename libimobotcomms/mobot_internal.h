@@ -116,7 +116,7 @@ DLLIMPORT int Mobot_moveNB(br_comms_t* comms,
                                double angle2,
                                double angle3,
                                double angle4);
-DLLIMPORT int Mobot_moveContinuous(br_comms_t* comms,
+DLLIMPORT int Mobot_moveContinuousNB(br_comms_t* comms,
                                   mobotJointDirection_t dir1,
                                   mobotJointDirection_t dir2,
                                   mobotJointDirection_t dir3,

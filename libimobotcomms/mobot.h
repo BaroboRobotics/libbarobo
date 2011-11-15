@@ -76,7 +76,7 @@ class CMobot {
     int getJointState(mobotJointId_t id, mobotJointState_t &state);
     int move(double angle1, double angle2, double angle3, double angle4);
     int moveNB(double angle1, double angle2, double angle3, double angle4);
-    int moveContinuous(mobotJointDirection_t dir1, 
+    int moveContinuousNB(mobotJointDirection_t dir1, 
                        mobotJointDirection_t dir2, 
                        mobotJointDirection_t dir3, 
                        mobotJointDirection_t dir4);
