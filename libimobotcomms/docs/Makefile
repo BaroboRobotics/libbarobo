@@ -1,6 +1,6 @@
-imobotcomms_api.pdf: 
-	pdflatex imobotcomms_api.tex
-	makeindex imobotcomms_api.idx
-	pdflatex imobotcomms_api.tex
+mobot.pdf: 
+	pdflatex mobot.tex
+	makeindex mobot.idx
+	pdflatex mobot.tex
 clean:
-	rm -rf imobotcomms_api.pdf imobotcomms_api.ind
+	rm -rf mobot.pdf mobot.ind
