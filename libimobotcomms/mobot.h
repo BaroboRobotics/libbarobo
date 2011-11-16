@@ -2,7 +2,7 @@
 #define _MOBOTCOMMS_H_
 
 #ifdef _CH_
-#pragma package <chbarobo>
+#pragma package <chmobot>
 #ifdef _WIN32_
 #define _WIN32
 #include <stdint.h>
