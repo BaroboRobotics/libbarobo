@@ -14,6 +14,7 @@
 
 #include <stdio.h>
 
+#ifndef _CH_
 #ifndef _WIN32
 #include <unistd.h>
 #include <sys/types.h>
@@ -26,7 +27,6 @@
 #include <Ws2bth.h>
 #endif
 
-#ifndef _CH_
 #include "mobot_internal.h"
 #endif
 

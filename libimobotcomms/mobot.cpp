@@ -583,7 +583,11 @@ int Mobot_motionStand(br_comms_t* comms)
   return 0;
 }
 
+#ifndef _WIN32
 void* motionInchwormLeftThread(void* arg)
+#else
+DWORD WINAPI motionInchwormLeftThread(LPVOID arg)
+#endif
 {
   br_comms_t* comms = (br_comms_t*)arg;
   Mobot_motionInchwormLeft(comms);
@@ -598,7 +602,11 @@ int Mobot_motionInchwormLeftNB(br_comms_t* comms)
   return 0;
 }
 
+#ifndef _WIN32
 void* motionInchwormRightThread(void* arg)
+#else
+DWORD WINAPI motionInchwormRightThread(LPVOID arg)
+#endif
 {
   Mobot_motionInchwormRight((br_comms_t*)arg);
   return NULL;
@@ -611,7 +619,11 @@ int Mobot_motionInchwormRightNB(br_comms_t* comms)
   return 0;
 }
 
+#ifndef _WIN32
 void* motionRollBackwardThread(void* arg)
+#else
+DWORD WINAPI motionRollBackwardThread(LPVOID arg)
+#endif
 {
   Mobot_motionRollBackward((br_comms_t*)arg);
   return NULL;
@@ -624,7 +636,11 @@ int Mobot_motionRollBackwardNB(br_comms_t* comms)
   return 0;
 }
 
+#ifndef _WIN32
 void* motionRollForwardThread(void* arg)
+#else
+DWORD WINAPI motionRollForwardThread(LPVOID arg)
+#endif
 {
   Mobot_motionRollForward((br_comms_t*)arg);
   return NULL;
@@ -637,7 +653,11 @@ int Mobot_motionRollForwardNB(br_comms_t* comms)
   return 0;
 }
 
+#ifndef _WIN32
 void* motionStandThread(void* arg)
+#else
+DWORD WINAPI motionStandThread(LPVOID arg)
+#endif
 {
   Mobot_motionStand((br_comms_t*)arg);
   return NULL;
@@ -650,7 +670,11 @@ int Mobot_motionStandNB(br_comms_t* comms)
   return 0;
 }
 
+#ifndef _WIN32
 void* motionTurnLeftThread(void* arg)
+#else
+DWORD WINAPI motionTurnLeftThread(LPVOID arg)
+#endif
 {
   Mobot_motionTurnLeft((br_comms_t*)arg);
   return NULL;
@@ -663,7 +687,11 @@ int Mobot_motionTurnLeftNB(br_comms_t* comms)
   return 0;
 }
 
+#ifndef _WIN32
 void* motionTurnRightThread(void* arg)
+#else
+DWORD WINAPI motionTurnRightThread(LPVOID arg)
+#endif
 {
   Mobot_motionTurnRight((br_comms_t*)arg);
   return NULL;

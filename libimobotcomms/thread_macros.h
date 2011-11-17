@@ -178,7 +178,7 @@ fprintf(stderr, "rwunlock error: %s:%d\n", __FILE__, __LINE__)
 #define THREAD_CREATE(thread_handle, function, arg) \
   *(thread_handle) = CreateThread( \
       NULL, \
-      (SIZE_T)stack_size, \
+      (SIZE_T)0, \
       function, \
       arg, \
       0, \
