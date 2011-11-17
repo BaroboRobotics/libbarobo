@@ -1,5 +1,5 @@
 PACKAGE=chmobot
-VERSION=0.1.0
+VERSION=0.1
 HEADERS=../mobot.h
 PKGDIR=$(PACKAGE)-$(VERSION)/$(PACKAGE)
 
@@ -36,6 +36,7 @@ createpkg: libmobot.dl
 	cp ../docs/mobot.pdf $(PKGDIR)/docs
 	cp ../demos/gettingStarted/gettingStarted.ch $(PKGDIR)/demos
 	cp ../demos/inchworm/inchworm.ch $(PKGDIR)/demos
+	cp ../demos/inchworm/inchworm2.ch $(PKGDIR)/demos
 	cp ../demos/simple/simple.ch $(PKGDIR)/demos
 	cp ../demos/stand/stand.ch $(PKGDIR)/demos
 	cp ../demos/stand/stand2.ch $(PKGDIR)/demos
