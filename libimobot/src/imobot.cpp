@@ -30,7 +30,7 @@ extern "C" {
 #include <bluetooth/sdp.h>
 #include <bluetooth/sdp_lib.h>
 
-int iMobot_getJointAngle(iMobot_t* iMobot, int id, double *angle)
+int iMobot_getJointAngle(iMobot_t* iMobot, iMobotJointId_t id, double *angle)
 {
   uint8_t hibyte, lobyte;
   short s_angle;
@@ -43,16 +43,16 @@ int iMobot_getJointAngle(iMobot_t* iMobot, int id, double *angle)
   return 0;
 }
 
-int iMobot_getJointDirection(iMobot_t* iMobot, int id, int *dir)
+int iMobot_getJointDirection(iMobot_t* iMobot, iMobotJointId_t id, iMobotJointDirection_t *dir)
 {
   uint8_t byte;
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
   I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORDIR(id), &byte);
-  *dir = byte;
+  *dir = (iMobotJointDirection_t)byte;
   return 0;
 }
 
-int iMobot_getJointSpeed(iMobot_t* iMobot, int id, double *speed)
+int iMobot_getJointSpeed(iMobot_t* iMobot, iMobotJointId_t id, double *speed)
 {
   uint8_t byte;
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
@@ -64,14 +64,14 @@ int iMobot_getJointSpeed(iMobot_t* iMobot, int id, double *speed)
   }
 }
 
-int iMobot_getJointState(iMobot_t* iMobot, int id, int *state)
+int iMobot_getJointState(iMobot_t* iMobot, iMobotJointId_t id, iMobotJointState_t *state)
 {
   uint8_t byte;
   I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
   if(I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORSTATE(id), &byte)) {
     return -1;
   } else {
-    *state = byte;
+    *state = (iMobotJointState_t)byte;
     return 0;
   }
 }
@@ -98,8 +98,8 @@ int iMobot_init(iMobot_t* iMobot)
     iMobot->enc[i] = (hibyte << 8) + lobyte;
   }
   /* Set default speeds for the motors */
-  for(i = 0; i < 4; i++) {
-    iMobot_setJointSpeed(iMobot, i, 30);
+  for(i = 1; i <= 4; i++) {
+    iMobot_setJointSpeed(iMobot, (iMobotJointId_t)i, 30);
   }
   return 0;
 }
@@ -291,8 +291,28 @@ int iMobot_move(iMobot_t* iMobot,
   angles[1] = angle2;
   angles[2] = angle3;
   angles[3] = angle4;
-  for(i = 0; i < 4; i++) {
-    if(iMobot_moveJoint(iMobot, i, angles[i])) {
+  for(i = 1; i <= 4; i++) {
+    if(iMobot_moveJoint(iMobot, (iMobotJointId_t)i, angles[i-1])) {
+      return -1;
+    }
+  }
+  return iMobot_moveWait(iMobot);
+}
+
+int iMobot_moveNB(iMobot_t* iMobot,
+                double angle1,
+                double angle2,
+                double angle3,
+                double angle4 )
+{
+  int i;
+  double angles[4];
+  angles[0] = angle1;
+  angles[1] = angle2;
+  angles[2] = angle3;
+  angles[3] = angle4;
+  for(i = 1; i <= 4; i++) {
+    if(iMobot_moveJoint(iMobot, (iMobotJointId_t)i, angles[i-1])) {
       return -1;
     }
   }
@@ -300,10 +320,10 @@ int iMobot_move(iMobot_t* iMobot,
 }
 
 int iMobot_moveContinuous(iMobot_t* iMobot,
-                                  int dir1,
-                                  int dir2,
-                                  int dir3,
-                                  int dir4)
+                                  iMobotJointDirection_t dir1,
+                                  iMobotJointDirection_t dir2,
+                                  iMobotJointDirection_t dir3,
+                                  iMobotJointDirection_t dir4)
 {
   int dirs[4];
   int i;
@@ -311,8 +331,8 @@ int iMobot_moveContinuous(iMobot_t* iMobot,
   dirs[1] = dir2;
   dirs[2] = dir3;
   dirs[3] = dir4;
-  for(i = 0; i < 4; i++) {
-    if(iMobot_setJointDirection(iMobot, i, dirs[i])) {
+  for(i = 1; i <= 4; i++) {
+    if(iMobot_setJointDirection(iMobot, (iMobotJointId_t)i, (iMobotJointDirection_t)dirs[i-1])) {
       return -1;
     }
   }
@@ -320,17 +340,17 @@ int iMobot_moveContinuous(iMobot_t* iMobot,
 }
 
 int iMobot_moveContinuousTime(iMobot_t* iMobot,
-                                  int dir1,
-                                  int dir2,
-                                  int dir3,
-                                  int dir4,
+                                  iMobotJointDirection_t dir1,
+                                  iMobotJointDirection_t dir2,
+                                  iMobotJointDirection_t dir3,
+                                  iMobotJointDirection_t dir4,
                                   int msecs)
 {
   int i;
   iMobot_moveContinuous(iMobot, dir1, dir2, dir3, dir4);
   usleep(msecs * 1000);
-  for(i = 0; i < 4; i++) {
-    if(iMobot_setJointDirection(iMobot, i, 0)) {
+  for(i = 1; i <= 4; i++) {
+    if(iMobot_setJointDirection(iMobot, (iMobotJointId_t)i, IMOBOT_NEUTRAL)) {
       return -1;
     }
   }
@@ -350,15 +370,49 @@ int iMobot_moveTo(iMobot_t* iMobot,
   angles[1] = angle2;
   angles[2] = angle3;
   angles[3] = angle4;
-  for(i = 0; i < 4; i++) {
-    if(iMobot_moveJointTo(iMobot, i, angles[i])) {
+  for(i = 1; i <= 4; i++) {
+    if(iMobot_moveJointTo(iMobot, (iMobotJointId_t)i, angles[i-1])) {
+      return -1;
+    }
+  }
+  return iMobot_moveWait(iMobot);
+}
+
+int iMobot_moveToNB(iMobot_t* iMobot,
+                double angle1,
+                double angle2,
+                double angle3,
+                double angle4 )
+{
+  int i;
+  double angles[4];
+  angles[0] = angle1;
+  angles[1] = angle2;
+  angles[2] = angle3;
+  angles[3] = angle4;
+  for(i = 1; i <= 4; i++) {
+    if(iMobot_moveJointTo(iMobot, (iMobotJointId_t)i, angles[i-1])) {
       return -1;
     }
   }
   return 0;
 }
 
-int iMobot_moveJoint(iMobot_t* iMobot, int id, double angle)
+
+int iMobot_moveJoint(iMobot_t* iMobot, iMobotJointId_t id, double angle)
+{
+  /* Get the current position */
+  double cur_angle;
+  if(iMobot_getJointAngle(iMobot, id, &cur_angle)) {
+    return -1;
+  }
+  if(iMobot_moveJointTo(iMobot, id, angle + cur_angle)) {
+    return -2;
+  }
+  return iMobot_moveJointWait(iMobot, id);
+}
+
+int iMobot_moveJointNB(iMobot_t* iMobot, iMobotJointId_t id, double angle)
 {
   /* Get the current position */
   double cur_angle;
@@ -371,7 +425,26 @@ int iMobot_moveJoint(iMobot_t* iMobot, int id, double angle)
   return 0;
 }
 
-int iMobot_moveJointTo(iMobot_t* iMobot, int id, double angle)
+int iMobot_moveJointTo(iMobot_t* iMobot, iMobotJointId_t id, double angle)
+{
+  /* Send the desired angles to the iMobot */
+  /* Need to convert it to 2 bytes and send to motor*/
+  uint8_t data[2];
+  /* Multiply by 10 to convert to 10*degrees, which are the units used by the
+   * daughterboard. */
+  short position = (short) angle*10;
+  memcpy(&data, &position, 2);
+  /* We should send the high byte first */
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORPOS(id), data[1]);
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  I2cWriteByte(iMobot->i2cDev, I2C_REG_MOTORPOS(id)+1, data[0]);
+  iMobot->enc[id] = position;
+
+  return iMobot_moveJointWait(iMobot, id);
+}
+
+int iMobot_moveJointToNB(iMobot_t* iMobot, iMobotJointId_t id, double angle)
 {
   /* Send the desired angles to the iMobot */
   /* Need to convert it to 2 bytes and send to motor*/
@@ -393,8 +466,19 @@ int iMobot_moveJointTo(iMobot_t* iMobot, int id, double angle)
 int iMobot_moveToZero(iMobot_t* iMobot)
 {
   int i;
-  for(i = 0; i < 4; i++) {
-    if(iMobot_moveJointTo(iMobot, i, 0)) {
+  for(i = 1; i <= 4; i++) {
+    if(iMobot_moveJointTo(iMobot, (iMobotJointId_t)i, 0)) {
+      return -1;
+    }
+  }
+  return iMobot_moveWait(iMobot);
+}
+
+int iMobot_moveToZeroNB(iMobot_t* iMobot)
+{
+  int i;
+  for(i = 1; i <= 4; i++) {
+    if(iMobot_moveJointTo(iMobot, (iMobotJointId_t)i, 0)) {
       return -1;
     }
   }
@@ -404,13 +488,13 @@ int iMobot_moveToZero(iMobot_t* iMobot)
 int iMobot_moveWait(iMobot_t* iMobot)
 {
   int i;
-  for(i = 0; i < 4; i++) {
-    iMobot_waitMotor(iMobot, i);
+  for(i = 1; i <= 4; i++) {
+    iMobot_moveJointWait(iMobot, (iMobotJointId_t)i);
   }
   return 0;
 }
 
-int iMobot_setJointDirection(iMobot_t* iMobot, int id, int direction)
+int iMobot_setJointDirection(iMobot_t* iMobot, iMobotJointId_t id, iMobotJointDirection_t direction)
 {
   int i;
   uint8_t data[2];
@@ -423,7 +507,7 @@ int iMobot_setJointDirection(iMobot_t* iMobot, int id, int direction)
   return 0;
 }
 
-int iMobot_setJointSpeed(iMobot_t* iMobot, int id, double speed)
+int iMobot_setJointSpeed(iMobot_t* iMobot, iMobotJointId_t id, double speed)
 {
   uint8_t data[2];
   int ispeed;
@@ -451,9 +535,9 @@ int iMobot_terminate(iMobot_t* iMobot)
   return close(iMobot->i2cDev);
 }
 
-int iMobot_waitMotor(iMobot_t* iMobot, int id)
+int iMobot_moveJointWait(iMobot_t* iMobot, iMobotJointId_t id)
 {
-  int state;
+  iMobotJointState_t state;
   if(iMobot_getJointState(iMobot, id, &state)) {
     return -1;
   }
@@ -521,7 +605,7 @@ int iMobot_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, cons
   } else if (MATCHSTR("SET_MOTOR_DIRECTION"))
   {
     sscanf(buf, "%*s %d %d", &id, &int32);
-    if(iMobot_setJointDirection(iMobot, id, int32)) {
+    if(iMobot_setJointDirection(iMobot, (iMobotJointId_t)id, (iMobotJointDirection_t)int32)) {
       write(socket, "ERROR", 6);
     } else {
       write(socket, "OK", 6);
@@ -529,7 +613,7 @@ int iMobot_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, cons
   } else if (MATCHSTR("GET_MOTOR_DIRECTION"))
   {
     sscanf(buf, "%*s %d", &id);
-    if(iMobot_getJointDirection(iMobot, id, &int32)) {
+    if(iMobot_getJointDirection(iMobot, (iMobotJointId_t)id, (iMobotJointDirection_t*)&int32)) {
       write(socket, "ERROR", 6);
     } else {
       sprintf(mybuf, "%d", int32);
@@ -538,7 +622,7 @@ int iMobot_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, cons
   } else if (MATCHSTR("SET_MOTOR_SPEED"))
   {
     sscanf(buf, "%*s %d %d", &id, &int32);
-    if(iMobot_setJointSpeed(iMobot, id, int32)) {
+    if(iMobot_setJointSpeed(iMobot, (iMobotJointId_t)id, int32)) {
       write(socket, "ERROR", 6);
     } else {
       write(socket, "OK", 3);
@@ -546,7 +630,7 @@ int iMobot_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, cons
   } else if (MATCHSTR("GET_MOTOR_SPEED"))
   {
     sscanf(buf, "%*s %d", &id);
-    if(iMobot_getJointSpeed(iMobot, id, &mydouble)) {
+    if(iMobot_getJointSpeed(iMobot, (iMobotJointId_t)id, &mydouble)) {
       write(socket, "ERROR", 6);
     } else {
       int32 = mydouble * 100;
@@ -556,7 +640,7 @@ int iMobot_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, cons
   } else if (MATCHSTR("SET_MOTOR_POSITION"))
   {
     sscanf(buf, "%*s %d %lf", &id, &mydouble);
-    if(iMobot_moveJointTo(iMobot, id, mydouble)) {
+    if(iMobot_moveJointTo(iMobot, (iMobotJointId_t)id, mydouble)) {
       write(socket, "ERROR", 6);
     } else {
       write(socket, "OK", 3);
@@ -564,7 +648,7 @@ int iMobot_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, cons
   } else if (MATCHSTR("GET_MOTOR_POSITION"))
   {
     sscanf(buf, "%*s %d", &id);
-    if(iMobot_getJointAngle(iMobot, id, &mydouble)) {
+    if(iMobot_getJointAngle(iMobot, (iMobotJointId_t)id, &mydouble)) {
       write(socket, "ERROR", 6);
     } else {
       sprintf(mybuf, "%lf", mydouble);
@@ -573,13 +657,13 @@ int iMobot_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, cons
   } else if (MATCHSTR("STOP")) 
   {
     for(id = 1; id < 5; id++) {
-      iMobot_setJointSpeed(iMobot, id, 0);
+      iMobot_setJointSpeed(iMobot, (iMobotJointId_t)id, 0);
     }
     write(socket, "OK", 3);
   }  else if (MATCHSTR("GET_MOTOR_STATE")) 
   {
     sscanf(buf, "%*s %d", &id);
-    if(iMobot_getJointState(iMobot, id, &int32)) {
+    if(iMobot_getJointState(iMobot, (iMobotJointId_t)id, (iMobotJointState_t*)&int32)) {
       write(socket, "ERROR", 6);
     } else {
       sprintf(mybuf, "%d", int32);
@@ -604,22 +688,22 @@ CiMobot::CiMobot() {
 CiMobot::~CiMobot() {
 }
 
-int CiMobot::getJointDirection(int id, int &direction)
+int CiMobot::getJointDirection(iMobotJointId_t id, iMobotJointDirection_t &direction)
 {
   return iMobot_getJointDirection(&_iMobot, id, &direction);
 }
 
-int CiMobot::getJointAngle(int id, double &angle)
+int CiMobot::getJointAngle(iMobotJointId_t id, double &angle)
 {
   return iMobot_getJointAngle(&_iMobot, id, &angle);
 }
 
-int CiMobot::getJointSpeed(int id, double &speed)
+int CiMobot::getJointSpeed(iMobotJointId_t id, double &speed)
 {
   return iMobot_getJointSpeed(&_iMobot, id, &speed);
 }
 
-int CiMobot::getJointState(int id, int &state)
+int CiMobot::getJointState(iMobotJointId_t id, iMobotJointState_t &state)
 {
   return iMobot_getJointState(&_iMobot, id, &state);
 }
@@ -647,12 +731,28 @@ int CiMobot::move( double angle1,
   return iMobot_move(&_iMobot, angle1, angle2, angle3, angle4);
 }
 
+int CiMobot::moveNB( double angle1,
+              double angle2,
+              double angle3,
+              double angle4 )
+{
+  return iMobot_moveNB(&_iMobot, angle1, angle2, angle3, angle4);
+}
+
 int CiMobot::moveTo( double angle1,
               double angle2,
               double angle3,
               double angle4 )
 {
   return iMobot_moveTo(&_iMobot, angle1, angle2, angle3, angle4);
+}
+
+int CiMobot::moveToNB( double angle1,
+              double angle2,
+              double angle3,
+              double angle4 )
+{
+  return iMobot_moveToNB(&_iMobot, angle1, angle2, angle3, angle4);
 }
 
 int CiMobot::moveWait()
@@ -665,22 +765,32 @@ int CiMobot::moveToZero()
   return iMobot_moveToZero(&_iMobot);
 }
 
-int CiMobot::setJointDirection(int id, int direction)
+int CiMobot::setJointDirection(iMobotJointId_t id, iMobotJointDirection_t direction)
 {
   return iMobot_setJointDirection(&_iMobot, id, direction);
 }
 
-int CiMobot::moveJoint(int id, double angle)
+int CiMobot::moveJoint(iMobotJointId_t id, double angle)
 {
   return iMobot_moveJoint(&_iMobot, id, angle);
 }
 
-int CiMobot::moveJointTo(int id, double angle)
+int CiMobot::moveJointNB(iMobotJointId_t id, double angle)
+{
+  return iMobot_moveJointNB(&_iMobot, id, angle);
+}
+
+int CiMobot::moveJointTo(iMobotJointId_t id, double angle)
 {
   return iMobot_moveJointTo(&_iMobot, id, angle);
 }
 
-int CiMobot::setJointSpeed(int id, double speed)
+int CiMobot::moveJointToNB(iMobotJointId_t id, double angle)
+{
+  return iMobot_moveJointToNB(&_iMobot, id, angle);
+}
+
+int CiMobot::setJointSpeed(iMobotJointId_t id, double speed)
 {
   return iMobot_setJointSpeed(&_iMobot, id, speed);
 }
@@ -695,8 +805,8 @@ int CiMobot::terminate()
   return iMobot_terminate(&_iMobot);
 }
 
-int CiMobot::waitMotor(int id)
+int CiMobot::moveJointWait(iMobotJointId_t id)
 {
-  return iMobot_waitMotor(&_iMobot, id);
+  return iMobot_moveJointWait(&_iMobot, id);
 }
 

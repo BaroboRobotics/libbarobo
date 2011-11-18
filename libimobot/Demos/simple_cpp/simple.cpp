@@ -9,16 +9,9 @@ int main()
   robot.moveWait();
 
   /* Rotate each of the faceplates by 90 degrees */
-  robot.moveJointTo(IMOBOT_MOTOR1, 90);
-  robot.moveJointTo(IMOBOT_MOTOR4, 90);
-  /* Wait for the movement to complete */
-  robot.waitMotor(IMOBOT_MOTOR1);
-  robot.waitMotor(IMOBOT_MOTOR4);
+  robot.moveTo(90, 0, 0, 90);
   /* Move the motors back to where they were */
-  robot.moveJointTo(IMOBOT_MOTOR1, 0);
-  robot.moveJointTo(IMOBOT_MOTOR4, 0);
-  robot.waitMotor(IMOBOT_MOTOR1);
-  robot.waitMotor(IMOBOT_MOTOR4);
+  robot.moveTo(0, 0, 0, 0);
 
   return 0;
 }

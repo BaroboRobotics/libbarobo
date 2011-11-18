@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <imobot.h>
 
-void moveJoint(CiMobot &robot, int id, double angle)
+void moveJoint(CiMobot &robot, iMobotJointId_t id, double angle)
 {
   double cur_angle;
   robot.getJointAngle(id, cur_angle);
@@ -12,56 +12,48 @@ void moveJoint(CiMobot &robot, int id, double angle)
 
 void move_forward(CiMobot &robot)
 {
-  moveJoint(robot, IMOBOT_MOTOR1, -90);
-  moveJoint(robot, IMOBOT_MOTOR4, 90);
+  moveJoint(robot, IMOBOT_JOINT1, -90);
+  moveJoint(robot, IMOBOT_JOINT4, 90);
 }
 
 void move_backward(CiMobot &robot)
 {
-  moveJoint(robot, IMOBOT_MOTOR1, 90);
-  moveJoint(robot, IMOBOT_MOTOR4, -90);
+  moveJoint(robot, IMOBOT_JOINT1, 90);
+  moveJoint(robot, IMOBOT_JOINT4, -90);
 }
 
 void arch(CiMobot &robot)
 {
-  robot.moveJointTo(IMOBOT_MOTOR2, -30);
-  robot.moveJointTo(IMOBOT_MOTOR3, 30);
+  robot.moveJointTo(IMOBOT_JOINT2, -30);
+  robot.moveJointTo(IMOBOT_JOINT3, 30);
 }
 
 void inch_right(CiMobot &robot)
 {
-  robot.moveJointTo(IMOBOT_MOTOR2, -50);
-  robot.waitMotor(IMOBOT_MOTOR2);
-  robot.moveJointTo(IMOBOT_MOTOR3, 50);
-  robot.waitMotor(IMOBOT_MOTOR3);
-  robot.moveJointTo(IMOBOT_MOTOR2, 0);
-  robot.waitMotor(IMOBOT_MOTOR2);
-  robot.moveJointTo(IMOBOT_MOTOR3, 0);
-  robot.waitMotor(IMOBOT_MOTOR3);
+  robot.moveJointTo(IMOBOT_JOINT2, -50);
+  robot.moveJointTo(IMOBOT_JOINT3, 50);
+  robot.moveJointTo(IMOBOT_JOINT2, 0);
+  robot.moveJointTo(IMOBOT_JOINT3, 0);
 }
 
 void inch_left(CiMobot &robot)
 {
-  robot.moveJointTo(IMOBOT_MOTOR3, 50);
-  robot.waitMotor(IMOBOT_MOTOR3);
-  robot.moveJointTo(IMOBOT_MOTOR2, -50);
-  robot.waitMotor(IMOBOT_MOTOR2);
-  robot.moveJointTo(IMOBOT_MOTOR3, 0);
-  robot.waitMotor(IMOBOT_MOTOR3);
-  robot.moveJointTo(IMOBOT_MOTOR2, 0);
-  robot.waitMotor(IMOBOT_MOTOR2);
+  robot.moveJointTo(IMOBOT_JOINT3, 50);
+  robot.moveJointTo(IMOBOT_JOINT2, -50);
+  robot.moveJointTo(IMOBOT_JOINT3, 0);
+  robot.moveJointTo(IMOBOT_JOINT2, 0);
 }
 
 void rotate_right(CiMobot &robot)
 {
-  moveJoint(robot, IMOBOT_MOTOR1, 90);
-  moveJoint(robot, IMOBOT_MOTOR4, 90);
+  moveJoint(robot, IMOBOT_JOINT1, 90);
+  moveJoint(robot, IMOBOT_JOINT4, 90);
 }
 
 void rotate_left(CiMobot &robot)
 {
-  moveJoint(robot, IMOBOT_MOTOR1, -90);
-  moveJoint(robot, IMOBOT_MOTOR4, -90);
+  moveJoint(robot, IMOBOT_JOINT1, -90);
+  moveJoint(robot, IMOBOT_JOINT4, -90);
 }
 
 void stand(CiMobot &robot)
@@ -69,29 +61,24 @@ void stand(CiMobot &robot)
   int i;
   double speed;
   /* Go to home position first */
-  for(i = IMOBOT_MOTOR1; i < IMOBOT_NUM_MOTORS; i++) {
-    robot.moveJointTo(i, 0);
-  }
-  robot.moveWait();
-  sleep(IMOBOT_MOTOR3);
+  robot.moveToZero();
+  sleep(1);
 
   /* Arch the robot */
-  robot.moveJointTo(IMOBOT_MOTOR2, -85);
-  robot.moveJointTo(IMOBOT_MOTOR3, 80);
+  robot.moveJointToNB(IMOBOT_JOINT2, -85);
+  robot.moveJointToNB(IMOBOT_JOINT3, 80);
   robot.moveWait();
 
   /* Twist the bottom face */
-  robot.moveJointTo(IMOBOT_MOTOR1, 45);
-  robot.waitMotor(IMOBOT_MOTOR1);
+  robot.moveJointTo(IMOBOT_JOINT1, 45);
 
   /* Stand the robot up slowly */
   /* First, save the speed */
-  robot.getJointSpeed(IMOBOT_MOTOR2, speed);
-  robot.setJointSpeed(IMOBOT_MOTOR2, 30);
-  robot.moveJointTo(IMOBOT_MOTOR2, 20);
-  robot.waitMotor(IMOBOT_MOTOR2);
+  robot.getJointSpeed(IMOBOT_JOINT2, speed);
+  robot.setJointSpeed(IMOBOT_JOINT2, 30);
+  robot.moveJointTo(IMOBOT_JOINT2, 20);
   /* Reset the old speed */
-  robot.setJointSpeed(IMOBOT_MOTOR2, speed);
+  robot.setJointSpeed(IMOBOT_JOINT2, speed);
 }
 
 int main()

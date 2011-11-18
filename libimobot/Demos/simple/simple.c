@@ -22,16 +22,9 @@ int main()
   iMobot_moveWait(&robot);
 
   /* Rotate each of the faceplates by 90 degrees */
-  iMobot_moveJointTo(&robot, IMOBOT_MOTOR1, 90);
-  iMobot_moveJointTo(&robot, IMOBOT_MOTOR4, 90);
-  /* Wait for the movement to complete */
-  iMobot_waitMotor(&robot, IMOBOT_MOTOR1);
-  iMobot_waitMotor(&robot, IMOBOT_MOTOR4);
+  iMobot_moveTo(&robot, 90, 0, 0, 90);
   /* Move the motors back to where they were */
-  iMobot_moveJointTo(&robot, IMOBOT_MOTOR1, 0);
-  iMobot_moveJointTo(&robot, IMOBOT_MOTOR4, 0);
-  iMobot_waitMotor(&robot, IMOBOT_MOTOR1);
-  iMobot_waitMotor(&robot, IMOBOT_MOTOR4);
+  iMobot_moveTo(&robot, 0, 0, 0, 0);
 
   /* The following 2 lines set up the robot to listen to Bluetooth remote
    * control commands */
