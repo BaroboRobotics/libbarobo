@@ -332,29 +332,29 @@ int executeGait(Gait* gait)
       case MOTION_MOVE:
         for(j = 0; j < 4; j++) {
           if((1<<j) & motorMask) {
-            getMotorPosition(j, &pos);
+            getMotorPosition(j+1, &pos);
             pos += angles[j];
-            setMotorDirection(j, 0);
-            setMotorSpeed(j, 
+            setMotorDirection(j+1, 0);
+            setMotorSpeed(j+1, 
                 (int)gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[j])));
-            setMotorPosition(j, pos);
+            setMotorPosition(j+1, pos);
           }
         }
         break;
       case MOTION_POSE:
         for(j = 0; j<4; j++) {
           if((1<<j) & motorMask) {
-            setMotorDirection(j, 0);
-            setMotorSpeed(j, 
+            setMotorDirection(j+1, 0);
+            setMotorSpeed(j+1, 
                 (int)gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[j])));
-            setMotorPosition(j, angles[j]);
+            setMotorPosition(j+1, angles[j]);
           }
         }
         break;
     }
     for(j = 0; j<4; j++) {
       if((1<<j) & motorMask) {
-        waitMotor(j);
+        waitMotor(j+1);
       }
     }
   }
@@ -373,7 +373,7 @@ gboolean updateMotorAngles(gpointer data)
     return TRUE;
   }
   for(i = 0; i < 4; i++) {
-    getMotorPosition(i, &position);
+    getMotorPosition(i+1, &position);
     while(position > 180) position -= 360;
     while(position < -180) position += 360;
     sprintf(buf, "%.1f", position);
@@ -382,7 +382,7 @@ gboolean updateMotorAngles(gpointer data)
     /* Update the motor position sliders */
     if(motor_position_scale_pressed[i]) {
       /* Send a set motor position to the appropriate motor */
-      setMotorPosition(i, (double)gtk_range_get_value(GTK_RANGE(scale_motorPositions[i])));
+      setMotorPosition(i+1, (double)gtk_range_get_value(GTK_RANGE(scale_motorPositions[i])));
     } else {
       while(position > 180) position -= 360;
       while(position < -180) position += 360;
