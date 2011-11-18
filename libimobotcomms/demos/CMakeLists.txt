@@ -1,4 +1,4 @@
 add_subdirectory(simple)
 add_subdirectory(stand)
 add_subdirectory(inchworm)
-add_subdirectory(multiple_modules)
+add_subdirectory(multipleModules)
