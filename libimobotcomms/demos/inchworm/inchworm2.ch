@@ -18,9 +18,6 @@ robot.moveToZero();
 /* Do the inchworm gait four times */
 int i;
 for(i = 0; i < 4; i++) {
-  robot.moveJointTo(MOBOT_JOINT2, -45);
-  robot.moveJointTo(MOBOT_JOINT3, 45);
-  robot.moveJointTo(MOBOT_JOINT2, 0);
-  robot.moveJointTo(MOBOT_JOINT3, 0);
+  robot.motionInchwormLeft();
 }
 

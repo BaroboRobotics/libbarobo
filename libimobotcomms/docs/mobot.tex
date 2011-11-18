@@ -4,6 +4,7 @@
 \usepackage{amsmath}
 \usepackage{verbatim}
 \usepackage{makeidx}
+\usepackage[left=1in,top=1in,right=1in]{geometry}
 
 \title{Programming the MoBot}  
 %\author{David Ko\\Mechanical and Aerospace Engineering}
@@ -311,6 +312,48 @@ for(i = 0; i < 4; i++) {
 }
 \end{verbatim}
 
+\subsection{Standing Demo}
+\subsubsection{\texttt{stand.ch} Source Code}
+\verbatiminput{../demos/stand/stand.ch}
+\subsubsection{\texttt{stand.ch} Explained}
+The first portion of the program performs the necessary setup and connecting,
+similar to the previous demos. Similar to the previous inchworm demo, the
+motor speeds are set to 50\% speed, and the function \texttt{moveToZero()} is
+called to put the robot into a flat position. Next, the following lines
+are executed:
+\begin{verbatim}
+robot.moveJointTo(MOBOT_JOINT2, -85);
+robot.moveJointTo(MOBOT_JOINT3, 80);
+\end{verbatim}
+These movement commands cause the MoBot to curl up into a fetal position with
+both of its endplates facing toward the ground. Next, the MoBot rotates one 
+of the endplates by 45 degrees. 
+\begin{verbatim}
+robot.moveJointTo(MOBOT_JOINT1, 45);
+\end{verbatim}
+This endplate will eventually become the ``foot'' of the standing MoBot. Next,
+the MoBot lifts itself into a standing position, balancing on its endplate.
+\begin{verbatim}
+robot.moveJointTo(MOBOT_JOINT2, 20);
+\end{verbatim}
+Note that the previous joint angle for Joint 2, a body joint, was -85 degrees. 
+This motion causes joint 2 to rotate all the way to a 20 degree position, which
+lift up the body of the MoBot such that the MoBot is balancing on faceplate joint 1.
+
+Finally, we rotate joint 1, the foot joint, for three seconds which causes the
+entire MoBot to rotate in place. The speed is first set to 30\% speed to make the
+rotation a slow rotation. Next, the \texttt{moveContinuousTime} member function
+is used to continuously rotate a joint for a desired amount of time.
+\begin{verbatim}
+robot.setJointSpeed(MOBOT_JOINT1, 0.30);
+robot.moveContinuousTime(
+    MOBOT_FORWARD,
+    MOBOT_NEUTRAL,
+    MOBOT_NEUTRAL,
+    MOBOT_NEUTRAL,
+    3000);
+\end{verbatim}
+
 \section{Preprogrammed Motions}
 The MoBot API contains functions for executing preprogrammed motions. The 
 preprogrammed motions are motions which are commonly used for MoBot locomotion.
@@ -338,12 +381,32 @@ they will not return until the motion has completed. These functions also
 have non-blocking equivalents which are discussed in Section
 \ref{sec:blocking}.
 
-\subsection{\texttt{stand.ch}: A Demo Using the \texttt{motionStand()} Preprogrammed
+\subsection{\texttt{inchworm2.ch}: A Demo using the \texttt{motionInchwormLeft()}
+Preprogrammed Motion}
+This demo performs the same motion as the previous \texttt{inchworm.ch} demo,
+except it uses a built-in preprogrammed motion.
+\subsubsection{\texttt{inchworm2.ch} Source Code}
+\verbatiminput{../demos/inchworm/inchworm2.ch}
+\subsubsection{\texttt{inchworm2.ch} Explained}
+This program is identical to the previously discussed \texttt{inchworm.ch} demo,
+except for the final lines of the program, which appear as such:
+\begin{verbatim}
+int i;
+for(i = 0; i < 4; i++) {
+  robot.motionInchwormLeft();
+}
+\end{verbatim}
+Note that instead of controlling each joint in sequence explicitly, the function
+\texttt{motionInchwormLeft()} is used instead. The \texttt{motionInchwormLeft()} 
+function automatically executes the inchworm gait on the MoBot module, and the
+encapsulating \texttt{for} loop executes the motion four times.
+
+\subsection{\texttt{stand2.ch}: A Demo Using the \texttt{motionStand()} Preprogrammed
 Motion}
 This demo is a simple demonstration of the \texttt{motionStand()} member function.
-\subsubsection{\texttt{stand.ch} Source Code}
-\verbatiminput{../demos/stand/stand.ch}
-\subsubsection{\texttt{stand.ch} Explained}
+\subsubsection{\texttt{stand2.ch} Source Code}
+\verbatiminput{../demos/stand/stand2.ch}
+\subsubsection{\texttt{stand2.ch} Explained}
 The source code for this demo is straightforward. After the initialization and 
 connection as seen in previous demos, it executes the following line of
 code:
@@ -372,11 +435,14 @@ the function \texttt{motionStandNB()} is non-blocking, meaning the function
 returns immediately and the robot performs the ``standing'' motion
 asynchronously.
 
-The function \texttt{move()} is an example of a non-blocking function. When
-the \texttt{move()} function is called, the function immediately returns 
+The function \texttt{moveNB()} is an example of a non-blocking function. When
+the \texttt{moveNB()} function is called, the function immediately returns 
 as the joints begin moving. Any lines of code following the call to 
-\texttt{move()} will be executed even if the current motion is still in
+\texttt{moveNB()} will be executed even if the current motion is still in
 progress. 
+
+Demos for the non-blocking functions are located in the next section of
+this document.
 
 \subsection{List of Blocking Movement Functions}
 \begin{itemize}
@@ -419,8 +485,8 @@ which enable the control of multiple modules. A small demo program which
 controls two modules simultaneously will first be presented, followed by
 a detailed explanation of the program elements.
 
-\subsection{Multiple Module Demo Program}
-\verbatiminput{../demos/multiple_modules/multipleModules.cpp}
+\subsection{\texttt{multipleModules.ch} Source Code}
+\verbatiminput{../demos/multiple_modules/multipleModules.ch}
 
 \subsection{Demo Explanation}
 The first two lines of interest appear as such:
@@ -569,7 +635,7 @@ The MoBot will choose the best direction to attain the commanded joint position.
 \input{api/libimobotcomms.tex}
 
 % Index
-\addcontentsline{toc}{chapter}{Index}
+%\addcontentsline{toc}{chapter}{Index}
 \printindex
 
 \end{document}
