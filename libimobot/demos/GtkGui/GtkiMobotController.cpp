@@ -5,7 +5,7 @@
 #include "gait.h"
 #include "GtkiMobotController.h"
 
-/* These store the embedded glade xml file */                                                             
+/* These store the embedded glade xml file */
 extern const char _binary_interface_interface_glade_start[];
 extern size_t _binary_interface_interface_glade_size;
 extern const char _binary_interface_interface_glade_end[];

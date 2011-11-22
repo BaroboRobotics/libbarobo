@@ -4,4 +4,4 @@ project(LIBIMOBOT)
 
 # Add the subdirectories
 add_subdirectory(src)
-add_subdirectory(Demos)
+add_subdirectory(demos)

@@ -1,0 +1,328 @@
+
+CiMobot::CiMobot() {
+  void *fptr;
+  /* Here to load the dynamically loaded library if necessary.
+     g_chimobot_dlhandle is a global pointer pointing to the loaded DLL
+     g_chimobot_dlcount is a global int counting instances for all classes
+     They are declared in the header file class1_ch.h for Ch space.
+     */
+  if(g_chimobot_dlhandle == NULL || g_chimobot_dlcount == 0) {
+    g_chimobot_dlhandle = dlopen("libimobot.dl", RTLD_LAZY);
+    if(g_chimobot_dlhandle == NULL) {
+      printf("Error: %s(): dlopen(): %s\n", __class_func__, dlerror());
+      return;
+    }
+  }
+  /* to get the address by function name */
+  fptr = dlsym(g_chimobot_dlhandle, "CiMobot_CiMobot_chdl");
+  if(fptr == NULL) {
+    printf("Error: %s(): dlsym(): %s\n", __class_func__, dlerror());
+    return;
+  }
+  /* to call the chdl function in dynamically loaded
+     library by address */
+  dlrunfun(fptr, NULL, NULL);
+  g_chimobot_dlcount++; // to increase count of instance
+}
+
+CiMobot::~CiMobot() {
+  void *fptr;
+  fptr = dlsym(g_chimobot_dlhandle, "CiMobot_dCiMobot_chdl");
+  if(fptr == NULL) {
+    printf("Error: %s(): dlsym(): %s\n", __class_func__, dlerror());
+    return;
+  }
+  /* call the chdl function in DLL by address */
+  dlrunfun(fptr, NULL, NULL, this);
+  g_chimobot_dlcount--; // to decrease count of instance
+  if(g_chimobot_dlcount <= 0 && g_chimobot_dlhandle != NULL) {
+    if(dlclose(g_chimobot_dlhandle)!=0)
+      printf("Error: %s(): dlclose(): %s\n", __class_func__, dlerror());
+  }
+}
+
+int CiMobot::getJointAngle(iMobotJointId_t id, double & angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "getJointAngle_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, getJointAngle, this, id, angle);
+    return retval;
+}
+
+int CiMobot::getJointDirection(iMobotJointId_t id, iMobotJointDirection_t & direction) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "getJointDirection_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, getJointDirection, this, id, direction);
+    return retval;
+}
+
+int CiMobot::getJointSpeed(iMobotJointId_t id, double & speed) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "getJointSpeed_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, getJointSpeed, this, id, speed);
+    return retval;
+}
+
+int CiMobot::getJointState(iMobotJointId_t id, iMobotJointState_t & state) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "getJointState_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, getJointState, this, id, state);
+    return retval;
+}
+
+int CiMobot::initListenerBluetooth(int channel) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "initListenerBluetooth_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, initListenerBluetooth, this, channel);
+    return retval;
+}
+
+int CiMobot::isBusy() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "isBusy_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, isBusy, this);
+    return retval;
+}
+
+int CiMobot::listenerMainLoop() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "listenerMainLoop_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, listenerMainLoop, this);
+    return retval;
+}
+
+int CiMobot::move(double angle1, double angle2, double angle3, double angle4) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "move_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, move, this, angle1, angle2, angle3, angle4);
+    return retval;
+}
+
+int CiMobot::moveJoint(iMobotJointId_t id, double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "moveJoint_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveJoint, this, id, angle);
+    return retval;
+}
+
+int CiMobot::moveJointNB(iMobotJointId_t id, double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "moveJointNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveJointNB, this, id, angle);
+    return retval;
+}
+
+int CiMobot::moveJointTo(iMobotJointId_t id, double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "moveJointTo_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveJointTo, this, id, angle);
+    return retval;
+}
+
+int CiMobot::moveJointToNB(iMobotJointId_t id, double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "moveJointToNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveJointToNB, this, id, angle);
+    return retval;
+}
+
+int CiMobot::moveJointWait(iMobotJointId_t id) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "moveJointWait_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveJointWait, this, id);
+    return retval;
+}
+
+int CiMobot::moveNB(double angle1, double angle2, double angle3, double angle4) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "moveNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveNB, this, angle1, angle2, angle3, angle4);
+    return retval;
+}
+
+int CiMobot::moveTo(double angle1, double angle2, double angle3, double angle4) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "moveTo_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveTo, this, angle1, angle2, angle3, angle4);
+    return retval;
+}
+
+int CiMobot::moveToNB(double angle1, double angle2, double angle3, double angle4) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "moveToNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveToNB, this, angle1, angle2, angle3, angle4);
+    return retval;
+}
+
+int CiMobot::moveToZero() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "moveToZero_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveToZero, this);
+    return retval;
+}
+
+int CiMobot::moveWait() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "moveWait_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveWait, this);
+    return retval;
+}
+
+int CiMobot::setJointDirection(iMobotJointId_t id, iMobotJointDirection_t direction) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "setJointDirection_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setJointDirection, this, id, direction);
+    return retval;
+}
+
+int CiMobot::setJointSpeed(iMobotJointId_t id, double speed) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "setJointSpeed_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setJointSpeed, this, id, speed);
+    return retval;
+}
+
+int CiMobot::stop() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "stop_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, stop, this);
+    return retval;
+}
+
+int CiMobot::terminate() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chimobot_handle, "terminate_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, terminate, this);
+    return retval;
+}
