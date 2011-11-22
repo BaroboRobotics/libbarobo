@@ -44,14 +44,6 @@
 
 #define I2C_HC_ADDR 0x55
 
-#ifdef _CH_
-#pragma package <chi2cio>
-#pragma package <chbluetooth>
-#include <i2c-io-api.h>
-#include <i2c.h>
-#include <i2c-api.h>
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -196,8 +188,8 @@ class CiMobot {
 #endif
 
 #ifdef _CH_
-void * CMobot::g_chmobot_dlhandle = NULL;
-int CMobot::g_chmobot_dlcount = 0;
+void * CiMobot::g_chimobot_dlhandle = NULL;
+int CiMobot::g_chimobot_dlcount = 0;
 #pragma importf "chimobot.chf"
 #endif
 
