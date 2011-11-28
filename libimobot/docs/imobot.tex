@@ -125,63 +125,146 @@ This is done by clicking on \texttt{File -> Init Local I2C Bus}. Ensure that
 the application is connected by ensuring that the status bar at the bottom of the
 application displays ``Connected''. 
 
-The graphical interface is composed of four basic components, as shown in
-Figure \ref{fig:gui}. The first section, labeled with the red ``1'',
-is a section of four sliders. Each slider controls the motor speed of a joint.
+The graphical interface is composed of six basic components, as shown in
+Figure \ref{fig:gui}. There are three components on the top half of the
+interface, and three on the bottom half. Each component is discussed in
+detail in the following subsections.
 
-The next section, labeled ``2'', are controls which can be used to move each
-joint independantly. The upward arrows indicate forward rotation, the stop
-buttons stop the motors, and the downward arrows indicate backward motion.
-Below the downward arrows are textboxes which display the current angle of each
-joint.
+\subsection{The iMobot Diagram and ``Move To Zero'' Button}
+The first section of the GUI located on the top left of the interface
+displays a schematic diagram of the iMobot, displaying motor positions.
+Underneath the diagram, there is a large button with the text 
+``Move To Zero''. When clicked, this button will command the connected
+iMobot to rotate all of its joints to a flat ``Zero'' position.
 
-The next section, labeled ``3'', contain buttons used for moving the iMobot. 
-The arrows indicate forwards and backwards motion, along with turning and
-sideways inchworming motions. The large stop sign button stops all motions
-on the iMobot. The button labeled ``Home'' causes the iMobot to move all joints
-back to their home position. 
+\subsection{Individual Joint Control}
+The second section, located at the top-middle section of the interface,
+is the ``Individual Joint Control'' section. These buttons command the
+iMobot to move individual joints. When the up or down arrows are clicked,
+the iMobot begins to move the corresponding joint in either the positive,
+or negative direction. The joint will continue to move until the stop 
+button, located between the up and down arrows, is clicked. 
 
-The final section, labeled ``4'', contain preprogramed gaits for the iMobot.
-To execute a gait, simply select the desired gait by left-clicking on its name,
-and click the ``Play'' button.
+\subsection{Rolling Control}
+This section contains buttons for controlling the iMobot as a 
+two wheeled mobile robot. The up and down buttons cause the iMobot to
+roll forward or backward. The left and right buttons cause the iMobot 
+to rotate towards the left, or towards the right. The stop button in the
+middle causes the iMobot to stop where it is.
+
+\subsection{Joint Speeds}
+The ``Joint Speeds'' section, located at the bottom left of the interface,
+displays and controls the current joint speeds of the iMobot. Joint speeds
+are a value between 0 and 1, with 1 meaning maximum joint power, and 0
+meaning zero joint power. The speed may be set by sliding the vertical 
+sliders to the desired positions. 
+
+\subsection{Joint Positions}
+This section, located in the bottom-middle of the interface, is used to display
+and control the positions of each of the four
+joints of a iMobot. The joint positions are displayed in the numerical
+text located above each vertical slider. The displayed joint positions are in
+units of degrees.  There are two methods to control
+the joints using this interface.
+
+The first method of controlling the joints is by using the vertical sliders.
+Each vertical slider's position represents a joint's angle. The sliders for the
+two end joints vary from -180 degrees to 180 degrees, representing one complete
+rotation. The angles for the two body joints vary from -90 to 90 degrees. When
+the position of the slider is moved, the iMobot will move its joints to match the 
+sliders. 
+
+The second method for moving the joints is by entering the exact angles for the
+joints. Below each of the four sliders lies a text entry box. Values in degrees
+may be typed into each of the four entry boxes. When the button on the lower
+right of the section labeled ``Move'' is clicked, the iMobot will move its joints
+to match the values typed into the boxes. If no value is typed into a box, that 
+joint will not move.
+
+\subsection{Motions}
+This section, located on the bottom right of the interface, contains a set of
+preprogrammed motions for the iMobot. To execute a preprogrammed motion, simply
+click on the name of the motion you wish to execute, and then click the button
+labeled ``Play''.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SUB: Overview of Sample Application Programs {{{
-\chapter{Overview of a Sample Application Program}
+\chapter{Overview of Sample Application Programs}
+\subsection{\texttt{simple.cpp} : A Simple Bare-Bones Demo}
 The following program is a simple program which moves some joints on the iMobot
 before initializing the robot to listen for incoming Bluetooth commands.
-\subsection{simple.cpp \label{subsec:simple.cpp}}
-\listinginput{1}{../Demos/simple_cpp/simple.cpp}
-\subsection{Explanation of simple.cpp}
+\subsubsection{simple.cpp \label{subsec:simple.cpp}}
+\listinginput{1}{../demos/simple_cpp/simple.cpp}
+\subsubsection{Explanation of simple.cpp}
 \begin{itemize}
 \item 
 \begin{verbatim}
   CiMobot robot;
 \end{verbatim}
 This line declares the \texttt{robot} object, which represents the
-capabilities of the iMobot module. This object contains various member
+capabilities of the iMobot module. iMobot modules are represented by
+the \texttt{CiMobot} type. This object contains various member
 functions which may be executed by the user.
 \item 
 \begin{verbatim}
-  robot.poseZero();
-  robot.moveWait();
+  robot.moveToZero();
 \end{verbatim}
 These commands command the iMobot to move all motors to their zero positions
 and wait until the motion is finished.
 \item 
 \begin{verbatim}
-  robot.setMotorPosition(IMOBOT_MOTOR3, 90);
-  robot.setMotorPosition(IMOBOT_MOTOR4, 90);
+  robot.moveTo(90, 0, 0, 90);
 \end{verbatim}
-These lines instruct the robot to rotate the third and fourth joints by 90
-degrees. 
+These lines instruct the robot to rotate the faceplates, which are the first
+and fourth joints, by 90 degrees. 
 \item 
 \begin{verbatim}
-  robot.waitMotor(IMOBOT_MOTOR3);
-  robot.waitMotor(IMOBOT_MOTOR4);
+  robot.moveTo(0, 0, 0, 0);
 \end{verbatim}
-This code causes the program to wait until the third and fourth
-joints have stopped moving.
+The previous line causes the iMobot to move the first and fourth joints back to
+their original position.
+\end{itemize}
+
+\subsection{\texttt{bluetoothListener.cpp} : A Demo That Receives and Executes
+Bluetooth Commands}
+The following program is a bare-bones demo program which initializes the iMobot's
+Bluetooth listening capabilities. The program sets up the iMobot so that Bluetooth
+enabled devices can connect to and control the iMobot remotely. 
+\subsubsection{bluetoothListener.cpp}
+\listinginput{1}{../demos/bluetoothListener/bluetoothListener.cpp}
+\subsubsection{Explanation of \texttt{bluetoothListener.cpp}}
+\begin{itemize}
+\item 
+\begin{verbatim}
+  CiMobot robot;
+  int i;
+\end{verbatim}
+Similar to the previous demo, the first line declares a \texttt{CiMobot} object
+called \texttt{robot}. The second line declares an integer variables called 
+\texttt{i}.
+\item
+\begin{verbatim}
+  for(i = 1; i <= 4; i++) {
+    robot.setJointSpeed((iMobotJointId_t)i, 50);
+  }
+\end{verbatim}
+The next lines execute a \texttt{for} loop which cycles through each of the four
+iMobot joints and sets their speeds to \texttt{0.50}, or 50\% speed.
+\item
+\begin{verbatim}
+  robot.initListenerBluetooth(20);
+\end{verbatim}
+This line initializes the iMobot's Bluetooth listening service. The function argument
+is the Bluetooth channel to listen on. In this line of code, channel 20 is chosen
+as the iMobot's listening bluetooth channel. 
+\item
+\begin{verbatim}
+  robot.listenerMainLoop();
+\end{verbatim}
+This function blocks indefinitely, allowing the iMobot to handle any number of Bluetooth
+commands from the remote device. The \texttt{listenerMainLoop()} will return if the
+``Quit'' command is sent to the iMobot from the remote device.
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

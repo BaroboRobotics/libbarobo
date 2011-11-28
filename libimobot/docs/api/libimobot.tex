@@ -14,28 +14,34 @@ may be used to control the robot.
 \hline
 Function & Description \\
 \hline
-%\texttt{pose()} \dotfill & Pose multiple joints of the iMobot. \\
-\texttt{CiMobot()} \dotfill & The CiMobot constructor function. This function
-is called automatically and should not be called explicitly. \\
-\texttt{\textasciitilde CiMobot()} \dotfill & The CiMobot destructor function. This function
+\texttt{CiMobot()} & The \texttt{CiMobot} constructor function. This function
+is called automatically and should not be called explicitly. This constructor will 
+set up initial internal parameters for the iMobot. \\
+\texttt{\textasciitilde CiMobot()} & The \texttt{CiMobot} destructor function. This function
 is called automatically and should not be called explicitly. \\
 & \\
-\texttt{getJointAngle()} \dotfill & Gets a joint's angle. \\
-\texttt{getJointAngles()} \dotfill & Gets all joint angles. \\
-\texttt{getMotorSpeed()} \dotfill & Gets a motor's speed. \\
-\texttt{initListenerBluetooth()} \dotfill & Initialize the Bluetooth module to
-listen for incoming commands. \\
-\texttt{isBusy()} \dotfill & See if the robot is currently moving. \\
-\texttt{listenerMainLoop()} \dotfill & Main execution loop for the Bluetooth listener. \\
-\texttt{moveJoint()} \dotfill & Move a joint of the imobot by some amount from its current location. \\
-\texttt{moveWait()} \dotfill & Wait until all motors have stopped moving. \\
-\texttt{poseJoint()} \dotfill & Pose a single joint of the iMobot. \\
-\texttt{setMotorDirection()} \dotfill & Set the motor direction of a motor. Set
-to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
-\texttt{setMotorSpeed()} \dotfill & Sets a motor's speed. \\
-\texttt{stop()} \dotfill & Stop all currently executing motions of the iMobot. \\
-\texttt{terminate()} \dotfill & Terminate the robotic control. \\
-\texttt{waitMotor()} \dotfill & Wait until the specified motor has stopped moving. \\
+\texttt{getJointAngle()} & Gets a joint's angle. \\
+\texttt{getJointSpeed()} & Gets a motor's speed. \\
+\texttt{getJointState()} & Gets a motor's current status. \\
+\texttt{initListenerBluetooth()} & Initializes an iMobot to start listening on
+a Bluetooth channel for incoming Bluetooth connections. \\
+\texttt{isConnected()} & This function is used to check the connection to an iMobot. \\
+\texttt{move()} & Move all four joints of the iMobot by specified angles. \\
+\texttt{moveNB()} & Identical to \texttt{move()} but non-blocking. \\
+\texttt{moveContinuousNB()} & Move joints continuously. Joints will move untill stopped.\\
+\texttt{moveContinuousTime()} & Move joints continuously for a certain amount of time.\\
+\texttt{moveTo()} & Move all four joints of the iMobot to specified absolute angles. \\
+\texttt{moveToNB()} & Identical to \texttt{moveTo()} but non-blocking. \\
+\texttt{moveJointTo()} & Set the desired motor position. \\
+\texttt{moveJointToNB()} & Identical to \texttt{moveJointTo()} but non-blocking. \\
+\texttt{moveJointWait()} & Wait until the specified motor has stopped moving. \\
+\texttt{moveWait()} & Wait until all motors have stopped moving. \\
+\texttt{moveToZero()} & Instructs all motors to go to their zero positions. \\
+\texttt{moveToZeroNB()} & Identical to \texttt{moveToZero()} but non-blocking. \\
+%\texttt{setJointDirection()} & Set the motor direction of a motor. Set
+%to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
+\texttt{setJointSpeed()} & Sets a motor's speed. \\
+\texttt{stop()} & Stop all currently executing motions of the iMobot. \\
 \hline
 \end{tabular}
 \end{center}
@@ -44,29 +50,18 @@ to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
 
 \newpage
 \input{api/getJointAngle}
-\pagebreak
-\input{api/getJointAngles}
-\pagebreak
-\input{api/getMotorSpeed}
-\pagebreak
+\input{api/getJointSpeed}
+\input{api/getJointState}
 \input{api/initListenerBluetooth}
-\pagebreak
 \input{api/isBusy}
-\pagebreak
 \input{api/listenerMainLoop}
-\pagebreak
+\input{api/move}
+\input{api/moveTo}
 \input{api/moveJoint}
-\pagebreak
+\input{api/moveJointTo}
+\input{api/moveJointWait}
 \input{api/moveWait}
-\pagebreak
-\input{api/poseJoint}
-\pagebreak
-\input{api/setMotorDirection}
-\pagebreak
-\input{api/setMotorSpeed}
-\pagebreak
+\input{api/moveToZero}
+\input{api/setJointSpeed}
 \input{api/stop}
-\pagebreak
-\input{api/terminate}
-\pagebreak
-\input{api/waitMotor}
+

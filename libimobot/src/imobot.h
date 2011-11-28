@@ -174,13 +174,13 @@ class CiMobot {
     int stop();
     int terminate();
     int moveJointWait(iMobotJointId_t id);
-    int getJointDirection(iMobotJointId_t id, iMobotJointDirection_t &direction);
-    int setJointDirection(iMobotJointId_t id, iMobotJointDirection_t direction);
 #ifndef _CH_
   private:
     iMobot_t _iMobot;
 #else
   private:
+    int getJointDirection(iMobotJointId_t id, iMobotJointDirection_t &direction);
+    int setJointDirection(iMobotJointId_t id, iMobotJointDirection_t direction);
     static void *g_chimobot_dlhandle;
     static int g_chimobot_dlcount;
 #endif

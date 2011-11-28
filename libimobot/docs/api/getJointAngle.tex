@@ -13,36 +13,8 @@
 int CiMobot::getJointAngle(int id, double &angle);
 \end{verbatim}
 
-\noindent
-{\bf Purpose}\\
-Get the angle of a joint on the iMobot.\\
+The usage of this function is identical to the
+\texttt{CMobot::getJointAngle()} function for the MoBot. Please refer
+to the MoBot documentation for \texttt{CMobot::getJointAngle} for
+detailed usage documentation.
 
-\noindent
-{\bf Return Value}\\
-The function returns 0 on success and non-zero otherwise.\\
-
-\noindent
-{\bf Parameters}
-\vspace{-0.1in}
-\begin{description}
-\item               
-\begin{tabular}{p{10 mm}p{145 mm}}
-\texttt{id} & The joint number to pose. \\
-\texttt{angle} & The address of a double. This variable will be overwritten
-with the current angle of the joint.
-\end{tabular}
-\end{description}
-
-\noindent
-{\bf Description}\\
-This function is used to find the angle of a joint. The angles are accurate to
-within half a degree. \\
-
-\noindent
-{\bf Example}\\
-\noindent
-
-\noindent
-{\bf See Also}\\
-
-%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\
