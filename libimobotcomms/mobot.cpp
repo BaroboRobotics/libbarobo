@@ -158,6 +158,21 @@ int Mobot_isConnected(br_comms_t* comms)
   return comms->connected;
 }
 
+int Mobot_isMoving(br_comms_t* comms)
+{
+  int moving = 0;
+  mobotJointState_t state;
+  int i;
+  for(i = 1; i <= 4; i++) {
+    Mobot_getJointState(comms, (mobotJointId_t)i, &state);
+    if(state != MOBOT_JOINT_IDLE) {
+      moving = 1;
+      break;
+    }
+  }
+  return moving;
+}
+
 int Mobot_setJointDirection(br_comms_t* comms, mobotJointId_t id, mobotJointDirection_t dir)
 {
   char buf[160];
@@ -783,6 +798,11 @@ int CMobot::disconnect()
 int CMobot::isConnected()
 {
   return Mobot_isConnected(&_comms);
+}
+
+int CMobot::isMoving()
+{
+  return Mobot_isMoving(&_comms);
 }
 
 int CMobot::setJointDirection(mobotJointId_t id, mobotJointDirection_t dir)

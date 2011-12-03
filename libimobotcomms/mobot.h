@@ -71,6 +71,7 @@ class CMobot {
     int connectWithAddress(const char address[], int channel);
     int disconnect();
     int isConnected();
+    int isMoving();
     int getJointAngle(mobotJointId_t id, double &angle);
     int getJointSpeed(mobotJointId_t id, double &speed);
     int getJointState(mobotJointId_t id, mobotJointState_t &state);

@@ -98,6 +98,7 @@ DLLIMPORT int Mobot_connectWithAddress(
     br_comms_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_disconnect(br_comms_t* comms);
 DLLIMPORT int Mobot_isConnected(br_comms_t* comms);
+DLLIMPORT int Mobot_isMoving(br_comms_t* comms);
 DLLIMPORT int Mobot_setJointDirection(br_comms_t* comms, mobotJointId_t id, mobotJointDirection_t dir);
 DLLIMPORT int Mobot_getJointDirection(br_comms_t* comms, mobotJointId_t id, mobotJointDirection_t *dir);
 DLLIMPORT int Mobot_setJointSpeed(br_comms_t* comms, mobotJointId_t id, double speed);
