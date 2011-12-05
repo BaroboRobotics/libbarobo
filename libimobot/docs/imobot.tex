@@ -93,7 +93,9 @@ This short guide will enable you to run the provided demo program,
   \texttt{http://sourceforge.net/projects/cotvnc/}
   \end{itemize}
 \item Log in to the imobot with a VNC client. 
-\item Connect to the iMobot with your VNC client. The default address of the iMobot is \texttt{192.168.0.123}.
+\item Connect to the iMobot with your VNC client. The iMobot will create an ad-hoc network
+called "imobot" by default upon startup. Connect to the ad-hoc network, and connect
+to the iMobot's IP address, which is 192.168.0.1 by default.
 \item Open and execute the demo program.
   \begin{enumerate}
   \item Copy the demo program to your home directory with the command\\
@@ -238,26 +240,27 @@ enabled devices can connect to and control the iMobot remotely.
 \item 
 \begin{verbatim}
   CiMobot robot;
-  int i;
+  int bluetoothChannel = 20; // Default channel
 \end{verbatim}
 Similar to the previous demo, the first line declares a \texttt{CiMobot} object
 called \texttt{robot}. The second line declares an integer variables called 
-\texttt{i}.
+\texttt{bluetoothChannel}, which is initialized to a value of 20. The 
+variable \texttt{bluetoothChannel} represents the channel to listen on
+for incoming bluetooth connections.
 \item
 \begin{verbatim}
-  for(i = 1; i <= 4; i++) {
-    robot.setJointSpeed((iMobotJointId_t)i, 50);
-  }
+  robot.setJointSpeed(IMOBOT_JOINT1, 0.50);
+  robot.setJointSpeed(IMOBOT_JOINT2, 0.50);
+  robot.setJointSpeed(IMOBOT_JOINT3, 0.50);
+  robot.setJointSpeed(IMOBOT_JOINT4, 0.50);
 \end{verbatim}
-The next lines execute a \texttt{for} loop which cycles through each of the four
-iMobot joints and sets their speeds to \texttt{0.50}, or 50\% speed.
+These lines of code set the motor speeds for all four motors to a value of
+\texttt{0.50}, or 50\% speed.
 \item
 \begin{verbatim}
-  robot.initListenerBluetooth(20);
+  robot.initListenerBluetooth(bluetoothChannel);
 \end{verbatim}
-This line initializes the iMobot's Bluetooth listening service. The function argument
-is the Bluetooth channel to listen on. In this line of code, channel 20 is chosen
-as the iMobot's listening bluetooth channel. 
+This line initializes the iMobot's Bluetooth listening service. 
 \item
 \begin{verbatim}
   robot.listenerMainLoop();
@@ -267,12 +270,103 @@ commands from the remote device. The \texttt{listenerMainLoop()} will return if 
 ``Quit'' command is sent to the iMobot from the remote device.
 \end{itemize}
 
+This demo enables an iMobot to accept bluetooth connections from the corresponding
+MoBot library, called \texttt{CMobot}. Please refer to the MoBot documentation
+for instructions on how to connect to and control a MoBot remotely via Bluetooth.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SUB: Execution of Sample Applications {{{
 %\section{Execution of Sample Applications}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Appendix {{{
 \appendix
+\chapter{Data Types, Macros, and Constants}
+\section{Data Types}
+There are data types which are used by the MoBot library to represent 
+certain values, such as joint id's and motor directions.
+
+\begin{tabular}{p{3.5cm}p{7cm}} \hline 
+Data Type& Description \\
+\hline 
+\texttt{mobotJointId\_t} & An enumerated value that indicates a MoBot joint. \\
+\texttt{mobotJointState\_t} & The current state of a MoBot joint. \\
+\texttt{mobotJointDirection\_t} & The current motion direction of a MoBot joint. 
+\end{tabular}
+
+\subsection{\label{sec:mobotJointId_t}\texttt{mobotJointId\_t}}
+This datatype is an enumerated type used to identify a joint on the MoBot. Valid
+values for this type are:
+\begin{verbatim}
+typedef enum mobot_joints_e {
+  MOBOT_JOINT1 = 1,
+  MOBOT_JOINT2 = 2,
+  MOBOT_JOINT3 = 3,
+  MOBOT_JOINT4 = 4
+} mobotJointId_t;
+\end{verbatim}
+The joints are enumerated in order from one side of the MoBot to the other. Joints 1 and 4
+are faceplate joints, and joints 2 and 3 are body joints.
+
+\subsection{\label{sec:mobotJointState_t}\texttt{mobotJointState\_t}}
+This datatype is an enumerated type used to designate the current 
+movement state of a joint. Valid values are:
+\begin{itemize}
+\item \texttt{MOBOT\_JOINT\_IDLE}: This value indicates that the joint is not moving.
+\item \texttt{MOBOT\_JOINT\_MOVING}: This value indicates that the joint is currently moving.
+\item \texttt{MOBOT\_JOINT\_GOALSEEK}: This value indicates that the joint is currently moving
+  towards a predefined goal.
+\end{itemize}
+
+\subsection{\label{sec:mobotJointDirection_t}\texttt{mobotJointDirection\_t}}
+This datatype designates a MoBot joint's commanded direction of travel. Valid values
+are
+\begin{itemize}
+\item \texttt{MOBOT\_NEUTRAL}: There is no predesignated direction for the
+joint. If the joint is commanded to move to a specific location, the MoBot will
+decide the best direction to move the joint in order to achieve the goal with
+the smallest motion.
+\item \texttt{MOBOT\_FORWARD}: Move the joint in the direction which increases its 
+angular position.
+\item \texttt{MOBOT\_BACKWARD}: Move the joint in the direction which decreases
+its angular position.
+\end{itemize}
+
+\section{Macros}
+
+\subsection{\texttt{MoBot\_joints\_t}}
+\index{MoBot\_joints\_t}
+The data type \texttt{MoBot\_joints\_t} contains the following macro datatypes.\\
+
+\index{IMOBOT\_JOINT1}
+\index{IMOBOT\_JOINT2}
+\index{IMOBOT\_JOINT3}
+\index{IMOBOT\_JOINT4}
+\begin{tabular}{p{3cm}p{7cm}} \hline 
+Value & Description \\
+\hline 
+\texttt{IMOBOT\_JOINT1} & Joint number 1 on the MoBot, which is a faceplate joint. \\
+\texttt{IMOBOT\_JOINT2} & Joint number 2 on the MoBot, which is a body joint. \\
+\texttt{IMOBOT\_JOINT3} & Joint number 3 on the MoBot, which is a body joint. \\
+\texttt{IMOBOT\_JOINT3} & Joint number 4 on the MoBot, which is a faceplate joint. 
+\end{tabular}
+
+\subsection{\texttt{MoBot\_joint\_direction\_t}}
+\index{MoBot\_joint\_direction\_t}
+The data type \texttt{MoBot\_joint\_direction\_t} indicates the commanded direction 
+of a joint on the MoBot.
+
+\index{IMOBOT\_NEUTRAL}
+\index{IMOBOT\_FORWARD}
+\index{IMOBOT\_BACKWARD}
+\begin{tabular}{p{3cm}p{7cm}} \hline 
+Value & Description \\
+\hline 
+\texttt{IMOBOT\_NEUTRAL} & This value indicates automatic direction control for a joint. 
+The MoBot will choose the best direction to attain the commanded joint position. \\
+\texttt{IMOBOT\_FORWARD} & Move the joint in the forward direction. \\
+\texttt{IMOBOT\_BACKWARD} & Move the joint in the backward direction. \\
+\end{tabular}
+
 \chapter{iMobot API}
 \input{api/libimobot}
 \pagebreak

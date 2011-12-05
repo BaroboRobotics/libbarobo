@@ -32,7 +32,7 @@
 
 #ifndef MOBOT_JOINTS_E
 #define MOBOT_JOINTS_E
-typedef enum mobot_joints_e {
+typedef enum mobotJoints_e {
   MOBOT_JOINT1 = 1,
   MOBOT_JOINT2,
   MOBOT_JOINT3,
@@ -43,7 +43,7 @@ typedef enum mobot_joints_e {
 
 #ifndef MOBOT_JOINT_STATE_E
 #define MOBOT_JOINT_STATE_E
-typedef enum mobot_joint_state_e
+typedef enum mobotJointState_e
 {
     MOBOT_JOINT_IDLE = 0,
     MOBOT_JOINT_MOVING,
@@ -53,7 +53,7 @@ typedef enum mobot_joint_state_e
 
 #ifndef MOBOT_JOINT_DIRECTION_T
 #define MOBOT_JOINT_DIRECTION_T
-typedef enum mobot_joint_direction_e
+typedef enum mobotJointDirection_e
 {
   MOBOT_NEUTRAL,
   MOBOT_FORWARD,

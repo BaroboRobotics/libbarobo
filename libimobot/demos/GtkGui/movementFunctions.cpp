@@ -5,7 +5,7 @@ int setMotorDirection(int motor, int direction)
   if(g_isConnected) {
     return Mobot_setJointDirection(imobotComms, (mobotJointId_t)motor, (mobotJointDirection_t)direction);
   } else if (g_localInit) {
-    return iMobot_setJointDirection(iMobot, (iMobotJointId_t)motor, (iMobotJointDirection_t)direction);
+    return iMobot_setJointDirection(iMobot, (mobotJointId_t)motor, (mobotJointDirection_t)direction);
   } else {
     fprintf(stderr, "Error: Not initialized or connected.\n");
     return -1;
@@ -23,7 +23,7 @@ int setMotorSpeed(int motor, int speed)
   if(g_isConnected) {
     return Mobot_setJointSpeed(imobotComms, (mobotJointId_t)motor, lspeed);
   } else if (g_localInit) {
-    return iMobot_setJointSpeed(iMobot, (iMobotJointId_t)motor, lspeed);
+    return iMobot_setJointSpeed(iMobot, (mobotJointId_t)motor, lspeed);
   } else {
     fprintf(stderr, "Error: Not initialized or connected.\n");
     return -1;
@@ -47,7 +47,7 @@ int setMotorPosition(int motor, double position)
   if(g_isConnected) {
     return Mobot_moveJointTo(imobotComms, (mobotJointId_t)motor, position);
   } else if (g_localInit) {
-    return iMobot_moveJointTo(iMobot, (iMobotJointId_t)motor, position);
+    return iMobot_moveJointTo(iMobot, (mobotJointId_t)motor, position);
   } else {
     fprintf(stderr, "Error: Not initialized or connected.\n");
     return -1;
@@ -61,7 +61,7 @@ int getMotorPosition(int motor, double *position)
     code = Mobot_getJointAngle(imobotComms, (mobotJointId_t)motor, position);
     return code;
   } else if (g_localInit) {
-    code = iMobot_getJointAngle(iMobot, (iMobotJointId_t)motor, position);
+    code = iMobot_getJointAngle(iMobot, (mobotJointId_t)motor, position);
     return code;
   } else {
     fprintf(stderr, "Error: Not initialized or connected.\n");
@@ -74,7 +74,7 @@ int waitMotor(int motor)
   if(g_isConnected) {
     return Mobot_moveJointWait(imobotComms, (mobotJointId_t)motor);
   } else if (g_localInit) {
-    return iMobot_moveJointWait(iMobot, (iMobotJointId_t)motor);
+    return iMobot_moveJointWait(iMobot, (mobotJointId_t)motor);
   } else {
     fprintf(stderr, "Error: Not initialized or connected.\n");
     return -1;

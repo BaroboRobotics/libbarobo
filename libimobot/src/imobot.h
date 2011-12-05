@@ -44,32 +44,40 @@
 
 #define I2C_HC_ADDR 0x55
 
+#ifndef MOBOT_JOINTS_E
+#define MOBOT_JOINTS_E
+typedef enum mobotJoints_e {
+  MOBOT_JOINT1 = 1,
+  MOBOT_JOINT2,
+  MOBOT_JOINT3,
+  MOBOT_JOINT4,
+  MOBOT_NUM_JOINTS = 4
+} mobotJointId_t;
+#endif
+
+#ifndef MOBOT_JOINT_STATE_E
+#define MOBOT_JOINT_STATE_E
+typedef enum mobotJointState_e
+{
+    MOBOT_JOINT_IDLE = 0,
+    MOBOT_JOINT_MOVING,
+    MOBOT_JOINT_GOALSEEK,
+} mobotJointState_t;
+#endif
+
+#ifndef MOBOT_JOINT_DIRECTION_T
+#define MOBOT_JOINT_DIRECTION_T
+typedef enum mobotJointDirection_e
+{
+  MOBOT_NEUTRAL,
+  MOBOT_FORWARD,
+  MOBOT_BACKWARD
+} mobotJointDirection_t;
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#ifndef IMOBOT_MOTORS_E
-#define IMOBOT_MOTORS_E
-typedef enum iMobot_joints_e {
-  IMOBOT_JOINT1 = 1,
-  IMOBOT_JOINT2,
-  IMOBOT_JOINT3,
-  IMOBOT_JOINT4,
-  IMOBOT_NUM_JOINTS = 4
-}iMobotJointId_t;
-#endif
-
-typedef enum iMobot_joint_direction_e {
-  IMOBOT_NEUTRAL = 0,
-  IMOBOT_FORWARD,
-  IMOBOT_BACKWARD
-} iMobotJointDirection_t;
-
-typedef enum iMobot_joint_state_e {
-  IMOBOT_JOINT_IDLE = 0,
-  IMOBOT_JOINT_MOVING,
-  IMOBOT_JOINT_GOALSEEK
-} iMobotJointState_t;
 
 typedef struct iMobot_s {
   int i2cDev;
@@ -78,10 +86,10 @@ typedef struct iMobot_s {
   double jointSpeed[4];
 } iMobot_t;
 
-int iMobot_getJointAngle(iMobot_t* iMobot, iMobotJointId_t id, double *angle);
-int iMobot_getJointDirection(iMobot_t* iMobot, iMobotJointId_t id, iMobotJointDirection_t *dir);
-int iMobot_getJointSpeed(iMobot_t* iMobot, iMobotJointId_t id, double *speed);
-int iMobot_getJointState(iMobot_t* iMobot, iMobotJointId_t id, iMobotJointState_t *state);
+int iMobot_getJointAngle(iMobot_t* iMobot, mobotJointId_t id, double *angle);
+int iMobot_getJointDirection(iMobot_t* iMobot, mobotJointId_t id, mobotJointDirection_t *dir);
+int iMobot_getJointSpeed(iMobot_t* iMobot, mobotJointId_t id, double *speed);
+int iMobot_getJointState(iMobot_t* iMobot, mobotJointId_t id, mobotJointState_t *state);
 int iMobot_init(iMobot_t* iMobot);
 int iMobot_initListenerBluetooth(iMobot_t* iMobot, int channel);
 int iMobot_isBusy(iMobot_t* iMobot);
@@ -97,15 +105,15 @@ int iMobot_moveNB(iMobot_t* iMobot,
                 double angle3,
                 double angle4 );
 int iMobot_moveContinuous(iMobot_t* iMobot,
-                                  iMobotJointDirection_t dir1,
-                                  iMobotJointDirection_t dir2,
-                                  iMobotJointDirection_t dir3,
-                                  iMobotJointDirection_t dir4);
+                                  mobotJointDirection_t dir1,
+                                  mobotJointDirection_t dir2,
+                                  mobotJointDirection_t dir3,
+                                  mobotJointDirection_t dir4);
 int iMobot_moveContinuousTime(iMobot_t* comms,
-                                  iMobotJointDirection_t dir1,
-                                  iMobotJointDirection_t dir2,
-                                  iMobotJointDirection_t dir3,
-                                  iMobotJointDirection_t dir4,
+                                  mobotJointDirection_t dir1,
+                                  mobotJointDirection_t dir2,
+                                  mobotJointDirection_t dir3,
+                                  mobotJointDirection_t dir4,
                                   int msecs);
 int iMobot_moveTo(iMobot_t* iMobot,
                 double angle1,
@@ -117,18 +125,18 @@ int iMobot_moveToNB(iMobot_t* iMobot,
                 double angle2,
                 double angle3,
                 double angle4 );
-int iMobot_moveJoint(iMobot_t* iMobot, iMobotJointId_t id, double angle);
-int iMobot_moveJointNB(iMobot_t* iMobot, iMobotJointId_t id, double angle);
-int iMobot_moveJointTo(iMobot_t* iMobot, iMobotJointId_t id, double angle);
-int iMobot_moveJointToNB(iMobot_t* iMobot, iMobotJointId_t id, double angle);
+int iMobot_moveJoint(iMobot_t* iMobot, mobotJointId_t id, double angle);
+int iMobot_moveJointNB(iMobot_t* iMobot, mobotJointId_t id, double angle);
+int iMobot_moveJointTo(iMobot_t* iMobot, mobotJointId_t id, double angle);
+int iMobot_moveJointToNB(iMobot_t* iMobot, mobotJointId_t id, double angle);
 int iMobot_moveToZero(iMobot_t* iMobot);
 int iMobot_moveToZeroNB(iMobot_t* iMobot);
 int iMobot_moveWait(iMobot_t* iMobot);
-int iMobot_setJointDirection(iMobot_t* iMobot, iMobotJointId_t id, iMobotJointDirection_t direction);
-int iMobot_setJointSpeed(iMobot_t* iMobot, iMobotJointId_t id, double speed);
+int iMobot_setJointDirection(iMobot_t* iMobot, mobotJointId_t id, mobotJointDirection_t direction);
+int iMobot_setJointSpeed(iMobot_t* iMobot, mobotJointId_t id, double speed);
 int iMobot_stop(iMobot_t* iMobot);
 int iMobot_terminate(iMobot_t* iMobot);
-int iMobot_moveJointWait(iMobot_t* iMobot, iMobotJointId_t id);
+int iMobot_moveJointWait(iMobot_t* iMobot, mobotJointId_t id);
 
 int iMobot_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, const char* buf);
 
@@ -142,9 +150,9 @@ class CiMobot {
   public:
     CiMobot();
     ~CiMobot();
-    int getJointAngle(iMobotJointId_t id, double &angle);
-    int getJointSpeed(iMobotJointId_t id, double &speed);
-    int getJointState(iMobotJointId_t id, iMobotJointState_t &state);
+    int getJointAngle(mobotJointId_t id, double &angle);
+    int getJointSpeed(mobotJointId_t id, double &speed);
+    int getJointState(mobotJointId_t id, mobotJointState_t &state);
     int initListenerBluetooth(int channel);
     int isBusy();
     int listenerMainLoop();
@@ -164,23 +172,25 @@ class CiMobot {
               double angle2,
               double angle3,
               double angle4 );
-    int moveJoint(iMobotJointId_t id, double angle);
-    int moveJointNB(iMobotJointId_t id, double angle);
-    int moveJointTo(iMobotJointId_t id, double angle);
-    int moveJointToNB(iMobotJointId_t id, double angle);
+    int moveJoint(mobotJointId_t id, double angle);
+    int moveJointNB(mobotJointId_t id, double angle);
+    int moveJointTo(mobotJointId_t id, double angle);
+    int moveJointToNB(mobotJointId_t id, double angle);
     int moveWait();
     int moveToZero();
-    int setJointSpeed(iMobotJointId_t id, double speed);
+    int setJointSpeed(mobotJointId_t id, double speed);
     int stop();
     int terminate();
-    int moveJointWait(iMobotJointId_t id);
+    int moveJointWait(mobotJointId_t id);
 #ifndef _CH_
   private:
+    int getJointDirection(mobotJointId_t id, mobotJointDirection_t &direction);
+    int setJointDirection(mobotJointId_t id, mobotJointDirection_t direction);
     iMobot_t _iMobot;
 #else
   private:
-    int getJointDirection(iMobotJointId_t id, iMobotJointDirection_t &direction);
-    int setJointDirection(iMobotJointId_t id, iMobotJointDirection_t direction);
+    int getJointDirection(mobotJointId_t id, mobotJointDirection_t &direction);
+    int setJointDirection(mobotJointId_t id, mobotJointDirection_t direction);
     static void *g_chimobot_dlhandle;
     static int g_chimobot_dlcount;
 #endif
