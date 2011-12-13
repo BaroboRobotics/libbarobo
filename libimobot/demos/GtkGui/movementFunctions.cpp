@@ -13,18 +13,12 @@ int setMotorDirection(int motor, int direction)
   }
 }
 
-int setMotorSpeed(int motor, int speed)
+int setMotorSpeed(int motor, double speed)
 {
-  double lspeed;
-  /* Need to convert integer speed to double [0,1] */
-  if(speed < -100 || speed > 100) {
-    return -1;
-  }
-  lspeed = (double)speed / 100.0;
   if(g_isConnected) {
-    return Mobot_setJointSpeed(imobotComms, (mobotJointId_t)motor, lspeed);
+    return Mobot_setJointSpeed(imobotComms, (mobotJointId_t)motor, speed);
   } else if (g_localInit) {
-    return iMobot_setJointSpeed(iMobot, (mobotJointId_t)motor, lspeed);
+    return iMobot_setJointSpeed(iMobot, (mobotJointId_t)motor, speed);
   } else {
     fprintf(stderr, "Error: Not initialized or connected.\n");
     return -1;
@@ -49,6 +43,20 @@ int setMotorPosition(int motor, double position)
   position = position * M_PI / 180.0;
   if(g_isConnected) {
     return Mobot_moveJointToNB(imobotComms, (mobotJointId_t)motor, position);
+  } else if (g_localInit) {
+    return iMobot_moveJointToNB(iMobot, (mobotJointId_t)motor, position);
+  } else {
+    fprintf(stderr, "Error: Not initialized or connected.\n");
+    return -1;
+  }
+}
+
+int setMotorPositionPID(int motor, double position)
+{
+  /* Convert the position to radians */
+  position = position * M_PI / 180.0;
+  if(g_isConnected) {
+    return Mobot_moveJointToPIDNB(imobotComms, (mobotJointId_t)motor, position);
   } else if (g_localInit) {
     return iMobot_moveJointToNB(iMobot, (mobotJointId_t)motor, position);
   } else {

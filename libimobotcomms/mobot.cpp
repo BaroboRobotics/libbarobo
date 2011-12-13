@@ -3,6 +3,10 @@
 #include <stdlib.h>
 #include "mobot.h"
 #include "mobot_internal.h"
+#ifndef _WIN32
+#include <unistd.h>
+#include <fcntl.h>
+#endif
 
 #ifdef _CH_
 #include <stdarg.h>
@@ -120,6 +124,7 @@ int Mobot_connect(br_comms_t* comms)
 int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel)
 {
   int status;
+  int flags;
   comms->socket = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
 
   // set the connection parameters (who to connect to)
@@ -138,6 +143,9 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
   if(status == 0) {
     comms->connected = 1;
   }
+  /* Make the socket non-blocking */
+  flags = fcntl(comms->socket, F_GETFL, 0);
+  fcntl(comms->socket, F_SETFL, flags | O_NONBLOCK);
   return status;
 }
 
@@ -205,7 +213,7 @@ int Mobot_setJointSpeed(br_comms_t* comms, mobotJointId_t id, double speed)
   char buf[160];
   int status;
   int bytes_read;
-  sprintf(buf, "SET_MOTOR_SPEED %d %d", id, (int)(speed*100));
+  sprintf(buf, "SET_MOTOR_SPEED %d %d", id, (int)(speed*100.0));
   status = SendToIMobot(comms, buf, strlen(buf)+1);
   if(status < 0) return status;
   bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
@@ -270,6 +278,19 @@ int Mobot_moveJointTo(br_comms_t* comms, mobotJointId_t id, double angle)
   if(strcmp(buf, "OK")) return -1;
   /* Wait for the motion to finish */
   return Mobot_moveJointWait(comms, id);
+}
+
+int Mobot_moveJointToPIDNB(br_comms_t* comms, mobotJointId_t id, double angle)
+{
+  char buf[160];
+  int status;
+  int bytes_read;
+  sprintf(buf, "SET_MOTOR_POSITION_PID %d %lf", id, angle);
+  status = SendToIMobot(comms, buf, strlen(buf)+1);
+  if(status < 0) return status;
+  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
+  if(strcmp(buf, "OK")) return -1;
+  return 0;
 }
 
 int Mobot_moveJointToNB(br_comms_t* comms, mobotJointId_t id, double angle)
@@ -760,6 +781,7 @@ int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
   int i = 0;
   int j = 0;
   int done = 0;
+  int tries = 100;
   char tmp[256];
 #ifdef _WIN32
   DWORD bytes;
@@ -769,7 +791,16 @@ int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
 #ifdef _WIN32
       err = recvfrom(comms->socket, tmp, 256, 0, (struct sockaddr*)0, 0);
 #else
-      err = read(comms->socket, tmp, 256);
+      while(tries >= 0) {
+        err = read(comms->socket, tmp, 255);
+        if(err < 0) {
+          tries--;
+          //printf("*");
+          usleep(1000);
+        } else {
+          break;
+        }
+      }
 #endif
     } else if (comms->connected == 2) {
 #ifdef _WIN32

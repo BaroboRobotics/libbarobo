@@ -143,6 +143,7 @@ DLLIMPORT int Mobot_moveToZeroNB(br_comms_t* comms);
 DLLIMPORT int Mobot_moveJointWait(br_comms_t* comms, mobotJointId_t id);
 DLLIMPORT int Mobot_moveWait(br_comms_t* comms);
 DLLIMPORT int Mobot_stop(br_comms_t* comms);
+DLLIMPORT int Mobot_moveJointToPIDNB(br_comms_t* comms, mobotJointId_t id, double angle);
 
 /* compound motion functions */
 DLLIMPORT int Mobot_motionInchwormLeft(br_comms_t* comms);

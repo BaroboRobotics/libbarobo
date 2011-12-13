@@ -203,15 +203,15 @@ int init_gaits()
 	motorMask |= (1<<2); motorMask |= (1<<1);
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, 0, -70, 85, 0);
+	SET_ANGLES(angles, 0, -70, 46, 0);
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, 0, 0, 0, 45);
-	motorMask = (1<<3);
+	SET_ANGLES(angles, 45, 0, 0, 0);
+	motorMask = (1<<0);
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, 0, 0, -20, 0);
-	motorMask = (1<<2);
+	SET_ANGLES(angles, 0, 30, 76, 0);
+	motorMask = (1<<2) | (1<<1);
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_POSE, angles, motorMask));
 	addGait(gait);
@@ -265,7 +265,7 @@ int init_gaits()
 
 	/* Unstand */
 	gait = new Gait("Unstand");
-	SET_ANGLES(angles, 0, -85, 85, 0);
+	SET_ANGLES(angles, 0, -72, 46, 0);
 	motorMask = 1<<1; motorMask |= 1<<2;
 	gait->addMotion(new Motion(
 		(motion_type_t)MOTION_POSE, angles, motorMask));
@@ -336,7 +336,7 @@ int executeGait(Gait* gait)
             pos += angles[j];
             setMotorDirection(j+1, 0);
             setMotorSpeed(j+1, 
-                (int)gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[j])));
+                gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[j])));
             setMotorPosition(j+1, pos);
           }
         }
@@ -382,7 +382,7 @@ gboolean updateMotorAngles(gpointer data)
     /* Update the motor position sliders */
     if(motor_position_scale_pressed[i]) {
       /* Send a set motor position to the appropriate motor */
-      setMotorPosition(i+1, (double)gtk_range_get_value(GTK_RANGE(scale_motorPositions[i])));
+      setMotorPositionPID(i+1, (double)gtk_range_get_value(GTK_RANGE(scale_motorPositions[i])));
     } else {
       while(position > 180) position -= 360;
       while(position < -180) position += 360;

@@ -76,9 +76,10 @@ int executeGait(Gait* gait);
 gboolean updateMotorAngles(gpointer data);
 
 int setMotorDirection(int motor, int direction);
-int setMotorSpeed(int motor, int speed);
+int setMotorSpeed(int motor, double speed);
 int stop();
 int setMotorPosition(int motor, double position);
+int setMotorPositionPID(int motor, double position);
 int getMotorPosition(int motor, double *position);
 int waitMotor(int motor);
 }
