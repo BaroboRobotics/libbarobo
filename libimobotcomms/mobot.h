@@ -1,5 +1,6 @@
 #ifndef _MOBOTCOMMS_H_
 #define _MOBOTCOMMS_H_
+#include <math.h>
 
 #ifdef _CH_
 #pragma package <chmobot>
@@ -30,6 +31,8 @@
 #include "mobot_internal.h"
 #endif
 
+#define MOTORMAXSPEED (90.0*M_PI/180.0)
+
 #ifndef MOBOT_JOINTS_E
 #define MOBOT_JOINTS_E
 typedef enum mobotJoints_e {
@@ -59,6 +62,13 @@ typedef enum mobotJointDirection_e
   MOBOT_FORWARD,
   MOBOT_BACKWARD
 } mobotJointDirection_t;
+#endif
+
+#ifndef _CH_
+extern "C" {
+  DLLIMPORT double deg2rad(double deg);
+  DLLIMPORT double rad2deg(double rad);
+}
 #endif
 
 #ifndef C_ONLY
@@ -95,6 +105,7 @@ class CMobot {
     int moveToZero();
     int moveToZeroNB();
     int setJointSpeed(mobotJointId_t id, double speed);
+    int setJointSpeedRatio(mobotJointId_t id, double ratio);
     int stop();
 
     int motionInchwormLeft();

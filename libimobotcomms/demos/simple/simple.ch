@@ -12,6 +12,6 @@ robot.connect();
 robot.moveToZero();
 
 /* Rotate each of the faceplates by 90 degrees */
-robot.move(90, 0, 0, 90);
+robot.move(deg2rad(90), 0, 0, deg2rad(90));
 /* Move the motors back to where they were */
-robot.move(-90, 0, 0, -90);
+robot.move(deg2rad(-90), 0, 0, deg2rad(-90));

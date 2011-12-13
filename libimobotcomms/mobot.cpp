@@ -12,6 +12,15 @@
 #include <stdarg.h>
 #endif
 
+double deg2rad(double deg)
+{
+  return deg * M_PI / 180.0;
+}
+
+double rad2deg(double rad)
+{
+  return rad * 180.0 / M_PI;
+}
 
 int Mobot_init(br_comms_t* comms)
 {
@@ -213,13 +222,21 @@ int Mobot_setJointSpeed(br_comms_t* comms, mobotJointId_t id, double speed)
   char buf[160];
   int status;
   int bytes_read;
-  sprintf(buf, "SET_MOTOR_SPEED %d %d", id, (int)(speed*100.0));
+  sprintf(buf, "SET_MOTOR_SPEED %d %lf", id, speed);
   status = SendToIMobot(comms, buf, strlen(buf)+1);
   if(status < 0) return status;
   bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
   if(strcmp(buf, "OK")) return -1;
   comms->jointSpeeds[id-1] = speed;
   return 0;
+}
+
+int Mobot_setJointSpeedRatio(br_comms_t* comms, mobotJointId_t id, double ratio)
+{
+  if((ratio < 0) || (ratio > 1)) {
+    return -1;
+  }
+  return Mobot_setJointSpeed(comms, id, ratio * MOTORMAXSPEED);
 }
 
 int Mobot_getJointSpeed(br_comms_t* comms, mobotJointId_t id, double *speed)
@@ -528,10 +545,10 @@ int Mobot_stop(br_comms_t* comms)
 int Mobot_motionRollForward(br_comms_t* comms)
 {
   double motorPosition[2];
-  Mobot_getJointAngle(comms, MOBOT_JOINT3, &motorPosition[0]);
+  Mobot_getJointAngle(comms, MOBOT_JOINT1, &motorPosition[0]);
   Mobot_getJointAngle(comms, MOBOT_JOINT4, &motorPosition[1]);
-  Mobot_moveJointTo(comms, MOBOT_JOINT3, motorPosition[0] + 90);
-  Mobot_moveJointTo(comms, MOBOT_JOINT4, motorPosition[1] - 90);
+  Mobot_moveJointTo(comms, MOBOT_JOINT1, motorPosition[0] + DEG2RAD(90));
+  Mobot_moveJointTo(comms, MOBOT_JOINT4, motorPosition[1] - DEG2RAD(90));
   Mobot_moveWait(comms);
   return 0;
 }
@@ -539,10 +556,10 @@ int Mobot_motionRollForward(br_comms_t* comms)
 int Mobot_motionRollBackward(br_comms_t* comms)
 {
   double motorPosition[2];
-  Mobot_getJointAngle(comms, MOBOT_JOINT3, &motorPosition[0]);
+  Mobot_getJointAngle(comms, MOBOT_JOINT1, &motorPosition[0]);
   Mobot_getJointAngle(comms, MOBOT_JOINT4, &motorPosition[1]);
-  Mobot_moveJointTo(comms, MOBOT_JOINT3, motorPosition[0] - 90);
-  Mobot_moveJointTo(comms, MOBOT_JOINT4, motorPosition[1] + 90);
+  Mobot_moveJointTo(comms, MOBOT_JOINT1, motorPosition[0] - DEG2RAD(90));
+  Mobot_moveJointTo(comms, MOBOT_JOINT4, motorPosition[1] + DEG2RAD(90));
   Mobot_moveWait(comms);
   return 0;
 }
@@ -550,10 +567,10 @@ int Mobot_motionRollBackward(br_comms_t* comms)
 int Mobot_motionTurnLeft(br_comms_t* comms)
 {
   double motorPosition[2];
-  Mobot_getJointAngle(comms, MOBOT_JOINT3, &motorPosition[0]);
+  Mobot_getJointAngle(comms, MOBOT_JOINT1, &motorPosition[0]);
   Mobot_getJointAngle(comms, MOBOT_JOINT4, &motorPosition[1]);
-  Mobot_moveJointTo(comms, MOBOT_JOINT3, motorPosition[0] + 90);
-  Mobot_moveJointTo(comms, MOBOT_JOINT4, motorPosition[1] + 90);
+  Mobot_moveJointTo(comms, MOBOT_JOINT1, motorPosition[0] + DEG2RAD(90));
+  Mobot_moveJointTo(comms, MOBOT_JOINT4, motorPosition[1] + DEG2RAD(90));
   Mobot_moveWait(comms);
   return 0;
 }
@@ -561,27 +578,27 @@ int Mobot_motionTurnLeft(br_comms_t* comms)
 int Mobot_motionTurnRight(br_comms_t* comms)
 {
   double motorPosition[2];
-  Mobot_getJointAngle(comms, MOBOT_JOINT3, &motorPosition[0]);
+  Mobot_getJointAngle(comms, MOBOT_JOINT1, &motorPosition[0]);
   Mobot_getJointAngle(comms, MOBOT_JOINT4, &motorPosition[1]);
-  Mobot_moveJointTo(comms, MOBOT_JOINT3, motorPosition[0] - 90);
-  Mobot_moveJointTo(comms, MOBOT_JOINT4, motorPosition[1] - 90);
+  Mobot_moveJointTo(comms, MOBOT_JOINT1, motorPosition[0] - DEG2RAD(90));
+  Mobot_moveJointTo(comms, MOBOT_JOINT4, motorPosition[1] - DEG2RAD(90));
   Mobot_moveWait(comms);
   return 0;
 }
 
 int Mobot_motionInchwormLeft(br_comms_t* comms)
 {
-  Mobot_moveJointTo(comms, MOBOT_JOINT1, 0);
   Mobot_moveJointTo(comms, MOBOT_JOINT2, 0);
+  Mobot_moveJointTo(comms, MOBOT_JOINT3, 0);
   Mobot_moveWait(comms);
 
-  Mobot_moveJointTo(comms, MOBOT_JOINT2, 50);
+  Mobot_moveJointTo(comms, MOBOT_JOINT3, DEG2RAD(50));
   Mobot_moveWait(comms);
-  Mobot_moveJointTo(comms, MOBOT_JOINT1, -50);
+  Mobot_moveJointTo(comms, MOBOT_JOINT2, DEG2RAD(-50));
+  Mobot_moveWait(comms);
+  Mobot_moveJointTo(comms, MOBOT_JOINT3, 0);
   Mobot_moveWait(comms);
   Mobot_moveJointTo(comms, MOBOT_JOINT2, 0);
-  Mobot_moveWait(comms);
-  Mobot_moveJointTo(comms, MOBOT_JOINT1, 0);
   Mobot_moveWait(comms);
 
   return 0;
@@ -589,17 +606,17 @@ int Mobot_motionInchwormLeft(br_comms_t* comms)
 
 int Mobot_motionInchwormRight(br_comms_t* comms)
 {
-  Mobot_moveJointTo(comms, MOBOT_JOINT1, 0);
   Mobot_moveJointTo(comms, MOBOT_JOINT2, 0);
+  Mobot_moveJointTo(comms, MOBOT_JOINT3, 0);
   Mobot_moveWait(comms);
 
-  Mobot_moveJointTo(comms, MOBOT_JOINT1, -50);
+  Mobot_moveJointTo(comms, MOBOT_JOINT2, DEG2RAD(-50));
   Mobot_moveWait(comms);
-  Mobot_moveJointTo(comms, MOBOT_JOINT2, 50);
-  Mobot_moveWait(comms);
-  Mobot_moveJointTo(comms, MOBOT_JOINT1, 0);
+  Mobot_moveJointTo(comms, MOBOT_JOINT3, DEG2RAD(50));
   Mobot_moveWait(comms);
   Mobot_moveJointTo(comms, MOBOT_JOINT2, 0);
+  Mobot_moveWait(comms);
+  Mobot_moveJointTo(comms, MOBOT_JOINT3, 0);
   Mobot_moveWait(comms);
 
   return 0;
@@ -609,12 +626,12 @@ int Mobot_motionStand(br_comms_t* comms)
 {
   Mobot_moveToZero(comms);
   Mobot_moveWait(comms);
-  Mobot_moveJointTo(comms, MOBOT_JOINT1, -85);
-  Mobot_moveJointTo(comms, MOBOT_JOINT2, 80);
+  Mobot_moveJointTo(comms, MOBOT_JOINT2, DEG2RAD(-85));
+  Mobot_moveJointTo(comms, MOBOT_JOINT3, DEG2RAD(80));
   Mobot_moveWait(comms);
-  Mobot_moveJointTo(comms, MOBOT_JOINT3, 45);
+  Mobot_moveJointTo(comms, MOBOT_JOINT1, DEG2RAD(45));
   Mobot_moveWait(comms);
-  Mobot_moveJointTo(comms, MOBOT_JOINT1, 20);
+  Mobot_moveJointTo(comms, MOBOT_JOINT2, DEG2RAD(20));
   Mobot_moveWait(comms);
   return 0;
 }
@@ -877,6 +894,11 @@ int CMobot::getJointDirection(mobotJointId_t id, mobotJointDirection_t &dir)
 int CMobot::setJointSpeed(mobotJointId_t id, double speed)
 {
   return Mobot_setJointSpeed(&_comms, id, speed);
+}
+
+int CMobot::setJointSpeedRatio(mobotJointId_t id, double ratio)
+{
+  return Mobot_setJointSpeedRatio(&_comms, id, ratio);
 }
 
 int CMobot::getJointSpeed(mobotJointId_t id, double &speed)

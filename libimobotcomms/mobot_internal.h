@@ -13,6 +13,9 @@ typedef struct sockaddr_rc sockaddr_t;
 typedef SOCKADDR_BTH sockaddr_t;
 #endif
 
+#define DEG2RAD(x) ((x) * M_PI / 180.0)
+#define RAD2DEG(x) ((x) * 180.0 / M_PI)
+
 #ifndef BR_COMMS_S
 #define BR_COMMS_S
 typedef struct br_comms_s
@@ -102,6 +105,7 @@ DLLIMPORT int Mobot_isMoving(br_comms_t* comms);
 DLLIMPORT int Mobot_setJointDirection(br_comms_t* comms, mobotJointId_t id, mobotJointDirection_t dir);
 DLLIMPORT int Mobot_getJointDirection(br_comms_t* comms, mobotJointId_t id, mobotJointDirection_t *dir);
 DLLIMPORT int Mobot_setJointSpeed(br_comms_t* comms, mobotJointId_t id, double speed);
+DLLIMPORT int Mobot_setJointSpeedRatio(br_comms_t* comms, mobotJointId_t id, double ratio);
 DLLIMPORT int Mobot_getJointSpeed(br_comms_t* comms, mobotJointId_t id, double *speed);
 DLLIMPORT int Mobot_moveJointTo(br_comms_t* comms, mobotJointId_t id, double angle);
 DLLIMPORT int Mobot_moveJointToNB(br_comms_t* comms, mobotJointId_t id, double angle);
