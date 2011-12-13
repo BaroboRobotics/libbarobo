@@ -1,3 +1,4 @@
+#include <math.h>
 #include "GtkiMobotController.h"
 
 int setMotorDirection(int motor, int direction)
@@ -44,10 +45,12 @@ int stop()
 
 int setMotorPosition(int motor, double position)
 {
+  /* Convert the position to radians */
+  position = position * M_PI / 180.0;
   if(g_isConnected) {
-    return Mobot_moveJointTo(imobotComms, (mobotJointId_t)motor, position);
+    return Mobot_moveJointToNB(imobotComms, (mobotJointId_t)motor, position);
   } else if (g_localInit) {
-    return iMobot_moveJointTo(iMobot, (mobotJointId_t)motor, position);
+    return iMobot_moveJointToNB(iMobot, (mobotJointId_t)motor, position);
   } else {
     fprintf(stderr, "Error: Not initialized or connected.\n");
     return -1;
@@ -59,14 +62,15 @@ int getMotorPosition(int motor, double *position)
   int code;
   if(g_isConnected) {
     code = Mobot_getJointAngle(imobotComms, (mobotJointId_t)motor, position);
-    return code;
   } else if (g_localInit) {
     code = iMobot_getJointAngle(iMobot, (mobotJointId_t)motor, position);
-    return code;
   } else {
     fprintf(stderr, "Error: Not initialized or connected.\n");
-    return -1;
+    code = -1;
   }
+  /* Convert position from radians to degrees */
+  *position = *position * 180 / M_PI;
+  return code;
 }
 
 int waitMotor(int motor)

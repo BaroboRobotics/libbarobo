@@ -723,50 +723,78 @@ int str2ba(const char *str, bdaddr_t *ba)
 
 int SendToIMobot(br_comms_t* comms, const char* str, int len)
 {
+  int err = 0;
+#if 0
+  char* str;
+  str = (char*)malloc(strlen(buf)+2);
+  strcpy(str, buf);
+  strcat(str, "$");
+  len++;
+#endif
+  //printf("SEND: <<%s>>\n", str);
+  /* To send to the iMobot, we need to append the terminating character, '$' */
   if(comms->connected == 1) {
 #ifdef _WIN32
-	return send(comms->socket, str, len, 0);
+    err = send(comms->socket, str, len, 0);
 #else
-    return write(comms->socket, str, len);
+    err = write(comms->socket, str, len);
 #endif
   } else if (comms->connected == 2) {
 #ifdef _WIN32
     DWORD bytes;
     if(!WriteFile(comms->hSerial, str, len, &bytes, NULL)) {
-      return -1;
+      err = -1;
     }
 #else
-    return -1;
+    err = -1;
 #endif
   } else {
-    return -1;
+    err = -1;
   }
-  return 0;
+  return err;
 }
 
 int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
 {
+  int err = 0;
+  int i = 0;
+  int j = 0;
+  int done = 0;
+  char tmp[256];
 #ifdef _WIN32
   DWORD bytes;
 #endif
-  if(comms->connected == 1) {
+  while(done == 0) {
+    if(comms->connected == 1) {
 #ifdef _WIN32
-	return recvfrom(comms->socket, buf, size, 0, (struct sockaddr*)0, 0);
+      err = recvfrom(comms->socket, tmp, 256, 0, (struct sockaddr*)0, 0);
 #else
-    return read(comms->socket, buf, size);
+      err = read(comms->socket, tmp, 256);
 #endif
-  } else if (comms->connected == 2) {
+    } else if (comms->connected == 2) {
 #ifdef _WIN32
-    if(!ReadFile(comms->hSerial, buf, size, &bytes, NULL)) {
-      return -1;
+      if(!ReadFile(comms->hSerial, tmp, 256, &bytes, NULL)) {
+        err = -1;
+      }
+      err = bytes;
+#else
+      err = -1;
+#endif
+    } else {
+      err = -1;
     }
-    return bytes;
-#else
-    return -1;
-#endif
-  } else {
-    return -1;
+    if(err < 0) break;
+    for(i = 0; i < err; i++, j++) {
+      buf[j] = tmp[i];
+      if(tmp[i] == '\0') 
+      {
+        done = 1;
+        break;
+      }
+    }
   }
+  //printf("RECV: <<%s>>\n", buf);
+  return err;
 }
 
 #ifndef C_ONLY
