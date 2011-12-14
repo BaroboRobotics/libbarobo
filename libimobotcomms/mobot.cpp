@@ -157,6 +157,7 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
   /* Make the socket non-blocking */
   flags = fcntl(comms->socket, F_GETFL, 0);
   fcntl(comms->socket, F_SETFL, flags | O_NONBLOCK);
+  fsync(comms->socket);
   finishConnect(comms);
   return status;
 }
@@ -166,8 +167,16 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
 int finishConnect(br_comms_t* comms)
 {
   int i;
+  char buf[256];
+  while(1) {
+    SendToIMobot(comms, "GET_IMOBOT_STATUS", strlen("GET_IMOBOT_STATUS")+1);
+    RecvFromIMobot(comms, buf, 255);
+    if(strcmp(buf, "IMOBOT READY")==0) {
+      break;
+    }
+  }
   /* Get the joint max speeds */
-  for(i = 1; i <= 4; i++) {
+  for(i = 4; i >= 1; i--) {
     Mobot_getJointMaxSpeed(comms, (mobotJointId_t)i, &(comms->maxSpeed[i-1]));
   }
   return 0;
@@ -855,6 +864,7 @@ int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
   int done = 0;
   int tries = 100;
   char tmp[256];
+  buf[0] = '\0';
 #ifdef _WIN32
   DWORD bytes;
 #endif

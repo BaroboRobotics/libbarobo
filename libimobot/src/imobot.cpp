@@ -632,10 +632,14 @@ int iMobot_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, cons
       sprintf(mybuf, "%d", int32);
       write(socket, mybuf, strlen(mybuf)+1);
     }
+  } else if (MATCHSTR("GET_JOINT_MAX_SPEED"))
+  {
+    sprintf(mybuf, "%lf", MAXSPEED);
+    write(socket, mybuf, strlen(mybuf)+1);
   } else if (MATCHSTR("SET_MOTOR_SPEED"))
   {
-    sscanf(buf, "%*s %d %d", &id, &int32);
-    if(iMobot_setJointSpeed(iMobot, (mobotJointId_t)id, int32)) {
+    sscanf(buf, "%*s %d %lf", &id, &mydouble);
+    if(iMobot_setJointSpeed(iMobot, (mobotJointId_t)id, mydouble)) {
       write(socket, "ERROR", 6);
     } else {
       write(socket, "OK", 3);
@@ -646,8 +650,7 @@ int iMobot_slaveProcessCommand(iMobot_t* iMobot, int socket, int bytesRead, cons
     if(iMobot_getJointSpeed(iMobot, (mobotJointId_t)id, &mydouble)) {
       write(socket, "ERROR", 6);
     } else {
-      int32 = mydouble * 100;
-      sprintf(mybuf, "%d", int32);
+      sprintf(mybuf, "%lf", mydouble);
       write(socket, mybuf, strlen(mybuf)+1);
     }
   } else if (MATCHSTR("SET_MOTOR_POSITION"))
