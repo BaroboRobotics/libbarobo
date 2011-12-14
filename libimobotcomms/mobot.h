@@ -83,6 +83,7 @@ class CMobot {
     int isConnected();
     int isMoving();
     int getJointAngle(mobotJointId_t id, double &angle);
+    int getJointMaxSpeed(mobotJointId_t id, double &maxSpeed);
     int getJointSpeed(mobotJointId_t id, double &speed);
     int getJointState(mobotJointId_t id, mobotJointState_t &state);
     int move(double angle1, double angle2, double angle3, double angle4);
@@ -96,6 +97,8 @@ class CMobot {
                            mobotJointDirection_t dir3, 
                            mobotJointDirection_t dir4, 
                            int msecs);
+    int moveJointContinuousNB(mobotJointId_t id, mobotJointDirection_t dir);
+    int moveJointContinuousTime(mobotJointId_t id, mobotJointDirection_t dir, int msecs);
     int moveJointTo(mobotJointId_t id, double angle);
     int moveJointToNB(mobotJointId_t id, double angle);
     int moveJointWait(mobotJointId_t id);

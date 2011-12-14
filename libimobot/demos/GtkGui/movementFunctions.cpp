@@ -16,9 +16,9 @@ int setMotorDirection(int motor, int direction)
 int setMotorSpeed(int motor, double speed)
 {
   if(g_isConnected) {
-    return Mobot_setJointSpeed(imobotComms, (mobotJointId_t)motor, speed);
+    return Mobot_setJointSpeedRatio(imobotComms, (mobotJointId_t)motor, speed);
   } else if (g_localInit) {
-    return iMobot_setJointSpeed(iMobot, (mobotJointId_t)motor, speed);
+    return iMobot_setJointSpeedRatio(iMobot, (mobotJointId_t)motor, speed);
   } else {
     fprintf(stderr, "Error: Not initialized or connected.\n");
     return -1;

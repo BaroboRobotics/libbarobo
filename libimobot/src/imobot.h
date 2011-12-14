@@ -1,5 +1,6 @@
 #ifndef _BAROBO_H_
 #define _BAROBO_H_
+#include <math.h>
 
 #ifdef _CH_
 #pragma package <chimobot>
@@ -44,6 +45,8 @@
 
 #define I2C_HC_ADDR 0x55
 
+#define MAXSPEED (M_PI/4.0)
+
 #ifndef MOBOT_JOINTS_E
 #define MOBOT_JOINTS_E
 typedef enum mobotJoints_e {
@@ -84,10 +87,12 @@ typedef struct iMobot_s {
   short enc[4];
   int socket;
   double jointSpeed[4];
+  double jointMaxSpeed[4];
 } iMobot_t;
 
 int iMobot_getJointAngle(iMobot_t* iMobot, mobotJointId_t id, double *angle);
 int iMobot_getJointDirection(iMobot_t* iMobot, mobotJointId_t id, mobotJointDirection_t *dir);
+int iMobot_getJointMaxSpeed(iMobot_t* iMobot, mobotJointId_t id, double *maxSpeed);
 int iMobot_getJointSpeed(iMobot_t* iMobot, mobotJointId_t id, double *speed);
 int iMobot_getJointState(iMobot_t* iMobot, mobotJointId_t id, mobotJointState_t *state);
 int iMobot_init(iMobot_t* iMobot);
@@ -134,6 +139,7 @@ int iMobot_moveToZeroNB(iMobot_t* iMobot);
 int iMobot_moveWait(iMobot_t* iMobot);
 int iMobot_setJointDirection(iMobot_t* iMobot, mobotJointId_t id, mobotJointDirection_t direction);
 int iMobot_setJointSpeed(iMobot_t* iMobot, mobotJointId_t id, double speed);
+int iMobot_setJointSpeedRatio(iMobot_t* iMobot, mobotJointId_t id, double ratio);
 int iMobot_stop(iMobot_t* iMobot);
 int iMobot_terminate(iMobot_t* iMobot);
 int iMobot_moveJointWait(iMobot_t* iMobot, mobotJointId_t id);
@@ -151,6 +157,7 @@ class CiMobot {
     CiMobot();
     ~CiMobot();
     int getJointAngle(mobotJointId_t id, double &angle);
+    int getJointMaxSpeed(mobotJointId_t id, double &maxSpeed);
     int getJointSpeed(mobotJointId_t id, double &speed);
     int getJointState(mobotJointId_t id, mobotJointState_t &state);
     int initListenerBluetooth(int channel);
@@ -179,6 +186,7 @@ class CiMobot {
     int moveWait();
     int moveToZero();
     int setJointSpeed(mobotJointId_t id, double speed);
+    int setJointSpeedRatio(mobotJointId_t id, double ratio);
     int stop();
     int terminate();
     int moveJointWait(mobotJointId_t id);

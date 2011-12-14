@@ -52,6 +52,13 @@ int iMobot_getJointDirection(iMobot_t* iMobot, mobotJointId_t id, mobotJointDire
   return 0;
 }
 
+int iMobot_getJointMaxSpeed(iMobot_t* iMobot, mobotJointId_t id, double *maxSpeed)
+{
+  *maxSpeed = MAXSPEED;
+  iMobot->jointMaxSpeed[(int)id-1] = *maxSpeed;
+  return 0;
+}
+
 int iMobot_getJointSpeed(iMobot_t* iMobot, mobotJointId_t id, double *speed)
 {
   uint8_t byte;
@@ -96,6 +103,7 @@ int iMobot_init(iMobot_t* iMobot)
     I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
     I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORPOS(i)+1, &lobyte);
     iMobot->enc[i] = (hibyte << 8) + lobyte;
+    iMobot->jointMaxSpeed[i] = MAXSPEED;
   }
   /* Set default speeds for the motors */
   for(i = 1; i <= 4; i++) {
@@ -519,6 +527,11 @@ int iMobot_setJointSpeed(iMobot_t* iMobot, mobotJointId_t id, double speed)
   return 0;
 }
 
+int iMobot_setJointSpeedRatio(iMobot_t* iMobot, mobotJointId_t id, double ratio)
+{
+  return iMobot_setJointSpeed(iMobot, id, ratio * iMobot->jointMaxSpeed[(int)id-1]);
+}
+
 int iMobot_stop(iMobot_t* iMobot)
 { 
   /* Immediately set motor speeds to zero */
@@ -698,6 +711,11 @@ int CiMobot::getJointAngle(mobotJointId_t id, double &angle)
   return iMobot_getJointAngle(&_iMobot, id, &angle);
 }
 
+int CiMobot::getJointMaxSpeed(mobotJointId_t id, double &maxSpeed)
+{
+  return iMobot_getJointMaxSpeed(&_iMobot, id, &maxSpeed);
+}
+
 int CiMobot::getJointSpeed(mobotJointId_t id, double &speed)
 {
   return iMobot_getJointSpeed(&_iMobot, id, &speed);
@@ -793,6 +811,11 @@ int CiMobot::moveJointToNB(mobotJointId_t id, double angle)
 int CiMobot::setJointSpeed(mobotJointId_t id, double speed)
 {
   return iMobot_setJointSpeed(&_iMobot, id, speed);
+}
+
+int CiMobot::setJointSpeedRatio(mobotJointId_t id, double ratio)
+{
+  return iMobot_setJointSpeedRatio(&_iMobot, id, ratio);
 }
 
 int CiMobot::stop()

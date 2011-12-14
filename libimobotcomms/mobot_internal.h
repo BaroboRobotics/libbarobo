@@ -27,6 +27,7 @@ typedef struct br_comms_s
 #endif
   sockaddr_t addr;
   double jointSpeeds[4];
+  double maxSpeed[4];
   THREAD_T thread;
 } br_comms_t;
 #endif
@@ -104,9 +105,11 @@ DLLIMPORT int Mobot_isConnected(br_comms_t* comms);
 DLLIMPORT int Mobot_isMoving(br_comms_t* comms);
 DLLIMPORT int Mobot_setJointDirection(br_comms_t* comms, mobotJointId_t id, mobotJointDirection_t dir);
 DLLIMPORT int Mobot_getJointDirection(br_comms_t* comms, mobotJointId_t id, mobotJointDirection_t *dir);
+DLLIMPORT int Mobot_getJointMaxSpeed(br_comms_t* comms, mobotJointId_t, double *maxSpeed);
 DLLIMPORT int Mobot_setJointSpeed(br_comms_t* comms, mobotJointId_t id, double speed);
 DLLIMPORT int Mobot_setJointSpeedRatio(br_comms_t* comms, mobotJointId_t id, double ratio);
 DLLIMPORT int Mobot_getJointSpeed(br_comms_t* comms, mobotJointId_t id, double *speed);
+DLLIMPORT int Mobot_getJointSpeedRatio(br_comms_t* comms, mobotJointId_t id, double *ratio);
 DLLIMPORT int Mobot_moveJointTo(br_comms_t* comms, mobotJointId_t id, double angle);
 DLLIMPORT int Mobot_moveJointToNB(br_comms_t* comms, mobotJointId_t id, double angle);
 DLLIMPORT int Mobot_getJointAngle(br_comms_t* comms, mobotJointId_t id, double *angle);
@@ -144,6 +147,8 @@ DLLIMPORT int Mobot_moveToNB(br_comms_t* comms,
                                double angle4);
 DLLIMPORT int Mobot_moveToZero(br_comms_t* comms);
 DLLIMPORT int Mobot_moveToZeroNB(br_comms_t* comms);
+DLLIMPORT int Mobot_moveJointContinuousNB(br_comms_t* comms, mobotJointId_t id, mobotJointDirection_t dir);
+DLLIMPORT int Mobot_moveJointContinuousTime(br_comms_t* comms, mobotJointId_t id, mobotJointDirection_t dir, int msecs);
 DLLIMPORT int Mobot_moveJointWait(br_comms_t* comms, mobotJointId_t id);
 DLLIMPORT int Mobot_moveWait(br_comms_t* comms);
 DLLIMPORT int Mobot_stop(br_comms_t* comms);

@@ -37,6 +37,7 @@ int Mobot_init(br_comms_t* comms)
   return 0;
 }
 
+int finishConnect(br_comms_t* comms);
 int Mobot_connect(br_comms_t* comms)
 {
 #ifndef _WIN32
@@ -128,6 +129,7 @@ int Mobot_connect(br_comms_t* comms)
     return -1;
   }
 #endif
+  finishConnect(comms);
 }
 
 int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel)
@@ -155,7 +157,20 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
   /* Make the socket non-blocking */
   flags = fcntl(comms->socket, F_GETFL, 0);
   fcntl(comms->socket, F_SETFL, flags | O_NONBLOCK);
+  finishConnect(comms);
   return status;
+}
+
+/* finishConnect():
+ * Perform final connecting tasks common to all connection methods */
+int finishConnect(br_comms_t* comms)
+{
+  int i;
+  /* Get the joint max speeds */
+  for(i = 1; i <= 4; i++) {
+    Mobot_getJointMaxSpeed(comms, (mobotJointId_t)i, &(comms->maxSpeed[i-1]));
+  }
+  return 0;
 }
 
 int Mobot_disconnect(br_comms_t* comms)
@@ -217,6 +232,21 @@ int Mobot_getJointDirection(br_comms_t* comms, mobotJointId_t id, mobotJointDire
   return 0;
 }
 
+int Mobot_getJointMaxSpeed(br_comms_t* comms, mobotJointId_t id, double *maxSpeed)
+{
+  char buf[160];
+  int status;
+  int bytes_read;
+  sprintf(buf, "GET_JOINT_MAX_SPEED %d", id);
+  status = SendToIMobot(comms, buf, strlen(buf)+1);
+  if(status < 0) return status;
+  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
+  if(!strcmp(buf, "ERROR")) return -1;
+  sscanf(buf, "%lf", maxSpeed);
+  comms->maxSpeed[(int)id-1] = *maxSpeed;
+  return 0;
+}
+
 int Mobot_setJointSpeed(br_comms_t* comms, mobotJointId_t id, double speed)
 {
   char buf[160];
@@ -236,7 +266,7 @@ int Mobot_setJointSpeedRatio(br_comms_t* comms, mobotJointId_t id, double ratio)
   if((ratio < 0) || (ratio > 1)) {
     return -1;
   }
-  return Mobot_setJointSpeed(comms, id, ratio * MOTORMAXSPEED);
+  return Mobot_setJointSpeed(comms, id, ratio * comms->maxSpeed[(int)id-1]);
 }
 
 int Mobot_getJointSpeed(br_comms_t* comms, mobotJointId_t id, double *speed)
@@ -250,8 +280,15 @@ int Mobot_getJointSpeed(br_comms_t* comms, mobotJointId_t id, double *speed)
   if(status < 0) return status;
   bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
   if(!strcmp(buf, "ERROR")) return -1;
-  sscanf(buf, "%d", &ispeed);
-  *speed = (double)ispeed/100.0;
+  sscanf(buf, "%lf", speed);
+  return 0;
+}
+
+int Mobot_getJointSpeedRatio(br_comms_t* comms, mobotJointId_t id, double *ratio)
+{
+  double speed;
+  Mobot_getJointSpeed(comms, id, &speed);
+  *ratio = speed / comms->maxSpeed[(int)id-1];
   return 0;
 }
 
@@ -280,6 +317,24 @@ int Mobot_getJointState(br_comms_t* comms, mobotJointId_t id, mobotJointState_t 
   bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
   if(!strcmp(buf, "ERROR")) return -1;
   sscanf(buf, "%d", (int*)state);
+  return 0;
+}
+
+int Mobot_moveJointContinuousNB(br_comms_t* comms, mobotJointId_t id, mobotJointDirection_t dir)
+{
+  Mobot_setJointSpeed(comms, id, comms->jointSpeeds[(int)id-1]);
+  Mobot_setJointDirection(comms, id, dir);
+  return 0;
+}
+
+int Mobot_moveJointContinuousTime(br_comms_t* comms, mobotJointId_t id, mobotJointDirection_t dir, int msecs)
+{
+  Mobot_moveJointContinuousNB(comms, id, dir);
+#ifdef _WIN32
+  Sleep(msecs);
+#else
+  usleep(msecs * 1000);
+#endif
   return 0;
 }
 
@@ -906,6 +961,16 @@ int CMobot::getJointSpeed(mobotJointId_t id, double &speed)
   return Mobot_getJointSpeed(&_comms, id, &speed);
 }
 
+int CMobot::moveJointContinuousNB(mobotJointId_t id, mobotJointDirection_t dir)
+{
+  return Mobot_moveJointContinuousNB(&_comms, id, dir);
+}
+
+int CMobot::moveJointContinuousTime(mobotJointId_t id, mobotJointDirection_t dir, int msecs)
+{
+  return Mobot_moveJointContinuousTime(&_comms, id, dir, msecs);
+}
+
 int CMobot::moveJointTo(mobotJointId_t id, double angle)
 {
   return Mobot_moveJointTo(&_comms, id, angle);
@@ -919,6 +984,11 @@ int CMobot::moveJointToNB(mobotJointId_t id, double angle)
 int CMobot::getJointAngle(mobotJointId_t id, double &angle)
 {
   return Mobot_getJointAngle(&_comms, id, &angle);
+}
+
+int CMobot::getJointMaxSpeed(mobotJointId_t id, double &maxSpeed)
+{
+  return Mobot_getJointMaxSpeed(&_comms, id, &maxSpeed);
 }
 
 int CMobot::getJointState(mobotJointId_t id, mobotJointState_t &state)
