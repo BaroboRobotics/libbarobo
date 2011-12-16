@@ -3,6 +3,11 @@
 
 void on_button_forward_clicked(GtkWidget* widget, gpointer data)
 {
+  g_buttonState[B_FORWARD].clicked = 1;
+}
+
+void buttonForward()
+{
   setMotorDirection(1, 2);
   setMotorDirection(4, 1);
   double speeds[2];
@@ -13,6 +18,11 @@ void on_button_forward_clicked(GtkWidget* widget, gpointer data)
 }
 
 void on_button_backward_clicked(GtkWidget* widget, gpointer data)
+{
+  g_buttonState[B_BACKWARD].clicked = 1;
+}
+
+void buttonBackward()
 {
   setMotorDirection(1, 1);
   setMotorDirection(4, 2);
@@ -25,6 +35,11 @@ void on_button_backward_clicked(GtkWidget* widget, gpointer data)
 
 void on_button_rotateLeft_clicked(GtkWidget* widget, gpointer data)
 {
+  g_buttonState[B_ROTATELEFT].clicked = 1;
+}
+
+void buttonRotateLeft()
+{
   setMotorDirection(1, 2);
   setMotorDirection(4, 2);
   double speeds[2];
@@ -35,6 +50,11 @@ void on_button_rotateLeft_clicked(GtkWidget* widget, gpointer data)
 }
 
 void on_button_rotateRight_clicked(GtkWidget* widget, gpointer data)
+{
+  g_buttonState[B_ROTATERIGHT].clicked = 1;
+}
+
+void buttonRotateRight()
 {
   setMotorDirection(1, 1);
   setMotorDirection(4, 1);
@@ -47,6 +67,11 @@ void on_button_rotateRight_clicked(GtkWidget* widget, gpointer data)
 
 void on_button_lfaceForward_clicked(GtkWidget* widget, gpointer data)
 {
+  g_buttonState[B_LFACEFORWARD].clicked = 1;
+}
+
+void buttonLFaceForward()
+{
   setMotorDirection(1, 1);
   double speed;
   speed = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[0]));
@@ -54,6 +79,11 @@ void on_button_lfaceForward_clicked(GtkWidget* widget, gpointer data)
 }
 
 void on_button_lfaceBackward_clicked(GtkWidget* widget, gpointer data)
+{
+  g_buttonState[B_LFACEBACKWARD].clicked = 1;
+}
+
+void buttonLFaceBackward()
 {
   setMotorDirection(1, 2);
   double speed;
@@ -63,6 +93,11 @@ void on_button_lfaceBackward_clicked(GtkWidget* widget, gpointer data)
 
 void on_button_rfaceForward_clicked(GtkWidget* widget, gpointer data)
 {
+  g_buttonState[B_RFACEFORWARD].clicked = 1;
+}
+
+void buttonRFaceForward()
+{
   setMotorDirection(4, 2);
   double speed;
   speed = gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[3]));
@@ -70,6 +105,11 @@ void on_button_rfaceForward_clicked(GtkWidget* widget, gpointer data)
 }
 
 void on_button_rfaceBackward_clicked(GtkWidget* widget, gpointer data)
+{
+  g_buttonState[B_RFACEBACKWARD].clicked = 1;
+}
+
+void buttonRFaceBackward()
 {
   setMotorDirection(4, 1);
   double speed;
@@ -89,6 +129,11 @@ void on_button_inchRight_clicked(GtkWidget* widget, gpointer data)
 
 void on_button_stop_clicked(GtkWidget* widget, gpointer data)
 {
+  g_buttonState[B_STOP].clicked = 1;
+}
+
+void buttonStop()
+{
   stop();
   int i;
 
@@ -99,6 +144,11 @@ void on_button_stop_clicked(GtkWidget* widget, gpointer data)
 }
 
 void on_button_home_clicked(GtkWidget* widget, gpointer data) 
+{
+  g_buttonState[B_HOME].clicked = 1;
+}
+
+void buttonHome()
 {
   int i;
   GtkRange* range;
@@ -145,6 +195,11 @@ void on_button_playGait_clicked(GtkWidget* widget, gpointer data)
 
 void on_button_moveJoints_clicked(GtkWidget* widget, gpointer data)
 {
+  g_buttonState[B_MOVEJOINTS].clicked = 1;
+}
+
+void buttonMoveJoints()
+{
   GtkEntry* entries[4];
   double val;
   const char* string;
@@ -162,6 +217,11 @@ void on_button_moveJoints_clicked(GtkWidget* widget, gpointer data)
   }
 }
 
+void buttonMotorforward(int id)
+{
+  g_buttonState[B_M1F + id - 1].clicked = 1;
+}
+
 void motor_forward(int id)
 {
   double speed;
@@ -170,10 +230,20 @@ void motor_forward(int id)
   setMotorDirection(id, 1);
 }
 
+void buttonMotorstop(int id)
+{
+  g_buttonState[B_M1S + id - 1].clicked = 1;
+}
+
 void motor_stop(int id)
 {
   setMotorSpeed(id, 0);
   setMotorDirection(id, 0);
+}
+
+void buttonMotorback(int id)
+{
+  g_buttonState[B_M1B + id - 1].clicked = 1;
 }
 
 void motor_back(int id)
@@ -187,7 +257,7 @@ void motor_back(int id)
 #define ON_MOTOR_BUTTON_CLICKED(id, motion) \
 void on_button_motor##id##motion##_clicked(GtkWidget* widget, gpointer data) \
 { \
-  motor_##motion (id+1); \
+  buttonMotor##motion (id+1); \
 }
 ON_MOTOR_BUTTON_CLICKED(0, forward)
 ON_MOTOR_BUTTON_CLICKED(1, forward)
@@ -207,29 +277,53 @@ ON_MOTOR_BUTTON_CLICKED(3, back)
 gboolean on_vscale_motorspeed0_button_release_event(GtkRange* range, GdkEvent* event, gpointer data)
 {
   double speed = gtk_range_get_value(range);
-  setMotorSpeed(1, speed);
+  g_buttonState[B_SPEED1].clicked = 1;
+  g_buttonState[B_SPEED1].dargs[0] = speed;
   return FALSE;
+}
+
+void buttonSpeed1(double speed)
+{
+  setMotorSpeed(1, speed);
 }
 
 gboolean on_vscale_motorspeed1_button_release_event(GtkRange* range, GdkEvent* event, gpointer data)
 {
   double speed = gtk_range_get_value(range);
-  setMotorSpeed(2, speed);
+  g_buttonState[B_SPEED2].clicked = 1;
+  g_buttonState[B_SPEED2].dargs[0] = speed;
   return FALSE;
+}
+
+void buttonSpeed2(double speed)
+{
+  setMotorSpeed(2, speed);
 }
 
 gboolean on_vscale_motorspeed2_button_release_event(GtkRange* range, GdkEvent* event, gpointer data)
 {
   double speed = gtk_range_get_value(range);
-  setMotorSpeed(3, speed);
+  g_buttonState[B_SPEED3].clicked = 1;
+  g_buttonState[B_SPEED3].dargs[0] = speed;
   return FALSE;
+}
+
+void buttonSpeed3(double speed)
+{
+  setMotorSpeed(3, speed);
 }
 
 gboolean on_vscale_motorspeed3_button_release_event(GtkRange* range, GdkEvent* event, gpointer data)
 {
   double speed = gtk_range_get_value(range);
-  setMotorSpeed(4, speed);
+  g_buttonState[B_SPEED4].clicked = 1;
+  g_buttonState[B_SPEED4].dargs[0] = speed;
   return FALSE;
+}
+
+void buttonSpeed4(double speed)
+{
+  setMotorSpeed(4, speed);
 }
 
 gboolean on_vscale_motorPos_button_press_event(GtkRange* range, GdkEvent* event, gpointer data)

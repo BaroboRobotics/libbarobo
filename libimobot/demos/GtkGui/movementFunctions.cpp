@@ -92,3 +92,16 @@ int waitMotor(int motor)
     return -1;
   }
 }
+
+int isMoving()
+{
+  if(g_isConnected) {
+    return Mobot_isMoving(imobotComms );
+  } else if (g_localInit) {
+    return iMobot_isMoving(iMobot);
+  } else {
+    fprintf(stderr, "Error: Not initialized or connected.\n");
+    return -1;
+  }
+}
+

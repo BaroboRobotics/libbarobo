@@ -20,6 +20,8 @@ GtkWidget *dialog_intro;
 GtkVScale* scale_motorSpeeds[4];
 GtkVScale* scale_motorPositions[4];
 int motor_position_scale_pressed[4];
+programState_t* g_programState;
+buttonState_t* g_buttonState;
 
 Gait* g_gaits[100];
 int g_numGaits;
@@ -44,6 +46,7 @@ int main(int argc, char* argv[])
   }
 
   /* Initialize everything */
+  gdk_threads_init();
   initialize();
 
   /* Get the main window */
@@ -108,7 +111,7 @@ int initialize()
 {
   int i;
   int speed; 
-
+  pthread_t thread;
   /* Initialize the gaits */
   init_gaits();
   imobotComms = (br_comms_t*)malloc(sizeof(br_comms_t));
@@ -135,8 +138,19 @@ int initialize()
   gtk_range_set_range(GTK_RANGE(scale_motorPositions[2]), -90, 90);
   gtk_range_set_range(GTK_RANGE(scale_motorPositions[3]), -180, 180);
 
+  /* Initialize button states */
+  g_buttonState = (buttonState_t*)malloc(sizeof(buttonState_t)*B_NUMBUTTONS);
+  memset(g_buttonState, 0, sizeof(buttonState_t)*B_NUMBUTTONS);
+
+  /* Initialize the program state */
+  g_programState = (programState_t*)malloc(sizeof(programState_t));
+  g_programState->state= STATE_IDLE;
+  g_programState->lock = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
+  pthread_mutex_init(g_programState->lock, NULL);
+
   /* Set up the motor angle entries handler */
-  g_timeout_add(250, updateMotorAngles, NULL);
+  //gdk_threads_add_timeout(250, updateMotorAngles, NULL);
+  pthread_create(&thread, NULL, updateMotorAngles, NULL);
 }
 
 #define SET_ANGLES(angles, a, b, c, d) \
@@ -318,76 +332,140 @@ Gait* findGait(const char* name)
 
 int executeGait(Gait* gait)
 {
-  int i,j;
+  g_programState->gait = gait;
+  g_programState->state = STATE_BEGINGAIT;
+}
+
+int executeGaitMotion(Gait* gait, int numMotion)
+{
+  int j;
   const Motion* motion;
   unsigned char motorMask;
   const double* angles;
   double pos;
-  for(i = 0; i < gait->getNumMotions(); i++) {
-    motion = gait->getMotion(i);
-    angles = motion->getAngles();
-    motorMask = motion->getMotorMask();
+  if (numMotion >= gait->getNumMotions()) {
+    return -1;
+  }
+  motion = gait->getMotion(numMotion);
+  angles = motion->getAngles();
+  motorMask = motion->getMotorMask();
 
-    switch(motion->getType()) {
-      case MOTION_MOVE:
-        for(j = 0; j < 4; j++) {
-          if((1<<j) & motorMask) {
-            getMotorPosition(j+1, &pos);
-            pos += angles[j];
-            setMotorDirection(j+1, 0);
-            setMotorSpeed(j+1, 
-                gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[j])));
-            setMotorPosition(j+1, pos);
-          }
+  switch(motion->getType()) {
+    case MOTION_MOVE:
+      for(j = 0; j < 4; j++) {
+        if((1<<j) & motorMask) {
+          getMotorPosition(j+1, &pos);
+          pos += angles[j];
+          setMotorDirection(j+1, 0);
+          setMotorSpeed(j+1, 
+              gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[j])));
+          setMotorPosition(j+1, pos);
         }
-        break;
-      case MOTION_POSE:
-        for(j = 0; j<4; j++) {
-          if((1<<j) & motorMask) {
-            setMotorDirection(j+1, 0);
-            setMotorSpeed(j+1, 
-                (int)gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[j])));
-            setMotorPosition(j+1, angles[j]);
-          }
-        }
-        break;
-    }
-    for(j = 0; j<4; j++) {
-      if((1<<j) & motorMask) {
-        waitMotor(j+1);
       }
-    }
+      break;
+    case MOTION_POSE:
+      for(j = 0; j<4; j++) {
+        if((1<<j) & motorMask) {
+          setMotorDirection(j+1, 0);
+          setMotorSpeed(j+1, 
+              gtk_range_get_value(GTK_RANGE(scale_motorSpeeds[j])));
+          setMotorPosition(j+1, angles[j]);
+        }
+      }
+      break;
   }
   return 0;
 }
 
-gboolean updateMotorAngles(gpointer data)
+
+void* updateMotorAngles(gpointer data)
 {
   double position;
   int i;
   char buf[40];
-  if(!Mobot_isConnected(imobotComms) && !g_localInit) {
-    for(i = 0; i < 4; i++) {
-      //gtk_entry_set_text(motorAngleEntries[i], "N/A");
+  while(1) {
+    if(!Mobot_isConnected(imobotComms) && !g_localInit) {
+      usleep(250000);
+      continue;
+      for(i = 0; i < 4; i++) {
+        //gtk_entry_set_text(motorAngleEntries[i], "N/A");
+      }
     }
-    return TRUE;
-  }
-  for(i = 0; i < 4; i++) {
-    getMotorPosition(i+1, &position);
-    while(position > 180) position -= 360;
-    while(position < -180) position += 360;
-    sprintf(buf, "%.1f", position);
-    //gtk_entry_set_text(motorAngleEntries[i], buf);
-
-    /* Update the motor position sliders */
-    if(motor_position_scale_pressed[i]) {
-      /* Send a set motor position to the appropriate motor */
-      setMotorPositionPID(i+1, (double)gtk_range_get_value(GTK_RANGE(scale_motorPositions[i])));
-    } else {
+    for(i = 0; i < 4; i++) {
+      getMotorPosition(i+1, &position);
       while(position > 180) position -= 360;
       while(position < -180) position += 360;
-      gtk_range_set_value(GTK_RANGE(scale_motorPositions[i]), position);
+      sprintf(buf, "%.1f", position);
+      //gtk_entry_set_text(motorAngleEntries[i], buf);
+
+      /* Update the motor position sliders */
+      if(motor_position_scale_pressed[i]) {
+        /* Send a set motor position to the appropriate motor */
+        gdk_threads_enter();
+        setMotorPositionPID(i+1, (double)gtk_range_get_value(GTK_RANGE(scale_motorPositions[i])));
+        gdk_threads_leave();
+      } else {
+        while(position > 180) position -= 360;
+        while(position < -180) position += 360;
+        gdk_threads_enter();
+        gtk_range_set_value(GTK_RANGE(scale_motorPositions[i]), position);
+        gdk_threads_leave();
+      }
+    }
+    /* Check the program state. If we have to run a gait, do it here */
+    pthread_mutex_lock(g_programState->lock);
+    if(g_programState->state == STATE_BEGINGAIT) {
+      /* Start the gait by performing the first motion */
+      executeGaitMotion(g_programState->gait, 0);
+      g_programState->index = 0;
+      g_programState->state = STATE_GAIT;
+    } else if (g_programState->state == STATE_GAIT) {
+      /* See if the robot is still moving */
+      if(!isMoving()) {
+        /* Move to the next motion */
+        g_programState->index++;
+        if(g_programState->index >= g_programState->gait->getNumMotions()) {
+          g_programState->state = STATE_IDLE;
+        } else {
+          executeGaitMotion(g_programState->gait, g_programState->index);
+        }
+      }
+    }
+    pthread_mutex_unlock(g_programState->lock);
+    /* Check the button states */
+    for(i = 0; i < B_NUMBUTTONS; i++) {
+      if(g_buttonState[i].clicked) {
+        switch((button_t)i) {
+          case B_FORWARD: buttonForward(); break;
+          case B_BACKWARD: buttonBackward(); break;
+          case B_ROTATELEFT: buttonRotateLeft(); break;
+          case B_ROTATERIGHT: buttonRotateRight(); break;
+          case B_LFACEFORWARD: buttonLFaceForward(); break;
+          case B_LFACEBACKWARD: buttonLFaceBackward(); break;
+          case B_RFACEFORWARD: buttonRFaceForward(); break;
+          case B_RFACEBACKWARD: buttonRFaceBackward(); break;
+          case B_STOP: buttonStop(); break;
+          case B_HOME: buttonHome(); break;
+          case B_MOVEJOINTS: buttonMoveJoints(); break;
+          case B_SPEED1: buttonSpeed1(g_buttonState[i].dargs[0]); break;
+          case B_SPEED2: buttonSpeed2(g_buttonState[i].dargs[0]); break;
+          case B_SPEED3: buttonSpeed3(g_buttonState[i].dargs[0]); break;
+          case B_SPEED4: buttonSpeed4(g_buttonState[i].dargs[0]); break;
+          case B_M1F: motor_forward(1); break;
+          case B_M2F: motor_forward(2); break;
+          case B_M3F: motor_forward(3); break;
+          case B_M4F: motor_forward(4); break;
+          case B_M1B: motor_back(1); break;
+          case B_M2B: motor_back(2); break;
+          case B_M3B: motor_back(3); break;
+          case B_M4B: motor_back(4); break;
+          case B_M1S: motor_stop(1); break;
+          case B_M2S: motor_stop(2); break;
+          case B_M3S: motor_stop(3); break;
+          case B_M4S: motor_stop(4); break;
+        }
+        g_buttonState[i].clicked = 0;
+      }
     }
   }
-  return TRUE;
 }
