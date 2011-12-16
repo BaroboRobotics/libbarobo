@@ -22,6 +22,11 @@ double rad2deg(double rad)
   return rad * 180.0 / M_PI;
 }
 
+void* nullThread(void* arg)
+{ 
+  return NULL;
+}
+
 int Mobot_init(br_comms_t* comms)
 {
   int i;
@@ -34,6 +39,7 @@ int Mobot_init(br_comms_t* comms)
   for(i = 0; i < 4; i++) {
     comms->jointSpeeds[i] = DEF_MOTOR_SPEED;
   }
+  THREAD_CREATE(&comms->thread, nullThread, NULL);
   return 0;
 }
 
