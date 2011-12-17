@@ -1,11 +1,16 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "mobot.h"
 #include "mobot_internal.h"
 #ifndef _WIN32
 #include <unistd.h>
 #include <fcntl.h>
+#endif
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
 #endif
 
 #ifdef _CH_
@@ -100,7 +105,7 @@ int Mobot_connect(br_comms_t* comms)
 
     /* Send status request message to the mobot */
     DWORD bytes;
-    if(!WriteFile(comms->hSerial, "GET_MOBOT_STATUS", strlen("GET_MOBOT_STATUS")+1, &bytes, NULL)) {
+    if(!WriteFile(comms->hSerial, "GET_IMOBOT_STATUS", strlen("GET_IMOBOT_STATUS")+1, &bytes, NULL)) {
       printf("Could not send status request message.\n");
       CloseHandle(comms->hSerial);
       continue;
@@ -113,7 +118,7 @@ int Mobot_connect(br_comms_t* comms)
       CloseHandle(comms->hSerial);
       continue;
     }
-    if(strcmp(buf, "MOBOT READY")) {
+    if(strcmp(buf, "IMOBOT READY")) {
       printf("Incorrect response message: %s.\n", buf);
       CloseHandle(comms->hSerial);
       continue;
@@ -154,10 +159,12 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
   if(status == 0) {
     comms->connected = 1;
   }
+#ifndef _WIN32
   /* Make the socket non-blocking */
   flags = fcntl(comms->socket, F_GETFL, 0);
   fcntl(comms->socket, F_SETFL, flags | O_NONBLOCK);
   fsync(comms->socket);
+#endif
   finishConnect(comms);
   return status;
 }
