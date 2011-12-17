@@ -247,6 +247,23 @@ int iMobot_isBusy(iMobot_t* iMobot)
   return 0;
 }
 
+int iMobot_isMoving(iMobot_t* iMobot)
+{
+  int i;
+  uint8_t byte;
+  I2cSetSlaveAddress(iMobot->i2cDev, I2C_HC_ADDR, 0);
+  for(i = 0; i < 4; i++) {
+    if(I2cReadByte(iMobot->i2cDev, I2C_REG_MOTORSTATE(i), &byte)) {
+      return -1;
+    } else {
+      if(byte) {
+        return 1;
+      }
+    }
+  }
+  return 0;
+}
+
 int iMobot_listenerMainLoop(iMobot_t* iMobot)
 {
   struct sockaddr_rc rem_addr = { 0 };

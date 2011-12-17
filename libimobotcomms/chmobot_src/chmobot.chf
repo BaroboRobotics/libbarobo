@@ -91,6 +91,18 @@ int CMobot::getJointAngle(int id, double & angle) {
     dlrunfun(fptr, &retval, NULL, this, id, &angle);
     return retval;
 }
+int CMobot::getJointMaxSpeed(int id, double & speed) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "getJointMaxSpeed_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, &speed);
+    return retval;
+}
 int CMobot::getJointSpeed(int id, double & speed) {
     void *fptr;
     int retval;
@@ -125,6 +137,18 @@ int CMobot::isConnected() {
         return -1;
     }
     dlrunfun(fptr, &retval, isConnected, this);
+    return retval;
+}
+int CMobot::isMoving() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "isMoving_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, isMoving, this);
     return retval;
 }
 int CMobot::motionInchwormLeft() {
@@ -343,6 +367,30 @@ int CMobot::moveContinuousTime(int dir1, int dir2, int dir3, int dir4, int msecs
     dlrunfun(fptr, &retval, moveContinuousTime, this, dir1, dir2, dir3, dir4, msecs);
     return retval;
 }
+int CMobot::moveJointContinuousNB(int id, int dir) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "moveJointContinuousNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveJointContinuousNB, this, id, dir);
+    return retval;
+}
+int CMobot::moveJointContinuousTime(int id, int dir, int msecs) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "moveJointContinuousTime_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveJointContinuousTime, this, id, dir, msecs);
+    return retval;
+}
 int CMobot::moveJointTo(int id, double angle) {
     void *fptr;
     int retval;
@@ -449,6 +497,18 @@ int CMobot::setJointSpeed(int id, double speed) {
         return -1;
     }
     dlrunfun(fptr, &retval, setJointSpeed, this, id, speed);
+    return retval;
+}
+int CMobot::setJointSpeedRatio(int id, double speed) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "setJointSpeedRatio_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setJointSpeedRatio, this, id, speed);
     return retval;
 }
 int CMobot::stop() {

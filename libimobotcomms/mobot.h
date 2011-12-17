@@ -15,6 +15,7 @@
 
 #include <stdio.h>
 
+#ifndef _CH_
 #ifndef _WIN32
 #include <unistd.h>
 #include <sys/types.h>
@@ -26,6 +27,7 @@
 #include <winsock2.h>
 #include <Ws2bth.h>
 #endif
+#endif /* Not if CH */
 
 #ifndef _CH_
 #include "mobot_internal.h"
@@ -36,7 +38,8 @@
 #ifndef MOBOT_JOINTS_E
 #define MOBOT_JOINTS_E
 typedef enum mobotJoints_e {
-  MOBOT_JOINT1 = 1,
+  MOBOT_ZERO,
+  MOBOT_JOINT1,
   MOBOT_JOINT2,
   MOBOT_JOINT3,
   MOBOT_JOINT4,

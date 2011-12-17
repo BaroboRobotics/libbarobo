@@ -27,6 +27,11 @@ double rad2deg(double rad)
   return rad * 180.0 / M_PI;
 }
 
+void* nullThread(void* arg)
+{ 
+  return NULL;
+}
+
 int Mobot_init(br_comms_t* comms)
 {
   int i;
@@ -39,6 +44,7 @@ int Mobot_init(br_comms_t* comms)
   for(i = 0; i < 4; i++) {
     comms->jointSpeeds[i] = DEF_MOTOR_SPEED;
   }
+  THREAD_CREATE(&comms->thread, nullThread, NULL);
   return 0;
 }
 
@@ -141,6 +147,7 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
 {
   int status;
   int flags;
+  char buf[256];
   comms->socket = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
 
   // set the connection parameters (who to connect to)
@@ -163,7 +170,9 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
   /* Make the socket non-blocking */
   flags = fcntl(comms->socket, F_GETFL, 0);
   fcntl(comms->socket, F_SETFL, flags | O_NONBLOCK);
-  fsync(comms->socket);
+  /* Wait for the MoBot to get ready */
+  sleep(1);
+  read(comms->socket, buf, 255);
 #endif
   finishConnect(comms);
   return status;
@@ -912,6 +921,7 @@ int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
         break;
       }
     }
+    tries = 100;
   }
   //printf("RECV: <<%s>>\n", buf);
   return err;

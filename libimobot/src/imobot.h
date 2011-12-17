@@ -98,6 +98,7 @@ int iMobot_getJointState(iMobot_t* iMobot, mobotJointId_t id, mobotJointState_t 
 int iMobot_init(iMobot_t* iMobot);
 int iMobot_initListenerBluetooth(iMobot_t* iMobot, int channel);
 int iMobot_isBusy(iMobot_t* iMobot);
+int iMobot_isMoving(iMobot_t* iMobot);
 int iMobot_listenerMainLoop(iMobot_t* iMobot);
 int iMobot_move(iMobot_t* iMobot,
                 double angle1,
