@@ -86,7 +86,7 @@ int Mobot_connect(br_comms_t* comms)
       printf("Could not get serial properties.\n");
       continue;
     }
-    dcbSerialParams.BaudRate = CBR_115200;
+    dcbSerialParams.BaudRate = CBR_57600;
     dcbSerialParams.ByteSize = 8;
     dcbSerialParams.StopBits = ONESTOPBIT;
     dcbSerialParams.Parity = NOPARITY;
@@ -135,12 +135,12 @@ int Mobot_connect(br_comms_t* comms)
   }
   /* At this point, we _should_ be connected */
   if(i != NUM_PORTS) {
+    finishConnect(comms);
     return 0;
   } else {
     return -1;
   }
 #endif
-  finishConnect(comms);
 }
 
 int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel)
@@ -173,8 +173,8 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
   /* Wait for the MoBot to get ready */
   sleep(1);
   read(comms->socket, buf, 255);
-#endif
   finishConnect(comms);
+#endif
   return status;
 }
 
