@@ -39,6 +39,8 @@
 
 #define MOTORMAXSPEED (90.0*M_PI/180.0)
 
+extern int g_numConnected;
+
 #ifndef MOBOT_JOINTS_E
 #define MOBOT_JOINTS_E
 typedef enum mobotJoints_e {

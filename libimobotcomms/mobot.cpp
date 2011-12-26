@@ -7,11 +7,16 @@
 #ifndef _WIN32
 #include <unistd.h>
 #include <fcntl.h>
+#else
+#include <windows.h>
+#include <shlobj.h>
 #endif
 
 #ifdef _CH_
 #include <stdarg.h>
 #endif
+
+int g_numConnected = 0;
 
 double deg2rad(double deg)
 {
@@ -49,6 +54,55 @@ int Mobot_init(br_comms_t* comms)
 
 int finishConnect(br_comms_t* comms);
 int Mobot_connect(br_comms_t* comms)
+{
+#ifdef _WIN32
+  /* Find the user's local appdata directory */
+  int i;
+  FILE *fp;
+  char path[MAX_PATH];
+  if(SHGetFolderPathA(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, path) != S_OK) 
+  {
+    /* Could not get the user's app data directory */
+  } else {
+    //MessageBox((LPCTSTR)path, (LPCTSTR)"Test");
+    //fprintf(fp, "%s", path); 
+  }
+  strcat(path, "\\Barobo.config");
+  fp = fopen(path, "r");
+  if(fp == NULL) {
+    /* The file doesn't exist. Gotta make the file */
+    fprintf(stderr, 
+        "ERROR: Your Barobo configuration file does not exist.\n"
+        "Please create one by opening the MoBot remote control, clicking on\n"
+        "the 'Robot' menu entry, and selecting 'Configure Robot Bluetooth'.\n");
+    return -1;
+  }
+  /* Read the correct line */
+  for(i = 0; i < g_numConnected+1; i++) {
+    if(fgets(path, MAX_PATH, fp) == NULL) {
+      return -1;
+    }
+  }
+  /* Get rid of trailing newline and/or carriage return */
+  while(
+      (path[strlen(path)-1] == '\r' ) ||
+      (path[strlen(path)-1] == '\n' ) 
+      )
+  {
+    path[strlen(path)-1] = '\0';
+  }
+  /* Pass it on to connectWithAddress() */
+  if(i = Mobot_connectWithAddress(comms, path, 1)) {
+    return i;
+  } else {
+    g_numConnected++;
+    return i;
+  }
+#else
+  return -1;
+#endif
+}
+int Mobot_connect_old(br_comms_t* comms)
 {
 #ifndef _WIN32
   fprintf(stderr, 
