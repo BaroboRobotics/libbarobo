@@ -97,6 +97,7 @@ IDD_IMOBOTCONTROLLER_WINDOWS_DIALOG DIALOGEX 0, 0, 388, 258
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_MAXIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_APPWINDOW
 CAPTION "iMobotController_Windows"
+MENU IDR_MENU1
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     CONTROL         "",IDC_SLIDER_speed1,"msctls_trackbar32",TBS_VERT | TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,12,156,16,88
@@ -134,14 +135,29 @@ BEGIN
     CONTROL         "",IDC_SLIDER_position4,"msctls_trackbar32",TBS_VERT | TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,233,167,22,84
     GROUPBOX        "Gaits",IDC_STATIC,270,126,114,126
     GROUPBOX        "Individual Joint Control",IDC_STATIC,156,12,109,90
-    PUSHBUTTON      "Connect",IDC_BUTTON_connect,6,0,54,12
+    PUSHBUTTON      "Connect",IDC_BUTTON_connect,22,4,54,12
     PUSHBUTTON      "Button1",IDC_BUTTON_rollLeft,276,49,24,24,BS_ICON
     PUSHBUTTON      "Button1",IDC_BUTTON_rollForward,300,25,24,24,BS_ICON
     PUSHBUTTON      "Button1",IDC_BUTTON_rollRight,324,49,24,24,BS_ICON
     PUSHBUTTON      "Button1",IDC_BUTTON_rollStop,300,49,24,24,BS_ICON
     PUSHBUTTON      "Button1",IDC_BUTTON_rollBack,300,73,24,24,BS_ICON
     GROUPBOX        "Rolling Control",IDC_STATIC,270,12,84,90
-    CONTROL         137,IDC_STATIC,"Static",SS_BITMAP,6,12,143,105
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,7,18,147,101
+END
+
+IDD_DIALOG_CONFIG DIALOGEX 0, 0, 214, 174
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,102,156,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,156,156,50,14
+    EDITTEXT        IDC_EDIT1,12,6,144,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "Add",IDC_BUTTON_ADD,162,6,42,12
+    LISTBOX         IDC_LIST2,12,30,144,114,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Move Up",IDC_BUTTON_MOVEUP,162,30,42,12
+    PUSHBUTTON      "Move Down",IDC_BUTTON_MOVEDOWN,162,48,42,12
+    PUSHBUTTON      "Remove",IDC_BUTTON_REMOVE,162,66,42,12
 END
 
 
@@ -204,8 +220,15 @@ BEGIN
     BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 381
-        TOPMARGIN, 7
         BOTTOMMARGIN, 251
+    END
+
+    IDD_DIALOG_CONFIG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 207
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 167
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -218,14 +241,30 @@ END
 
 IDB_BITMAP1             BITMAP                  "res\\bitmap1.bmp"
 IDB_BITMAP2             BITMAP                  "res\\bitmap2.bmp"
-IDB_BITMAP3             BITMAP                  "C:\\Documents and Settings\\david\\Projects\\Barobo\\iMobot_gumstix_api\\libimobotcomms\\demos\\iMobotController_Windows\\iMobot_diagram.bmp"
+IDB_BITMAP3             BITMAP                  "res\\iMobot_diagram.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // PNG
 //
 
-IDB_PNG1                PNG                     "C:\\Documents and Settings\\david\\Projects\\Barobo\\iMobot_gumstix_api\\libimobot\\Demos\\GtkGui\\interface\\imobot_diagram.png"
+IDB_PNG1                PNG                     "res\\imobot_diagram.png"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU1 MENU 
+BEGIN
+    MENUITEM "File",                        ID_FILE
+    POPUP "Robot"
+    BEGIN
+        MENUITEM "Configure Robot Bluetooth",   ID_ROBOT_CONFIGUREROBOTBLUETOOTH
+        MENUITEM "Connect to a Robot",          ID_ROBOT_CONNECTTOAROBOT
+    END
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

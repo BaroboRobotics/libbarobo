@@ -16,6 +16,9 @@
 #define IDI_ICON_right                  135
 #define IDI_ICON_left                   136
 #define IDB_BITMAP3                     137
+#define IDD_DIALOG1                     138
+#define IDD_DIALOG_CONFIG               138
+#define IDR_MENU1                       139
 #define IDC_SLIDER_speed1               1000
 #define IDC_EDIT_speed1                 1001
 #define IDC_SLIDER_speed2               1002
@@ -50,17 +53,28 @@
 #define IDC_BUTTON_connect              1031
 #define IDC_BUTTON_rollLeft             1034
 #define IDC_BUTTON_rollForward          1035
+#define IDC_EDIT1                       1035
 #define IDC_BUTTON_rollRight            1036
+#define IDC_BUTTON1                     1036
+#define IDC_BUTTON_ADD                  1036
 #define IDC_BUTTON_rollStop             1037
+#define IDC_LIST1                       1037
 #define IDC_BUTTON_rollBack             1038
+#define IDC_LIST2                       1038
+#define IDC_BUTTON_MOVEUP               1039
+#define IDC_BUTTON_MOVEDOWN             1040
+#define IDC_BUTTON_REMOVE               1041
+#define ID_ROBOT_CONFIGUREROBOTBLUETOOTH 32771
+#define ID_ROBOT_CONNECTTOAROBOT        32772
+#define ID_FILE                         32773
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        138
-#define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1035
+#define _APS_NEXT_RESOURCE_VALUE        140
+#define _APS_NEXT_COMMAND_VALUE         32774
+#define _APS_NEXT_CONTROL_VALUE         1042
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

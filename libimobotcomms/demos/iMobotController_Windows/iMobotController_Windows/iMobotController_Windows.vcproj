@@ -48,7 +48,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\Documents and Settings\david\Projects\Barobo\iMobot_gumstix_api\libimobotcomms&quot;"
+				AdditionalIncludeDirectories="&quot;C:\Documents and Settings\david\Projects\iMobot_gumstix_api\libimobotcomms&quot;;D:\Projects\iMobot_gumstix_api\libimobotcomms"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -362,11 +362,15 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\gait.cpp"
+				RelativePath=".\configFile.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\imobotcomms.cpp"
+				RelativePath=".\configFileDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\gait.cpp"
 				>
 			</File>
 			<File
@@ -375,6 +379,10 @@
 			</File>
 			<File
 				RelativePath=".\iMobotController_WindowsDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\mobot.cpp"
 				>
 			</File>
 			<File
@@ -420,11 +428,15 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\gait.h"
+				RelativePath=".\configFile.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\imobotcomms.h"
+				RelativePath=".\configFileDialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\gait.h"
 				>
 			</File>
 			<File
@@ -433,6 +445,10 @@
 			</File>
 			<File
 				RelativePath=".\iMobotController_WindowsDlg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\mobot.h"
 				>
 			</File>
 			<File
@@ -486,7 +502,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\iMobot_diagram.bmp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\..\libimobot\Demos\GtkGui\interface\imobot_diagram.png"
+				>
+			</File>
+			<File
+				RelativePath=".\res\iMobot_diagram.png"
 				>
 			</File>
 			<File

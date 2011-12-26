@@ -33,6 +33,10 @@
 #include "mobot_internal.h"
 #endif
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 #define MOTORMAXSPEED (90.0*M_PI/180.0)
 
 #ifndef MOBOT_JOINTS_E
@@ -104,6 +108,7 @@ class CMobot {
     int moveJointContinuousTime(mobotJointId_t id, mobotJointDirection_t dir, int msecs);
     int moveJointTo(mobotJointId_t id, double angle);
     int moveJointToNB(mobotJointId_t id, double angle);
+    int moveJointToPIDNB(mobotJointId_t id, double angle);
     int moveJointWait(mobotJointId_t id);
     int moveTo(double angle1, double angle2, double angle3, double angle4);
     int moveToNB(double angle1, double angle2, double angle3, double angle4);

@@ -5,11 +5,15 @@
 #include "stdafx.h"
 #include "iMobotController_Windows.h"
 #include "iMobotController_WindowsDlg.h"
+#include "configFileDialog.h"
 #include "gait.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
+
+CRITICAL_SECTION UpdateGuiCriticalSection;
+buttonState_t g_buttonState[B_NUMBUTTONS];
 
 
 // CAboutDlg dialog used for App About
@@ -47,7 +51,6 @@ END_MESSAGE_MAP()
 
 
 
-
 CiMobotController_WindowsDlg::CiMobotController_WindowsDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CiMobotController_WindowsDlg::IDD, pParent)
 {
@@ -67,6 +70,10 @@ CiMobotController_WindowsDlg::CiMobotController_WindowsDlg(CWnd* pParent /*=NULL
 	m_slider_Positions[1] = &m_slider_Position2;
 	m_slider_Positions[2] = &m_slider_Position3;
 	m_slider_Positions[3] = &m_slider_Position4;
+  /* Initialize critical section */
+  InitializeCriticalSection(&UpdateGuiCriticalSection);
+  /* Initialize button states */
+  g_buttonState[B_PLAY].handlerFunc = &CiMobotController_WindowsDlg::OnBnClickedButtonrollback;
 }
 
 void CiMobotController_WindowsDlg::DoDataExchange(CDataExchange* pDX)
@@ -131,6 +138,17 @@ BEGIN_MESSAGE_MAP(CiMobotController_WindowsDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_Motor2Backward, &CiMobotController_WindowsDlg::OnBnClickedButtonMotor2backward)
 	ON_BN_CLICKED(IDC_BUTTON_Motor3Backward, &CiMobotController_WindowsDlg::OnBnClickedButtonMotor3backward)
 	ON_BN_CLICKED(IDC_BUTTON_Motor4Backward, &CiMobotController_WindowsDlg::OnBnClickedButtonMotor4backward)
+	ON_BN_CLICKED(IDC_BUTTON_rollForward, &CiMobotController_WindowsDlg::OnBnClickedButtonrollforward)
+	ON_BN_CLICKED(IDC_BUTTON_rollStop, &CiMobotController_WindowsDlg::OnBnClickedButtonrollstop)
+	ON_BN_CLICKED(IDC_BUTTON_rollLeft, &CiMobotController_WindowsDlg::OnBnClickedButtonrollleft)
+	ON_BN_CLICKED(IDC_BUTTON_rollRight, &CiMobotController_WindowsDlg::OnBnClickedButtonrollright)
+	ON_BN_CLICKED(IDC_BUTTON_rollBack, &CiMobotController_WindowsDlg::OnBnClickedButtonrollback)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_position2, &CiMobotController_WindowsDlg::OnNMCustomdrawSliderposition2)
+	ON_NOTIFY(TRBN_THUMBPOSCHANGING, IDC_SLIDER_position2, &CiMobotController_WindowsDlg::OnTRBNThumbPosChangingSliderposition2)
+	ON_NOTIFY(TRBN_THUMBPOSCHANGING, IDC_SLIDER_position1, &CiMobotController_WindowsDlg::OnTRBNThumbPosChangingSliderposition1)
+	ON_NOTIFY(TRBN_THUMBPOSCHANGING, IDC_SLIDER_position3, &CiMobotController_WindowsDlg::OnTRBNThumbPosChangingSliderposition3)
+	ON_NOTIFY(TRBN_THUMBPOSCHANGING, IDC_SLIDER_position4, &CiMobotController_WindowsDlg::OnTRBNThumbPosChangingSliderposition4)
+	ON_COMMAND(ID_ROBOT_CONFIGUREROBOTBLUETOOTH, &CiMobotController_WindowsDlg::OnRobotConfigurerobotbluetooth)
 END_MESSAGE_MAP()
 
 
@@ -450,6 +468,10 @@ int CiMobotController_WindowsDlg::addGait(Gait* gait)
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonplay()
 {
+}
+
+void CiMobotController_WindowsDlg::handlerPlay()
+{
 	/* Get the index of the gait to play */
 	int index;
 	index = m_list_gaits.GetCurSel();
@@ -472,71 +494,28 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonplay()
 
 afx_msg void CiMobotController_WindowsDlg::OnTimer(UINT nIDEvent)
 {
-	/* Perform iMobot update actions */
-	if(isConnected == false) {
-		/* Call base class handler */
-		CDialog::OnTimer(nIDEvent);
-		return;
-	}
-
-	double value;
-	wchar_t buf[200];
-	for(int i = 0; i < 4; i++) {
-		/* Get all of the motor angles */
-		iMobotComms.getJointAngle(i, value);
-		swprintf(buf, L"%lf", value);
-		m_edit_MotorPositions[i]->SetWindowTextW(buf);
-	}
-	/* Check the Speed and Position sliders. If any 
-	 * of them have moved, send the appropriate message 
-	 * to the iMobot. */
-	int position;
-	int speed;
-	for(int i = 0; i < 4; i++) {
-		/* Check the position */
-		position = m_slider_Positions[i]->GetPos();
-		if(position != m_positions[i]) {
-			iMobotComms.moveJointTo(i, (double) position);
-			m_positions[i] = position;
-		}
-
-		/* Check the speed */
-		speed = m_slider_Speeds[i]->GetPos();
-		if(speed != m_speeds[i]) {
-			iMobotComms.setJointSpeed(i, (double)speed/100.0);
-			m_speeds[i] = speed;
-		}
-	}
 	/* Call base class handler */
 	CDialog::OnTimer(nIDEvent);
 }
+
 void CiMobotController_WindowsDlg::OnBnClickedButtonconnect()
 {
 	/* "Connect" button clicked */
-#if 0
-	/* Get the address */
-	wchar_t address[200];
-	char paddress[200];
-	wchar_t channel[80];
-	m_edit_Address.GetLine(0, address);
-	m_edit_Channel.GetLine(0, channel);
-	/* Try to connect */
-	int chan;
-	swscanf(channel, L"%d", &chan);
-	/* Convert "address" from wchar_t* to char* */
-	size_t origsize = wcslen(address) + 1;
-	const size_t newsize = 200;
-	size_t convertedChars = 0;
-	wcstombs_s(&convertedChars, paddress, origsize, address, _TRUNCATE); 
-	//if(iMobotComms.connectWithAddress(paddress, chan)) {
-#endif
-	if(iMobotComms.connect()) {
+	if(iMobotComms.connectWithAddress("00:06:66:43:0C:DE", 1)) {
 		/* Error connecting */
 		MessageBox(L"Error connecting to iMobot.", L"Error");
 	} else {
 		isConnected = true;
 		/* Update the positions of all the sliders and such */
 		UpdateSliders();
+    /* Start the handler thread */
+    CreateThread(
+        NULL,
+        0,
+		(LPTHREAD_START_ROUTINE)(HandlerThread),
+        this,
+        0,
+        NULL );
 	}
 }
 
@@ -562,11 +541,11 @@ void CiMobotController_WindowsDlg::UpdateSliders()
 	double speed;
 
 	for(int i = 0; i < 4; i++) {
-		iMobotComms.getJointAngle(i, position);
-		m_slider_Positions[i]->SetPos( (int) position );
+		iMobotComms.getJointAngle((mobotJointId_t)(i+1), position);
+		m_slider_Positions[i]->SetPos( (int) RAD2DEG(position) );
 		m_positions[i] = (int) position;
 
-		iMobotComms.getJointSpeed(i, speed);
+		iMobotComms.getJointSpeed((mobotJointId_t)(i+1), speed);
 		m_slider_Speeds[i]->SetPos( speed*100 );
 		m_speeds[i] = speed*100;
 	}
@@ -581,7 +560,7 @@ int CiMobotController_WindowsDlg::poseJoints(const double *angles, unsigned char
 {
 	for(int i = 0; i < 4; i++) {
 		if(motorMask & (1<<i)) {
-			iMobotComms.moveJointTo(i, angles[i]);
+			iMobotComms.moveJointTo((mobotJointId_t)(i+1), angles[i]);
 		}
 	}
 	return 0;
@@ -593,9 +572,9 @@ int CiMobotController_WindowsDlg::moveJoints(const double *angles, unsigned char
 	for(int i = 0; i < 4; i++) {
 		if(motorMask & (1<<i)) {
 			/* Get the motor position first */
-			iMobotComms.getJointAngle(i, pos);
+			iMobotComms.getJointAngle((mobotJointId_t)(i+1), pos);
 			/* Set the motor to an offset position */
-			iMobotComms.moveJointTo(i, pos + angles[i]);
+			iMobotComms.moveJointTo((mobotJointId_t)(i+1), pos + angles[i]);
 		}
 	}
 	return 0;
@@ -617,91 +596,323 @@ void CiMobotController_WindowsDlg::OnStnClickedStaticImobotPicture()
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonMotor1forward()
 {
+  g_buttonState[B_M1F].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerM1F()
+{
 	/* get the speed from the slider control */
 	int speed;
 	speed = m_slider_Speed1.GetPos();
-	iMobotComms.setJointSpeed(0, (double)speed/100.0);
-	iMobotComms.setJointDirection(0, 1);
+	iMobotComms.setJointSpeedRatio(MOBOT_JOINT1, (double)speed/100.0);
+	iMobotComms.moveJointContinuousNB(MOBOT_JOINT1, MOBOT_FORWARD);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonMotor2forward()
 {
+  g_buttonState[B_M2F].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerM2F()
+{
 	/* get the speed from the slider control */
 	int speed;
 	speed = m_slider_Speed2.GetPos();
-	iMobotComms.setJointSpeed(1, (double)speed/100.0);
-	iMobotComms.setJointDirection(1, 1);
+	iMobotComms.setJointSpeedRatio(MOBOT_JOINT2, (double)speed/100.0);
+	iMobotComms.moveJointContinuousNB(MOBOT_JOINT2, MOBOT_FORWARD);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonMotor3forward()
 {
+  g_buttonState[B_M3F].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerM3F()
+{
 	/* get the speed from the slider control */
 	int speed;
 	speed = m_slider_Speed3.GetPos();
-	iMobotComms.setJointSpeed(2, (double)speed/100.0);
-	iMobotComms.setJointDirection(2, 1);
+	iMobotComms.setJointSpeed(MOBOT_JOINT3, (double)speed/100.0);
+	iMobotComms.moveJointContinuousNB(MOBOT_JOINT3, MOBOT_FORWARD);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonMotor4forward()
 {
+  g_buttonState[B_M4F].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerM4F()
+{
 	/* get the speed from the slider control */
 	int speed;
 	speed = m_slider_Speed4.GetPos();
-	iMobotComms.setJointSpeed(3, (double)speed/100.0);
-	iMobotComms.setJointDirection(3, 1);
+	iMobotComms.setJointSpeed(MOBOT_JOINT4, (double)speed/100.0);
+	iMobotComms.moveJointContinuousNB(MOBOT_JOINT4, MOBOT_FORWARD);
 }
+
 void CiMobotController_WindowsDlg::OnBnClickedButtonMotor1stop()
 {
-	iMobotComms.setJointSpeed(0, 0);
+  g_buttonState[B_M1S].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerM1S()
+{
+	iMobotComms.setJointSpeed(MOBOT_JOINT1, 0);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonMotor2stop()
 {
-	iMobotComms.setJointSpeed(1, 0);
+  g_buttonState[B_M2S].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerM2S()
+{
+	iMobotComms.setJointSpeed(MOBOT_JOINT2, 0);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonMotor3stop()
 {
-	iMobotComms.setJointSpeed(2, 0);
+  g_buttonState[B_M3S].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerM3S()
+{
+	iMobotComms.setJointSpeed(MOBOT_JOINT3, 0);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonMotor4stop()
 {
-	iMobotComms.setJointSpeed(3, 0);
+  g_buttonState[B_M4S].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerM4S()
+{
+	iMobotComms.setJointSpeed(MOBOT_JOINT4, 0);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonMotor1backward()
 {
+  g_buttonState[B_M1B].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerM1B()
+{
 	/* get the speed from the slider control */
 	int speed;
 	speed = m_slider_Speed1.GetPos();
-	iMobotComms.setJointSpeed(0, (double)speed/100.0);
-	iMobotComms.setJointDirection(0, 2);
+	iMobotComms.setJointSpeedRatio(MOBOT_JOINT1, (double)speed/100.0);
+	iMobotComms.moveJointContinuousNB(MOBOT_JOINT1, MOBOT_BACKWARD);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonMotor2backward()
 {
+  g_buttonState[B_M2B].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerM2B()
+{
 	/* get the speed from the slider control */
 	int speed;
 	speed = m_slider_Speed2.GetPos();
-	iMobotComms.setJointSpeed(1, (double)speed/100.0);
-	iMobotComms.setJointDirection(1, 2);
+	iMobotComms.setJointSpeedRatio(MOBOT_JOINT2, (double)speed/100.0);
+	iMobotComms.moveJointContinuousNB(MOBOT_JOINT2, MOBOT_BACKWARD);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonMotor3backward()
 {
+  g_buttonState[B_M3B].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerM3B()
+{
 	/* get the speed from the slider control */
 	int speed;
 	speed = m_slider_Speed3.GetPos();
-	iMobotComms.setJointSpeed(2, (double)speed/100.0);
-	iMobotComms.setJointDirection(2, 2);
+	iMobotComms.setJointSpeedRatio(MOBOT_JOINT3, (double)speed/100.0);
+	iMobotComms.moveJointContinuousNB(MOBOT_JOINT3, MOBOT_BACKWARD);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonMotor4backward()
 {
+  MessageBox(L"Error connecting to iMobot.", L"Error");
+  g_buttonState[B_M4B].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerM4B()
+{
 	/* get the speed from the slider control */
 	int speed;
 	speed = m_slider_Speed4.GetPos();
-	iMobotComms.setJointSpeed(3, (double)speed/100.0);
-	iMobotComms.setJointDirection(3, 2);
+	iMobotComms.setJointSpeedRatio(MOBOT_JOINT4, (double)speed/100.0);
+	iMobotComms.moveJointContinuousNB(MOBOT_JOINT4, MOBOT_BACKWARD);
+}
+
+void CiMobotController_WindowsDlg::OnBnClickedButtonrollforward()
+{
+	// TODO: Add your control notification handler code here
+}
+
+void CiMobotController_WindowsDlg::OnBnClickedButtonrollstop()
+{
+	// TODO: Add your control notification handler code here
+}
+
+void CiMobotController_WindowsDlg::OnBnClickedButtonrollleft()
+{
+	// TODO: Add your control notification handler code here
+}
+
+void CiMobotController_WindowsDlg::OnBnClickedButtonrollright()
+{
+	// TODO: Add your control notification handler code here
+}
+
+void CiMobotController_WindowsDlg::OnBnClickedButtonrollback()
+{
+	// TODO: Add your control notification handler code here
+}
+
+void CiMobotController_WindowsDlg::OnNMCustomdrawSliderposition2(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	// TODO: Add your control notification handler code here
+	*pResult = 0;
+}
+
+void CiMobotController_WindowsDlg::OnTRBNThumbPosChangingSliderposition1(NMHDR *pNMHDR, LRESULT *pResult)
+{
+  MessageBox(L"Error connecting to iMobot.", L"Error");
+	// This feature requires Windows Vista or greater.
+	// The symbol _WIN32_WINNT must be >= 0x0600.
+	NMTRBTHUMBPOSCHANGING *pNMTPC = reinterpret_cast<NMTRBTHUMBPOSCHANGING *>(pNMHDR);
+	// TODO: Add your control notification handler code here
+	*pResult = 0;
+  g_buttonState[S_M1P].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::OnTRBNThumbPosChangingSliderposition2(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	// This feature requires Windows Vista or greater.
+  MessageBox(L"Error connecting to iMobot.", L"Error");
+	// The symbol _WIN32_WINNT must be >= 0x0600.
+	NMTRBTHUMBPOSCHANGING *pNMTPC = reinterpret_cast<NMTRBTHUMBPOSCHANGING *>(pNMHDR);
+	// TODO: Add your control notification handler code here
+	*pResult = 0;
+  g_buttonState[S_M2P].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::OnTRBNThumbPosChangingSliderposition3(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	// This feature requires Windows Vista or greater.
+  MessageBox(L"Error connecting to iMobot.", L"Error");
+	// The symbol _WIN32_WINNT must be >= 0x0600.
+	NMTRBTHUMBPOSCHANGING *pNMTPC = reinterpret_cast<NMTRBTHUMBPOSCHANGING *>(pNMHDR);
+	// TODO: Add your control notification handler code here
+	*pResult = 0;
+  g_buttonState[S_M3P].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::OnTRBNThumbPosChangingSliderposition4(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	// This feature requires Windows Vista or greater.
+  MessageBox(L"Error connecting to iMobot.", L"Error");
+	// The symbol _WIN32_WINNT must be >= 0x0600.
+	NMTRBTHUMBPOSCHANGING *pNMTPC = reinterpret_cast<NMTRBTHUMBPOSCHANGING *>(pNMHDR);
+	// TODO: Add your control notification handler code here
+	*pResult = 0;
+  g_buttonState[S_M4P].clicked = 1;
+}
+
+DWORD WINAPI HandlerThread(void* arg)
+{
+  static int lastPosition[4];
+  static int lastSpeed[4];
+  CiMobotController_WindowsDlg* dlg;
+  CMobot *mobot;
+  dlg = (CiMobotController_WindowsDlg*) arg;
+  mobot = &dlg->iMobotComms;
+  /* Initialize values */
+  for(int i = 0; i < 4; i++) {
+    lastPosition[i] = dlg->m_slider_Positions[i]->GetPos();
+    lastSpeed[i] = dlg->m_slider_Speeds[i]->GetPos();
+  }
+  while(1) {
+    /* Perform iMobot update actions */
+    if(mobot->isConnected() == false) {
+      Sleep(250);
+      continue;
+    }
+
+    double value;
+    wchar_t buf[200];
+    /* Check the Speed and Position sliders. If any 
+     * of them have moved, send the appropriate message 
+     * to the iMobot. */
+    int position;
+    int speed;
+    for(int i = 0; i < 4; i++) {
+      mobot->getJointAngle((mobotJointId_t)(i+1), value);
+      swprintf(buf, L"%lf", RAD2DEG(value));
+      EnterCriticalSection(&UpdateGuiCriticalSection);
+      dlg->m_edit_MotorPositions[i]->SetWindowTextW(buf);
+      /* See if the position slider has been clicked */
+      position = dlg->m_slider_Positions[i]->GetPos();
+      if(lastPosition[i] != position) {
+        mobot->moveJointToPIDNB((mobotJointId_t)(i+1), (double) position);
+        g_buttonState[S_M1P + i].clicked = 0;
+        lastPosition[i] = dlg->m_slider_Positions[i]->GetPos();
+      } else {
+        /* Move the slider into position */
+        dlg->m_slider_Positions[i]->SetPos((int) RAD2DEG(value));
+        lastPosition[i] = value;
+      }
+
+      /* Check the speed */
+      speed = dlg->m_slider_Speeds[i]->GetPos();
+      if(speed != dlg->m_speeds[i]) {
+        mobot->setJointSpeed((mobotJointId_t)(i+1), (double)speed/100.0);
+        dlg->m_speeds[i] = speed;
+      }
+      LeaveCriticalSection(&UpdateGuiCriticalSection);
+    }
+    /* Handle any button presses */
+    for(int i = 0; i < B_NUMBUTTONS; i++) {
+      if(g_buttonState[i].clicked) {
+        switch(i) {
+          case B_PLAY: dlg->handlerPlay(); break;
+          case B_M1F: dlg->handlerM1F(); break;
+          case B_M2F: dlg->handlerM2F(); break;
+          case B_M3F: dlg->handlerM3F(); break;
+          case B_M4F: dlg->handlerM4F(); break;
+          case B_M1S: dlg->handlerM1S(); break;
+          case B_M2S: dlg->handlerM2S(); break;
+          case B_M3S: dlg->handlerM3S(); break;
+          case B_M4S: dlg->handlerM4S(); break;
+          case B_M1B: dlg->handlerM1B(); break;
+          case B_M2B: dlg->handlerM2B(); break;
+          case B_M3B: dlg->handlerM3B(); break;
+          case B_M4B: dlg->handlerM4B(); break;
+          default: break;
+        }
+        g_buttonState[i].clicked = 0;
+      }
+    }
+  }
+}
+
+void CiMobotController_WindowsDlg::OnRobotConfigurerobotbluetooth()
+{
+  INT_PTR nRet = -1;
+  ConfigFileDialog cfDialog;
+  nRet = cfDialog.DoModal();
+  char path[MAX_PATH];
+  switch(nRet) {
+    case IDOK:
+      iMobotComms.connect();
+      break;
+    case IDABORT:
+    case IDCANCEL:   
+    default:  
+      1+1;
+  }
 }

@@ -9,10 +9,6 @@
 #include <fcntl.h>
 #endif
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
-
 #ifdef _CH_
 #include <stdarg.h>
 #endif
@@ -38,8 +34,11 @@ int Mobot_init(br_comms_t* comms)
   memset(&comms->addr, 0, sizeof(sockaddr_t));
   comms->connected = 0;
 #ifdef _WIN32
+  printf("Starting WSA...\n");
   WSADATA wsd;
-  WSAStartup (MAKEWORD(1,1), &wsd);
+  if(WSAStartup (MAKEWORD(2,2), &wsd) != 0) {
+    printf("WSAStartup failed with error %d\n", WSAGetLastError());
+  }
 #endif
   for(i = 0; i < 4; i++) {
     comms->jointSpeeds[i] = DEF_MOTOR_SPEED;
@@ -148,7 +147,18 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
   int status;
   int flags;
   char buf[256];
+#ifndef _WIN32
   comms->socket = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
+#else
+  comms->socket = socket(AF_BTH, SOCK_STREAM, BTHPROTO_RFCOMM);
+#endif
+
+#ifdef _WIN32
+  if(comms->socket == INVALID_SOCKET) {
+    printf("Could not bind to socket. Error %d\n", WSAGetLastError());
+    return -1;
+  }
+#endif
 
   // set the connection parameters (who to connect to)
 #ifndef _WIN32
@@ -1006,6 +1016,11 @@ int CMobot::moveJointTo(mobotJointId_t id, double angle)
 int CMobot::moveJointToNB(mobotJointId_t id, double angle)
 {
   return Mobot_moveJointToNB(&_comms, id, angle);
+}
+
+int CMobot::moveJointToPIDNB(mobotJointId_t id, double angle)
+{
+  return Mobot_moveJointToPIDNB(&_comms, id, angle);
 }
 
 int CMobot::getJointAngle(mobotJointId_t id, double &angle)
