@@ -1229,4 +1229,201 @@ int CMobot::motionTurnRightNB()
   return Mobot_motionTurnRightNB(&_comms);
 }
 
+int CMobotGroup::add(CMobot& robot)
+{
+  _robots[_numRobots] = &robot;
+  _numRobots++;
+  return 0;
+}
+
+int CMobotGroup::move(double angle1, double angle2, double angle3, double angle4)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveNB(angle1, angle2, angle3, angle4);
+  }
+  return 0;
+} 
+
+int CMobotGroup::moveContinuousNB(mobotJointDirection_t dir1, 
+                       mobotJointDirection_t dir2, 
+                       mobotJointDirection_t dir3, 
+                       mobotJointDirection_t dir4)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveContinuousNB(dir1, dir2, dir3, dir4);
+  }
+  return 0;
+}
+
+int CMobotGroup::moveContinuousTime(mobotJointDirection_t dir1, 
+                           mobotJointDirection_t dir2, 
+                           mobotJointDirection_t dir3, 
+                           mobotJointDirection_t dir4, 
+                           int msecs)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveContinuousNB(dir1, dir2, dir3, dir4);
+  }
+#ifdef _WIN32
+  Sleep(msecs);
+#else
+  usleep(msecs*1000);
+#endif
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->stop();
+  }
+  return 0;
+}
+
+int CMobotGroup::moveJointContinuousNB(mobotJointId_t id, mobotJointDirection_t dir)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveJointContinuousNB(id, dir);
+  }
+  return 0;
+}
+
+int CMobotGroup::moveJointContinuousTime(mobotJointId_t id, mobotJointDirection_t dir, int msecs)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveJointContinuousNB(id, dir);
+  }
+#ifdef _WIN32
+  Sleep(msecs);
+#else
+  usleep(msecs * 1000);
+#endif
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->stop();
+  }
+  return 0;
+}
+
+int CMobotGroup::moveJointTo(mobotJointId_t id, double angle)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveJointToNB(id, angle);
+  }
+  return 0;
+}
+
+int CMobotGroup::moveJointWait(mobotJointId_t id)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveJointWait(id);
+  }
+  return 0;
+}
+
+int CMobotGroup::moveTo(double angle1, double angle2, double angle3, double angle4)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveToNB(angle1, angle2, angle3, angle4);
+  }
+  moveWait();
+  return 0;
+}
+
+int CMobotGroup::moveWait()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveWait();
+  }
+  return 0;
+}
+
+int CMobotGroup::moveToZero()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveToZero();
+  }
+  return 0;
+}
+
+int CMobotGroup::setJointSpeed(mobotJointId_t id, double speed)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->setJointSpeed(id, speed);
+  }
+  return 0;
+}
+
+int CMobotGroup::setJointSpeedRatio(mobotJointId_t id, double ratio)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->setJointSpeedRatio(id, ratio);
+  }
+  return 0;
+}
+
+int CMobotGroup::stop()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->stop();
+  }
+  return 0;
+}
+
+int CMobotGroup::motionInchwormLeft()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->motionInchwormLeftNB();
+  }
+  moveWait();
+  return 0;
+}
+
+int CMobotGroup::motionInchwormRight()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->motionInchwormRightNB();
+  }
+  moveWait();
+  return 0;
+}
+
+int CMobotGroup::motionRollBackward()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->motionRollBackwardNB();
+  }
+  moveWait();
+  return 0;
+}
+
+int CMobotGroup::motionRollForward()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->motionRollForwardNB();
+  }
+  moveWait();
+  return 0;
+}
+
+int CMobotGroup::motionStand()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->motionStandNB();
+  }
+  moveWait();
+  return 0;
+}
+
+int CMobotGroup::motionTurnLeft()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->motionTurnLeftNB();
+  }
+  moveWait();
+  return 0;
+}
+
+int CMobotGroup::motionTurnRight()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->motionTurnRightNB();
+  }
+  moveWait();
+  return 0;
+}
 #endif

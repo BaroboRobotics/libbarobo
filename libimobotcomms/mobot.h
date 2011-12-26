@@ -148,6 +148,47 @@ class CMobot {
     static int g_chmobot_dlcount;
 #endif /* Not _CH_*/
 };
+
+class CMobotGroup
+{
+  public:
+    CMobotGroup();
+    ~CMobotGroup();
+    int add(CMobot& robot);
+    int move(double angle1, double angle2, double angle3, double angle4);
+    int moveContinuousNB(mobotJointDirection_t dir1, 
+                       mobotJointDirection_t dir2, 
+                       mobotJointDirection_t dir3, 
+                       mobotJointDirection_t dir4);
+    int moveContinuousTime(mobotJointDirection_t dir1, 
+                           mobotJointDirection_t dir2, 
+                           mobotJointDirection_t dir3, 
+                           mobotJointDirection_t dir4, 
+                           int msecs);
+    int moveJointContinuousNB(mobotJointId_t id, mobotJointDirection_t dir);
+    int moveJointContinuousTime(mobotJointId_t id, mobotJointDirection_t dir, int msecs);
+    int moveJointTo(mobotJointId_t id, double angle);
+    int moveJointWait(mobotJointId_t id);
+    int moveTo(double angle1, double angle2, double angle3, double angle4);
+    int moveWait();
+    int moveToZero();
+    int setJointSpeed(mobotJointId_t id, double speed);
+    int setJointSpeedRatio(mobotJointId_t id, double ratio);
+    int stop();
+
+    int motionInchwormLeft();
+    int motionInchwormRight();
+    int motionRollBackward();
+    int motionRollForward();
+    int motionStand();
+    int motionTurnLeft();
+    int motionTurnRight();
+
+  private:
+    int _numRobots;
+    CMobot *_robots[64];
+};
+
 #endif /* If C++ or CH */
 #endif /* C_ONLY */
 
