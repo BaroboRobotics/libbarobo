@@ -951,6 +951,25 @@ int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
   while(done == 0) {
     if(comms->connected == 1) {
 #ifdef _WIN32
+      fd_set fds;
+      int n;
+      struct timeval tv;
+      /* Set up file descriptor set */
+      FD_ZERO(&fds);
+      FD_SET(comms->socket, &fds);
+      /* Set up timeval for the timeout */
+      tv.tv_sec = 1;
+      tv.tv_usec = 0;
+      /* Wait until timeout or data received */
+      n = select(comms->socket, &fds, NULL, NULL, &tv);
+      if(n == 0) {
+        /* Timeout */
+        return -1;
+      }
+      if(n == -1) {
+        /* Error */
+        return -1;
+      }
       err = recvfrom(comms->socket, tmp, 256, 0, (struct sockaddr*)0, 0);
 #else
       while(tries >= 0) {

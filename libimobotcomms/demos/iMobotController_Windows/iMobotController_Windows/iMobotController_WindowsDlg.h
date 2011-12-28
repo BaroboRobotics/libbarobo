@@ -99,6 +99,7 @@ public:
 	CEdit m_edit_Motor4Position;
 public:
 	CEdit *m_edit_MotorPositions[4];
+	CEdit *m_edit_MotorSpeeds[4];
 	CEdit m_edit_Address;
 	CEdit m_edit_Channel;
 	CSliderCtrl m_slider_Speed1;
@@ -168,6 +169,10 @@ public:
 	afx_msg void OnTRBNThumbPosChangingSliderposition3(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnTRBNThumbPosChangingSliderposition4(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnRobotConfigurerobotbluetooth();
+	CEdit m_edit_MotorSpeed1;
+	CEdit m_edit_MotorSpeed2;
+	CEdit m_edit_MotorSpeed3;
+	CEdit m_edit_MotorSpeed4;
 };
 
 DWORD WINAPI HandlerThread(void*);
