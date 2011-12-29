@@ -47,34 +47,34 @@
 
 #define MAXSPEED (M_PI/4.0)
 
-#ifndef MOBOT_JOINTS_E
-#define MOBOT_JOINTS_E
+#ifndef ROBOT_JOINTS_E
+#define ROBOT_JOINTS_E
 typedef enum mobotJoints_e {
-  MOBOT_JOINT1 = 1,
-  MOBOT_JOINT2,
-  MOBOT_JOINT3,
-  MOBOT_JOINT4,
-  MOBOT_NUM_JOINTS = 4
+  ROBOT_JOINT1 = 1,
+  ROBOT_JOINT2,
+  ROBOT_JOINT3,
+  ROBOT_JOINT4,
+  ROBOT_NUM_JOINTS = 4
 } mobotJointId_t;
 #endif
 
-#ifndef MOBOT_JOINT_STATE_E
-#define MOBOT_JOINT_STATE_E
+#ifndef ROBOT_JOINT_STATE_E
+#define ROBOT_JOINT_STATE_E
 typedef enum mobotJointState_e
 {
-    MOBOT_JOINT_IDLE = 0,
-    MOBOT_JOINT_MOVING,
-    MOBOT_JOINT_GOALSEEK,
+    ROBOT_JOINT_IDLE = 0,
+    ROBOT_JOINT_MOVING,
+    ROBOT_JOINT_GOALSEEK,
 } mobotJointState_t;
 #endif
 
-#ifndef MOBOT_JOINT_DIRECTION_T
-#define MOBOT_JOINT_DIRECTION_T
+#ifndef ROBOT_JOINT_DIRECTION_T
+#define ROBOT_JOINT_DIRECTION_T
 typedef enum mobotJointDirection_e
 {
-  MOBOT_NEUTRAL,
-  MOBOT_FORWARD,
-  MOBOT_BACKWARD
+  ROBOT_NEUTRAL,
+  ROBOT_FORWARD,
+  ROBOT_BACKWARD
 } mobotJointDirection_t;
 #endif
 
