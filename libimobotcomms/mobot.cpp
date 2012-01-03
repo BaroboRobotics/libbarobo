@@ -425,6 +425,29 @@ int Mobot_getJointSpeedRatios(br_comms_t* comms, double ratios[4])
   return 0;
 }
 
+int Mobot_setTwoWheelRobotSpeed(br_comms_t* comms, double speed, double radius, char unit[])
+{
+  double omega;
+  if(!strcmp(unit, "cm")) {
+    speed = speed/100.0;
+    radius = radius/100.0;
+  } else if (!strcmp(unit, "m")) {
+    /* No conversion necessary */
+  } else if (!strcmp(unit, "inch")) {
+    speed = speed * 0.0254;
+    radius = radius * 0.0254;
+  } else if (!strcmp(unit, "foot")) {
+    speed = speed * 0.3048;
+    radius = radius * 0.3048;
+  } else {
+    return -1;
+  }
+  omega = (speed)/(2 * M_PI * radius);
+  Mobot_setJointSpeed(comms, ROBOT_JOINT1, omega);
+  Mobot_setJointSpeed(comms, ROBOT_JOINT4, -1*omega);
+  return 0;
+}
+
 int Mobot_moveJointContinuousNB(br_comms_t* comms, robotJointId_t id, robotJointDirection_t dir)
 {
   Mobot_setJointSpeed(comms, id, comms->jointSpeeds[(int)id-1]);
@@ -929,7 +952,7 @@ int SendToIMobot(br_comms_t* comms, const char* str, int len)
   strcat(str, "$");
   len++;
 #endif
-  //printf("SEND: <<%s>>\n", str);
+  printf("SEND: <<%s>>\n", str);
   /* To send to the iMobot, we need to append the terminating character, '$' */
   if(comms->connected == 1) {
 #ifdef _WIN32
@@ -1022,7 +1045,7 @@ int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
     }
     tries = 100;
   }
-  //printf("RECV: <<%s>>\n", buf);
+  printf("RECV: <<%s>>\n", buf);
   return err;
 }
 
@@ -1087,12 +1110,12 @@ int CMobot::getJointSpeed(robotJointId_t id, double &speed)
   return Mobot_getJointSpeed(&_comms, id, &speed);
 }
 
-int CMobot::getJointSpeeds(robotJointId_t id, double speeds[4])
+int CMobot::getJointSpeeds(double speeds[4])
 {
   return Mobot_getJointSpeeds(&_comms, speeds);
 }
 
-int CMobot::getJointSpeedRatios(robotJointId_t id, double ratios[4])
+int CMobot::getJointSpeedRatios(double ratios[4])
 {
   return Mobot_getJointSpeeds(&_comms, ratios);
 }
@@ -1202,6 +1225,11 @@ int CMobot::moveWait()
 int CMobot::stop()
 {
   return Mobot_stop(&_comms);
+}
+
+int CMobot::setTwoWheelRobotSpeed(double speed, double radius, char unit[])
+{
+  return Mobot_setTwoWheelRobotSpeed(&_comms, speed, radius, unit);
 }
 
 int CMobot::motionRollForward()
@@ -1397,6 +1425,14 @@ int CMobotGroup::setJointSpeedRatio(robotJointId_t id, double ratio)
 {
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->setJointSpeedRatio(id, ratio);
+  }
+  return 0;
+}
+
+int CMobotGroup::setTwoWheelRobotSpeed(double speed, double radius, char unit[])
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->setTwoWheelRobotSpeed(speed, radius, unit);
   }
   return 0;
 }
