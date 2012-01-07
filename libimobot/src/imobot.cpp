@@ -375,7 +375,7 @@ int iMobot_moveContinuousTime(iMobot_t* iMobot,
   iMobot_moveContinuous(iMobot, dir1, dir2, dir3, dir4);
   usleep(msecs * 1000);
   for(i = 1; i <= 4; i++) {
-    if(iMobot_setJointDirection(iMobot, (mobotJointId_t)i, MOBOT_NEUTRAL)) {
+    if(iMobot_setJointDirection(iMobot, (mobotJointId_t)i, ROBOT_NEUTRAL)) {
       return -1;
     }
   }
