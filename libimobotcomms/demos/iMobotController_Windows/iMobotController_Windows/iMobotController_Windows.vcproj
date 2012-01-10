@@ -212,11 +212,12 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="&quot;C:\Documents and Settings\david\Projects\iMobot_gumstix_api\libimobotcomms&quot;;D:\Projects\iMobot_gumstix_api\libimobotcomms"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
 				MinimalRebuild="false"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -478,6 +479,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\bitmap4.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\bitmap5.bmp"
+				>
+			</File>
+			<File
 				RelativePath=".\res\ico00001.ico"
 				>
 			</File>
@@ -523,6 +532,22 @@
 			</File>
 			<File
 				RelativePath=".\res\iMobotController_Windows.rc2"
+				>
+			</File>
+			<File
+				RelativePath=".\res\joint_diagram.png"
+				>
+			</File>
+			<File
+				RelativePath=".\res\joint_diagram2.png"
+				>
+			</File>
+			<File
+				RelativePath=".\res\joint_diagram3.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\joint_diagram3.png"
 				>
 			</File>
 		</Filter>

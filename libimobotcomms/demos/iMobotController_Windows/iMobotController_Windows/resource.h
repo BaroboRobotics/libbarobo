@@ -19,6 +19,7 @@
 #define IDD_DIALOG1                     138
 #define IDD_DIALOG_CONFIG               138
 #define IDR_MENU1                       139
+#define IDB_BITMAP4                     142
 #define IDC_SLIDER_speed1               1000
 #define IDC_EDIT_speed1                 1001
 #define IDC_SLIDER_speed2               1002
@@ -72,7 +73,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        140
+#define _APS_NEXT_RESOURCE_VALUE        143
 #define _APS_NEXT_COMMAND_VALUE         32774
 #define _APS_NEXT_CONTROL_VALUE         1042
 #define _APS_NEXT_SYMED_VALUE           101
