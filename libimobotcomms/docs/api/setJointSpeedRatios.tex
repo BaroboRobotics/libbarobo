@@ -1,0 +1,49 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobot::setJointSpeedRatios()}\index{setJointSpeedRatios()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{setJointSpeedRatios()}
+
+\noindent
+{\bf Synopsis}\\
+\begin{verbatim}
+#include <mobot.h>
+int CMobot::setJointSpeedRatios(double ratios[4]);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Set the speed ratio settings of all joints on the robot.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{10 mm}p{145 mm}}
+\texttt{ratios} & An array of type double. Each element of the array
+represents the speed ratio for a joint, expressed in a value from 0 to 1. \\
+\end{tabular}
+\end{description}
+
+\noindent
+{\bf Description}\\
+This function is used to simultaneously set the angular speed ratio settings of
+all four joints of a robot. The speed ratio is a percentage of the maximum
+speed of a joint, expressed in a value from 0 to 1.\\
+
+\noindent
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+\texttt{getJointSpeeds(), setJointSpeed(), getJointSpeed()}
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

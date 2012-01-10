@@ -1,7 +1,7 @@
 %\lhead{libimobotcomms API Documentation}
 \noindent
 The header file {\bf mobot.h} defines all the data types, macros 
-and function prototypes for the MoBot API library. The header file
+and function prototypes for the robot API library. The header file
 declares a class called \texttt{CMobot} which contains member functions which
 may be used to control the robot.
 
@@ -14,28 +14,28 @@ may be used to control the robot.
 \hline
 Function & Description \\
 \hline
-%\texttt{pose()} \dotfill & Pose multiple joints of the MoBot. \\
+%\texttt{pose()} \dotfill & Pose multiple joints of the robot. \\
 \texttt{CMobot()} & The CMobot constructor function. This function
-is called automatically and should not be called explicitly. This constructor will 
-automatically try to connect with a paired MoBot using the \texttt{connect()} member
-function. To specify an address to connect to, please use the
-\texttt{CMobot(const char address[], int channel);} constructor.\\
-\texttt{CMobot(const char address[], int channel);} & 
-An alternate constructor which may be used to explicitly specify the address of a MoBot 
-to connect to. \\
+is called automatically and should not be called explicitly. \\
 \texttt{\textasciitilde CMobot()} & The CMobot destructor function. This function
 is called automatically and should not be called explicitly. \\
 & \\
-\texttt{connect()} & Connect to a remote MoBot module. This function connects to an already-paired MoBot module in Microsoft Windows. This function does not currently work for non-Windows operating systems, such as Mac or Linux. For those operating systems, please use the \texttt{connectWithAddress()} function instead. \\
-\texttt{connectWithAddress()} & Connect to a MoBot module by specifying its Bluetooth address. \\
-\texttt{disconnect()} & Disconnect from a MoBot module. \\
+\texttt{connect()} & Connect to a remote robot module. This function 
+connects to the first robot listed in the Barobo configuration file. To
+edit the configuration file, use the robot control graphical user interface,
+and select the menu item ``Robot $\rightarrow$ Configure Robot Bluetooth''. \\
+\texttt{connectWithAddress()} & Connect to a robot module by specifying its Bluetooth address. \\
+\texttt{disconnect()} & Disconnect from a robot module. \\
 \texttt{getJointAngle()} & Gets a joint's angle. \\
 %\texttt{getJointDirection()} & Gets a motor's currently assigned direction. \\
-\texttt{getJointSpeed()} & Gets a motor's speed. \\
+\texttt{getJointMaxSpeed()} & Gets a joint's maximum speed in radians per second. \\
+\texttt{getJointSpeed()} & Gets a motor's current speed setting in radians per second. \\
 \texttt{getJointState()} & Gets a motor's current status. \\
-\texttt{isConnected()} & This function is used to check the connection to a MoBot. \\
-\texttt{move()} & Move all four joints of the MoBot by specified angles. \\
+\texttt{isConnected()} & This function is used to check the connection to a robot. \\
+\texttt{move()} & Move all four joints of the robot by specified angles. \\
 \texttt{moveNB()} & Identical to \texttt{move()} but non-blocking. \\
+
+\begin{comment}
 \hline
 \end{tabular}
 \end{center}
@@ -52,9 +52,11 @@ is called automatically and should not be called explicitly. \\
 \hline
 Function & Description \\
 \hline
+\end{comment}
+
 \texttt{moveContinuousNB()} & Move joints continuously. Joints will move untill stopped.\\
 \texttt{moveContinuousTime()} & Move joints continuously for a certain amount of time.\\
-\texttt{moveTo()} & Move all four joints of the MoBot to specified absolute angles. \\
+\texttt{moveTo()} & Move all four joints of the robot to specified absolute angles. \\
 \texttt{moveToNB()} & Identical to \texttt{moveTo()} but non-blocking. \\
 \texttt{moveJointTo()} & Set the desired motor position. \\
 \texttt{moveJointToNB()} & Identical to \texttt{moveJointTo()} but non-blocking. \\
@@ -63,9 +65,11 @@ Function & Description \\
 \texttt{moveToZero()} & Instructs all motors to go to their zero positions. \\
 \texttt{moveToZeroNB()} & Identical to \texttt{moveToZero()} but non-blocking. \\
 %\texttt{setJointDirection()} & Set the motor direction of a motor. Set
-to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
-\texttt{setJointSpeed()} & Sets a motor's speed. \\
-\texttt{stop()} & Stop all currently executing motions of the MoBot. \\
+%to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
+\texttt{setJointSpeed()} & Sets a motor's speed setting in radians per second. \\
+\texttt{setJointSpeedRatio()} & Set a joints speed setting to a fraction of its
+maximum speed. \\
+\texttt{stop()} & Stop all currently executing motions of the robot. \\
 \hline
 \end{tabular}
 \end{center}
@@ -87,11 +91,11 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \texttt{motionRollBackwardNB()} \dotfill & Identical to \texttt{motionRollBackward()} but non-blocking. \\
 \texttt{motionRollForward()} \dotfill & Roll on the faceplates forwards. \\
 \texttt{motionRollForwardNB()} \dotfill & Identical to \texttt{motionRollForward()} but non-blocking. \\
-\texttt{motionStand()} \dotfill & Stand the MoBot up on its end. \\
+\texttt{motionStand()} \dotfill & Stand the robot up on its end. \\
 \texttt{motionStandNB()} \dotfill & Identical to \texttt{motionStandNB()} but non-blocking. \\
-\texttt{motionTurnLeft()} \dotfill & Rotate the MoBot counterclockwise. \\
+\texttt{motionTurnLeft()} \dotfill & Rotate the robot counterclockwise. \\
 \texttt{motionTurnLeftNB()} \dotfill & Identical to \texttt{motionTurnLeft()} but non-blocking. \\
-\texttt{motionTurnRight()} \dotfill & Rotate the MoBot clockwise. \\
+\texttt{motionTurnRight()} \dotfill & Rotate the robot clockwise. \\
 \texttt{motionTurnRightNB()} \dotfill & Identical to \texttt{motionTurnRight()} but non-blocking. \\
 \hline
 \end{tabular}
@@ -106,9 +110,14 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \input{api/disconnect}
 \input{api/getJointAngle}
 %\input{api/getJointDirection}
+\input{api/getJointMaxSpeed}
 \input{api/getJointSpeed}
+\input{api/getJointSpeedRatio}
+\input{api/getJointSpeedRatios}
+\input{api/getJointSpeeds}
 \input{api/getJointState}
 \input{api/isConnected}
+\input{api/isMoving}
 \input{api/motionInchwormLeft}
 \input{api/motionInchwormRight}
 \input{api/motionRollBackward}
@@ -126,4 +135,8 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \input{api/moveToZero}
 %\input{api/setJointDirection}
 \input{api/setJointSpeed}
+\input{api/setJointSpeedRatio}
+\input{api/setJointSpeedRatios}
+\input{api/setJointSpeeds}
+\input{api/setTwoWheelRobotSpeed}
 \input{api/stop}

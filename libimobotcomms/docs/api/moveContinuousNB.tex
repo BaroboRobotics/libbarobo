@@ -2,15 +2,19 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CMobot::moveContinuousTime()}\index{moveContinuousTime()}}\\
+{\LARGE \texttt{CMobot::moveContinuousNB()}\index{moveContinuousNB()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{moveContinuousTime()}
+\addcontentsline{toc}{section}{moveContinuousNB()}
 
 \noindent
 {\bf Synopsis}\\
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::moveContinuousTime(int dir1, int dir2, int dir3, int dir4, int msecs);
+int CMobot::moveContinuousNB(
+  robotJointDirection_t dir1, 
+  robotJointDirection_t dir2, 
+  robotJointDirection_t dir3, 
+  robotJointDirection_t dir4);
 \end{verbatim}
 
 \noindent
@@ -23,21 +27,23 @@ The function returns 0 on success and non-zero otherwise.\\
 
 \noindent
 {\bf Parameters}\\
-Each integer direction parameter specifies the direction the joint should move. The types
+Each integer parameter specifies the direction the joint should move. The types
 are enumerated in \texttt{mobot.h} and have the following values:
 \begin{itemize}
 \item \texttt{MOBOT\_NEUTRAL} : The joint should not move.
 \item \texttt{MOBOT\_FORWARD} : The joint will begin moving in the positive direction.
 \item \texttt{MOBOT\_BACKWARD}: The joint will begin moving in the negative direction.
 \end{itemize}
-The \texttt{msecs} parameter is the time to perform the movement, in milliseconds.
-\\
+More documentation about these types may be found at Section
+\ref{sec:robotJointDirection_t} on page
+\pageref{sec:robotJointDirection_t}.
 
 \noindent
 {\bf Description}\\
-This function causes joints of a robot to begin moving. The joints will continue moving
-until the joint hits a joint limit, or the time specified in the \texttt{msecs} parameter
-is reached. This function will block until the motion is completed.\\
+This function causes joints of a robot to begin moving at the previously set
+speed. The joints will continue moving until the joint hits a joint limit, or
+the joint is stopped by setting the speed to zero. This function is a non-blocking
+function.\\
 
 \noindent
 {\bf Example}\\

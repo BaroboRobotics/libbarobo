@@ -28,86 +28,28 @@ This documentation introduces the basic computer setup required for controlling
 the MoBot, as well as several demo programs and a complete reference for all
 API function provided with the \texttt{CMobot} library.
 
-\section{\label{sec:pairing}Bluetooth Pairing with the MoBot}
-To control the MoBot with the Bluetooth wireless protocol, the controlling 
-computer must be equipped with Bluetooth. If the computer does not have
-Bluetooth built-in, an external USB Bluetooth dongle may be used. The following
-instructions are for a Windows 7 computer with built-in Bluetooth. The basic
-process is the same for Windows XP and Vista, although the screenshots may
-appear different. 
+\section{\label{sec:pairing}Configuring MoBots for Remote Control}
+MoBot modules should be configured the first time they are used with 
+a new computer. The process informs the computer which MoBots it
+is allowed to connect to. The is also necessary for certain 
+functions in the \texttt{CMobot} API, such as \texttt{connect()},
+to determine which robots to connect to.
 
-The first step is to open the Bluetooth applet by double-clicking the Bluetooth
-icon in the applet tray normally found at the bottom right of the screen, as
-shown highlighted in red in the following figure.
+The configuration is performed through the Barobo Robot Controller
+program. The remainder of the section contains step-by-step instructions
+and screenshots showing how to configure your MoBots.
 
-\begin{center}
-\includegraphics[width=3in]{images/imobot_connect_1.png}
-\end{center}
+First, start the provided Barobo Robot Control Program. The following
+control dialog should pop up.
 
-After double-clicking the icon, a new window will appear similar to the following.
+\includegraphics[width=4.5in]{images/shot1.png}
 
-\begin{center}
-\includegraphics[width=5in]{images/imobot_connect_1a.png}
-\end{center}
+Next, click on the menu item ``Robot $\rightarrow$ Configure Robot Bluetooth'', as
+shown in the following picture.
 
-Next, click on the
-button labeled "Add Wireless Device" towards the top of the window. This 
-will bring up the following dialog.
+\includegraphics[width=4.5in]{images/shot3.png}
 
-\begin{center}
-\includegraphics[width=5in]{images/imobot_connect_2.png}
-\end{center}
-
-This dialog shows a list of all Bluetooth wireless devices that are in range.
-Among them should be the MoBot you wish to connect to. If the MoBot does not
-appear on this list, please ensure that the MoBot is within 10 meters of the
-connecting computer and that the MoBot is powered on. Double click on the icon
-representing the MoBot to proceed. Once you have double-clicked the icon, the
-following dialog box should appear.
-
-\begin{center}
-\includegraphics[width=5in]{images/imobot_connect_3.png}
-\end{center}
-
-Select the second option, labeled ``Enter the device's pairing code''. MoBot
-modules come hard-coded with a default pairing code. When prompted for the
-pairing code, enter ``1234''. Once the computer is paired with the MoBot,
-the following dialog box may pop up asking to install drivers.
-
-\begin{center}
-\includegraphics[width=5in]{images/imobot_connect_4.png}
-\end{center}
-
-If the previously illustrated dialog box appears, just click the ``cancel''
-button at the bottom right. No extra drivers are necessary for controlling the
-MoBot module.
-
-At this point, the following dialog should be shown.
-
-\begin{center}
-\includegraphics[width=5in]{images/imobot_connect_6.png}
-\end{center}
-
-The next step is to enable the MoBot control service. 
-Double-click on the icon denoting the
-MoBot module to bring up the following dialog:
-
-\begin{center}
-\includegraphics[width=5in]{images/imobot_connect_7.png}
-\end{center}
-
-Click on the tab labeled ``Services''
-
-\begin{center}
-\includegraphics[width=5in]{images/imobot_connect_8.png}
-\end{center}
-
-Ensure that the service titled ``MoBot Control'' is enabled. If it is not
-enabled, click on the check-box to enable it. Click on the ``Ok'' button to
-accept the changes and close the dialogs. The MoBot is now ready to be
-controlled with the MoBotComms library.
-
-\section{ The MoBot Remote Control Program }
+\section{ The Robot Remote Control Program }
 \includegraphics[width=4.5in]{images/iMobot_controller_screenshot.png}
 
 The preceding figure shows the MoBot remote control program. The
@@ -184,7 +126,7 @@ The first demo presents a minimal program which connects to a MoBot and
 moves some joints.
 
 \subsubsection{\texttt{gettingStarted.ch} Source Code}
-\verbatiminput{../demos/getting_started/gettingStarted.ch}
+\verbatiminput{../demos/gettingStarted/gettingStarted.ch}
 
 \subsubsection{\label{sec:democode}Demo Code for \texttt{gettingStarted.ch} Explained}
 The beginning of every MoBot control program will include header files. Each
@@ -241,11 +183,16 @@ robot.moveToZero();
 \end{verbatim}
 
 The next lines of code command joints 1 and 4 to rotate 90 degrees.
+Note that the member function \texttt{move()} expects input angles
+in radians, so the angles in degrees must be converted to radians
+using the \texttt{deg2rad()} function. If desired, values in radians
+may also be converted to degrees using the counterpart function,
+\texttt{rad2deg()}.
 Joints 1 and 4 are the faceplates
 of the MoBot which are sometimes used to act as "wheels".
 \begin{verbatim}
-angle1 = 90;
-angle4 = 90;
+angle1 = deg2rad(90);
+angle4 = deg2rad(90);
 robot.move(angle1, 0, 0, angle4);
 \end{verbatim}
 
@@ -274,8 +221,8 @@ slow the gait down in order to minimize slippage.
 
 \begin{verbatim}
 /* Set robot motors to speed of 0.50 */
-robot.setJointSpeed(MOBOT_JOINT2, 0.50);
-robot.setJointSpeed(MOBOT_JOINT3, 0.50);
+robot.setJointSpeedRatio(ROBOT_JOINT2, 0.50);
+robot.setJointSpeedRatio(ROBOT_JOINT3, 0.50);
 \end{verbatim}
 
 Next, we move the robot into a flat ``zero'' position.
@@ -305,10 +252,10 @@ encapsulated in a ``for'' loop which executes the entire gait four times.
 /* Do the inchworm gait four times */
 int i;
 for(i = 0; i < 4; i++) {
-  robot.moveJointTo(MOBOT_JOINT2, -45);
-  robot.moveJointTo(MOBOT_JOINT3, 45);
-  robot.moveJointTo(MOBOT_JOINT2, 0);
-  robot.moveJointTo(MOBOT_JOINT3, 0);
+  robot.moveJointTo(ROBOT_JOINT2, deg2rad(-45));
+  robot.moveJointTo(ROBOT_JOINT3, deg2rad(45));
+  robot.moveJointTo(ROBOT_JOINT2, 0);
+  robot.moveJointTo(ROBOT_JOINT3, 0);
 }
 \end{verbatim}
 
@@ -318,23 +265,23 @@ for(i = 0; i < 4; i++) {
 \subsubsection{\texttt{stand.ch} Explained}
 The first portion of the program performs the necessary setup and connecting,
 similar to the previous demos. Similar to the previous inchworm demo, the
-motor speeds are set to 50\% speed, and the function \texttt{moveToZero()} is
+motor speeds are set to a speed of 10 degrees per second, and the function \texttt{moveToZero()} is
 called to put the robot into a flat position. Next, the following lines
 are executed:
 \begin{verbatim}
-robot.moveJointTo(MOBOT_JOINT2, -85);
-robot.moveJointTo(MOBOT_JOINT3, 80);
+robot.moveJointTo(ROBOT_JOINT2, deg2rad(-85));
+robot.moveJointTo(ROBOT_JOINT3, deg2rad(80));
 \end{verbatim}
 These movement commands cause the MoBot to curl up into a fetal position with
 both of its endplates facing toward the ground. Next, the MoBot rotates one 
 of the endplates by 45 degrees. 
 \begin{verbatim}
-robot.moveJointTo(MOBOT_JOINT1, 45);
+robot.moveJointTo(ROBOT_JOINT1, deg2rad(45));
 \end{verbatim}
 This endplate will eventually become the ``foot'' of the standing MoBot. Next,
 the MoBot lifts itself into a standing position, balancing on its endplate.
 \begin{verbatim}
-robot.moveJointTo(MOBOT_JOINT2, 20);
+robot.moveJointTo(ROBOT_JOINT2, deg2rad(20));
 \end{verbatim}
 Note that the previous joint angle for Joint 2, a body joint, was -85 degrees. 
 This motion causes joint 2 to rotate all the way to a 20 degree position, which
@@ -345,35 +292,35 @@ entire MoBot to rotate in place. The speed is first set to 30\% speed to make th
 rotation a slow rotation. Next, the \texttt{moveContinuousTime} member function
 is used to continuously rotate a joint for a desired amount of time.
 \begin{verbatim}
-robot.setJointSpeed(MOBOT_JOINT1, 0.30);
+robot.setJointSpeed(ROBOT_JOINT1, 0.30);
 robot.moveContinuousTime(
-    MOBOT_FORWARD,
-    MOBOT_NEUTRAL,
-    MOBOT_NEUTRAL,
-    MOBOT_NEUTRAL,
+    ROBOT_FORWARD,
+    ROBOT_NEUTRAL,
+    ROBOT_NEUTRAL,
+    ROBOT_NEUTRAL,
     3000);
 \end{verbatim}
 
 \section{Preprogrammed Motions}
-The MoBot API contains functions for executing preprogrammed motions. The 
-preprogrammed motions are motions which are commonly used for MoBot locomotion.
+The robot API contains functions for executing preprogrammed motions. The 
+preprogrammed motions are motions which are commonly used for robot locomotion.
 Following is a list of available functions and a brief description about
-their effect on the MoBot.
+their effect on the robot.
 \begin{itemize}
-\item \texttt{motionInchwormLeft()}: This function causes the MoBot to perform
-  the inchworm gait once, moving the MoBot towards its left.
-\item \texttt{motionInchwormRight()}: This function causes the MoBot to perform
-  the inchworm gait once, moving the MoBot towards its right.
-\item \texttt{motionRollBackward()}: This function causes the MoBot to rotate
+\item \texttt{motionInchwormLeft()}: This function causes the robot to perform
+  the inchworm gait once, moving the robot towards its left.
+\item \texttt{motionInchwormRight()}: This function causes the robot to perform
+  the inchworm gait once, moving the robot towards its right.
+\item \texttt{motionRollBackward()}: This function causes the robot to rotate
   its faceplates, using them as wheels to roll backward.
-\item \texttt{motionRollForward()}: This function causes the MoBot to rotate
+\item \texttt{motionRollForward()}: This function causes the robot to rotate
   its faceplates, using them as wheels to roll forward.
-\item \texttt{motionStand()}: This function causes the MoBot to stand up onto a 
+\item \texttt{motionStand()}: This function causes the robot to stand up onto a 
   faceplate, assuming the camera platform position.
-\item \texttt{motionTurnLeft()}: Uses the MoBot's faceplates as wheels, turning
-  them in opposite directions in order to rotate the MoBot towards its left.
-\item \texttt{motionTurnRight()}: Uses the MoBot's faceplates as wheels, turning
-  them in opposite directions in order to rotate the MoBot towards its right.
+\item \texttt{motionTurnLeft()}: Uses the robot's faceplates as wheels, turning
+  them in opposite directions in order to rotate the robot towards its left.
+\item \texttt{motionTurnRight()}: Uses the robot's faceplates as wheels, turning
+  them in opposite directions in order to rotate the robot towards its right.
 \end{itemize}
 
 Note that all of the functions listed above are ``blocking'' functions, meaning
@@ -486,7 +433,7 @@ controls two modules simultaneously will first be presented, followed by
 a detailed explanation of the program elements.
 
 \subsection{\texttt{multipleModules.ch} Source Code}
-\verbatiminput{../demos/multiple_modules/multipleModules.ch}
+\verbatiminput{../demos/multipleModules/multipleModules.ch}
 
 \subsection{Demo Explanation}
 The first two lines of interest appear as such:
@@ -532,16 +479,64 @@ the robots have finished moving before the program continues.
 
 \begin{verbatim}
   robot1.motionStandNB();
-  robot2.motionStandNB();
+  robot2.motionInchwormLeftNB();
   robot1.moveWait();
   robot2.moveWait();
 \end{verbatim}
 Similar to the calls to \texttt{moveToZeroNB()}, this block of code instructs 
-the two MoBots to stand. Note that we call the non-blocking versions of the
-stand function, called \texttt{motionStandNB()}. Since these functions are
-non-blocking, both robots will effectively stand simultaneously. Again,
+the first MoBot to stand and the second MoBot to perform the inchworm gait.
+Note that we call the non-blocking versions of the
+functions, \texttt{motionStandNB()} and \texttt{motionInchwormLeftNB}. Since these functions are
+non-blocking, both robots will effectively perform the motions simultaneously. Again,
 we call the \texttt{moveWait()} function on both robots to ensure that 
 the robots have finished standing before the code continues.
+
+\section{Commanding Multiple Robots to Perform Identical Tasks}
+There is a specialized class called \texttt{CMobotGroup} which may be used
+to control multiple modules simultaneously. The \texttt{CMobotGroup} represents
+a group of robots. Any command that is given to the group of modules is 
+duplicated to each member of the group.
+
+The majority of the movement functions available in the \texttt{CMobot} class
+are also available in the \texttt{CMobotGroup} class. 
+For documentation of each member function, please consult the documentation
+for the corresponding functions in the \texttt{CMobot} class. Following
+is a complete listing of the available member functions in the \texttt{CMobotGroup}
+class.
+
+\begin{tabular}{p{4.5cm}p{8cm}} \hline 
+Function Name & Description \\
+\hline
+\texttt{addRobot()} & Adds a robot to the group. \\
+\texttt{move()} & For the remaining functions, 
+please see corresponding \texttt{CMobot} member function.\\
+\texttt{moveContinuousNB()} & \\
+\texttt{moveContinunousTime()} & \\
+\texttt{moveJointContinuousNB()} & \\
+\texttt{moveJointContinuousTime()} & \\
+\texttt{moveJointTo()} & \\
+\texttt{moveJointWait()} & \\
+\texttt{moveTo()} & \\
+\texttt{moveWait()} & \\
+\texttt{moveToZero()} & \\
+\texttt{setJointSpeed()} & \\
+\texttt{setJointSpeedRatio()} & \\
+\texttt{setTwoWheelRobotSpeed()} & \\
+\texttt{stop()} & \\
+\texttt{motionInchwormLeft()} & \\
+\texttt{motionInchwormLeftNB()} & \\
+\texttt{motionInchwormRight()} & \\
+\texttt{motionInchwormRightNB()} & \\
+\texttt{motionRollBackward()} & \\
+\texttt{motionRollForwardNB()} & \\
+\texttt{motionStand()} & \\
+\texttt{motionStandNB()} & \\
+\texttt{motionTurnLeft()} & \\
+\texttt{motionTurnLeftNB()} & \\
+\texttt{motionTurnRight()} & \\
+\texttt{motionTurnRightNB()} & \\
+\end{tabular}
+
 
 \newpage
 \appendix
@@ -552,86 +547,86 @@ certain values, such as joint id's and motor directions.
 \begin{tabular}{p{3.5cm}p{7cm}} \hline 
 Data Type& Description \\
 \hline 
-\texttt{mobotJointId\_t} & An enumerated value that indicates a MoBot joint. \\
-\texttt{mobotJointState\_t} & The current state of a MoBot joint. \\
-\texttt{mobotJointDirection\_t} & The current motion direction of a MoBot joint. 
+\texttt{robotJointId\_t} & An enumerated value that indicates a MoBot joint. \\
+\texttt{robotJointState\_t} & The current state of a MoBot joint. \\
+\texttt{robotJointDirection\_t} & The current motion direction of a MoBot joint. 
 \end{tabular}
 
-\subsection{\label{sec:mobotJointId_t}\texttt{mobotJointId\_t}}
+\subsection{\label{sec:robotJointId_t}\texttt{robotJointId\_t}}
 This datatype is an enumerated type used to identify a joint on the MoBot. Valid
 values for this type are:
 \begin{verbatim}
 typedef enum mobot_joints_e {
-  MOBOT_JOINT1 = 1,
-  MOBOT_JOINT2 = 2,
-  MOBOT_JOINT3 = 3,
-  MOBOT_JOINT4 = 4
-} mobotJointId_t;
+  ROBOT_JOINT1 = 1,
+  ROBOT_JOINT2 = 2,
+  ROBOT_JOINT3 = 3,
+  ROBOT_JOINT4 = 4
+} robotJointId_t;
 \end{verbatim}
 The joints are enumerated in order from one side of the MoBot to the other. Joints 1 and 4
 are faceplate joints, and joints 2 and 3 are body joints.
 
-\subsection{\label{sec:mobotJointState_t}\texttt{mobotJointState\_t}}
+\subsection{\label{sec:robotJointState_t}\texttt{robotJointState\_t}}
 This datatype is an enumerated type used to designate the current 
 movement state of a joint. Valid values are:
 \begin{itemize}
-\item \texttt{MOBOT\_JOINT\_IDLE}: This value indicates that the joint is not moving.
-\item \texttt{MOBOT\_JOINT\_MOVING}: This value indicates that the joint is currently moving.
-\item \texttt{MOBOT\_JOINT\_GOALSEEK}: This value indicates that the joint is currently moving
+\item \texttt{ROBOT\_JOINT\_IDLE}: This value indicates that the joint is not moving.
+\item \texttt{ROBOT\_JOINT\_MOVING}: This value indicates that the joint is currently moving.
+\item \texttt{ROBOT\_JOINT\_GOALSEEK}: This value indicates that the joint is currently moving
   towards a predefined goal.
 \end{itemize}
 
-\subsection{\label{sec:mobotJointDirection_t}\texttt{mobotJointDirection\_t}}
+\subsection{\label{sec:robotJointDirection_t}\texttt{robotJointDirection\_t}}
 This datatype designates a MoBot joint's commanded direction of travel. Valid values
 are
 \begin{itemize}
-\item \texttt{MOBOT\_NEUTRAL}: There is no predesignated direction for the
+\item \texttt{ROBOT\_NEUTRAL}: There is no predesignated direction for the
 joint. If the joint is commanded to move to a specific location, the MoBot will
 decide the best direction to move the joint in order to achieve the goal with
 the smallest motion.
-\item \texttt{MOBOT\_FORWARD}: Move the joint in the direction which increases its 
+\item \texttt{ROBOT\_FORWARD}: Move the joint in the direction which increases its 
 angular position.
-\item \texttt{MOBOT\_BACKWARD}: Move the joint in the direction which decreases
+\item \texttt{ROBOT\_BACKWARD}: Move the joint in the direction which decreases
 its angular position.
 \end{itemize}
 
 \section{Macros}
 
-\subsection{\texttt{MoBot\_joints\_t}}
-\index{MoBot\_joints\_t}
-The data type \texttt{MoBot\_joints\_t} contains the following macro datatypes.\\
+\subsection{\texttt{robot\_joints\_t}}
+\index{robot\_joints\_t}
+The data type \texttt{robot\_joints\_t} contains the following macro datatypes.\\
 
-\index{MOBOT\_JOINT1}
-\index{MOBOT\_JOINT2}
-\index{MOBOT\_JOINT3}
-\index{MOBOT\_JOINT4}
+\index{ROBOT\_JOINT1}
+\index{ROBOT\_JOINT2}
+\index{ROBOT\_JOINT3}
+\index{ROBOT\_JOINT4}
 \begin{tabular}{p{3cm}p{7cm}} \hline 
 Value & Description \\
 \hline 
-\texttt{MOBOT\_JOINT1} & Joint number 1 on the MoBot, which is a faceplate joint. \\
-\texttt{MOBOT\_JOINT2} & Joint number 2 on the MoBot, which is a body joint. \\
-\texttt{MOBOT\_JOINT3} & Joint number 3 on the MoBot, which is a body joint. \\
-\texttt{MOBOT\_JOINT3} & Joint number 4 on the MoBot, which is a faceplate joint. 
+\texttt{ROBOT\_JOINT1} & Joint number 1 on the MoBot, which is a faceplate joint. \\
+\texttt{ROBOT\_JOINT2} & Joint number 2 on the MoBot, which is a body joint. \\
+\texttt{ROBOT\_JOINT3} & Joint number 3 on the MoBot, which is a body joint. \\
+\texttt{ROBOT\_JOINT3} & Joint number 4 on the MoBot, which is a faceplate joint. 
 \end{tabular}
 
-\subsection{\texttt{MoBot\_joint\_direction\_t}}
-\index{MoBot\_joint\_direction\_t}
-The data type \texttt{MoBot\_joint\_direction\_t} indicates the commanded direction 
+\subsection{\texttt{robot\_joint\_direction\_t}}
+\index{robot\_joint\_direction\_t}
+The data type \texttt{robot\_joint\_direction\_t} indicates the commanded direction 
 of a joint on the MoBot.
 
-\index{MOBOT\_NEUTRAL}
-\index{MOBOT\_FORWARD}
-\index{MOBOT\_BACKWARD}
+\index{ROBOT\_NEUTRAL}
+\index{ROBOT\_FORWARD}
+\index{ROBOT\_BACKWARD}
 \begin{tabular}{p{3cm}p{7cm}} \hline 
 Value & Description \\
 \hline 
-\texttt{MOBOT\_NEUTRAL} & This value indicates automatic direction control for a joint. 
+\texttt{ROBOT\_NEUTRAL} & This value indicates automatic direction control for a joint. 
 The MoBot will choose the best direction to attain the commanded joint position. \\
-\texttt{MOBOT\_FORWARD} & Move the joint in the forward direction. \\
-\texttt{MOBOT\_BACKWARD} & Move the joint in the backward direction. \\
+\texttt{ROBOT\_FORWARD} & Move the joint in the forward direction. \\
+\texttt{ROBOT\_BACKWARD} & Move the joint in the backward direction. \\
 \end{tabular}
 
-\section{MoBotComms API}
+\section{CMobot API}
 \input{api/libimobotcomms.tex}
 
 % Index

@@ -18,7 +18,7 @@ int CMobot::moveNB(double angle1, double angle2, double angle3, double angle4);
 
 \noindent
 {\bf Purpose}\\
-Move all of the joints of a MoBot by specified angles.\\
+Move all of the joints of a robot by specified angles.\\
 
 \noindent
 {\bf Return Value}\\
@@ -26,11 +26,19 @@ The function returns 0 on success and non-zero otherwise.\\
 
 \noindent
 {\bf Parameters}\\
-None.\\
-
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{15 mm}p{105 mm}}
+\texttt{angle1} & The amount to move joint 1, expressed in radians. \\
+\texttt{angle2} & The amount to move joint 2, expressed in radians. \\
+\texttt{angle3} & The amount to move joint 3, expressed in radians. \\
+\texttt{angle4} & The amount to move joint 4, expressed in radians. \\
+\end{tabular}
+\end{description}
 \noindent
 {\bf Description}\\
-This function moves all of the joints of a MoBot by the specified number of degrees
+This function moves all of the joints of a robot by the specified number of degrees
 from their current positions. 
 
 The function \texttt{move()} is a blocking function,

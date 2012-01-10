@@ -15,7 +15,7 @@ int CMobot::connect();
 
 \noindent
 {\bf Purpose}\\
-Connect to a remote MoBot via Bluetooth.\\
+Connect to a remote robot via Bluetooth.\\
 
 \noindent
 {\bf Return Value}\\
@@ -27,10 +27,10 @@ None.\\
 
 \noindent
 {\bf Description}\\
-This function is used to connect to a MoBot. The MoBot must first be paired
-with the computer. This function currently only works in Microsoft Windows
-operating systems. For other operating systems, please use the
-\texttt{connectWithAddress()} function.
+This function is used to connect to a robot. The function looks inside of a 
+Barobo configuration file and connects to the first robot listed in the file.
+The configuration file may be created and/or modified using the Robot Controller
+Interface, and selecting the ``Robot $\rightarrow$ Configure Robot Bluetooth'' menu item.
 
 \noindent
 {\bf Example}\\
@@ -39,6 +39,6 @@ Please see the example in Section \ref{sec:democode} on page \pageref{sec:democo
 
 \noindent
 {\bf See Also}\\
-\texttt{connectWithAddress()}
+\texttt{connectWithAddress(), disconnect()}
 
 %\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

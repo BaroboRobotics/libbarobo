@@ -15,11 +15,12 @@ int CMobot::isConnected();
 
 \noindent
 {\bf Purpose}\\
-Check to see if currently connected to a remote MoBot via Bluetooth.\\
+Check to see if currently connected to a remote robot via Bluetooth.\\
 
 \noindent
 {\bf Return Value}\\
-The function returns zero if it is not currently connected to a MoBot, or non-zero otherwise.\\
+The function returns zero if it is not currently connected to a robot, 1 if the robot 
+is connected, or -1 if an error has occured.\\
 
 \noindent
 {\bf Parameters}\\
@@ -28,7 +29,7 @@ None.\\
 \noindent
 {\bf Description}\\
 This function is used to check if the software is currently connected to
-a MoBot.\\
+a robot.\\
 
 \noindent
 {\bf Example}\\
