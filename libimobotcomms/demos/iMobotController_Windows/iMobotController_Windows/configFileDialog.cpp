@@ -4,6 +4,8 @@
 #include "stdafx.h"
 #include "iMobotController_Windows.h"
 #include "configFileDialog.h"
+#include <tchar.h>
+#include <atlconv.h>
 
 
 // ConfigFileDialog dialog
@@ -60,13 +62,16 @@ END_MESSAGE_MAP()
 void ConfigFileDialog::OnBnClickedButtonAdd()
 {
   /* Get the text from the correct edit and put it in the config file */
-  WCHAR text[40];
-  char address[40];
-  _edit_AddressBox.GetLine(0, text, 39);
+  USES_CONVERSION;
+  TCHAR text[256];
+  LPCSTR address;
+  memset(text, 0, sizeof(TCHAR)*256);
+  _edit_AddressBox.GetLine(0, text, 255);
   /* Convert from wide char to normal char */
-  size_t convertedChars = 0;
-  size_t origsize = wcslen(text)+1;
-  wcstombs_s(&convertedChars, address, origsize, text, _TRUNCATE);
+  //size_t convertedChars = 0;
+  //size_t origsize = wcslen(text)+1;
+  //wcstombs_s(&convertedChars, address, origsize, text, _TRUNCATE);
+  address = T2CA(text);
   _configFile.addEntry(address);
   Refresh();
 }
