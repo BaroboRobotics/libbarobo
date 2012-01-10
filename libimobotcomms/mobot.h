@@ -120,7 +120,9 @@ class CMobot {
     int moveToZero();
     int moveToZeroNB();
     int setJointSpeed(robotJointId_t id, double speed);
+    int setJointSpeeds(double speeds[4]);
     int setJointSpeedRatio(robotJointId_t id, double ratio);
+    int setJointSpeedRatios(double ratios[4]);
     int setTwoWheelRobotSpeed(double speed, double radius, char unit[]);
     int stop();
 
@@ -157,7 +159,7 @@ class CMobotGroup
   public:
     CMobotGroup();
     ~CMobotGroup();
-    int add(CMobot& robot);
+    int addRobot(CMobot& robot);
     int move(double angle1, double angle2, double angle3, double angle4);
     int moveContinuousNB(robotJointDirection_t dir1, 
                        robotJointDirection_t dir2, 
@@ -176,17 +178,26 @@ class CMobotGroup
     int moveWait();
     int moveToZero();
     int setJointSpeed(robotJointId_t id, double speed);
+    int setJointSpeeds(robotJointId_t id, double speeds[4]);
     int setJointSpeedRatio(robotJointId_t id, double ratio);
+    int setJointSpeedRatios(robotJointId_t id, double ratios[4]);
     int setTwoWheelRobotSpeed(double speed, double radius, char unit[]);
     int stop();
 
     int motionInchwormLeft();
+    int motionInchwormLeftNB();
     int motionInchwormRight();
+    int motionInchwormRightNB();
     int motionRollBackward();
+    int motionRollBackwardNB();
     int motionRollForward();
+    int motionRollForwardNB();
     int motionStand();
+    int motionStandNB();
     int motionTurnLeft();
+    int motionTurnLeftNB();
     int motionTurnRight();
+    int motionTurnRightNB();
 
   private:
     int _numRobots;

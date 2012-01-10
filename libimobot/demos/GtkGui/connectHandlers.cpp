@@ -29,7 +29,7 @@ void on_button_connect_clicked(GtkWidget* widget, gpointer data)
     /* Get the motor speeds and set the sliders */
     double lspeed;
     for(i = 1; i <= 4; i++) {
-      Mobot_getJointSpeed(imobotComms, (mobotJointId_t)i, &lspeed);
+      Mobot_getJointSpeed(imobotComms, (robotJointId_t)i, &lspeed);
       gtk_range_set_value(GTK_RANGE(scale_motorSpeeds[i-1]), lspeed);
     }
   }

@@ -417,10 +417,26 @@ int Mobot_getJointSpeeds(br_comms_t* comms, double speeds[4])
   return 0;
 }
 
+int Mobot_setJointSpeeds(br_comms_t* comms, double speeds[4])
+{
+  for(int i = 0; i < 4; i++) {
+    Mobot_setJointSpeed(comms, (robotJointId_t)(i+1), speeds[i]);
+  }
+  return 0;
+}
+
 int Mobot_getJointSpeedRatios(br_comms_t* comms, double ratios[4])
 {
   for(int i = 0; i < 4; i++) {
     Mobot_getJointSpeedRatio(comms, (robotJointId_t)(i+1), &ratios[i]);
+  }
+  return 0;
+}
+
+int Mobot_setJointSpeedRatios(br_comms_t* comms, double ratios[4])
+{
+  for(int i = 0; i < 4; i++) {
+    Mobot_setJointSpeedRatio(comms, (robotJointId_t)(i+1), ratios[i]);
   }
   return 0;
 }
@@ -952,7 +968,7 @@ int SendToIMobot(br_comms_t* comms, const char* str, int len)
   strcat(str, "$");
   len++;
 #endif
-  printf("SEND: <<%s>>\n", str);
+  //printf("SEND: <<%s>>\n", str);
   /* To send to the iMobot, we need to append the terminating character, '$' */
   if(comms->connected == 1) {
 #ifdef _WIN32
@@ -1045,7 +1061,7 @@ int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
     }
     tries = 100;
   }
-  printf("RECV: <<%s>>\n", buf);
+  //printf("RECV: <<%s>>\n", buf);
   return err;
 }
 
@@ -1100,9 +1116,19 @@ int CMobot::setJointSpeed(robotJointId_t id, double speed)
   return Mobot_setJointSpeed(&_comms, id, speed);
 }
 
+int CMobot::setJointSpeeds(double speeds[4])
+{
+  return Mobot_setJointSpeeds(&_comms, speeds);
+}
+
 int CMobot::setJointSpeedRatio(robotJointId_t id, double ratio)
 {
   return Mobot_setJointSpeedRatio(&_comms, id, ratio);
+}
+
+int CMobot::setJointSpeedRatios(double ratios[4])
+{
+  return Mobot_setJointSpeedRatios(&_comms, ratios);
 }
 
 int CMobot::getJointSpeed(robotJointId_t id, double &speed)
@@ -1302,7 +1328,7 @@ int CMobot::motionTurnRightNB()
   return Mobot_motionTurnRightNB(&_comms);
 }
 
-int CMobotGroup::add(CMobot& robot)
+int CMobotGroup::addRobot(CMobot& robot)
 {
   _robots[_numRobots] = &robot;
   _numRobots++;
@@ -1454,12 +1480,28 @@ int CMobotGroup::motionInchwormLeft()
   return 0;
 }
 
+int CMobotGroup::motionInchwormLeftNB()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->motionInchwormLeftNB();
+  }
+  return 0;
+}
+
 int CMobotGroup::motionInchwormRight()
 {
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->motionInchwormRightNB();
   }
   moveWait();
+  return 0;
+}
+
+int CMobotGroup::motionInchwormRightNB()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->motionInchwormRightNB();
+  }
   return 0;
 }
 
@@ -1472,12 +1514,28 @@ int CMobotGroup::motionRollBackward()
   return 0;
 }
 
+int CMobotGroup::motionRollBackwardNB()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->motionRollBackwardNB();
+  }
+  return 0;
+}
+
 int CMobotGroup::motionRollForward()
 {
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->motionRollForwardNB();
   }
   moveWait();
+  return 0;
+}
+
+int CMobotGroup::motionRollForwardNB()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->motionRollForwardNB();
+  }
   return 0;
 }
 
@@ -1490,6 +1548,14 @@ int CMobotGroup::motionStand()
   return 0;
 }
 
+int CMobotGroup::motionStandNB()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->motionStandNB();
+  }
+  return 0;
+}
+
 int CMobotGroup::motionTurnLeft()
 {
   for(int i = 0; i < _numRobots; i++) {
@@ -1499,12 +1565,28 @@ int CMobotGroup::motionTurnLeft()
   return 0;
 }
 
+int CMobotGroup::motionTurnLeftNB()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->motionTurnLeftNB();
+  }
+  return 0;
+}
+
 int CMobotGroup::motionTurnRight()
 {
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->motionTurnRightNB();
   }
   moveWait();
+  return 0;
+}
+
+int CMobotGroup::motionTurnRightNB()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->motionTurnRightNB();
+  }
   return 0;
 }
 #endif

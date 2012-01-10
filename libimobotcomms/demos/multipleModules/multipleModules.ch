@@ -23,11 +23,10 @@ robot2.moveToZeroNB();
 robot1.moveWait();
 robot2.moveWait();
 
-/* Make both robots stand simultaneously. Note that we must use the
- * non-blocking versions of the motion functions here in order for the robots
- * to perform the motions simultaneously. */
+/* Instruct the first robot to stand and the second robot to inchworm
+ * simultaneously. */
 robot1.motionStandNB();
-robot2.motionStandNB();
+robot2.motionInchwormLeftNB();
 robot1.moveWait();
 robot2.moveWait();
 
