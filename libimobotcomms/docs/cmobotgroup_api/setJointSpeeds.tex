@@ -1,0 +1,48 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::setJointSpeeds()}\index{CMobotGroup::setJointSpeeds()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{setJointSpeeds()}
+
+\noindent
+{\bf Synopsis}\\
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::setJointSpeeds(double speeds[4]);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Set the speed settings of all joints on all robot in the group.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{10 mm}p{145 mm}}
+\texttt{speeds} & An array of type double. Each element of the array
+represents the speed, expressed in radians per second, to set a joint. \\
+\end{tabular}
+\end{description}
+
+\noindent
+{\bf Description}\\
+This function is used to simultaneously set the angular speed settings of
+all four joints of all robots in the group. \\
+
+\noindent
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+\texttt{setJointSpeed()}
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

@@ -1,0 +1,55 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::moveContinuousNB()}\index{CMobotGroup::moveContinuousNB()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{moveContinuousNB()}
+
+\noindent
+{\bf Synopsis}\\
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::moveContinuousNB(
+  robotJointDirection_t dir1, 
+  robotJointDirection_t dir2, 
+  robotJointDirection_t dir3, 
+  robotJointDirection_t dir4);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Move the joints of grouped robots continuously in the specified directions.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+Each integer parameter specifies the direction the joint should move. The types
+are enumerated in \texttt{mobot.h} and have the following values:
+\begin{itemize}
+\item \texttt{MOBOT\_NEUTRAL} : The joint should not move.
+\item \texttt{MOBOT\_FORWARD} : The joint will begin moving in the positive direction.
+\item \texttt{MOBOT\_BACKWARD}: The joint will begin moving in the negative direction.
+\end{itemize}
+More documentation about these types may be found at Section
+\ref{sec:robotJointDirection_t} on page
+\pageref{sec:robotJointDirection_t}.
+
+\noindent
+{\bf Description}\\
+This function causes joints of robots to begin moving at the previously set
+speed. The joints will continue moving until the joint hits a joint limit, or
+the joint is stopped by setting the speed to zero. This function is a non-blocking
+function.\\
+
+\noindent
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

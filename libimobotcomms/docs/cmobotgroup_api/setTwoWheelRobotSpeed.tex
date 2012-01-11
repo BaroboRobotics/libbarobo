@@ -1,0 +1,59 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::setTwoWheelRobotSpeed()}\index{CMobotGroup::setTwoWheelRobotSpeed()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{setTwoWheelRobotSpeed()}
+
+\noindent
+{\bf Synopsis}\\
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::setTwoWheelRobotSpeed(double speed, double radius, char unit[]);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Roll the robots in the group at a certain speed in a straight line.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{10 mm}p{145 mm}}
+\texttt{speed} & The speed at which to roll the robot. The units used will be the units
+specified in the \texttt{unit} parameter. \\
+\texttt{radius} & The radius of the wheels attached to the robot. The units of the parameter
+should match the units provided in the \texttt{unit} parameter. \\
+\texttt{unit} & Specify the units used for the \texttt{speed} and \texttt{radius} parameters.
+
+\begin{tabular}{lll}
+speed & radius & unit \\
+\hline \\
+cm/s & cm & \texttt{"cm"} \\
+m/s & m & \texttt{"m"} \\
+inch/s & inch & \texttt{"inch"} \\
+foot/s & foot & \texttt{"foot"}
+\end{tabular}
+\end{tabular}
+\end{description}
+
+\noindent
+{\bf Description}\\
+This function is used to make a two wheeled robot roll at a certain speed. The desired 
+speed and radius of the wheels is provided and the function will rotate the wheels at the
+appropriate rate in order to achieve the desired speed.
+\noindent\\
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

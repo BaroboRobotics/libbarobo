@@ -1,0 +1,46 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::motionRollBackward()}\index{CMobotGroup::motionRollBackward()}}\\
+{\LARGE \texttt{CMobotGroup::motionRollBackwardNB()}\index{CMobotGroup::motionRollBackwardNB()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{motionRollBackward()}
+\addcontentsline{toc}{section}{motionRollBackwardNB()}
+
+\noindent
+{\bf Synopsis}\\
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::motionRollBackward();
+int CMobotGroup::motionRollBackwardNB();
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Use the faceplates as wheels to roll all the robots in a group backward.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+None.\\
+
+\noindent
+{\bf Description}\\
+This function causes each of the faceplates to rotate 90 degrees to roll the
+robots backward.
+
+This function has both a blocking and non-blocking version.
+The blocking version, \texttt{motionRollBackward()}, will block until the
+robot motion has completed. The non-blocking version, \texttt{motionRollBackwardNB()},
+will return immediately, and the motion will be performed asynchronously.\\
+\\
+
+\noindent
+{\bf See Also}\\
+\texttt{motionRollForward()}
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

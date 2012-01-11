@@ -1,0 +1,45 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::motionTurnRight()}\index{CMobotGroup::motionTurnRight()}}\\
+{\LARGE \texttt{CMobotGroup::motionTurnRightNB()}\index{CMobotGroup::motionTurnRightNB()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{motionTurnRight()}
+\addcontentsline{toc}{section}{motionTurnRightNB()}
+
+\noindent
+{\bf Synopsis}\\
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::motionTurnRight();
+int CMobotGroup::motionTurnRightNB();
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Rotate the robots using the faceplates as wheels.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+None.\\
+
+\noindent
+{\bf Description}\\
+This function causes the robots to rotate the faceplates in opposite directions
+to cause the robot to rotate clockwise.
+
+This function has both a blocking and non-blocking version.
+The blocking version, \texttt{motionTurnRight()}, will block until the
+robot motion has completed. The non-blocking version, \texttt{motionTurnRightNB()},
+will return immediately, and the motion will be performed asynchronously.\\
+
+\noindent
+{\bf See Also}\\
+\texttt{motionTurnLeft()}
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

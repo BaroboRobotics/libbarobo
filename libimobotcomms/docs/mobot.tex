@@ -49,8 +49,43 @@ shown in the following picture.
 
 \includegraphics[width=4.5in]{images/shot3.png}
 
+This should bring up a second dialog, titled ``Configure Robot Bluetooth'', as
+shown below.
+
+\includegraphics[width=4.5in]{images/shot4.png}
+
+This dialog allows us to add robot bluetooth addresses to the list of currently
+known robot bluetooth addresses. To add an address, first type in the address
+in the text box on the top of the dialog, as shown below.
+
+\includegraphics[width=4.5in]{images/shot5.png}
+
+Next, click the ``Add'' button. The newly added address should appear in the 
+list of known addresses, as shown below. In our case, we have added the 
+address of one of our robots, which is \texttt{"00:06:66:43:0E:02"}.
+
+\includegraphics[width=4.5in]{images/shot6.png}
+
+We use the same process to add our remaining two robots to the list,
+with addresses \texttt{"00:06:66:43:0D:F2"} and 
+\texttt{"00:06:66:47:23:9C"}. The dialog now appears as such:
+
+\includegraphics[width=4.5in]{images/shot8.png}
+
+The dialog also allows users to reorder the addresses listed. The
+order the addresses are listed in affects the order in which the robots
+are connected to using the \texttt{connect()} member function. Furthermore,
+the remote control dialog connects to the primary address located at the
+top of the list by default. To reorder the list of addresses, simply
+select the address to move and click on the ``Move Up'' or ``Move Down''
+button to either move the address higher in the list or lower. For instance,
+the result of clicking on the address \texttt{"00:06:66:43:0D:F2"} and clicking
+the ``Move Up'' button is shown below.
+
+\includegraphics[width=4.5in]{images/shot10.png}
+
 \section{ The Robot Remote Control Program }
-\includegraphics[width=4.5in]{images/iMobot_controller_screenshot.png}
+\includegraphics[width=4.5in]{images/shot1.png}
 
 The preceding figure shows the MoBot remote control program. The
 program displays a graphical interface which may be used to display
@@ -93,22 +128,23 @@ This section, located in the bottom-middle of the interface, is used to display
 and control the positions of each of the four
 joints of a MoBot. The joint positions are displayed in the numerical
 text located above each vertical slider. The displayed joint positions are in
-units of degrees.  There are two methods to control
-the joints using this interface.
+units of degrees.  
+%There are two methods to control the joints using this interface.
 
-The first method of controlling the joints is by using the vertical sliders.
+The method of controlling the joints is by using the vertical sliders.
 Each vertical slider's position represents a joint's angle. The sliders for the
 two end joints vary from -180 degrees to 180 degrees, representing one complete
 rotation. The angles for the two body joints vary from -90 to 90 degrees. When
 the position of the slider is moved, the MoBot will move its joints to match the 
 sliders. 
-
+\begin{comment}
 The second method for moving the joints is by entering the exact angles for the
 joints. Below each of the four sliders lies a text entry box. Values in degrees
 may be typed into each of the four entry boxes. When the button on the lower
 right of the section labeled ``Move'' is clicked, the MoBot will move its joints
 to match the values typed into the boxes. If no value is typed into a box, that 
 joint will not move.
+\end{comment}
 
 \subsection{Motions}
 This section, located on the bottom right of the interface, contains a set of
@@ -167,13 +203,15 @@ MoBots simultaneously, as only a single MoBot may be paired with the
 computer at a time. The second method uses the function
 \texttt{connectWithAddress()}, and its default usage is as such:
 \begin{verbatim}
-robot.connectWithAddress("11:22:33:44:55:66", 20);
+string_t address = "11:22:33:44:55:66";
+int defaultChannel = 1;
+robot.connectWithAddress(address, defaultChannel);
 \end{verbatim}
 The string \texttt{"11:22:33:44:55:66"} represents the Bluetooth address
-of the MoBot, which must be known in advance. The number \texttt{20} 
-represents the Bluetooth channel to connect to. Channel \texttt{20}
+of the MoBot, which must be known in advance. The channel number \texttt{1} 
+represents the Bluetooth channel to connect to. Channel \texttt{1}
 is the default channel MoBots listen on for incoming connections, but
-may be set to other values.
+may be set to other values depending on the type of robot.
 
 The next line will use the \texttt{moveToZero} member function. The
 \texttt{moveToZero} function causes the MoBot to move all of its motors to the
@@ -294,11 +332,8 @@ is used to continuously rotate a joint for a desired amount of time.
 \begin{verbatim}
 robot.setJointSpeed(ROBOT_JOINT1, 0.30);
 robot.moveContinuousTime(
-    ROBOT_FORWARD,
-    ROBOT_NEUTRAL,
-    ROBOT_NEUTRAL,
-    ROBOT_NEUTRAL,
-    3000);
+robot.moveContinuousTime( ROBOT_FORWARD, ROBOT_NEUTRAL, ROBOT_NEUTRAL, 
+                          ROBOT_NEUTRAL, 3000);
 \end{verbatim}
 
 \section{Preprogrammed Motions}
@@ -445,17 +480,20 @@ These two lines declare two separate variables which will represent the
 two separate MoBot modules. Next, we need to connect each variable to
 a physically separate MoBot. This is done with the following lines.
 \begin{verbatim}
-  robot1.connectWithAddress("11:11:11:11:11:11", 20);
-  robot2.connectWithAddress("22:22:22:22:22:22", 20);
+  robot1.connect();
+  robot2.connect();
 \end{verbatim}
-These lines connect the first variable, \texttt{robot1}, to the MoBot with
-address \texttt{11:11:11:11:11:11}. When running this demo, this
-demo address will need to be replaced with the actual address of the MoBot.
-The second argument, \texttt{20}, is the channel to connect to. By default,
-the MoBot will listen on channel 20 for incoming connections.
-
-A similar process is done with \texttt{robot2}, causing it to connect
-to a second MoBot with address \texttt{22:22:22:22:22:22}.
+These two lines connect the robots to the first two addresses
+of the known robot addresses. The list of the computer's known
+robot addresses may be configured in the process detailed in Section
+\ref{sec:pairing} on page \pageref{sec:pairing}. For each separate
+control program, the first call to the \texttt{connect()} member
+function will connect to the first robot listed in the configuration
+file. Each successive call to the \texttt{connect()} function will
+connect to successive robots listed in the configuration file. 
+The order in which they are connected may be modified using the
+``Configure Robot Bluetooth'' dialog, as discussed in Section
+\ref{sec:pairing}.
 
 \begin{verbatim}
   robot1.moveToZeroNB();
@@ -508,33 +546,32 @@ class.
 Function Name & Description \\
 \hline
 \texttt{addRobot()} & Adds a robot to the group. \\
-\texttt{move()} & For the remaining functions, 
-please see corresponding \texttt{CMobot} member function.\\
-\texttt{moveContinuousNB()} & \\
-\texttt{moveContinunousTime()} & \\
-\texttt{moveJointContinuousNB()} & \\
-\texttt{moveJointContinuousTime()} & \\
-\texttt{moveJointTo()} & \\
-\texttt{moveJointWait()} & \\
-\texttt{moveTo()} & \\
-\texttt{moveWait()} & \\
-\texttt{moveToZero()} & \\
-\texttt{setJointSpeed()} & \\
-\texttt{setJointSpeedRatio()} & \\
-\texttt{setTwoWheelRobotSpeed()} & \\
-\texttt{stop()} & \\
-\texttt{motionInchwormLeft()} & \\
-\texttt{motionInchwormLeftNB()} & \\
-\texttt{motionInchwormRight()} & \\
-\texttt{motionInchwormRightNB()} & \\
-\texttt{motionRollBackward()} & \\
-\texttt{motionRollForwardNB()} & \\
-\texttt{motionStand()} & \\
-\texttt{motionStandNB()} & \\
-\texttt{motionTurnLeft()} & \\
-\texttt{motionTurnLeftNB()} & \\
-\texttt{motionTurnRight()} & \\
-\texttt{motionTurnRightNB()} & \\
+\texttt{move()} & Move joints on robots from their current positions for all robots in the group. \\
+\texttt{moveContinuousNB()} & Move joints continuously for all robots in the group. \\
+\texttt{moveContinunousTime()} & Move joints continuously for a specific amount of time for all robots in the group.\\
+\texttt{moveJointContinuousNB()} & Move a single joint continuously for all robots in the group. \\
+\texttt{moveJointContinuousTime()} & Move a single joint continuously for a specific amount of time for all robots in the group.\\
+\texttt{moveJointTo()} & Move a joint to an absolute angle for all robots in the group.\\
+\texttt{moveJointWait()} & Wait for a joint to finish moving for all robots in the group. \\
+\texttt{moveTo()} & Move joints to a set of specific angles for all robots in the group. \\
+\texttt{moveWait()} & Wait for all joints to finish moving. \\
+\texttt{moveToZero()} & Move all joints to their zero positions. \\
+\texttt{setJointSpeed()} & Set the speed of a joint, in radians per second. \\
+\texttt{setJointSpeedRatio()} & Set the speed of a joint as a ratio of the maximum speed. \\
+\texttt{setTwoWheelRobotSpeed()} & Move the robot at a linear speed, given the wheel size and desired speed.\\
+\texttt{stop()} & Stop all the joints of all robots in the group. \\
+\texttt{motionInchwormLeft()} & Cause all robots in the group to inchworm. \\
+\texttt{motionInchwormLeftNB()} & Cause all robots in the group to inchworm. \\
+\texttt{motionInchwormRight()} & Cause all robots in the group to inchworm. \\
+\texttt{motionInchwormRightNB()} & Cause all robots in the group to inchworm. \\
+\texttt{motionRollBackward()} & Makes all robots in the group roll backward. \\
+\texttt{motionRollForwardNB()} & Makes all robots in the group roll forward. \\
+\texttt{motionStand()} & Makes all robots in the group stand. \\
+\texttt{motionStandNB()} & Makes all robots in the group stand. \\
+\texttt{motionTurnLeft()} & Makes all robots in the group turn left. \\
+\texttt{motionTurnLeftNB()} & Makes all robots in the group turn left. \\
+\texttt{motionTurnRight()} & Makes all robots in the group turn right. \\
+\texttt{motionTurnRightNB()} & Makes all robots in the group turn right.\\
 \end{tabular}
 
 
@@ -592,9 +629,9 @@ its angular position.
 
 \section{Macros}
 
-\subsection{\texttt{robot\_joints\_t}}
+\subsection{\texttt{robotJointId\_t}}
 \index{robot\_joints\_t}
-The data type \texttt{robot\_joints\_t} contains the following macro datatypes.\\
+The data type \texttt{robotJointId\_t} contains the following macro datatypes.\\
 
 \index{ROBOT\_JOINT1}
 \index{ROBOT\_JOINT2}
@@ -609,9 +646,9 @@ Value & Description \\
 \texttt{ROBOT\_JOINT3} & Joint number 4 on the MoBot, which is a faceplate joint. 
 \end{tabular}
 
-\subsection{\texttt{robot\_joint\_direction\_t}}
+\subsection{\texttt{robotJointDirection\_t}}
 \index{robot\_joint\_direction\_t}
-The data type \texttt{robot\_joint\_direction\_t} indicates the commanded direction 
+The data type \texttt{robotJointDirection\_t} indicates the commanded direction 
 of a joint on the MoBot.
 
 \index{ROBOT\_NEUTRAL}
@@ -629,6 +666,8 @@ The MoBot will choose the best direction to attain the commanded joint position.
 \section{CMobot API}
 \input{api/libimobotcomms.tex}
 
+\section{CMobotGroup API}
+\input{cmobotgroup_api/cmobotgroup.tex}
 % Index
 %\addcontentsline{toc}{chapter}{Index}
 \printindex

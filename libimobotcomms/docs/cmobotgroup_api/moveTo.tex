@@ -1,0 +1,51 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::moveTo()}\index{CMobotGroup::moveTo()}}\\
+{\LARGE \texttt{CMobotGroup::moveToNB()}\index{CMobotGroup::moveToNB()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{moveTo()}
+\addcontentsline{toc}{section}{moveToNB()}
+
+\noindent
+{\bf Synopsis}\\
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::moveTo(double angle1, double angle2, double angle3, double angle4);
+int CMobotGroup::moveToNB(double angle1, double angle2, double angle3, double angle4);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Move all of the joints of robots in the group to the specified positions.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+None.\\
+
+\noindent
+{\bf Description}\\
+This function moves all of the joints of robots in the group to the specified absolute positions. 
+
+The function \texttt{moveTo()} is a blocking function, which means that 
+the function will not return until the commanded motion is 
+completed. The function \texttt{moveToNB()} is the non-blocking version of
+the \texttt{moveTo()} function, which means that the function will return
+immediately and the physical robot motion will occur asynchronously. For
+more details on blocking and non-blocking functions, please refer to 
+Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\
+
+\noindent
+{\bf Example}\\
+Please see the demo at Section \ref{sec:democode} on page \pageref{sec:democode}.\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

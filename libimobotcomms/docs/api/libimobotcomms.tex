@@ -30,8 +30,12 @@ and select the menu item ``Robot $\rightarrow$ Configure Robot Bluetooth''. \\
 %\texttt{getJointDirection()} & Gets a motor's currently assigned direction. \\
 \texttt{getJointMaxSpeed()} & Gets a joint's maximum speed in radians per second. \\
 \texttt{getJointSpeed()} & Gets a motor's current speed setting in radians per second. \\
+\texttt{getJointSpeeds()} & Gets all motor's current speed settings in radians per second. \\
+\texttt{getJointSpeedRatio()} & Gets a motor's speed as a ratio of the motor's maximum speed. \\
+\texttt{getJointSpeedRatios()} & Gets all motor speeds as ratios of the motor's maximum speed. \\
 \texttt{getJointState()} & Gets a motor's current status. \\
 \texttt{isConnected()} & This function is used to check the connection to a robot. \\
+\texttt{isMoving()} & This function is used to check if any joints are currently in motion. \\
 \texttt{move()} & Move all four joints of the robot by specified angles. \\
 \texttt{moveNB()} & Identical to \texttt{move()} but non-blocking. \\
 
@@ -67,8 +71,10 @@ Function & Description \\
 %\texttt{setJointDirection()} & Set the motor direction of a motor. Set
 %to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
 \texttt{setJointSpeed()} & Sets a motor's speed setting in radians per second. \\
-\texttt{setJointSpeedRatio()} & Set a joints speed setting to a fraction of its
-maximum speed. \\
+\texttt{setJointSpeeds()} & Sets all motor speeds in radians per second. \\
+\texttt{setJointSpeedRatio()} & Set a joints speed setting to a fraction of its maximum speed, a value between 0 and 1. \\
+\texttt{setJointSpeedRatios()} & Set all joint speed settings to a fraction of its
+maximum speed, expressed as a value from 0 to 1. \\
 \texttt{stop()} & Stop all currently executing motions of the robot. \\
 \hline
 \end{tabular}

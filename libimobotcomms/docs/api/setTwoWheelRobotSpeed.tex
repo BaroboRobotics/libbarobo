@@ -2,7 +2,7 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CMobot::setTwoWheelRobotSpeed()}\index{setTwoWheelRobotSpeed()}}\\
+{\LARGE \texttt{CMobot::setTwoWheelRobotSpeed()}\index{CMobot::setTwoWheelRobotSpeed()}}\\
 %\phantomsection
 \addcontentsline{toc}{section}{setTwoWheelRobotSpeed()}
 
@@ -28,16 +28,19 @@ The function returns 0 on success and non-zero otherwise.\\
 \item               
 \begin{tabular}{p{10 mm}p{145 mm}}
 \texttt{speed} & The speed at which to roll the robot. The units used will be the units
-specified in the \texttt{unit} paramater. \\
+specified in the \texttt{unit} parameter. \\
 \texttt{radius} & The radius of the wheels attached to the robot. The units of the parameter
 should match the units provided in the \texttt{unit} parameter. \\
 \texttt{unit} & Specify the units used for the \texttt{speed} and \texttt{radius} parameters.
-\begin{itemize}
-\item \texttt{"cm"} : The speed is expressed in centimeters per second, and the radius in centimeters.
-\item \texttt{"m"} : The speed is expressed in meters per second, and the radius in meters.
-\item \texttt{"inch"} : The speed is expressed in inches per second, and the radius in inches.
-\item \texttt{"foot"} : The speed is expressed in feet per second, and the radius in feet.
-\end{itemize}
+
+\begin{tabular}{lll}
+speed & radius & unit \\
+\hline \\
+cm/s & cm & \texttt{"cm"} \\
+m/s & m & \texttt{"m"} \\
+inch/s & inch & \texttt{"inch"} \\
+foot/s & foot & \texttt{"foot"}
+\end{tabular}
 \end{tabular}
 \end{description}
 
