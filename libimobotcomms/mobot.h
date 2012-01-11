@@ -161,6 +161,7 @@ class CMobotGroup
     ~CMobotGroup();
     int addRobot(CMobot& robot);
     int move(double angle1, double angle2, double angle3, double angle4);
+    int moveNB(double angle1, double angle2, double angle3, double angle4);
     int moveContinuousNB(robotJointDirection_t dir1, 
                        robotJointDirection_t dir2, 
                        robotJointDirection_t dir3, 
@@ -173,8 +174,10 @@ class CMobotGroup
     int moveJointContinuousNB(robotJointId_t id, robotJointDirection_t dir);
     int moveJointContinuousTime(robotJointId_t id, robotJointDirection_t dir, int msecs);
     int moveJointTo(robotJointId_t id, double angle);
+    int moveJointToNB(robotJointId_t id, double angle);
     int moveJointWait(robotJointId_t id);
     int moveTo(double angle1, double angle2, double angle3, double angle4);
+    int moveToNB(double angle1, double angle2, double angle3, double angle4);
     int moveWait();
     int moveToZero();
     int setJointSpeed(robotJointId_t id, double speed);

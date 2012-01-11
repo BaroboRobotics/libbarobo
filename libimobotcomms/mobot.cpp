@@ -83,6 +83,7 @@ int Mobot_connect(br_comms_t* comms)
       return -1;
     }
   }
+  fclose(fp);
   /* Get rid of trailing newline and/or carriage return */
   while(
       (path[strlen(path)-1] == '\r' ) ||
@@ -99,7 +100,43 @@ int Mobot_connect(br_comms_t* comms)
     return i;
   }
 #else
-  return -1;
+  /* Try to open the barobo configuration file. */
+#define MAX_PATH 512
+  FILE *fp;
+  int i;
+  char path[MAX_PATH];
+  strcpy(path, getenv("HOME"));
+  strcat(path, "/.Barobo.config");
+  fp = fopen(path, "r");
+  if(fp == NULL) {
+    fprintf(stderr, 
+        "ERROR: Your Barobo configuration file does not exist.\n"
+        "Please create one by opening the MoBot remote control, clicking on\n"
+        "the 'Robot' menu entry, and selecting 'Configure Robot Bluetooth'.\n");
+    return -1;
+  }
+  /* Read the correct line */
+  for(i = 0; i < g_numConnected+1; i++) {
+    if(fgets(path, MAX_PATH, fp) == NULL) {
+      return -1;
+    }
+  }
+  fclose(fp);
+  /* Get rid of trailing newline and/or carriage return */
+  while(
+      (path[strlen(path)-1] == '\r' ) ||
+      (path[strlen(path)-1] == '\n' ) 
+      )
+  {
+    path[strlen(path)-1] = '\0';
+  }
+  /* Pass it on to connectWithAddress() */
+  if(i = Mobot_connectWithAddress(comms, path, 1)) {
+    return i;
+  } else {
+    g_numConnected++;
+    return i;
+  }
 #endif
 }
 int Mobot_connect_old(br_comms_t* comms)
@@ -1337,6 +1374,12 @@ int CMobotGroup::addRobot(CMobot& robot)
 
 int CMobotGroup::move(double angle1, double angle2, double angle3, double angle4)
 {
+  moveNB(angle1, angle2, angle3, angle4);
+  return _robots[_numRobots-1]->moveWait();
+}
+
+int CMobotGroup::moveNB(double angle1, double angle2, double angle3, double angle4)
+{
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->moveNB(angle1, angle2, angle3, angle4);
   }
@@ -1400,6 +1443,12 @@ int CMobotGroup::moveJointContinuousTime(robotJointId_t id, robotJointDirection_
 
 int CMobotGroup::moveJointTo(robotJointId_t id, double angle)
 {
+  moveJointToNB(id, angle);
+  return _robots[_numRobots-1]->moveWait();
+}
+
+int CMobotGroup::moveJointToNB(robotJointId_t id, double angle)
+{
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->moveJointToNB(id, angle);
   }
@@ -1416,10 +1465,15 @@ int CMobotGroup::moveJointWait(robotJointId_t id)
 
 int CMobotGroup::moveTo(double angle1, double angle2, double angle3, double angle4)
 {
+  moveToNB(angle1, angle2, angle3, angle4);
+  return _robots[_numRobots-1]->moveWait();
+}
+
+int CMobotGroup::moveToNB(double angle1, double angle2, double angle3, double angle4)
+{
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->moveToNB(angle1, angle2, angle3, angle4);
   }
-  moveWait();
   return 0;
 }
 
