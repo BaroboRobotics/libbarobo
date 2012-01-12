@@ -212,7 +212,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;C:\Documents and Settings\david\Projects\iMobot_gumstix_api\libimobotcomms&quot;;D:\Projects\iMobot_gumstix_api\libimobotcomms"
+				AdditionalIncludeDirectories="..\..\..\"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
 				MinimalRebuild="false"
 				RuntimeLibrary="2"
@@ -515,11 +515,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\libimobot\Demos\GtkGui\interface\imobot_diagram.png"
+				RelativePath=".\res\iMobot_diagram.png"
 				>
 			</File>
 			<File
-				RelativePath=".\res\iMobot_diagram.png"
+				RelativePath="..\..\..\..\libimobot\Demos\GtkGui\interface\imobot_diagram.png"
 				>
 			</File>
 			<File

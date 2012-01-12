@@ -513,7 +513,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonconnect()
 	/* "Connect" button clicked */
 	if(iMobotComms.connect()) {
 		/* Error connecting */
-		MessageBox(L"Error connecting to iMobot.", L"Error");
+		MessageBox(L"Error connecting to robot.", L"Error");
 	} else {
 		isConnected = true;
 		/* Update the positions of all the sliders and such */

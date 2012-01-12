@@ -1,7 +1,10 @@
-#ifndef _IPT_TCPMSS_MATCH_H
-#define _IPT_TCPMSS_MATCH_H
+#ifndef _IPT_TCPMSS_H
+#define _IPT_TCPMSS_H
 
-#include <linux/netfilter/xt_tcpmss.h>
-#define ipt_tcpmss_match_info xt_tcpmss_match_info
+struct ipt_tcpmss_info {
+	u_int16_t mss;
+};
 
-#endif /*_IPT_TCPMSS_MATCH_H*/
+#define IPT_TCPMSS_CLAMP_PMTU 0xffff
+
+#endif /*_IPT_TCPMSS_H*/
