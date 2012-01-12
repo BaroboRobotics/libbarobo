@@ -148,7 +148,7 @@ class CMobot {
     int setJointDirection(robotJointId_t id, robotJointDirection_t dir);
     br_comms_t _comms;
 #else
-  private:
+  public:
     static void *g_chmobot_dlhandle;
     static int g_chmobot_dlcount;
 #endif /* Not _CH_*/
@@ -160,6 +160,7 @@ class CMobotGroup
     CMobotGroup();
     ~CMobotGroup();
     int addRobot(CMobot& robot);
+    int isMoving();
     int move(double angle1, double angle2, double angle3, double angle4);
     int moveNB(double angle1, double angle2, double angle3, double angle4);
     int moveContinuousNB(robotJointDirection_t dir1, 
@@ -180,6 +181,7 @@ class CMobotGroup
     int moveToNB(double angle1, double angle2, double angle3, double angle4);
     int moveWait();
     int moveToZero();
+    int moveToZeroNB();
     int setJointSpeed(robotJointId_t id, double speed);
     int setJointSpeeds(robotJointId_t id, double speeds[4]);
     int setJointSpeedRatio(robotJointId_t id, double ratio);

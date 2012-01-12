@@ -1365,10 +1365,29 @@ int CMobot::motionTurnRightNB()
   return Mobot_motionTurnRightNB(&_comms);
 }
 
+CMobotGroup::CMobotGroup()
+{
+  _numRobots = 0;
+}
+
+CMobotGroup::~CMobotGroup()
+{
+}
+
 int CMobotGroup::addRobot(CMobot& robot)
 {
   _robots[_numRobots] = &robot;
   _numRobots++;
+  return 0;
+}
+
+int CMobotGroup::isMoving()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    if(_robots[i]->isMoving()) {
+      return 1;
+    }
+  }
   return 0;
 }
 
@@ -1485,12 +1504,18 @@ int CMobotGroup::moveWait()
   return 0;
 }
 
-int CMobotGroup::moveToZero()
+int CMobotGroup::moveToZeroNB()
 {
   for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->moveToZero();
+    _robots[i]->moveToZeroNB();
   }
   return 0;
+}
+
+int CMobotGroup::moveToZero()
+{
+  moveToZeroNB();
+  return _robots[_numRobots-1]->moveWait();
 }
 
 int CMobotGroup::setJointSpeed(robotJointId_t id, double speed)
