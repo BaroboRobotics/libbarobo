@@ -35,10 +35,10 @@ typedef struct br_comms_s
 #ifndef ROBOT_JOINTS_E
 #define ROBOT_JOINTS_E
 typedef enum mobot_joints_e {
-  ROBOT_JOINT1 = 0,
-  ROBOT_JOINT2,
-  ROBOT_JOINT3,
-  ROBOT_JOINT4,
+  ROBOT_JOINT1 = 1,
+  ROBOT_JOINT2 = 2,
+  ROBOT_JOINT3 = 3,
+  ROBOT_JOINT4 = 4,
   ROBOT_NUM_JOINTS 
 } robotJointId_t;
 #endif

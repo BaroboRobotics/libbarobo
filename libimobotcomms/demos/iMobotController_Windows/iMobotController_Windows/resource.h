@@ -65,6 +65,12 @@
 #define IDC_BUTTON_MOVEUP               1039
 #define IDC_BUTTON_MOVEDOWN             1040
 #define IDC_BUTTON_REMOVE               1041
+#define IDC_EDIT_setpos1                1042
+#define IDC_EDIT_setpos2                1043
+#define IDC_EDIT_setpos3                1044
+#define IDC_EDIT_setpos4                1045
+#define IDC_BUTTON2                     1046
+#define IDC_BUTTON_GOPOS                1046
 #define ID_ROBOT_CONFIGUREROBOTBLUETOOTH 32771
 #define ID_ROBOT_CONNECTTOAROBOT        32772
 #define ID_FILE                         32773
@@ -75,7 +81,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        143
 #define _APS_NEXT_COMMAND_VALUE         32774
-#define _APS_NEXT_CONTROL_VALUE         1042
+#define _APS_NEXT_CONTROL_VALUE         1047
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

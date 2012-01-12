@@ -120,6 +120,10 @@ void CiMobotController_WindowsDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_speed2, m_edit_MotorSpeed2);
 	DDX_Control(pDX, IDC_EDIT_speed3, m_edit_MotorSpeed3);
 	DDX_Control(pDX, IDC_EDIT_speed4, m_edit_MotorSpeed4);
+	DDX_Control(pDX, IDC_EDIT_setpos1, m_edit_setpos1);
+	DDX_Control(pDX, IDC_EDIT_setpos2, m_edit_setpos2);
+	DDX_Control(pDX, IDC_EDIT_setpos3, m_edit_setpos3);
+	DDX_Control(pDX, IDC_EDIT_setpos4, m_edit_setpos4);
 }
 
 BEGIN_MESSAGE_MAP(CiMobotController_WindowsDlg, CDialog)
@@ -157,6 +161,8 @@ BEGIN_MESSAGE_MAP(CiMobotController_WindowsDlg, CDialog)
 	ON_NOTIFY(TRBN_THUMBPOSCHANGING, IDC_SLIDER_position3, &CiMobotController_WindowsDlg::OnTRBNThumbPosChangingSliderposition3)
 	ON_NOTIFY(TRBN_THUMBPOSCHANGING, IDC_SLIDER_position4, &CiMobotController_WindowsDlg::OnTRBNThumbPosChangingSliderposition4)
 	ON_COMMAND(ID_ROBOT_CONFIGUREROBOTBLUETOOTH, &CiMobotController_WindowsDlg::OnRobotConfigurerobotbluetooth)
+	ON_EN_CHANGE(IDC_EDIT_setpos1, &CiMobotController_WindowsDlg::OnEnChangeEditsetpos1)
+	ON_BN_CLICKED(IDC_BUTTON_GOPOS, &CiMobotController_WindowsDlg::OnBnClickedButtonGopos)
 END_MESSAGE_MAP()
 
 
@@ -746,7 +752,6 @@ void CiMobotController_WindowsDlg::handlerM3B()
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonMotor4backward()
 {
-  MessageBox(L"Error connecting to iMobot.", L"Error");
   g_buttonState[B_M4B].clicked = 1;
 }
 
@@ -906,6 +911,7 @@ DWORD WINAPI HandlerThread(void* arg)
           case B_M2B: dlg->handlerM2B(); break;
           case B_M3B: dlg->handlerM3B(); break;
           case B_M4B: dlg->handlerM4B(); break;
+		  case B_SETPOS: dlg->handlerSETPOS(); break;
           default: break;
         }
         g_buttonState[i].clicked = 0;
@@ -929,4 +935,62 @@ void CiMobotController_WindowsDlg::OnRobotConfigurerobotbluetooth()
     default:  
       1+1;
   }
+}
+
+void CiMobotController_WindowsDlg::OnEnChangeEdit2()
+{
+	// TODO:  If this is a RICHEDIT control, the control will not
+	// send this notification unless you override the CDialog::OnInitDialog()
+	// function and call CRichEditCtrl().SetEventMask()
+	// with the ENM_CHANGE flag ORed into the mask.
+
+	// TODO:  Add your control notification handler code here
+}
+
+void CiMobotController_WindowsDlg::OnEnChangeEditsetpos1()
+{
+	// TODO:  If this is a RICHEDIT control, the control will not
+	// send this notification unless you override the CDialog::OnInitDialog()
+	// function and call CRichEditCtrl().SetEventMask()
+	// with the ENM_CHANGE flag ORed into the mask.
+
+	// TODO:  Add your control notification handler code here
+}
+
+void CiMobotController_WindowsDlg::OnBnClickedButtonGopos()
+{
+	g_buttonState[B_SETPOS].clicked = 1;
+	return;
+}
+
+void CiMobotController_WindowsDlg::handlerSETPOS()
+{
+	/* Get strings for all of the edit boxes containing values */
+	TCHAR str[80];
+	double pos;
+	int len;
+	memset(str, 0, sizeof(TCHAR)*80);
+	len = m_edit_setpos1.GetLine(0, str, 79);
+	if(len > 0) {
+		_stscanf(str, TEXT("%lf"), &pos);
+		iMobotComms.moveJointToNB(ROBOT_JOINT1, DEG2RAD(pos));
+	}
+	memset(str, 0, sizeof(TCHAR)*80);
+	len = m_edit_setpos2.GetLine(0, str, 79);
+	if(len > 0) {
+		_stscanf(str, TEXT("%lf"), &pos);
+		iMobotComms.moveJointToNB(ROBOT_JOINT2, DEG2RAD(pos));
+	}
+	memset(str, 0, sizeof(TCHAR)*80);
+	len = m_edit_setpos3.GetLine(0, str, 79);
+	if(len > 0) {
+		_stscanf(str, TEXT("%lf"), &pos);
+		iMobotComms.moveJointToNB(ROBOT_JOINT3, DEG2RAD(pos));
+	}
+	memset(str, 0, sizeof(TCHAR)*80);
+	len = m_edit_setpos4.GetLine(0, str, 79);
+	if(len > 0) {
+		_stscanf(str, TEXT("%lf"), &pos);
+		iMobotComms.moveJointToNB(ROBOT_JOINT4, DEG2RAD(pos));
+	}
 }

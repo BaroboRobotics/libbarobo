@@ -42,6 +42,7 @@ typedef enum button_e
   S_M2P, 
   S_M3P, 
   S_M4P, 
+  B_SETPOS,
   B_NUMBUTTONS
 } buttonId_t;
 
@@ -173,6 +174,14 @@ public:
 	CEdit m_edit_MotorSpeed2;
 	CEdit m_edit_MotorSpeed3;
 	CEdit m_edit_MotorSpeed4;
+	afx_msg void OnEnChangeEdit2();
+	afx_msg void OnEnChangeEditsetpos1();
+	CEdit m_edit_setpos1;
+	CEdit m_edit_setpos2;
+	CEdit m_edit_setpos3;
+	CEdit m_edit_setpos4;
+	afx_msg void OnBnClickedButtonGopos();
+	void handlerSETPOS();
 };
 
 DWORD WINAPI HandlerThread(void*);

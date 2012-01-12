@@ -48,7 +48,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\Documents and Settings\david\Projects\iMobot_gumstix_api\libimobotcomms&quot;;D:\Projects\iMobot_gumstix_api\libimobotcomms"
+				AdditionalIncludeDirectories="..\..\..\"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
