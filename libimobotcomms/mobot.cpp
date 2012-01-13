@@ -1177,6 +1177,11 @@ int CMobot::getJointSpeeds(double speeds[4])
   return Mobot_getJointSpeeds(&_comms, speeds);
 }
 
+int CMobot::getJointSpeedRatio(robotJointId_t id, double &ratio)
+{
+  return Mobot_getJointSpeedRatio(&_comms, id, &ratio);
+}
+
 int CMobot::getJointSpeedRatios(double ratios[4])
 {
   return Mobot_getJointSpeeds(&_comms, ratios);

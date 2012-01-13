@@ -94,6 +94,7 @@ class CMobot {
     int getJointAngle(robotJointId_t id, double &angle);
     int getJointMaxSpeed(robotJointId_t id, double &maxSpeed);
     int getJointSpeed(robotJointId_t id, double &speed);
+    int getJointSpeedRatio(robotJointId_t id, double &ratio);
     int getJointSpeeds(double speeds[4]);
     int getJointSpeedRatios(double ratios[4]);
     int getJointState(robotJointId_t id, robotJointState_t &state);
