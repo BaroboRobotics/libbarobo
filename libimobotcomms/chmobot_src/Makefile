@@ -41,6 +41,7 @@ createpkg: libmobot.dl
 	cp ../demos/stand/stand.ch $(PKGDIR)/demos
 	cp ../demos/stand/stand2.ch $(PKGDIR)/demos
 	cp ../demos/multipleModules/multipleModules.ch $(PKGDIR)/demos
+	cp ../demos/multipleModules/group.ch $(PKGDIR)/demos
 	cp Makefile $(PACKAGE)-$(VERSION)
 	cp Readme.txt $(PACKAGE)-$(VERSION)
 	zip -rq $(PACKAGE)-$(VERSION).zip $(PACKAGE)-$(VERSION)
