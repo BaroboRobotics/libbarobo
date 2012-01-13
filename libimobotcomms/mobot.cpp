@@ -273,8 +273,8 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
   /* Wait for the MoBot to get ready */
   sleep(1);
   read(comms->socket, buf, 255);
-  finishConnect(comms);
 #endif
+  finishConnect(comms);
   return status;
 }
 
