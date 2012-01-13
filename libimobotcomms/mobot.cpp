@@ -39,7 +39,6 @@ int Mobot_init(br_comms_t* comms)
   memset(&comms->addr, 0, sizeof(sockaddr_t));
   comms->connected = 0;
 #ifdef _WIN32
-  printf("Starting WSA...\n");
   WSADATA wsd;
   if(WSAStartup (MAKEWORD(2,2), &wsd) != 0) {
     printf("WSAStartup failed with error %d\n", WSAGetLastError());
