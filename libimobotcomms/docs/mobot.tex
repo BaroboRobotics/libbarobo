@@ -4,6 +4,7 @@
 \usepackage{amsmath}
 \usepackage{verbatim}
 \usepackage{makeidx}
+\usepackage{float}
 \usepackage[left=1in,top=1in,right=1in]{geometry}
 
 \title{Programming the MoBot}  
@@ -12,21 +13,40 @@
 \makeindex
 
 \begin{document}
-\maketitle
+
+\begin{center}
+\includegraphics[width=4in]{images/Barobo.png}
+\end{center}
+\begin{center}
+\vspace*{1.5cm}
+{\Huge\sf\bf Programming the MoBot}
+\end{center}
+\bigskip
+%\maketitle
 \tableofcontents
-\newpage
+%\newpage
 \section{The \texttt{CMobot} MoBot Remote Control Library}
 The \texttt{CMobot} library is a collection of functions geared towards
 controlling the motors and reading sensor values of a MoBot module via the
 Bluetooth wireless protocol. The functions are designed to be intuitive
 and easy to use. Various functions are provided to control or obtain the speed,
-direction, and position of the motors. The API includes C-style functions as well
-as a C++ class called \texttt{CMobot} to facilitate C++ style api function
-calls. 
+direction, and position of the motors. The API includes C++ classes called
+\texttt{CMobot} and \texttt{CMobotGroup} to facilitate control of 
+single and multiple MoBots.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=4.5in]{images/joint_diagram_verbose.png}
+\end{center}
+\caption{\label{fig:joint_diagram_verbose.png} A schematic diagram of a MoBot module.}
+\end{figure}
+
+Figure \ref{fig:joint_diagram_verbose.png} shows a schematic diagram displaying the
+locations and positive directions of the four joints of a MoBot module. 
 
 This documentation introduces the basic computer setup required for controlling 
 the MoBot, as well as several demo programs and a complete reference for all
-API function provided with the \texttt{CMobot} library.
+API function provided with the \texttt{CMobot} and \texttt{CMobotGroup} library.
 
 \section{\label{sec:pairing}Configuring MoBots for Remote Control}
 MoBot modules should be configured the first time they are used with 
@@ -39,38 +59,69 @@ The configuration is performed through the Barobo Robot Controller
 program. The remainder of the section contains step-by-step instructions
 and screenshots showing how to configure your MoBots.
 
-First, start the provided Barobo Robot Control Program. The following
-control dialog should pop up.
+First, start the provided Barobo Robot Control Program. The 
+control dialog as shown in Figure \ref{fig:shot1.png} should pop up.
 
+\begin{figure}[H]
+\begin{center}
 \includegraphics[width=4.5in]{images/shot1.png}
+\end{center}
+\caption{\label{fig:shot1.png} The graphical user interface of the RobotController.}
+\end{figure}
 
 Next, click on the menu item ``Robot $\rightarrow$ Configure Robot Bluetooth'', as
-shown in the following picture.
+shown in Figure \ref{fig:shot3.png}
 
+\begin{figure}[H]
+\begin{center}
 \includegraphics[width=4.5in]{images/shot3.png}
+\end{center}
+\caption{\label{fig:shot3.png} The graphical user interface of the RobotController.}
+\end{figure}
 
 This should bring up a second dialog, titled ``Configure Robot Bluetooth'', as
-shown below.
+shown in Figure \ref{fig:shot4.png}
 
+\begin{figure}[H]
+\begin{center}
 \includegraphics[width=4.5in]{images/shot4.png}
+\end{center}
+\caption{\label{fig:shot4.png} The graphical user interface of the RobotController.}
+\end{figure}
 
 This dialog allows us to add robot bluetooth addresses to the list of currently
 known robot bluetooth addresses. To add an address, first type in the address
-in the text box on the top of the dialog, as shown below.
+in the text box on the top of the dialog, as in Figure \ref{fig:shot5.png}
 
-\includegraphics[width=4.5in]{images/shot5.png}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=3in]{images/shot5.png}
+\end{center}
+\caption{\label{fig:shot5.png} The graphical user interface of the RobotController.}
+\end{figure}
 
 Next, click the ``Add'' button. The newly added address should appear in the 
-list of known addresses, as shown below. In our case, we have added the 
+list of known addresses, as shown in Figure \ref{fig:shot6.png}. In our case, we have added the 
 address of one of our robots, which is \texttt{"00:06:66:43:0E:02"}.
 
-\includegraphics[width=4.5in]{images/shot6.png}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=3in]{images/shot6.png}
+\end{center}
+\caption{\label{fig:shot6.png} The graphical user interface of the RobotController.}
+\end{figure}
 
 We use the same process to add our remaining two robots to the list,
 with addresses \texttt{"00:06:66:43:0D:F2"} and 
-\texttt{"00:06:66:47:23:9C"}. The dialog now appears as such:
+\texttt{"00:06:66:47:23:9C"}. The dialog now appears as shown in
+Figure \ref{fig:shot8.png}.
 
-\includegraphics[width=4.5in]{images/shot8.png}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=3in]{images/shot8.png}
+\end{center}
+\caption{\label{fig:shot8.png} The graphical user interface of the RobotController.}
+\end{figure}
 
 The dialog also allows users to reorder the addresses listed. The
 order the addresses are listed in affects the order in which the robots
@@ -80,12 +131,22 @@ top of the list by default. To reorder the list of addresses, simply
 select the address to move and click on the ``Move Up'' or ``Move Down''
 button to either move the address higher in the list or lower. For instance,
 the result of clicking on the address \texttt{"00:06:66:43:0D:F2"} and clicking
-the ``Move Up'' button is shown below.
+the ``Move Up'' button is shown in Figure \ref{fig:shot10.png}.
 
-\includegraphics[width=4.5in]{images/shot10.png}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=3in]{images/shot10.png}
+\end{center}
+\caption{\label{fig:shot10.png} The graphical user interface of the RobotController.}
+\end{figure}
 
 \section{ The Robot Remote Control Program }
-\includegraphics[width=4.5in]{images/shot1.png}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=4.5in]{images/shot1_populated.png}
+\end{center}
+\caption{\label{fig:shot1_populated.png} The graphical user interface of the RobotController.}
+\end{figure}
 
 The preceding figure shows the MoBot remote control program. The
 program displays a graphical interface which may be used to display
@@ -331,9 +392,8 @@ rotation a slow rotation. Next, the \texttt{moveContinuousTime} member function
 is used to continuously rotate a joint for a desired amount of time.
 \begin{verbatim}
 robot.setJointSpeed(ROBOT_JOINT1, 0.30);
-robot.moveContinuousTime(
-robot.moveContinuousTime( ROBOT_FORWARD, ROBOT_NEUTRAL, ROBOT_NEUTRAL, 
-                          ROBOT_NEUTRAL, 3000);
+robot.moveContinuousTime(ROBOT_FORWARD, ROBOT_NEUTRAL, ROBOT_NEUTRAL, 
+                         ROBOT_NEUTRAL, 3000);
 \end{verbatim}
 
 \section{Preprogrammed Motions}
@@ -572,8 +632,48 @@ Function Name & Description \\
 \texttt{motionTurnLeftNB()} & Makes all robots in the group turn left. \\
 \texttt{motionTurnRight()} & Makes all robots in the group turn right. \\
 \texttt{motionTurnRightNB()} & Makes all robots in the group turn right.\\
+\hline
 \end{tabular}
 
+\subsection{Demo program \texttt{group.ch}}
+\subsubsection{Source Code}
+\verbatiminput{../demos/multipleModules/group.ch}
+
+\subsubsection{Demo Explanation}
+The first lines of interest appear as such:
+
+\begin{verbatim}
+CMobot robot1;
+CMobot robot2;
+
+CMobotGroup group;
+\end{verbatim}
+
+These lines declare two robot variables, and one variable which
+will represent a group of robots. Next, we connect the robot
+variables to their physical counterparts.
+
+\begin{verbatim}
+robot1.connect();
+robot2.connect();
+\end{verbatim}
+
+Once they are connected, we wish to add both of these robots to our robot group,
+which we have named \texttt{group}.
+
+\begin{verbatim}
+group.addRobot(robot1);
+group.addRobot(robot2);
+\end{verbatim}
+
+Finally, we wish for all of the robots in our robot group, namely
+\texttt{robot1} and \texttt{robot2}, to peform an inchworm gait, followed
+by a standing gait. This is done with the following lines:
+
+\begin{verbatim}
+group.motionInchwormLeft(); /* Causes both robots to inchworm left */
+group.motionStand(); /* Causes both robots to stand */
+\end{verbatim}
 
 \newpage
 \appendix
@@ -581,12 +681,13 @@ Function Name & Description \\
 There are data types which are used by the MoBot library to represent 
 certain values, such as joint id's and motor directions.
 
-\begin{tabular}{p{3.5cm}p{7cm}} \hline 
+\begin{tabular}{p{3.5cm}p{10cm}} \hline 
 Data Type& Description \\
 \hline 
 \texttt{robotJointId\_t} & An enumerated value that indicates a MoBot joint. \\
 \texttt{robotJointState\_t} & The current state of a MoBot joint. \\
-\texttt{robotJointDirection\_t} & The current motion direction of a MoBot joint. 
+\texttt{robotJointDirection\_t} & The current motion direction of a MoBot joint. \\
+\hline
 \end{tabular}
 
 \subsection{\label{sec:robotJointId_t}\texttt{robotJointId\_t}}
@@ -600,67 +701,50 @@ typedef enum mobot_joints_e {
   ROBOT_JOINT4 = 4
 } robotJointId_t;
 \end{verbatim}
-The joints are enumerated in order from one side of the MoBot to the other. Joints 1 and 4
-are faceplate joints, and joints 2 and 3 are body joints.
-
-\subsection{\label{sec:robotJointState_t}\texttt{robotJointState\_t}}
-This datatype is an enumerated type used to designate the current 
-movement state of a joint. Valid values are:
-\begin{itemize}
-\item \texttt{ROBOT\_JOINT\_IDLE}: This value indicates that the joint is not moving.
-\item \texttt{ROBOT\_JOINT\_MOVING}: This value indicates that the joint is currently moving.
-\item \texttt{ROBOT\_JOINT\_GOALSEEK}: This value indicates that the joint is currently moving
-  towards a predefined goal.
-\end{itemize}
-
-\subsection{\label{sec:robotJointDirection_t}\texttt{robotJointDirection\_t}}
-This datatype designates a MoBot joint's commanded direction of travel. Valid values
-are
-\begin{itemize}
-\item \texttt{ROBOT\_NEUTRAL}: There is no predesignated direction for the
-joint. If the joint is commanded to move to a specific location, the MoBot will
-decide the best direction to move the joint in order to achieve the goal with
-the smallest motion.
-\item \texttt{ROBOT\_FORWARD}: Move the joint in the direction which increases its 
-angular position.
-\item \texttt{ROBOT\_BACKWARD}: Move the joint in the direction which decreases
-its angular position.
-\end{itemize}
-
-\section{Macros}
-
-\subsection{\texttt{robotJointId\_t}}
 \index{robot\_joints\_t}
-The data type \texttt{robotJointId\_t} contains the following macro datatypes.\\
 
 \index{ROBOT\_JOINT1}
 \index{ROBOT\_JOINT2}
 \index{ROBOT\_JOINT3}
 \index{ROBOT\_JOINT4}
-\begin{tabular}{p{3cm}p{7cm}} \hline 
+\begin{tabular}{p{3cm}p{10cm}} \hline 
 Value & Description \\
 \hline 
 \texttt{ROBOT\_JOINT1} & Joint number 1 on the MoBot, which is a faceplate joint. \\
 \texttt{ROBOT\_JOINT2} & Joint number 2 on the MoBot, which is a body joint. \\
 \texttt{ROBOT\_JOINT3} & Joint number 3 on the MoBot, which is a body joint. \\
-\texttt{ROBOT\_JOINT3} & Joint number 4 on the MoBot, which is a faceplate joint. 
+\texttt{ROBOT\_JOINT3} & Joint number 4 on the MoBot, which is a faceplate joint. \\
+\hline
 \end{tabular}
 
-\subsection{\texttt{robotJointDirection\_t}}
-\index{robot\_joint\_direction\_t}
-The data type \texttt{robotJointDirection\_t} indicates the commanded direction 
-of a joint on the MoBot.
+\subsection{\label{sec:robotJointState_t}\texttt{robotJointState\_t}}
+This datatype is an enumerated type used to designate the current 
+movement state of a joint. Valid values are:
+
+
+\begin{tabular}{p{3.3cm}p{10cm}} \hline 
+Value & Description \\
+\texttt{ROBOT\_JOINT\_IDLE}& This value indicates that the joint is not moving. \\
+\texttt{ROBOT\_JOINT\_MOVING}& This value indicates that the joint is currently moving. \\
+\texttt{ROBOT\_JOINT\_GOALSEEK}& This value indicates that the joint is currently moving. \\
+\hline
+\end{tabular}
+
+\subsection{\label{sec:robotJointDirection_t}\texttt{robotJointDirection\_t}}
+This datatype designates a MoBot joint's commanded direction of travel. Valid values
+are
 
 \index{ROBOT\_NEUTRAL}
 \index{ROBOT\_FORWARD}
 \index{ROBOT\_BACKWARD}
-\begin{tabular}{p{3cm}p{7cm}} \hline 
+\begin{tabular}{p{3cm}p{10cm}} \hline 
 Value & Description \\
 \hline 
 \texttt{ROBOT\_NEUTRAL} & This value indicates automatic direction control for a joint. 
 The MoBot will choose the best direction to attain the commanded joint position. \\
 \texttt{ROBOT\_FORWARD} & Move the joint in the forward direction. \\
 \texttt{ROBOT\_BACKWARD} & Move the joint in the backward direction. \\
+\hline
 \end{tabular}
 
 \section{CMobot API}
