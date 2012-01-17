@@ -155,6 +155,11 @@ public:
 	afx_msg void OnBnClickedButtonrollleft();
 	afx_msg void OnBnClickedButtonrollright();
 	afx_msg void OnBnClickedButtonrollback();
+  void handlerFORWARD();
+  void handlerSTOP();
+  void handlerLEFT();
+  void handlerRIGHT();
+  void handlerBACK();
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support

@@ -776,27 +776,52 @@ void CiMobotController_WindowsDlg::handlerM4B()
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollforward()
 {
-	// TODO: Add your control notification handler code here
+  g_buttonState[B_FORWARD].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerFORWARD()
+{
+  iMobotComms.motionRollForwardNB();
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollstop()
+{
+  g_buttonState[B_STOP].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerSTOP()
 {
   iMobotComms.stop();
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollleft()
 {
-	// TODO: Add your control notification handler code here
+  g_buttonState[B_LEFT].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerLEFT()
+{
+  iMobotComms.motionTurnLeftNB();
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollright()
 {
-	// TODO: Add your control notification handler code here
+  g_buttonState[B_RIGHT].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerRIGHT()
+{
+  iMobotComms.motionTurnRightNB();
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollback()
 {
-	// TODO: Add your control notification handler code here
+  g_buttonState[B_BACK].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerBACK()
+{
+  iMobotComms.motionRollBackwardNB();
 }
 
 void CiMobotController_WindowsDlg::OnNMCustomdrawSliderposition2(NMHDR *pNMHDR, LRESULT *pResult)
@@ -921,7 +946,12 @@ DWORD WINAPI HandlerThread(void* arg)
           case B_M2B: dlg->handlerM2B(); break;
           case B_M3B: dlg->handlerM3B(); break;
           case B_M4B: dlg->handlerM4B(); break;
-		  case B_SETPOS: dlg->handlerSETPOS(); break;
+          case B_SETPOS: dlg->handlerSETPOS(); break;
+          case B_FORWARD: dlg->handlerFORWARD(); break;
+          case B_STOP: dlg->handlerSTOP(); break;
+          case B_LEFT: dlg->handlerLEFT(); break;
+          case B_RIGHT: dlg->handlerRIGHT(); break;
+          case B_BACK: dlg->handlerBACK(); break;
           default: break;
         }
         g_buttonState[i].clicked = 0;
