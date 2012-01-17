@@ -182,6 +182,11 @@ public:
 	CEdit m_edit_setpos4;
 	afx_msg void OnBnClickedButtonGopos();
 	void handlerSETPOS();
+	afx_msg void OnRobotConnecttoarobot();
+	afx_msg void OnConnectDisconnectfromrobot();
+	afx_msg void OnHelpHelp();
+	afx_msg void OnHelpAboutrobotcontroller();
+	afx_msg void OnFileExit();
 };
 
 DWORD WINAPI HandlerThread(void*);

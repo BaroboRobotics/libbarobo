@@ -304,7 +304,7 @@ int Mobot_disconnect(br_comms_t* comms)
   close(comms->socket);
 #else
   closesocket(comms->socket);
-  CloseHandle((LPVOID)comms->socket);
+  //CloseHandle((LPVOID)comms->socket);
 #endif
   comms->connected = 0;
   return 0;

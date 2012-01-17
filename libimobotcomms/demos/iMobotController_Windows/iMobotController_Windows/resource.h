@@ -20,6 +20,12 @@
 #define IDD_DIALOG_CONFIG               138
 #define IDR_MENU1                       139
 #define IDB_BITMAP4                     142
+#define IDI_ICON1                       143
+#define IDB_PNG2                        144
+#define IDB_BITMAP5                     145
+#define IDI_ICON2                       147
+#define IDI_ICON3                       150
+#define IDI_ICON_BAROBO                 150
 #define IDC_SLIDER_speed1               1000
 #define IDC_EDIT_speed1                 1001
 #define IDC_SLIDER_speed2               1002
@@ -74,13 +80,17 @@
 #define ID_ROBOT_CONFIGUREROBOTBLUETOOTH 32771
 #define ID_ROBOT_CONNECTTOAROBOT        32772
 #define ID_FILE                         32773
+#define ID_CONNECT_DISCONNECTFROMROBOT  32774
+#define ID_HELP_HELP                    32775
+#define ID_HELP_ABOUTROBOTCONTROLLER    32776
+#define ID_FILE_EXIT                    32777
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        143
-#define _APS_NEXT_COMMAND_VALUE         32774
+#define _APS_NEXT_RESOURCE_VALUE        151
+#define _APS_NEXT_COMMAND_VALUE         32778
 #define _APS_NEXT_CONTROL_VALUE         1047
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
