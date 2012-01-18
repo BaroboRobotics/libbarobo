@@ -471,6 +471,14 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
+				RelativePath=".\res\barobo.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\res\Barobo_square_32.png"
+				>
+			</File>
+			<File
 				RelativePath=".\res\bitmap1.bmp"
 				>
 			</File>
@@ -487,6 +495,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\bitmap6.bmp"
+				>
+			</File>
+			<File
 				RelativePath=".\res\ico00001.ico"
 				>
 			</File>
@@ -499,11 +511,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\ico00004.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\res\ico00005.ico"
+				>
+			</File>
+			<File
 				RelativePath=".\res\icon1.ico"
 				>
 			</File>
 			<File
 				RelativePath=".\res\icon2.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\res\icon3.ico"
 				>
 			</File>
 			<File
@@ -515,11 +539,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\iMobot_diagram.png"
+				RelativePath="..\..\..\..\libimobot\Demos\GtkGui\interface\imobot_diagram.png"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\libimobot\Demos\GtkGui\interface\imobot_diagram.png"
+				RelativePath=".\res\iMobot_diagram.png"
 				>
 			</File>
 			<File

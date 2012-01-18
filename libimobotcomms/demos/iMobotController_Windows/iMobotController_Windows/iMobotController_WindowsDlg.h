@@ -155,6 +155,11 @@ public:
 	afx_msg void OnBnClickedButtonrollleft();
 	afx_msg void OnBnClickedButtonrollright();
 	afx_msg void OnBnClickedButtonrollback();
+  void handlerFORWARD();
+  void handlerSTOP();
+  void handlerLEFT();
+  void handlerRIGHT();
+  void handlerBACK();
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
@@ -182,6 +187,11 @@ public:
 	CEdit m_edit_setpos4;
 	afx_msg void OnBnClickedButtonGopos();
 	void handlerSETPOS();
+	afx_msg void OnRobotConnecttoarobot();
+	afx_msg void OnConnectDisconnectfromrobot();
+	afx_msg void OnHelpHelp();
+	afx_msg void OnHelpAboutrobotcontroller();
+	afx_msg void OnFileExit();
 };
 
 DWORD WINAPI HandlerThread(void*);

@@ -15,6 +15,8 @@
 CRITICAL_SECTION UpdateGuiCriticalSection;
 buttonState_t g_buttonState[B_NUMBUTTONS];
 
+int getChHome(char *chhome);
+HINSTANCE GotoURL(LPCTSTR url, int showcmd);
 
 // CAboutDlg dialog used for App About
 
@@ -32,6 +34,8 @@ public:
 // Implementation
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnStnClickedIcon1();
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
@@ -44,6 +48,7 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
+	ON_STN_CLICKED(IDI_ICON1, &CAboutDlg::OnStnClickedIcon1)
 END_MESSAGE_MAP()
 
 
@@ -54,7 +59,7 @@ END_MESSAGE_MAP()
 CiMobotController_WindowsDlg::CiMobotController_WindowsDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CiMobotController_WindowsDlg::IDD, pParent)
 {
-	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	m_hIcon = AfxGetApp()->LoadIcon(IDI_ICON_BAROBO);
 	m_numGaits = 0;
 	isConnected = false;
 	/* Initialize lists of controls */
@@ -163,6 +168,11 @@ BEGIN_MESSAGE_MAP(CiMobotController_WindowsDlg, CDialog)
 	ON_COMMAND(ID_ROBOT_CONFIGUREROBOTBLUETOOTH, &CiMobotController_WindowsDlg::OnRobotConfigurerobotbluetooth)
 	ON_EN_CHANGE(IDC_EDIT_setpos1, &CiMobotController_WindowsDlg::OnEnChangeEditsetpos1)
 	ON_BN_CLICKED(IDC_BUTTON_GOPOS, &CiMobotController_WindowsDlg::OnBnClickedButtonGopos)
+	ON_COMMAND(ID_ROBOT_CONNECTTOAROBOT, &CiMobotController_WindowsDlg::OnRobotConnecttoarobot)
+	ON_COMMAND(ID_CONNECT_DISCONNECTFROMROBOT, &CiMobotController_WindowsDlg::OnConnectDisconnectfromrobot)
+	ON_COMMAND(ID_HELP_HELP, &CiMobotController_WindowsDlg::OnHelpHelp)
+	ON_COMMAND(ID_HELP_ABOUTROBOTCONTROLLER, &CiMobotController_WindowsDlg::OnHelpAboutrobotcontroller)
+	ON_COMMAND(ID_FILE_EXIT, &CiMobotController_WindowsDlg::OnFileExit)
 END_MESSAGE_MAP()
 
 
@@ -766,27 +776,52 @@ void CiMobotController_WindowsDlg::handlerM4B()
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollforward()
 {
-	// TODO: Add your control notification handler code here
+  g_buttonState[B_FORWARD].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerFORWARD()
+{
+  iMobotComms.motionRollForwardNB();
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollstop()
+{
+  g_buttonState[B_STOP].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerSTOP()
 {
   iMobotComms.stop();
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollleft()
 {
-	// TODO: Add your control notification handler code here
+  g_buttonState[B_LEFT].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerLEFT()
+{
+  iMobotComms.motionTurnLeftNB();
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollright()
 {
-	// TODO: Add your control notification handler code here
+  g_buttonState[B_RIGHT].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerRIGHT()
+{
+  iMobotComms.motionTurnRightNB();
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollback()
 {
-	// TODO: Add your control notification handler code here
+  g_buttonState[B_BACK].clicked = 1;
+}
+
+void CiMobotController_WindowsDlg::handlerBACK()
+{
+  iMobotComms.motionRollBackwardNB();
 }
 
 void CiMobotController_WindowsDlg::OnNMCustomdrawSliderposition2(NMHDR *pNMHDR, LRESULT *pResult)
@@ -911,7 +946,12 @@ DWORD WINAPI HandlerThread(void* arg)
           case B_M2B: dlg->handlerM2B(); break;
           case B_M3B: dlg->handlerM3B(); break;
           case B_M4B: dlg->handlerM4B(); break;
-		  case B_SETPOS: dlg->handlerSETPOS(); break;
+          case B_SETPOS: dlg->handlerSETPOS(); break;
+          case B_FORWARD: dlg->handlerFORWARD(); break;
+          case B_STOP: dlg->handlerSTOP(); break;
+          case B_LEFT: dlg->handlerLEFT(); break;
+          case B_RIGHT: dlg->handlerRIGHT(); break;
+          case B_BACK: dlg->handlerBACK(); break;
           default: break;
         }
         g_buttonState[i].clicked = 0;
@@ -993,4 +1033,146 @@ void CiMobotController_WindowsDlg::handlerSETPOS()
 		_stscanf(str, TEXT("%lf"), &pos);
 		iMobotComms.moveJointToNB(ROBOT_JOINT4, DEG2RAD(pos));
 	}
+}
+
+void CiMobotController_WindowsDlg::OnRobotConnecttoarobot()
+{ 
+  /* Just activate the same handler as the "connect" button */
+  OnBnClickedButtonconnect();
+}
+
+void CiMobotController_WindowsDlg::OnConnectDisconnectfromrobot()
+{
+  iMobotComms.disconnect();
+}
+
+void CiMobotController_WindowsDlg::OnHelpHelp()
+{
+  USES_CONVERSION;
+  char chHome[MAX_PATH];
+  TCHAR command[MAX_PATH];
+  getChHome(chHome);
+  _stprintf(command, TEXT("file://%s\\package\\chmobot\\docs\\index.html"), A2T(chHome));
+  //sprintf(command, "file://%s\\package\\chmobot\\docs\\index.html", "C:\\Ch");
+  GotoURL(command, 0);
+  //system(command);
+}
+
+void CiMobotController_WindowsDlg::OnHelpAboutrobotcontroller()
+{
+  CAboutDlg dlgAbout;
+  dlgAbout.DoModal();
+}
+
+void CiMobotController_WindowsDlg::OnFileExit()
+{
+  iMobotComms.disconnect();
+  EndDialog(0);
+}
+
+void CAboutDlg::OnStnClickedIcon1()
+{
+	// TODO: Add your control notification handler code here
+}
+
+int getChHome(char *chhome)
+{
+  int retval = 0;
+  /* the following code will work for 9x/NT */
+  DWORD chHomeDirLen = MAX_PATH;
+  HKEY hkResult, hStartKey = HKEY_LOCAL_MACHINE;
+  LONG nResult;
+  LONG NTversionLen = 128;
+  unsigned char NTversion[128];
+
+/* CHHOME set in registry Windows 95/98, during installation */
+#if defined(_WIN32)
+  if(!getenv("CHHOME")) 
+  {
+    /* the following code will work for 9x/NT */
+#if defined(_WIN64)
+      nResult = RegOpenKeyEx(hStartKey, TEXT("SOFTWARE\\SoftIntegration"), 0L, KEY_READ | KEY_WOW64_32KEY, &hkResult);
+#else
+      nResult = RegOpenKeyEx(hStartKey, TEXT("SOFTWARE\\SoftIntegration"), 0L, KEY_READ, &hkResult);
+#endif
+    if (ERROR_SUCCESS == nResult)
+    {
+       nResult = RegQueryValueEx(hkResult, TEXT("CHHOME"), 0 ,0, 
+                                 (unsigned char*)chhome, &chHomeDirLen);
+       if (ERROR_SUCCESS != nResult) { /* should not reach here */
+/*
+         fprintf(stderr, "ERROR: register value CHHOME cannot be obtained from registry\n");
+*/
+         retval = -1;
+       }
+       RegCloseKey(hkResult);
+    }
+    else { 
+/*
+      fprintf(stderr, "ERROR: cannot obtain a value for CHHOME\n");
+      fprintf(stderr, "       you may set it using 'option.chhome' in Embedded Ch API Ch_Initialize2(&interp, option)\n");
+*/
+    }
+  }
+  else
+    strcpy(chhome, getenv("CHHOME"));
+#endif
+  return retval;
+}
+
+
+LONG GetRegKey(HKEY key, LPCTSTR subkey, LPTSTR retdata)
+{
+    HKEY hkey;
+    LONG retval = RegOpenKeyEx(key, subkey, 0, KEY_QUERY_VALUE, &hkey);
+
+    if (retval == ERROR_SUCCESS) {
+        long datasize = MAX_PATH;
+    TCHAR data[MAX_PATH];
+    RegQueryValue(hkey, NULL, data, &datasize);
+    lstrcpy(retdata,data);
+    RegCloseKey(hkey);
+    }
+
+    return retval;
+}
+
+
+// "GotoURL" function by Stuart Patterson
+// As seen in the August, 1997 Windows Developer's Journal.
+HINSTANCE GotoURL(LPCTSTR url, int showcmd)
+{
+    USES_CONVERSION;
+    TCHAR key[MAX_PATH + MAX_PATH];
+
+    // First try ShellExecute()
+    HINSTANCE result = ShellExecute(NULL, _T("open"), url, NULL,NULL, showcmd);
+
+    // If it failed, get the .htm regkey and lookup the program
+    if ((UINT)result <= HINSTANCE_ERROR) {
+
+        if (GetRegKey(HKEY_CLASSES_ROOT, _T(".htm"), key) == ERROR_SUCCESS) {
+            lstrcat(key, _T("\\shell\\open\\command"));
+
+            if (GetRegKey(HKEY_CLASSES_ROOT,key,key) == ERROR_SUCCESS) {
+                TCHAR *pos;
+                pos = _tcsstr(key, _T("\"%1\""));
+                if (pos == NULL) {                     // No quotes found
+                    pos = (TCHAR*)strstr((const char*)key, (char *)_T("%1"));       // Check for %1, without quotes
+                    if (pos == NULL)                   // No parameter at all...
+                        pos = key+lstrlen(key)-1;
+                    else
+                        *pos = '\0';                   // Remove the parameter
+                }
+                else
+                    *pos = '\0';                       // Remove the parameter
+
+                lstrcat(pos, _T(" "));
+                lstrcat(pos, url);
+                result = (HINSTANCE) WinExec(T2A(key),showcmd);
+            }
+        }
+  }
+
+    return result;
 }
