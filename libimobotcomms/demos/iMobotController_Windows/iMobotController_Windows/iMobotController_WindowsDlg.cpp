@@ -310,7 +310,7 @@ void CiMobotController_WindowsDlg::InitGaits()
 	/* Rotate Left */
 	Gait* gait;
 	gait = new Gait(L"Rotate Left");
-	double angles[4] = {90, 0, 0, 90};
+	double angles[4] = {-90, 0, 0, 90};
 	unsigned char motorMask = 0;
 	motorMask |= (1<<0);
 	motorMask |= (1<<3);
@@ -320,21 +320,21 @@ void CiMobotController_WindowsDlg::InitGaits()
 
 	/* Rotate Right */
 	gait = new Gait(L"Rotate Right");
-	SET_ANGLES(angles, -90, 0, 0, -90);
+	SET_ANGLES(angles, 90, 0, 0, -90);
 	gait->addMotion( new Motion(
 		MOTION_MOVE, angles, motorMask));
 	addGait(gait);
 
 	/* Roll Forward */
 	gait = new Gait(L"Roll Forward");
-	SET_ANGLES(angles, 90, 0, 0, -90);
+	SET_ANGLES(angles, 90, 0, 0, 90);
 	gait->addMotion( new Motion(
 		MOTION_MOVE, angles, motorMask));
 	addGait(gait);
 
 	/* Roll Backward */
 	gait = new Gait(L"Roll Backward");
-	SET_ANGLES(angles, -90, 0, 0, 90);
+	SET_ANGLES(angles, -90, 0, 0, -90);
 	gait->addMotion( new Motion(
 		MOTION_MOVE, angles, motorMask));
 	addGait(gait);
@@ -355,8 +355,8 @@ void CiMobotController_WindowsDlg::InitGaits()
 		MOTION_POSE, angles, motorMask));
 	addGait(gait);
 
-	/* Inch Right */
-	gait = new Gait(L"Inch Right");
+	/* Inch Left */
+	gait = new Gait(L"Inch Left");
 	SET_ANGLES(angles, 0, -50, 0, 0);
 	motorMask = 0;
 	motorMask |= (1<<1); motorMask |= (1<<2);
@@ -373,8 +373,8 @@ void CiMobotController_WindowsDlg::InitGaits()
 		MOTION_POSE, angles, motorMask));
 	addGait(gait);
 
-	/* Inch Left */
-	gait = new Gait(L"Inch Left");
+	/* Inch Right */
+	gait = new Gait(L"Inch Right");
 	SET_ANGLES(angles, 0, 0, 50, 0);
 	motorMask = 0;
 	motorMask |= (1<<1); motorMask |= (1<<2);
@@ -427,8 +427,8 @@ void CiMobotController_WindowsDlg::InitGaits()
 	addGait(gait);
 
 	/* Right Faceplate Forward */
-	gait = new Gait(L"Right Face Forward");
-	SET_ANGLES(angles, -10, 0, 0, 0);
+	gait = new Gait(L"Left Face Forward");
+	SET_ANGLES(angles, 10, 0, 0, 0);
 	motorMask = 1<<0;
 	gait->addMotion(new Motion(
 		MOTION_MOVE, angles, motorMask));
@@ -436,31 +436,31 @@ void CiMobotController_WindowsDlg::InitGaits()
   /* TODO: Repair gaits */
 
 	/* Right Faceplate Backward */
-	gait = new Gait(L"Right Face Backward");
-	SET_ANGLES(angles, 0, 0, 10, 0);
-	motorMask = 1<<2;
-	gait->addMotion(new Motion(
-		MOTION_MOVE, angles, motorMask));
-	addGait(gait);
-
-	/* Left Faceplate Forward */
-	gait = new Gait(L"Left Face Backward");
-	SET_ANGLES(angles, 0, 0, 0, -10);
-	motorMask = 1<<3;
-	gait->addMotion(new Motion(
-		MOTION_MOVE, angles, motorMask));
-	addGait(gait);
-
-	/* Left Faceplate Backward */
-	gait = new Gait(L"Left Face Backward");
+	gait = new Gait(L"Right Face Forward");
 	SET_ANGLES(angles, 0, 0, 0, 10);
 	motorMask = 1<<3;
 	gait->addMotion(new Motion(
 		MOTION_MOVE, angles, motorMask));
 	addGait(gait);
 
-	/* UnmotionStand */
-	gait = new Gait(L"UnmotionStand");
+	/* Left Faceplate Forward */
+	gait = new Gait(L"Left Face Backward");
+	SET_ANGLES(angles, -10, 0, 0, 0);
+	motorMask = 1<<0;
+	gait->addMotion(new Motion(
+		MOTION_MOVE, angles, motorMask));
+	addGait(gait);
+
+	/* Left Faceplate Backward */
+	gait = new Gait(L"Right Face Backward");
+	SET_ANGLES(angles, 0, 0, 0, -10);
+	motorMask = 1<<3;
+	gait->addMotion(new Motion(
+		MOTION_MOVE, angles, motorMask));
+	addGait(gait);
+
+	/* UnStand */
+	gait = new Gait(L"UnStand");
 	SET_ANGLES(angles, -85, 80, 0, 0);
 	motorMask = 1<<0; motorMask |= 1<<1;
 	gait->addMotion(new Motion(
