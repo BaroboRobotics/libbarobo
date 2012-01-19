@@ -6,15 +6,9 @@
 CMobot robot1;
 CMobot robot2;
 
-/* For multiple robots, we need to use the "connectWithAddress" function to
- * connect to separate robots. Substitute the string "11:11:11:11:11:11" with
- * the address of the first MoBot and the string "22:22:22:22:22:22" with the
- * string of the second MoBot.*/
-int defaultChannel = 1;
-string_t bluetoothAddress1 = "11:11:11:11:11:11";
-string_t bluetoothAddress2 = "22:22:22:22:22:22";
-robot1.connectWithAddress(bluetoothAddress1, defaultChannel);
-robot2.connectWithAddress(bluetoothAddress2, defaultChannel);
+/* Connect robot variables to the robot modules. The */
+robot1.connect();
+robot2.connect();
 
 /* Set the robot to "home" position, where all joint angles are 0 degrees. */
 robot1.moveToZeroNB();

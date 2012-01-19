@@ -562,7 +562,7 @@ int Mobot_moveToZero(br_comms_t* comms)
 {
   int i;
   for(i = 1; i < 5; i++) {
-    if(Mobot_moveJointTo(comms, (robotJointId_t)i, 0)) {
+    if(Mobot_moveJointToNB(comms, (robotJointId_t)i, 0)) {
       return -1;
     }
   }
@@ -574,7 +574,7 @@ int Mobot_moveToZeroNB(br_comms_t* comms)
 {
   int i;
   for(i = 1; i < 5; i++) {
-    if(Mobot_moveJointTo(comms, (robotJointId_t)i, 0)) {
+    if(Mobot_moveJointToNB(comms, (robotJointId_t)i, 0)) {
       return -1;
     }
   }
@@ -595,6 +595,9 @@ int Mobot_move(br_comms_t* comms,
   angles[2] = angle3;
   angles[3] = angle4;
   for(i = 0; i < 4; i++) {
+    if(angles[i] == 0) {
+      continue;
+    }
     if(Mobot_getJointAngle(comms, (robotJointId_t)(i+1), &curAngles[i])) {
       return -1;
     }
@@ -603,7 +606,7 @@ int Mobot_move(br_comms_t* comms,
     if(angles[i] == 0) {
       continue;
     }
-    if(Mobot_moveJointTo(comms, (robotJointId_t)(i+1), angles[i] + curAngles[i])) {
+    if(Mobot_moveJointToNB(comms, (robotJointId_t)(i+1), angles[i] + curAngles[i])) {
       return -1;
     }
   }
@@ -633,7 +636,7 @@ int Mobot_moveNB(br_comms_t* comms,
     if(angles[i] == 0) {
       continue;
     }
-    if(Mobot_moveJointTo(comms, (robotJointId_t)(i+1), angles[i] + curAngles[i])) {
+    if(Mobot_moveJointToNB(comms, (robotJointId_t)(i+1), angles[i] + curAngles[i])) {
       return -1;
     }
   }
@@ -691,16 +694,16 @@ int Mobot_moveTo(br_comms_t* comms,
                                double angle3,
                                double angle4)
 {
-  if(Mobot_moveJointTo(comms, ROBOT_JOINT1, angle1)) {
+  if(Mobot_moveJointToNB(comms, ROBOT_JOINT1, angle1)) {
     return -1;
   }
-  if(Mobot_moveJointTo(comms, ROBOT_JOINT2, angle2)) {
+  if(Mobot_moveJointToNB(comms, ROBOT_JOINT2, angle2)) {
     return -1;
   }
-  if(Mobot_moveJointTo(comms, ROBOT_JOINT3, angle3)) {
+  if(Mobot_moveJointToNB(comms, ROBOT_JOINT3, angle3)) {
     return -1;
   }
-  if(Mobot_moveJointTo(comms, ROBOT_JOINT4, angle4)) {
+  if(Mobot_moveJointToNB(comms, ROBOT_JOINT4, angle4)) {
     return -1;
   }
   /* Wait for motion to finish */
@@ -713,16 +716,16 @@ int Mobot_moveToNB(br_comms_t* comms,
                                double angle3,
                                double angle4)
 {
-  if(Mobot_moveJointTo(comms, ROBOT_JOINT1, angle1)) {
+  if(Mobot_moveJointToNB(comms, ROBOT_JOINT1, angle1)) {
     return -1;
   }
-  if(Mobot_moveJointTo(comms, ROBOT_JOINT2, angle2)) {
+  if(Mobot_moveJointToNB(comms, ROBOT_JOINT2, angle2)) {
     return -1;
   }
-  if(Mobot_moveJointTo(comms, ROBOT_JOINT3, angle3)) {
+  if(Mobot_moveJointToNB(comms, ROBOT_JOINT3, angle3)) {
     return -1;
   }
-  if(Mobot_moveJointTo(comms, ROBOT_JOINT4, angle4)) {
+  if(Mobot_moveJointToNB(comms, ROBOT_JOINT4, angle4)) {
     return -1;
   }
   return 0;
@@ -854,7 +857,7 @@ int Mobot_motionStand(br_comms_t* comms)
   double speed;
   Mobot_moveToZero(comms);
   Mobot_moveJointToNB(comms, ROBOT_JOINT2, DEG2RAD(-85));
-  Mobot_moveJointToNB(comms, ROBOT_JOINT3, DEG2RAD(80));
+  Mobot_moveJointToNB(comms, ROBOT_JOINT3, DEG2RAD(70));
   Mobot_moveWait(comms);
   Mobot_moveJointTo(comms, ROBOT_JOINT1, DEG2RAD(45));
   /* Sleep for a second, wait for it to settle down */
@@ -866,9 +869,9 @@ int Mobot_motionStand(br_comms_t* comms)
   if(Mobot_getJointSpeed(comms, ROBOT_JOINT2, &speed)) {
     return -1;
   }
-  Mobot_setJointSpeed(comms, ROBOT_JOINT2, DEG2RAD(20));
+  Mobot_setJointSpeed(comms, ROBOT_JOINT2, DEG2RAD(30));
   Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(20));
-  Mobot_setJointSpeed(comms, ROBOT_JOINT2, speed);
+  //Mobot_setJointSpeed(comms, ROBOT_JOINT2, speed);
   return 0;
 }
 
@@ -1111,6 +1114,7 @@ CMobot::CMobot()
 
 CMobot::~CMobot()
 {
+  stop();
 }
 
 int CMobot::connect()
@@ -1557,10 +1561,15 @@ int CMobotGroup::stop()
 
 int CMobotGroup::motionInchwormLeft()
 {
-  for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->motionInchwormLeftNB();
-  }
+  moveJointToNB(ROBOT_JOINT2, 0);
+  moveJointToNB(ROBOT_JOINT3, 0);
   moveWait();
+
+  moveJointTo(ROBOT_JOINT2, DEG2RAD(-50));
+  moveJointTo(ROBOT_JOINT3, DEG2RAD(50));
+  moveJointTo(ROBOT_JOINT2, 0);
+  moveJointTo(ROBOT_JOINT3, 0);
+
   return 0;
 }
 
@@ -1574,10 +1583,15 @@ int CMobotGroup::motionInchwormLeftNB()
 
 int CMobotGroup::motionInchwormRight()
 {
-  for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->motionInchwormRightNB();
-  }
+  moveJointToNB(ROBOT_JOINT2, 0);
+  moveJointToNB(ROBOT_JOINT3, 0);
   moveWait();
+
+  moveJointTo(ROBOT_JOINT3, DEG2RAD(50));
+  moveJointTo(ROBOT_JOINT2, DEG2RAD(-50));
+  moveJointTo(ROBOT_JOINT3, 0);
+  moveJointTo(ROBOT_JOINT2, 0);
+
   return 0;
 }
 
@@ -1591,10 +1605,7 @@ int CMobotGroup::motionInchwormRightNB()
 
 int CMobotGroup::motionRollBackward()
 {
-  for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->motionRollBackwardNB();
-  }
-  moveWait();
+  move(DEG2RAD(-90), 0, 0, DEG2RAD(-90));
   return 0;
 }
 
@@ -1608,10 +1619,7 @@ int CMobotGroup::motionRollBackwardNB()
 
 int CMobotGroup::motionRollForward()
 {
-  for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->motionRollForwardNB();
-  }
-  moveWait();
+  move(DEG2RAD(90), 0, 0, DEG2RAD(90));
   return 0;
 }
 
@@ -1625,10 +1633,13 @@ int CMobotGroup::motionRollForwardNB()
 
 int CMobotGroup::motionStand()
 {
-  for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->motionStandNB();
-  }
+  moveToZero();
+  moveJointToNB(ROBOT_JOINT2, DEG2RAD(-85));
+  moveJointToNB(ROBOT_JOINT3, DEG2RAD(70));
   moveWait();
+  moveJointTo(ROBOT_JOINT1, DEG2RAD(45));
+  setJointSpeed(ROBOT_JOINT2, DEG2RAD(30));
+  moveJointTo(ROBOT_JOINT2, DEG2RAD(20));
   return 0;
 }
 
@@ -1642,10 +1653,7 @@ int CMobotGroup::motionStandNB()
 
 int CMobotGroup::motionTurnLeft()
 {
-  for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->motionTurnLeftNB();
-  }
-  moveWait();
+  move(DEG2RAD(-90), 0, 0, DEG2RAD(90));
   return 0;
 }
 
@@ -1659,10 +1667,7 @@ int CMobotGroup::motionTurnLeftNB()
 
 int CMobotGroup::motionTurnRight()
 {
-  for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->motionTurnRightNB();
-  }
-  moveWait();
+  move(DEG2RAD(90), 0, 0, DEG2RAD(-90));
   return 0;
 }
 
