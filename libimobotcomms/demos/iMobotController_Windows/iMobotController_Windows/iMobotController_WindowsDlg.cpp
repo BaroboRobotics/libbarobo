@@ -173,6 +173,7 @@ BEGIN_MESSAGE_MAP(CiMobotController_WindowsDlg, CDialog)
 	ON_COMMAND(ID_HELP_HELP, &CiMobotController_WindowsDlg::OnHelpHelp)
 	ON_COMMAND(ID_HELP_ABOUTROBOTCONTROLLER, &CiMobotController_WindowsDlg::OnHelpAboutrobotcontroller)
 	ON_COMMAND(ID_FILE_EXIT, &CiMobotController_WindowsDlg::OnFileExit)
+	ON_BN_CLICKED(IDC_BUTTON_MOVETOZERO, &CiMobotController_WindowsDlg::OnBnClickedButtonMovetozero)
 END_MESSAGE_MAP()
 
 
@@ -310,7 +311,7 @@ void CiMobotController_WindowsDlg::InitGaits()
 	/* Rotate Left */
 	Gait* gait;
 	gait = new Gait(L"Rotate Left");
-	double angles[4] = {90, 0, 0, 90};
+	double angles[4] = {-90, 0, 0, 90};
 	unsigned char motorMask = 0;
 	motorMask |= (1<<0);
 	motorMask |= (1<<3);
@@ -320,21 +321,21 @@ void CiMobotController_WindowsDlg::InitGaits()
 
 	/* Rotate Right */
 	gait = new Gait(L"Rotate Right");
-	SET_ANGLES(angles, -90, 0, 0, -90);
+	SET_ANGLES(angles, 90, 0, 0, -90);
 	gait->addMotion( new Motion(
 		MOTION_MOVE, angles, motorMask));
 	addGait(gait);
 
 	/* Roll Forward */
 	gait = new Gait(L"Roll Forward");
-	SET_ANGLES(angles, 90, 0, 0, -90);
+	SET_ANGLES(angles, 90, 0, 0, 90);
 	gait->addMotion( new Motion(
 		MOTION_MOVE, angles, motorMask));
 	addGait(gait);
 
 	/* Roll Backward */
 	gait = new Gait(L"Roll Backward");
-	SET_ANGLES(angles, -90, 0, 0, 90);
+	SET_ANGLES(angles, -90, 0, 0, -90);
 	gait->addMotion( new Motion(
 		MOTION_MOVE, angles, motorMask));
 	addGait(gait);
@@ -355,8 +356,8 @@ void CiMobotController_WindowsDlg::InitGaits()
 		MOTION_POSE, angles, motorMask));
 	addGait(gait);
 
-	/* Inch Right */
-	gait = new Gait(L"Inch Right");
+	/* Inch Left */
+	gait = new Gait(L"Inch Left");
 	SET_ANGLES(angles, 0, -50, 0, 0);
 	motorMask = 0;
 	motorMask |= (1<<1); motorMask |= (1<<2);
@@ -373,8 +374,8 @@ void CiMobotController_WindowsDlg::InitGaits()
 		MOTION_POSE, angles, motorMask));
 	addGait(gait);
 
-	/* Inch Left */
-	gait = new Gait(L"Inch Left");
+	/* Inch Right */
+	gait = new Gait(L"Inch Right");
 	SET_ANGLES(angles, 0, 0, 50, 0);
 	motorMask = 0;
 	motorMask |= (1<<1); motorMask |= (1<<2);
@@ -427,8 +428,8 @@ void CiMobotController_WindowsDlg::InitGaits()
 	addGait(gait);
 
 	/* Right Faceplate Forward */
-	gait = new Gait(L"Right Face Forward");
-	SET_ANGLES(angles, -10, 0, 0, 0);
+	gait = new Gait(L"Left Face Forward");
+	SET_ANGLES(angles, 10, 0, 0, 0);
 	motorMask = 1<<0;
 	gait->addMotion(new Motion(
 		MOTION_MOVE, angles, motorMask));
@@ -436,31 +437,31 @@ void CiMobotController_WindowsDlg::InitGaits()
   /* TODO: Repair gaits */
 
 	/* Right Faceplate Backward */
-	gait = new Gait(L"Right Face Backward");
-	SET_ANGLES(angles, 0, 0, 10, 0);
-	motorMask = 1<<2;
-	gait->addMotion(new Motion(
-		MOTION_MOVE, angles, motorMask));
-	addGait(gait);
-
-	/* Left Faceplate Forward */
-	gait = new Gait(L"Left Face Backward");
-	SET_ANGLES(angles, 0, 0, 0, -10);
-	motorMask = 1<<3;
-	gait->addMotion(new Motion(
-		MOTION_MOVE, angles, motorMask));
-	addGait(gait);
-
-	/* Left Faceplate Backward */
-	gait = new Gait(L"Left Face Backward");
+	gait = new Gait(L"Right Face Forward");
 	SET_ANGLES(angles, 0, 0, 0, 10);
 	motorMask = 1<<3;
 	gait->addMotion(new Motion(
 		MOTION_MOVE, angles, motorMask));
 	addGait(gait);
 
-	/* UnmotionStand */
-	gait = new Gait(L"UnmotionStand");
+	/* Left Faceplate Forward */
+	gait = new Gait(L"Left Face Backward");
+	SET_ANGLES(angles, -10, 0, 0, 0);
+	motorMask = 1<<0;
+	gait->addMotion(new Motion(
+		MOTION_MOVE, angles, motorMask));
+	addGait(gait);
+
+	/* Left Faceplate Backward */
+	gait = new Gait(L"Right Face Backward");
+	SET_ANGLES(angles, 0, 0, 0, -10);
+	motorMask = 1<<3;
+	gait->addMotion(new Motion(
+		MOTION_MOVE, angles, motorMask));
+	addGait(gait);
+
+	/* UnStand */
+	gait = new Gait(L"UnStand");
 	SET_ANGLES(angles, -85, 80, 0, 0);
 	motorMask = 1<<0; motorMask |= 1<<1;
 	gait->addMotion(new Motion(
@@ -568,12 +569,15 @@ void CiMobotController_WindowsDlg::UpdateSliders()
 
 	for(int i = 0; i < 4; i++) {
 		iMobotComms.getJointAngle((robotJointId_t)(i+1), position);
-		m_slider_Positions[i]->SetPos( (int) RAD2DEG(position) );
+		m_slider_Positions[i]->SetPos( (int) RAD2DEG(-position) );
 		m_positions[i] = (int) position;
 
-		iMobotComms.getJointSpeed((robotJointId_t)(i+1), speed);
-		m_slider_Speeds[i]->SetPos( speed*100 );
+		iMobotComms.getJointSpeedRatio((robotJointId_t)(i+1), speed);
+		m_slider_Speeds[i]->SetPos( 100 - speed*100 );
 		m_speeds[i] = speed*100;
+    wchar_t buf[200];
+    swprintf(buf, L"%lf", speed);
+    m_edit_MotorSpeeds[i]->SetWindowTextW(buf);
 	}
 }
 
@@ -824,6 +828,16 @@ void CiMobotController_WindowsDlg::handlerBACK()
   iMobotComms.motionRollBackwardNB();
 }
 
+void CiMobotController_WindowsDlg::OnBnClickedButtonMovetozero()
+{
+  g_buttonState[B_MOVETOZERO].clicked = 1; 
+}
+
+void CiMobotController_WindowsDlg::handlerMOVETOZERO()
+{
+  iMobotComms.moveToZero();
+}
+
 void CiMobotController_WindowsDlg::OnNMCustomdrawSliderposition2(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
@@ -879,13 +893,14 @@ DWORD WINAPI HandlerThread(void* arg)
 {
   static double lastPosition[4];
   static int lastSpeed[4];
+  static int initialized = 0;
   CiMobotController_WindowsDlg* dlg;
   CMobot *mobot;
   dlg = (CiMobotController_WindowsDlg*) arg;
   mobot = &dlg->iMobotComms;
   /* Initialize values */
   for(int i = 0; i < 4; i++) {
-    lastPosition[i] = dlg->m_slider_Positions[i]->GetPos();
+    lastPosition[i] = -dlg->m_slider_Positions[i]->GetPos();
     lastSpeed[i] = dlg->m_slider_Speeds[i]->GetPos();
   }
   while(1) {
@@ -908,26 +923,33 @@ DWORD WINAPI HandlerThread(void* arg)
       EnterCriticalSection(&UpdateGuiCriticalSection);
       dlg->m_edit_MotorPositions[i]->SetWindowTextW(buf);
       /* See if the position slider has been clicked */
-      position = DEG2RAD(dlg->m_slider_Positions[i]->GetPos());
+      position = DEG2RAD(-dlg->m_slider_Positions[i]->GetPos());
       if(lastPosition[i] != position) {
-        mobot->moveJointToPIDNB((robotJointId_t)(i+1), (double) position);
+        if(initialized) {
+          mobot->moveJointToPIDNB((robotJointId_t)(i+1), (double) position);
+        }
         g_buttonState[S_M1P + i].clicked = 0;
         lastPosition[i] = position;
       } else {
         /* Move the slider into position */
-        dlg->m_slider_Positions[i]->SetPos((int) RAD2DEG(value));
-        lastPosition[i] = DEG2RAD(dlg->m_slider_Positions[i]->GetPos());
+        dlg->m_slider_Positions[i]->SetPos((int) RAD2DEG(-value));
+        lastPosition[i] = DEG2RAD(-dlg->m_slider_Positions[i]->GetPos());
       }
 
       /* Check the speed */
-      speed = dlg->m_slider_Speeds[i]->GetPos();
+      speed = 100 - dlg->m_slider_Speeds[i]->GetPos();
       if(speed != dlg->m_speeds[i]) {
         mobot->setJointSpeedRatio((robotJointId_t)(i+1), (double)speed/100.0);
         dlg->m_speeds[i] = speed;
-        swprintf(buf, L"%lf", speed);
+        swprintf(buf, L"%lf", (double)(speed/100.0));
         dlg->m_edit_MotorSpeeds[i]->SetWindowTextW(buf);
       }
       LeaveCriticalSection(&UpdateGuiCriticalSection);
+    }
+    if(!initialized) {
+      mobot->stop();
+      initialized = 1;
+      continue;
     }
     /* Handle any button presses */
     for(int i = 0; i < B_NUMBUTTONS; i++) {
@@ -952,6 +974,7 @@ DWORD WINAPI HandlerThread(void* arg)
           case B_LEFT: dlg->handlerLEFT(); break;
           case B_RIGHT: dlg->handlerRIGHT(); break;
           case B_BACK: dlg->handlerBACK(); break;
+          case B_MOVETOZERO: dlg->handlerMOVETOZERO(); break;
           default: break;
         }
         g_buttonState[i].clicked = 0;
@@ -1176,3 +1199,4 @@ HINSTANCE GotoURL(LPCTSTR url, int showcmd)
 
     return result;
 }
+

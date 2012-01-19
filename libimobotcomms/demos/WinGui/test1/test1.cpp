@@ -6,7 +6,7 @@
 #include "windows.h"
 #include <windowsx.h>
 #include "comutility.h"
-#include <imobotcomms.h>
+#include <mobot.h>
 #include <cstdlib>
 #include "gait.h"
 
@@ -319,7 +319,8 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 	//strcpy(btadd,"00:80:37:27:03:D8");
 	//strcpy(btadd,"00:80:37:2E:45:D2");
-	strcpy(btadd, "00:19:88:19:FB:9E"); //new iMobot module
+	//strcpy(btadd, "00:19:88:19:FB:9E"); //new iMobot module
+	strcpy(btadd, "00:06:66:45:D9:D3"); //new Mobot module
 
 	//initialise command character arrays
 
@@ -509,7 +510,8 @@ INT_PTR CALLBACK first_dia(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
 
 	//strcpy(btadd,"00:80:37:27:03:D8");
 	//strcpy(btadd,"00:80:37:2E:45:D2");
-	strcpy(btadd,"00:19:88:19:FB:9E");
+	//strcpy(btadd,"00:19:88:19:FB:9E");
+	strcpy(btadd,"00:06:66:45:D9:D3");
 
 	switch (message)
     {

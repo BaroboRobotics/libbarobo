@@ -26,6 +26,7 @@
 #define IDI_ICON2                       147
 #define IDI_ICON3                       150
 #define IDI_ICON_BAROBO                 150
+#define IDB_PNG3                        151
 #define IDC_SLIDER_speed1               1000
 #define IDC_EDIT_speed1                 1001
 #define IDC_SLIDER_speed2               1002
@@ -77,6 +78,9 @@
 #define IDC_EDIT_setpos4                1045
 #define IDC_BUTTON2                     1046
 #define IDC_BUTTON_GOPOS                1046
+#define IDC_JOINTPICTURE                1047
+#define IDC_BUTTON3                     1048
+#define IDC_BUTTON_MOVETOZERO           1048
 #define ID_ROBOT_CONFIGUREROBOTBLUETOOTH 32771
 #define ID_ROBOT_CONNECTTOAROBOT        32772
 #define ID_FILE                         32773
@@ -89,9 +93,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        151
+#define _APS_NEXT_RESOURCE_VALUE        152
 #define _APS_NEXT_COMMAND_VALUE         32778
-#define _APS_NEXT_CONTROL_VALUE         1047
+#define _APS_NEXT_CONTROL_VALUE         1049
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

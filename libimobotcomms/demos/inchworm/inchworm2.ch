@@ -9,8 +9,8 @@ CMobot robot;
 robot.connect();
 
 /* Set robot motors to speed of 0.50 */
-robot.setJointSpeedRatio(MOBOT_JOINT2, 0.50);
-robot.setJointSpeedRatio(MOBOT_JOINT3, 0.50);
+robot.setJointSpeedRatio(ROBOT_JOINT2, 0.50);
+robot.setJointSpeedRatio(ROBOT_JOINT3, 0.50);
 
 /* Set the robot to "home" position, where all joint angles are 0 degrees. */
 robot.moveToZero();

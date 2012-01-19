@@ -210,7 +210,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\imobotcomms.cpp"
+				RelativePath="..\..\..\mobot.cpp"
 				>
 			</File>
 			<File
@@ -252,7 +252,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\imobotcomms.h"
+				RelativePath="..\..\..\mobot.h"
 				>
 			</File>
 			<File
