@@ -531,19 +531,19 @@
 				>
 			</File>
 			<File
-				RelativePath="..\iMobot_diagram.bmp"
-				>
-			</File>
-			<File
 				RelativePath=".\res\iMobot_diagram.bmp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\libimobot\Demos\GtkGui\interface\imobot_diagram.png"
+				RelativePath="..\iMobot_diagram.bmp"
 				>
 			</File>
 			<File
 				RelativePath=".\res\iMobot_diagram.png"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\libimobot\Demos\GtkGui\interface\imobot_diagram.png"
 				>
 			</File>
 			<File
@@ -572,6 +572,14 @@
 			</File>
 			<File
 				RelativePath=".\res\joint_diagram3.png"
+				>
+			</File>
+			<File
+				RelativePath=".\res\joint_diagram_verbose.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\joint_diagram_verbose.png"
 				>
 			</File>
 		</Filter>

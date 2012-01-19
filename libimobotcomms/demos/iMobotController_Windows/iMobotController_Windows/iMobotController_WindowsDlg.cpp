@@ -568,12 +568,15 @@ void CiMobotController_WindowsDlg::UpdateSliders()
 
 	for(int i = 0; i < 4; i++) {
 		iMobotComms.getJointAngle((robotJointId_t)(i+1), position);
-		m_slider_Positions[i]->SetPos( (int) RAD2DEG(position) );
+		m_slider_Positions[i]->SetPos( (int) RAD2DEG(-position) );
 		m_positions[i] = (int) position;
 
-		iMobotComms.getJointSpeed((robotJointId_t)(i+1), speed);
-		m_slider_Speeds[i]->SetPos( speed*100 );
+		iMobotComms.getJointSpeedRatio((robotJointId_t)(i+1), speed);
+		m_slider_Speeds[i]->SetPos( 100 - speed*100 );
 		m_speeds[i] = speed*100;
+    wchar_t buf[200];
+    swprintf(buf, L"%lf", speed);
+    m_edit_MotorSpeeds[i]->SetWindowTextW(buf);
 	}
 }
 
@@ -879,13 +882,14 @@ DWORD WINAPI HandlerThread(void* arg)
 {
   static double lastPosition[4];
   static int lastSpeed[4];
+  static int initialized = 0;
   CiMobotController_WindowsDlg* dlg;
   CMobot *mobot;
   dlg = (CiMobotController_WindowsDlg*) arg;
   mobot = &dlg->iMobotComms;
   /* Initialize values */
   for(int i = 0; i < 4; i++) {
-    lastPosition[i] = dlg->m_slider_Positions[i]->GetPos();
+    lastPosition[i] = -dlg->m_slider_Positions[i]->GetPos();
     lastSpeed[i] = dlg->m_slider_Speeds[i]->GetPos();
   }
   while(1) {
@@ -908,26 +912,31 @@ DWORD WINAPI HandlerThread(void* arg)
       EnterCriticalSection(&UpdateGuiCriticalSection);
       dlg->m_edit_MotorPositions[i]->SetWindowTextW(buf);
       /* See if the position slider has been clicked */
-      position = DEG2RAD(dlg->m_slider_Positions[i]->GetPos());
+      position = DEG2RAD(-dlg->m_slider_Positions[i]->GetPos());
       if(lastPosition[i] != position) {
         mobot->moveJointToPIDNB((robotJointId_t)(i+1), (double) position);
         g_buttonState[S_M1P + i].clicked = 0;
         lastPosition[i] = position;
       } else {
         /* Move the slider into position */
-        dlg->m_slider_Positions[i]->SetPos((int) RAD2DEG(value));
-        lastPosition[i] = DEG2RAD(dlg->m_slider_Positions[i]->GetPos());
+        dlg->m_slider_Positions[i]->SetPos((int) RAD2DEG(-value));
+        lastPosition[i] = DEG2RAD(-dlg->m_slider_Positions[i]->GetPos());
       }
 
       /* Check the speed */
-      speed = dlg->m_slider_Speeds[i]->GetPos();
+      speed = 100 - dlg->m_slider_Speeds[i]->GetPos();
       if(speed != dlg->m_speeds[i]) {
         mobot->setJointSpeedRatio((robotJointId_t)(i+1), (double)speed/100.0);
         dlg->m_speeds[i] = speed;
-        swprintf(buf, L"%lf", speed);
+        swprintf(buf, L"%lf", (double)(speed/100.0));
         dlg->m_edit_MotorSpeeds[i]->SetWindowTextW(buf);
       }
       LeaveCriticalSection(&UpdateGuiCriticalSection);
+    }
+    if(!initialized) {
+      mobot->stop();
+      initialized = 1;
+      continue;
     }
     /* Handle any button presses */
     for(int i = 0; i < B_NUMBUTTONS; i++) {
