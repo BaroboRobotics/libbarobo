@@ -74,7 +74,7 @@ control dialog as shown in Figure \ref{fig:shot1.png} should pop up.
 \caption{\label{fig:shot1.png} The graphical user interface of the RobotController.}
 \end{figure}
 
-Next, click on the menu item ``Robot $\rightarrow$ Configure Robot Bluetooth'', as
+Next, click on the menu item ``Configure $\rightarrow$ Configure Robot Bluetooth'', as
 shown in Figure \ref{fig:shot3.png}
 
 \begin{figure}[H]
@@ -175,6 +175,11 @@ the MoBot begins to move the corresponding joint in either the positive,
 or negative direction. The joint will continue to move until the stop 
 button, located between the up and down arrows, is clicked. 
 
+If the joint encounters any obstacle that prevents it from moving, the 
+joint will automatically disengage power to the joint. This may happen, 
+example, if a body joint attempts to rotate beyond its limits,
+or if it collides with the other corresponding body joint. 
+
 \subsection{Rolling Control}
 This section contains buttons for controlling the MoBot as a 
 two wheeled mobile robot. The up and down buttons cause the MoBot to
@@ -212,7 +217,7 @@ to match the values typed into the boxes. If no value is typed into a box, that
 joint will not move.
 \end{comment}
 
-\subsection{Motions}
+\subsection{Gaits}
 This section, located on the bottom right of the interface, contains a set of
 preprogrammed motions for the MoBot. To execute a preprogrammed motion, simply
 click on the name of the motion you wish to execute, and then click the button
@@ -233,7 +238,9 @@ moves some joints.
 \subsubsection{\label{sec:democode}Demo Code for \texttt{gettingStarted.ch} Explained}
 The beginning of every MoBot control program will include header files. Each
 header file imports functions used for a number of tasks, such as printing
-data onto the screen or controlling the MoBot. 
+data onto the screen or controlling the MoBot. The \texttt{mobot.h} header
+file must be included in order to use the \texttt{CMobot} class and related
+robotic control functions.
 
 \begin{verbatim}
 #include <mobot.h> // Required for MoBot control functions
@@ -249,13 +256,14 @@ CMobot robot;
 \end{verbatim}
 
 Next, we initialize two \texttt{double} type variables called 
-``angle1'' and ``angle4'', which we will use to store some joint angles.
+``angle1'' and ``angle4'', which we will use to store joint angles.
 \begin{verbatim}
 double angle1, angle4;
 \end{verbatim}
 
 The next line will connect our new variable, \texttt{robot}, to a
-MoBot that has been previously paired with the computer.
+MoBot that has been previously configured with the computer in the 
+process described in Section \ref{sec:pairing}.
 \begin{verbatim}
 robot.connect();
 \end{verbatim}
@@ -320,7 +328,7 @@ robot.connect();
 \end{verbatim}
 
 The next lines of code set the joint speeds for the two body joints, joints 
-two and three, to 50\% speed. They are set to fify percent speed in order to 
+two and three, to 50\% speed. They are set to fifty percent speed in order to 
 slow the gait down in order to minimize slippage.
 
 \begin{verbatim}
@@ -400,6 +408,10 @@ robot.setJointSpeed(ROBOT_JOINT1, 0.30);
 robot.moveContinuousTime(ROBOT_FORWARD, ROBOT_NEUTRAL, ROBOT_NEUTRAL, 
                          ROBOT_NEUTRAL, 3000);
 \end{verbatim}
+
+The macros \texttt{ROBOT\_FORWARD, ROBOT\_NEUTRAL,} and \texttt{ROBOT\_BACKWARD}
+indicate the directions for each motor to turn. More information regarding these
+macros may be found in Section \ref{sec:robotJointDirection_t}.
 
 \section{Preprogrammed Motions}
 The robot API contains functions for executing preprogrammed motions. The 
