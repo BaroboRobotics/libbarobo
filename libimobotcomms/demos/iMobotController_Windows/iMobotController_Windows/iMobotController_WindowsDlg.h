@@ -43,6 +43,7 @@ typedef enum button_e
   S_M3P, 
   S_M4P, 
   B_SETPOS,
+  B_MOVETOZERO,
   B_NUMBUTTONS
 } buttonId_t;
 
@@ -192,6 +193,8 @@ public:
 	afx_msg void OnHelpHelp();
 	afx_msg void OnHelpAboutrobotcontroller();
 	afx_msg void OnFileExit();
+	afx_msg void OnBnClickedButtonMovetozero();
+  void handlerMOVETOZERO();
 };
 
 DWORD WINAPI HandlerThread(void*);

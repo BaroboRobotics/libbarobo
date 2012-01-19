@@ -80,6 +80,7 @@
 #define IDC_BUTTON_GOPOS                1046
 #define IDC_JOINTPICTURE                1047
 #define IDC_BUTTON3                     1048
+#define IDC_BUTTON_MOVETOZERO           1048
 #define ID_ROBOT_CONFIGUREROBOTBLUETOOTH 32771
 #define ID_ROBOT_CONNECTTOAROBOT        32772
 #define ID_FILE                         32773

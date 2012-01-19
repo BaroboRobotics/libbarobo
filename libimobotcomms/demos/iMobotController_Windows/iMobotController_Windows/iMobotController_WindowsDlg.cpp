@@ -173,6 +173,7 @@ BEGIN_MESSAGE_MAP(CiMobotController_WindowsDlg, CDialog)
 	ON_COMMAND(ID_HELP_HELP, &CiMobotController_WindowsDlg::OnHelpHelp)
 	ON_COMMAND(ID_HELP_ABOUTROBOTCONTROLLER, &CiMobotController_WindowsDlg::OnHelpAboutrobotcontroller)
 	ON_COMMAND(ID_FILE_EXIT, &CiMobotController_WindowsDlg::OnFileExit)
+	ON_BN_CLICKED(IDC_BUTTON_MOVETOZERO, &CiMobotController_WindowsDlg::OnBnClickedButtonMovetozero)
 END_MESSAGE_MAP()
 
 
@@ -827,6 +828,16 @@ void CiMobotController_WindowsDlg::handlerBACK()
   iMobotComms.motionRollBackwardNB();
 }
 
+void CiMobotController_WindowsDlg::OnBnClickedButtonMovetozero()
+{
+  g_buttonState[B_MOVETOZERO].clicked = 1; 
+}
+
+void CiMobotController_WindowsDlg::handlerMOVETOZERO()
+{
+  iMobotComms.moveToZero();
+}
+
 void CiMobotController_WindowsDlg::OnNMCustomdrawSliderposition2(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
@@ -914,7 +925,9 @@ DWORD WINAPI HandlerThread(void* arg)
       /* See if the position slider has been clicked */
       position = DEG2RAD(-dlg->m_slider_Positions[i]->GetPos());
       if(lastPosition[i] != position) {
-        mobot->moveJointToPIDNB((robotJointId_t)(i+1), (double) position);
+        if(initialized) {
+          mobot->moveJointToPIDNB((robotJointId_t)(i+1), (double) position);
+        }
         g_buttonState[S_M1P + i].clicked = 0;
         lastPosition[i] = position;
       } else {
@@ -961,6 +974,7 @@ DWORD WINAPI HandlerThread(void* arg)
           case B_LEFT: dlg->handlerLEFT(); break;
           case B_RIGHT: dlg->handlerRIGHT(); break;
           case B_BACK: dlg->handlerBACK(); break;
+          case B_MOVETOZERO: dlg->handlerMOVETOZERO(); break;
           default: break;
         }
         g_buttonState[i].clicked = 0;
@@ -1185,3 +1199,4 @@ HINSTANCE GotoURL(LPCTSTR url, int showcmd)
 
     return result;
 }
+
