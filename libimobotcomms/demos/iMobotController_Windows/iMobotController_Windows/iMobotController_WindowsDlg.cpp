@@ -15,7 +15,7 @@
 CRITICAL_SECTION UpdateGuiCriticalSection;
 buttonState_t g_buttonState[B_NUMBUTTONS];
 
-int getChHome(char *chhome);
+int getChHome(TCHAR *chhome);
 HINSTANCE GotoURL(LPCTSTR url, int showcmd);
 
 // CAboutDlg dialog used for App About
@@ -135,7 +135,7 @@ BEGIN_MESSAGE_MAP(CiMobotController_WindowsDlg, CDialog)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_WM_TIMER()
+	//ON_WM_TIMER()
 	//}}AFX_MSG_MAP
 	
 	ON_BN_CLICKED(IDC_BUTTON_Motor1Forward, &CiMobotController_WindowsDlg::OnBnClickedButtonMotor1forward)
@@ -1072,10 +1072,10 @@ void CiMobotController_WindowsDlg::OnConnectDisconnectfromrobot()
 void CiMobotController_WindowsDlg::OnHelpHelp()
 {
   USES_CONVERSION;
-  char chHome[MAX_PATH];
+  TCHAR chHome[MAX_PATH];
   TCHAR command[MAX_PATH];
   getChHome(chHome);
-  _stprintf(command, TEXT("file://%s\\package\\chmobot\\docs\\index.html"), A2T(chHome));
+  _stprintf(command, TEXT("file://%s\\package\\chmobot\\docs\\index.html"), chHome);
   //sprintf(command, "file://%s\\package\\chmobot\\docs\\index.html", "C:\\Ch");
   GotoURL(command, 0);
   //system(command);
@@ -1098,9 +1098,10 @@ void CAboutDlg::OnStnClickedIcon1()
 	// TODO: Add your control notification handler code here
 }
 
-int getChHome(char *chhome)
+int getChHome(TCHAR *chhome)
 {
   int retval = 0;
+  USES_CONVERSION;
   /* the following code will work for 9x/NT */
   DWORD chHomeDirLen = MAX_PATH;
   HKEY hkResult, hStartKey = HKEY_LOCAL_MACHINE;
@@ -1121,7 +1122,7 @@ int getChHome(char *chhome)
     if (ERROR_SUCCESS == nResult)
     {
        nResult = RegQueryValueEx(hkResult, TEXT("CHHOME"), 0 ,0, 
-                                 (unsigned char*)chhome, &chHomeDirLen);
+                                 (LPBYTE)chhome, &chHomeDirLen);
        if (ERROR_SUCCESS != nResult) { /* should not reach here */
 /*
          fprintf(stderr, "ERROR: register value CHHOME cannot be obtained from registry\n");
@@ -1138,7 +1139,7 @@ int getChHome(char *chhome)
     }
   }
   else
-    strcpy(chhome, getenv("CHHOME"));
+    _tcscpy(chhome, A2T(getenv("CHHOME")));
 #endif
   return retval;
 }
