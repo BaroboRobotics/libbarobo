@@ -50,6 +50,8 @@ int Mobot_init(br_comms_t* comms)
   THREAD_CREATE(&comms->thread, nullThread, NULL);
   comms->commsLock = (MUTEX_T*)malloc(sizeof(MUTEX_T));
   MUTEX_INIT(comms->commsLock);
+  comms->threadLock = (MUTEX_T*)malloc(sizeof(MUTEX_T));
+  MUTEX_INIT(comms->threadLock);
   return 0;
 }
 
@@ -267,7 +269,7 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
   status = -1;
   int tries = 0;
   while(status < 0) {
-    if(tries > 5) {
+    if(tries > 2) {
       return -1;
     }
     status = connect(comms->socket, (const struct sockaddr *)&comms->addr, sizeof(comms->addr));
@@ -693,6 +695,8 @@ int Mobot_moveContinuousNB(br_comms_t* comms,
     } else if (dirs[i] == ROBOT_BACKWARD) {
       Mobot_setJointSpeed(comms, (robotJointId_t)(i+1), comms->jointSpeeds[i]);
       Mobot_setJointDirection(comms, (robotJointId_t)(i+1), ROBOT_BACKWARD);
+    } else {
+      Mobot_setJointDirection(comms, (robotJointId_t)(i+1), ROBOT_NEUTRAL);
     }
   }
   return 0;
