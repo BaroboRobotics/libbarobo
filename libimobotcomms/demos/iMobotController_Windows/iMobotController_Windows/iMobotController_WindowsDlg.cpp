@@ -131,6 +131,21 @@ void CiMobotController_WindowsDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_setpos4, m_edit_setpos4);
 }
 
+void CiMobotController_WindowsDlg::OnOK()
+{
+	CWnd* pwndCtrl = GetFocus();
+	int ctrlID = pwndCtrl->GetDlgCtrlID();
+	switch(ctrlID) {
+		case IDC_EDIT_setpos1:
+		case IDC_EDIT_setpos2:
+		case IDC_EDIT_setpos3:
+		case IDC_EDIT_setpos4:
+			OnBnClickedButtonGopos();
+			return;
+	}
+	CDialog::OnOK();
+}
+
 BEGIN_MESSAGE_MAP(CiMobotController_WindowsDlg, CDialog)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
