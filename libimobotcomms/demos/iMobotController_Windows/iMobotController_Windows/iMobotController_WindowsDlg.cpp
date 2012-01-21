@@ -991,7 +991,6 @@ void CiMobotController_WindowsDlg::OnRobotConfigurerobotbluetooth()
   char path[MAX_PATH];
   switch(nRet) {
     case IDOK:
-      iMobotComms.connect();
       break;
     case IDABORT:
     case IDCANCEL:   

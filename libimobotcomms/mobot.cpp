@@ -262,9 +262,17 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
 #endif
 
   // connect to server
-  status = connect(comms->socket, (const struct sockaddr *)&comms->addr, sizeof(comms->addr));
-  if(status == 0) {
-    comms->connected = 1;
+  status = -1;
+  int tries = 0;
+  while(status < 0) {
+    if(tries > 5) {
+      return -1;
+    }
+    status = connect(comms->socket, (const struct sockaddr *)&comms->addr, sizeof(comms->addr));
+    if(status == 0) {
+      comms->connected = 1;
+    } 
+    tries++;
   }
 #ifndef _WIN32
   /* Make the socket non-blocking */
