@@ -1432,7 +1432,7 @@ int CMobotGroup::isMoving()
 int CMobotGroup::move(double angle1, double angle2, double angle3, double angle4)
 {
   moveNB(angle1, angle2, angle3, angle4);
-  return _robots[_numRobots-1]->moveWait();
+  return moveWait();
 }
 
 int CMobotGroup::moveNB(double angle1, double angle2, double angle3, double angle4)
@@ -1501,7 +1501,7 @@ int CMobotGroup::moveJointContinuousTime(robotJointId_t id, robotJointDirection_
 int CMobotGroup::moveJointTo(robotJointId_t id, double angle)
 {
   moveJointToNB(id, angle);
-  return _robots[_numRobots-1]->moveWait();
+  return moveWait();
 }
 
 int CMobotGroup::moveJointToNB(robotJointId_t id, double angle)
@@ -1523,7 +1523,7 @@ int CMobotGroup::moveJointWait(robotJointId_t id)
 int CMobotGroup::moveTo(double angle1, double angle2, double angle3, double angle4)
 {
   moveToNB(angle1, angle2, angle3, angle4);
-  return _robots[_numRobots-1]->moveWait();
+  return moveWait();
 }
 
 int CMobotGroup::moveToNB(double angle1, double angle2, double angle3, double angle4)
@@ -1553,7 +1553,7 @@ int CMobotGroup::moveToZeroNB()
 int CMobotGroup::moveToZero()
 {
   moveToZeroNB();
-  return _robots[_numRobots-1]->moveWait();
+  return moveWait();
 }
 
 int CMobotGroup::setJointSpeed(robotJointId_t id, double speed)
