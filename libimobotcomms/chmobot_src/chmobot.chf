@@ -115,6 +115,18 @@ int CMobot::getJointSpeed(int id, double & speed) {
     dlrunfun(fptr, &retval, NULL, this, id, &speed);
     return retval;
 }
+int CMobot::getJointSpeedRatio(int id, double & ratio) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "getJointSpeedRatio_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, &ratio);
+    return retval;
+}
 int CMobot::getJointState(int id, int & state) {
     void *fptr;
     int retval;
