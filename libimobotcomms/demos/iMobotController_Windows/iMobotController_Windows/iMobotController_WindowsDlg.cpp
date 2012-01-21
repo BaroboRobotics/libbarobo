@@ -571,8 +571,8 @@ void CiMobotController_WindowsDlg::UpdateSliders()
 		iMobotComms.getJointAngle((robotJointId_t)(i+1), position);
 		m_slider_Positions[i]->SetPos( (int) RAD2DEG(-position) );
 		m_positions[i] = (int) position;
-
-		iMobotComms.getJointSpeedRatio((robotJointId_t)(i+1), speed);
+		speed = 0.5;
+		iMobotComms.setJointSpeedRatio((robotJointId_t)(i+1), speed);
 		m_slider_Speeds[i]->SetPos( 100 - speed*100 );
 		m_speeds[i] = speed*100;
     wchar_t buf[200];
@@ -689,7 +689,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonMotor1stop()
 
 void CiMobotController_WindowsDlg::handlerM1S()
 {
-	iMobotComms.setJointSpeed(ROBOT_JOINT1, 0);
+	iMobotComms.moveJointContinuousNB(ROBOT_JOINT1, ROBOT_NEUTRAL);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonMotor2stop()
@@ -699,7 +699,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonMotor2stop()
 
 void CiMobotController_WindowsDlg::handlerM2S()
 {
-	iMobotComms.setJointSpeed(ROBOT_JOINT2, 0);
+	iMobotComms.moveJointContinuousNB(ROBOT_JOINT2, ROBOT_NEUTRAL);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonMotor3stop()
@@ -709,7 +709,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonMotor3stop()
 
 void CiMobotController_WindowsDlg::handlerM3S()
 {
-	iMobotComms.setJointSpeed(ROBOT_JOINT3, 0);
+	iMobotComms.moveJointContinuousNB(ROBOT_JOINT3, ROBOT_NEUTRAL);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonMotor4stop()
@@ -719,7 +719,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonMotor4stop()
 
 void CiMobotController_WindowsDlg::handlerM4S()
 {
-	iMobotComms.setJointSpeed(ROBOT_JOINT4, 0);
+	iMobotComms.moveJointContinuousNB(ROBOT_JOINT4, ROBOT_NEUTRAL);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonMotor1backward()
@@ -835,7 +835,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonMovetozero()
 
 void CiMobotController_WindowsDlg::handlerMOVETOZERO()
 {
-  iMobotComms.moveToZero();
+  iMobotComms.moveToZeroNB();
 }
 
 void CiMobotController_WindowsDlg::OnNMCustomdrawSliderposition2(NMHDR *pNMHDR, LRESULT *pResult)
@@ -909,7 +909,10 @@ DWORD WINAPI HandlerThread(void* arg)
       Sleep(250);
       continue;
     }
-
+	if(!initialized) {
+		double ratios[4] = {0.5, 0.5, 0.5, 0.5};
+		mobot->setJointSpeedRatios(ratios);
+	}
     double value;
     wchar_t buf[200];
     /* Check the Speed and Position sliders. If any 
