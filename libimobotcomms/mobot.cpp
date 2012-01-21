@@ -48,6 +48,10 @@ int Mobot_init(br_comms_t* comms)
     comms->jointSpeeds[i] = DEF_MOTOR_SPEED;
   }
   THREAD_CREATE(&comms->thread, nullThread, NULL);
+  comms->commsLock = (MUTEX_T*)malloc(sizeof(MUTEX_T));
+  MUTEX_INIT(comms->commsLock);
+  comms->threadLock = (MUTEX_T*)malloc(sizeof(MUTEX_T));
+  MUTEX_INIT(comms->threadLock);
   return 0;
 }
 
@@ -265,7 +269,7 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
   status = -1;
   int tries = 0;
   while(status < 0) {
-    if(tries > 5) {
+    if(tries > 2) {
       return -1;
     }
     status = connect(comms->socket, (const struct sockaddr *)&comms->addr, sizeof(comms->addr));
@@ -691,6 +695,8 @@ int Mobot_moveContinuousNB(br_comms_t* comms,
     } else if (dirs[i] == ROBOT_BACKWARD) {
       Mobot_setJointSpeed(comms, (robotJointId_t)(i+1), comms->jointSpeeds[i]);
       Mobot_setJointDirection(comms, (robotJointId_t)(i+1), ROBOT_BACKWARD);
+    } else {
+      Mobot_setJointDirection(comms, (robotJointId_t)(i+1), ROBOT_NEUTRAL);
     }
   }
   return 0;
@@ -764,7 +770,7 @@ int Mobot_moveJointWait(br_comms_t* comms, robotJointId_t id)
 {
   robotJointState_t state;
   /* Make sure there is no non-blocking function running */
-  THREAD_JOIN(comms->thread);
+//  THREAD_JOIN(comms->thread);
 
   while(1)
   {
@@ -788,7 +794,7 @@ int Mobot_moveWait(br_comms_t* comms)
 {
   int i;
   /* Make sure there is no non-blocking function running */
-  THREAD_JOIN(comms->thread);
+//  THREAD_JOIN(comms->thread);
   for(i = 0; i < 4; i++) {
     if(Mobot_moveJointWait(comms, (robotJointId_t)(i+1))) {
       return -1;
@@ -914,7 +920,7 @@ void* motionInchwormLeftThread(void* arg)
 int Mobot_motionInchwormLeftNB(br_comms_t* comms)
 {
   /* Make sure the old thread has joined */
-  THREAD_JOIN(comms->thread);
+
   THREAD_CREATE(&comms->thread, motionInchwormLeftThread, comms);
   return 0;
 }
@@ -927,7 +933,7 @@ void* motionInchwormRightThread(void* arg)
 
 int Mobot_motionInchwormRightNB(br_comms_t* comms)
 {
-  THREAD_JOIN(comms->thread);
+
   THREAD_CREATE(&comms->thread, motionInchwormRightThread, comms);
   return 0;
 }
@@ -940,7 +946,7 @@ void* motionRollBackwardThread(void* arg)
 
 int Mobot_motionRollBackwardNB(br_comms_t* comms)
 {
-  THREAD_JOIN(comms->thread);
+
   THREAD_CREATE(&comms->thread, motionRollBackwardThread, comms);
   return 0;
 }
@@ -953,7 +959,7 @@ void* motionRollForwardThread(void* arg)
 
 int Mobot_motionRollForwardNB(br_comms_t* comms)
 {
-  THREAD_JOIN(comms->thread);
+
   THREAD_CREATE(&comms->thread, motionRollForwardThread, comms);
   return 0;
 }
@@ -966,7 +972,7 @@ void* motionStandThread(void* arg)
 
 int Mobot_motionStandNB(br_comms_t* comms)
 {
-  THREAD_JOIN(comms->thread);
+
   THREAD_CREATE(&comms->thread, motionStandThread, comms);
   return 0;
 }
@@ -979,7 +985,7 @@ void* motionTurnLeftThread(void* arg)
 
 int Mobot_motionTurnLeftNB(br_comms_t* comms)
 {
-  THREAD_JOIN(comms->thread);
+
   THREAD_CREATE(&comms->thread, motionTurnLeftThread, comms);
   return 0;
 }
@@ -992,7 +998,7 @@ void* motionTurnRightThread(void* arg)
 
 int Mobot_motionTurnRightNB(br_comms_t* comms)
 {
-  THREAD_JOIN(comms->thread);
+
   THREAD_CREATE(&comms->thread, motionTurnRightThread, comms);
   return 0;
 }
@@ -1030,6 +1036,7 @@ int str2ba(const char *str, bdaddr_t *ba)
 int SendToIMobot(br_comms_t* comms, const char* str, int len)
 {
   int err = 0;
+  MUTEX_LOCK(comms->commsLock);
 #if 0
   char* str;
   str = (char*)malloc(strlen(buf)+2);
@@ -1088,10 +1095,12 @@ int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
       n = select(comms->socket, &fds, NULL, NULL, &tv);
       if(n == 0) {
         /* Timeout */
+		MUTEX_UNLOCK(comms->commsLock);
         return -1;
       }
       if(n == -1) {
         /* Error */
+		MUTEX_UNLOCK(comms->commsLock);
         return -1;
       }
       err = recvfrom(comms->socket, tmp, 256, 0, (struct sockaddr*)0, 0);
@@ -1131,6 +1140,7 @@ int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
     tries = 100;
   }
   //printf("RECV %d: <<%s>>\n", comms->socket, buf);
+  MUTEX_UNLOCK(comms->commsLock);
   return err;
 }
 

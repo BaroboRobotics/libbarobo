@@ -6,7 +6,7 @@ PKGDIR=$(PACKAGE)-$(VERSION)/$(PACKAGE)
 target: libmobot.dl
 
 libmobot.dl: mobot.obj chmobot_chdl.obj
-	ch dllink libmobot.dl cplusplus mobot.obj chmobot_chdl.obj ws2_32.lib
+	ch dllink libmobot.dl cplusplus mobot.obj chmobot_chdl.obj ws2_32.lib shell32.lib
 
 mobot.obj: ../mobot.cpp $(HEADERS)
 	ch dlcomp libmobot.dl cplusplus ../mobot.cpp

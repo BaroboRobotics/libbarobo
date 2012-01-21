@@ -29,6 +29,8 @@ typedef struct br_comms_s
   double jointSpeeds[4];
   double maxSpeed[4];
   THREAD_T thread;
+  MUTEX_T* commsLock;
+  MUTEX_T* threadLock;
 } br_comms_t;
 #endif
 
