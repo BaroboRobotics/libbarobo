@@ -766,7 +766,7 @@ int Mobot_moveJointWait(br_comms_t* comms, robotJointId_t id)
 {
   robotJointState_t state;
   /* Make sure there is no non-blocking function running */
-  THREAD_JOIN(comms->thread);
+//  THREAD_JOIN(comms->thread);
 
   while(1)
   {
@@ -790,7 +790,7 @@ int Mobot_moveWait(br_comms_t* comms)
 {
   int i;
   /* Make sure there is no non-blocking function running */
-  THREAD_JOIN(comms->thread);
+//  THREAD_JOIN(comms->thread);
   for(i = 0; i < 4; i++) {
     if(Mobot_moveJointWait(comms, (robotJointId_t)(i+1))) {
       return -1;
