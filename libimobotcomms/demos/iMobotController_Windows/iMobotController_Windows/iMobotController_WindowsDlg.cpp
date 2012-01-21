@@ -399,7 +399,7 @@ void CiMobotController_WindowsDlg::InitGaits()
 	motorMask |= (1<<2); motorMask |= (1<<1);
 	gait->addMotion(new Motion(
 		MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, 0, -85, 80, 0);
+	SET_ANGLES(angles, 0, -80, 85, 0);
 	gait->addMotion(new Motion(
 		MOTION_POSE, angles, motorMask));
 	SET_ANGLES(angles, 45, 0, 0, 0);
@@ -505,7 +505,8 @@ void CiMobotController_WindowsDlg::handlerPlay()
 	if(index == LB_ERR) {
 		return;
 	}
-
+	double speeds[4] = {1.5, 1.5, 1.5, 1.5};
+	iMobotComms.setJointSpeeds(speeds);
 	int numMotions = m_gaits[index]->getNumMotions();
 	const Motion *motion;
 	for(int i = 0; i < numMotions; i++) {
@@ -593,7 +594,6 @@ int CiMobotController_WindowsDlg::poseJoints(const double *angles, unsigned char
 			iMobotComms.moveJointToNB((robotJointId_t)(i+1), DEG2RAD(angles[i]));
 		}
 	}
-  iMobotComms.moveWait();
 	return 0;
 }
 
@@ -608,7 +608,6 @@ int CiMobotController_WindowsDlg::moveJoints(const double *angles, unsigned char
 			iMobotComms.moveJointToNB((robotJointId_t)(i+1), pos + DEG2RAD(angles[i]));
 		}
 	}
-  iMobotComms.moveWait();
 	return 0;
 }
 void CiMobotController_WindowsDlg::OnEnChangeEditposition4()
