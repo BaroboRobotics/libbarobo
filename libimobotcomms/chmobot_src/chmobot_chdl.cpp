@@ -498,6 +498,25 @@ EXPORTCH int setJointSpeedRatio_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int setTwoWheelRobotSpeed_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double speed;
+    double radius;
+    char* unit;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    speed = Ch_VaArg(interp, ap, double);
+    radius = Ch_VaArg(interp, ap, double);
+    unit = Ch_VaArg(interp, ap, char*);
+    retval = mobot->setTwoWheelRobotSpeed(speed, radius, unit);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int stop_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

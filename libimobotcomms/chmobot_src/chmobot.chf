@@ -559,6 +559,18 @@ int CMobot::setJointSpeedRatio(int id, double speed) {
     dlrunfun(fptr, &retval, setJointSpeedRatio, this, id, speed);
     return retval;
 }
+int CMobot::setTwoWheelRobotSpeed(double speed, double radius, char unit[]) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "setTwoWheelRobotSpeed_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setTwoWheelRobotSpeed, this, speed, radius, unit);
+    return retval;
+}
 int CMobot::stop() {
     void *fptr;
     int retval;
