@@ -111,6 +111,8 @@ class CMobot {
                            int msecs);
     int moveJointContinuousNB(robotJointId_t id, robotJointDirection_t dir);
     int moveJointContinuousTime(robotJointId_t id, robotJointDirection_t dir, int msecs);
+    int moveJoint(robotJointId_t id, double angle);
+    int moveJointNB(robotJointId_t id, double angle);
     int moveJointTo(robotJointId_t id, double angle);
     int moveJointToNB(robotJointId_t id, double angle);
     int moveJointToPIDNB(robotJointId_t id, double angle);

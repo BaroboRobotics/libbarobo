@@ -550,6 +550,24 @@ int Mobot_moveJointContinuousTime(br_comms_t* comms, robotJointId_t id, robotJoi
   return 0;
 }
 
+int Mobot_moveJoint(br_comms_t* comms, robotJointId_t id, double angle)
+{
+  double curAngle;
+  if(Mobot_getJointAngle(comms, id, &curAngle)) {
+    return -1;
+  }
+  return Mobot_moveJointTo(comms, id, curAngle + angle);
+}
+
+int Mobot_moveJointNB(br_comms_t* comms, robotJointId_t id, double angle)
+{
+  double curAngle;
+  if(Mobot_getJointAngle(comms, id, &curAngle)) {
+    return -1;
+  }
+  return Mobot_moveJointToNB(comms, id, curAngle + angle);
+}
+
 int Mobot_moveJointTo(br_comms_t* comms, robotJointId_t id, double angle)
 {
   char buf[160];
@@ -1263,6 +1281,16 @@ int CMobot::moveJointContinuousNB(robotJointId_t id, robotJointDirection_t dir)
 int CMobot::moveJointContinuousTime(robotJointId_t id, robotJointDirection_t dir, int msecs)
 {
   return Mobot_moveJointContinuousTime(&_comms, id, dir, msecs);
+}
+
+int CMobot::moveJoint(robotJointId_t id, double angle)
+{
+  return Mobot_moveJoint(&_comms, id, angle);
+}
+
+int CMobot::moveJointNB(robotJointId_t id, double angle)
+{
+  return Mobot_moveJointNB(&_comms, id, angle);
 }
 
 int CMobot::moveJointTo(robotJointId_t id, double angle)
