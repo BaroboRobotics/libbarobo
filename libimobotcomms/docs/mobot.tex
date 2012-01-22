@@ -595,16 +595,16 @@ the robots have finished moving before the program continues.
 \begin{verbatim}
   robot1.motionStandNB();
   robot2.motionInchwormLeftNB();
-  robot1.moveWait();
-  robot2.moveWait();
+  robot1.motionWait();
+  robot2.motionWait();
 \end{verbatim}
 Similar to the calls to \texttt{moveToZeroNB()}, this block of code instructs 
 the first MoBot to stand and the second MoBot to perform the inchworm gait.
 Note that we call the non-blocking versions of the
 functions, \texttt{motionStandNB()} and \texttt{motionInchwormLeftNB}. Since these functions are
-non-blocking, both robots will effectively perform the motions simultaneously. Again,
-we call the \texttt{moveWait()} function on both robots to ensure that 
-the robots have finished standing before the code continues.
+non-blocking, both robots will effectively perform the motions simultaneously. 
+Next, we call the member function \texttt{motionWait()} to wait for the motions
+to finish before exiting the program.
 
 \section{Commanding Multiple Robots to Perform Identical Tasks}
 There is a specialized class called \texttt{CMobotGroup} which may be used
