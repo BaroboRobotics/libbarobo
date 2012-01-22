@@ -400,12 +400,12 @@ int Mobot_setJointSpeed(br_comms_t* comms, robotJointId_t id, double speed)
   char buf[160];
   int status;
   int bytes_read;
+  comms->jointSpeeds[id-1] = speed;
   sprintf(buf, "SET_MOTOR_SPEED %d %lf", id, speed);
   status = SendToIMobot(comms, buf, strlen(buf)+1);
   if(status < 0) return status;
   bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
   if(strcmp(buf, "OK")) return -1;
-  comms->jointSpeeds[id-1] = speed;
   return 0;
 }
 
@@ -485,8 +485,13 @@ int Mobot_getJointSpeeds(br_comms_t* comms, double speeds[4])
   return 0;
 }
 
-int Mobot_setJointSpeeds(br_comms_t* comms, double speeds[4])
+int Mobot_setJointSpeeds(br_comms_t* comms, double speed1, double speed2, double speed3, double speed4)
 {
+  double speeds[4];
+  speeds[0] = speed1;
+  speeds[1] = speed2;
+  speeds[2] = speed3;
+  speeds[3] = speed4;
   for(int i = 0; i < 4; i++) {
     Mobot_setJointSpeed(comms, (robotJointId_t)(i+1), speeds[i]);
   }
@@ -501,8 +506,13 @@ int Mobot_getJointSpeedRatios(br_comms_t* comms, double ratios[4])
   return 0;
 }
 
-int Mobot_setJointSpeedRatios(br_comms_t* comms, double ratios[4])
+int Mobot_setJointSpeedRatios(br_comms_t* comms, double ratio1, double ratio2, double ratio3, double ratio4)
 {
+  double ratios[4];
+  ratios[0] = ratio1;
+  ratios[1] = ratio2;
+  ratios[2] = ratio3;
+  ratios[3] = ratio4;
   for(int i = 0; i < 4; i++) {
     Mobot_setJointSpeedRatio(comms, (robotJointId_t)(i+1), ratios[i]);
   }
@@ -527,8 +537,11 @@ int Mobot_setTwoWheelRobotSpeed(br_comms_t* comms, double speed, double radius, 
     return -1;
   }
   omega = (speed)/(2 * M_PI * radius);
+  if(omega > M_PI) {
+    return -1;
+  }
   Mobot_setJointSpeed(comms, ROBOT_JOINT1, omega);
-  Mobot_setJointSpeed(comms, ROBOT_JOINT4, -1*omega);
+  Mobot_setJointSpeed(comms, ROBOT_JOINT4, omega);
   return 0;
 }
 
@@ -713,7 +726,7 @@ int Mobot_moveContinuousNB(br_comms_t* comms,
       Mobot_setJointSpeed(comms, (robotJointId_t)(i+1), comms->jointSpeeds[i]);
       Mobot_setJointDirection(comms, (robotJointId_t)(i+1), ROBOT_BACKWARD);
     } else {
-      Mobot_setJointDirection(comms, (robotJointId_t)(i+1), ROBOT_NEUTRAL);
+      Mobot_setJointDirection(comms, (robotJointId_t)(i+1), dirs[i]);
     }
   }
   return 0;
@@ -1106,7 +1119,11 @@ int SendToIMobot(br_comms_t* comms, const char* str, int len)
   } else {
     err = -1;
   }
-  return err;
+  if(err < 0) {
+    return err;
+  } else {
+    return 0;
+  }
 }
 
 int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
@@ -1183,7 +1200,11 @@ int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
   }
   //printf("RECV %d: <<%s>>\n", comms->socket, buf);
   MUTEX_UNLOCK(comms->commsLock);
-  return err;
+  if(err < 0) {
+    return err;
+  } else {
+    return 0;
+  }
 }
 
 #ifndef C_ONLY
@@ -1238,9 +1259,9 @@ int CMobot::setJointSpeed(robotJointId_t id, double speed)
   return Mobot_setJointSpeed(&_comms, id, speed);
 }
 
-int CMobot::setJointSpeeds(double speeds[4])
+int CMobot::setJointSpeeds(double speed1, double speed2, double speed3, double speed4)
 {
-  return Mobot_setJointSpeeds(&_comms, speeds);
+  return Mobot_setJointSpeeds(&_comms, speed1, speed2, speed3, speed4);
 }
 
 int CMobot::setJointSpeedRatio(robotJointId_t id, double ratio)
@@ -1248,9 +1269,9 @@ int CMobot::setJointSpeedRatio(robotJointId_t id, double ratio)
   return Mobot_setJointSpeedRatio(&_comms, id, ratio);
 }
 
-int CMobot::setJointSpeedRatios(double ratios[4])
+int CMobot::setJointSpeedRatios(double ratio1, double ratio2, double ratio3, double ratio4)
 {
-  return Mobot_setJointSpeedRatios(&_comms, ratios);
+  return Mobot_setJointSpeedRatios(&_comms, ratio1, ratio2, ratio3, ratio4);
 }
 
 int CMobot::getJointSpeed(robotJointId_t id, double &speed)

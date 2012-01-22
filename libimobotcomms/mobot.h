@@ -69,7 +69,8 @@ typedef enum robotJointDirection_e
 {
   ROBOT_NEUTRAL,
   ROBOT_FORWARD,
-  ROBOT_BACKWARD
+  ROBOT_BACKWARD,
+  ROBOT_HOLD
 } robotJointDirection_t;
 #endif
 
@@ -123,9 +124,9 @@ class CMobot {
     int moveToZero();
     int moveToZeroNB();
     int setJointSpeed(robotJointId_t id, double speed);
-    int setJointSpeeds(double speeds[4]);
+    int setJointSpeeds(double speed1, double speed2, double speed3, double speed4);
     int setJointSpeedRatio(robotJointId_t id, double ratio);
-    int setJointSpeedRatios(double ratios[4]);
+    int setJointSpeedRatios(double ratios1, double ratios2, double ratios3, double ratios4);
     int setTwoWheelRobotSpeed(double speed, double radius, char unit[]);
     int stop();
 
