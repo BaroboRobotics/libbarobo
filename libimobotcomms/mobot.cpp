@@ -50,8 +50,7 @@ int Mobot_init(br_comms_t* comms)
   THREAD_CREATE(&comms->thread, nullThread, NULL);
   comms->commsLock = (MUTEX_T*)malloc(sizeof(MUTEX_T));
   MUTEX_INIT(comms->commsLock);
-  comms->threadLock = (MUTEX_T*)malloc(sizeof(MUTEX_T));
-  MUTEX_INIT(comms->threadLock);
+  comms->motionInProgress = 0;
   return 0;
 }
 
@@ -913,7 +912,9 @@ int Mobot_motionStand(br_comms_t* comms)
 void* motionInchwormLeftThread(void* arg)
 {
   br_comms_t* comms = (br_comms_t*)arg;
+  comms->motionInProgress++;
   Mobot_motionInchwormLeft(comms);
+  comms->motionInProgress--;
   return NULL;
 }
 
@@ -927,7 +928,9 @@ int Mobot_motionInchwormLeftNB(br_comms_t* comms)
 
 void* motionInchwormRightThread(void* arg)
 {
+  ((br_comms_t*)arg)->motionInProgress++;
   Mobot_motionInchwormRight((br_comms_t*)arg);
+  ((br_comms_t*)arg)->motionInProgress--;
   return NULL;
 }
 
@@ -940,7 +943,9 @@ int Mobot_motionInchwormRightNB(br_comms_t* comms)
 
 void* motionRollBackwardThread(void* arg)
 {
+  ((br_comms_t*)arg)->motionInProgress++;
   Mobot_motionRollBackward((br_comms_t*)arg);
+  ((br_comms_t*)arg)->motionInProgress--;
   return NULL;
 }
 
@@ -953,7 +958,9 @@ int Mobot_motionRollBackwardNB(br_comms_t* comms)
 
 void* motionRollForwardThread(void* arg)
 {
+  ((br_comms_t*)arg)->motionInProgress++;
   Mobot_motionRollForward((br_comms_t*)arg);
+  ((br_comms_t*)arg)->motionInProgress--;
   return NULL;
 }
 
@@ -966,7 +973,9 @@ int Mobot_motionRollForwardNB(br_comms_t* comms)
 
 void* motionStandThread(void* arg)
 {
+  ((br_comms_t*)arg)->motionInProgress++;
   Mobot_motionStand((br_comms_t*)arg);
+  ((br_comms_t*)arg)->motionInProgress--;
   return NULL;
 }
 
@@ -979,20 +988,23 @@ int Mobot_motionStandNB(br_comms_t* comms)
 
 void* motionTurnLeftThread(void* arg)
 {
+  ((br_comms_t*)arg)->motionInProgress++;
   Mobot_motionTurnLeft((br_comms_t*)arg);
+  ((br_comms_t*)arg)->motionInProgress--;
   return NULL;
 }
 
 int Mobot_motionTurnLeftNB(br_comms_t* comms)
 {
-
   THREAD_CREATE(&comms->thread, motionTurnLeftThread, comms);
   return 0;
 }
 
 void* motionTurnRightThread(void* arg)
 {
+  ((br_comms_t*)arg)->motionInProgress++;
   Mobot_motionTurnRight((br_comms_t*)arg);
+  ((br_comms_t*)arg)->motionInProgress--;
   return NULL;
 }
 
@@ -1000,6 +1012,18 @@ int Mobot_motionTurnRightNB(br_comms_t* comms)
 {
 
   THREAD_CREATE(&comms->thread, motionTurnRightThread, comms);
+  return 0;
+}
+
+int Mobot_motionWait(br_comms_t* comms)
+{
+  while(comms->motionInProgress) {
+#ifdef _WIN32
+    Sleep(200);
+#else
+    usleep(200000);
+#endif
+  }
   return 0;
 }
 
@@ -1413,6 +1437,11 @@ int CMobot::motionTurnRightNB()
   return Mobot_motionTurnRightNB(&_comms);
 }
 
+int CMobot::motionWait()
+{
+  return Mobot_motionWait(&_comms);
+}
+
 CMobotGroup::CMobotGroup()
 {
   _numRobots = 0;
@@ -1714,6 +1743,14 @@ int CMobotGroup::motionTurnRightNB()
 {
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->motionTurnRightNB();
+  }
+  return 0;
+}
+
+int CMobotGroup::motionWait()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->motionWait();
   }
   return 0;
 }

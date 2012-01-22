@@ -21,6 +21,6 @@ robot2.moveWait();
  * simultaneously. */
 robot1.motionStandNB();
 robot2.motionInchwormLeftNB();
-robot1.moveWait();
-robot2.moveWait();
+robot1.motionWait();
+robot2.motionWait();
 

@@ -331,6 +331,18 @@ int CMobot::motionTurnRightNB() {
     dlrunfun(fptr, &retval, motionTurnRightNB, this);
     return retval;
 }
+int CMobot::motionWait() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "motionWait_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, motionWait, this);
+    return retval;
+}
 int CMobot::move(double angle1, double angle2, double angle3, double angle4) {
     void *fptr;
     int retval;

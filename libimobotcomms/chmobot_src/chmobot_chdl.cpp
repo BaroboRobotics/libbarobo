@@ -144,6 +144,23 @@ EXPORTCH int getJointSpeed_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int getJointSpeedRatio_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    int id;
+    double *speed;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    id = Ch_VaArg(interp, ap, int);
+    speed = Ch_VaArg(interp, ap, double *);
+    retval = mobot->getJointSpeedRatio((robotJointId_t)id, *speed);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int getJointState_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -642,6 +659,18 @@ EXPORTCH int motionTurnRightNB_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int motionWait_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    retval = mobot->motionWait();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
 
 /* CMobotGroup functions */
 

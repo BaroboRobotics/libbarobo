@@ -143,6 +143,7 @@ class CMobot {
     int motionStandNB();
     int motionTurnLeftNB();
     int motionTurnRightNB();
+    int motionWait();
 #ifndef _CH_
   private:
     int getJointDirection(robotJointId_t id, robotJointDirection_t &dir);
@@ -204,6 +205,7 @@ class CMobotGroup
     int motionTurnLeftNB();
     int motionTurnRight();
     int motionTurnRightNB();
+    int motionWait();
 
   private:
     int _numRobots;

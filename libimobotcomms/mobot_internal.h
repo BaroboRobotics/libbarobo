@@ -30,7 +30,7 @@ typedef struct br_comms_s
   double maxSpeed[4];
   THREAD_T thread;
   MUTEX_T* commsLock;
-  MUTEX_T* threadLock;
+  int motionInProgress;
 } br_comms_t;
 #endif
 
@@ -178,6 +178,7 @@ DLLIMPORT int Mobot_motionRollForwardNB(br_comms_t* comms);
 DLLIMPORT int Mobot_motionStandNB(br_comms_t* comms);
 DLLIMPORT int Mobot_motionTurnLeftNB(br_comms_t* comms);
 DLLIMPORT int Mobot_motionTurnRightNB(br_comms_t* comms);
+DLLIMPORT int Mobot_motionWait(br_comms_t* comms);
 
 /* Utility Functions */
 int SendToIMobot(br_comms_t* comms, const char* str, int len);
