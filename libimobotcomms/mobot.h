@@ -130,22 +130,22 @@ class CMobot {
     int setTwoWheelRobotSpeed(double speed, double radius, char unit[]);
     int stop();
 
-    int motionInchwormLeft();
-    int motionInchwormRight();
-    int motionRollBackward();
-    int motionRollForward();
+    int motionInchwormLeft(int num);
+    int motionInchwormRight(int num);
+    int motionRollBackward(double angle);
+    int motionRollForward(double angle);
     int motionStand();
-    int motionTurnLeft();
-    int motionTurnRight();
+    int motionTurnLeft(double angle);
+    int motionTurnRight(double angle);
 
     /* Non-Blocking motion functions */
-    int motionInchwormLeftNB();
-    int motionInchwormRightNB();
-    int motionRollBackwardNB();
-    int motionRollForwardNB();
+    int motionInchwormLeftNB(int num);
+    int motionInchwormRightNB(int num);
+    int motionRollBackwardNB(double angle);
+    int motionRollForwardNB(double angle);
     int motionStandNB();
-    int motionTurnLeftNB();
-    int motionTurnRightNB();
+    int motionTurnLeftNB(double angle);
+    int motionTurnRightNB(double angle);
     int motionWait();
 #ifndef _CH_
   private:
@@ -194,25 +194,40 @@ class CMobotGroup
     int setTwoWheelRobotSpeed(double speed, double radius, char unit[]);
     int stop();
 
-    int motionInchwormLeft();
-    int motionInchwormLeftNB();
-    int motionInchwormRight();
-    int motionInchwormRightNB();
-    int motionRollBackward();
-    int motionRollBackwardNB();
-    int motionRollForward();
-    int motionRollForwardNB();
+    int motionInchwormLeft(int num);
+    int motionInchwormLeftNB(int num);
+    static void* motionInchwormLeftThread(void*);
+    int motionInchwormRight(int num);
+    int motionInchwormRightNB(int num);
+    static void* motionInchwormRightThread(void*);
+    int motionRollBackward(double angle);
+    int motionRollBackwardNB(double angle);
+    static void* motionRollBackwardThread(void*);
+    int motionRollForward(double angle);
+    int motionRollForwardNB(double angle);
+    static void* motionRollForwardThread(void*);
     int motionStand();
     int motionStandNB();
-    int motionTurnLeft();
-    int motionTurnLeftNB();
-    int motionTurnRight();
-    int motionTurnRightNB();
+    static void* motionStandThread(void*);
+    int motionTurnLeft(double angle);
+    int motionTurnLeftNB(double angle);
+    static void* motionTurnLeftThread(void*);
+    int motionTurnRight(double angle);
+    int motionTurnRightNB(double angle);
+    static void* motionTurnRightThread(void*);
     int motionWait();
 
   private:
     int _numRobots;
     CMobot *_robots[64];
+    int argInt;
+    double argDouble;
+#ifndef _CH_
+    THREAD_T* _thread;
+#else
+    void* _thread;
+#endif
+    int _motionInProgress;
 };
 
 #endif /* If C++ or CH */

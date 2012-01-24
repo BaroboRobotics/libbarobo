@@ -31,6 +31,8 @@ typedef struct br_comms_s
   THREAD_T thread;
   MUTEX_T* commsLock;
   int motionInProgress;
+  int motionArgInt;
+  double motionArgDouble;
 } br_comms_t;
 #endif
 
@@ -164,13 +166,13 @@ DLLIMPORT int Mobot_stop(br_comms_t* comms);
 DLLIMPORT int Mobot_moveJointToPIDNB(br_comms_t* comms, robotJointId_t id, double angle);
 
 /* compound motion functions */
-DLLIMPORT int Mobot_motionInchwormLeft(br_comms_t* comms);
-DLLIMPORT int Mobot_motionInchwormRight(br_comms_t* comms);
-DLLIMPORT int Mobot_motionRollBackward(br_comms_t* comms);
-DLLIMPORT int Mobot_motionRollForward(br_comms_t* comms);
+DLLIMPORT int Mobot_motionInchwormLeft(br_comms_t* comms, int num);
+DLLIMPORT int Mobot_motionInchwormRight(br_comms_t* comms, int num);
+DLLIMPORT int Mobot_motionRollBackward(br_comms_t* comms, double angle);
+DLLIMPORT int Mobot_motionRollForward(br_comms_t* comms, double angle);
 DLLIMPORT int Mobot_motionStand(br_comms_t* comms);
-DLLIMPORT int Mobot_motionTurnLeft(br_comms_t* comms);
-DLLIMPORT int Mobot_motionTurnRight(br_comms_t* comms);
+DLLIMPORT int Mobot_motionTurnLeft(br_comms_t* comms, double angle);
+DLLIMPORT int Mobot_motionTurnRight(br_comms_t* comms, double angle);
 
 /* Non-Blocking compound motion functions */
 DLLIMPORT int Mobot_motionInchwormLeftNB(br_comms_t* comms);

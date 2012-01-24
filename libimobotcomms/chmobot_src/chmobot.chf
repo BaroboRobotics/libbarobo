@@ -163,7 +163,7 @@ int CMobot::isMoving() {
     dlrunfun(fptr, &retval, isMoving, this);
     return retval;
 }
-int CMobot::motionInchwormLeft() {
+int CMobot::motionInchwormLeft(int num) {
     void *fptr;
     int retval;
 
@@ -172,10 +172,10 @@ int CMobot::motionInchwormLeft() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionInchwormLeft, this);
+    dlrunfun(fptr, &retval, motionInchwormLeft, this, num);
     return retval;
 }
-int CMobot::motionInchwormLeftNB() {
+int CMobot::motionInchwormLeftNB(int num) {
     void *fptr;
     int retval;
 
@@ -184,10 +184,10 @@ int CMobot::motionInchwormLeftNB() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionInchwormLeftNB, this);
+    dlrunfun(fptr, &retval, motionInchwormLeftNB, this, num);
     return retval;
 }
-int CMobot::motionInchwormRight() {
+int CMobot::motionInchwormRight(int num) {
     void *fptr;
     int retval;
 
@@ -196,10 +196,10 @@ int CMobot::motionInchwormRight() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionInchwormRight, this);
+    dlrunfun(fptr, &retval, motionInchwormRight, this, num);
     return retval;
 }
-int CMobot::motionInchwormRightNB() {
+int CMobot::motionInchwormRightNB(int num) {
     void *fptr;
     int retval;
 
@@ -208,10 +208,10 @@ int CMobot::motionInchwormRightNB() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionInchwormRightNB, this);
+    dlrunfun(fptr, &retval, motionInchwormRightNB, this, num);
     return retval;
 }
-int CMobot::motionRollBackward() {
+int CMobot::motionRollBackward(double angle) {
     void *fptr;
     int retval;
 
@@ -220,10 +220,10 @@ int CMobot::motionRollBackward() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionRollBackward, this);
+    dlrunfun(fptr, &retval, motionRollBackward, this, angle);
     return retval;
 }
-int CMobot::motionRollBackwardNB() {
+int CMobot::motionRollBackwardNB(double angle) {
     void *fptr;
     int retval;
 
@@ -232,10 +232,10 @@ int CMobot::motionRollBackwardNB() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionRollBackwardNB, this);
+    dlrunfun(fptr, &retval, motionRollBackwardNB, this, angle);
     return retval;
 }
-int CMobot::motionRollForward() {
+int CMobot::motionRollForward(double angle) {
     void *fptr;
     int retval;
 
@@ -244,10 +244,10 @@ int CMobot::motionRollForward() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionRollForward, this);
+    dlrunfun(fptr, &retval, motionRollForward, this, angle);
     return retval;
 }
-int CMobot::motionRollForwardNB() {
+int CMobot::motionRollForwardNB(double angle) {
     void *fptr;
     int retval;
 
@@ -256,7 +256,7 @@ int CMobot::motionRollForwardNB() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionRollForwardNB, this);
+    dlrunfun(fptr, &retval, motionRollForwardNB, this, angle);
     return retval;
 }
 int CMobot::motionStand() {
@@ -283,7 +283,7 @@ int CMobot::motionStandNB() {
     dlrunfun(fptr, &retval, motionStandNB, this);
     return retval;
 }
-int CMobot::motionTurnLeft() {
+int CMobot::motionTurnLeft(double angle) {
     void *fptr;
     int retval;
 
@@ -292,10 +292,10 @@ int CMobot::motionTurnLeft() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionTurnLeft, this);
+    dlrunfun(fptr, &retval, motionTurnLeft, this, angle);
     return retval;
 }
-int CMobot::motionTurnLeftNB() {
+int CMobot::motionTurnLeftNB(double angle) {
     void *fptr;
     int retval;
 
@@ -304,10 +304,10 @@ int CMobot::motionTurnLeftNB() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionTurnLeftNB, this);
+    dlrunfun(fptr, &retval, motionTurnLeftNB, this, angle);
     return retval;
 }
-int CMobot::motionTurnRight() {
+int CMobot::motionTurnRight(double angle) {
     void *fptr;
     int retval;
 
@@ -316,10 +316,10 @@ int CMobot::motionTurnRight() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionTurnRight, this);
+    dlrunfun(fptr, &retval, motionTurnRight, this, angle);
     return retval;
 }
-int CMobot::motionTurnRightNB() {
+int CMobot::motionTurnRightNB(double angle) {
     void *fptr;
     int retval;
 
@@ -328,7 +328,7 @@ int CMobot::motionTurnRightNB() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionTurnRightNB, this);
+    dlrunfun(fptr, &retval, motionTurnRightNB, this, angle);
     return retval;
 }
 int CMobot::motionWait() {
@@ -614,7 +614,7 @@ CMobotGroup::CMobotGroup() {
 
 CMobotGroup::~CMobotGroup() {
   void *fptr;
-  fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMobot_dCMobot_chdl");
+  fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMobotGroup_dCMobotGroup_chdl");
   if(fptr == NULL) {
     printf("Error: %s(): dlsym(): %s\n", __class_func__, dlerror());
     return;
@@ -652,7 +652,7 @@ int CMobotGroup::isMoving() {
     dlrunfun(fptr, &retval, isMoving, this);
     return retval;
 }
-int CMobotGroup::motionInchwormLeft() {
+int CMobotGroup::motionInchwormLeft(int num) {
     void *fptr;
     int retval;
 
@@ -661,10 +661,10 @@ int CMobotGroup::motionInchwormLeft() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionInchwormLeft, this);
+    dlrunfun(fptr, &retval, motionInchwormLeft, this, num);
     return retval;
 }
-int CMobotGroup::motionInchwormLeftNB() {
+int CMobotGroup::motionInchwormLeftNB(int num) {
     void *fptr;
     int retval;
 
@@ -673,10 +673,10 @@ int CMobotGroup::motionInchwormLeftNB() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionInchwormLeftNB, this);
+    dlrunfun(fptr, &retval, motionInchwormLeftNB, this, num);
     return retval;
 }
-int CMobotGroup::motionInchwormRight() {
+int CMobotGroup::motionInchwormRight(int num) {
     void *fptr;
     int retval;
 
@@ -685,10 +685,10 @@ int CMobotGroup::motionInchwormRight() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionInchwormRight, this);
+    dlrunfun(fptr, &retval, motionInchwormRight, this, num);
     return retval;
 }
-int CMobotGroup::motionInchwormRightNB() {
+int CMobotGroup::motionInchwormRightNB(int num) {
     void *fptr;
     int retval;
 
@@ -697,10 +697,10 @@ int CMobotGroup::motionInchwormRightNB() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionInchwormRightNB, this);
+    dlrunfun(fptr, &retval, motionInchwormRightNB, this, num);
     return retval;
 }
-int CMobotGroup::motionRollBackward() {
+int CMobotGroup::motionRollBackward(double angle) {
     void *fptr;
     int retval;
 
@@ -709,10 +709,10 @@ int CMobotGroup::motionRollBackward() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionRollBackward, this);
+    dlrunfun(fptr, &retval, motionRollBackward, this, angle);
     return retval;
 }
-int CMobotGroup::motionRollBackwardNB() {
+int CMobotGroup::motionRollBackwardNB(double angle) {
     void *fptr;
     int retval;
 
@@ -721,10 +721,10 @@ int CMobotGroup::motionRollBackwardNB() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionRollBackwardNB, this);
+    dlrunfun(fptr, &retval, motionRollBackwardNB, this, angle);
     return retval;
 }
-int CMobotGroup::motionRollForward() {
+int CMobotGroup::motionRollForward(double angle) {
     void *fptr;
     int retval;
 
@@ -733,10 +733,10 @@ int CMobotGroup::motionRollForward() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionRollForward, this);
+    dlrunfun(fptr, &retval, motionRollForward, this, angle);
     return retval;
 }
-int CMobotGroup::motionRollForwardNB() {
+int CMobotGroup::motionRollForwardNB(double angle) {
     void *fptr;
     int retval;
 
@@ -745,7 +745,7 @@ int CMobotGroup::motionRollForwardNB() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionRollForwardNB, this);
+    dlrunfun(fptr, &retval, motionRollForwardNB, this, angle);
     return retval;
 }
 int CMobotGroup::motionStand() {
@@ -757,7 +757,7 @@ int CMobotGroup::motionStand() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionStand, this);
+    dlrunfun(fptr, &retval, NULL, this);
     return retval;
 }
 int CMobotGroup::motionStandNB() {
@@ -772,7 +772,7 @@ int CMobotGroup::motionStandNB() {
     dlrunfun(fptr, &retval, motionStandNB, this);
     return retval;
 }
-int CMobotGroup::motionTurnLeft() {
+int CMobotGroup::motionTurnLeft(double angle) {
     void *fptr;
     int retval;
 
@@ -781,10 +781,10 @@ int CMobotGroup::motionTurnLeft() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionTurnLeft, this);
+    dlrunfun(fptr, &retval, motionTurnLeft, this, angle);
     return retval;
 }
-int CMobotGroup::motionTurnLeftNB() {
+int CMobotGroup::motionTurnLeftNB(double angle) {
     void *fptr;
     int retval;
 
@@ -793,10 +793,10 @@ int CMobotGroup::motionTurnLeftNB() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionTurnLeftNB, this);
+    dlrunfun(fptr, &retval, motionTurnLeftNB, this, angle);
     return retval;
 }
-int CMobotGroup::motionTurnRight() {
+int CMobotGroup::motionTurnRight(double angle) {
     void *fptr;
     int retval;
 
@@ -805,10 +805,10 @@ int CMobotGroup::motionTurnRight() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionTurnRight, this);
+    dlrunfun(fptr, &retval, motionTurnRight, this, angle);
     return retval;
 }
-int CMobotGroup::motionTurnRightNB() {
+int CMobotGroup::motionTurnRightNB(double angle) {
     void *fptr;
     int retval;
 
@@ -817,7 +817,7 @@ int CMobotGroup::motionTurnRightNB() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionTurnRightNB, this);
+    dlrunfun(fptr, &retval, motionTurnRightNB, this, angle);
     return retval;
 }
 int CMobotGroup::move(double angle1, double angle2, double angle3, double angle4) {
