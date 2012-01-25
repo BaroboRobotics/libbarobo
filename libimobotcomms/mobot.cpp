@@ -902,6 +902,47 @@ int Mobot_motionTurnRight(br_comms_t* comms, double angle)
   return 0;
 }
 
+int Mobot_motionTumble(br_comms_t* comms, int num)
+{
+  int i;
+  Mobot_moveToZero(comms);
+  Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(-85));
+  Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(80));
+
+  for(i = 0; i < num; i++) {
+    if((i%2) == 0) {
+      Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(0));
+      Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(0));
+      Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(60));
+      Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(-85));
+      Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(80));
+    } else {
+      Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(0));
+      Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(0));
+      Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(60));
+      Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(-85));
+      Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(80));
+    }
+  }
+  return 0;
+}
+
+void* motionTumbleThread(void* arg)
+{
+  br_comms_t* comms = (br_comms_t*)arg;
+  Mobot_motionTumble(comms, comms->motionArgInt);
+  comms->motionInProgress--;
+  return NULL;
+}
+
+int Mobot_motionTumbleNB(br_comms_t* comms, int num)
+{
+  comms->motionArgInt = num;
+  comms->motionInProgress++;
+  THREAD_CREATE(&comms->thread, motionTumbleThread, comms);
+  return 0;
+}
+
 int Mobot_motionInchwormLeft(br_comms_t* comms, int num)
 {
   int i;
@@ -962,7 +1003,6 @@ int Mobot_motionStand(br_comms_t* comms)
 void* motionInchwormLeftThread(void* arg)
 {
   br_comms_t* comms = (br_comms_t*)arg;
-  comms->motionInProgress++;
   Mobot_motionInchwormLeft(comms, comms->motionArgInt);
   comms->motionInProgress--;
   return NULL;
@@ -971,6 +1011,7 @@ void* motionInchwormLeftThread(void* arg)
 int Mobot_motionInchwormLeftNB(br_comms_t* comms, int num)
 {
   /* Make sure the old thread has joined */
+  comms->motionInProgress++;
   comms->motionArgInt = num;
   THREAD_CREATE(&comms->thread, motionInchwormLeftThread, comms);
   return 0;
@@ -1916,6 +1957,49 @@ void* CMobotGroup::motionTurnRightThread(void* arg)
 {
   CMobotGroup* cmg = (CMobotGroup*)arg;
   cmg->move(cmg->argDouble, 0, 0, -cmg->argDouble);
+  cmg->_motionInProgress--;
+  return NULL;
+}
+
+int CMobotGroup::motionTumble(int num)
+{
+  argInt = num;
+  motionTumbleThread(this);
+  return 0;
+}
+
+int CMobotGroup::motionTumbleNB(int num)
+{
+  argInt = num;
+  _motionInProgress++;
+  THREAD_CREATE(_thread, motionTumbleThread, this);
+  return 0;
+}
+
+void* CMobotGroup::motionTumbleThread(void* arg)
+{
+  int i;
+  CMobotGroup* cmg = (CMobotGroup*)arg;
+  cmg->moveToZero();
+  cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(-85));
+  cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(80));
+
+  for(i = 0; i < cmg->argInt; i++) {
+    if((i%2) == 0) {
+      cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(0));
+      cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(0));
+      cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(60));
+      cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(-85));
+      cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(80));
+    } else {
+      cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(0));
+      cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(0));
+      cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(60));
+      cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(-85));
+      cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(80));
+    }
+  }
+
   cmg->_motionInProgress--;
   return NULL;
 }
