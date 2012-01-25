@@ -163,6 +163,30 @@ int CMobot::isMoving() {
     dlrunfun(fptr, &retval, isMoving, this);
     return retval;
 }
+int CMobot::motionArch(double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "motionArch_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, motionArch, this, angle);
+    return retval;
+}
+int CMobot::motionArchNB(double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "motionArchNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, motionArchNB, this, angle);
+    return retval;
+}
 int CMobot::motionInchwormLeft(int num) {
     void *fptr;
     int retval;
@@ -559,7 +583,7 @@ int CMobot::setJointSpeedRatio(int id, double speed) {
     dlrunfun(fptr, &retval, setJointSpeedRatio, this, id, speed);
     return retval;
 }
-int CMobot::setTwoWheelRobotSpeed(double speed, double radius, char unit[]) {
+int CMobot::setTwoWheelRobotSpeed(double speed, double radius) {
     void *fptr;
     int retval;
 
@@ -568,7 +592,7 @@ int CMobot::setTwoWheelRobotSpeed(double speed, double radius, char unit[]) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, setTwoWheelRobotSpeed, this, speed, radius, unit);
+    dlrunfun(fptr, &retval, setTwoWheelRobotSpeed, this, speed, radius);
     return retval;
 }
 int CMobot::stop() {
@@ -820,6 +844,18 @@ int CMobotGroup::motionTurnRightNB(double angle) {
     dlrunfun(fptr, &retval, motionTurnRightNB, this, angle);
     return retval;
 }
+int CMobotGroup::motionWait() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_motionWait_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, motionWait, this);
+    return retval;
+}
 int CMobotGroup::move(double angle1, double angle2, double angle3, double angle4) {
     void *fptr;
     int retval;
@@ -1010,6 +1046,18 @@ int CMobotGroup::setJointSpeedRatio(int id, double speed) {
         return -1;
     }
     dlrunfun(fptr, &retval, setJointSpeedRatio, this, id, speed);
+    return retval;
+}
+int CMobotGroup::setTwoWheelRobotSpeed(double speed, double radius) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_setTwoWheelRobotSpeed_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setTwoWheelRobotSpeed, this, speed, radius);
     return retval;
 }
 int CMobotGroup::stop() {
