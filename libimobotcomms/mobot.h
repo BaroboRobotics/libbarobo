@@ -130,6 +130,7 @@ class CMobot {
     int motionTurnLeft(double angle);
     int motionTurnRight(double angle);
     int motionTumble(int num);
+    int motionUnstand();
 
     /* Non-Blocking motion functions */
     int motionArchNB(double angle);
@@ -141,6 +142,7 @@ class CMobot {
     int motionTurnLeftNB(double angle);
     int motionTurnRightNB(double angle);
     int motionTumbleNB(int num);
+    int motionUnstandNB();
     int motionWait();
 #ifndef _CH_
   private:
@@ -216,6 +218,9 @@ class CMobotGroup
     int motionTumble(int num);
     int motionTumbleNB(int num);
     static void* motionTumbleThread(void*);
+    int motionUnstand();
+    int motionUnstandNB();
+    static void* motionUnstandThread(void*);
     int motionWait();
 
   private:
