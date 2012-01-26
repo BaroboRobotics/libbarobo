@@ -1815,6 +1815,7 @@ int CMobotGroup::motionInchwormLeftNB(int num)
   argInt = num;
   _motionInProgress++;
   THREAD_CREATE(_thread, motionInchwormLeftThread, this);
+  return 0;
 }
 
 void* CMobotGroup::motionInchwormLeftThread(void* arg)
