@@ -1601,6 +1601,16 @@ int CMobot::motionTurnRightNB(double angle)
   return Mobot_motionTurnRightNB(&_comms, angle);
 }
 
+int CMobot::motionUnstand()
+{
+  return Mobot_motionUnstand(&_comms);
+}
+
+int CMobot::motionUnstandNB()
+{
+  return Mobot_motionUnstandNB(&_comms);
+}
+
 int CMobot::motionWait()
 {
   return Mobot_motionWait(&_comms);
