@@ -328,7 +328,11 @@ int Mobot_disconnect(br_comms_t* comms)
 
 int Mobot_isConnected(br_comms_t* comms)
 {
-  return comms->connected;
+  if(comms->connected > 0) {
+    return 1;
+  } else {
+    return 0;
+  }
 }
 
 int Mobot_isMoving(br_comms_t* comms)
@@ -1512,24 +1516,9 @@ int CMobot::motionArch(double angle)
   return Mobot_motionArch(&_comms, angle);
 }
 
-int CMobot::motionRollForward(double angle)
+int CMobot::motionArchNB(double angle)
 {
-  return Mobot_motionRollForward(&_comms, angle);
-}
-
-int CMobot::motionRollBackward(double angle)
-{
-  return Mobot_motionRollBackward(&_comms, angle);
-}
-
-int CMobot::motionTurnLeft(double angle)
-{
-  return Mobot_motionTurnLeft(&_comms, angle);
-}
-
-int CMobot::motionTurnRight(double angle)
-{
-  return Mobot_motionTurnRight(&_comms, angle);
+  return Mobot_motionArchNB(&_comms, angle);
 }
 
 int CMobot::motionInchwormLeft(int num)
@@ -1537,24 +1526,14 @@ int CMobot::motionInchwormLeft(int num)
   return Mobot_motionInchwormLeft(&_comms, num);
 }
 
-int CMobot::motionInchwormRight(int num)
-{
-  return Mobot_motionInchwormRight(&_comms, num);
-}
-
-int CMobot::motionStand()
-{
-  return Mobot_motionStand(&_comms);
-}
-
-int CMobot::motionArchNB(double angle)
-{
-  return Mobot_motionArchNB(&_comms, angle);
-}
-
 int CMobot::motionInchwormLeftNB(int num)
 {
   return Mobot_motionInchwormLeftNB(&_comms, num);
+}
+
+int CMobot::motionInchwormRight(int num)
+{
+  return Mobot_motionInchwormRight(&_comms, num);
 }
 
 int CMobot::motionInchwormRightNB(int num)
@@ -1562,9 +1541,19 @@ int CMobot::motionInchwormRightNB(int num)
   return Mobot_motionInchwormRightNB(&_comms, num);
 }
 
+int CMobot::motionRollBackward(double angle)
+{
+  return Mobot_motionRollBackward(&_comms, angle);
+}
+
 int CMobot::motionRollBackwardNB(double angle)
 {
   return Mobot_motionRollBackwardNB(&_comms, angle);
+}
+
+int CMobot::motionRollForward(double angle)
+{
+  return Mobot_motionRollForward(&_comms, angle);
 }
 
 int CMobot::motionRollForwardNB(double angle)
@@ -1572,14 +1561,39 @@ int CMobot::motionRollForwardNB(double angle)
   return Mobot_motionRollForwardNB(&_comms, angle);
 }
 
+int CMobot::motionStand()
+{
+  return Mobot_motionStand(&_comms);
+}
+
 int CMobot::motionStandNB()
 {
   return Mobot_motionStandNB(&_comms);
 }
 
+int CMobot::motionTumble(int num)
+{
+  return Mobot_motionTumble(&_comms, num);
+}
+
+int CMobot::motionTumbleNB(int num)
+{
+  return Mobot_motionTumbleNB(&_comms, num);
+}
+
+int CMobot::motionTurnLeft(double angle)
+{
+  return Mobot_motionTurnLeft(&_comms, angle);
+}
+
 int CMobot::motionTurnLeftNB(double angle)
 {
   return Mobot_motionTurnLeftNB(&_comms, angle);
+}
+
+int CMobot::motionTurnRight(double angle)
+{
+  return Mobot_motionTurnRight(&_comms, angle);
 }
 
 int CMobot::motionTurnRightNB(double angle)
@@ -2050,6 +2064,7 @@ void* CMobotGroup::motionUnstandThread(void* arg)
   cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(-85));
   cmg->moveWait();
   cmg->moveToZero();
+  cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(20));
   cmg->_motionInProgress--;
   return 0;
 }
