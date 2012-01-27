@@ -125,10 +125,14 @@ void CiMobotController_WindowsDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_speed2, m_edit_MotorSpeed2);
 	DDX_Control(pDX, IDC_EDIT_speed3, m_edit_MotorSpeed3);
 	DDX_Control(pDX, IDC_EDIT_speed4, m_edit_MotorSpeed4);
-	DDX_Control(pDX, IDC_EDIT_setpos1, m_edit_setpos1);
-	DDX_Control(pDX, IDC_EDIT_setpos2, m_edit_setpos2);
-	DDX_Control(pDX, IDC_EDIT_setpos3, m_edit_setpos3);
-	DDX_Control(pDX, IDC_EDIT_setpos4, m_edit_setpos4);
+	DDX_Control(pDX, IDC_EDIT_setpos1, m_edit_setspd1);
+	DDX_Control(pDX, IDC_EDIT_setpos2, m_edit_setspd2);
+	DDX_Control(pDX, IDC_EDIT_setpos3, m_edit_setspd3);
+	DDX_Control(pDX, IDC_EDIT_setpos4, m_edit_setspd4);
+	DDX_Control(pDX, IDC_EDIT_setspd1, m_edit_setspd1);
+	DDX_Control(pDX, IDC_EDIT_setspd2, m_edit_setspd2);
+	DDX_Control(pDX, IDC_EDIT_setspd3, m_edit_setspd3);
+	DDX_Control(pDX, IDC_EDIT_setspd4, m_edit_setspd4);
 }
 
 void CiMobotController_WindowsDlg::OnOK()
@@ -142,6 +146,12 @@ void CiMobotController_WindowsDlg::OnOK()
 		case IDC_EDIT_setpos4:
 			OnBnClickedButtonGopos();
 			return;
+    case IDC_EDIT_setspd1:
+    case IDC_EDIT_setspd2:
+    case IDC_EDIT_setspd3:
+    case IDC_EDIT_setspd4:
+      OnBnClickedButtonSetspd();
+      return;
 	}
 	CDialog::OnOK();
 }
@@ -189,6 +199,7 @@ BEGIN_MESSAGE_MAP(CiMobotController_WindowsDlg, CDialog)
 	ON_COMMAND(ID_HELP_ABOUTROBOTCONTROLLER, &CiMobotController_WindowsDlg::OnHelpAboutrobotcontroller)
 	ON_COMMAND(ID_FILE_EXIT, &CiMobotController_WindowsDlg::OnFileExit)
 	ON_BN_CLICKED(IDC_BUTTON_MOVETOZERO, &CiMobotController_WindowsDlg::OnBnClickedButtonMovetozero)
+	ON_BN_CLICKED(IDC_BUTTON_SETSPD, &CiMobotController_WindowsDlg::OnBnClickedButtonSetspd)
 END_MESSAGE_MAP()
 
 
@@ -323,180 +334,28 @@ void CiMobotController_WindowsDlg::InitGaits()
 {
 	/* Add some pre-programmed gaits into the robot */
 
-	/* Rotate Left */
 	Gait* gait;
-	gait = new Gait(L"Rotate Left");
-	double angles[4] = {-90, 0, 0, 90};
-	unsigned char motorMask = 0;
-	motorMask |= (1<<0);
-	motorMask |= (1<<3);
-	gait->addMotion( new Motion(
-		MOTION_MOVE, angles, motorMask));
-	addGait(gait);
-
-	/* Rotate Right */
-	gait = new Gait(L"Rotate Right");
-	SET_ANGLES(angles, 90, 0, 0, -90);
-	gait->addMotion( new Motion(
-		MOTION_MOVE, angles, motorMask));
-	addGait(gait);
-
-	/* Roll Forward */
-	gait = new Gait(L"Roll Forward");
-	SET_ANGLES(angles, 90, 0, 0, 90);
-	gait->addMotion( new Motion(
-		MOTION_MOVE, angles, motorMask));
-	addGait(gait);
-
-	/* Roll Backward */
-	gait = new Gait(L"Roll Backward");
-	SET_ANGLES(angles, -90, 0, 0, -90);
-	gait->addMotion( new Motion(
-		MOTION_MOVE, angles, motorMask));
-	addGait(gait);
-
-	/* Arch */
 	gait = new Gait(L"Arch");
-	SET_ANGLES(angles, 0, -30, 30, 0);
-	motorMask = 0;
-	motorMask |= (1<<1); motorMask |= (1<<2);
-	gait->addMotion( new Motion(
-		MOTION_POSE, angles, motorMask));
 	addGait(gait);
-
-	/* Flat */
-	gait = new Gait (L"Flat");
-	SET_ANGLES(angles, 0, 0, 0, 0);
-	gait->addMotion(new Motion(
-		MOTION_POSE, angles, motorMask));
+	gait = new Gait(L"Inchworm Left");
 	addGait(gait);
-
-	/* Inch Left */
-	gait = new Gait(L"Inch Left");
-	SET_ANGLES(angles, 0, -50, 0, 0);
-	motorMask = 0;
-	motorMask |= (1<<1); motorMask |= (1<<2);
-	gait->addMotion(new Motion(
-		MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, 0, -50, 50, 0);
-	gait->addMotion(new Motion(
-		MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, 0, 0, 50, 0);
-	gait->addMotion(new Motion(
-		MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, 0, 0, 0, 0);
-	gait->addMotion(new Motion(
-		MOTION_POSE, angles, motorMask));
+	gait = new Gait(L"Inchworm Right");
 	addGait(gait);
-
-	/* Inch Right */
-	gait = new Gait(L"Inch Right");
-	SET_ANGLES(angles, 0, 0, 50, 0);
-	motorMask = 0;
-	motorMask |= (1<<1); motorMask |= (1<<2);
-	gait->addMotion(new Motion(
-		MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, 0, -50, 50, 0);
-	gait->addMotion(new Motion(
-		MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, 0, -50, 0, 0);
-	gait->addMotion(new Motion(
-		MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, 0, 0, 0, 0);
-	gait->addMotion(new Motion(
-		MOTION_POSE, angles, motorMask));
+	gait = new Gait(L"Roll Backward");
 	addGait(gait);
-
-	/* Stand */
-	gait = new Gait(L"Stand");
-	SET_ANGLES(angles, 0, 0, 0, 0);
-	motorMask = 0;
-	motorMask |= (1<<2); motorMask |= (1<<1);
-	gait->addMotion(new Motion(
-		MOTION_POSE, angles, motorMask));
-	motorMask |= (1<<1);
-	SET_ANGLES(angles, 0, -90, 70, 0);
-	gait->addMotion(new Motion(
-		MOTION_POSE, angles, motorMask));
-	motorMask |= (1<<2);
-	SET_ANGLES(angles, 0, -90, 70, 0);
-	gait->addMotion(new Motion(
-		MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, 45, 0, 0, 0);
-	motorMask = (1<<0);
-	gait->addMotion(new Motion(
-		MOTION_MOVE, angles, motorMask));
-	SET_ANGLES(angles, 0, 20, 0, 0);
-	motorMask = (1<<1);
-	gait->addMotion(new Motion(
-		MOTION_POSE, angles, motorMask));
+	gait = new Gait(L"Roll Forward");
 	addGait(gait);
-
-	/* Stand turn Right */
-	gait = new Gait(L"Stand Turn Right");
-	SET_ANGLES(angles, -30, 0, 0, 0);
-	motorMask = 1<<0;
-	gait->addMotion(new Motion(
-		MOTION_MOVE, angles, motorMask));
-	addGait(gait);
-
-	/* Stand turn left */
-	gait = new Gait(L"Stand Turn Left");
-	SET_ANGLES(angles, 30, 0, 0, 0);
-	gait->addMotion(new Motion(
-		MOTION_MOVE, angles, motorMask));
-	addGait(gait);
-
-	/* Right Faceplate Forward */
-	gait = new Gait(L"Left Face Forward");
-	SET_ANGLES(angles, 10, 0, 0, 0);
-	motorMask = 1<<0;
-	gait->addMotion(new Motion(
-		MOTION_MOVE, angles, motorMask));
-	addGait(gait);
-  /* TODO: Repair gaits */
-
-	/* Right Faceplate Backward */
-	gait = new Gait(L"Right Face Forward");
-	SET_ANGLES(angles, 0, 0, 0, 10);
-	motorMask = 1<<3;
-	gait->addMotion(new Motion(
-		MOTION_MOVE, angles, motorMask));
-	addGait(gait);
-
-	/* Left Faceplate Forward */
-	gait = new Gait(L"Left Face Backward");
-	SET_ANGLES(angles, -10, 0, 0, 0);
-	motorMask = 1<<0;
-	gait->addMotion(new Motion(
-		MOTION_MOVE, angles, motorMask));
-	addGait(gait);
-
-	/* Left Faceplate Backward */
-	gait = new Gait(L"Right Face Backward");
-	SET_ANGLES(angles, 0, 0, 0, -10);
-	motorMask = 1<<3;
-	gait->addMotion(new Motion(
-		MOTION_MOVE, angles, motorMask));
-	addGait(gait);
-
-	/* UnStand */
-	gait = new Gait(L"UnStand");
-	SET_ANGLES(angles, -85, 80, 0, 0);
-	motorMask = 1<<0; motorMask |= 1<<1;
-	gait->addMotion(new Motion(
-		MOTION_POSE, angles, motorMask));
-	SET_ANGLES(angles, 0, 0, 0, 0);
-	gait->addMotion(new Motion(
-		MOTION_POSE, angles, motorMask));
-	addGait(gait);
-
-	/* Skinny */
 	gait = new Gait(L"Skinny");
-	SET_ANGLES(angles, 85, 80, 0, 0);
-	motorMask = 1<<0; motorMask |= 1<<1;
-	gait->addMotion(new Motion(
-		MOTION_POSE, angles, motorMask));
+	addGait(gait);
+	gait = new Gait(L"Stand");
+	addGait(gait);
+	gait = new Gait(L"Turn Left");
+	addGait(gait);
+	gait = new Gait(L"Turn Right");
+	addGait(gait);
+	gait = new Gait(L"Tumble");
+	addGait(gait);
+	gait = new Gait(L"Unstand");
 	addGait(gait);
 
 	/* Add the names to the listbox */
@@ -530,19 +389,22 @@ void CiMobotController_WindowsDlg::handlerPlay()
       ROBOT_NEUTRAL,
       ROBOT_NEUTRAL,
       ROBOT_NEUTRAL);
-	double speeds[4] = {1.5, 1.5, 1.5, 1.5};
-	iMobotComms.setJointSpeeds(speeds);
-	int numMotions = m_gaits[index]->getNumMotions();
-	const Motion *motion;
-	for(int i = 0; i < numMotions; i++) {
-		motion = m_gaits[index]->getMotion(i);
-		if(motion->getType() == MOTION_POSE) {
-			poseJoints(motion->getAngles(), motion->getMotorMask());
-		} else if (motion->getType() == MOTION_MOVE) {
-			moveJoints(motion->getAngles(), motion->getMotorMask());
-		}
-		iMobotComms.moveWait();
-	}
+
+	iMobotComms.setJointSpeeds(1.5, 1.5, 1.5, 1.5);
+  switch(index) {
+    case 0: iMobotComms.motionArch(DEG2RAD(90)); break;
+    case 1: iMobotComms.motionInchwormLeft(1); break;
+    case 2: iMobotComms.motionInchwormRight(1); break;
+    case 3: iMobotComms.motionRollBackward(DEG2RAD(360)); break;
+    case 4: iMobotComms.motionRollForward(DEG2RAD(360)); break;
+    case 5: iMobotComms.motionSkinny(DEG2RAD(90)); break;
+    case 6: iMobotComms.motionStand(); break;
+    case 7: iMobotComms.motionTurnLeft(DEG2RAD(90)); break;
+    case 8: iMobotComms.motionTurnRight(DEG2RAD(90)); break;
+    case 9: iMobotComms.motionTumble(2); break;
+    case 10: iMobotComms.motionUnstand(); break;
+    default: break;
+  }
 }
 
 afx_msg void CiMobotController_WindowsDlg::OnTimer(UINT nIDEvent)
@@ -605,6 +467,15 @@ void CiMobotController_WindowsDlg::UpdateSliders()
     swprintf(buf, L"%lf", speed);
     m_edit_MotorSpeeds[i]->SetWindowTextW(buf);
 	}
+}
+
+void CiMobotController_WindowsDlg::UpdateSpeedSliders(int i, double speed)
+{
+		m_slider_Speeds[i]->SetPos( 100 - speed*100 );
+		m_speeds[i] = speed*100;
+    wchar_t buf[200];
+    swprintf(buf, L"%lf", speed);
+    m_edit_MotorSpeeds[i]->SetWindowTextW(buf);
 }
 
 void CiMobotController_WindowsDlg::OnLbnSelchangeListgaits()
@@ -809,7 +680,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonrollforward()
 
 void CiMobotController_WindowsDlg::handlerFORWARD()
 {
-  iMobotComms.motionRollForwardNB();
+  iMobotComms.motionRollForwardNB(DEG2RAD(360));
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollstop()
@@ -829,7 +700,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonrollleft()
 
 void CiMobotController_WindowsDlg::handlerLEFT()
 {
-  iMobotComms.motionTurnLeftNB();
+  iMobotComms.motionTurnLeftNB(DEG2RAD(90));
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollright()
@@ -839,7 +710,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonrollright()
 
 void CiMobotController_WindowsDlg::handlerRIGHT()
 {
-  iMobotComms.motionTurnRightNB();
+  iMobotComms.motionTurnRightNB(DEG2RAD(90));
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollback()
@@ -849,7 +720,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonrollback()
 
 void CiMobotController_WindowsDlg::handlerBACK()
 {
-  iMobotComms.motionRollBackwardNB();
+  iMobotComms.motionRollBackwardNB(DEG2RAD(360));
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonMovetozero()
@@ -934,8 +805,7 @@ DWORD WINAPI HandlerThread(void* arg)
       continue;
     }
 	if(!initialized) {
-		double ratios[4] = {0.5, 0.5, 0.5, 0.5};
-		mobot->setJointSpeedRatios(ratios);
+		mobot->setJointSpeedRatios(0.5, 0.5, 0.5, 0.5);
 	}
     double value;
     wchar_t buf[200];
@@ -996,6 +866,7 @@ DWORD WINAPI HandlerThread(void* arg)
           case B_M3B: dlg->handlerM3B(); break;
           case B_M4B: dlg->handlerM4B(); break;
           case B_SETPOS: dlg->handlerSETPOS(); break;
+          case B_SETSPD: dlg->handlerSETSPD(); break;
           case B_FORWARD: dlg->handlerFORWARD(); break;
           case B_STOP: dlg->handlerSTOP(); break;
           case B_LEFT: dlg->handlerLEFT(); break;
@@ -1059,25 +930,25 @@ void CiMobotController_WindowsDlg::handlerSETPOS()
 	double pos;
 	int len;
 	memset(str, 0, sizeof(TCHAR)*80);
-	len = m_edit_setpos1.GetLine(0, str, 79);
+	len = m_edit_setspd1.GetLine(0, str, 79);
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
 		iMobotComms.moveJointToNB(ROBOT_JOINT1, DEG2RAD(pos));
 	}
 	memset(str, 0, sizeof(TCHAR)*80);
-	len = m_edit_setpos2.GetLine(0, str, 79);
+	len = m_edit_setspd2.GetLine(0, str, 79);
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
 		iMobotComms.moveJointToNB(ROBOT_JOINT2, DEG2RAD(pos));
 	}
 	memset(str, 0, sizeof(TCHAR)*80);
-	len = m_edit_setpos3.GetLine(0, str, 79);
+	len = m_edit_setspd3.GetLine(0, str, 79);
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
 		iMobotComms.moveJointToNB(ROBOT_JOINT3, DEG2RAD(pos));
 	}
 	memset(str, 0, sizeof(TCHAR)*80);
-	len = m_edit_setpos4.GetLine(0, str, 79);
+	len = m_edit_setspd4.GetLine(0, str, 79);
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
 		iMobotComms.moveJointToNB(ROBOT_JOINT4, DEG2RAD(pos));
@@ -1227,3 +1098,45 @@ HINSTANCE GotoURL(LPCTSTR url, int showcmd)
     return result;
 }
 
+
+void CiMobotController_WindowsDlg::OnBnClickedButtonSetspd()
+{
+  g_buttonState[B_SETSPD].clicked = 1;
+  return;
+}
+
+void CiMobotController_WindowsDlg::handlerSETSPD()
+{
+	/* Get strings for all of the edit boxes containing values */
+	TCHAR str[80];
+	double pos;
+	int len;
+	memset(str, 0, sizeof(TCHAR)*80);
+	len = m_edit_setspd1.GetLine(0, str, 79);
+	if(len > 0) {
+		_stscanf(str, TEXT("%lf"), &pos);
+		iMobotComms.setJointSpeedRatio(ROBOT_JOINT1, pos);
+    UpdateSpeedSliders(0, pos);
+	}
+	memset(str, 0, sizeof(TCHAR)*80);
+	len = m_edit_setspd2.GetLine(0, str, 79);
+	if(len > 0) {
+		_stscanf(str, TEXT("%lf"), &pos);
+		iMobotComms.setJointSpeedRatio(ROBOT_JOINT2, pos);
+    UpdateSpeedSliders(1, pos);
+	}
+	memset(str, 0, sizeof(TCHAR)*80);
+	len = m_edit_setspd3.GetLine(0, str, 79);
+	if(len > 0) {
+		_stscanf(str, TEXT("%lf"), &pos);
+		iMobotComms.setJointSpeedRatio(ROBOT_JOINT3, pos);
+    UpdateSpeedSliders(2, pos);
+	}
+	memset(str, 0, sizeof(TCHAR)*80);
+	len = m_edit_setspd4.GetLine(0, str, 79);
+	if(len > 0) {
+		_stscanf(str, TEXT("%lf"), &pos);
+		iMobotComms.setJointSpeedRatio(ROBOT_JOINT4, pos);
+    UpdateSpeedSliders(3, pos);
+	}
+}
