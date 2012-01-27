@@ -43,6 +43,7 @@ typedef enum button_e
   S_M3P, 
   S_M4P, 
   B_SETPOS,
+  B_SETSPD,
   B_MOVETOZERO,
   B_NUMBUTTONS
 } buttonId_t;
@@ -76,6 +77,7 @@ public:
   void InitGaits();
   void InitSliders();
   void UpdateSliders();
+  void UpdateSpeedSliders(int i, double speed);
   int addGait(Gait* gait);
   int poseJoints(const double *angles, unsigned char motorMask);
   int moveJoints(const double *angles, unsigned char motorMask);
@@ -196,6 +198,12 @@ public:
 	afx_msg void OnFileExit();
 	afx_msg void OnBnClickedButtonMovetozero();
   void handlerMOVETOZERO();
+  afx_msg void OnBnClickedButtonSetspd();
+  void handlerSETSPD();
+  CEdit m_edit_setspd1;
+  CEdit m_edit_setspd2;
+  CEdit m_edit_setspd3;
+  CEdit m_edit_setspd4;
 };
 
 DWORD WINAPI HandlerThread(void*);
