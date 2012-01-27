@@ -844,6 +844,30 @@ int CMobotGroup::motionRollForwardNB(double angle) {
     dlrunfun(fptr, &retval, motionRollForwardNB, this, angle);
     return retval;
 }
+int CMobotGroup::motionSkinny(double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_motionSkinny_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, motionSkinny, this, angle);
+    return retval;
+}
+int CMobotGroup::motionSkinnyNB(double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_motionSkinnyNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, motionSkinnyNB, this, angle);
+    return retval;
+}
 int CMobotGroup::motionStand() {
     void *fptr;
     int retval;

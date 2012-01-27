@@ -28,3 +28,7 @@ robot1.moveToNB(0, 0, deg2rad(90),  0);
 robot2.moveToNB(0,  deg2rad(-90), 0, 0);
 robot1.moveWait();
 robot2.moveWait();
+robot1.moveToZeroNB();
+robot2.moveToZeroNB();
+robot1.moveWait();
+robot2.moveWait();

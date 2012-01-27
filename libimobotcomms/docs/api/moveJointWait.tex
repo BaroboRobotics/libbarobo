@@ -8,6 +8,7 @@
 
 \noindent
 {\bf Synopsis}
+\vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
 int CMobot::moveJointWait(robotJointId_t id);
@@ -34,9 +35,9 @@ The function returns 0 on success and non-zero otherwise.\\
 \noindent
 {\bf Description}\\
 This function is used to wait for a joint motion to finish. Functions such as
-\texttt{poseJoint()} and \texttt{moveJoint()} do not wait for a joint to finish
+\texttt{moveJoint()} and \texttt{moveJointTo()} do not wait for a joint to finish
 moving before continuing to allow multiple joints to move at the same time. The
-\texttt{moveJointWait()} or \texttt{moveJointWait()} functions are used to wait for
+\texttt{moveJointWait()} function is used to wait for
 robotic motions to complete.
 
 Please note that if this function is called after a motor has been commanded to

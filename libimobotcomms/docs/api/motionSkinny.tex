@@ -2,24 +2,24 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CMobotGroup::motionStand()}\index{CMobotGroup::motionStand()}}\\
-{\LARGE \texttt{CMobotGroup::motionStandNB()}\index{CMobotGroup::motionStandNB()}}\\
+{\LARGE \texttt{CMobot::motionSkinny()}\index{CMobot::motionSkinny()}}\\
+{\LARGE \texttt{CMobot::motionSkinnyNB()}\index{CMobot::motionSkinnyNB()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{motionStand()}
-\addcontentsline{toc}{section}{motionStandNB()}
+\addcontentsline{toc}{section}{motionSkinny()}
+\addcontentsline{toc}{section}{motionSkinnyNB()}
 
 \noindent
 {\bf Synopsis}
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobotGroup::motionStand();
-int CMobotGroup::motionStandNB();
+int CMobot::motionSkinny(double angle);
+int CMobot::motionSkinnyNB(double angle);
 \end{verbatim}
 
 \noindent
 {\bf Purpose}\\
-Stand robots up on a faceplate.\\
+Move the robot into a skinny profile.\\
 
 \noindent
 {\bf Return Value}\\
@@ -31,11 +31,11 @@ None.\\
 
 \noindent
 {\bf Description}\\
-This function causes the robots to stand up into the camera platform.
+This function causes the robot to motionSkinny up into the camera platform.
 
 This function has both a blocking and non-blocking version.
-The blocking version, \texttt{motionStand()}, will block until the
-robot motion has completed. The non-blocking version, \texttt{motionStandNB()},
+The blocking version, \texttt{motionSkinny()}, will block until the
+robot motion has completed. The non-blocking version, \texttt{motionSkinnyNB()},
 will return immediately, and the motion will be performed asynchronously.\\
 
 \noindent

@@ -9,7 +9,7 @@ may be used to control the robot.
 %\capstart
 \begin{center}
 \caption{CMobot Member Functions.}
-\begin{tabular}{p{38 mm}p{90 mm}}
+\begin{tabular}{p{38 mm}p{110 mm}}
 %\begin{tabular}{ll}
 \hline
 Function & Description \\
@@ -29,11 +29,11 @@ and select the menu item ``Robot $\rightarrow$ Configure Robot Bluetooth''. \\
 \texttt{getJointAngle()} & Gets a joint's angle. \\
 %\texttt{getJointDirection()} & Gets a motor's currently assigned direction. \\
 \texttt{getJointMaxSpeed()} & Gets a joint's maximum speed in radians per second. \\
-\texttt{getJointSpeed()} & Gets a motor's current speed setting in radians per second. \\
-\texttt{getJointSpeeds()} & Gets all motor's current speed settings in radians per second. \\
-\texttt{getJointSpeedRatio()} & Gets a motor's speed as a ratio of the motor's maximum speed. \\
-\texttt{getJointSpeedRatios()} & Gets all motor speeds as ratios of the motor's maximum speed. \\
-\texttt{getJointState()} & Gets a motor's current status. \\
+\texttt{getJointSpeed()} & Get a motor's current speed setting in radians per second. \\
+\texttt{getJointSpeeds()} & Get all motor's current speed settings in radians per second. \\
+\texttt{getJointSpeedRatio()} & Get a motor's speed as a ratio of the motor's maximum speed. \\
+\texttt{getJointSpeedRatios()} & Get all motor speeds as ratios of the motor's maximum speed. \\
+\texttt{getJointState()} & Get a motor's current status. \\
 \texttt{isConnected()} & This function is used to check the connection to a robot. \\
 \texttt{isMoving()} & This function is used to check if any joints are currently in motion. \\
 \texttt{move()} & Move all four joints of the robot by specified angles. \\
@@ -62,16 +62,18 @@ Function & Description \\
 \texttt{moveContinuousTime()} & Move joints continuously for a certain amount of time.\\
 \texttt{moveTo()} & Move all four joints of the robot to specified absolute angles. \\
 \texttt{moveToNB()} & Identical to \texttt{moveTo()} but non-blocking. \\
-\texttt{moveJointTo()} & Set the desired motor position. \\
+\texttt{moveJoint()} & Move a joint. \\
+\texttt{moveJointNB()} & Move a joint. \\
+\texttt{moveJointTo()} & Set the desired motor position for a joint. \\
 \texttt{moveJointToNB()} & Identical to \texttt{moveJointTo()} but non-blocking. \\
 \texttt{moveJointWait()} & Wait until the specified motor has stopped moving. \\
 \texttt{moveWait()} & Wait until all motors have stopped moving. \\
-\texttt{moveToZero()} & Instructs all motors to go to their zero positions. \\
+\texttt{moveToZero()} & Instruct all motors to go to their zero positions. \\
 \texttt{moveToZeroNB()} & Identical to \texttt{moveToZero()} but non-blocking. \\
 %\texttt{setJointDirection()} & Set the motor direction of a motor. Set
 %to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
-\texttt{setJointSpeed()} & Sets a motor's speed setting in radians per second. \\
-\texttt{setJointSpeeds()} & Sets all motor speeds in radians per second. \\
+\texttt{setJointSpeed()} & Set a motor's speed setting in radians per second. \\
+\texttt{setJointSpeeds()} & Set all motor speeds in radians per second. \\
 \texttt{setJointSpeedRatio()} & Set a joints speed setting to a fraction of its maximum speed, a value between 0 and 1. \\
 \texttt{setJointSpeedRatios()} & Set all joint speed settings to a fraction of its
 maximum speed, expressed as a value from 0 to 1. \\
@@ -86,19 +88,25 @@ maximum speed, expressed as a value from 0 to 1. \\
 %\capstart
 \begin{center}
 \caption{CMobot Member Functions for Compound Motions.}
-\begin{tabular}{p{38 mm}p{77 mm}}
+\begin{tabular}{p{38 mm}p{107 mm}}
 Compound Motions & These are convenience functions of commonly used compound motions. \\
 \hline
-\texttt{motionInchwormLeft()} \dotfill & Inchworm gait towards the left. \\
+\texttt{motionArch()} \dotfill & Arch the robot for better ground clearance. \\
+\texttt{motionArchNB()} \dotfill & Identical to \texttt{motionArch} but non-blocking. \\
+\texttt{motionInchwormLeft()} \dotfill & Inchworm motion towards the left. \\
 \texttt{motionInchwormLeftNB()} \dotfill & Identical to \texttt{motionInchwormLeft} but non-blocking. \\
-\texttt{motionInchwormRight()} \dotfill & Inchworm gait towards the right. \\
+\texttt{motionInchwormRight()} \dotfill & Inchworm motion towards the right. \\
 \texttt{motionInchwormRightNB()} \dotfill & Identical to \texttt{motionInchwormRight} but non-blocking. \\
 \texttt{motionRollBackward()} \dotfill & Roll on the faceplates toward the backward direction. \\
 \texttt{motionRollBackwardNB()} \dotfill & Identical to \texttt{motionRollBackward()} but non-blocking. \\
 \texttt{motionRollForward()} \dotfill & Roll on the faceplates forwards. \\
 \texttt{motionRollForwardNB()} \dotfill & Identical to \texttt{motionRollForward()} but non-blocking. \\
+\texttt{motionSkinny()} \dotfill & Move the robot into a skinny profile. \\
+\texttt{motionSkinnyNB()} \dotfill & Identical to \texttt{motionSkinny()} but non-blocking. \\
 \texttt{motionStand()} \dotfill & Stand the robot up on its end. \\
-\texttt{motionStandNB()} \dotfill & Identical to \texttt{motionStandNB()} but non-blocking. \\
+\texttt{motionStandNB()} \dotfill & Identical to \texttt{motionStand()} but non-blocking. \\
+\texttt{motionTumble()} \dotfill & Perform the tumbling motion. \\
+\texttt{motionTumbleNB()} \dotfill & Identical to \texttt{motionTumble()} but non-blocking. \\
 \texttt{motionTurnLeft()} \dotfill & Rotate the robot counterclockwise. \\
 \texttt{motionTurnLeftNB()} \dotfill & Identical to \texttt{motionTurnLeft()} but non-blocking. \\
 \texttt{motionTurnRight()} \dotfill & Rotate the robot clockwise. \\

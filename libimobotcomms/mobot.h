@@ -11,7 +11,6 @@
 #else
 #pragma package <chbluetooth>
 #endif
-#include <stdbool.h>
 #endif
 
 #include <stdio.h>
@@ -126,6 +125,7 @@ class CMobot {
     int motionInchwormRight(int num);
     int motionRollBackward(double angle);
     int motionRollForward(double angle);
+    int motionSkinny(double angle);
     int motionStand();
     int motionTurnLeft(double angle);
     int motionTurnRight(double angle);
@@ -138,6 +138,7 @@ class CMobot {
     int motionInchwormRightNB(int num);
     int motionRollBackwardNB(double angle);
     int motionRollForwardNB(double angle);
+    int motionSkinnyNB(double angle);
     int motionStandNB();
     int motionTurnLeftNB(double angle);
     int motionTurnRightNB(double angle);
@@ -206,6 +207,9 @@ class CMobotGroup
     int motionRollForward(double angle);
     int motionRollForwardNB(double angle);
     static void* motionRollForwardThread(void*);
+    int motionSkinny(double angle);
+    int motionSkinnyNB(double angle);
+    static void* motionSkinnyThread(void*);
     int motionStand();
     int motionStandNB();
     static void* motionStandThread(void*);

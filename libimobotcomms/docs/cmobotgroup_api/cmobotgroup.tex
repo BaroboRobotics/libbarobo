@@ -9,7 +9,7 @@ move and affect a group of many robots.
 %\capstart
 \begin{center}
 \caption{CMobotGroup Member Functions.}
-\begin{tabular}{p{38 mm}p{77 mm}}
+\begin{tabular}{p{38 mm}p{107 mm}}
 %\begin{tabular}{ll}
 \hline
 Function & Description \\
@@ -29,7 +29,9 @@ is called automatically and should not be called explicitly. \\
 \texttt{moveJointContinuousTime()} & Move a single joint on all robots continuously for a specific amount of time. \\
 \texttt{moveTo()} & Move all four joints of the robots to specified absolute angles. \\
 \texttt{moveToNB()} & Identical to \texttt{moveTo()} but non-blocking. \\
-\texttt{moveJointTo()} & Set the desired motor position. \\
+\texttt{moveJoint()} & Move a motor from its current position by an angle. \\
+\texttt{moveJointNB()} & Identical to \texttt{moveJoint()} but non-blocking. \\
+\texttt{moveJointTo()} & Set the desired motor position for a joint. \\
 \texttt{moveJointToNB()} & Identical to \texttt{moveJointTo()} but non-blocking. \\
 \texttt{moveJointWait()} & Wait until the specified motor has stopped moving. \\
 \texttt{moveWait()} & Wait until all motors have stopped moving. \\
@@ -37,12 +39,12 @@ is called automatically and should not be called explicitly. \\
 \texttt{moveToZeroNB()} & Identical to \texttt{moveToZero()} but non-blocking. \\
 %\texttt{setJointDirection()} & Set the motor direction of a motor. Set
 %to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
-\texttt{setJointSpeed()} & Sets a motor's speed setting in radians per second. \\
-\texttt{setJointSpeeds()} & Sets all motor speeds in radians per second. \\
+\texttt{setJointSpeed()} & Set a motor's speed setting in radians per second. \\
+\texttt{setJointSpeeds()} & Set all motor speeds in radians per second. \\
 \texttt{setJointSpeedRatio()} & Set a joints speed setting to a fraction of its maximum speed, a value between 0 and 1. \\
 \texttt{setJointSpeedRatios()} & Set all joint speed settings to a fraction of its
 maximum speed, expressed as a value from 0 to 1. \\
-\texttt{setTwoWheelRobotSpeed()} & Moves the robot at a constant forward velocity. \\
+\texttt{setTwoWheelRobotSpeed()} & Move the robot at a constant forward velocity. \\
 \texttt{stop()} & Stop all currently executing motions of the robot. \\
 \hline
 \end{tabular}
@@ -54,12 +56,12 @@ maximum speed, expressed as a value from 0 to 1. \\
 %\capstart
 \begin{center}
 \caption{CMobot Member Functions for Compound Motions.}
-\begin{tabular}{p{38 mm}p{77 mm}}
+\begin{tabular}{p{38 mm}p{107 mm}}
 Compound Motions & These are convenience functions of commonly used compound motions. \\
 \hline
-\texttt{motionInchwormLeft()} \dotfill & Inchworm gait towards the left. \\
+\texttt{motionInchwormLeft()} \dotfill & Inchworm motion towards the left. \\
 \texttt{motionInchwormLeftNB()} \dotfill & Identical to \texttt{motionInchwormLeft} but non-blocking. \\
-\texttt{motionInchwormRight()} \dotfill & Inchworm gait towards the right. \\
+\texttt{motionInchwormRight()} \dotfill & Inchworm motion towards the right. \\
 \texttt{motionInchwormRightNB()} \dotfill & Identical to \texttt{motionInchwormRight} but non-blocking. \\
 \texttt{motionRollBackward()} \dotfill & Roll on the faceplates toward the backward direction. \\
 \texttt{motionRollBackwardNB()} \dotfill & Identical to \texttt{motionRollBackward()} but non-blocking. \\

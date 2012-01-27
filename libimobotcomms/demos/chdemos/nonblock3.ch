@@ -8,9 +8,10 @@ CMobot robot;
 robot.connect();
 
 robot.moveToZero();
-/* Rotate each of the faceplates by 90 degrees */
 
+printf("Rolling 360 degrees.\n");
 robot.motionRollForward(deg2rad(360));
+printf("Rolling 360 degrees while arching.\n");
 robot.motionArchNB(deg2rad(90));
 robot.motionRollForwardNB(deg2rad(360));
 robot.motionWait();

@@ -8,6 +8,7 @@
 
 \noindent
 {\bf Synopsis}
+\vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
 int CMobot::isConnected();
@@ -19,8 +20,8 @@ Check to see if currently connected to a remote robot via Bluetooth.\\
 
 \noindent
 {\bf Return Value}\\
-The function returns zero if it is not currently connected to a robot, 1 if the robot 
-is connected, or -1 if an error has occured.\\
+The function returns zero if it is not currently connected to a robot or if an 
+error has occured, or 1 if the robot is connected.\\
 
 \noindent
 {\bf Parameters}\\
@@ -37,5 +38,5 @@ a robot.\\
 
 \noindent
 {\bf See Also}\\
-
+\texttt{connect(), disconnect()}
 %\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

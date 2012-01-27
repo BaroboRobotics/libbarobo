@@ -1013,6 +1013,30 @@ void* motionStandThread(void* arg)
   return NULL;
 }
 
+int Mobot_motionSkinny(br_comms_t* comms, double angle)
+{
+  Mobot_moveJointToNB(comms, ROBOT_JOINT2, angle);
+  Mobot_moveJointToNB(comms, ROBOT_JOINT3, angle);
+  Mobot_moveWait(comms);
+  return 0;
+}
+
+void* motionSkinnyThread(void* arg)
+{
+  br_comms_t* comms = (br_comms_t*)arg;
+  Mobot_motionSkinny((br_comms_t*)arg, comms->motionArgDouble);
+  ((br_comms_t*)arg)->motionInProgress--;
+  return NULL;
+}
+
+int Mobot_motionSkinnyNB(br_comms_t* comms, double angle)
+{
+  comms->motionArgDouble = angle;
+  comms->motionInProgress++;
+  THREAD_CREATE(&comms->thread, motionSkinnyThread, comms);
+  return 0;
+}
+
 int Mobot_motionStandNB(br_comms_t* comms)
 {
   comms->motionInProgress++;
@@ -1561,6 +1585,16 @@ int CMobot::motionRollForwardNB(double angle)
   return Mobot_motionRollForwardNB(&_comms, angle);
 }
 
+int CMobot::motionSkinny(double angle)
+{
+  return Mobot_motionSkinny(&_comms, angle);
+}
+
+int CMobot::motionSkinnyNB(double angle)
+{
+  return Mobot_motionSkinnyNB(&_comms, angle);
+}
+
 int CMobot::motionStand()
 {
   return Mobot_motionStand(&_comms);
@@ -1805,6 +1839,7 @@ int CMobotGroup::stop()
 
 int CMobotGroup::motionArch(double angle) {
   argDouble = angle;
+  _motionInProgress++;
   motionArchThread(this);
   return 0;
 }
@@ -1830,6 +1865,7 @@ void* CMobotGroup::motionArchThread(void* arg)
 int CMobotGroup::motionInchwormLeft(int num)
 {
   argInt = num;
+  _motionInProgress++;
   motionInchwormLeftThread(this);
   return 0;
 }
@@ -1861,6 +1897,7 @@ void* CMobotGroup::motionInchwormLeftThread(void* arg)
 int CMobotGroup::motionInchwormRight(int num)
 {
   argInt = num;
+  _motionInProgress++;
   motionInchwormRightThread(this);
   return 0;
 }
@@ -1894,6 +1931,7 @@ void* CMobotGroup::motionInchwormRightThread(void* arg)
 int CMobotGroup::motionRollBackward(double angle)
 {
   argDouble = angle;
+  _motionInProgress++;
   motionRollBackwardThread(this);
   return 0;
 }
@@ -1917,6 +1955,7 @@ void* CMobotGroup::motionRollBackwardThread(void* arg)
 int CMobotGroup::motionRollForward(double angle)
 {
   argDouble = angle;
+  _motionInProgress++;
   motionRollForwardThread(this);
   return 0;
 }
@@ -1937,8 +1976,34 @@ void* CMobotGroup::motionRollForwardThread(void* arg)
   return NULL;
 }
 
+int CMobotGroup::motionSkinny(double angle)
+{
+  argDouble = angle;
+  _motionInProgress++;
+  motionSkinnyThread(this);
+  return 0;
+}
+
+int CMobotGroup::motionSkinnyNB(double angle)
+{
+  argDouble = angle;
+  _motionInProgress++;
+  THREAD_CREATE(_thread, motionSkinnyThread, this);
+  return 0;
+}
+
+void* CMobotGroup::motionSkinnyThread(void* arg)
+{
+  CMobotGroup *cmg = (CMobotGroup*)arg;
+  cmg->moveJointToNB(ROBOT_JOINT2, cmg->argDouble);
+  cmg->moveJointToNB(ROBOT_JOINT3, cmg->argDouble);
+  cmg->_motionInProgress--;
+  return NULL;
+}
+
 int CMobotGroup::motionStand()
 {
+  _motionInProgress++;
   motionStandThread(this);
   return 0;
 }
@@ -1967,6 +2032,7 @@ void* CMobotGroup::motionStandThread(void* arg)
 int CMobotGroup::motionTurnLeft(double angle)
 {
   argDouble = angle;
+  _motionInProgress++;
   motionTurnLeftThread(this);
   return 0;
 }
@@ -1990,6 +2056,7 @@ void* CMobotGroup::motionTurnLeftThread(void* arg)
 int CMobotGroup::motionTurnRight(double angle)
 {
   argDouble = angle;
+  _motionInProgress++;
   motionTurnRightThread(this);
   return 0;
 }
@@ -2013,6 +2080,7 @@ void* CMobotGroup::motionTurnRightThread(void* arg)
 int CMobotGroup::motionTumble(int num)
 {
   argInt = num;
+  _motionInProgress++;
   motionTumbleThread(this);
   return 0;
 }
@@ -2055,6 +2123,7 @@ void* CMobotGroup::motionTumbleThread(void* arg)
 
 int CMobotGroup::motionUnstand()
 {
+  _motionInProgress++;
   motionUnstandThread(this);
   return 0;
 }

@@ -1337,6 +1337,35 @@ EXPORTCH int CMG_motionRollForwardNB_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int CMG_motionSkinny_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotGroup *mobot;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->motionSkinny(angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int CMG_motionSkinnyNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotGroup *mobot;
+    double angle;
+    int retval;
+    
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->motionSkinnyNB(angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int CMG_motionStand_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

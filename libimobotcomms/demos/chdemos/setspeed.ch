@@ -29,12 +29,12 @@ robot.motionRollForward(deg2rad(360));
 
 speed = (3.5/2) * M_PI / 2;      // 2.75 inch/s 
 radius = 3.5/2;     // radius is 1.75 
-robot.setTwoWheelRobotSpeed(speed, radius, "inch");
+robot.setTwoWheelRobotSpeed(speed, radius);
 
 printf("Move 360 degrees.\n");
 robot.move(deg2rad(360), 0, 0, deg2rad(360));
 
-/* move at 2inch/sec with the radius 3.5 inches for 3 seconds */
+/* move at 2.75inch/sec with the radius 3.5 inches for 3 seconds */
 printf("Move continuously for 3 seconds.\n");
 robot.moveContinuousTime(ROBOT_JOINT_FORWARD, ROBOT_JOINT_HOLD, 
                          ROBOT_JOINT_HOLD, ROBOT_JOINT_FORWARD, 3000);

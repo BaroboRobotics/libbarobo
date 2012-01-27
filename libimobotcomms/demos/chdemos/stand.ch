@@ -1,4 +1,4 @@
-/* Filename: stand2.ch 
+/* Filename: stand.ch 
  * Make a MoBot stand up on a faceplate */
 #include <mobot.h>
 

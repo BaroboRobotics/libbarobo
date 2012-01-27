@@ -17,8 +17,7 @@ robot2.moveToZeroNB();
 robot1.moveWait();
 robot2.moveWait();
 
-/* Instruct the first robot to stand and the second robot to inchworm
- * simultaneously. */
+/* Instruct the first robot to stand and the second robot to inchworm simultaneously. */
 robot1.motionStandNB();
 robot2.motionInchwormLeftNB();
 robot1.motionWait();

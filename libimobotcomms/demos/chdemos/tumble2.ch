@@ -1,4 +1,4 @@
-/* Filename: tumble.ch 
+/* Filename: tumble2.ch 
  * Tumbling robot */
 
 #include <mobot.h>
@@ -7,11 +7,7 @@
 CMobot robot;
 
 /* Connect to the paired MoBot */
-if(robot.connect())
-{
-	printf("Connect error.\n");
-	exit(0);
-}
+robot.connect();
 
 /* Set the robot to "home" position, where all joint angles are 0 degrees. */
 robot.moveToZero();

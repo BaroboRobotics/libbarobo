@@ -8,6 +8,7 @@
 
 \noindent
 {\bf Synopsis}
+\vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
 int CMobot::isMoving();
@@ -19,8 +20,10 @@ Check to see if a robot is currently moving any of its joints.\\
 
 \noindent
 {\bf Return Value}\\
-This function returns 0 if none of the joints are being driven, 1 if any joint
-is being driven, and -1 if there was an error communicating with the MoBot.\\
+This function returns 0 if none of the joints are being driven or if an error
+has occured, or 1 if any joint is being driven. A value of 1 is equivalent to 
+either a joint state of \texttt{ROBOT\_FORWARD} or \texttt{ROBOT\_BACKWARD} 
+from \texttt{getJointState()}\\ 
 
 \noindent
 {\bf Parameters}\\
@@ -37,5 +40,6 @@ its joints. \\
 
 \noindent
 {\bf See Also}\\
+\texttt{getJointState()}
 
 %\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

@@ -8,6 +8,7 @@
 
 \noindent
 {\bf Synopsis}
+\vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
 int CMobot::getJointState(robotJointId_t id, robotJointState_t &state);
@@ -40,11 +41,16 @@ discussed in Section \ref{sec:robotJointState_t} on page
 \noindent
 {\bf Description}\\
 This function is used to determine the current state of a motor. Valid states are:
-\begin{itemize}
-\item \texttt{ROBOT\_JOINT\_IDLE} : 0: The motor is idle.
-\item \texttt{ROBOT\_JOINT\_MOVING} : 1: The motor is moving.
-\item \texttt{ROBOT\_JOINT\_GOALSEEK} : 2: The motor is heading towards a specified position.
-\end{itemize}
+
+\begin{tabular}{p{3.3cm}p{10cm}} \hline 
+Value & Description \\
+\texttt{ROBOT\_NEUTRAL}& This value indicates that the joint is not moving and is not actuated. The joint is freely backdrivable. \\
+\texttt{ROBOT\_FORWARD}& This value indicates that the joint is currently moving forward. \\
+\texttt{ROBOT\_BACKWARD}& This value indicates that the joint is currently moving backward. \\
+\texttt{ROBOT\_HOLD}& This value indicates that the joint is currently not moving and is holding its current position. The joint is not currently backdrivable. \\
+\hline
+\end{tabular}
+
 
 \noindent
 {\bf Example}\\
@@ -52,5 +58,5 @@ This function is used to determine the current state of a motor. Valid states ar
 
 \noindent
 {\bf See Also}\\
-
+\texttt{isMoving()}
 %\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\
