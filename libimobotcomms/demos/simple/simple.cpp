@@ -10,7 +10,7 @@ int main()
   robot.connect();
 
   robot.setJointSpeed(ROBOT_JOINT1, M_PI);
-  robot.moveJointContinuousNB(ROBOT_JOINT1, ROBOT_JOINT_FORWARD);
+  robot.moveJointContinuousNB(ROBOT_JOINT1, ROBOT_FORWARD);
 
   return 0;
 }

@@ -57,10 +57,10 @@ typedef enum robotJoints_e {
 #define ROBOT_JOINT_STATE_E
 typedef enum robotJointState_e
 {
-    ROBOT_JOINT_NEUTRAL = 0,
-    ROBOT_JOINT_FORWARD,
-    ROBOT_JOINT_BACKWARD,
-    ROBOT_JOINT_HOLD,
+    ROBOT_NEUTRAL = 0,
+    ROBOT_FORWARD,
+    ROBOT_BACKWARD,
+    ROBOT_HOLD,
 } robotJointState_t;
 #endif
 
