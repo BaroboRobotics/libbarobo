@@ -20,3 +20,5 @@ group.addRobot(robot2);
  * execute the command. */
 group.motionInchwormLeft(4); /* Cause both robots to inchworm left 4 times */
 group.motionStand(); /* Cause both robots to stand */
+sleep(3); /* Make the robots stand still for 3 seconds */
+group.motionUnstand(); /* Make the robots get back down from standing */

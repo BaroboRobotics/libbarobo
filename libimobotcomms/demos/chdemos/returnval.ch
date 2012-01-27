@@ -8,7 +8,7 @@ CMobot robot;
 /* Connect to the paired MoBot */
 if(robot.connect())
 {
-    printf("Connect error.\n");
+    printf("Failed to connect to the robot.\n");
     exit(0);
 }
 /* Set the robot to "home" position, where all joint angles are 0 degrees. */

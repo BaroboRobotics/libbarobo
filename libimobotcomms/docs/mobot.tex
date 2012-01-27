@@ -67,8 +67,14 @@ program. The remainder of the section contains step-by-step instructions
 and screenshots showing how to configure your MoBots.
 
 To start the provided Barobo Robot Control Program click on the icon labeled 
-``RobotController'' on your desktop. The 
+``RobotController'' on your desktop, as shown in \ref{fig:barobo_icon.png}. The 
 control dialog as shown in Figure \ref{fig:shot1.png} should pop up.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=1in]{images/barobo_icon.png}
+\end{center}
+\caption{\label{fig:barobo_icon.png} The icon for the Barobo RobotController.}
+\end{figure}
 
 \begin{figure}[H]
 \begin{center}
@@ -148,7 +154,7 @@ the ``Move Up'' button is shown in Figure \ref{fig:shot10.png}.
 \begin{center}
 \includegraphics[width=3in]{images/shot10.png}
 \end{center}
-\caption{\label{fig:shot10.png} The graphical user interface of the RobotController.}
+\caption{\label{fig:shot10.png} Modifying the order of bluetooth addresses with the ``Configure Robot Bluetooth'' dialog.}
 \end{figure}
 
 \subsection{Connecting and Disconnecting to Robots from the RobotController}
@@ -156,7 +162,10 @@ Once bluetooth addresses are added to the RobotController, you may connect to th
 first address by clicking on the ``Connect $\rightarrow$ Connect to Robot''
 menu item. The connected robot may be disconnected by clicking on the 
 ``Connect $\rightarrow$ Disconnect from Robot'' menu item. Any connected robots are
-automatically disconnected upon exiting the program.
+automatically disconnected upon exiting the program. Note that in order to run a Ch
+program that controls a robot, the robot may not currently be connected to any
+other application, including the RobotController, other Ch programs, and other
+programs on other computers.
 
 \section{ The Robot Remote Control Program }
 \begin{figure}[H]
@@ -228,7 +237,7 @@ sliders.
 Underneath the sliders, there are four text entry boxes. The text boxes
 accept specific angles for each joint which the user may type in. When 
 the ``Move'' button is clicked, each joint will move to their respective 
-desired positions. If any text entry is left blank, the joint will
+desired positions. If any text entry is left blank, the corresponding joint will
 not move. 
 \begin{comment}
 The second method for moving the joints is by entering the exact angles for the
@@ -249,14 +258,14 @@ preprogrammed motions for the MoBot. To execute a preprogrammed motion, simply
 click on the name of the motion you wish to execute, and then click the button
 labeled ``Play''.
 
-\section{Getting Started Programming the MoBot}
-The first demo presents a minimal program which connects to a MoBot and
-moves some joints.
-
+\section{Getting Started with Programming the MoBot}
 Before the Ch program is executed, the Bluetooth addresses of the robots
 need to be added using the RobotController as described in Section \ref{sec:pairing}.
 If a robot is already connected to the RobotController, disconnect
 from the robot before running the Ch program, or close the RobotController application.
+
+The first demo presents a minimal program which connects to a MoBot and
+moves some joints.
 
 \subsection{\texttt{start.ch}, A Basic Ch Mobot Program}
 \subsubsection{\texttt{start.ch} Source Code}
@@ -451,9 +460,21 @@ code:
 robot.motionStand();
 \end{verbatim}
 This line of code causes the MoBot to perform a sequence of motions causing it to
-stand up on a faceplate. The function is a blocking function and will wait until
-the entire motion sequence is completed before continuing. There are also non-blocking
-versions of the motion functions, documented in Section \ref{sec:blocking}.
+stand up on a faceplate. After the robot has stood up, the next line of code,
+\begin{verbatim}
+sleep(3); // Stand still for three seconds
+\end{verbatim}
+pauses the program for three seconds, causing the robot to remain still for three
+seconds. After the pause is over, the line
+\begin{verbatim}
+robot.move(deg2rad(720), 0, 0, deg2rad(720));
+\end{verbatim}
+turns both faceplates of the robot two full rotations, making the robot spin in place
+while standing. Finally, the line
+\begin{verbatim}
+robot.motionUnstand();
+\end{verbatim}
+causes the robot to drop back down into a flat position.
 
 \subsection{\texttt{tumble.ch}: A Demo Using the \texttt{motionTumble()} Preprogrammed
 Motion}
@@ -462,7 +483,7 @@ Motion}
 \subsection{\texttt{motion.ch}: A Demo Using Multiple Preprogrammed Motions}
 \verbatiminput{../demos/chdemos/motion.ch}
 
-\section{Detailed Examples of Custom Motions}
+\section{Detailed Examples of Preprogrammed Motions and Writing Customized Motions}
 To help the user become acquainted with the MoBot control programs, sample
 programs will be presented in this section to illustrate the basics and minimum requirements of
 a MoBot control program. The sample programs are located at 
@@ -672,7 +693,7 @@ this document.
 
 \section{Controlling Multiple Modules}
 The MoBot control software is designed to be able to control multiple modules
-simultaneously. There are a couple important differences in the program 
+simultaneously. There are some important differences in the program 
 which enable the control of multiple modules. A small demo program which
 controls two modules simultaneously will first be presented, followed by
 a detailed explanation of the program elements.
@@ -838,10 +859,24 @@ group.motionInchwormLeft(4); /* Cause both robots to inchworm left 4 times */
 group.motionStand(); /* Cause both robots to stand */
 \end{verbatim}
 
+After the robots stand, the next line, 
+\begin{verbatim}
+sleep(3); /* Make the robots stand still for 3 seconds */
+\end{verbatim}
+makes the robots stand still for three seconds. After standing
+still for three seconds, the line
+\begin{verbatim}
+group.motionUnstand(); /* Make the robots get back down from standing */
+\end{verbatim}
+makes both robots move back down from a standing position into a prone
+position.
+
 \newpage
 \appendix
 \section{\label{sec:datatypes}Data Types}
-There are data types which are used by the MoBot library to represent 
+The data types defined in the header file \texttt{mobot.h} are described in
+this appendix.
+These data types are used by the MoBot library to represent 
 certain values, such as joint id's and motor directions.
 
 \begin{tabular}{p{3.5cm}p{10cm}} \hline 
@@ -896,6 +931,7 @@ typedef enum mobot_joint_state_e {
 
 \begin{tabular}{p{3.3cm}p{11.5cm}} \hline 
 Value & Description \\
+\hline
 \texttt{ROBOT\_NEUTRAL}& This value indicates that the joint is not moving and is not actuated. The joint is freely backdrivable. \\
 \texttt{ROBOT\_FORWARD}& This value indicates that the joint is currently moving forward. \\
 \texttt{ROBOT\_BACKWARD}& This value indicates that the joint is currently moving backward. \\

@@ -12,7 +12,7 @@ robot.connect();
 robot.moveToZero();
 
 /* test all pre-programmed motions */
-robot.motionArched();
+robot.motionArch(deg2rad(90));
 robot.motionInchwormLeft(4);
 robot.motionInchwormRight(4);
 robot.motionRollBackward(deg2rad(360));
