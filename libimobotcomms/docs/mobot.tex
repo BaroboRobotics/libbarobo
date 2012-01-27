@@ -85,7 +85,7 @@ shown in Figure \ref{fig:shot3.png}.
 \begin{center}
 \includegraphics[width=4.5in]{images/shot3.png}
 \end{center}
-\caption{\label{fig:shot3.png} The graphical user interface of the RobotController.}
+\caption{\label{fig:shot3.png} Configuring robot bluetooth connection.}
 \end{figure}
 
 This should bring up a second dialog, titled ``Configure Robot Bluetooth'', as
@@ -258,10 +258,11 @@ need to be added using the RobotController as described in Section \ref{sec:pair
 If a robot is already connected to the RobotController, disconnect
 from the robot before running the Ch program, or close the RobotController application.
 
-\subsubsection{\texttt{gettingStarted.ch} Source Code}
-\verbatiminput{../demos/gettingStarted/gettingStarted.ch}
+\subsection{\texttt{start.ch}, A Basic Ch Mobot Program}
+\subsubsection{\texttt{start.ch} Source Code}
+\verbatiminput{../demos/chdemos/start.ch}
 
-\subsubsection{\label{sec:democode}Demo Code for \texttt{gettingStarted.ch} Explained}
+\subsubsection{\label{sec:democode}Demo Code for \texttt{start.ch} Explained}
 The beginning of every MoBot control program will include header files. Each
 header file imports functions used for a number of tasks, such as printing
 data onto the screen or controlling the MoBot. The \texttt{mobot.h} header
@@ -356,6 +357,11 @@ may also be converted to degrees using the counterpart function,
 Joints 1 and 4 are the faceplates
 of the MoBot which are sometimes used to act as "wheels".
 
+\subsection{\texttt{returnval.ch}, A Basic Ch Mobot Program Which Checks Return Values}
+\verbatiminput{../demos/chdemos/returnval.ch}
+
+\section{Controlling the Speed of Mobot Joints}
+\verbatiminput{../demos/chdemos/setspeed.ch}
 
 \section{Preprogrammed Motions}
 The robot API contains functions for executing preprogrammed motions. The 
@@ -377,7 +383,8 @@ clearance.
 rolling profile.
 \item \texttt{motionStand()}: This function causes the robot to stand up onto a 
   faceplate, assuming the camera platform position.
-\item \texttt{motionTumble()}: This function 
+\item \texttt{motionTumble()}: This function causes the robot to perform the
+tumbling motion, flipping end over end.
 \item \texttt{motionTurnLeft()}: Uses the robot's faceplates as wheels, turning
   them in opposite directions in order to rotate the robot towards its left.
 \item \texttt{motionTurnRight()}: Uses the robot's faceplates as wheels, turning
@@ -393,7 +400,7 @@ have non-blocking equivalents which are discussed in Section
 \subsection{\texttt{inchworm.ch}: A Demo using the \texttt{motionInchwormLeft()}
 Preprogrammed Motion}
 \subsubsection{\texttt{inchworm.ch} Source Code}
-\verbatiminput{../demos/inchworm/inchworm.ch}
+\verbatiminput{../demos/chdemos/inchworm.ch}
 \subsubsection{\texttt{inchworm.ch} Explained}
 First, the header file \texttt{mobot.h} is included. This header file
 is required before usage of the \texttt{CMobot} class and its associated
@@ -435,7 +442,7 @@ robot.motionInchwormLeft(4);
 Motion}
 This demo is a simple demonstration of the \texttt{motionStand()} member function.
 \subsubsection{\texttt{stand.ch} Source Code}
-\verbatiminput{../demos/stand/stand.ch}
+\verbatiminput{../demos/chdemos/stand.ch}
 \subsubsection{\texttt{stand.ch} Explained}
 After the initialization and 
 connection as seen in the previous demo, it executes the following line of
@@ -447,6 +454,13 @@ This line of code causes the MoBot to perform a sequence of motions causing it t
 stand up on a faceplate. The function is a blocking function and will wait until
 the entire motion sequence is completed before continuing. There are also non-blocking
 versions of the motion functions, documented in Section \ref{sec:blocking}.
+
+\subsection{\texttt{tumble.ch}: A Demo Using the \texttt{motionTumble()} Preprogrammed
+Motion}
+\verbatiminput{../demos/chdemos/tumble.ch}
+
+\subsection{\texttt{motion.ch}: A Demo Using Multiple Preprogrammed Motions}
+\verbatiminput{../demos/chdemos/motion.ch}
 
 \section{Detailed Examples of Custom Motions}
 To help the user become acquainted with the MoBot control programs, sample
@@ -461,7 +475,7 @@ The next demo will illustrate how a simple gait known as the ``Inchworm'' gait
 can be implemented.
 
 \subsubsection{\texttt{inchworm2.ch} Source Code}
-\verbatiminput{../demos/inchworm/inchworm2.ch}
+\verbatiminput{../demos/chdemos/inchworm2.ch}
 
 \subsubsection{Demo Code for \texttt{inchworm2.ch} Explained}
 The first portion of the code is identical to the previous demo, and performs
@@ -527,7 +541,7 @@ textures and ground surfaces.
 
 \subsection{Standing Demo}
 \subsubsection{\texttt{stand2.ch} Source Code}
-\verbatiminput{../demos/stand/stand2.ch}
+\verbatiminput{../demos/chdemos/stand2.ch}
 \subsubsection{\texttt{stand2.ch} Explained}
 The first portion of the program performs the necessary setup and connecting,
 similar to the previous demos. Similar to the previous inchworm demo, the
@@ -579,16 +593,8 @@ indicates that the joint will not turn, and that the joint will be
 forcefully held in place at its current position. More information regarding these
 macros may be found in Section \ref{sec:robotJointState_t}.
 
-\subsection{New Samples to be Documented}
-\verbatiminput{../demos/simple/simple.ch}
-\verbatiminput{../demos/misc/tumble.ch}
-\verbatiminput{../demos/misc/tumble2.ch}
-\verbatiminput{../demos/misc/motion.ch}
-\verbatiminput{../demos/misc/lift.ch}
-\verbatiminput{../demos/misc/nonblock.ch}
-\verbatiminput{../demos/misc/nonblock2.ch}
-\verbatiminput{../demos/misc/nonblock3.ch}
-\verbatiminput{../demos/misc/setspeed.ch}
+\subsection{Tumbling Demo}
+\verbatiminput{../demos/chdemos/tumble2.ch}
 
 \section{\label{sec:blocking}Blocking and Non-Blocking Functions}
 All of the MoBot movement functions may be designated as either ``blocking'' 
@@ -659,6 +665,11 @@ this document.
 \item \texttt{motionUnstandNB()}
 \end{itemize}
 
+\subsection{Blocking and Non-Blocking Demo Programs}
+\verbatiminput{../demos/chdemos/nonblock.ch}
+\verbatiminput{../demos/chdemos/nonblock2.ch}
+\verbatiminput{../demos/chdemos/nonblock3.ch}
+
 \section{Controlling Multiple Modules}
 The MoBot control software is designed to be able to control multiple modules
 simultaneously. There are a couple important differences in the program 
@@ -667,7 +678,7 @@ controls two modules simultaneously will first be presented, followed by
 a detailed explanation of the program elements.
 
 \subsection{\texttt{multipleModules.ch} Source Code}
-\verbatiminput{../demos/multipleModules/multipleModules.ch}
+\verbatiminput{../demos/chdemos/multipleModules.ch}
 
 \subsection{Demo Explanation}
 The first two lines of interest appear as such:
@@ -728,6 +739,10 @@ non-blocking, both robots will effectively perform the motions simultaneously.
 Next, we call the member function \texttt{motionWait()} to wait for the motions
 to finish before exiting the program.
 
+\subsection{Controlling Multiple Connected Modules}
+\subsubsection{\texttt{lift.ch}, Lifting Demo}
+\verbatiminput{../demos/chdemos/lift.ch}
+
 \section{Commanding Multiple Robots to Perform Identical Tasks}
 There is a specialized class called \texttt{CMobotGroup} which may be used
 to control multiple modules simultaneously. The \texttt{CMobotGroup} represents
@@ -785,7 +800,7 @@ Function Name & Description \\
 
 \subsection{Demo program \texttt{group.ch}}
 \subsubsection{Source Code}
-\verbatiminput{../demos/multipleModules/group.ch}
+\verbatiminput{../demos/chdemos/group.ch}
 
 \subsubsection{Demo Explanation}
 The first lines of interest appear as such:

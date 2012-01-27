@@ -2,24 +2,24 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CMobot::moveJointTo()}\index{CMobot::moveJointTo()}}\\
-{\LARGE \texttt{CMobot::moveJointToNB()}\index{CMobot::moveJointToNB()}}\\
+{\LARGE \texttt{CMobot::moveJoint()}\index{CMobot::moveJoint()}}\\
+{\LARGE \texttt{CMobot::moveJointNB()}\index{CMobot::moveJointNB()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{moveJointTo()}
-\addcontentsline{toc}{section}{moveJointToNB()}
+\addcontentsline{toc}{section}{moveJoint()}
+\addcontentsline{toc}{section}{moveJointNB()}
 
 \noindent
 {\bf Synopsis}
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::moveJointTo(robotJointId_t id, double position);
-int CMobot::moveJointToNB(robotJointId_t id, double position);
+int CMobot::moveJoint(robotJointId_t id, double angle);
+int CMobot::moveJointNB(robotJointId_t id, double angle);
 \end{verbatim}
 
 \noindent
 {\bf Purpose}\\
-Move a joint on the robot to an absolute position.\\
+Move a joint on the robot by a specified angle with respect to the current position.\\
 
 \noindent
 {\bf Return Value}\\
@@ -32,22 +32,23 @@ The function returns 0 on success and non-zero otherwise.\\
 \item               
 \begin{tabular}{p{10 mm}p{145 mm}}
 \texttt{id} & The joint number to wait for. \\
-\texttt{position} & The absolute angle to move the motor to.  \\
+\texttt{angle} & The angle to move the motor.  \\
 \end{tabular}
 \end{description}
 
 \noindent
 {\bf Description}\\
-This function commands the motor to move to a position specified in radians at
-the current motor's speed. The current motor speed may be set with the
+This function commands the motor to move by an angle relative to the
+joint's current position at the joints current speed setting.
+The current motor speed may be set with the
 \texttt{setJointSpeed()} member function. Please note that if the motor speed
 is set to zero, the motor will not move after calling the
-\texttt{moveJointTo()} function. 
+\texttt{moveJoint()} function. 
 
-The function \texttt{moveJointTo()} is a blocking function, which means that 
+The function \texttt{moveJoint()} is a blocking function, which means that 
 the function will not return until the commanded motion is 
-completed. The function \texttt{moveJointToNB()} is the non-blocking version of
-the \texttt{moveJointTo()} function, which means that the function will return
+completed. The function \texttt{moveJointNB()} is the non-blocking version of
+the \texttt{moveJoint()} function, which means that the function will return
 immediately and the physical robot motion will occur asynchronously. For
 more details on blocking and non-blocking functions, please refer to 
 Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\

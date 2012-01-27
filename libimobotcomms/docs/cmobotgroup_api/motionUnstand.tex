@@ -2,8 +2,8 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CMobot::motionUnstand()}\index{CMobot::motionUnstand()}}\\
-{\LARGE \texttt{CMobot::motionUnstandNB()}\index{CMobot::motionUnstandNB()}}\\
+{\LARGE \texttt{CMobotGroup::motionUnstand()}\index{CMobotGroup::motionUnstand()}}\\
+{\LARGE \texttt{CMobotGroup::motionUnstandNB()}\index{CMobotGroup::motionUnstandNB()}}\\
 %\phantomsection
 \addcontentsline{toc}{section}{motionUnstand()}
 \addcontentsline{toc}{section}{motionUnstandNB()}
@@ -13,13 +13,13 @@
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::motionUnstand();
-int CMobot::motionUnstandNB();
+int CMobotGroup::motionUnstand();
+int CMobotGroup::motionUnstandNB();
 \end{verbatim}
 
 \noindent
 {\bf Purpose}\\
-Move a robot currently standing on a faceplate back down into a prone position.\\
+Move robots currently standing on a faceplate back down into a prone position.\\
 
 \noindent
 {\bf Return Value}\\

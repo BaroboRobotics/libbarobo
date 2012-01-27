@@ -15,9 +15,9 @@
    version="1.1"
    inkscape:version="0.48.1 r9760"
    sodipodi:docname="joint_diagram_verbose.svg"
-   inkscape:export-filename="/home/dko/Projects/Barobo/iMobot_gumstix_api/libimobotcomms/demos/iMobotController_Windows/iMobotController_Windows/res/joint_diagram_verbose.png"
-   inkscape:export-xdpi="32.520695"
-   inkscape:export-ydpi="32.520695">
+   inkscape:export-filename="/home/dko/Projects/Barobo/iMobot_gumstix_api/libimobotcomms/docs/images/joint_diagram_verbose.png"
+   inkscape:export-xdpi="300"
+   inkscape:export-ydpi="300">
   <defs
      id="defs6466">
     <marker
@@ -168,7 +168,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
-     inkscape:cx="372.09851"
+     inkscape:cx="199.8675"
      inkscape:cy="766.31499"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -581,5 +581,23 @@
        d="m 450.71429,245.57646 104.27792,60.20489"
        id="path4864"
        inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2.59800005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Mend-4-7)"
+       d="M 353.83795,127.27077 292.07762,91.613594"
+       id="path3063"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       style="font-size:16.75064087px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="318.93442"
+       y="-84.42675"
+       id="text4493"
+       sodipodi:linespacing="125%"
+       transform="matrix(0.93059121,0.53727458,0,1.0745857,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan4495"
+         x="318.93442"
+         y="-84.42675">Forward</tspan></text>
   </g>
 </svg>

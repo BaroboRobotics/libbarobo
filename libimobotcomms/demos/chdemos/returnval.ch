@@ -1,4 +1,4 @@
-/* Filename: simple.ch 
+/* Filename: returnval.ch 
  * Rotate the faceplates by 90 degrees */
 
 #include <mobot.h>

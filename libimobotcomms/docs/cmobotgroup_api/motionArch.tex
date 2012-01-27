@@ -2,8 +2,8 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CMobot::motionArch()}\index{CMobot::motionArch()}}\\
-{\LARGE \texttt{CMobot::motionArchNB()}\index{CMobot::motionArchNB()}}\\
+{\LARGE \texttt{CMobotGroup::motionArch()}\index{CMobotGroup::motionArch()}}\\
+{\LARGE \texttt{CMobotGroup::motionArchNB()}\index{CMobotGroup::motionArchNB()}}\\
 %\phantomsection
 \addcontentsline{toc}{section}{motionArch()}
 \addcontentsline{toc}{section}{motionArchNB()}
@@ -13,13 +13,13 @@
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::motionArch(double angle);
-int CMobot::motionArchNB(double angle);
+int CMobotGroup::motionArch(double angle);
+int CMobotGroup::motionArchNB(double angle);
 \end{verbatim}
 
 \noindent
 {\bf Purpose}\\
-Arch the robot for more ground clearance.\\
+Arch the robots in the group for more ground clearance.\\
 
 \noindent
 {\bf Return Value}\\
@@ -38,7 +38,7 @@ no arch, to 180 degrees, which is a fully curled up position.\\
 
 \noindent
 {\bf Description}\\
-This function causes the robot to Arch up for better ground clearance while 
+This function causes the robots to Arch up for better ground clearance while 
 rolling.
 
 This function has both a blocking and non-blocking version.

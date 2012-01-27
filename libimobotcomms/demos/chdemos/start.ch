@@ -1,4 +1,4 @@
-/* Filename: gettingStarted.ch 
+/* Filename: start.ch 
  * Move the robot endplates. */
 
 #include <mobot.h>
