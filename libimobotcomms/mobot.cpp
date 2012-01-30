@@ -1109,13 +1109,13 @@ int Mobot_motionTumble(br_comms_t* comms, int num)
     if((i%2) == 0) {
       Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(0));
       Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(0));
-      Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(60));
+      Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(70));
       Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(-85));
       Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(80));
     } else {
       Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(0));
       Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(0));
-      Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(60));
+      Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(70));
       Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(-85));
       Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(80));
     }
