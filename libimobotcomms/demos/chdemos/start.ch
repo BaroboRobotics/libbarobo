@@ -13,7 +13,7 @@ robot.connect();
 robot.moveToZero();
 
 /* Rotate each of the faceplates by 360 degrees */
-angle1 = deg2rad(360);
-angle4 = deg2rad(360);
+angle1 = 360;
+angle4 = 360;
 robot.move(angle1, 0, 0, angle4);
 robot.moveWait();

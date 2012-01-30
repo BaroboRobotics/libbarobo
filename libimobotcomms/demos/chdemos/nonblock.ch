@@ -10,8 +10,8 @@ robot.connect();
 robot.moveToZero();
 
 /* Rotate each of the faceplates by 720 degrees */
-//robot.move(deg2rad(720), 0, 0, deg2rad(720)); // Blocking version
-robot.moveNB(deg2rad(720), 0, 0, deg2rad(720)); // Non-Blocking version
+//robot.move(720, 0, 0, 720); // Blocking version
+robot.moveNB(720, 0, 0, 720); // Non-Blocking version
 while(robot.isMoving()) {
     printf("robot is moving ...\n");
 }

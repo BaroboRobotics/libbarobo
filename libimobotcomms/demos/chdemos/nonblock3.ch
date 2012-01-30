@@ -10,8 +10,8 @@ robot.connect();
 robot.moveToZero();
 
 printf("Rolling 360 degrees.\n");
-robot.motionRollForward(deg2rad(360));
+robot.motionRollForward(360);
 printf("Rolling 360 degrees while arching.\n");
-robot.motionArchNB(deg2rad(90));
-robot.motionRollForwardNB(deg2rad(360));
+robot.motionArchNB(90);
+robot.motionRollForwardNB(360);
 robot.motionWait();

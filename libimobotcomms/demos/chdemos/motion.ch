@@ -12,13 +12,13 @@ robot.connect();
 robot.moveToZero();
 
 /* test all pre-programmed motions */
-robot.motionArch(deg2rad(90));
+robot.motionArch(90);
 robot.motionInchwormLeft(4);
 robot.motionInchwormRight(4);
-robot.motionRollBackward(deg2rad(360));
-robot.motionRollForward(deg2rad(360));
-robot.motionTurnLeft(deg2rad(360));
-robot.motionTurnRight(deg2rad(360));
+robot.motionRollBackward(360);
+robot.motionRollForward(360);
+robot.motionTurnLeft(360);
+robot.motionTurnRight(360);
 robot.motionStand();
 robot.motionUnstand();
 robot.motionTumble();

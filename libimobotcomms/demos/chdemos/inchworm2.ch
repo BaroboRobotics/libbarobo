@@ -17,8 +17,8 @@ robot.moveToZero();
 
 /* Do the inchworm motion four times */
 int i, num = 4;
-double angle2 = deg2rad(-45);
-double angle3 = deg2rad(45);
+double angle2 = -45;
+double angle3 = 45;
 for(i = 0; i < num; i++) {
   robot.moveJointTo(ROBOT_JOINT2, angle2);
   robot.moveJointTo(ROBOT_JOINT3, angle3);

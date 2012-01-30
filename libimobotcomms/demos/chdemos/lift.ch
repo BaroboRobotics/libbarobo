@@ -19,13 +19,13 @@ robot1.moveWait();
 robot2.moveWait();
 
 /* First lift */
-robot1.moveNB(0, deg2rad(-90),  0, 0);
-robot2.moveNB(0, 0, deg2rad(90), 0);
+robot1.moveNB(0, -90,  0, 0);
+robot2.moveNB(0, 0, 90, 0);
 robot1.moveWait();
 robot2.moveWait();
 /* Second lift */
-robot1.moveToNB(0, 0, deg2rad(90),  0);
-robot2.moveToNB(0,  deg2rad(-90), 0, 0);
+robot1.moveToNB(0, 0, 90,  0);
+robot2.moveToNB(0,  -90, 0, 0);
 robot1.moveWait();
 robot2.moveWait();
 robot1.moveToZeroNB();

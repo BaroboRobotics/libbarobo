@@ -8,7 +8,7 @@ CMobot robot;
 /* Connect to the paired MoBot */
 robot.connect();
 
-robot.moveJointToNB(ROBOT_JOINT3, DEG2RAD(45));
-robot.moveJointToNB(ROBOT_JOINT2, DEG2RAD(-85));
+robot.moveJointToNB(ROBOT_JOINT3, 45);
+robot.moveJointToNB(ROBOT_JOINT2, -85);
 robot.moveWait();
 robot.moveToZero();
