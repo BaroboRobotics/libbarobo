@@ -37,6 +37,13 @@ The function returns 0 on success and non-zero otherwise.\\
 
 \noindent
 {\bf Description}\\
+\vspace{-12pt}
+\begin{quote}
+{\bf CMobot::motionTumble()}\\
+This causes the robot to tumble end over end. The argument, \texttt{num},
+indicates the number of times to tumble.
+
+{\bf CMobot::motionTumbleNB()}\\
 This causes the robot to tumble end over end. The argument, \texttt{num},
 indicates the number of times to tumble.
 
@@ -44,6 +51,7 @@ This function has both a blocking and non-blocking version.
 The blocking version, \texttt{motionTumble()}, will block until the
 robot motion has completed. The non-blocking version, \texttt{motionTumbleNB()},
 will return immediately, and the motion will be performed asynchronously.\\
+\end{quote}
 
 \noindent
 {\bf See Also}\\
