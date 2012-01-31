@@ -144,6 +144,27 @@ EXPORTCH int getJointSpeed_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int getJointSpeeds_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double *speed1;
+    double *speed2;
+    double *speed3;
+    double *speed4;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    speed1 = Ch_VaArg(interp, ap, double *);
+    speed2 = Ch_VaArg(interp, ap, double *);
+    speed3 = Ch_VaArg(interp, ap, double *);
+    speed4 = Ch_VaArg(interp, ap, double *);
+    retval = mobot->getJointSpeeds(*speed1, *speed2, *speed3, *speed4);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int getJointSpeedRatio_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -157,6 +178,27 @@ EXPORTCH int getJointSpeedRatio_chdl(void *varg) {
     id = Ch_VaArg(interp, ap, int);
     speed = Ch_VaArg(interp, ap, double *);
     retval = mobot->getJointSpeedRatio((robotJointId_t)id, *speed);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int getJointSpeedRatios_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double *ratio1;
+    double *ratio2;
+    double *ratio3;
+    double *ratio4;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    ratio1 = Ch_VaArg(interp, ap, double *);
+    ratio2 = Ch_VaArg(interp, ap, double *);
+    ratio3 = Ch_VaArg(interp, ap, double *);
+    ratio4 = Ch_VaArg(interp, ap, double *);
+    retval = mobot->getJointSpeedRatios(*ratio1, *ratio2, *ratio3, *ratio4);
     Ch_VaEnd(interp, ap);
     return retval;
 }

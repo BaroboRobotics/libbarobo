@@ -115,6 +115,18 @@ int CMobot::getJointSpeed(int id, double & speed) {
     dlrunfun(fptr, &retval, NULL, this, id, &speed);
     return retval;
 }
+int CMobot::getJointSpeeds(double &speed1, double &speed2, double &speed3, double &speed4) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "getJointSpeeds_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, &speed1, &speed2, &speed3, &speed4);
+    return retval;
+}
 int CMobot::getJointSpeedRatio(int id, double & ratio) {
     void *fptr;
     int retval;
@@ -125,6 +137,18 @@ int CMobot::getJointSpeedRatio(int id, double & ratio) {
         return -1;
     }
     dlrunfun(fptr, &retval, NULL, this, id, &ratio);
+    return retval;
+}
+int CMobot::getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3, double &ratio4) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "getJointSpeedRatios_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, &ratio1, &ratio2, &ratio3, &ratio4);
     return retval;
 }
 int CMobot::getJointState(int id, int & state) {
