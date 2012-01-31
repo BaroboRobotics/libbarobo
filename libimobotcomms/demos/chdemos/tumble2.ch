@@ -19,16 +19,16 @@ robot.moveJointTo(ROBOT_JOINT3, 80);
 int n = 5;
 int i;
 for(i = 0; i < n; i++) {
-    if((i%2) == 0) {
+    if((i%2) == 0) { /* If i is an even number... */
         robot.moveJointTo(ROBOT_JOINT2, 0);
         robot.moveJointTo(ROBOT_JOINT3, 0);
-        robot.moveJointTo(ROBOT_JOINT2, 60);
+        robot.moveJointTo(ROBOT_JOINT2, 70);
         robot.moveJointTo(ROBOT_JOINT3, -85);
         robot.moveJointTo(ROBOT_JOINT2, 80);
-    } else {
+    } else { /* If i is an odd number, */
         robot.moveJointTo(ROBOT_JOINT3, 0);
         robot.moveJointTo(ROBOT_JOINT2, 0);
-        robot.moveJointTo(ROBOT_JOINT3, 60);
+        robot.moveJointTo(ROBOT_JOINT3, 70);
         robot.moveJointTo(ROBOT_JOINT2, -85);
         robot.moveJointTo(ROBOT_JOINT3, 80);
     }

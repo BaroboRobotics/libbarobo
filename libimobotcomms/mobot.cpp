@@ -483,10 +483,15 @@ int Mobot_getJointState(br_comms_t* comms, robotJointId_t id, robotJointState_t 
   return 0;
 }
 
-int Mobot_getJointSpeeds(br_comms_t* comms, double speeds[4])
+int Mobot_getJointSpeeds(br_comms_t* comms, double *speed1, double *speed2, double *speed3, double *speed4)
 {
+  double *speeds[4];
+  speeds[0] = speed1;
+  speeds[1] = speed2;
+  speeds[2] = speed3;
+  speeds[3] = speed4;
   for(int i = 0; i < 4; i++) {
-    Mobot_getJointSpeed(comms, (robotJointId_t)(i+1), &speeds[i]);
+    Mobot_getJointSpeed(comms, (robotJointId_t)(i+1), speeds[i]);
   }
   return 0;
 }
@@ -504,10 +509,15 @@ int Mobot_setJointSpeeds(br_comms_t* comms, double speed1, double speed2, double
   return 0;
 }
 
-int Mobot_getJointSpeedRatios(br_comms_t* comms, double ratios[4])
+int Mobot_getJointSpeedRatios(br_comms_t* comms, double *ratio1, double *ratio2, double *ratio3, double *ratio4)
 {
+  double *ratios[4];
+  ratios[0] = ratio1;
+  ratios[1] = ratio2;
+  ratios[2] = ratio3;
+  ratios[3] = ratio4;
   for(int i = 0; i < 4; i++) {
-    Mobot_getJointSpeedRatio(comms, (robotJointId_t)(i+1), &ratios[i]);
+    Mobot_getJointSpeedRatio(comms, (robotJointId_t)(i+1), ratios[i]);
   }
   return 0;
 }
@@ -1402,17 +1412,18 @@ int CMobot::getJointSpeed(robotJointId_t id, double &speed)
 {
   int err;
   err = Mobot_getJointSpeed(&_comms, id, &speed);
-  speed = DEG2RAD(speed);
+  speed = RAD2DEG(speed);
   return err;
 }
 
-int CMobot::getJointSpeeds(double speeds[4])
+int CMobot::getJointSpeeds(double &speed1, double &speed2, double &speed3, double &speed4)
 {
   int i;
-  int err = Mobot_getJointSpeeds(&_comms, speeds);
-  for(i = 0; i < 4; i++) {
-    speeds[i] = DEG2RAD(speeds[i]);
-  }
+  int err = Mobot_getJointSpeeds(&_comms, &speed1, &speed2, &speed3, &speed4);
+  speed1 = RAD2DEG(speed1);
+  speed2 = RAD2DEG(speed2);
+  speed3 = RAD2DEG(speed3);
+  speed4 = RAD2DEG(speed4);
   return err;
 }
 
@@ -1421,9 +1432,9 @@ int CMobot::getJointSpeedRatio(robotJointId_t id, double &ratio)
   return Mobot_getJointSpeedRatio(&_comms, id, &ratio);
 }
 
-int CMobot::getJointSpeedRatios(double ratios[4])
+int CMobot::getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3, double &ratio4)
 {
-  return Mobot_getJointSpeedRatios(&_comms, ratios);
+  return Mobot_getJointSpeedRatios(&_comms, &ratio1, &ratio2, &ratio3, &ratio4);
 }
 
 int CMobot::moveJointContinuousNB(robotJointId_t id, robotJointState_t dir)

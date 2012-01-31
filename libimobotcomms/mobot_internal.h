@@ -104,9 +104,9 @@ DLLIMPORT int Mobot_setJointSpeed(br_comms_t* comms, robotJointId_t id, double s
 DLLIMPORT int Mobot_setJointSpeedRatio(br_comms_t* comms, robotJointId_t id, double ratio);
 DLLIMPORT int Mobot_getJointSpeed(br_comms_t* comms, robotJointId_t id, double *speed);
 DLLIMPORT int Mobot_getJointSpeedRatio(br_comms_t* comms, robotJointId_t id, double *ratio);
-DLLIMPORT int Mobot_getJointSpeeds(br_comms_t* comms, double speeds[4]);
+DLLIMPORT int Mobot_getJointSpeeds(br_comms_t* comms, double *speed1, double *speed2, double *speed3, double *speed4);
 DLLIMPORT int Mobot_setJointSpeeds(br_comms_t* comms, double speeds1, double speeds2, double speeds3, double speeds4);
-DLLIMPORT int Mobot_getJointSpeedRatios(br_comms_t* comms, double ratios[4]);
+DLLIMPORT int Mobot_getJointSpeedRatios(br_comms_t* comms, double *ratio1, double *ratio2, double *ratio3, double *ratio4);
 DLLIMPORT int Mobot_setJointSpeedRatios(br_comms_t* comms, double ratio1, double ratio2, double ratio3, double ratio4);
 DLLIMPORT int Mobot_setTwoWheelRobotSpeed(br_comms_t* comms, double speed, double radius, char unit[]);
 DLLIMPORT int Mobot_moveJoint(br_comms_t* comms, robotJointId_t id, double angle);
