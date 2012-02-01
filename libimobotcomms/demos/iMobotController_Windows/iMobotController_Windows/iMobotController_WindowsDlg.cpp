@@ -390,7 +390,7 @@ void CiMobotController_WindowsDlg::handlerPlay()
       ROBOT_HOLD,
       ROBOT_HOLD);
 
-	iMobotComms.setJointSpeeds(90, 90, 90, 90);
+	iMobotComms.setJointSpeeds(45, 45, 45, 45);
   switch(index) {
     case 0: iMobotComms.motionArch(90); break;
     case 1: iMobotComms.motionInchwormLeft(1); break;
@@ -459,7 +459,7 @@ void CiMobotController_WindowsDlg::UpdateSliders()
 		iMobotComms.getJointAngle((robotJointId_t)(i+1), position);
 		m_slider_Positions[i]->SetPos( (int) -position );
 		m_positions[i] = (int) position;
-		speed = 90;
+		speed = 45;
 		iMobotComms.setJointSpeed((robotJointId_t)(i+1), speed);
 		m_slider_Speeds[i]->SetPos( 180 - speed );
 		m_speeds[i] = speed;
