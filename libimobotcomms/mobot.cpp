@@ -1114,6 +1114,7 @@ int Mobot_motionTumble(br_comms_t* comms, int num)
   Mobot_moveToZero(comms);
   Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(-85));
   Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(80));
+  sleep(1);
 
   for(i = 0; i < num; i++) {
     if((i%2) == 0) {
