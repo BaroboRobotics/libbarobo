@@ -997,8 +997,8 @@ int Mobot_motionStand(br_comms_t* comms)
 {
   double speed;
   Mobot_moveToZero(comms);
-  Mobot_moveJointToNB(comms, ROBOT_JOINT2, DEG2RAD(-85));
-  Mobot_moveJointToNB(comms, ROBOT_JOINT3, DEG2RAD(70));
+  Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(-85));
+  Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(70));
   Mobot_moveWait(comms);
   Mobot_moveJointTo(comms, ROBOT_JOINT1, DEG2RAD(45));
   /* Sleep for a second, wait for it to settle down */
@@ -1119,13 +1119,15 @@ int Mobot_motionTumble(br_comms_t* comms, int num)
     if((i%2) == 0) {
       Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(0));
       Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(0));
-      Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(70));
+      Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(80));
+      Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(45));
       Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(-85));
       Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(80));
     } else {
       Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(0));
       Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(0));
-      Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(70));
+      Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(80));
+      Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(45));
       Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(-85));
       Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(80));
     }
