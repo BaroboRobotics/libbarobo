@@ -438,13 +438,13 @@ void CiMobotController_WindowsDlg::InitSliders()
 {
 	for(int i = 0; i < 2; i++) {
 		m_slider_Speeds[i]->SetRange(0, 180, TRUE);
-		m_slider_Speeds[i]->SetPos(90);
+		m_slider_Speeds[i]->SetPos(45);
 		m_slider_Positions[i]->SetRange(-90, 90, TRUE);
 		m_slider_Positions[i]->SetPos(0);
 	}
 	for(int i = 2; i < 4; i++) {
 		m_slider_Speeds[i]->SetRange(0, 180, TRUE);
-		m_slider_Speeds[i]->SetPos(90);
+		m_slider_Speeds[i]->SetPos(45);
 		m_slider_Positions[i]->SetRange(-180, 180, TRUE);
 		m_slider_Positions[i]->SetPos(0);
 	}
@@ -805,7 +805,7 @@ DWORD WINAPI HandlerThread(void* arg)
       continue;
     }
 	if(!initialized) {
-		mobot->setJointSpeedRatios(0.5, 0.5, 0.5, 0.5);
+		mobot->setJointSpeeds(45, 45, 45, 45);
 	}
     double value;
     wchar_t buf[200];
