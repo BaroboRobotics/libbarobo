@@ -353,7 +353,7 @@ using the \texttt{rad2deg()} function. The \texttt{rad2deg()} function
 takes an angle in radians as its argument and returns the angle in
 degrees. The function is implemented in Ch with the code
 \begin{verbatim}
-#include<math.h>
+#include<math.h> /* For M_PI */
 double rad2deg(double radians)
 {
     double degrees;
@@ -751,14 +751,14 @@ the robots have finished moving before the program continues.
 
 \begin{verbatim}
   robot1.motionStandNB();
-  robot2.motionInchwormLeftNB();
+  robot2.motionInchwormLeftNB(4);
   robot1.motionWait();
   robot2.motionWait();
 \end{verbatim}
 Similar to the calls to \texttt{moveToZeroNB()}, this block of code instructs 
-the first MoBot to stand and the second MoBot to perform the inchworm gait.
+the first MoBot to stand and the second MoBot to perform the inchworm motion four times.
 Note that we call the non-blocking versions of the
-functions, \texttt{motionStandNB()} and \texttt{motionInchwormLeftNB}. Since these functions are
+functions, \texttt{motionStandNB()} and \texttt{motionInchwormLeftNB()}. Since these functions are
 non-blocking, both robots will effectively perform the motions simultaneously. 
 Next, we call the member function \texttt{motionWait()} to wait for the motions
 to finish.

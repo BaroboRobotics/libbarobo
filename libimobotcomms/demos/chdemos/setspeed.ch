@@ -14,7 +14,7 @@ robot.moveToZero();
 
 double speed, radius;
 robot.getJointMaxSpeed(ROBOT_JOINT1, speed);
-printf("The maximum speed is %lf degrees/s\n", rad2deg(speed));
+printf("The maximum speed is %lf degrees/s\n", speed);
 
 robot.setJointSpeed(ROBOT_JOINT1, 90);
 robot.setJointSpeed(ROBOT_JOINT4, 90);

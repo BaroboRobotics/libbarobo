@@ -55,24 +55,33 @@ maximum speed, expressed as a value from 0 to 1. \\
 \begin{table}[!h]
 %\capstart
 \begin{center}
-\caption{CMobot Member Functions for Compound Motions.}
+\caption{CMobotGroup Member Functions for Compound Motions.}
 \begin{tabular}{p{38 mm}p{107 mm}}
 Compound Motions & These are convenience functions of commonly used compound motions. \\
 \hline
+\texttt{motionArch()} \dotfill & Move the robot into an arched configuration. \\
+\texttt{motionArchNB()} \dotfill & Identical to \texttt{motionArch()} but non-blocking. \\
 \texttt{motionInchwormLeft()} \dotfill & Inchworm motion towards the left. \\
-\texttt{motionInchwormLeftNB()} \dotfill & Identical to \texttt{motionInchwormLeft} but non-blocking. \\
+\texttt{motionInchwormLeftNB()} \dotfill & Identical to \texttt{motionInchwormLeft()} but non-blocking. \\
 \texttt{motionInchwormRight()} \dotfill & Inchworm motion towards the right. \\
-\texttt{motionInchwormRightNB()} \dotfill & Identical to \texttt{motionInchwormRight} but non-blocking. \\
+\texttt{motionInchwormRightNB()} \dotfill & Identical to \texttt{motionInchwormRight()} but non-blocking. \\
 \texttt{motionRollBackward()} \dotfill & Roll on the faceplates toward the backward direction. \\
 \texttt{motionRollBackwardNB()} \dotfill & Identical to \texttt{motionRollBackward()} but non-blocking. \\
 \texttt{motionRollForward()} \dotfill & Roll on the faceplates forwards. \\
 \texttt{motionRollForwardNB()} \dotfill & Identical to \texttt{motionRollForward()} but non-blocking. \\
+\texttt{motionSkinny()} \dotfill & Move the robot into a skinny configuration. \\
+\texttt{motionSkinnyNB()} \dotfill & Identical to \texttt{motionSkinnyNB()} but non-blocking. \\
 \texttt{motionStand()} \dotfill & Stand the robot up on its end. \\
 \texttt{motionStandNB()} \dotfill & Identical to \texttt{motionStandNB()} but non-blocking. \\
+\texttt{motionTumble()} \dotfill & Tumble the robot end over end. \\
+\texttt{motionTumbleNB()} \dotfill & Identical to \texttt{motionTumbleNB()} but non-blocking. \\
 \texttt{motionTurnLeft()} \dotfill & Rotate the robot counterclockwise. \\
 \texttt{motionTurnLeftNB()} \dotfill & Identical to \texttt{motionTurnLeft()} but non-blocking. \\
 \texttt{motionTurnRight()} \dotfill & Rotate the robot clockwise. \\
 \texttt{motionTurnRightNB()} \dotfill & Identical to \texttt{motionTurnRight()} but non-blocking. \\
+\texttt{motionUnstand()} \dotfill & Move a robot currently standing on its end down into a prone position. \\
+\texttt{motionUnstandNB()} \dotfill & Identical to \texttt{motionUnstand()} but non-blocking. \\
+\texttt{motionWait()} \dotfill & Wait for preprogrammed robotic motions to complete. \\
 \hline
 \end{tabular}
 \end{center}
