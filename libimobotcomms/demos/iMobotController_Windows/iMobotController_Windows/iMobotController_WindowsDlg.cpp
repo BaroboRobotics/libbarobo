@@ -385,22 +385,22 @@ void CiMobotController_WindowsDlg::handlerPlay()
 		return;
 	}
   iMobotComms.moveContinuousNB(
-      ROBOT_NEUTRAL,
-      ROBOT_NEUTRAL,
-      ROBOT_NEUTRAL,
-      ROBOT_NEUTRAL);
+      ROBOT_HOLD,
+      ROBOT_HOLD,
+      ROBOT_HOLD,
+      ROBOT_HOLD);
 
-	iMobotComms.setJointSpeeds(1.5, 1.5, 1.5, 1.5);
+	iMobotComms.setJointSpeeds(90, 90, 90, 90);
   switch(index) {
-    case 0: iMobotComms.motionArch(DEG2RAD(90)); break;
+    case 0: iMobotComms.motionArch(90); break;
     case 1: iMobotComms.motionInchwormLeft(1); break;
     case 2: iMobotComms.motionInchwormRight(1); break;
-    case 3: iMobotComms.motionRollBackward(DEG2RAD(360)); break;
-    case 4: iMobotComms.motionRollForward(DEG2RAD(360)); break;
-    case 5: iMobotComms.motionSkinny(DEG2RAD(90)); break;
+    case 3: iMobotComms.motionRollBackward(360); break;
+    case 4: iMobotComms.motionRollForward(360); break;
+    case 5: iMobotComms.motionSkinny(90); break;
     case 6: iMobotComms.motionStand(); break;
-    case 7: iMobotComms.motionTurnLeft(DEG2RAD(90)); break;
-    case 8: iMobotComms.motionTurnRight(DEG2RAD(90)); break;
+    case 7: iMobotComms.motionTurnLeft(360); break;
+    case 8: iMobotComms.motionTurnRight(360); break;
     case 9: iMobotComms.motionTumble(2); break;
     case 10: iMobotComms.motionUnstand(); break;
     default: break;
@@ -437,14 +437,14 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonconnect()
 void CiMobotController_WindowsDlg::InitSliders()
 {
 	for(int i = 0; i < 2; i++) {
-		m_slider_Speeds[i]->SetRange(0, 100, TRUE);
-		m_slider_Speeds[i]->SetPos(50);
+		m_slider_Speeds[i]->SetRange(0, 180, TRUE);
+		m_slider_Speeds[i]->SetPos(90);
 		m_slider_Positions[i]->SetRange(-90, 90, TRUE);
 		m_slider_Positions[i]->SetPos(0);
 	}
 	for(int i = 2; i < 4; i++) {
-		m_slider_Speeds[i]->SetRange(0, 100, TRUE);
-		m_slider_Speeds[i]->SetPos(50);
+		m_slider_Speeds[i]->SetRange(0, 180, TRUE);
+		m_slider_Speeds[i]->SetPos(90);
 		m_slider_Positions[i]->SetRange(-180, 180, TRUE);
 		m_slider_Positions[i]->SetPos(0);
 	}
@@ -457,12 +457,12 @@ void CiMobotController_WindowsDlg::UpdateSliders()
 
 	for(int i = 0; i < 4; i++) {
 		iMobotComms.getJointAngle((robotJointId_t)(i+1), position);
-		m_slider_Positions[i]->SetPos( (int) RAD2DEG(-position) );
+		m_slider_Positions[i]->SetPos( (int) -position );
 		m_positions[i] = (int) position;
-		speed = 0.5;
-		iMobotComms.setJointSpeedRatio((robotJointId_t)(i+1), speed);
-		m_slider_Speeds[i]->SetPos( 100 - speed*100 );
-		m_speeds[i] = speed*100;
+		speed = 90;
+		iMobotComms.setJointSpeed((robotJointId_t)(i+1), speed);
+		m_slider_Speeds[i]->SetPos( 180 - speed );
+		m_speeds[i] = speed;
     wchar_t buf[200];
     swprintf(buf, L"%lf", speed);
     m_edit_MotorSpeeds[i]->SetWindowTextW(buf);
@@ -471,8 +471,8 @@ void CiMobotController_WindowsDlg::UpdateSliders()
 
 void CiMobotController_WindowsDlg::UpdateSpeedSliders(int i, double speed)
 {
-		m_slider_Speeds[i]->SetPos( 100 - speed*100 );
-		m_speeds[i] = speed*100;
+		m_slider_Speeds[i]->SetPos( 180 - speed);
+		m_speeds[i] = speed;
     wchar_t buf[200];
     swprintf(buf, L"%lf", speed);
     m_edit_MotorSpeeds[i]->SetWindowTextW(buf);
@@ -487,7 +487,7 @@ int CiMobotController_WindowsDlg::poseJoints(const double *angles, unsigned char
 {
 	for(int i = 0; i < 4; i++) {
 		if(motorMask & (1<<i)) {
-			iMobotComms.moveJointToNB((robotJointId_t)(i+1), DEG2RAD(angles[i]));
+			iMobotComms.moveJointToNB((robotJointId_t)(i+1), angles[i]);
 		}
 	}
 	return 0;
@@ -501,7 +501,7 @@ int CiMobotController_WindowsDlg::moveJoints(const double *angles, unsigned char
 			/* Get the motor position first */
 			iMobotComms.getJointAngle((robotJointId_t)(i+1), pos);
 			/* Set the motor to an offset position */
-			iMobotComms.moveJointToNB((robotJointId_t)(i+1), pos + DEG2RAD(angles[i]));
+			iMobotComms.moveJointToNB((robotJointId_t)(i+1), pos + angles[i]);
 		}
 	}
 	return 0;
@@ -531,7 +531,7 @@ void CiMobotController_WindowsDlg::handlerM1F()
 	/* get the speed from the slider control */
 	int speed;
 	speed = m_slider_Speed1.GetPos();
-	iMobotComms.setJointSpeedRatio(ROBOT_JOINT1, (double)speed/100.0);
+	iMobotComms.setJointSpeed(ROBOT_JOINT1, (double)speed);
 	iMobotComms.moveJointContinuousNB(ROBOT_JOINT1, ROBOT_FORWARD);
 }
 
@@ -545,7 +545,7 @@ void CiMobotController_WindowsDlg::handlerM2F()
 	/* get the speed from the slider control */
 	int speed;
 	speed = m_slider_Speed2.GetPos();
-	iMobotComms.setJointSpeedRatio(ROBOT_JOINT2, (double)speed/100.0);
+	iMobotComms.setJointSpeed(ROBOT_JOINT2, (double)speed);
 	iMobotComms.moveJointContinuousNB(ROBOT_JOINT2, ROBOT_FORWARD);
 }
 
@@ -559,7 +559,7 @@ void CiMobotController_WindowsDlg::handlerM3F()
 	/* get the speed from the slider control */
 	int speed;
 	speed = m_slider_Speed3.GetPos();
-	iMobotComms.setJointSpeed(ROBOT_JOINT3, (double)speed/100.0);
+	iMobotComms.setJointSpeed(ROBOT_JOINT3, (double)speed);
 	iMobotComms.moveJointContinuousNB(ROBOT_JOINT3, ROBOT_FORWARD);
 }
 
@@ -573,7 +573,7 @@ void CiMobotController_WindowsDlg::handlerM4F()
 	/* get the speed from the slider control */
 	int speed;
 	speed = m_slider_Speed4.GetPos();
-	iMobotComms.setJointSpeed(ROBOT_JOINT4, (double)speed/100.0);
+	iMobotComms.setJointSpeed(ROBOT_JOINT4, (double)speed);
 	iMobotComms.moveJointContinuousNB(ROBOT_JOINT4, ROBOT_FORWARD);
 }
 
@@ -627,7 +627,7 @@ void CiMobotController_WindowsDlg::handlerM1B()
 	/* get the speed from the slider control */
 	int speed;
 	speed = m_slider_Speed1.GetPos();
-	iMobotComms.setJointSpeedRatio(ROBOT_JOINT1, (double)speed/100.0);
+	iMobotComms.setJointSpeed(ROBOT_JOINT1, (double)speed);
 	iMobotComms.moveJointContinuousNB(ROBOT_JOINT1, ROBOT_BACKWARD);
 }
 
@@ -641,7 +641,7 @@ void CiMobotController_WindowsDlg::handlerM2B()
 	/* get the speed from the slider control */
 	int speed;
 	speed = m_slider_Speed2.GetPos();
-	iMobotComms.setJointSpeedRatio(ROBOT_JOINT2, (double)speed/100.0);
+	iMobotComms.setJointSpeed(ROBOT_JOINT2, (double)speed);
 	iMobotComms.moveJointContinuousNB(ROBOT_JOINT2, ROBOT_BACKWARD);
 }
 
@@ -655,7 +655,7 @@ void CiMobotController_WindowsDlg::handlerM3B()
 	/* get the speed from the slider control */
 	int speed;
 	speed = m_slider_Speed3.GetPos();
-	iMobotComms.setJointSpeedRatio(ROBOT_JOINT3, (double)speed/100.0);
+	iMobotComms.setJointSpeed(ROBOT_JOINT3, (double)speed);
 	iMobotComms.moveJointContinuousNB(ROBOT_JOINT3, ROBOT_BACKWARD);
 }
 
@@ -669,7 +669,7 @@ void CiMobotController_WindowsDlg::handlerM4B()
 	/* get the speed from the slider control */
 	int speed;
 	speed = m_slider_Speed4.GetPos();
-	iMobotComms.setJointSpeedRatio(ROBOT_JOINT4, (double)speed/100.0);
+	iMobotComms.setJointSpeed(ROBOT_JOINT4, (double)speed);
 	iMobotComms.moveJointContinuousNB(ROBOT_JOINT4, ROBOT_BACKWARD);
 }
 
@@ -680,7 +680,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonrollforward()
 
 void CiMobotController_WindowsDlg::handlerFORWARD()
 {
-  iMobotComms.motionRollForwardNB(DEG2RAD(360));
+  iMobotComms.motionRollForwardNB(360);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollstop()
@@ -700,7 +700,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonrollleft()
 
 void CiMobotController_WindowsDlg::handlerLEFT()
 {
-  iMobotComms.motionTurnLeftNB(DEG2RAD(90));
+  iMobotComms.motionTurnLeftNB(90);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollright()
@@ -710,7 +710,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonrollright()
 
 void CiMobotController_WindowsDlg::handlerRIGHT()
 {
-  iMobotComms.motionTurnRightNB(DEG2RAD(90));
+  iMobotComms.motionTurnRightNB(90);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollback()
@@ -720,7 +720,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonrollback()
 
 void CiMobotController_WindowsDlg::handlerBACK()
 {
-  iMobotComms.motionRollBackwardNB(DEG2RAD(360));
+  iMobotComms.motionRollBackwardNB(360);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonMovetozero()
@@ -816,11 +816,11 @@ DWORD WINAPI HandlerThread(void* arg)
     int speed;
     for(int i = 0; i < 4; i++) {
       mobot->getJointAngle((robotJointId_t)(i+1), value);
-      swprintf(buf, L"%lf", RAD2DEG(value));
+      swprintf(buf, L"%lf", value);
       EnterCriticalSection(&UpdateGuiCriticalSection);
       dlg->m_edit_MotorPositions[i]->SetWindowTextW(buf);
       /* See if the position slider has been clicked */
-      position = DEG2RAD(-dlg->m_slider_Positions[i]->GetPos());
+      position = -dlg->m_slider_Positions[i]->GetPos();
       if(lastPosition[i] != position) {
         if(initialized) {
           mobot->moveJointToPIDNB((robotJointId_t)(i+1), (double) position);
@@ -829,16 +829,16 @@ DWORD WINAPI HandlerThread(void* arg)
         lastPosition[i] = position;
       } else {
         /* Move the slider into position */
-        dlg->m_slider_Positions[i]->SetPos((int) RAD2DEG(-value));
-        lastPosition[i] = DEG2RAD(-dlg->m_slider_Positions[i]->GetPos());
+        dlg->m_slider_Positions[i]->SetPos((int) -value);
+        lastPosition[i] = -dlg->m_slider_Positions[i]->GetPos();
       }
 
       /* Check the speed */
-      speed = 100 - dlg->m_slider_Speeds[i]->GetPos();
+      speed = 180 - dlg->m_slider_Speeds[i]->GetPos();
       if(speed != dlg->m_speeds[i]) {
-        mobot->setJointSpeedRatio((robotJointId_t)(i+1), (double)speed/100.0);
+        mobot->setJointSpeed((robotJointId_t)(i+1), (double)speed);
         dlg->m_speeds[i] = speed;
-        swprintf(buf, L"%lf", (double)(speed/100.0));
+        swprintf(buf, L"%lf", (double)(speed));
         dlg->m_edit_MotorSpeeds[i]->SetWindowTextW(buf);
       }
       LeaveCriticalSection(&UpdateGuiCriticalSection);
@@ -933,25 +933,25 @@ void CiMobotController_WindowsDlg::handlerSETPOS()
 	len = m_edit_setspd1.GetLine(0, str, 79);
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
-		iMobotComms.moveJointToNB(ROBOT_JOINT1, DEG2RAD(pos));
+		iMobotComms.moveJointToNB(ROBOT_JOINT1, pos);
 	}
 	memset(str, 0, sizeof(TCHAR)*80);
 	len = m_edit_setspd2.GetLine(0, str, 79);
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
-		iMobotComms.moveJointToNB(ROBOT_JOINT2, DEG2RAD(pos));
+		iMobotComms.moveJointToNB(ROBOT_JOINT2, pos);
 	}
 	memset(str, 0, sizeof(TCHAR)*80);
 	len = m_edit_setspd3.GetLine(0, str, 79);
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
-		iMobotComms.moveJointToNB(ROBOT_JOINT3, DEG2RAD(pos));
+		iMobotComms.moveJointToNB(ROBOT_JOINT3, pos);
 	}
 	memset(str, 0, sizeof(TCHAR)*80);
 	len = m_edit_setspd4.GetLine(0, str, 79);
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
-		iMobotComms.moveJointToNB(ROBOT_JOINT4, DEG2RAD(pos));
+		iMobotComms.moveJointToNB(ROBOT_JOINT4, pos);
 	}
 }
 
@@ -1115,28 +1115,28 @@ void CiMobotController_WindowsDlg::handlerSETSPD()
 	len = m_edit_setspd1.GetLine(0, str, 79);
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
-		iMobotComms.setJointSpeedRatio(ROBOT_JOINT1, pos);
+		iMobotComms.setJointSpeed(ROBOT_JOINT1, pos);
     UpdateSpeedSliders(0, pos);
 	}
 	memset(str, 0, sizeof(TCHAR)*80);
 	len = m_edit_setspd2.GetLine(0, str, 79);
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
-		iMobotComms.setJointSpeedRatio(ROBOT_JOINT2, pos);
+		iMobotComms.setJointSpeed(ROBOT_JOINT2, pos);
     UpdateSpeedSliders(1, pos);
 	}
 	memset(str, 0, sizeof(TCHAR)*80);
 	len = m_edit_setspd3.GetLine(0, str, 79);
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
-		iMobotComms.setJointSpeedRatio(ROBOT_JOINT3, pos);
+		iMobotComms.setJointSpeed(ROBOT_JOINT3, pos);
     UpdateSpeedSliders(2, pos);
 	}
 	memset(str, 0, sizeof(TCHAR)*80);
 	len = m_edit_setspd4.GetLine(0, str, 79);
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
-		iMobotComms.setJointSpeedRatio(ROBOT_JOINT4, pos);
+		iMobotComms.setJointSpeed(ROBOT_JOINT4, pos);
     UpdateSpeedSliders(3, pos);
 	}
 }
