@@ -13,8 +13,8 @@
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobotGroup::motionInchwormLeft();
-int CMobotGroup::motionInchwormLeftNB();
+int CMobotGroup::motionInchwormLeft(int num);
+int CMobotGroup::motionInchwormLeftNB(int num);
 \end{verbatim}
 
 \noindent
@@ -27,15 +27,30 @@ The function returns 0 on success and non-zero otherwise.\\
 
 \noindent
 {\bf Parameters}\\
-None.\\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{15 mm}p{145 mm}}
+\texttt{num} & The number of times to perform the inchworm gait.\\
+\end{tabular}
+\end{description}
 
 \noindent
 {\bf Description}\\
+\vspace{-12pt}
+\begin{quote}
+{\bf CMobot::motionInchwormLeft()}\\
 This function causes the robots to perform a single cycle of the inchworm gait
-to the left. This function comes in two flavors; a blocking and a non blocking
-version. The function \texttt{motionInchwormLeft()} is blocking, and the function
+to the left. 
+
+{\bf CMobot::motionInchwormLeftNB()}\\
+This function causes the robots to perform a single cycle of the inchworm gait
+to the left. 
+
+The function \texttt{motionInchwormLeft()} is blocking, and the function
 will hang until the motion has finished. The alternative function, \texttt{motionInchwormLeftNB()} 
 will return immediately, and the motion will execute asynchronously. \\
+\end{quote}
 
 \noindent
 {\bf See Also}\\

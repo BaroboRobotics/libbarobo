@@ -20,12 +20,13 @@
 \vspace*{2.5cm}
 {\Huge\sf\bf MoBot User's Guide}\\
 \vspace*{2.5cm}
-{\Large\bf Version 1.2}
+{\Large\bf Version 1.3}
 \vspace{4.5cm}
 
-\includegraphics[width=4in]{images/imobot_module.jpg}
+\includegraphics[width=4in]{images/Mobot_Camera_Stand.JPG}
 \end{center}
 
+\input{copyright}
 %\maketitle
 \newpage
 \tableofcontents
@@ -163,7 +164,7 @@ first address by clicking on the ``Connect $\rightarrow$ Connect to Robot''
 menu item. The connected robot may be disconnected by clicking on the 
 ``Connect $\rightarrow$ Disconnect from Robot'' menu item. Any connected robots are
 automatically disconnected upon exiting the program. Note that in order to run a Ch
-program that controls a robot, the robot may not currently be connected to any
+program that controls a robot, the robot should not currently be connected to any
 other application, including the RobotController, other Ch programs, and other
 programs on other computers.
 
@@ -214,11 +215,12 @@ middle causes the MoBot to stop where it is.
 
 \subsection{Joint Speeds}
 The ``Joint Speeds'' section, located at the bottom left of the interface,
-displays and controls the current joint speeds of the MoBot. Joint speeds
-are a value between 0 and 1, with 1 meaning maximum joint power, and 0
-meaning zero joint power. The speed may be set by sliding the vertical 
-sliders to the desired positions. 
-
+displays and controls the current joint speeds of the MoBot.
+The joint speeds are in units of degrees per second. To set a specific 
+desired joint speed for a particular joint, the joint speed may be 
+typed directly into the edit boxes below the sliders, and the ``Set''
+button should be clicked.
+ 
 \subsection{Joint Positions}
 This section, located in the bottom-middle of the interface, is used to display
 and control the positions of each of the four
@@ -341,28 +343,28 @@ zero position.
 
 The next lines of code command joints 1 and 4 to rotate 360 degrees.
 \begin{verbatim}
-angle1 = deg2rad(360);
-angle4 = deg2rad(360);
+angle1 = 360;
+angle4 = 360;
 robot.move(angle1, 0, 0, angle4);
 \end{verbatim}
 Note that the member function \texttt{move()} expects input angles
-in radians, so the angles in degrees must be converted to radians
-using the \texttt{deg2rad()} function. The \texttt{deg2rad()} function
-takes an angle in degrees as its argument and returns the angle in
-radians. The function is implemented in Ch with the code
+in degrees, so the angles in radians must be first be converted to degrees 
+using the \texttt{rad2deg()} function. The \texttt{rad2deg()} function
+takes an angle in radians as its argument and returns the angle in
+degrees. The function is implemented in Ch with the code
 \begin{verbatim}
 #include<math.h>
-double deg2rad(double degrees)
+double rad2deg(double radians)
 {
-    double radians;
-    radians = degrees * M_PI / 180.0;
-    return radians;
+    double degrees;
+    radians = radians * 180.0 / M_PI;
+    return degrees;
 }
 \end{verbatim}
 
 If desired, values in radians
 may also be converted to degrees using the counterpart function,
-\texttt{rad2deg()}.
+\texttt{deg2rad()}.
 Joints 1 and 4 are the faceplates
 of the MoBot which are sometimes used to act as "wheels".
 
@@ -372,7 +374,7 @@ of the MoBot which are sometimes used to act as "wheels".
 \section{Controlling the Speed of Mobot Joints}
 \verbatiminput{../demos/chdemos/setspeed.ch}
 
-\section{Preprogrammed Motions}
+\section{\label{sec:preprogrammed_motions}Preprogrammed Motions}
 The robot API contains functions for executing preprogrammed motions. The 
 preprogrammed motions are motions which are commonly used for robot locomotion.
 Following is a list of available functions and a brief description about
@@ -394,11 +396,11 @@ rolling profile.
   faceplate, assuming the camera platform position.
 \item \texttt{motionTumble()}: This function causes the robot to perform the
 tumbling motion, flipping end over end.
-\item \texttt{motionTurnLeft()}: Uses the robot's faceplates as wheels, turning
+\item \texttt{motionTurnLeft()}: This function uses the robot's faceplates as wheels, turning
   them in opposite directions in order to rotate the robot towards its left.
-\item \texttt{motionTurnRight()}: Uses the robot's faceplates as wheels, turning
+\item \texttt{motionTurnRight()}: This function uses the robot's faceplates as wheels, turning
   them in opposite directions in order to rotate the robot towards its right.
-\item \texttt{motionUnstand()}: Causes the robot to drop down from a standing position.
+\item \texttt{motionUnstand()}: This function causes the robot to drop down from a standing position.
 \end{itemize}
 
 Note that all of the functions listed above are ``blocking'' functions, meaning
@@ -467,7 +469,7 @@ sleep(3); // Stand still for three seconds
 pauses the program for three seconds, causing the robot to remain still for three
 seconds. After the pause is over, the line
 \begin{verbatim}
-robot.move(deg2rad(720), 0, 0, deg2rad(720));
+robot.move(2*360, 0, 0, 2*360);
 \end{verbatim}
 turns both faceplates of the robot two full rotations, making the robot spin in place
 while standing. Finally, the line
@@ -547,8 +549,8 @@ encapsulated in a ``for'' loop which executes the entire motion four times.
 \begin{verbatim}
 /* Do the inchworm gait four times */
 int i, num = 4;
-double angle2 = deg2rad(-45);
-double angle3 = deg2rad(45);
+double angle2 = -45;
+double angle3 = 45;
 for(i = 0; i < num; i++) {
     robot.moveJointTo(ROBOT_JOINT2, angle2);
     robot.moveJointTo(ROBOT_JOINT3, angle3);
@@ -570,8 +572,8 @@ motor speeds are set to a speed of 90 degrees per second, and the function \text
 called to put the robot into a flat position. Next, the following lines
 are executed:
 \begin{verbatim}
-robot.moveJointTo(ROBOT_JOINT2, deg2rad(-85));
-robot.moveJointTo(ROBOT_JOINT3, deg2rad(70));
+robot.moveJointTo(ROBOT_JOINT2, -85);
+robot.moveJointTo(ROBOT_JOINT3, 70);
 \end{verbatim}
 These movement commands cause the MoBot to curl up into a fetal position with
 both of its endplates facing toward the ground. The next line, 
@@ -585,12 +587,12 @@ robot to settle down, in case it was still in motion from the last movement.
 Next, the MoBot rotates one 
 of the endplates by 45 degrees. 
 \begin{verbatim}
-robot.moveJointTo(ROBOT_JOINT1, deg2rad(45));
+robot.moveJointTo(ROBOT_JOINT1, 45);
 \end{verbatim}
 This endplate will eventually become the ``foot'' of the standing MoBot. Next,
 the MoBot lifts itself into a standing position, balancing on its endplate.
 \begin{verbatim}
-robot.moveJointTo(ROBOT_JOINT2, deg2rad(20));
+robot.moveJointTo(ROBOT_JOINT2, 20);
 \end{verbatim}
 Note that the previous joint angle for Joint 2, a body joint, was -85 degrees. 
 This motion causes joint 2 to rotate all the way to a 20 degree position, which
@@ -601,9 +603,8 @@ entire MoBot to rotate in place. The speed is first set to 45 degrees per second
 rotation a slow rotation. Next, the \texttt{moveContinuousTime} member function
 is used to continuously rotate a joint for a desired amount of time.
 \begin{verbatim}
-robot.setJointSpeed(ROBOT_JOINT1, deg2rad(45));
-robot.moveContinuousTime(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, 
-                         ROBOT_HOLD, 3000);
+robot.setJointSpeed(ROBOT_JOINT1, 45);
+robot.moveContinuousTime(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_HOLD, 3000);
 \end{verbatim}
 
 The macros \texttt{ROBOT\_FORWARD} and \texttt{ROBOT\_BACKWARD}
@@ -648,6 +649,7 @@ this document.
 \begin{itemize}
 \item \texttt{move()}
 \item \texttt{moveContinuousTime()}
+\item \texttt{moveJoint()}
 \item \texttt{moveJointTo()}
 \item \texttt{moveTo()}
 \item \texttt{moveToZero()}
@@ -670,6 +672,7 @@ this document.
 \begin{itemize}
 \item \texttt{moveNB()}
 \item \texttt{moveContinuousNB()}
+\item \texttt{moveJointNB()}
 \item \texttt{moveJointToNB()}
 \item \texttt{moveToNB()}
 \item \texttt{moveToZeroNB()}
@@ -698,8 +701,8 @@ which enable the control of multiple modules. A small demo program which
 controls two modules simultaneously will first be presented, followed by
 a detailed explanation of the program elements.
 
-\subsection{\texttt{multipleModules.ch} Source Code}
-\verbatiminput{../demos/chdemos/multipleModules.ch}
+\subsection{\texttt{twoModules.ch} Source Code}
+\verbatiminput{../demos/chdemos/twoModules.ch}
 
 \subsection{Demo Explanation}
 The first two lines of interest appear as such:
@@ -758,7 +761,21 @@ Note that we call the non-blocking versions of the
 functions, \texttt{motionStandNB()} and \texttt{motionInchwormLeftNB}. Since these functions are
 non-blocking, both robots will effectively perform the motions simultaneously. 
 Next, we call the member function \texttt{motionWait()} to wait for the motions
-to finish before exiting the program.
+to finish.
+
+Finally, the following lines,
+\begin{verbatim}
+robot1.motionUnstandNB();
+robot2.motionInchwormRightNB(4);
+robot1.motionWait();
+robot2.motionWait();
+\end{verbatim}
+make the first robot come back down from its standing position and the second robot
+inchworm to the right four times simultaneously. Note that the function 
+\texttt{motionWait()} is used to wait for motions, which are compound
+movements, to finish. This is similar to how
+the function \texttt{moveWait()} is used to wait for individual movements
+to finish.
 
 \subsection{Controlling Multiple Connected Modules}
 \subsubsection{\texttt{lift.ch}, Lifting Demo}
@@ -781,7 +798,7 @@ class.
 \begin{tabular}{p{4.5cm}p{8cm}} \hline 
 Function Name & Description \\
 \hline
-\texttt{addRobot()} & Adds a robot to the group. \\
+\texttt{addRobot()} & Add a robot to the group. \\
 \texttt{move()} & Move joints on robots from their current positions for all robots in the group. \\
 \texttt{moveContinuousNB()} & Move joints continuously for all robots in the group. \\
 \texttt{moveContinunousTime()} & Move joints continuously for a specific amount of time for all robots in the group.\\
@@ -804,18 +821,19 @@ Function Name & Description \\
 \texttt{motionInchwormRightNB()} & Cause all robots in the group to inchworm. \\
 \texttt{motionRollBackward()} & Makes all robots in the group roll backward. \\
 \texttt{motionRollForwardNB()} & Makes all robots in the group roll forward. \\
-\texttt{motionSkinny()} & Makes all robots in the group assume a skinny rolling profile. \\
-\texttt{motionSkinnyNB()} & Makes all robots in the group assume a skinny rolling profile. \\
-\texttt{motionStand()} & Makes all robots in the group stand. \\
-\texttt{motionStandNB()} & Makes all robots in the group stand. \\
-\texttt{motionTumble()} & Makes all the robots in the group perform the tumbling motion. \\
-\texttt{motionTumbleNB()} & Makes all the robots in the group perform the tumbling motion. \\
-\texttt{motionTurnLeft()} & Makes all robots in the group turn left. \\
-\texttt{motionTurnLeftNB()} & Makes all robots in the group turn left. \\
-\texttt{motionTurnRight()} & Makes all robots in the group turn right. \\
-\texttt{motionTurnRightNB()} & Makes all robots in the group turn right.\\
-\texttt{motionUnstand()} & Makes all robots in the group drop down from a standing position. \\
-\texttt{motionUnstandNB()} & Makes all robots in the group drop down from a standing position. \\
+\texttt{motionSkinny()} & Make all robots in the group assume a skinny rolling profile. \\
+\texttt{motionSkinnyNB()} & Make all robots in the group assume a skinny rolling profile. \\
+\texttt{motionStand()} & Make all robots in the group stand. \\
+\texttt{motionStandNB()} & Make all robots in the group stand. \\
+\texttt{motionTumble()} & Make all the robots in the group perform the tumbling motion. \\
+\texttt{motionTumbleNB()} & Make all the robots in the group perform the tumbling motion. \\
+\texttt{motionTurnLeft()} & Make all robots in the group turn left. \\
+\texttt{motionTurnLeftNB()} & Make all robots in the group turn left. \\
+\texttt{motionTurnRight()} & Make all robots in the group turn right. \\
+\texttt{motionTurnRightNB()} & Make all robots in the group turn right.\\
+\texttt{motionUnstand()} & Make all robots in the group drop down from a standing position. \\
+\texttt{motionUnstandNB()} & Make all robots in the group drop down from a standing position. \\
+\texttt{motionWait()} & Wait for the robots to complete all currently executing compound motions.\\
 \hline
 \end{tabular}
 

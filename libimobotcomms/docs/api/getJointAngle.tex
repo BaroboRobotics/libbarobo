@@ -11,7 +11,7 @@
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::getJointAngle(robotJointId_t id, double &position);
+int CMobot::getJointAngle(robotJointId_t id, double &angle);
 \end{verbatim}
 
 \noindent
@@ -31,7 +31,7 @@ The function returns 0 on success and non-zero otherwise.\\
 \texttt{id} & The joint number. This is an enumerated type 
 discussed in Section \ref{sec:robotJointId_t} on page
 \pageref{sec:robotJointId_t}.\\
-\texttt{position} & A variable to store the current position of the robot
+\texttt{angle} & A variable to store the current angle of the robot
 motor. The contents of this variable will be overwritten with a value that
 represents the motor's angle in radians.  \\
 \end{tabular}
@@ -39,8 +39,8 @@ represents the motor's angle in radians.  \\
 
 \noindent
 {\bf Description}\\
-This function gets the current motor position of a robot's motor. The
-position returned is in units of degrees and is accurate to roughly $\pm0.1$
+This function gets the current motor angle of a robot's motor. The
+angle returned is in units of degrees and is accurate to roughly $\pm0.17$
 degrees. \\
 
 \noindent

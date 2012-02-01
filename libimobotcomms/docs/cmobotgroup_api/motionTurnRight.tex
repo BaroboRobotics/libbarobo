@@ -13,8 +13,8 @@
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobotGroup::motionTurnRight();
-int CMobotGroup::motionTurnRightNB();
+int CMobotGroup::motionTurnRight(double angle);
+int CMobotGroup::motionTurnRightNB(double angle);
 \end{verbatim}
 
 \noindent
@@ -27,7 +27,13 @@ The function returns 0 on success and non-zero otherwise.\\
 
 \noindent
 {\bf Parameters}\\
-None.\\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{10 mm}p{145 mm}}
+\texttt{angle} & The angle in degrees to turn the wheels. The wheels will turn in opposite directions by the amount specifid by this argument in order to turn the robot to the right. \\
+\end{tabular}
+\end{description}
 
 \noindent
 {\bf Description}\\

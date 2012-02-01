@@ -13,8 +13,8 @@
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::motionRollBackward();
-int CMobot::motionRollBackwardNB();
+int CMobot::motionRollBackward(double angle);
+int CMobot::motionRollBackwardNB(double angle);
 \end{verbatim}
 
 \noindent
@@ -27,18 +27,33 @@ The function returns 0 on success and non-zero otherwise.\\
 
 \noindent
 {\bf Parameters}\\
-None.\\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{15 mm}p{145 mm}}
+\texttt{angle} & The angle to turn the wheels, specified in degrees.\\
+\end{tabular}
+\end{description}
 
 \noindent
 {\bf Description}\\
-This function causes each of the faceplates to rotate 90 degrees to roll the
-robot backward.
+\vspace{-12pt}
+\begin{quote}
+{\bf CMobot::motionRollBackward()}\\
+This function causes each of the faceplates to rotate to roll the
+robot backward. The amount to roll the wheels is specified by the argument,
+\texttt{angle}.
+
+{\bf CMobot::motionRollBackwardNB()}\\
+This function causes each of the faceplates to rotate to roll the
+robot backward. The amount to roll the wheels is specified by the argument,
+\texttt{angle}.
 
 This function has both a blocking and non-blocking version.
 The blocking version, \texttt{motionRollBackward()}, will block until the
 robot motion has completed. The non-blocking version, \texttt{motionRollBackwardNB()},
 will return immediately, and the motion will be performed asynchronously.\\
-\\
+\end{quote}
 
 \noindent
 {\bf See Also}\\
