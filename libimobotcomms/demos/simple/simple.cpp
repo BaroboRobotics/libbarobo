@@ -9,13 +9,8 @@ int main()
   /* Connect to the paired MoBot */
   robot.connect();
 
-  /* Set the robot to "home" position, where all joint angles are 0 degrees. */
-  robot.moveToZero();
-
-  /* Rotate each of the faceplates by 90 degrees */
-  robot.move(deg2rad(90), 0, 0, deg2rad(90));
-  /* Move the motors back to where they were */
-  robot.move(deg2rad(-90), 0, 0, deg2rad(-90));
+  robot.setJointSpeed(ROBOT_JOINT1, M_PI);
+  robot.moveJointContinuousNB(ROBOT_JOINT1, ROBOT_FORWARD);
 
   return 0;
 }

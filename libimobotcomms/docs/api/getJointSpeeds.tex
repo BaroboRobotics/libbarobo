@@ -7,10 +7,11 @@
 \addcontentsline{toc}{section}{getJointSpeeds()}
 
 \noindent
-{\bf Synopsis}\\
+{\bf Synopsis}
+\vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::getJointSpeeds(double speed[4]);
+int CMobot::getJointSpeeds(double &speed1, double &speed2, double &speed3, double &speed4);
 \end{verbatim}
 
 \noindent
@@ -27,16 +28,17 @@ The function returns 0 on success and non-zero otherwise.\\
 \begin{description}
 \item               
 \begin{tabular}{p{10 mm}p{145 mm}}
-\texttt{speed} & An array of type double. The four elements of the array will be 
-overwritten with the four speed settings of the robot's joints, which are 
-expressed in radians per second. \\
+\texttt{speed1} & The joint speed setting for joint 1.\\
+\texttt{speed2} & The joint speed setting for joint 2.\\
+\texttt{speed3} & The joint speed setting for joint 3.\\
+\texttt{speed4} & The joint speed setting for joint 4.\\
 \end{tabular}
 \end{description}
 
 \noindent
 {\bf Description}\\
 This function is used to retrieve all four joint speed settings of a robot
-simultaneously. The speeds are in radians per second. \\
+simultaneously. The speeds are in degrees per second. \\
 
 \noindent
 {\bf Example}\\

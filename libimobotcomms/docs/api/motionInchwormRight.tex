@@ -9,11 +9,12 @@
 \addcontentsline{toc}{section}{motionInchwormRightNB()}
 
 \noindent
-{\bf Synopsis}\\
+{\bf Synopsis}
+\vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::motionInchwormRight();
-int CMobot::motionInchwormRightNB();
+int CMobot::motionInchwormRight(int num);
+int CMobot::motionInchwormRightNB(int num);
 \end{verbatim}
 
 \noindent
@@ -26,10 +27,23 @@ The function returns 0 on success and non-zero otherwise.\\
 
 \noindent
 {\bf Parameters}\\
-None.\\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{15 mm}p{145 mm}}
+\texttt{num} & The number of times to perform the inchworm gait.\\
+\end{tabular}
+\end{description}
 
 \noindent
 {\bf Description}\\
+\vspace{-12pt}
+\begin{quote}
+{\bf CMobot::motionInchwormRight()}\\
+This function causes the robot to perform a single cycle of the inchworm gait
+to the right. 
+
+{\bf CMobot::motionInchwormRightNB()}\\
 This function causes the robot to perform a single cycle of the inchworm gait
 to the right. 
 
@@ -37,6 +51,7 @@ This function has both a blocking and non-blocking version.
 The blocking version, \texttt{motionInchwormRight()}, will block until the
 robot motion has completed. The non-blocking version, \texttt{motionInchwormRightNB()},
 will return immediately, and the motion will be performed asynchronously.\\
+\end{quote}
 
 \noindent
 {\bf See Also}\\

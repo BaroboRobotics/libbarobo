@@ -29,6 +29,10 @@ typedef struct br_comms_s
   double jointSpeeds[4];
   double maxSpeed[4];
   THREAD_T thread;
+  MUTEX_T* commsLock;
+  int motionInProgress;
+  int motionArgInt;
+  double motionArgDouble;
 } br_comms_t;
 #endif
 
@@ -45,24 +49,14 @@ typedef enum mobot_joints_e {
 
 #ifndef ROBOT_JOINT_STATE_E
 #define ROBOT_JOINT_STATE_E
-typedef enum mobot_joint_state_e
+typedef enum robotJointState_e
 {
-    ROBOT_JOINT_IDLE = 0,
-    ROBOT_JOINT_MOVING,
-    ROBOT_JOINT_GOALSEEK,
+    ROBOT_NEUTRAL = 0,
+    ROBOT_FORWARD,
+    ROBOT_BACKWARD,
+    ROBOT_HOLD,
 } robotJointState_t;
 #endif
-
-#ifndef ROBOT_JOINT_DIRECTION_T
-#define ROBOT_JOINT_DIRECTION_T
-typedef enum mobot_joint_direction_e
-{
-  ROBOT_NEUTRAL,
-  ROBOT_FORWARD,
-  ROBOT_BACKWARD
-} robotJointDirection_t;
-#endif
-
 
 #ifndef ROBOT_JOINT_DIRECTION_E
 #define ROBOT_JOINT_DIRECTION_E
@@ -103,18 +97,20 @@ DLLIMPORT int Mobot_connectWithAddress(
 DLLIMPORT int Mobot_disconnect(br_comms_t* comms);
 DLLIMPORT int Mobot_isConnected(br_comms_t* comms);
 DLLIMPORT int Mobot_isMoving(br_comms_t* comms);
-DLLIMPORT int Mobot_setJointDirection(br_comms_t* comms, robotJointId_t id, robotJointDirection_t dir);
-DLLIMPORT int Mobot_getJointDirection(br_comms_t* comms, robotJointId_t id, robotJointDirection_t *dir);
+DLLIMPORT int Mobot_setJointDirection(br_comms_t* comms, robotJointId_t id, robotJointState_t dir);
+DLLIMPORT int Mobot_getJointDirection(br_comms_t* comms, robotJointId_t id, robotJointState_t *dir);
 DLLIMPORT int Mobot_getJointMaxSpeed(br_comms_t* comms, robotJointId_t, double *maxSpeed);
 DLLIMPORT int Mobot_setJointSpeed(br_comms_t* comms, robotJointId_t id, double speed);
 DLLIMPORT int Mobot_setJointSpeedRatio(br_comms_t* comms, robotJointId_t id, double ratio);
 DLLIMPORT int Mobot_getJointSpeed(br_comms_t* comms, robotJointId_t id, double *speed);
 DLLIMPORT int Mobot_getJointSpeedRatio(br_comms_t* comms, robotJointId_t id, double *ratio);
-DLLIMPORT int Mobot_getJointSpeeds(br_comms_t* comms, double speeds[4]);
-DLLIMPORT int Mobot_setJointSpeeds(br_comms_t* comms, double speeds[4]);
-DLLIMPORT int Mobot_getJointSpeedRatios(br_comms_t* comms, double ratios[4]);
-DLLIMPORT int Mobot_setJointSpeedRatios(br_comms_t* comms, double ratios[4]);
+DLLIMPORT int Mobot_getJointSpeeds(br_comms_t* comms, double *speed1, double *speed2, double *speed3, double *speed4);
+DLLIMPORT int Mobot_setJointSpeeds(br_comms_t* comms, double speeds1, double speeds2, double speeds3, double speeds4);
+DLLIMPORT int Mobot_getJointSpeedRatios(br_comms_t* comms, double *ratio1, double *ratio2, double *ratio3, double *ratio4);
+DLLIMPORT int Mobot_setJointSpeedRatios(br_comms_t* comms, double ratio1, double ratio2, double ratio3, double ratio4);
 DLLIMPORT int Mobot_setTwoWheelRobotSpeed(br_comms_t* comms, double speed, double radius, char unit[]);
+DLLIMPORT int Mobot_moveJoint(br_comms_t* comms, robotJointId_t id, double angle);
+DLLIMPORT int Mobot_moveJointNB(br_comms_t* comms, robotJointId_t id, double angle);
 DLLIMPORT int Mobot_moveJointTo(br_comms_t* comms, robotJointId_t id, double angle);
 DLLIMPORT int Mobot_moveJointToNB(br_comms_t* comms, robotJointId_t id, double angle);
 DLLIMPORT int Mobot_getJointAngle(br_comms_t* comms, robotJointId_t id, double *angle);
@@ -130,15 +126,15 @@ DLLIMPORT int Mobot_moveNB(br_comms_t* comms,
                                double angle3,
                                double angle4);
 DLLIMPORT int Mobot_moveContinuousNB(br_comms_t* comms,
-                                  robotJointDirection_t dir1,
-                                  robotJointDirection_t dir2,
-                                  robotJointDirection_t dir3,
-                                  robotJointDirection_t dir4);
+                                  robotJointState_t dir1,
+                                  robotJointState_t dir2,
+                                  robotJointState_t dir3,
+                                  robotJointState_t dir4);
 DLLIMPORT int Mobot_moveContinuousTime(br_comms_t* comms,
-                                  robotJointDirection_t dir1,
-                                  robotJointDirection_t dir2,
-                                  robotJointDirection_t dir3,
-                                  robotJointDirection_t dir4,
+                                  robotJointState_t dir1,
+                                  robotJointState_t dir2,
+                                  robotJointState_t dir3,
+                                  robotJointState_t dir4,
                                   int msecs);
 DLLIMPORT int Mobot_moveTo(br_comms_t* comms,
                                double angle1,
@@ -152,30 +148,38 @@ DLLIMPORT int Mobot_moveToNB(br_comms_t* comms,
                                double angle4);
 DLLIMPORT int Mobot_moveToZero(br_comms_t* comms);
 DLLIMPORT int Mobot_moveToZeroNB(br_comms_t* comms);
-DLLIMPORT int Mobot_moveJointContinuousNB(br_comms_t* comms, robotJointId_t id, robotJointDirection_t dir);
-DLLIMPORT int Mobot_moveJointContinuousTime(br_comms_t* comms, robotJointId_t id, robotJointDirection_t dir, int msecs);
+DLLIMPORT int Mobot_moveJointContinuousNB(br_comms_t* comms, robotJointId_t id, robotJointState_t dir);
+DLLIMPORT int Mobot_moveJointContinuousTime(br_comms_t* comms, robotJointId_t id, robotJointState_t dir, int msecs);
 DLLIMPORT int Mobot_moveJointWait(br_comms_t* comms, robotJointId_t id);
 DLLIMPORT int Mobot_moveWait(br_comms_t* comms);
 DLLIMPORT int Mobot_stop(br_comms_t* comms);
 DLLIMPORT int Mobot_moveJointToPIDNB(br_comms_t* comms, robotJointId_t id, double angle);
 
 /* compound motion functions */
-DLLIMPORT int Mobot_motionInchwormLeft(br_comms_t* comms);
-DLLIMPORT int Mobot_motionInchwormRight(br_comms_t* comms);
-DLLIMPORT int Mobot_motionRollBackward(br_comms_t* comms);
-DLLIMPORT int Mobot_motionRollForward(br_comms_t* comms);
+DLLIMPORT int Mobot_motionArch(br_comms_t* comms, double angle);
+DLLIMPORT int Mobot_motionInchwormLeft(br_comms_t* comms, int num);
+DLLIMPORT int Mobot_motionInchwormRight(br_comms_t* comms, int num);
+DLLIMPORT int Mobot_motionRollBackward(br_comms_t* comms, double angle);
+DLLIMPORT int Mobot_motionRollForward(br_comms_t* comms, double angle);
+DLLIMPORT int Mobot_motionSkinny(br_comms_t* comms, double angle);
 DLLIMPORT int Mobot_motionStand(br_comms_t* comms);
-DLLIMPORT int Mobot_motionTurnLeft(br_comms_t* comms);
-DLLIMPORT int Mobot_motionTurnRight(br_comms_t* comms);
+DLLIMPORT int Mobot_motionTumble(br_comms_t* comms, int num);
+DLLIMPORT int Mobot_motionTurnLeft(br_comms_t* comms, double angle);
+DLLIMPORT int Mobot_motionTurnRight(br_comms_t* comms, double angle);
+DLLIMPORT int Mobot_motionUnstand(br_comms_t* comms);
 
 /* Non-Blocking compound motion functions */
 DLLIMPORT int Mobot_motionInchwormLeftNB(br_comms_t* comms);
 DLLIMPORT int Mobot_motionInchwormRightNB(br_comms_t* comms);
 DLLIMPORT int Mobot_motionRollBackwardNB(br_comms_t* comms);
 DLLIMPORT int Mobot_motionRollForwardNB(br_comms_t* comms);
+DLLIMPORT int Mobot_motionSkinnyNB(br_comms_t* comms, double angle);
 DLLIMPORT int Mobot_motionStandNB(br_comms_t* comms);
+DLLIMPORT int Mobot_motionTumbleNB(br_comms_t* comms, int num);
 DLLIMPORT int Mobot_motionTurnLeftNB(br_comms_t* comms);
 DLLIMPORT int Mobot_motionTurnRightNB(br_comms_t* comms);
+DLLIMPORT int Mobot_motionUnstandNB(br_comms_t* comms);
+DLLIMPORT int Mobot_motionWait(br_comms_t* comms);
 
 /* Utility Functions */
 int SendToIMobot(br_comms_t* comms, const char* str, int len);

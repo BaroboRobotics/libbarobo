@@ -1,0 +1,51 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::motionUnstand()}\index{CMobotGroup::motionUnstand()}}\\
+{\LARGE \texttt{CMobotGroup::motionUnstandNB()}\index{CMobotGroup::motionUnstandNB()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{motionUnstand()}
+\addcontentsline{toc}{section}{motionUnstandNB()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::motionUnstand();
+int CMobotGroup::motionUnstandNB();
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Move robots currently standing on a faceplate back down into a prone position.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+None.\\
+
+\noindent
+{\bf Description}\\
+\vspace{-12pt}
+\begin{quote}
+{\bf CMobot::motionUnstand()}\\
+This function causes the robot to move down from the camera platform.
+
+{\bf CMobot::motionUnstandNB()}\\
+This function causes the robot to move down from the camera platform.
+
+This function has both a blocking and non-blocking version.
+The blocking version, \texttt{motionUnstand()}, will block until the
+robot motion has completed. The non-blocking version, \texttt{motionUnstandNB()},
+will return immediately, and the motion will be performed asynchronously.\\
+\end{quote}
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

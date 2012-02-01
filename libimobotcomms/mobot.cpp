@@ -48,6 +48,9 @@ int Mobot_init(br_comms_t* comms)
     comms->jointSpeeds[i] = DEF_MOTOR_SPEED;
   }
   THREAD_CREATE(&comms->thread, nullThread, NULL);
+  comms->commsLock = (MUTEX_T*)malloc(sizeof(MUTEX_T));
+  MUTEX_INIT(comms->commsLock);
+  comms->motionInProgress = 0;
   return 0;
 }
 
@@ -262,9 +265,17 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
 #endif
 
   // connect to server
-  status = connect(comms->socket, (const struct sockaddr *)&comms->addr, sizeof(comms->addr));
-  if(status == 0) {
-    comms->connected = 1;
+  status = -1;
+  int tries = 0;
+  while(status < 0) {
+    if(tries > 2) {
+      return -1;
+    }
+    status = connect(comms->socket, (const struct sockaddr *)&comms->addr, sizeof(comms->addr));
+    if(status == 0) {
+      comms->connected = 1;
+    } 
+    tries++;
   }
 #ifndef _WIN32
   /* Make the socket non-blocking */
@@ -317,7 +328,11 @@ int Mobot_disconnect(br_comms_t* comms)
 
 int Mobot_isConnected(br_comms_t* comms)
 {
-  return comms->connected;
+  if(comms->connected > 0) {
+    return 1;
+  } else {
+    return 0;
+  }
 }
 
 int Mobot_isMoving(br_comms_t* comms)
@@ -327,7 +342,9 @@ int Mobot_isMoving(br_comms_t* comms)
   int i;
   for(i = 1; i <= 4; i++) {
     Mobot_getJointState(comms, (robotJointId_t)i, &state);
-    if(state != ROBOT_JOINT_IDLE) {
+    if( (state == ROBOT_FORWARD) ||
+        (state == ROBOT_BACKWARD) ) 
+    {
       moving = 1;
       break;
     }
@@ -335,7 +352,7 @@ int Mobot_isMoving(br_comms_t* comms)
   return moving;
 }
 
-int Mobot_setJointDirection(br_comms_t* comms, robotJointId_t id, robotJointDirection_t dir)
+int Mobot_setJointDirection(br_comms_t* comms, robotJointId_t id, robotJointState_t dir)
 {
   char buf[160];
   int status;
@@ -348,7 +365,7 @@ int Mobot_setJointDirection(br_comms_t* comms, robotJointId_t id, robotJointDire
   return 0;
 }
 
-int Mobot_getJointDirection(br_comms_t* comms, robotJointId_t id, robotJointDirection_t *dir)
+int Mobot_getJointDirection(br_comms_t* comms, robotJointId_t id, robotJointState_t *dir)
 {
   char buf[160];
   int status;
@@ -389,12 +406,12 @@ int Mobot_setJointSpeed(br_comms_t* comms, robotJointId_t id, double speed)
   char buf[160];
   int status;
   int bytes_read;
+  comms->jointSpeeds[id-1] = speed;
   sprintf(buf, "SET_MOTOR_SPEED %d %lf", id, speed);
   status = SendToIMobot(comms, buf, strlen(buf)+1);
   if(status < 0) return status;
   bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
   if(strcmp(buf, "OK")) return -1;
-  comms->jointSpeeds[id-1] = speed;
   return 0;
 }
 
@@ -466,69 +483,75 @@ int Mobot_getJointState(br_comms_t* comms, robotJointId_t id, robotJointState_t 
   return 0;
 }
 
-int Mobot_getJointSpeeds(br_comms_t* comms, double speeds[4])
+int Mobot_getJointSpeeds(br_comms_t* comms, double *speed1, double *speed2, double *speed3, double *speed4)
 {
+  double *speeds[4];
+  speeds[0] = speed1;
+  speeds[1] = speed2;
+  speeds[2] = speed3;
+  speeds[3] = speed4;
   for(int i = 0; i < 4; i++) {
-    Mobot_getJointSpeed(comms, (robotJointId_t)(i+1), &speeds[i]);
+    Mobot_getJointSpeed(comms, (robotJointId_t)(i+1), speeds[i]);
   }
   return 0;
 }
 
-int Mobot_setJointSpeeds(br_comms_t* comms, double speeds[4])
+int Mobot_setJointSpeeds(br_comms_t* comms, double speed1, double speed2, double speed3, double speed4)
 {
+  double speeds[4];
+  speeds[0] = speed1;
+  speeds[1] = speed2;
+  speeds[2] = speed3;
+  speeds[3] = speed4;
   for(int i = 0; i < 4; i++) {
     Mobot_setJointSpeed(comms, (robotJointId_t)(i+1), speeds[i]);
   }
   return 0;
 }
 
-int Mobot_getJointSpeedRatios(br_comms_t* comms, double ratios[4])
+int Mobot_getJointSpeedRatios(br_comms_t* comms, double *ratio1, double *ratio2, double *ratio3, double *ratio4)
 {
+  double *ratios[4];
+  ratios[0] = ratio1;
+  ratios[1] = ratio2;
+  ratios[2] = ratio3;
+  ratios[3] = ratio4;
   for(int i = 0; i < 4; i++) {
-    Mobot_getJointSpeedRatio(comms, (robotJointId_t)(i+1), &ratios[i]);
+    Mobot_getJointSpeedRatio(comms, (robotJointId_t)(i+1), ratios[i]);
   }
   return 0;
 }
 
-int Mobot_setJointSpeedRatios(br_comms_t* comms, double ratios[4])
+int Mobot_setJointSpeedRatios(br_comms_t* comms, double ratio1, double ratio2, double ratio3, double ratio4)
 {
+  double ratios[4];
+  ratios[0] = ratio1;
+  ratios[1] = ratio2;
+  ratios[2] = ratio3;
+  ratios[3] = ratio4;
   for(int i = 0; i < 4; i++) {
     Mobot_setJointSpeedRatio(comms, (robotJointId_t)(i+1), ratios[i]);
   }
   return 0;
 }
 
-int Mobot_setTwoWheelRobotSpeed(br_comms_t* comms, double speed, double radius, char unit[])
+int Mobot_setTwoWheelRobotSpeed(br_comms_t* comms, double speed, double radius)
 {
   double omega;
-  if(!strcmp(unit, "cm")) {
-    speed = speed/100.0;
-    radius = radius/100.0;
-  } else if (!strcmp(unit, "m")) {
-    /* No conversion necessary */
-  } else if (!strcmp(unit, "inch")) {
-    speed = speed * 0.0254;
-    radius = radius * 0.0254;
-  } else if (!strcmp(unit, "foot")) {
-    speed = speed * 0.3048;
-    radius = radius * 0.3048;
-  } else {
-    return -1;
-  }
-  omega = (speed)/(2 * M_PI * radius);
+  omega = speed/radius;
   Mobot_setJointSpeed(comms, ROBOT_JOINT1, omega);
-  Mobot_setJointSpeed(comms, ROBOT_JOINT4, -1*omega);
+  Mobot_setJointSpeed(comms, ROBOT_JOINT4, omega);
   return 0;
 }
 
-int Mobot_moveJointContinuousNB(br_comms_t* comms, robotJointId_t id, robotJointDirection_t dir)
+int Mobot_moveJointContinuousNB(br_comms_t* comms, robotJointId_t id, robotJointState_t dir)
 {
   Mobot_setJointSpeed(comms, id, comms->jointSpeeds[(int)id-1]);
   Mobot_setJointDirection(comms, id, dir);
   return 0;
 }
 
-int Mobot_moveJointContinuousTime(br_comms_t* comms, robotJointId_t id, robotJointDirection_t dir, int msecs)
+int Mobot_moveJointContinuousTime(br_comms_t* comms, robotJointId_t id, robotJointState_t dir, int msecs)
 {
   Mobot_moveJointContinuousNB(comms, id, dir);
 #ifdef _WIN32
@@ -537,6 +560,24 @@ int Mobot_moveJointContinuousTime(br_comms_t* comms, robotJointId_t id, robotJoi
   usleep(msecs * 1000);
 #endif
   return 0;
+}
+
+int Mobot_moveJoint(br_comms_t* comms, robotJointId_t id, double angle)
+{
+  double curAngle;
+  if(Mobot_getJointAngle(comms, id, &curAngle)) {
+    return -1;
+  }
+  return Mobot_moveJointTo(comms, id, curAngle + angle);
+}
+
+int Mobot_moveJointNB(br_comms_t* comms, robotJointId_t id, double angle)
+{
+  double curAngle;
+  if(Mobot_getJointAngle(comms, id, &curAngle)) {
+    return -1;
+  }
+  return Mobot_moveJointToNB(comms, id, curAngle + angle);
 }
 
 int Mobot_moveJointTo(br_comms_t* comms, robotJointId_t id, double angle)
@@ -665,12 +706,12 @@ int Mobot_moveNB(br_comms_t* comms,
 }
 
 int Mobot_moveContinuousNB(br_comms_t* comms,
-                                  robotJointDirection_t dir1,
-                                  robotJointDirection_t dir2,
-                                  robotJointDirection_t dir3,
-                                  robotJointDirection_t dir4)
+                                  robotJointState_t dir1,
+                                  robotJointState_t dir2,
+                                  robotJointState_t dir3,
+                                  robotJointState_t dir4)
 {
-  robotJointDirection_t dirs[4];
+  robotJointState_t dirs[4];
   int i;
   dirs[0] = dir1;
   dirs[1] = dir2;
@@ -683,16 +724,18 @@ int Mobot_moveContinuousNB(br_comms_t* comms,
     } else if (dirs[i] == ROBOT_BACKWARD) {
       Mobot_setJointSpeed(comms, (robotJointId_t)(i+1), comms->jointSpeeds[i]);
       Mobot_setJointDirection(comms, (robotJointId_t)(i+1), ROBOT_BACKWARD);
+    } else {
+      Mobot_setJointDirection(comms, (robotJointId_t)(i+1), dirs[i]);
     }
   }
   return 0;
 }
 
 int Mobot_moveContinuousTime(br_comms_t* comms,
-                                  robotJointDirection_t dir1,
-                                  robotJointDirection_t dir2,
-                                  robotJointDirection_t dir3,
-                                  robotJointDirection_t dir4,
+                                  robotJointState_t dir1,
+                                  robotJointState_t dir2,
+                                  robotJointState_t dir3,
+                                  robotJointState_t dir4,
                                   int msecs)
 {
   int i;
@@ -756,14 +799,17 @@ int Mobot_moveJointWait(br_comms_t* comms, robotJointId_t id)
 {
   robotJointState_t state;
   /* Make sure there is no non-blocking function running */
-  THREAD_JOIN(comms->thread);
+//  THREAD_JOIN(comms->thread);
 
   while(1)
   {
     if(Mobot_getJointState(comms, id, &state)) {
       return -1;
     }
-    if(state == 0) {
+    if(
+      (state == ROBOT_NEUTRAL) ||
+      (state == ROBOT_HOLD) )
+    {
       return 0;
     } else {
 #ifndef _WIN32
@@ -780,7 +826,7 @@ int Mobot_moveWait(br_comms_t* comms)
 {
   int i;
   /* Make sure there is no non-blocking function running */
-  THREAD_JOIN(comms->thread);
+//  THREAD_JOIN(comms->thread);
   for(i = 0; i < 4; i++) {
     if(Mobot_moveJointWait(comms, (robotJointId_t)(i+1))) {
       return -1;
@@ -801,75 +847,149 @@ int Mobot_stop(br_comms_t* comms)
   return 0;
 }
 
-int Mobot_motionRollForward(br_comms_t* comms)
+int Mobot_motionArch(br_comms_t* comms, double angle)
 {
-  double motorPosition[2];
-  Mobot_getJointAngle(comms, ROBOT_JOINT1, &motorPosition[0]);
-  Mobot_getJointAngle(comms, ROBOT_JOINT4, &motorPosition[1]);
-  Mobot_moveJointToNB(comms, ROBOT_JOINT1, motorPosition[0] + DEG2RAD(90));
-  Mobot_moveJointToNB(comms, ROBOT_JOINT4, motorPosition[1] + DEG2RAD(90));
-  Mobot_moveWait(comms);
+  Mobot_moveJointToNB(comms, ROBOT_JOINT2, -angle/2.0);
+  Mobot_moveJointToNB(comms, ROBOT_JOINT3, angle/2.0);
+  Mobot_moveJointWait(comms, ROBOT_JOINT2);
+  Mobot_moveJointWait(comms, ROBOT_JOINT3);
   return 0;
 }
 
-int Mobot_motionRollBackward(br_comms_t* comms)
+void* motionArchThread(void* arg)
 {
-  double motorPosition[2];
-  Mobot_getJointAngle(comms, ROBOT_JOINT1, &motorPosition[0]);
-  Mobot_getJointAngle(comms, ROBOT_JOINT4, &motorPosition[1]);
-  Mobot_moveJointToNB(comms, ROBOT_JOINT1, motorPosition[0] - DEG2RAD(90));
-  Mobot_moveJointToNB(comms, ROBOT_JOINT4, motorPosition[1] - DEG2RAD(90));
-  Mobot_moveWait(comms);
+  br_comms_t* comms = (br_comms_t*)arg;
+  Mobot_motionArch(comms, comms->motionArgDouble);
+  comms->motionInProgress--;
+  return NULL;
+}
+
+int Mobot_motionArchNB(br_comms_t* comms, double angle)
+{
+  comms->motionArgDouble = angle;
+  comms->motionInProgress++;
+  THREAD_CREATE(&comms->thread, motionArchThread, comms);
   return 0;
 }
 
-int Mobot_motionTurnLeft(br_comms_t* comms)
+int Mobot_motionInchwormLeft(br_comms_t* comms, int num)
 {
-  double motorPosition[2];
-  Mobot_getJointAngle(comms, ROBOT_JOINT1, &motorPosition[0]);
-  Mobot_getJointAngle(comms, ROBOT_JOINT4, &motorPosition[1]);
-  Mobot_moveJointToNB(comms, ROBOT_JOINT1, motorPosition[0] - DEG2RAD(90));
-  Mobot_moveJointToNB(comms, ROBOT_JOINT4, motorPosition[1] + DEG2RAD(90));
-  Mobot_moveWait(comms);
-  return 0;
-}
-
-int Mobot_motionTurnRight(br_comms_t* comms)
-{
-  double motorPosition[2];
-  Mobot_getJointAngle(comms, ROBOT_JOINT1, &motorPosition[0]);
-  Mobot_getJointAngle(comms, ROBOT_JOINT4, &motorPosition[1]);
-  Mobot_moveJointToNB(comms, ROBOT_JOINT1, motorPosition[0] + DEG2RAD(90));
-  Mobot_moveJointToNB(comms, ROBOT_JOINT4, motorPosition[1] - DEG2RAD(90));
-  Mobot_moveWait(comms);
-  return 0;
-}
-
-int Mobot_motionInchwormLeft(br_comms_t* comms)
-{
+  int i;
   Mobot_moveJointToNB(comms, ROBOT_JOINT2, 0);
   Mobot_moveJointToNB(comms, ROBOT_JOINT3, 0);
   Mobot_moveWait(comms);
 
-  Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(-50));
-  Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(50));
-  Mobot_moveJointTo(comms, ROBOT_JOINT2, 0);
-  Mobot_moveJointTo(comms, ROBOT_JOINT3, 0);
+  for(i = 0; i < num; i++) {
+    Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(-50));
+    Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(50));
+    Mobot_moveJointTo(comms, ROBOT_JOINT2, 0);
+    Mobot_moveJointTo(comms, ROBOT_JOINT3, 0);
+  }
 
   return 0;
 }
 
-int Mobot_motionInchwormRight(br_comms_t* comms)
+void* motionInchwormLeftThread(void* arg)
 {
+  br_comms_t* comms = (br_comms_t*)arg;
+  Mobot_motionInchwormLeft(comms, comms->motionArgInt);
+  comms->motionInProgress--;
+  return NULL;
+}
+
+int Mobot_motionInchwormLeftNB(br_comms_t* comms, int num)
+{
+  /* Make sure the old thread has joined */
+  comms->motionInProgress++;
+  comms->motionArgInt = num;
+  THREAD_CREATE(&comms->thread, motionInchwormLeftThread, comms);
+  return 0;
+}
+
+int Mobot_motionInchwormRight(br_comms_t* comms, int num)
+{
+  int i;
   Mobot_moveJointToNB(comms, ROBOT_JOINT2, 0);
   Mobot_moveJointToNB(comms, ROBOT_JOINT3, 0);
   Mobot_moveWait(comms);
 
-  Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(50));
-  Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(-50));
-  Mobot_moveJointTo(comms, ROBOT_JOINT3, 0);
-  Mobot_moveJointTo(comms, ROBOT_JOINT2, 0);
+  for(i = 0; i < num; i++) {
+    Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(50));
+    Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(-50));
+    Mobot_moveJointTo(comms, ROBOT_JOINT3, 0);
+    Mobot_moveJointTo(comms, ROBOT_JOINT2, 0);
+  }
 
+  return 0;
+}
+
+void* motionInchwormRightThread(void* arg)
+{
+  br_comms_t* comms = (br_comms_t*)arg;
+  Mobot_motionInchwormRight((br_comms_t*)arg, comms->motionArgInt);
+  ((br_comms_t*)arg)->motionInProgress--;
+  return NULL;
+}
+
+int Mobot_motionInchwormRightNB(br_comms_t* comms, int num)
+{
+  comms->motionArgInt = num;
+  comms->motionInProgress++;
+  THREAD_CREATE(&comms->thread, motionInchwormRightThread, comms);
+  return 0;
+}
+
+int Mobot_motionRollBackward(br_comms_t* comms, double angle)
+{
+  double motorPosition[2];
+  Mobot_getJointAngle(comms, ROBOT_JOINT1, &motorPosition[0]);
+  Mobot_getJointAngle(comms, ROBOT_JOINT4, &motorPosition[1]);
+  Mobot_moveJointToNB(comms, ROBOT_JOINT1, motorPosition[0] - angle);
+  Mobot_moveJointToNB(comms, ROBOT_JOINT4, motorPosition[1] - angle);
+  Mobot_moveWait(comms);
+  return 0;
+}
+
+void* motionRollBackwardThread(void* arg)
+{
+  br_comms_t* comms = (br_comms_t*)arg;
+  Mobot_motionRollBackward((br_comms_t*)arg, comms->motionArgDouble);
+  ((br_comms_t*)arg)->motionInProgress--;
+  return NULL;
+}
+
+int Mobot_motionRollBackwardNB(br_comms_t* comms, double angle)
+{
+  comms->motionArgDouble = angle;
+  comms->motionInProgress++;
+  THREAD_CREATE(&comms->thread, motionRollBackwardThread, comms);
+  return 0;
+}
+
+int Mobot_motionRollForward(br_comms_t* comms, double angle)
+{
+  double motorPosition[2];
+  Mobot_getJointAngle(comms, ROBOT_JOINT1, &motorPosition[0]);
+  Mobot_getJointAngle(comms, ROBOT_JOINT4, &motorPosition[1]);
+  Mobot_moveJointToNB(comms, ROBOT_JOINT1, motorPosition[0] + angle);
+  Mobot_moveJointToNB(comms, ROBOT_JOINT4, motorPosition[1] + angle);
+  Mobot_moveWait(comms);
+  return 0;
+}
+
+void* motionRollForwardThread(void* arg)
+{
+  br_comms_t* comms = (br_comms_t*)arg;
+  Mobot_motionRollForward((br_comms_t*)arg, comms->motionArgDouble);
+  ((br_comms_t*)arg)->motionInProgress--;
+  return NULL;
+}
+
+int Mobot_motionRollForwardNB(br_comms_t* comms, double angle)
+{
+  comms->motionArgDouble = angle;
+  comms->motionInProgress++;
+  THREAD_CREATE(&comms->thread, motionRollForwardThread, comms);
   return 0;
 }
 
@@ -877,8 +997,8 @@ int Mobot_motionStand(br_comms_t* comms)
 {
   double speed;
   Mobot_moveToZero(comms);
-  Mobot_moveJointToNB(comms, ROBOT_JOINT2, DEG2RAD(-85));
-  Mobot_moveJointToNB(comms, ROBOT_JOINT3, DEG2RAD(70));
+  Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(-85));
+  Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(70));
   Mobot_moveWait(comms);
   Mobot_moveJointTo(comms, ROBOT_JOINT1, DEG2RAD(45));
   /* Sleep for a second, wait for it to settle down */
@@ -896,96 +1016,181 @@ int Mobot_motionStand(br_comms_t* comms)
   return 0;
 }
 
-void* motionInchwormLeftThread(void* arg)
-{
-  br_comms_t* comms = (br_comms_t*)arg;
-  Mobot_motionInchwormLeft(comms);
-  return NULL;
-}
-
-int Mobot_motionInchwormLeftNB(br_comms_t* comms)
-{
-  /* Make sure the old thread has joined */
-  THREAD_JOIN(comms->thread);
-  THREAD_CREATE(&comms->thread, motionInchwormLeftThread, comms);
-  return 0;
-}
-
-void* motionInchwormRightThread(void* arg)
-{
-  Mobot_motionInchwormRight((br_comms_t*)arg);
-  return NULL;
-}
-
-int Mobot_motionInchwormRightNB(br_comms_t* comms)
-{
-  THREAD_JOIN(comms->thread);
-  THREAD_CREATE(&comms->thread, motionInchwormRightThread, comms);
-  return 0;
-}
-
-void* motionRollBackwardThread(void* arg)
-{
-  Mobot_motionRollBackward((br_comms_t*)arg);
-  return NULL;
-}
-
-int Mobot_motionRollBackwardNB(br_comms_t* comms)
-{
-  THREAD_JOIN(comms->thread);
-  THREAD_CREATE(&comms->thread, motionRollBackwardThread, comms);
-  return 0;
-}
-
-void* motionRollForwardThread(void* arg)
-{
-  Mobot_motionRollForward((br_comms_t*)arg);
-  return NULL;
-}
-
-int Mobot_motionRollForwardNB(br_comms_t* comms)
-{
-  THREAD_JOIN(comms->thread);
-  THREAD_CREATE(&comms->thread, motionRollForwardThread, comms);
-  return 0;
-}
-
 void* motionStandThread(void* arg)
 {
   Mobot_motionStand((br_comms_t*)arg);
+  ((br_comms_t*)arg)->motionInProgress--;
   return NULL;
+}
+
+int Mobot_motionSkinny(br_comms_t* comms, double angle)
+{
+  Mobot_moveJointToNB(comms, ROBOT_JOINT2, angle);
+  Mobot_moveJointToNB(comms, ROBOT_JOINT3, angle);
+  Mobot_moveWait(comms);
+  return 0;
+}
+
+void* motionSkinnyThread(void* arg)
+{
+  br_comms_t* comms = (br_comms_t*)arg;
+  Mobot_motionSkinny((br_comms_t*)arg, comms->motionArgDouble);
+  ((br_comms_t*)arg)->motionInProgress--;
+  return NULL;
+}
+
+int Mobot_motionSkinnyNB(br_comms_t* comms, double angle)
+{
+  comms->motionArgDouble = angle;
+  comms->motionInProgress++;
+  THREAD_CREATE(&comms->thread, motionSkinnyThread, comms);
+  return 0;
 }
 
 int Mobot_motionStandNB(br_comms_t* comms)
 {
-  THREAD_JOIN(comms->thread);
+  comms->motionInProgress++;
   THREAD_CREATE(&comms->thread, motionStandThread, comms);
+  return 0;
+}
+
+int Mobot_motionTurnLeft(br_comms_t* comms, double angle)
+{
+  double motorPosition[2];
+  Mobot_getJointAngle(comms, ROBOT_JOINT1, &motorPosition[0]);
+  Mobot_getJointAngle(comms, ROBOT_JOINT4, &motorPosition[1]);
+  Mobot_moveJointToNB(comms, ROBOT_JOINT1, motorPosition[0] - angle);
+  Mobot_moveJointToNB(comms, ROBOT_JOINT4, motorPosition[1] + angle);
+  Mobot_moveWait(comms);
   return 0;
 }
 
 void* motionTurnLeftThread(void* arg)
 {
-  Mobot_motionTurnLeft((br_comms_t*)arg);
+  br_comms_t* comms = (br_comms_t*)arg;
+  Mobot_motionTurnLeft((br_comms_t*)arg, comms->motionArgDouble);
+  ((br_comms_t*)arg)->motionInProgress--;
   return NULL;
 }
 
-int Mobot_motionTurnLeftNB(br_comms_t* comms)
+int Mobot_motionTurnLeftNB(br_comms_t* comms, double angle)
 {
-  THREAD_JOIN(comms->thread);
+  comms->motionInProgress++;
+  comms->motionArgDouble = angle;
   THREAD_CREATE(&comms->thread, motionTurnLeftThread, comms);
+  return 0;
+}
+
+int Mobot_motionTurnRight(br_comms_t* comms, double angle)
+{
+  double motorPosition[2];
+  Mobot_getJointAngle(comms, ROBOT_JOINT1, &motorPosition[0]);
+  Mobot_getJointAngle(comms, ROBOT_JOINT4, &motorPosition[1]);
+  Mobot_moveJointToNB(comms, ROBOT_JOINT1, motorPosition[0] + angle);
+  Mobot_moveJointToNB(comms, ROBOT_JOINT4, motorPosition[1] - angle);
+  Mobot_moveWait(comms);
   return 0;
 }
 
 void* motionTurnRightThread(void* arg)
 {
-  Mobot_motionTurnRight((br_comms_t*)arg);
+  br_comms_t* comms = (br_comms_t*)arg;
+  Mobot_motionTurnRight((br_comms_t*)arg, comms->motionArgDouble);
+  ((br_comms_t*)arg)->motionInProgress--;
   return NULL;
 }
 
-int Mobot_motionTurnRightNB(br_comms_t* comms)
+int Mobot_motionTurnRightNB(br_comms_t* comms, double angle)
 {
-  THREAD_JOIN(comms->thread);
+  comms->motionArgDouble = angle;
+  comms->motionInProgress++;
   THREAD_CREATE(&comms->thread, motionTurnRightThread, comms);
+  return 0;
+}
+
+int Mobot_motionTumble(br_comms_t* comms, int num)
+{
+  int i;
+  Mobot_moveToZero(comms);
+  Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(-85));
+  Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(80));
+#ifndef _WIN32
+  sleep(1);
+#else
+  Sleep(1000);
+#endif
+
+  for(i = 0; i < num; i++) {
+    if((i%2) == 0) {
+      Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(0));
+      Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(0));
+      Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(80));
+      Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(45));
+      Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(-85));
+      Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(80));
+    } else {
+      Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(0));
+      Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(0));
+      Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(80));
+      Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(45));
+      Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(-85));
+      Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(80));
+    }
+  }
+  return 0;
+}
+
+void* motionTumbleThread(void* arg)
+{
+  br_comms_t* comms = (br_comms_t*)arg;
+  Mobot_motionTumble(comms, comms->motionArgInt);
+  comms->motionInProgress--;
+  return NULL;
+}
+
+int Mobot_motionTumbleNB(br_comms_t* comms, int num)
+{
+  comms->motionArgInt = num;
+  comms->motionInProgress++;
+  THREAD_CREATE(&comms->thread, motionTumbleThread, comms);
+  return 0;
+}
+
+int Mobot_motionUnstand(br_comms_t* comms)
+{
+  double speed;
+  Mobot_moveToZero(comms);
+  Mobot_moveJointToNB(comms, ROBOT_JOINT3, DEG2RAD(45));
+  Mobot_moveJointToNB(comms, ROBOT_JOINT2, DEG2RAD(-85));
+  Mobot_moveWait(comms);
+  Mobot_moveToZero(comms);
+  return 0;
+}
+
+void* motionUnstandThread(void* arg)
+{
+  Mobot_motionUnstand((br_comms_t*)arg);
+  ((br_comms_t*)arg)->motionInProgress--;
+  return NULL;
+}
+
+int Mobot_motionUnstandNB(br_comms_t* comms)
+{
+  comms->motionInProgress++;
+  THREAD_CREATE(&comms->thread, motionUnstandThread, comms);
+  return 0;
+}
+
+int Mobot_motionWait(br_comms_t* comms)
+{
+  while(comms->motionInProgress) {
+#ifdef _WIN32
+    Sleep(200);
+#else
+    usleep(200000);
+#endif
+  }
+  Mobot_moveWait(comms);
   return 0;
 }
 
@@ -1022,6 +1227,7 @@ int str2ba(const char *str, bdaddr_t *ba)
 int SendToIMobot(br_comms_t* comms, const char* str, int len)
 {
   int err = 0;
+  MUTEX_LOCK(comms->commsLock);
 #if 0
   char* str;
   str = (char*)malloc(strlen(buf)+2);
@@ -1049,7 +1255,11 @@ int SendToIMobot(br_comms_t* comms, const char* str, int len)
   } else {
     err = -1;
   }
-  return err;
+  if(err < 0) {
+    return err;
+  } else {
+    return 0;
+  }
 }
 
 int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
@@ -1080,10 +1290,12 @@ int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
       n = select(comms->socket, &fds, NULL, NULL, &tv);
       if(n == 0) {
         /* Timeout */
+		MUTEX_UNLOCK(comms->commsLock);
         return -1;
       }
       if(n == -1) {
         /* Error */
+		MUTEX_UNLOCK(comms->commsLock);
         return -1;
       }
       err = recvfrom(comms->socket, tmp, 256, 0, (struct sockaddr*)0, 0);
@@ -1123,7 +1335,12 @@ int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
     tries = 100;
   }
   //printf("RECV %d: <<%s>>\n", comms->socket, buf);
-  return err;
+  MUTEX_UNLOCK(comms->commsLock);
+  if(err < 0) {
+    return err;
+  } else {
+    return 0;
+  }
 }
 
 #ifndef C_ONLY
@@ -1163,24 +1380,29 @@ int CMobot::isMoving()
   return Mobot_isMoving(&_comms);
 }
 
-int CMobot::setJointDirection(robotJointId_t id, robotJointDirection_t dir)
+int CMobot::setJointDirection(robotJointId_t id, robotJointState_t dir)
 {
   return Mobot_setJointDirection(&_comms, id, dir);
 }
 
-int CMobot::getJointDirection(robotJointId_t id, robotJointDirection_t &dir)
+int CMobot::getJointDirection(robotJointId_t id, robotJointState_t &dir)
 {
   return Mobot_getJointDirection(&_comms, id, &dir);
 }
 
 int CMobot::setJointSpeed(robotJointId_t id, double speed)
 {
-  return Mobot_setJointSpeed(&_comms, id, speed);
+  return Mobot_setJointSpeed(&_comms, id, DEG2RAD(speed));
 }
 
-int CMobot::setJointSpeeds(double speeds[4])
+int CMobot::setJointSpeeds(double speed1, double speed2, double speed3, double speed4)
 {
-  return Mobot_setJointSpeeds(&_comms, speeds);
+  return Mobot_setJointSpeeds(
+      &_comms, 
+      DEG2RAD(speed1), 
+      DEG2RAD(speed2), 
+      DEG2RAD(speed3), 
+      DEG2RAD(speed4));
 }
 
 int CMobot::setJointSpeedRatio(robotJointId_t id, double ratio)
@@ -1188,19 +1410,28 @@ int CMobot::setJointSpeedRatio(robotJointId_t id, double ratio)
   return Mobot_setJointSpeedRatio(&_comms, id, ratio);
 }
 
-int CMobot::setJointSpeedRatios(double ratios[4])
+int CMobot::setJointSpeedRatios(double ratio1, double ratio2, double ratio3, double ratio4)
 {
-  return Mobot_setJointSpeedRatios(&_comms, ratios);
+  return Mobot_setJointSpeedRatios(&_comms, ratio1, ratio2, ratio3, ratio4);
 }
 
 int CMobot::getJointSpeed(robotJointId_t id, double &speed)
 {
-  return Mobot_getJointSpeed(&_comms, id, &speed);
+  int err;
+  err = Mobot_getJointSpeed(&_comms, id, &speed);
+  speed = RAD2DEG(speed);
+  return err;
 }
 
-int CMobot::getJointSpeeds(double speeds[4])
+int CMobot::getJointSpeeds(double &speed1, double &speed2, double &speed3, double &speed4)
 {
-  return Mobot_getJointSpeeds(&_comms, speeds);
+  int i;
+  int err = Mobot_getJointSpeeds(&_comms, &speed1, &speed2, &speed3, &speed4);
+  speed1 = RAD2DEG(speed1);
+  speed2 = RAD2DEG(speed2);
+  speed3 = RAD2DEG(speed3);
+  speed4 = RAD2DEG(speed4);
+  return err;
 }
 
 int CMobot::getJointSpeedRatio(robotJointId_t id, double &ratio)
@@ -1208,44 +1439,59 @@ int CMobot::getJointSpeedRatio(robotJointId_t id, double &ratio)
   return Mobot_getJointSpeedRatio(&_comms, id, &ratio);
 }
 
-int CMobot::getJointSpeedRatios(double ratios[4])
+int CMobot::getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3, double &ratio4)
 {
-  return Mobot_getJointSpeeds(&_comms, ratios);
+  return Mobot_getJointSpeedRatios(&_comms, &ratio1, &ratio2, &ratio3, &ratio4);
 }
 
-int CMobot::moveJointContinuousNB(robotJointId_t id, robotJointDirection_t dir)
+int CMobot::moveJointContinuousNB(robotJointId_t id, robotJointState_t dir)
 {
   return Mobot_moveJointContinuousNB(&_comms, id, dir);
 }
 
-int CMobot::moveJointContinuousTime(robotJointId_t id, robotJointDirection_t dir, int msecs)
+int CMobot::moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, int msecs)
 {
   return Mobot_moveJointContinuousTime(&_comms, id, dir, msecs);
 }
 
+int CMobot::moveJoint(robotJointId_t id, double angle)
+{
+  return Mobot_moveJoint(&_comms, id, DEG2RAD(angle));
+}
+
+int CMobot::moveJointNB(robotJointId_t id, double angle)
+{
+  return Mobot_moveJointNB(&_comms, id, DEG2RAD(angle));
+}
+
 int CMobot::moveJointTo(robotJointId_t id, double angle)
 {
-  return Mobot_moveJointTo(&_comms, id, angle);
+  return Mobot_moveJointTo(&_comms, id, DEG2RAD(angle));
 }
 
 int CMobot::moveJointToNB(robotJointId_t id, double angle)
 {
-  return Mobot_moveJointToNB(&_comms, id, angle);
+  return Mobot_moveJointToNB(&_comms, id, DEG2RAD(angle));
 }
 
 int CMobot::moveJointToPIDNB(robotJointId_t id, double angle)
 {
-  return Mobot_moveJointToPIDNB(&_comms, id, angle);
+  return Mobot_moveJointToPIDNB(&_comms, id, DEG2RAD(angle));
 }
 
 int CMobot::getJointAngle(robotJointId_t id, double &angle)
 {
-  return Mobot_getJointAngle(&_comms, id, &angle);
+  int err;
+  err = Mobot_getJointAngle(&_comms, id, &angle);
+  angle = RAD2DEG(angle);
+  return err;
 }
 
 int CMobot::getJointMaxSpeed(robotJointId_t id, double &maxSpeed)
 {
-  return Mobot_getJointMaxSpeed(&_comms, id, &maxSpeed);
+  int err = Mobot_getJointMaxSpeed(&_comms, id, &maxSpeed);
+  maxSpeed = DEG2RAD(maxSpeed);
+  return err;
 }
 
 int CMobot::getJointState(robotJointId_t id, robotJointState_t &state)
@@ -1258,7 +1504,12 @@ int CMobot::move( double angle1,
                         double angle3,
                         double angle4)
 {
-  return Mobot_move(&_comms, angle1, angle2, angle3, angle4);
+  return Mobot_move(
+      &_comms, 
+      DEG2RAD(angle1), 
+      DEG2RAD(angle2), 
+      DEG2RAD(angle3), 
+      DEG2RAD(angle4));
 }
 
 int CMobot::moveNB( double angle1,
@@ -1266,15 +1517,20 @@ int CMobot::moveNB( double angle1,
                         double angle3,
                         double angle4)
 {
-  return Mobot_moveNB(&_comms, angle1, angle2, angle3, angle4);
+  return Mobot_moveNB(
+      &_comms, 
+      DEG2RAD(angle1), 
+      DEG2RAD(angle2), 
+      DEG2RAD(angle3), 
+      DEG2RAD(angle4));
 }
 
-int CMobot::moveContinuousNB( robotJointDirection_t dir1, robotJointDirection_t dir2, robotJointDirection_t dir3, robotJointDirection_t dir4)
+int CMobot::moveContinuousNB( robotJointState_t dir1, robotJointState_t dir2, robotJointState_t dir3, robotJointState_t dir4)
 {
   return Mobot_moveContinuousNB(&_comms, dir1, dir2, dir3, dir4);
 }
 
-int CMobot::moveContinuousTime( robotJointDirection_t dir1, robotJointDirection_t dir2, robotJointDirection_t dir3, robotJointDirection_t dir4, int msecs)
+int CMobot::moveContinuousTime( robotJointState_t dir1, robotJointState_t dir2, robotJointState_t dir3, robotJointState_t dir4, int msecs)
 {
   return Mobot_moveContinuousTime(&_comms, dir1, dir2, dir3, dir4, msecs);
 }
@@ -1284,7 +1540,12 @@ int CMobot::moveTo( double angle1,
                           double angle3,
                           double angle4)
 {
-  return Mobot_moveTo(&_comms, angle1, angle2, angle3, angle4);
+  return Mobot_moveTo(
+      &_comms, 
+      DEG2RAD(angle1), 
+      DEG2RAD(angle2), 
+      DEG2RAD(angle3), 
+      DEG2RAD(angle4));
 }
 
 int CMobot::moveToNB( double angle1,
@@ -1292,7 +1553,12 @@ int CMobot::moveToNB( double angle1,
                           double angle3,
                           double angle4)
 {
-  return Mobot_moveToNB(&_comms, angle1, angle2, angle3, angle4);
+  return Mobot_moveToNB(
+      &_comms, 
+      DEG2RAD(angle1), 
+      DEG2RAD(angle2), 
+      DEG2RAD(angle3), 
+      DEG2RAD(angle4));
 }
 
 int CMobot::moveToZero()
@@ -1320,39 +1586,69 @@ int CMobot::stop()
   return Mobot_stop(&_comms);
 }
 
-int CMobot::setTwoWheelRobotSpeed(double speed, double radius, char unit[])
+int CMobot::setTwoWheelRobotSpeed(double speed, double radius)
 {
-  return Mobot_setTwoWheelRobotSpeed(&_comms, speed, radius, unit);
+  return Mobot_setTwoWheelRobotSpeed(&_comms, speed, radius);
 }
 
-int CMobot::motionRollForward()
+int CMobot::motionArch(double angle)
 {
-  return Mobot_motionRollForward(&_comms);
+  return Mobot_motionArch(&_comms, DEG2RAD(angle));
 }
 
-int CMobot::motionRollBackward()
+int CMobot::motionArchNB(double angle)
 {
-  return Mobot_motionRollBackward(&_comms);
+  return Mobot_motionArchNB(&_comms, DEG2RAD(angle));
 }
 
-int CMobot::motionTurnLeft()
+int CMobot::motionInchwormLeft(int num)
 {
-  return Mobot_motionTurnLeft(&_comms);
+  return Mobot_motionInchwormLeft(&_comms, num);
 }
 
-int CMobot::motionTurnRight()
+int CMobot::motionInchwormLeftNB(int num)
 {
-  return Mobot_motionTurnRight(&_comms);
+  return Mobot_motionInchwormLeftNB(&_comms, num);
 }
 
-int CMobot::motionInchwormLeft()
+int CMobot::motionInchwormRight(int num)
 {
-  return Mobot_motionInchwormLeft(&_comms);
+  return Mobot_motionInchwormRight(&_comms, num);
 }
 
-int CMobot::motionInchwormRight()
+int CMobot::motionInchwormRightNB(int num)
 {
-  return Mobot_motionInchwormRight(&_comms);
+  return Mobot_motionInchwormRightNB(&_comms, num);
+}
+
+int CMobot::motionRollBackward(double angle)
+{
+  return Mobot_motionRollBackward(&_comms, DEG2RAD(angle));
+}
+
+int CMobot::motionRollBackwardNB(double angle)
+{
+  return Mobot_motionRollBackwardNB(&_comms, DEG2RAD(angle));
+}
+
+int CMobot::motionRollForward(double angle)
+{
+  return Mobot_motionRollForward(&_comms, DEG2RAD(angle));
+}
+
+int CMobot::motionRollForwardNB(double angle)
+{
+  return Mobot_motionRollForwardNB(&_comms, DEG2RAD(angle));
+}
+
+int CMobot::motionSkinny(double angle)
+{
+  return Mobot_motionSkinny(&_comms, DEG2RAD(angle));
+}
+
+int CMobot::motionSkinnyNB(double angle)
+{
+  return Mobot_motionSkinnyNB(&_comms, DEG2RAD(angle));
 }
 
 int CMobot::motionStand()
@@ -1360,44 +1656,61 @@ int CMobot::motionStand()
   return Mobot_motionStand(&_comms);
 }
 
-int CMobot::motionInchwormLeftNB()
-{
-  return Mobot_motionInchwormLeftNB(&_comms);
-}
-
-int CMobot::motionInchwormRightNB()
-{
-  return Mobot_motionInchwormRightNB(&_comms);
-}
-
-int CMobot::motionRollBackwardNB()
-{
-  return Mobot_motionRollBackwardNB(&_comms);
-}
-
-int CMobot::motionRollForwardNB()
-{
-  return Mobot_motionRollForwardNB(&_comms);
-}
-
 int CMobot::motionStandNB()
 {
   return Mobot_motionStandNB(&_comms);
 }
 
-int CMobot::motionTurnLeftNB()
+int CMobot::motionTumble(int num)
 {
-  return Mobot_motionTurnLeftNB(&_comms);
+  return Mobot_motionTumble(&_comms, num);
 }
 
-int CMobot::motionTurnRightNB()
+int CMobot::motionTumbleNB(int num)
 {
-  return Mobot_motionTurnRightNB(&_comms);
+  return Mobot_motionTumbleNB(&_comms, num);
+}
+
+int CMobot::motionTurnLeft(double angle)
+{
+  return Mobot_motionTurnLeft(&_comms, DEG2RAD(angle));
+}
+
+int CMobot::motionTurnLeftNB(double angle)
+{
+  return Mobot_motionTurnLeftNB(&_comms, DEG2RAD(angle));
+}
+
+int CMobot::motionTurnRight(double angle)
+{
+  return Mobot_motionTurnRight(&_comms, DEG2RAD(angle));
+}
+
+int CMobot::motionTurnRightNB(double angle)
+{
+  return Mobot_motionTurnRightNB(&_comms, DEG2RAD(angle));
+}
+
+int CMobot::motionUnstand()
+{
+  return Mobot_motionUnstand(&_comms);
+}
+
+int CMobot::motionUnstandNB()
+{
+  return Mobot_motionUnstandNB(&_comms);
+}
+
+int CMobot::motionWait()
+{
+  return Mobot_motionWait(&_comms);
 }
 
 CMobotGroup::CMobotGroup()
 {
   _numRobots = 0;
+  _motionInProgress = 0;
+  _thread = (THREAD_T*)malloc(sizeof(THREAD_T));
 }
 
 CMobotGroup::~CMobotGroup()
@@ -1424,7 +1737,7 @@ int CMobotGroup::isMoving()
 int CMobotGroup::move(double angle1, double angle2, double angle3, double angle4)
 {
   moveNB(angle1, angle2, angle3, angle4);
-  return _robots[_numRobots-1]->moveWait();
+  return moveWait();
 }
 
 int CMobotGroup::moveNB(double angle1, double angle2, double angle3, double angle4)
@@ -1435,10 +1748,10 @@ int CMobotGroup::moveNB(double angle1, double angle2, double angle3, double angl
   return 0;
 } 
 
-int CMobotGroup::moveContinuousNB(robotJointDirection_t dir1, 
-                       robotJointDirection_t dir2, 
-                       robotJointDirection_t dir3, 
-                       robotJointDirection_t dir4)
+int CMobotGroup::moveContinuousNB(robotJointState_t dir1, 
+                       robotJointState_t dir2, 
+                       robotJointState_t dir3, 
+                       robotJointState_t dir4)
 {
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->moveContinuousNB(dir1, dir2, dir3, dir4);
@@ -1446,10 +1759,10 @@ int CMobotGroup::moveContinuousNB(robotJointDirection_t dir1,
   return 0;
 }
 
-int CMobotGroup::moveContinuousTime(robotJointDirection_t dir1, 
-                           robotJointDirection_t dir2, 
-                           robotJointDirection_t dir3, 
-                           robotJointDirection_t dir4, 
+int CMobotGroup::moveContinuousTime(robotJointState_t dir1, 
+                           robotJointState_t dir2, 
+                           robotJointState_t dir3, 
+                           robotJointState_t dir4, 
                            int msecs)
 {
   for(int i = 0; i < _numRobots; i++) {
@@ -1466,7 +1779,7 @@ int CMobotGroup::moveContinuousTime(robotJointDirection_t dir1,
   return 0;
 }
 
-int CMobotGroup::moveJointContinuousNB(robotJointId_t id, robotJointDirection_t dir)
+int CMobotGroup::moveJointContinuousNB(robotJointId_t id, robotJointState_t dir)
 {
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->moveJointContinuousNB(id, dir);
@@ -1474,7 +1787,7 @@ int CMobotGroup::moveJointContinuousNB(robotJointId_t id, robotJointDirection_t 
   return 0;
 }
 
-int CMobotGroup::moveJointContinuousTime(robotJointId_t id, robotJointDirection_t dir, int msecs)
+int CMobotGroup::moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, int msecs)
 {
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->moveJointContinuousNB(id, dir);
@@ -1493,7 +1806,7 @@ int CMobotGroup::moveJointContinuousTime(robotJointId_t id, robotJointDirection_
 int CMobotGroup::moveJointTo(robotJointId_t id, double angle)
 {
   moveJointToNB(id, angle);
-  return _robots[_numRobots-1]->moveWait();
+  return moveWait();
 }
 
 int CMobotGroup::moveJointToNB(robotJointId_t id, double angle)
@@ -1515,7 +1828,7 @@ int CMobotGroup::moveJointWait(robotJointId_t id)
 int CMobotGroup::moveTo(double angle1, double angle2, double angle3, double angle4)
 {
   moveToNB(angle1, angle2, angle3, angle4);
-  return _robots[_numRobots-1]->moveWait();
+  return moveWait();
 }
 
 int CMobotGroup::moveToNB(double angle1, double angle2, double angle3, double angle4)
@@ -1545,7 +1858,7 @@ int CMobotGroup::moveToZeroNB()
 int CMobotGroup::moveToZero()
 {
   moveToZeroNB();
-  return _robots[_numRobots-1]->moveWait();
+  return moveWait();
 }
 
 int CMobotGroup::setJointSpeed(robotJointId_t id, double speed)
@@ -1564,10 +1877,10 @@ int CMobotGroup::setJointSpeedRatio(robotJointId_t id, double ratio)
   return 0;
 }
 
-int CMobotGroup::setTwoWheelRobotSpeed(double speed, double radius, char unit[])
+int CMobotGroup::setTwoWheelRobotSpeed(double speed, double radius)
 {
   for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->setTwoWheelRobotSpeed(speed, radius, unit);
+    _robots[i]->setTwoWheelRobotSpeed(speed, radius);
   }
   return 0;
 }
@@ -1580,122 +1893,331 @@ int CMobotGroup::stop()
   return 0;
 }
 
-int CMobotGroup::motionInchwormLeft()
-{
-  moveJointToNB(ROBOT_JOINT2, 0);
-  moveJointToNB(ROBOT_JOINT3, 0);
-  moveWait();
-
-  moveJointTo(ROBOT_JOINT2, DEG2RAD(-50));
-  moveJointTo(ROBOT_JOINT3, DEG2RAD(50));
-  moveJointTo(ROBOT_JOINT2, 0);
-  moveJointTo(ROBOT_JOINT3, 0);
-
+int CMobotGroup::motionArch(double angle) {
+  argDouble = angle;
+  _motionInProgress++;
+  motionArchThread(this);
   return 0;
 }
 
-int CMobotGroup::motionInchwormLeftNB()
+int CMobotGroup::motionArchNB(double angle) {
+  argDouble = angle;
+  _motionInProgress++;
+  THREAD_CREATE(_thread, motionArchThread, this);
+  return 0;
+}
+
+void* CMobotGroup::motionArchThread(void* arg) 
 {
-  for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->motionInchwormLeftNB();
+  CMobotGroup *cmg = (CMobotGroup*)arg;
+  cmg->moveJointToNB(ROBOT_JOINT2, -cmg->argDouble/2);
+  cmg->moveJointToNB(ROBOT_JOINT3, cmg->argDouble/2);
+  cmg->moveJointWait(ROBOT_JOINT2);
+  cmg->moveJointWait(ROBOT_JOINT3);
+  cmg->_motionInProgress--;
+  return NULL;
+}
+
+int CMobotGroup::motionInchwormLeft(int num)
+{
+  argInt = num;
+  _motionInProgress++;
+  motionInchwormLeftThread(this);
+  return 0;
+}
+
+int CMobotGroup::motionInchwormLeftNB(int num)
+{
+  argInt = num;
+  _motionInProgress++;
+  THREAD_CREATE(_thread, motionInchwormLeftThread, this);
+  return 0;
+}
+
+void* CMobotGroup::motionInchwormLeftThread(void* arg)
+{
+  int i;
+  CMobotGroup *cmg = (CMobotGroup*)arg;
+  cmg->moveJointToNB(ROBOT_JOINT2, 0);
+  cmg->moveJointToNB(ROBOT_JOINT3, 0);
+  cmg->moveWait();
+  for(i = 0; i < cmg->argInt ; i++) {
+    cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(-50));
+    cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(50));
+    cmg->moveJointTo(ROBOT_JOINT2, 0);
+    cmg->moveJointTo(ROBOT_JOINT3, 0);
   }
+  cmg->_motionInProgress--;
+  return NULL;
+}
+
+int CMobotGroup::motionInchwormRight(int num)
+{
+  argInt = num;
+  _motionInProgress++;
+  motionInchwormRightThread(this);
   return 0;
 }
 
-int CMobotGroup::motionInchwormRight()
+int CMobotGroup::motionInchwormRightNB(int num)
 {
-  moveJointToNB(ROBOT_JOINT2, 0);
-  moveJointToNB(ROBOT_JOINT3, 0);
-  moveWait();
-
-  moveJointTo(ROBOT_JOINT3, DEG2RAD(50));
-  moveJointTo(ROBOT_JOINT2, DEG2RAD(-50));
-  moveJointTo(ROBOT_JOINT3, 0);
-  moveJointTo(ROBOT_JOINT2, 0);
-
+  argInt = num;
+  _motionInProgress++;
+  THREAD_CREATE(_thread, motionInchwormRightThread, this);
   return 0;
 }
 
-int CMobotGroup::motionInchwormRightNB()
+void* CMobotGroup::motionInchwormRightThread(void* arg)
 {
-  for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->motionInchwormRightNB();
+  int i;
+  CMobotGroup *cmg = (CMobotGroup*)arg;
+
+  cmg->moveJointToNB(ROBOT_JOINT2, 0);
+  cmg->moveJointToNB(ROBOT_JOINT3, 0);
+  cmg->moveWait();
+  for(i = 0; i < cmg->argInt; i++) {
+    cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(50));
+    cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(-50));
+    cmg->moveJointTo(ROBOT_JOINT3, 0);
+    cmg->moveJointTo(ROBOT_JOINT2, 0);
   }
+  cmg->_motionInProgress--;
+  return NULL;
+}
+
+int CMobotGroup::motionRollBackward(double angle)
+{
+  argDouble = angle;
+  _motionInProgress++;
+  motionRollBackwardThread(this);
   return 0;
 }
 
-int CMobotGroup::motionRollBackward()
+int CMobotGroup::motionRollBackwardNB(double angle)
 {
-  move(DEG2RAD(-90), 0, 0, DEG2RAD(-90));
+  argDouble = angle;
+  _motionInProgress++;
+  THREAD_CREATE(_thread, motionRollBackwardThread, this);
   return 0;
 }
 
-int CMobotGroup::motionRollBackwardNB()
+void* CMobotGroup::motionRollBackwardThread(void* arg)
 {
-  for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->motionRollBackwardNB();
-  }
+  CMobotGroup *cmg = (CMobotGroup*)arg;
+  cmg->move(-cmg->argDouble, 0, 0, -cmg->argDouble);
+  cmg->_motionInProgress--;
+  return NULL;
+}
+
+int CMobotGroup::motionRollForward(double angle)
+{
+  argDouble = angle;
+  _motionInProgress++;
+  motionRollForwardThread(this);
   return 0;
 }
 
-int CMobotGroup::motionRollForward()
+int CMobotGroup::motionRollForwardNB(double angle)
 {
-  move(DEG2RAD(90), 0, 0, DEG2RAD(90));
+  argDouble = angle;
+  _motionInProgress++;
+  THREAD_CREATE(_thread, motionRollForwardThread, this);
   return 0;
 }
 
-int CMobotGroup::motionRollForwardNB()
+void* CMobotGroup::motionRollForwardThread(void* arg)
 {
-  for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->motionRollForwardNB();
-  }
+  CMobotGroup *cmg = (CMobotGroup*)arg;
+  cmg->move(cmg->argDouble, 0, 0, cmg->argDouble);
+  cmg->_motionInProgress--;
+  return NULL;
+}
+
+int CMobotGroup::motionSkinny(double angle)
+{
+  argDouble = angle;
+  _motionInProgress++;
+  motionSkinnyThread(this);
   return 0;
+}
+
+int CMobotGroup::motionSkinnyNB(double angle)
+{
+  argDouble = angle;
+  _motionInProgress++;
+  THREAD_CREATE(_thread, motionSkinnyThread, this);
+  return 0;
+}
+
+void* CMobotGroup::motionSkinnyThread(void* arg)
+{
+  CMobotGroup *cmg = (CMobotGroup*)arg;
+  cmg->moveJointToNB(ROBOT_JOINT2, cmg->argDouble);
+  cmg->moveJointToNB(ROBOT_JOINT3, cmg->argDouble);
+  cmg->_motionInProgress--;
+  return NULL;
 }
 
 int CMobotGroup::motionStand()
 {
-  moveToZero();
-  moveJointToNB(ROBOT_JOINT2, DEG2RAD(-85));
-  moveJointToNB(ROBOT_JOINT3, DEG2RAD(70));
-  moveWait();
-  moveJointTo(ROBOT_JOINT1, DEG2RAD(45));
-  setJointSpeed(ROBOT_JOINT2, DEG2RAD(30));
-  moveJointTo(ROBOT_JOINT2, DEG2RAD(20));
+  _motionInProgress++;
+  motionStandThread(this);
   return 0;
 }
 
 int CMobotGroup::motionStandNB()
 {
-  for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->motionStandNB();
+  _motionInProgress++;
+  THREAD_CREATE(_thread, motionStandThread, NULL);
+  return 0;
+}
+
+void* CMobotGroup::motionStandThread(void* arg)
+{
+  CMobotGroup* cmg = (CMobotGroup*)arg;
+  cmg->moveToZero();
+  cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(-85));
+  cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(70));
+  cmg->moveWait();
+  cmg->moveJointTo(ROBOT_JOINT1, DEG2RAD(45));
+  cmg->setJointSpeed(ROBOT_JOINT2, DEG2RAD(30));
+  cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(20));
+  cmg->_motionInProgress--;
+  return 0;
+}
+
+int CMobotGroup::motionTurnLeft(double angle)
+{
+  argDouble = angle;
+  _motionInProgress++;
+  motionTurnLeftThread(this);
+  return 0;
+}
+
+int CMobotGroup::motionTurnLeftNB(double angle)
+{
+  argDouble = angle;
+  _motionInProgress++;
+  THREAD_CREATE(_thread, motionTurnLeftThread, this);
+  return 0;
+}
+
+void* CMobotGroup::motionTurnLeftThread(void* arg)
+{
+  CMobotGroup* cmg = (CMobotGroup*)arg;
+  cmg->move(-cmg->argDouble, 0, 0, cmg->argDouble);
+  cmg->_motionInProgress--;
+  return NULL;
+}
+
+int CMobotGroup::motionTurnRight(double angle)
+{
+  argDouble = angle;
+  _motionInProgress++;
+  motionTurnRightThread(this);
+  return 0;
+}
+
+int CMobotGroup::motionTurnRightNB(double angle)
+{
+  argDouble = angle;
+  _motionInProgress++;
+  THREAD_CREATE(_thread, motionTurnRightThread, this);
+  return 0;
+}
+
+void* CMobotGroup::motionTurnRightThread(void* arg)
+{
+  CMobotGroup* cmg = (CMobotGroup*)arg;
+  cmg->move(cmg->argDouble, 0, 0, -cmg->argDouble);
+  cmg->_motionInProgress--;
+  return NULL;
+}
+
+int CMobotGroup::motionTumble(int num)
+{
+  argInt = num;
+  _motionInProgress++;
+  motionTumbleThread(this);
+  return 0;
+}
+
+int CMobotGroup::motionTumbleNB(int num)
+{
+  argInt = num;
+  _motionInProgress++;
+  THREAD_CREATE(_thread, motionTumbleThread, this);
+  return 0;
+}
+
+void* CMobotGroup::motionTumbleThread(void* arg)
+{
+  int i;
+  CMobotGroup* cmg = (CMobotGroup*)arg;
+  cmg->moveToZero();
+  cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(-85));
+  cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(80));
+#ifndef _WIN32
+  sleep(1);
+#else
+  Sleep(1000);
+#endif
+
+  for(i = 0; i < cmg->argInt; i++) {
+    if((i%2) == 0) {
+      cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(0));
+      cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(0));
+      cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(60));
+      cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(-85));
+      cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(80));
+    } else {
+      cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(0));
+      cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(0));
+      cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(60));
+      cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(-85));
+      cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(80));
+    }
   }
+
+  cmg->_motionInProgress--;
+  return NULL;
+}
+
+int CMobotGroup::motionUnstand()
+{
+  _motionInProgress++;
+  motionUnstandThread(this);
   return 0;
 }
 
-int CMobotGroup::motionTurnLeft()
+int CMobotGroup::motionUnstandNB()
 {
-  move(DEG2RAD(-90), 0, 0, DEG2RAD(90));
+  _motionInProgress++;
+  THREAD_CREATE(_thread, motionUnstandThread, NULL);
   return 0;
 }
 
-int CMobotGroup::motionTurnLeftNB()
+void* CMobotGroup::motionUnstandThread(void* arg)
 {
-  for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->motionTurnLeftNB();
-  }
+  CMobotGroup* cmg = (CMobotGroup*)arg;
+  cmg->moveToZero();
+  cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(45));
+  cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(-85));
+  cmg->moveWait();
+  cmg->moveToZero();
+  cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(20));
+  cmg->_motionInProgress--;
   return 0;
 }
 
-int CMobotGroup::motionTurnRight()
+int CMobotGroup::motionWait()
 {
-  move(DEG2RAD(90), 0, 0, DEG2RAD(-90));
-  return 0;
-}
-
-int CMobotGroup::motionTurnRightNB()
-{
-  for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->motionTurnRightNB();
+  while(_motionInProgress > 0) {
+#ifdef _WIN32
+    Sleep(200);
+#else
+    usleep(200000);
+#endif
   }
   return 0;
 }

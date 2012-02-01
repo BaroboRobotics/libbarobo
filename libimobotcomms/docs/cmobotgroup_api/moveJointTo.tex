@@ -9,11 +9,12 @@
 \addcontentsline{toc}{section}{moveJointToNB()}
 
 \noindent
-{\bf Synopsis}\\
+{\bf Synopsis}
+\vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobotGroup::moveJointTo(robotJointId_t id, double position);
-int CMobotGroup::moveJointToNB(robotJointId_t id, double position);
+int CMobotGroup::moveJointTo(robotJointId_t id, double angle);
+int CMobotGroup::moveJointToNB(robotJointId_t id, double angle);
 \end{verbatim}
 
 \noindent
@@ -31,12 +32,22 @@ The function returns 0 on success and non-zero otherwise.\\
 \item               
 \begin{tabular}{p{10 mm}p{145 mm}}
 \texttt{id} & The joint number to wait for. \\
-\texttt{position} & The absolute angle to move the motor to.  \\
+\texttt{angle} & The absolute angle in degrees to move the motor to.  \\
 \end{tabular}
 \end{description}
 
 \noindent
 {\bf Description}\\
+\vspace{-12pt}
+\begin{quote}
+{\bf CMobot::moveJointTo()}\\
+This function commands the motor on robots in a group to move to a position specified in degrees at
+the current motor's speed. The current motor speed may be set with the
+\texttt{setJointSpeed()} member function. Please note that if the motor speed
+is set to zero, the motor will not move after calling the
+\texttt{moveJointTo()} function. 
+
+{\bf CMobot::moveJointToNB()}\\
 This function commands the motor on robots in a group to move to a position specified in degrees at
 the current motor's speed. The current motor speed may be set with the
 \texttt{setJointSpeed()} member function. Please note that if the motor speed
@@ -50,7 +61,7 @@ the \texttt{moveJointTo()} function, which means that the function will return
 immediately and the physical robot motion will occur asynchronously. For
 more details on blocking and non-blocking functions, please refer to 
 Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\
-
+\end{quote}
 \noindent
 {\bf Example}\\
 Please see the example in Section \ref{sec:democode} on page \pageref{sec:democode}.\\

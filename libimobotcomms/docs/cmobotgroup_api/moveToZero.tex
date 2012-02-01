@@ -9,7 +9,8 @@
 \addcontentsline{toc}{section}{moveToZeroNB()}
 
 \noindent
-{\bf Synopsis}\\
+{\bf Synopsis}
+\vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
 int CMobotGroup::moveToZero();
@@ -30,6 +31,15 @@ None.\\
 
 \noindent
 {\bf Description}\\
+\vspace{-12pt}
+\begin{quote}
+{\bf CMobot::moveToZero()}\\
+This function moves all of the joints of robots in the group to their zero position.
+Please note that this function is non-blocking and will return immediately. Use
+this function in conjunction with the \texttt{moveWait()} function to block
+until the movement completes.
+
+{\bf CMobot::moveToZeroNB()}\\
 This function moves all of the joints of robots in the group to their zero position.
 Please note that this function is non-blocking and will return immediately. Use
 this function in conjunction with the \texttt{moveWait()} function to block
@@ -42,6 +52,7 @@ the \texttt{moveToZero()} function, which means that the function will return
 immediately and the physical robot motion will occur asynchronously. For
 more details on blocking and non-blocking functions, please refer to 
 Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\
+\end{quote}
 
 \noindent
 {\bf Example}\\

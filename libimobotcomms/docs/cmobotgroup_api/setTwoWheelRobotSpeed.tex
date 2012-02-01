@@ -7,10 +7,11 @@
 \addcontentsline{toc}{section}{setTwoWheelRobotSpeed()}
 
 \noindent
-{\bf Synopsis}\\
+{\bf Synopsis}
+\vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobotGroup::setTwoWheelRobotSpeed(double speed, double radius, char unit[]);
+int CMobotGroup::setTwoWheelRobotSpeed(double speed, double radius);
 \end{verbatim}
 
 \noindent
@@ -31,15 +32,14 @@ The function returns 0 on success and non-zero otherwise.\\
 specified in the \texttt{unit} parameter. \\
 \texttt{radius} & The radius of the wheels attached to the robot. The units of the parameter
 should match the units provided in the \texttt{unit} parameter. \\
-\texttt{unit} & Specify the units used for the \texttt{speed} and \texttt{radius} parameters.
 
-\begin{tabular}{lll}
-speed & radius & unit \\
+\begin{tabular}{ll}
+speed & radius \\
 \hline \\
-cm/s & cm & \texttt{"cm"} \\
-m/s & m & \texttt{"m"} \\
-inch/s & inch & \texttt{"inch"} \\
-foot/s & foot & \texttt{"foot"} \\
+cm/s & cm \\
+m/s & m \\
+inch/s & inch \\
+foot/s & foot \\
 \hline
 \end{tabular}
 \end{tabular}

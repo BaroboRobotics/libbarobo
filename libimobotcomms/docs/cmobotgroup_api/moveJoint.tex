@@ -1,0 +1,78 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::moveJoint()}\index{CMobotGroup::moveJoint()}}\\
+{\LARGE \texttt{CMobotGroup::moveJointNB()}\index{CMobotGroup::moveJointNB()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{moveJoint()}
+\addcontentsline{toc}{section}{moveJointNB()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::moveJoint(robotJointId_t id, double angle);
+int CMobotGroup::moveJointNB(robotJointId_t id, double angle);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Move a joint on the robots in the group by a specified angle with respect
+to the current position.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{10 mm}p{145 mm}}
+\texttt{id} & The joint number to wait for. \\
+\texttt{angle} & The angle in degrees to move the motor, relative to the current position.  \\
+\end{tabular}
+\end{description}
+
+\noindent
+{\bf Description}\\
+\vspace{-12pt}
+\begin{quote}
+{\bf CMobot::moveJoint()}\\
+This function commands the motor to move by an angle relative to the
+joint's current position at the joints current speed setting.
+The current motor speed may be set with the
+\texttt{setJointSpeed()} member function. Please note that if the motor speed
+is set to zero, the motor will not move after calling the
+\texttt{moveJoint()} function. 
+
+{\bf CMobot::moveJointNB()}\\
+This function commands the motor to move by an angle relative to the
+joint's current position at the joints current speed setting.
+The current motor speed may be set with the
+\texttt{setJointSpeed()} member function. Please note that if the motor speed
+is set to zero, the motor will not move after calling the
+\texttt{moveJoint()} function. 
+
+The function \texttt{moveJoint()} is a blocking function, which means that 
+the function will not return until the commanded motion is 
+completed. The function \texttt{moveJointNB()} is the non-blocking version of
+the \texttt{moveJoint()} function, which means that the function will return
+immediately and the physical robot motion will occur asynchronously. For
+more details on blocking and non-blocking functions, please refer to 
+Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\
+\end{quote}
+
+\noindent
+{\bf Example}\\
+Please see the example in Section \ref{sec:democode} on page \pageref{sec:democode}.\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+\texttt{connectWithAddress()}
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

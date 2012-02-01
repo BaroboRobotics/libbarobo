@@ -15,9 +15,9 @@
    version="1.1"
    inkscape:version="0.48.1 r9760"
    sodipodi:docname="joint_diagram_verbose.svg"
-   inkscape:export-filename="/home/dko/Projects/Barobo/iMobot_gumstix_api/libimobotcomms/demos/iMobotController_Windows/iMobotController_Windows/res/joint_diagram_verbose.png"
-   inkscape:export-xdpi="32.520695"
-   inkscape:export-ydpi="32.520695">
+   inkscape:export-filename="/home/dko/Projects/Barobo/iMobot_gumstix_api/libimobotcomms/docs/images/joint_diagram_verbose.png"
+   inkscape:export-xdpi="200"
+   inkscape:export-ydpi="200">
   <defs
      id="defs6466">
     <marker
@@ -168,7 +168,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
-     inkscape:cx="372.09851"
+     inkscape:cx="275.2696"
      inkscape:cy="766.31499"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -434,7 +434,7 @@
          style="fill:none;stroke:#000000;stroke-width:0.85114169px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     </g>
     <path
-       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend-4-7)"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Lend-2)"
        d="m 408.32288,172.23782 0,-113.214285"
        id="path4126"
        inkscape:connector-curvature="0"
@@ -446,17 +446,17 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend-4-7)"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:none"
        d="m 538.66385,146.12907 52.36491,-30.23289"
        id="path4330"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Lend-2)"
        d="M 232.96573,322.59496 147.36495,372.0166"
        id="path4532"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend-4-7)"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Lend-2)"
        d="M 333.1443,177.59496 271.72134,142.1324"
        id="path4538"
        inkscape:connector-curvature="0" />
@@ -546,40 +546,58 @@
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Century Schoolbook L;-inkscape-font-specification:Century Schoolbook L Medium"
-       x="595.98999"
-       y="116.96093"
+       x="121.21829"
+       y="383.6412"
        id="text4852"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4854"
-         x="595.98999"
-         y="116.96093">x</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Century Schoolbook L;-inkscape-font-specification:Century Schoolbook L Medium"
-       x="245.46707"
-       y="148.27565"
-       id="text4856"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan4858"
-         x="245.46707"
-         y="148.27565">y</tspan></text>
+         x="121.21829"
+         y="383.6412">x</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Century Schoolbook L;-inkscape-font-specification:Century Schoolbook L Medium"
        x="399.01025"
-       y="50.290852"
+       y="42.209633"
+       id="text4856"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4858"
+         x="399.01025"
+         y="42.209633">y</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Century Schoolbook L;-inkscape-font-specification:Century Schoolbook L Medium"
+       x="244.45692"
+       y="143.22488"
        id="text4860"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4862"
-         x="399.01025"
-         y="50.290852">z</tspan></text>
+         x="244.45692"
+         y="143.22488">z</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 450.71429,245.57646 104.27792,60.20489"
        id="path4864"
        inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2.59800005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Mend-4-7)"
+       d="M 353.83795,127.27077 292.07762,91.613594"
+       id="path3063"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       style="font-size:16.75064087px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="318.93442"
+       y="-84.42675"
+       id="text4493"
+       sodipodi:linespacing="125%"
+       transform="matrix(0.93059121,0.53727458,0,1.0745857,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan4495"
+         x="318.93442"
+         y="-84.42675">Forward</tspan></text>
   </g>
 </svg>

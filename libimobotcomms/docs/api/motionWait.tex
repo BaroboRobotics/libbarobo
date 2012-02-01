@@ -1,0 +1,39 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobot::motionWait()}\index{CMobot::motionWait()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{motionWait()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobot::motionWait();
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Wait for a motion to complete execution.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Description}\\
+This function is used to wait for a motion function to fully complete its cycle.
+The \texttt{CMobot} motion functions are those member functions which begin
+with ``motion'' as part of their name, such as \texttt{motionInchwormLeft()}.
+
+
+\noindent
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

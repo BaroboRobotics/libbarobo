@@ -9,11 +9,12 @@
 \addcontentsline{toc}{section}{motionTurnRightNB()}
 
 \noindent
-{\bf Synopsis}\\
+{\bf Synopsis}
+\vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::motionTurnRight();
-int CMobot::motionTurnRightNB();
+int CMobot::motionTurnRight(double angle);
+int CMobot::motionTurnRightNB(double angle);
 \end{verbatim}
 
 \noindent
@@ -26,10 +27,23 @@ The function returns 0 on success and non-zero otherwise.\\
 
 \noindent
 {\bf Parameters}\\
-None.\\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{10 mm}p{145 mm}}
+\texttt{angle} & The angle in degrees to turn the wheels. The wheels will turn in opposite directions by the amount specifid by this argument in order to turn the robot to the right. \\
+\end{tabular}
+\end{description}
 
 \noindent
 {\bf Description}\\
+\vspace{-12pt}
+\begin{quote}
+{\bf CMobot::motionTurnRight()}\\
+This function causes the robot to rotate the faceplates in opposite directions
+to cause the robot to rotate clockwise.
+
+{\bf CMobot::motionTurnRightNB()}\\
 This function causes the robot to rotate the faceplates in opposite directions
 to cause the robot to rotate clockwise.
 
@@ -37,9 +51,11 @@ This function has both a blocking and non-blocking version.
 The blocking version, \texttt{motionTurnRight()}, will block until the
 robot motion has completed. The non-blocking version, \texttt{motionTurnRightNB()},
 will return immediately, and the motion will be performed asynchronously.\\
+\end{quote}
+
 
 \noindent
 {\bf See Also}\\
-\texttt{motionTurnLeft()}
+\texttt{motionTurnRight()}
 
 %\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

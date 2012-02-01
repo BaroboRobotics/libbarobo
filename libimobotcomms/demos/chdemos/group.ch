@@ -18,5 +18,7 @@ group.addRobot(robot2);
 
 /* Now, any commands given to "group" will cause both robot1 and robot2 to
  * execute the command. */
-group.motionInchwormLeft(); /* Causes both robots to inchworm left */
-group.motionStand(); /* Causes both robots to stand */
+group.motionInchwormLeft(4); /* Cause both robots to inchworm left 4 times */
+group.motionStand(); /* Cause both robots to stand */
+sleep(3); /* Make the robots stand still for 3 seconds */
+group.motionUnstand(); /* Make the robots get back down from standing */

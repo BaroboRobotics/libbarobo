@@ -7,7 +7,8 @@
 \addcontentsline{toc}{section}{setJointSpeed()}
 
 \noindent
-{\bf Synopsis}\\
+{\bf Synopsis}
+\vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
 int CMobot::setJointSpeed(robotJointId_t id, double speed);
@@ -29,7 +30,7 @@ The function returns 0 on success and non-zero otherwise.\\
 \begin{tabular}{p{10 mm}p{145 mm}}
 \texttt{id} & The joint number to pose. \\
 \texttt{speed} & An variable of type \texttt{double} for the requested average
-angular speed in radians per second.
+angular speed in degrees per second.
 \end{tabular}
 \end{description}
 
