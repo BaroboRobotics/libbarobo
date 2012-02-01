@@ -1942,8 +1942,8 @@ void* CMobotGroup::motionInchwormLeftThread(void* arg)
   cmg->moveJointToNB(ROBOT_JOINT3, 0);
   cmg->moveWait();
   for(i = 0; i < cmg->argInt ; i++) {
-    cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(-50));
-    cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(50));
+    cmg->moveJointTo(ROBOT_JOINT2, -50);
+    cmg->moveJointTo(ROBOT_JOINT3, 50);
     cmg->moveJointTo(ROBOT_JOINT2, 0);
     cmg->moveJointTo(ROBOT_JOINT3, 0);
   }
@@ -1976,8 +1976,8 @@ void* CMobotGroup::motionInchwormRightThread(void* arg)
   cmg->moveJointToNB(ROBOT_JOINT3, 0);
   cmg->moveWait();
   for(i = 0; i < cmg->argInt; i++) {
-    cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(50));
-    cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(-50));
+    cmg->moveJointTo(ROBOT_JOINT3, 50);
+    cmg->moveJointTo(ROBOT_JOINT2, -50);
     cmg->moveJointTo(ROBOT_JOINT3, 0);
     cmg->moveJointTo(ROBOT_JOINT2, 0);
   }
@@ -2076,12 +2076,12 @@ void* CMobotGroup::motionStandThread(void* arg)
 {
   CMobotGroup* cmg = (CMobotGroup*)arg;
   cmg->moveToZero();
-  cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(-85));
-  cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(70));
+  cmg->moveJointTo(ROBOT_JOINT2, -85);
+  cmg->moveJointTo(ROBOT_JOINT3, 70);
   cmg->moveWait();
-  cmg->moveJointTo(ROBOT_JOINT1, DEG2RAD(45));
-  cmg->setJointSpeed(ROBOT_JOINT2, DEG2RAD(30));
-  cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(20));
+  cmg->moveJointTo(ROBOT_JOINT1, 45);
+  cmg->setJointSpeed(ROBOT_JOINT2, 30);
+  cmg->moveJointTo(ROBOT_JOINT2, 20);
   cmg->_motionInProgress--;
   return 0;
 }
@@ -2155,8 +2155,8 @@ void* CMobotGroup::motionTumbleThread(void* arg)
   int i;
   CMobotGroup* cmg = (CMobotGroup*)arg;
   cmg->moveToZero();
-  cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(-85));
-  cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(80));
+  cmg->moveJointTo(ROBOT_JOINT2, -85);
+  cmg->moveJointTo(ROBOT_JOINT3, 80);
 #ifndef _WIN32
   sleep(1);
 #else
@@ -2165,17 +2165,17 @@ void* CMobotGroup::motionTumbleThread(void* arg)
 
   for(i = 0; i < cmg->argInt; i++) {
     if((i%2) == 0) {
-      cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(0));
-      cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(0));
-      cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(60));
-      cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(-85));
-      cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(80));
+      cmg->moveJointTo(ROBOT_JOINT2, 0);
+      cmg->moveJointTo(ROBOT_JOINT3, 0);
+      cmg->moveJointTo(ROBOT_JOINT2, 60);
+      cmg->moveJointTo(ROBOT_JOINT3, -85);
+      cmg->moveJointTo(ROBOT_JOINT2, 80);
     } else {
-      cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(0));
-      cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(0));
-      cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(60));
-      cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(-85));
-      cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(80));
+      cmg->moveJointTo(ROBOT_JOINT3, 0);
+      cmg->moveJointTo(ROBOT_JOINT2, 0);
+      cmg->moveJointTo(ROBOT_JOINT3, 60);
+      cmg->moveJointTo(ROBOT_JOINT2, -85);
+      cmg->moveJointTo(ROBOT_JOINT3, 80);
     }
   }
 
@@ -2201,11 +2201,11 @@ void* CMobotGroup::motionUnstandThread(void* arg)
 {
   CMobotGroup* cmg = (CMobotGroup*)arg;
   cmg->moveToZero();
-  cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(45));
-  cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(-85));
+  cmg->moveJointTo(ROBOT_JOINT3, 45);
+  cmg->moveJointTo(ROBOT_JOINT2, -85);
   cmg->moveWait();
   cmg->moveToZero();
-  cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(20));
+  cmg->moveJointTo(ROBOT_JOINT2, 20);
   cmg->_motionInProgress--;
   return 0;
 }
