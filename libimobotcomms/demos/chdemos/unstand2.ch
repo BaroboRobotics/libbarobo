@@ -1,8 +1,6 @@
 /* Filename: unstand.ch 
  * Drop the robot down from a standing position. */
-
 #include <mobot.h>
-
 CMobot robot;
 
 /* Connect to the paired MoBot */

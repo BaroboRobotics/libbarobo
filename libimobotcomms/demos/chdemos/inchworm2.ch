@@ -1,8 +1,6 @@
 /* File: inchworm2.ch 
  * Perform the "inchworm" motion four times */
-
 #include <mobot.h>
-
 CMobot robot;
 
 /* Connect to the paired MoBot */

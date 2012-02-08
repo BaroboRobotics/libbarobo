@@ -1,9 +1,13 @@
 /* Filename: lift.ch
    Control two modules and make them stand simultaneously.
-   The joint4 of the first robot should be connected to the joint1 of the second robot. */
-
+   Joint 4 of the 1st robot should be connected to 
+   Joint 1 of the 2nd robot as
+           1st                       2nd
+  |---------|--------|      |---------|--------|     
+ 1|   2     |   3    | 4 X 1|    2    |   3    | 4
+  |---------|--------|      |---------|--------|
+*/
 #include <mobot.h>
-
 CMobot robot1;
 CMobot robot2;
 
@@ -28,7 +32,8 @@ robot1.moveToNB(0, 0, 90,  0);
 robot2.moveToNB(0,  -90, 0, 0);
 robot1.moveWait();
 robot2.moveWait();
-robot1.moveToZeroNB();
+/* Move to zero position */
+robot1.moveToZeroNB(); 
 robot2.moveToZeroNB();
 robot1.moveWait();
 robot2.moveWait();

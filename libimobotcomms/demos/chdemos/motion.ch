@@ -1,8 +1,6 @@
 /* Filename: motion.ch 
  * Move the two wheeled robot. */
-
 #include <mobot.h>
-
 CMobot robot;
 
 /* Connect to the paired MoBot */

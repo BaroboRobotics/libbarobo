@@ -1,9 +1,7 @@
 /* Filename: setspeed.ch 
   Move the two wheeled robot with different speed. */
-
 #include <mobot.h>
 #include <math.h>
-
 CMobot robot;
 
 /* Connect to the paired MoBot */
@@ -36,5 +34,4 @@ robot.move(360, 0, 0, 360);
 
 /* move at 2.75inch/sec with the radius 3.5 inches for 3 seconds */
 printf("Move continuously for 3 seconds.\n");
-robot.moveContinuousTime(ROBOT_FORWARD, ROBOT_HOLD, 
-                         ROBOT_HOLD, ROBOT_FORWARD, 3000);
+robot.moveContinuousTime(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_FORWARD, 3000);

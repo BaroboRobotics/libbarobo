@@ -9,45 +9,7 @@ move and affect a group of many robots.
 %\capstart
 \begin{center}
 \caption{CMobotGroup Member Functions.}
-\begin{tabular}{p{38 mm}p{107 mm}}
-%\begin{tabular}{ll}
-\hline
-Function & Description \\
-\hline
-%\texttt{pose()} \dotfill & Pose multiple joints of the robot. \\
-\texttt{CMobotGroup()} & The CMobotGroup constructor function. This function
-is called automatically and should not be called explicitly. \\
-\texttt{\textasciitilde CMobotGroup()} & The CMobotGroup destructor function. This function
-is called automatically and should not be called explicitly. \\
-& \\
-\texttt{addRobot()} & Add a robot to be a member of the robot group. \\
-\texttt{move()} & Move all four joints of the robots by specified angles. \\
-\texttt{moveNB()} & Identical to \texttt{move()} but non-blocking. \\
-\texttt{moveContinuousNB()} & Move joints continuously. Joints will move untill stopped.\\
-\texttt{moveContinuousTime()} & Move joints continuously for a certain amount of time.\\
-\texttt{moveJointContinuousNB()} & Move a single joint on all robots continuously. \\
-\texttt{moveJointContinuousTime()} & Move a single joint on all robots continuously for a specific amount of time. \\
-\texttt{moveTo()} & Move all four joints of the robots to specified absolute angles. \\
-\texttt{moveToNB()} & Identical to \texttt{moveTo()} but non-blocking. \\
-\texttt{moveJoint()} & Move a motor from its current position by an angle. \\
-\texttt{moveJointNB()} & Identical to \texttt{moveJoint()} but non-blocking. \\
-\texttt{moveJointTo()} & Set the desired motor position for a joint. \\
-\texttt{moveJointToNB()} & Identical to \texttt{moveJointTo()} but non-blocking. \\
-\texttt{moveJointWait()} & Wait until the specified motor has stopped moving. \\
-\texttt{moveWait()} & Wait until all motors have stopped moving. \\
-\texttt{moveToZero()} & Instructs all motors to go to their zero positions. \\
-\texttt{moveToZeroNB()} & Identical to \texttt{moveToZero()} but non-blocking. \\
-%\texttt{setJointDirection()} & Set the motor direction of a motor. Set
-%to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
-\texttt{setJointSpeed()} & Set a motor's speed setting in radians per second. \\
-\texttt{setJointSpeeds()} & Set all motor speeds in radians per second. \\
-\texttt{setJointSpeedRatio()} & Set a joints speed setting to a fraction of its maximum speed, a value between 0 and 1. \\
-\texttt{setJointSpeedRatios()} & Set all joint speed settings to a fraction of its
-maximum speed, expressed as a value from 0 to 1. \\
-\texttt{setTwoWheelRobotSpeed()} & Move the robot at a constant forward velocity. \\
-\texttt{stop()} & Stop all currently executing motions of the robot. \\
-\hline
-\end{tabular}
+\input{cmobotgroup_table.tex}
 \end{center}
 \label{mobilec_api_cbinary}
 \end{table}
@@ -56,34 +18,7 @@ maximum speed, expressed as a value from 0 to 1. \\
 %\capstart
 \begin{center}
 \caption{CMobotGroup Member Functions for Compound Motions.}
-\begin{tabular}{p{38 mm}p{107 mm}}
-Compound Motions & These are convenience functions of commonly used compound motions. \\
-\hline
-\texttt{motionArch()} \dotfill & Move the robot into an arched configuration. \\
-\texttt{motionArchNB()} \dotfill & Identical to \texttt{motionArch()} but non-blocking. \\
-\texttt{motionInchwormLeft()} \dotfill & Inchworm motion towards the left. \\
-\texttt{motionInchwormLeftNB()} \dotfill & Identical to \texttt{motionInchwormLeft()} but non-blocking. \\
-\texttt{motionInchwormRight()} \dotfill & Inchworm motion towards the right. \\
-\texttt{motionInchwormRightNB()} \dotfill & Identical to \texttt{motionInchwormRight()} but non-blocking. \\
-\texttt{motionRollBackward()} \dotfill & Roll on the faceplates toward the backward direction. \\
-\texttt{motionRollBackwardNB()} \dotfill & Identical to \texttt{motionRollBackward()} but non-blocking. \\
-\texttt{motionRollForward()} \dotfill & Roll on the faceplates forwards. \\
-\texttt{motionRollForwardNB()} \dotfill & Identical to \texttt{motionRollForward()} but non-blocking. \\
-\texttt{motionSkinny()} \dotfill & Move the robot into a skinny configuration. \\
-\texttt{motionSkinnyNB()} \dotfill & Identical to \texttt{motionSkinnyNB()} but non-blocking. \\
-\texttt{motionStand()} \dotfill & Stand the robot up on its end. \\
-\texttt{motionStandNB()} \dotfill & Identical to \texttt{motionStandNB()} but non-blocking. \\
-\texttt{motionTumble()} \dotfill & Tumble the robot end over end. \\
-\texttt{motionTumbleNB()} \dotfill & Identical to \texttt{motionTumbleNB()} but non-blocking. \\
-\texttt{motionTurnLeft()} \dotfill & Rotate the robot counterclockwise. \\
-\texttt{motionTurnLeftNB()} \dotfill & Identical to \texttt{motionTurnLeft()} but non-blocking. \\
-\texttt{motionTurnRight()} \dotfill & Rotate the robot clockwise. \\
-\texttt{motionTurnRightNB()} \dotfill & Identical to \texttt{motionTurnRight()} but non-blocking. \\
-\texttt{motionUnstand()} \dotfill & Move a robot currently standing on its end down into a prone position. \\
-\texttt{motionUnstandNB()} \dotfill & Identical to \texttt{motionUnstand()} but non-blocking. \\
-\texttt{motionWait()} \dotfill & Wait for preprogrammed robotic motions to complete. \\
-\hline
-\end{tabular}
+\input{cmobotgroup_motions_table.tex}
 \end{center}
 \label{mobilec_api_compound}
 \end{table}
@@ -102,6 +37,7 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \input{cmobotgroup_api/motionTurnLeft}
 \input{cmobotgroup_api/motionTurnRight}
 \input{cmobotgroup_api/motionUnstand}
+\input{cmobotgroup_api/motionWait}
 \input{cmobotgroup_api/move}
 \input{cmobotgroup_api/moveContinuousNB}
 \input{cmobotgroup_api/moveContinuousTime}

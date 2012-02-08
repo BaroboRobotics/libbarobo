@@ -30,12 +30,7 @@ The function returns 0 on success and non-zero otherwise.\\
 {\bf Parameters}\\
 Each of the direction parameters, \texttt{dir1, dir2, dir3,} and \texttt{dir4}, specifies the direction the joint should move. The types
 are enumerated in \texttt{mobot.h} and have the following values:
-\begin{itemize}
-\item \texttt{ROBOT\_NEUTRAL} : The joint should not move.
-\item \texttt{ROBOT\_FORWARD} : The joint will begin moving in the positive direction.
-\item \texttt{ROBOT\_BACKWARD}: The joint will begin moving in the negative direction.
-\item \texttt{ROBOT\_HOLD}: The joint will hold its current position.
-\end{itemize}
+\input{jointStateTable}
 The \texttt{msecs} parameter is the time to perform the movement, in milliseconds.
 \\
 

@@ -1,8 +1,6 @@
 /* Filename: tumble2.ch 
  * Tumbling robot */
-
 #include <mobot.h>
-
 CMobot robot;
 
 /* Connect to the paired MoBot */
@@ -37,3 +35,17 @@ for(i = 0; i < n; i++) {
     }
 }
 
+/* Unstand the robot */
+if((n%2) == 0) {
+  /* Robot is balancing on joint 1 */
+  robot.moveJointToNB(ROBOT_JOINT3, 45);
+  robot.moveJointToNB(ROBOT_JOINT2, -85);
+  robot.moveWait();
+  robot.moveToZero();
+} else {
+  /* Robot is balancing on joint 4 */
+  robot.moveJointToNB(ROBOT_JOINT2, 45);
+  robot.moveJointToNB(ROBOT_JOINT3, -85);
+  robot.moveWait();
+  robot.moveToZero();
+}

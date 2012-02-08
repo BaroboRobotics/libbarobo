@@ -1,11 +1,8 @@
 /* Filename: group.ch
  * Control multiple MoBot modules simultaneously using the CMobotGroup class */
-
 #include <mobot.h>
-
 CMobot robot1;
 CMobot robot2;
-
 CMobotGroup group;
 
 /* Connect to the robots listed in the configuration file. */
@@ -18,7 +15,8 @@ group.addRobot(robot2);
 
 /* Now, any commands given to "group" will cause both robot1 and robot2 to
  * execute the command. */
-group.motionInchwormLeft(4); /* Cause both robots to inchworm left 4 times */
-group.motionStand(); /* Cause both robots to stand */
-sleep(3); /* Make the robots stand still for 3 seconds */
-group.motionUnstand(); /* Make the robots get back down from standing */
+group.motionInchwormLeft(4); /* Both robots inchworm left 4 times */
+group.motionStand(); /* Both robots stand */
+group.move(360, 0, 0, 360); /* Joints 1 and 4 rotate 360 degrees */
+sleep(3); /* Robots stand still for 3 seconds */
+group.motionUnstand(); /* Robots get back down from standing */
