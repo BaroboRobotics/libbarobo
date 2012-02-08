@@ -55,7 +55,7 @@ robot1.moveToNB(0, -45, 45, 0);
 robot2.moveToNB(0, -45, 45, 0);
 robot1.moveWait();
 robot2.moveWait();
-sleep(5);
+sleep(4);
 robot1.moveToNB(0, -90, 0, 0);
 robot2.moveToNB(0, 0, 90,  0);
 robot1.moveWait();
@@ -75,7 +75,7 @@ robot1.moveToNB(0, 0, 90, 0);
 robot2.moveToNB(0, -90,  0, 0);
 robot1.moveWait();
 robot2.moveWait();
-sleep(5);
+sleep(4);
 robot1.moveToNB(0, -90, 0, 0);
 robot2.moveToNB(0, 0, 90,  0);
 robot1.moveWait();
@@ -90,7 +90,7 @@ robot1.moveToNB(0, 0, 90, 0);
 robot2.moveToNB(0, -90,  0, 0);
 robot1.moveWait();
 robot2.moveWait();
-sleep(5);
+sleep(4);
 /* walk left*/
 for(i = 0;i <3; i++){
     robot1.moveToNB(0, -60, 30, 0);

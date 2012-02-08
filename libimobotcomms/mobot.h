@@ -117,6 +117,7 @@ class CMobot {
     int setJointSpeeds(double speed1, double speed2, double speed3, double speed4);
     int setJointSpeedRatio(robotJointId_t id, double ratio);
     int setJointSpeedRatios(double ratios1, double ratios2, double ratios3, double ratios4);
+    int setMotorPower(robotJointId_t id, int power);
     int setTwoWheelRobotSpeed(double speed, double radius);
     int stop();
 
@@ -186,9 +187,9 @@ class CMobotGroup
     int moveToZero();
     int moveToZeroNB();
     int setJointSpeed(robotJointId_t id, double speed);
-    int setJointSpeeds(robotJointId_t id, double speeds[4]);
+    int setJointSpeeds(double speed1, double speed2, double speed3, double speed4);
     int setJointSpeedRatio(robotJointId_t id, double ratio);
-    int setJointSpeedRatios(robotJointId_t id, double ratios[4]);
+    int setJointSpeedRatios(double ratio1, double ratio2, double ratio3, double ratio4);
     int setTwoWheelRobotSpeed(double speed, double radius);
     int stop();
 

@@ -8,10 +8,10 @@ CMobot robot;
 robot.connect();
 robot.moveToZero();
 
-robot.setJointSpeedRatio(ROBOT_JOINT1, 0.2);
-robot.setJointSpeedRatio(ROBOT_JOINT2, 0.2);
-robot.setJointSpeedRatio(ROBOT_JOINT3, 0.2);
-robot.setJointSpeedRatio(ROBOT_JOINT4, 0.2);
+robot.setJointSpeedRatio(ROBOT_JOINT1, 0.3);
+robot.setJointSpeedRatio(ROBOT_JOINT2, 0.3);
+robot.setJointSpeedRatio(ROBOT_JOINT3, 0.3);
+robot.setJointSpeedRatio(ROBOT_JOINT4, 0.3);
 
 /* pre-programmed motions */
 robot.motionArchNB(15);
