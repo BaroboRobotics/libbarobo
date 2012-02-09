@@ -13,12 +13,14 @@ robot.moveToZero();
 int n = 2;
 int i;
 for(i = 0; i < n; i++) {
+    /* First lift and tumble */
     robot.moveJointTo(ROBOT_JOINT2, -85);
     robot.moveJointTo(ROBOT_JOINT3, 80);
     robot.moveJointTo(ROBOT_JOINT2, 0);
     robot.moveJointTo(ROBOT_JOINT3, 0);
     robot.moveJointTo(ROBOT_JOINT2, 80);
     robot.moveJointTo(ROBOT_JOINT2, 45);
+    /* Second lift and tumble */
     robot.moveJointTo(ROBOT_JOINT3, -85);
     robot.moveJointTo(ROBOT_JOINT2, 80);
     robot.moveJointTo(ROBOT_JOINT3, 0);
