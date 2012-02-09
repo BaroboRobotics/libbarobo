@@ -1,8 +1,6 @@
 /* Filename: motion.ch 
  * Move the two wheeled robot. */
-
 #include <mobot.h>
-
 CMobot robot;
 
 /* Connect to the paired MoBot */
@@ -20,5 +18,6 @@ robot.motionRollForward(360);
 robot.motionTurnLeft(360);
 robot.motionTurnRight(360);
 robot.motionStand();
+robot.move(360, 0, 0, 360);
 robot.motionUnstand();
 robot.motionTumble(5);

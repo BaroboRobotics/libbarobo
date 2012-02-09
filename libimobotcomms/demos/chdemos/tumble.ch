@@ -1,8 +1,6 @@
 /* Filename: tumble.ch 
  * Tumbling robot */
-
 #include <mobot.h>
-
 CMobot robot;
 
 /* Connect to the paired MoBot */

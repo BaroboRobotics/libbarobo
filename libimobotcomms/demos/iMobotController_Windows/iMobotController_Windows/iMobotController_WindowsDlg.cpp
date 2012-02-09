@@ -390,7 +390,7 @@ void CiMobotController_WindowsDlg::handlerPlay()
       ROBOT_HOLD,
       ROBOT_HOLD);
 
-	iMobotComms.setJointSpeeds(90, 90, 90, 90);
+	iMobotComms.setJointSpeeds(45, 45, 45, 45);
   switch(index) {
     case 0: iMobotComms.motionArch(90); break;
     case 1: iMobotComms.motionInchwormLeft(1); break;
@@ -438,13 +438,13 @@ void CiMobotController_WindowsDlg::InitSliders()
 {
 	for(int i = 0; i < 2; i++) {
 		m_slider_Speeds[i]->SetRange(0, 180, TRUE);
-		m_slider_Speeds[i]->SetPos(90);
+		m_slider_Speeds[i]->SetPos(45);
 		m_slider_Positions[i]->SetRange(-90, 90, TRUE);
 		m_slider_Positions[i]->SetPos(0);
 	}
 	for(int i = 2; i < 4; i++) {
 		m_slider_Speeds[i]->SetRange(0, 180, TRUE);
-		m_slider_Speeds[i]->SetPos(90);
+		m_slider_Speeds[i]->SetPos(45);
 		m_slider_Positions[i]->SetRange(-180, 180, TRUE);
 		m_slider_Positions[i]->SetPos(0);
 	}
@@ -459,7 +459,7 @@ void CiMobotController_WindowsDlg::UpdateSliders()
 		iMobotComms.getJointAngle((robotJointId_t)(i+1), position);
 		m_slider_Positions[i]->SetPos( (int) -position );
 		m_positions[i] = (int) position;
-		speed = 90;
+		speed = 45;
 		iMobotComms.setJointSpeed((robotJointId_t)(i+1), speed);
 		m_slider_Speeds[i]->SetPos( 180 - speed );
 		m_speeds[i] = speed;
@@ -473,9 +473,9 @@ void CiMobotController_WindowsDlg::UpdateSpeedSliders(int i, double speed)
 {
 		m_slider_Speeds[i]->SetPos( 180 - speed);
 		m_speeds[i] = speed;
-    wchar_t buf[200];
-    swprintf(buf, L"%lf", speed);
-    m_edit_MotorSpeeds[i]->SetWindowTextW(buf);
+    TCHAR buf[200];
+    _stprintf(buf, TEXT("%lf"), speed);
+    m_edit_MotorSpeeds[i]->SetWindowText(buf);
 }
 
 void CiMobotController_WindowsDlg::OnLbnSelchangeListgaits()
@@ -700,7 +700,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonrollleft()
 
 void CiMobotController_WindowsDlg::handlerLEFT()
 {
-  iMobotComms.motionTurnLeftNB(90);
+  iMobotComms.motionTurnLeftNB(360);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollright()
@@ -710,7 +710,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonrollright()
 
 void CiMobotController_WindowsDlg::handlerRIGHT()
 {
-  iMobotComms.motionTurnRightNB(90);
+  iMobotComms.motionTurnRightNB(360);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollback()
@@ -805,7 +805,7 @@ DWORD WINAPI HandlerThread(void* arg)
       continue;
     }
 	if(!initialized) {
-		mobot->setJointSpeedRatios(0.5, 0.5, 0.5, 0.5);
+		mobot->setJointSpeeds(45, 45, 45, 45);
 	}
     double value;
     wchar_t buf[200];

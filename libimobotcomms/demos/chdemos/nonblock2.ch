@@ -1,7 +1,6 @@
 /* File: nonblock2.ch
    use the non-blocking functoin move() . */
 #include <mobot.h>
-
 CMobot robot;
 
 /* Connect to the paired MoBot */

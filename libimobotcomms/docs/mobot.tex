@@ -296,13 +296,6 @@ MoBot module which we wish to control. This special variable is actually an
 instance of the \texttt{CMobot} class, which contains its own set of
 functions called ``methods'' or ``member functions''.
 
-Next, we initialize two \texttt{double} type variables called 
-``angle1'' and ``angle4'', which we will use to store joint angles by the
-statement below.
-\begin{verbatim}
-double angle1, angle4;
-\end{verbatim}
-
 The next line,
 \begin{verbatim}
 robot.connect();
@@ -341,11 +334,9 @@ uses the \texttt{moveToZero()} member function. The
 \texttt{moveToZero} function causes the MoBot to move all of its motors to the
 zero position.
 
-The next lines of code command joints 1 and 4 to rotate 360 degrees.
+The next line of code command joints 1 and 4 to rotate 360 degrees.
 \begin{verbatim}
-angle1 = 360;
-angle4 = 360;
-robot.move(angle1, 0, 0, angle4);
+robot.move(360, 0, 0, 360);
 \end{verbatim}
 Note that the member function \texttt{move()} expects input angles
 in degrees, so the angles in radians must be first be converted to degrees 
@@ -353,7 +344,7 @@ using the \texttt{rad2deg()} function. The \texttt{rad2deg()} function
 takes an angle in radians as its argument and returns the angle in
 degrees. The function is implemented in Ch with the code
 \begin{verbatim}
-#include<math.h>
+#include <math.h> /* For M_PI */
 double rad2deg(double radians)
 {
     double degrees;
@@ -369,10 +360,181 @@ Joints 1 and 4 are the faceplates
 of the MoBot which are sometimes used to act as "wheels".
 
 \subsection{\texttt{returnval.ch}, A Basic Ch Mobot Program Which Checks Return Values}
+\subsubsection{Source Code}
 \verbatiminput{../demos/chdemos/returnval.ch}
 
+\subsubsection{\texttt{returnval.ch} Explained}
+The first portion of the code, the lines
+\begin{verbatim}
+#include <mobot.h>
+
+CMobot robot;
+\end{verbatim}
+set up our program for controlling robots as seen in previous demos. The next line,
+\begin{verbatim}
+double angle1, angle4;
+\end{verbatim}
+declares two variables that will be used to hold angle values later in the program.
+
+The next
+lines, which connect to the robot, appear as such:
+\begin{verbatim}
+if(robot.connect())
+{
+    printf("Failed to connect to the robot.\n");
+    exit(0);
+}
+\end{verbatim}
+This section connects to the remote robot as in previous examples, but also
+does some error checking. The majority of the \texttt{CMobot} member functions
+return an integer value indicating whether or not the function succeeded.
+The \texttt{CMobot} member functions return 0 if they succeed, and -1
+if any type of error has occurred. Errors may occur for any number of reasons,
+including lost connections, mechanical failure, and electrical interference. 
+The demos up to this point have ignored the return values of the 
+\texttt{CMobot} member functions.
+
+Next following lines,
+\begin{verbatim}
+/* Set the robot to "home" position, where all joint angles are 0 degrees. */
+robot.moveToZero();
+
+/* Rotate each of the faceplates by 360 degrees */
+angle1 = 360;
+angle4 = 360;
+robot.move(angle1, 0, 0, angle4);
+/* Move the motors back to where they were */
+angle1 = -360;
+angle4 = -360;
+robot.move(angle1, 0, 0, angle4);
+\end{verbatim}
+move the robot into its zero position, rotates its end plates by one full rotation, and then
+rotates the end plates back to their original position. Unlike the previous demo, this 
+demo uses variables to store the joint angle values. The variables are assigned 
+values, and then used as the function arguments for the \texttt{move()} function.
+
+\subsection{\texttt{getJointAngle.ch}, A Basic Ch Mobot Program Which Retrieves a Joint Angle}
+\subsubsection{Source Code}
+\verbatiminput{../demos/chdemos/getJointAngle.ch}
+
+\subsubsection{\texttt{getJointAngle.ch} Explained}
+The first portion of the program, 
+\begin{verbatim}
+#include <mobot.h>
+
+CMobot robot;
+
+/* Connect to a robot */
+robot.connect();
+\end{verbatim}
+initialize the robot variable and connect to the remote robot, as shown in the
+previous demo. Next, the line
+\begin{verbatim}
+double angle;
+\end{verbatim}
+initializes a new variable called \texttt{angle}, which will be used to store
+the current angle of one of the robotic joints. The next line,
+\begin{verbatim}
+robot.getJointAngle(ROBOT_JOINT1, angle);
+\end{verbatim}
+retrieves the current angle of joint 1, which is one of the faceplates of the
+robot. Finally, the last line of the program,
+\begin{verbatim}
+printf("The current joint angle for joint 1 is %lf degrees.\n", angle);
+\end{verbatim}
+prints the value of the variable onto the screen. 
+
+
 \section{Controlling the Speed of Mobot Joints}
+\subsection{\texttt{setspeed.ch} Source Code}
 \verbatiminput{../demos/chdemos/setspeed.ch}
+\subsection{\texttt{setspeed.ch} Source Code Explanation}
+The first several lines,
+\begin{verbatim}
+#include <mobot.h>
+#include <math.h>
+
+CMobot robot;
+
+/* Connect to the paired MoBot */
+robot.connect();
+
+/* Set the robot to "home" position, where all joint angles are 0 degrees. */
+robot.moveToZero();
+\end{verbatim}
+initialize the program, connect to the robot, and move the robot into its zero position,
+similar to the previous demos. The next three lines,
+\begin{verbatim}
+double speed, radius;
+robot.getJointMaxSpeed(ROBOT_JOINT1, speed);
+printf("The maximum speed is %lf degrees/s\n", speed);
+\end{verbatim}
+initializes the variables \texttt{speed} and \texttt{radius},
+retrieves the maximum joint speed for the first joint using the member function,
+\texttt{getJointMaxSpeed} and stores it in the variables named \texttt{speed}.
+The value of the maximum speed is then printed onto the screen using the \texttt{printf()}
+function.
+
+The next two lines,
+\begin{verbatim}
+robot.setJointSpeed(ROBOT_JOINT1, 90);
+robot.setJointSpeed(ROBOT_JOINT4, 90);
+\end{verbatim}
+set the joint speed settings for the two faceplate joints to 90 degrees per second.
+
+The next lines, 
+\begin{verbatim}
+//robot.setJointSpeedRatio(ROBOT_JOINT1, 0.5);
+//robot.setJointSpeedRatio(ROBOT_JOINT4, 0.5);
+
+//robot.setJointSpeeds(90, 0, 0, 90);
+\end{verbatim}
+are two alternate ways of setting the joint speeds of the faceplate joints. 
+The member function \texttt{setJointSpeedRatio()} sets the joint speeds as a ratio of the 
+maximum speed. The function \texttt{setJointSpeeds()} is used to set all four
+joint speeds simultaneously. Note though, that there is a slight difference between
+using the \texttt{setJointSpeeds()} function as shown in this example compared to the
+other methods. The other methods do not alter the joint speeds for joints 2 and 3, while
+the \texttt{setJointSpeeds()} function used as shown in the example explicitely sets
+the joint speeds of joints 2 and 3 to zero. 
+
+The next two lines,
+\begin{verbatim}
+printf("Roll forward 360 degrees.\n");
+robot.motionRollForward(360);
+\end{verbatim}
+print a message to the screen and rolls the robot forward by rotating the faceplates
+360 degrees.
+
+The next lines,
+\begin{verbatim}
+speed = (3.5/2) * M_PI / 2;      // 2.75 inch/s 
+radius = 3.5/2;     // radius is 1.75 
+robot.setTwoWheelRobotSpeed(speed, radius);
+\end{verbatim}
+use the \texttt{setTwoWheelRobotSpeed()} function to set the faceplate joint
+speeds. The \texttt{setTwoWheelRobotSpeed()} function takes a desired speed
+and the radius of the wheels as arguments and calculates the necessary
+rotational speed of the faceplate wheels to achieve the desired speed. Note
+that the units for the speed must match the units for the radius. For instance,
+if the radius is provided in inches, the desired speed must be provided in 
+inches per second. If the radius is provided in centimeters, the speed must
+be provided in centimeters per second, and so on.
+
+The following two lines,
+\begin{verbatim}
+printf("Move 360 degrees.\n");
+robot.move(360, 0, 0, 360);
+\end{verbatim}
+rotate the faceplates forward at the necessary rate to achieve a forward speed of
+2.75 inches per second.
+
+Finally, the last two lines,
+\begin{verbatim}
+printf("Move continuously for 3 seconds.\n");
+robot.moveContinuousTime(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_FORWARD, 3000);
+\end{verbatim}
+roll the robot forward for three seconds.
 
 \section{\label{sec:preprogrammed_motions}Preprogrammed Motions}
 The robot API contains functions for executing preprogrammed motions. The 
@@ -480,10 +642,94 @@ causes the robot to drop back down into a flat position.
 
 \subsection{\texttt{tumble.ch}: A Demo Using the \texttt{motionTumble()} Preprogrammed
 Motion}
+\subsubsection{\texttt{tumble.ch} Source Code}
 \verbatiminput{../demos/chdemos/tumble.ch}
+\subsubsection{\texttt{tumble.ch} Explained}
+The first portion of the program,
+\begin{verbatim}
+/* Filename: tumble.ch 
+ * Tumbling robot */
+
+#include <mobot.h>
+
+CMobot robot;
+
+/* Connect to the paired MoBot */
+robot.connect()
+/* Set the robot to "home" position, where all joint angles are 0 degrees. */
+robot.moveToZero();
+\end{verbatim}
+initialize the proper variables, connect to the remote robot, and make it move
+to a flat zero position, similar to previous demos.
+
+Next, we make the robot perform the tumbling motion with the following line:
+\begin{verbatim}
+robot.motionTumble(5);
+\end{verbatim}
+The argument, ``5'', indicates that the tumbling motion should be performed
+five times.
 
 \subsection{\texttt{motion.ch}: A Demo Using Multiple Preprogrammed Motions}
+\subsubsection{\texttt{motion.ch} Source Code}
 \verbatiminput{../demos/chdemos/motion.ch}
+\subsubsection{\texttt{motion.ch} Explained}
+The first portion of the program initializes and connects to the
+remote robot similar to the previous demos.
+
+The next portion of code executes a number of different pregrammed motions
+to demonstrate the motion capabilities of the robot. First, the ``Arch'' motion
+is demonstrated by the following line of code:
+\begin{verbatim}
+robot.motionArch(15);
+\end{verbatim}
+The parameter given to the function, ``15'' in this case, is the angle in degrees 
+that the body joints should form in relation to each other. 
+
+The next couple lines of code,
+\begin{verbatim}
+robot.motionInchwormLeft(4);
+robot.motionInchwormRight(4);
+\end{verbatim}
+make the robot inchworm to the left four times, and then inchworm to the right
+four times. 
+
+Next, the lines
+\begin{verbatim}
+robot.motionRollBackward(360);
+robot.motionRollForward(360);
+robot.motionTurnLeft(360);
+robot.motionTurnRight(360);
+\end{verbatim}
+make the robot roll backward, forward, and then turn left, and turn right
+sequentially. For each of these functions, the parameter is the angle in degrees
+to turn the faceplates. For instance, the line rolls the robot backward
+using its faceplates as wheels by rotating the faceplates 360 degrees.
+
+Next, the robot stands up by executing the line
+\begin{verbatim}
+robot.motionStand();
+\end{verbatim}
+
+While the robot is standing, the line
+\begin{verbatim}
+robot.move(360, 0, 0, 360);
+\end{verbatim}
+rotates both faceplates one complete rotation. This causes the robot to spin around 
+in a circle, since it is currently standing on one of its faceplates.
+
+Next, we lay the robot back down into a prone position with the following line
+of code:
+\begin{verbatim}
+robot.motionUnstand();
+\end{verbatim}
+
+Finally, we perform the tumbling motion. 
+\begin{verbatim}
+robot.motionTumble(5);
+\end{verbatim}
+The tumbling motion is a movement in which
+the robot stands up and then flips, end over end. The argument provided to the
+function, ``5'' in this case, is the number of times to perform the motion.
 
 \section{Detailed Examples of Preprogrammed Motions and Writing Customized Motions}
 To help the user become acquainted with the MoBot control programs, sample
@@ -615,9 +861,6 @@ indicates that the joint will not turn, and that the joint will be
 forcefully held in place at its current position. More information regarding these
 macros may be found in Section \ref{sec:robotJointState_t}.
 
-\subsection{Tumbling Demo}
-\verbatiminput{../demos/chdemos/tumble2.ch}
-
 \section{\label{sec:blocking}Blocking and Non-Blocking Functions}
 All of the MoBot movement functions may be designated as either ``blocking'' 
 functions or ``non-blocking'' functions. A blocking function is a function which
@@ -690,9 +933,176 @@ this document.
 \end{itemize}
 
 \subsection{Blocking and Non-Blocking Demo Programs}
+\subsubsection{\texttt{nonblock.ch} Source Code}
 \verbatiminput{../demos/chdemos/nonblock.ch}
+\subsubsection{\texttt{nonblock.ch} Source Code Explanation}
+This demo gives an example of how non blocking functions operate. 
+After the initial setup and initialization similar to the previous
+demos, the following line is executed:
+\begin{verbatim}
+robot.moveNB(720, 0, 0, 720); // Non-Blocking version
+\end{verbatim}
+The function \texttt{moveNB()} is a non-blocking function, which means
+that the program will continue executing even before the movement
+has completed. The next lines of code appear as such:
+\begin{verbatim}
+while(robot.isMoving()) {
+    printf("robot is moving ...\n");
+}
+\end{verbatim}
+The previous lines of code basically loops as long as the \texttt{robot.isMoving()} function
+is returning true. In other words, in plain english, as long as the robot is moving,
+the program will print the message ``robot is moving...''. As soon as the robot completes
+its motion, the loop will break and the message ``move finished!'' is printed.
+
+\subsubsection{\texttt{nonblock2.ch} Source Code}
 \verbatiminput{../demos/chdemos/nonblock2.ch}
+\subsubsection{\texttt{nonblock2.ch} Source Code Explanation}
+The first block of the source code initialized and sets up the remote robot 
+similar to previous demos. The last two lines in the program appear like so:
+\begin{verbatim}
+robot.moveJointNB(ROBOT_JOINT1, 360); // Non-Blocking version
+robot.moveJoint(ROBOT_JOINT4, 360);
+\end{verbatim}
+The first line turns joint 1 360 degrees. However, since it is a non-blocking function,
+the program immediately continues to the next line. The second line turns joint 4
+360 degrees. Because computer programs execute so fast compared to the physical
+motion of the robots, this program effectively begins rotating joints 1 and 4 
+simultaneously. Since the function \texttt{moveJoint()} is a blocking function,
+the program will not execute beyond that point until joint 4 has finished moving.
+
+\subsubsection{\texttt{nonblock3.ch} Source Code}
 \verbatiminput{../demos/chdemos/nonblock3.ch}
+\subsubsection{\texttt{nonblock3.ch} Source Code Explanation}
+The first section of code initializes the necessary variables to control remote
+robots as seen in previous demos. Next, we print a message on the screen and 
+roll the robot forward with the following two lines of code.
+\begin{verbatim}
+printf("Rolling 360 degrees.\n");
+robot.motionRollForward(360);
+\end{verbatim}
+Next, we make two calls to non-blocking functions.
+\begin{verbatim}
+robot.motionArchNB(15);
+robot.motionRollForwardNB(360);
+\end{verbatim}
+The first call is to the function \texttt{motionArchNB()}, which arches the robot
+up by moving joints 2 and 3. Since it is a non-blocking function, the program
+immediately continues on even before the arching motion as finished. The
+next call rolls the robot forward by rotating joints 1 and 4. In effect, these
+two lines cause the robot to roll forward and arch simultaneously. It is important
+to note that this compound motion works because the Arch motion only moves 
+joints 2 and 3 while the rolling motions only move joints 1 and 4, so there are
+no conflicting motor commands.
+
+In order to wait for all motions to finish, the last line of the program is
+\begin{verbatim}
+robot.motionWait();
+\end{verbatim}
+The \texttt{motionWait()} function will wait until all robot motions are finished.
+If a program contains non-blocking functions, it is typically necessary to 
+call a waiting function such as \texttt{moveWait()} or \texttt{motionWait()}
+before the program terminates. If a waiting function is not called, the program
+may terminate before the motion has been completed, which may halt the robot
+in the middle of one of its motions.
+
+\subsection{Preprogrammed Motion Demos with Non-Blocking Functions}
+\subsubsection{\texttt{unstand2.ch} Source Code}
+\verbatiminput{../demos/chdemos/unstand2.ch}
+\subsubsection{\texttt{unstand2.ch} Source Code Explanation}
+The first block of code,
+\begin{verbatim}
+/* Filename: unstand.ch 
+ * Drop the robot down from a standing position. */
+#include <mobot.h>
+CMobot robot;
+
+/* Connect to the paired MoBot */
+robot.connect();
+\end{verbatim}
+initialize the program and connect to the remote robot. Next, a series of
+non-blocking movements are performed:
+\begin{verbatim}
+robot.moveJointToNB(ROBOT_JOINT2, -85);
+robot.moveJointToNB(ROBOT_JOINT3, 45);
+\end{verbatim}
+Because both of these function calls are non-blocking, this function will
+effectively move joints two and three simultaneously. Since these are both
+non-blocking functions, a call to \texttt{moveWait()} is necessary to
+wait for the robot to complete its motions, as done in the next line:
+\begin{verbatim}
+robot.moveWait();
+\end{verbatim}
+
+Finally, we move the robot into a flat zero position with the following line:
+\begin{verbatim}
+robot.moveToZero();
+\end{verbatim}
+
+\subsubsection{\texttt{tumble2.ch} Source Code}
+\verbatiminput{../demos/chdemos/tumble2.ch}
+\subsubsection{\texttt{tumble2.ch} Source Code Explanation}
+The first lines of the program,
+\begin{verbatim}
+#include <mobot.h>
+CMobot robot;
+
+/* Connect to the paired MoBot */
+robot.connect();
+
+/* Set the robot to "home" position, where all joint angles are 0 degrees. */
+robot.moveToZero();
+\end{verbatim}
+initialize the proper variables and connections as seen in previous demos.
+
+Next, we begin the tumbling motion. We consider each tumbling motion to be the 
+robot flipping over twice. The reason the robot flips twice per tumble is so that
+when the tumbling motion is done, the robot ends right side up. 
+A for loop is used to to tumble ``n'' times, as shown in the following code:
+\begin{verbatim}
+int n = 2;
+int i;
+for(i = 0; i < n; i++) {
+\end{verbatim}
+These lines create two new variables, ``n'' and ``i'', which hold the number
+of times to tumble, and act as the loop counter variable, respectively. 
+
+Inside the loop, two tumbling motions are performed. The first tumbling
+motion appears as such:
+\begin{verbatim}
+    /* First lift and tumble */
+    robot.moveJointTo(ROBOT_JOINT2, -85);
+    robot.moveJointTo(ROBOT_JOINT3, 80);
+    robot.moveJointTo(ROBOT_JOINT2, 0);
+    robot.moveJointTo(ROBOT_JOINT3, 0);
+    robot.moveJointTo(ROBOT_JOINT2, 80);
+    robot.moveJointTo(ROBOT_JOINT2, 45);
+\end{verbatim}
+This movement is similar to the \texttt{motionStand()} motion, except that the
+robot flips all the way over after standing up. After this motion is done,
+the robot is balancing on joint 4. Next, we flip again so that the robot
+is balancing on joint 1.
+\begin{verbatim}
+    /* Second lift and tumble */
+    robot.moveJointTo(ROBOT_JOINT3, -85);
+    robot.moveJointTo(ROBOT_JOINT2, 80);
+    robot.moveJointTo(ROBOT_JOINT3, 0);
+    robot.moveJointTo(ROBOT_JOINT2, 0);
+    robot.moveJointTo(ROBOT_JOINT3, 80);
+    robot.moveJointTo(ROBOT_JOINT3, 45);
+}
+\end{verbatim}
+The entire motion, consisting of two flips, are performed ``n'' times. After
+the loop is completed, the robot is made to fall back down into a prone
+positions with the following lines of code:
+\begin{verbatim}
+/* Unstand the robot */
+robot.moveJointToNB(ROBOT_JOINT2, 0);
+robot.moveJointToNB(ROBOT_JOINT3, 0);
+robot.moveWait();
+robot.moveToZero();
+\end{verbatim}
+
 
 \section{Controlling Multiple Modules}
 The MoBot control software is designed to be able to control multiple modules
@@ -751,17 +1161,33 @@ the robots have finished moving before the program continues.
 
 \begin{verbatim}
   robot1.motionStandNB();
-  robot2.motionInchwormLeftNB();
-  robot1.motionWait();
-  robot2.motionWait();
+  robot2.motionInchwormLeftNB(4);
 \end{verbatim}
 Similar to the calls to \texttt{moveToZeroNB()}, this block of code instructs 
-the first MoBot to stand and the second MoBot to perform the inchworm gait.
+the first MoBot to stand and the second MoBot to perform the inchworm motion four times.
 Note that we call the non-blocking versions of the
-functions, \texttt{motionStandNB()} and \texttt{motionInchwormLeftNB}. Since these functions are
+functions, \texttt{motionStandNB()} and \texttt{motionInchwormLeftNB()}. Since these functions are
 non-blocking, both robots will effectively perform the motions simultaneously. 
-Next, we call the member function \texttt{motionWait()} to wait for the motions
-to finish.
+
+When the first robot finishes standing, we want it to spin around on its faceplate
+while the second robot is still inchworming. We can accomplish this by first
+waiting for the standing motion to finish, and then moving the faceplate joints
+of the first robot, as in the following lines of code.
+\begin{verbatim}
+  robot1.motionWait();
+  robot1.moveNB(360, 0, 0, 360);
+\end{verbatim}
+
+Before we continue with the program, we wish to ensure that motion has stopped on both
+robots. Since the the last command sent to \texttt{robot1} was a \texttt{moveNB()}
+command, we use the \texttt{moveWait()} function to wait for that movement to finish.
+Similarly, the last command sent to \texttt{robot2} was a motion command, and so we
+use \texttt{motionWait()} to wait for the motion to finish. The two lines of code
+are seen in the program as follows:
+\begin{verbatim}
+  robot1.moveWait();
+  robot2.motionWait();
+\end{verbatim}
 
 Finally, the following lines,
 \begin{verbatim}
@@ -780,9 +1206,51 @@ to finish.
 \subsection{Controlling Multiple Connected Modules}
 \subsubsection{\texttt{lift.ch}, Lifting Demo}
 \verbatiminput{../demos/chdemos/lift.ch}
+\subsubsection{\texttt{lift.ch} Source Code Explanation}
+This demo is designed to lift two connected modules up into
+a two-legged standing configuration. The robots are connected such that the fourth
+joint of robot one is connected to the first joint of robot two. The two connect robots
+act as one long robot.
+
+The first portion of the program initialize two variables called \texttt{robot1} 
+and \texttt{robot2}, which will be used to control the two connected modules.
+Once the robots are initialized, they are both moved into a flat zero position.
+
+The next lines,
+\begin{verbatim}
+/* First lift */
+robot1.moveNB(0, -90,  0, 0);
+robot2.moveNB(0, 0, 90, 0);
+robot1.moveWait();
+robot2.moveWait();
+\end{verbatim}
+rotate the joints on either end of the compound robot to perform the 
+first portion of the lift. The motion is performed as two non-blocking
+calls to \texttt{moveNB()} and then waiting for both movements to finish.
+
+The next lines rotate the inner joints of the compound robot to lift the robot
+one step higher.
+\begin{verbatim}
+/* Second lift */
+robot1.moveToNB(0, 0, 90,  0);
+robot2.moveToNB(0,  -90, 0, 0);
+robot1.moveWait();
+robot2.moveWait();
+\end{verbatim}
+Again, these lines perform two calls to the non-blocking function
+\texttt{moveNB()} and then wait for the movements to finish.
+
+Finally, we move both robots back to their zero positions, which drops 
+the compound robot back onto the ground.
+\begin{verbatim}
+robot1.moveToZeroNB();
+robot2.moveToZeroNB();
+robot1.moveWait();
+robot2.moveWait();
+\end{verbatim}
 
 \section{Commanding Multiple Robots to Perform Identical Tasks}
-There is a specialized class called \texttt{CMobotGroup} which may be used
+The class called \texttt{CMobotGroup} can be used
 to control multiple modules simultaneously. The \texttt{CMobotGroup} represents
 a group of robots. Any command that is given to the group of modules is 
 duplicated to each member of the group.
@@ -790,52 +1258,17 @@ duplicated to each member of the group.
 The majority of the movement functions available in the \texttt{CMobot} class
 are also available in the \texttt{CMobotGroup} class. 
 The detailed information for each member function are presented in 
-Appendix \ref{sec:cmobot_api}.
+Appendix \ref{sec:cmobotgroup_api}.
  Following
 is a complete listing of the available member functions in the \texttt{CMobotGroup}
 class.
 
-\begin{tabular}{p{4.5cm}p{8cm}} \hline 
-Function Name & Description \\
-\hline
-\texttt{addRobot()} & Add a robot to the group. \\
-\texttt{move()} & Move joints on robots from their current positions for all robots in the group. \\
-\texttt{moveContinuousNB()} & Move joints continuously for all robots in the group. \\
-\texttt{moveContinunousTime()} & Move joints continuously for a specific amount of time for all robots in the group.\\
-\texttt{moveJointContinuousNB()} & Move a single joint continuously for all robots in the group. \\
-\texttt{moveJointContinuousTime()} & Move a single joint continuously for a specific amount of time for all robots in the group.\\
-\texttt{moveJointTo()} & Move a joint to an absolute angle for all robots in the group.\\
-\texttt{moveJointWait()} & Wait for a joint to finish moving for all robots in the group. \\
-\texttt{moveTo()} & Move joints to a set of specific angles for all robots in the group. \\
-\texttt{moveWait()} & Wait for all joints to finish moving. \\
-\texttt{moveToZero()} & Move all joints to their zero positions. \\
-\texttt{setJointSpeed()} & Set the speed of a joint, in radians per second. \\
-\texttt{setJointSpeedRatio()} & Set the speed of a joint as a ratio of the maximum speed. \\
-\texttt{setTwoWheelRobotSpeed()} & Move the robot at a linear speed, given the wheel size and desired speed.\\
-\texttt{stop()} & Stop all the joints of all robots in the group. \\
-\texttt{motionArch()} & Cause all robots in the group to arch for higher rolling clearance. \\
-\texttt{motionArchNB()} & Cause all robots in the group to arch for higher rolling clearance. \\
-\texttt{motionInchwormLeft()} & Cause all robots in the group to inchworm. \\
-\texttt{motionInchwormLeftNB()} & Cause all robots in the group to inchworm. \\
-\texttt{motionInchwormRight()} & Cause all robots in the group to inchworm. \\
-\texttt{motionInchwormRightNB()} & Cause all robots in the group to inchworm. \\
-\texttt{motionRollBackward()} & Makes all robots in the group roll backward. \\
-\texttt{motionRollForwardNB()} & Makes all robots in the group roll forward. \\
-\texttt{motionSkinny()} & Make all robots in the group assume a skinny rolling profile. \\
-\texttt{motionSkinnyNB()} & Make all robots in the group assume a skinny rolling profile. \\
-\texttt{motionStand()} & Make all robots in the group stand. \\
-\texttt{motionStandNB()} & Make all robots in the group stand. \\
-\texttt{motionTumble()} & Make all the robots in the group perform the tumbling motion. \\
-\texttt{motionTumbleNB()} & Make all the robots in the group perform the tumbling motion. \\
-\texttt{motionTurnLeft()} & Make all robots in the group turn left. \\
-\texttt{motionTurnLeftNB()} & Make all robots in the group turn left. \\
-\texttt{motionTurnRight()} & Make all robots in the group turn right. \\
-\texttt{motionTurnRightNB()} & Make all robots in the group turn right.\\
-\texttt{motionUnstand()} & Make all robots in the group drop down from a standing position. \\
-\texttt{motionUnstandNB()} & Make all robots in the group drop down from a standing position. \\
-\texttt{motionWait()} & Wait for the robots to complete all currently executing compound motions.\\
-\hline
-\end{tabular}
+\vspace{8pt}
+\noindent
+\input{cmobotgroup_table.tex}
+
+\noindent
+\input{cmobotgroup_motions_table.tex}
 
 \subsection{Demo program \texttt{group.ch}}
 \subsubsection{Source Code}
@@ -877,7 +1310,14 @@ group.motionInchwormLeft(4); /* Cause both robots to inchworm left 4 times */
 group.motionStand(); /* Cause both robots to stand */
 \end{verbatim}
 
-After the robots stand, the next line, 
+After the robots stand up, the line
+\begin{verbatim}
+group.move(360, 0, 0, 360); /* Joints 1 and 4 rotate 360 degrees */
+\end{verbatim}
+makes the robots perform a 360 degree rotation on their faceplates
+while standing.
+
+The next line, 
 \begin{verbatim}
 sleep(3); /* Make the robots stand still for 3 seconds */
 \end{verbatim}
@@ -888,6 +1328,15 @@ group.motionUnstand(); /* Make the robots get back down from standing */
 \end{verbatim}
 makes both robots move back down from a standing position into a prone
 position.
+
+\section{Application Examples}
+\subsection{Example 1}
+\subsubsection{Problem Statement}
+Rotate a faceplate joint 720 degrees at 45 degrees
+ second. Plot the relationship between joint angle versus time for the 
+ duration of the joint's movement at a rate of 10 data points per second.
+
+\subsubsection{\texttt{dataAcquisition.ch} Source Code}
 
 \newpage
 \appendix
@@ -960,7 +1409,7 @@ Value & Description \\
 \section{\label{sec:cmobot_api}CMobot API}
 \input{api/libimobotcomms.tex}
 
-\section{CMobotGroup API}
+\section{\label{sec:cmobotgroup_api}CMobotGroup API}
 \input{cmobotgroup_api/cmobotgroup.tex}
 % Index
 %\addcontentsline{toc}{chapter}{Index}
