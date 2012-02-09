@@ -473,9 +473,9 @@ void CiMobotController_WindowsDlg::UpdateSpeedSliders(int i, double speed)
 {
 		m_slider_Speeds[i]->SetPos( 180 - speed);
 		m_speeds[i] = speed;
-    wchar_t buf[200];
-    swprintf(buf, L"%lf", speed);
-    m_edit_MotorSpeeds[i]->SetWindowTextW(buf);
+    TCHAR buf[200];
+    _stprintf(buf, TEXT("%lf"), speed);
+    m_edit_MotorSpeeds[i]->SetWindowText(buf);
 }
 
 void CiMobotController_WindowsDlg::OnLbnSelchangeListgaits()
@@ -700,7 +700,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonrollleft()
 
 void CiMobotController_WindowsDlg::handlerLEFT()
 {
-  iMobotComms.motionTurnLeftNB(90);
+  iMobotComms.motionTurnLeftNB(360);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollright()
@@ -710,7 +710,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonrollright()
 
 void CiMobotController_WindowsDlg::handlerRIGHT()
 {
-  iMobotComms.motionTurnRightNB(90);
+  iMobotComms.motionTurnRightNB(360);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollback()
