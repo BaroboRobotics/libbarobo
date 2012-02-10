@@ -5,6 +5,7 @@
 \usepackage{verbatim}
 \usepackage{makeidx}
 \usepackage{float}
+\usepackage{subfig}
 \usepackage[left=1in,top=1in,right=1in]{geometry}
 
 \title{Programming the MoBot}  
@@ -769,23 +770,34 @@ robot.setJointSpeedRatio(ROBOT_JOINT2, 0.50);
 robot.setJointSpeedRatio(ROBOT_JOINT3, 0.50);
 \end{verbatim}
 
-Next, we move the robot into a flat ``zero'' position.
+Next, we move the robot into a flat ``zero'' position, as shown in Figure \ref{fig:inchworm1}.
 
 \begin{verbatim}
 /* Set the robot to "home" position, where all joint angles are 0 degrees. */
 robot.moveToZero();
 \end{verbatim}
 
+\begin{figure}
+  \centering
+  \subfloat[Zero Position]{\label{fig:inchworm1}\includegraphics[width=1in]{images/inchworm1.jpg}}
+  \subfloat[Move joint 2]{\label{fig:inchworm2}\includegraphics[width=1in]{images/inchworm2.jpg}}
+  \subfloat[Move joint 3]{\label{fig:inchworm3}\includegraphics[width=1in]{images/inchworm4.jpg}}
+  \subfloat[Move joint 2]{\label{fig:inchworm4}\includegraphics[width=1in]{images/inchworm3.jpg}}
+  \subfloat[End]{\label{fig:inchworm5}\includegraphics[width=1in]{images/inchworm1.jpg}}
+  \caption{The inchworm motion}
+  \label{fig:inchworm}
+\end{figure}
+
 Finally, we perform the actual inchworm motion. The inchworm motion is a gait defined
 by a sequence of motions performed by the body joints. The motions are as such:
 \begin{enumerate}
 \item The first body joint, referred to as joint A, rotates towards the ground.
-This drags the MoBot towards the direction of joint A.
+This drags the MoBot towards the direction of joint A. (Figure \ref{fig:inchworm2})
 \item The other body joint, joint B, rotates towards the ground. Since the center
 of gravity is currently positioned over joint A, this causes the trailing body 
-joint to slide toward joint A.
-\item Joint A moves back to a flat position.
-\item Joint B moves back to a flat position.
+joint to slide toward joint A. (Figure \ref{fig:inchworm3})
+\item Joint A moves back to a flat position. (Figure \ref{fig:inchworm4})
+\item Joint B moves back to a flat position. (Figure \ref{fig:inchworm5})
 \item Repeat, if desired.
 \end{enumerate}
 The direction of travel depends on the selection of the initial body joint. In
@@ -1207,6 +1219,13 @@ to finish.
 \subsubsection{\texttt{lift.ch}, Lifting Demo}
 \verbatiminput{../demos/chdemos/lift.ch}
 \subsubsection{\texttt{lift.ch} Source Code Explanation}
+\begin{figure}
+  \centering
+  \subfloat[First lift]{\label{fig:lift1}\includegraphics[width=2in]{images/lift1_v2.jpg}}
+  \subfloat[Second lift]{\label{fig:lift2}\includegraphics[width=2in]{images/lift2_v2.jpg}}
+  \caption{Lifting motion with two connected modules}
+  \label{fig:lift}
+\end{figure}
 This demo is designed to lift two connected modules up into
 a two-legged standing configuration. The robots are connected such that the fourth
 joint of robot one is connected to the first joint of robot two. The two connect robots
@@ -1225,11 +1244,11 @@ robot1.moveWait();
 robot2.moveWait();
 \end{verbatim}
 rotate the joints on either end of the compound robot to perform the 
-first portion of the lift. The motion is performed as two non-blocking
+first portion of the lift, as shown in Figure \ref{fig:lift1}. The motion is performed as two non-blocking
 calls to \texttt{moveNB()} and then waiting for both movements to finish.
 
 The next lines rotate the inner joints of the compound robot to lift the robot
-one step higher.
+one step higher, as shown is Figure \ref{fig:lift2}.
 \begin{verbatim}
 /* Second lift */
 robot1.moveToNB(0, 0, 90,  0);
