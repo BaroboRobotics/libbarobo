@@ -506,6 +506,42 @@ EXPORTCH int moveToZeroNB_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int recordAngle_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    robotJointId_t id;
+    double* time;
+    double* angle;
+    int num;
+    int msecs;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
+    time = Ch_VaArg(interp, ap, double*);
+    angle = Ch_VaArg(interp, ap, double*);
+    num = Ch_VaArg(interp, ap, int);
+    msecs = Ch_VaArg(interp, ap, int);
+    retval = mobot->recordAngle(id, time, angle, num, msecs);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int recordWait_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    retval = mobot->recordWait();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int setJointSpeed_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

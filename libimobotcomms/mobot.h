@@ -69,6 +69,16 @@ extern "C" {
   DLLIMPORT double deg2rad(double deg);
   DLLIMPORT double rad2deg(double rad);
 }
+
+typedef struct recordAngleArg_s 
+{
+  br_comms_t* comms;
+  robotJointId_t id;
+  double *time;
+  double *angle;
+  int num;
+  int msecs;
+} recordAngleArg_t;
 #endif
 
 #ifndef C_ONLY
@@ -113,6 +123,12 @@ class CMobot {
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
+#ifdef _CH_
+    int recordAngle(robotJointId_t id, double time[:], double angle[:], int num, int msecs);
+#else
+    int recordAngle(robotJointId_t id, double time[], double angle[], int num, int msecs);
+#endif
+    int recordWait();
     int setJointSpeed(robotJointId_t id, double speed);
     int setJointSpeeds(double speed1, double speed2, double speed3, double speed4);
     int setJointSpeedRatio(robotJointId_t id, double ratio);

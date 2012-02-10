@@ -631,6 +631,30 @@ int CMobot::moveWait() {
     dlrunfun(fptr, &retval, moveWait, this);
     return retval;
 }
+int CMobot::recordAngle(int id, double time[:], double angle[:], int num, int msecs) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "recordAngle_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, recordAngle, this, id, time, angle, num, msecs);
+    return retval;
+}
+int CMobot::recordWait() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "recordWait_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, recordWait, this);
+    return retval;
+}
 int CMobot::setJointSpeed(int id, double speed) {
     void *fptr;
     int retval;

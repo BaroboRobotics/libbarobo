@@ -33,6 +33,7 @@ typedef struct br_comms_s
   int motionInProgress;
   int motionArgInt;
   double motionArgDouble;
+  int recordingInProgress[4];
 } br_comms_t;
 #endif
 
@@ -153,6 +154,8 @@ DLLIMPORT int Mobot_moveJointContinuousNB(br_comms_t* comms, robotJointId_t id, 
 DLLIMPORT int Mobot_moveJointContinuousTime(br_comms_t* comms, robotJointId_t id, robotJointState_t dir, int msecs);
 DLLIMPORT int Mobot_moveJointWait(br_comms_t* comms, robotJointId_t id);
 DLLIMPORT int Mobot_moveWait(br_comms_t* comms);
+int Mobot_recordAngle(br_comms_t* comms, robotJointId_t id, double* time, double* angle, int num, int msecs);
+int Mobot_recordWait(br_comms_t* comms);
 DLLIMPORT int Mobot_stop(br_comms_t* comms);
 DLLIMPORT int Mobot_moveJointToPIDNB(br_comms_t* comms, robotJointId_t id, double angle);
 

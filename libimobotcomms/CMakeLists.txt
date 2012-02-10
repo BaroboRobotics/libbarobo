@@ -15,7 +15,7 @@ else(CMAKE_HOST_WIN32)
 	add_library(mobot SHARED
 	  mobot.cpp
 	  )
-	target_link_libraries(mobot bluetooth pthread)
+	target_link_libraries(mobot bluetooth pthread rt)
 endif(CMAKE_HOST_WIN32)
 
 #install(TARGETS mobot LIBRARY DESTINATION lib)

@@ -46,6 +46,7 @@ int Mobot_init(br_comms_t* comms)
 #endif
   for(i = 0; i < 4; i++) {
     comms->jointSpeeds[i] = DEF_MOTOR_SPEED;
+    comms->recordingInProgress[i] = 0;
   }
   THREAD_CREATE(&comms->thread, nullThread, NULL);
   comms->commsLock = (MUTEX_T*)malloc(sizeof(MUTEX_T));
@@ -466,6 +467,25 @@ int Mobot_getJointAngle(br_comms_t* comms, robotJointId_t id, double *angle)
   return 0;
 }
 
+int Mobot_getJointAngleTime(br_comms_t* comms, robotJointId_t id, double *time, double *angle)
+{
+  char buf[160];
+  int status;
+  int bytes_read;
+  long unsigned int millis;
+  while(1) {
+    sprintf(buf, "GET_MOTOR_TIMEPOSITION %d", id);
+    status = SendToIMobot(comms, buf, strlen(buf)+1);
+    if(status < 0) return status;
+    bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
+    if(!strcmp(buf, "ERROR")) return -1;
+    if(!strncmp("TIMEPOS ", buf, 4)) {break;}
+  }
+  sscanf(buf, "TIMEPOS %lu %lf", &millis, angle);
+  *time = millis / 1000.0;
+  return 0;
+}
+
 int Mobot_getJointState(br_comms_t* comms, robotJointId_t id, robotJointState_t *state)
 {
   char buf[160];
@@ -843,6 +863,71 @@ int Mobot_moveWait(br_comms_t* comms)
   for(i = 0; i < 4; i++) {
     if(Mobot_moveJointWait(comms, (robotJointId_t)(i+1))) {
       return -1;
+    }
+  }
+  return 0;
+}
+
+void* Mobot_recordAngleThread(void* arg);
+int Mobot_recordAngle(br_comms_t* comms, robotJointId_t id, double* time, double* angle, int num, int msecs)
+{
+  THREAD_T thread;
+  recordAngleArg_t *rArg;
+  rArg = (recordAngleArg_t*)malloc(sizeof(recordAngleArg_t));
+  rArg->comms = comms;
+  rArg->id = id;
+  rArg->time = time;
+  rArg->angle = angle;
+  rArg->num = num;
+  rArg->msecs = msecs;
+  comms->recordingInProgress[id-1] = 1;
+  THREAD_CREATE(&thread, Mobot_recordAngleThread, rArg);
+}
+
+#ifndef _WIN32
+unsigned int diff_msecs(struct timespec t1, struct timespec t2)
+{
+  unsigned int t;
+  t = (t2.tv_sec - t1.tv_sec) * 1000;
+  t += (t2.tv_nsec - t1.tv_nsec) / 1000000;
+  return t;
+}
+#endif
+
+void* Mobot_recordAngleThread(void* arg)
+{
+#ifndef _WIN32
+  recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
+  int i;
+  struct timespec cur_time, itime;
+  unsigned int dt;
+  double start_time;
+  for(i = 0; i < rArg->num; i++) {
+    clock_gettime(CLOCK_REALTIME, &cur_time);
+    Mobot_getJointAngleTime(rArg->comms, rArg->id, &rArg->time[i], &rArg->angle[i]);
+    if(i == 0) {
+      start_time = rArg->time[i];
+    }
+    rArg->time[i] = rArg->time[i] - start_time;
+    /* Convert angle to degrees */
+    rArg->angle[i] = RAD2DEG(rArg->angle[i]);
+    clock_gettime(CLOCK_REALTIME, &itime);
+    dt = diff_msecs(cur_time, itime);
+    if(dt < (rArg->msecs)) {
+      usleep(rArg->msecs*1000 - dt*1000);
+    }
+  }
+  rArg->comms->recordingInProgress[rArg->id-1] = 0;
+  return NULL;
+#endif
+}
+
+int Mobot_recordWait(br_comms_t* comms)
+{
+  int i;
+  for(i = 0; i < 4; i++) {
+    while(comms->recordingInProgress[i]) {
+      usleep(100000);
     }
   }
   return 0;
@@ -1587,6 +1672,16 @@ int CMobot::moveJointWait(robotJointId_t id)
 int CMobot::moveWait()
 {
   return Mobot_moveWait(&_comms);
+}
+
+int CMobot::recordAngle(robotJointId_t id, double* time, double* angle, int num, int msecs)
+{
+  return Mobot_recordAngle(&_comms, id, time, angle, num, msecs);
+}
+
+int CMobot::recordWait()
+{
+  return Mobot_recordWait(&_comms);
 }
 
 int CMobot::stop()
