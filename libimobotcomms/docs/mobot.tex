@@ -8,7 +8,7 @@
 \usepackage{subfig}
 \usepackage[left=1in,top=1in,right=1in]{geometry}
 
-\title{Programming the MoBot}  
+\title{Programming the Mobot}  
 %\author{David Ko\\Mechanical and Aerospace Engineering}
 %\date{\today} 
 \makeindex
@@ -19,7 +19,7 @@
 \hrule
 \begin{center}
 \vspace*{2.5cm}
-{\Huge\sf\bf MoBot User's Guide}\\
+{\Huge\sf\bf Mobot User's Guide}\\
 \vspace*{2.5cm}
 {\Large\bf Version 1.3}
 \vspace{4.5cm}
@@ -32,41 +32,41 @@
 \newpage
 \tableofcontents
 \newpage
-\section{The \texttt{CMobot} MoBot Remote Control Library}
+\section{The \texttt{CMobot} Mobot Remote Control Library}
 The \texttt{CMobot} library is a collection of functions geared towards
-controlling the motors and reading sensor values of a MoBot module via the
+controlling the motors and reading sensor values of a Mobot module via the
 Bluetooth wireless protocol. The functions are designed to be intuitive
 and easy to use. Various functions are provided to control or obtain the speed,
 direction, and position of the motors. The API includes C++ classes called
 \texttt{CMobot} and \texttt{CMobotGroup} to facilitate control of 
-single and multiple MoBots.
+single and multiple Mobots.
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=4.5in]{images/joint_diagram_verbose.png}
 \end{center}
-\caption{\label{fig:joint_diagram_verbose.png} A schematic diagram of a MoBot module.}
+\caption{\label{fig:joint_diagram_verbose.png} A schematic diagram of a Mobot module.}
 \end{figure}
 
 Figure \ref{fig:joint_diagram_verbose.png} shows a schematic diagram displaying the
-locations and positive directions of the four joints of a MoBot module. The
+locations and positive directions of the four joints of a Mobot module. The
 joints 1 and 4 shown in the figure are fully rotational and have no joint limits.
 Joints 2 and 3, however, can only move in the range -90 to +90 degrees.
 
 This documentation introduces the basic computer setup required for controlling 
-the MoBot, as well as several demo programs and a complete reference for all
+the Mobot, as well as several demo programs and a complete reference for all
 API function provided with the \texttt{CMobot} and \texttt{CMobotGroup} library.
 
-\section{\label{sec:pairing}Configuring MoBots for Remote Control}
-MoBot modules should be configured the first time they are used with 
-a new computer. The process informs the computer which MoBots it
+\section{\label{sec:pairing}Configuring Mobots for Remote Control}
+Mobot modules should be configured the first time they are used with 
+a new computer. The process informs the computer which Mobots it
 is allowed to connect to. The is also necessary for certain 
 functions in the \texttt{CMobot} API, such as \texttt{connect()},
 to determine which robots to connect to.
 
 The configuration is performed through the Barobo RobotController
 program. The remainder of the section contains step-by-step instructions
-and screenshots showing how to configure your MoBots.
+and screenshots showing how to configure your Mobots.
 
 To start the provided Barobo Robot Control Program click on the icon labeled 
 ``RobotController'' on your desktop, as shown in \ref{fig:barobo_icon.png}. The 
@@ -182,23 +182,23 @@ Once a robot is connected to the RobotController, the joint angles and speeds
 of the robot are displayed as shown in Figure \ref{fig:shot1_populated.png}.
 The RobotController can then be
 used to display
-information about the MoBot's joint positions, and also control the
-speeds and positions of the MoBot's joints. The interface is divided
+information about the Mobot's joint positions, and also control the
+speeds and positions of the Mobot's joints. The interface is divided
 up into six sections; three on the top half of the interface, and three on 
 the bottom half. 
 
-\subsection{The MoBot Diagram and ``Move To Zero'' Button}
+\subsection{The Mobot Diagram and ``Move To Zero'' Button}
 The first section of the GUI located on the top left of the interface
-displays a schematic diagram of the MoBot, displaying motor positions.
+displays a schematic diagram of the Mobot, displaying motor positions.
 Underneath the diagram, there is a large button with the text 
 ``Move To Zero''. When clicked, this button will command the connected
-MoBot to rotate all of its joints to a flat ``Zero'' position.
+Mobot to rotate all of its joints to a flat ``Zero'' position.
 
 \subsection{Individual Joint Control}
 The second section, located at the top-middle section of the interface,
 is the ``Individual Joint Control'' section. These buttons command the
-MoBot to move individual joints. When the up or down arrows are clicked,
-the MoBot begins to move the corresponding joint in either the positive,
+Mobot to move individual joints. When the up or down arrows are clicked,
+the Mobot begins to move the corresponding joint in either the positive,
 or negative direction. The joint will continue to move until the stop 
 button, located between the up and down arrows, is clicked. 
 
@@ -208,15 +208,15 @@ example, if a body joint attempts to rotate beyond its limits,
 or if it collides with the other corresponding body joint. 
 
 \subsection{Rolling Control}
-This section contains buttons for controlling the MoBot as a 
-two wheeled mobile robot. The up and down buttons cause the MoBot to
-roll forward or backward. The left and right buttons cause the MoBot 
+This section contains buttons for controlling the Mobot as a 
+two wheeled mobile robot. The up and down buttons cause the Mobot to
+roll forward or backward. The left and right buttons cause the Mobot 
 to rotate towards the left, or towards the right. The stop button in the
-middle causes the MoBot to stop where it is.
+middle causes the Mobot to stop where it is.
 
 \subsection{Joint Speeds}
 The ``Joint Speeds'' section, located at the bottom left of the interface,
-displays and controls the current joint speeds of the MoBot.
+displays and controls the current joint speeds of the Mobot.
 The joint speeds are in units of degrees per second. To set a specific 
 desired joint speed for a particular joint, the joint speed may be 
 typed directly into the edit boxes below the sliders, and the ``Set''
@@ -225,7 +225,7 @@ button should be clicked.
 \subsection{Joint Positions}
 This section, located in the bottom-middle of the interface, is used to display
 and control the positions of each of the four
-joints of a MoBot. The joint positions are displayed in the numerical
+joints of a Mobot. The joint positions are displayed in the numerical
 text located above each vertical slider. The displayed joint positions are in
 units of degrees.  
 %There are two methods to control the joints using this interface.
@@ -234,7 +234,7 @@ The method of controlling the joints is by using the vertical sliders.
 Each vertical slider's position represents a joint's angle. The sliders for the
 two end joints vary from -180 degrees to 180 degrees, representing one complete
 rotation. The angles for the two body joints vary from -90 to 90 degrees. When
-the position of the slider is moved, the MoBot will move its joints to match the 
+the position of the slider is moved, the Mobot will move its joints to match the 
 sliders. 
 
 Underneath the sliders, there are four text entry boxes. The text boxes
@@ -246,7 +246,7 @@ not move.
 The second method for moving the joints is by entering the exact angles for the
 joints. Below each of the four sliders lies a text entry box. Values in degrees
 may be typed into each of the four entry boxes. When the button on the lower
-right of the section labeled ``Move'' is clicked, the MoBot will move its joints
+right of the section labeled ``Move'' is clicked, the Mobot will move its joints
 to match the values typed into the boxes. If no value is typed into a box, that 
 joint will not move.
 \end{comment}
@@ -257,17 +257,17 @@ limited to a range of -90 to +90 degrees.
 
 \subsection{Motions}
 This section, located on the bottom right of the interface, contains a set of
-preprogrammed motions for the MoBot. To execute a preprogrammed motion, simply
+preprogrammed motions for the Mobot. To execute a preprogrammed motion, simply
 click on the name of the motion you wish to execute, and then click the button
 labeled ``Play''.
 
-\section{Getting Started with Programming the MoBot}
+\section{Getting Started with Programming the Mobot}
 Before the Ch program is executed, the Bluetooth addresses of the robots
 need to be added using the RobotController as described in Section \ref{sec:pairing}.
 If a robot is already connected to the RobotController, disconnect
 from the robot before running the Ch program, or close the RobotController application.
 
-The first demo presents a minimal program which connects to a MoBot and
+The first demo presents a minimal program which connects to a Mobot and
 moves some joints.
 
 \subsection{\texttt{start.ch}, A Basic Ch Mobot Program}
@@ -275,17 +275,17 @@ moves some joints.
 \verbatiminput{../demos/chdemos/start.ch}
 
 \subsubsection{\label{sec:democode}Demo Code for \texttt{start.ch} Explained}
-The beginning of every MoBot control program will include header files. Each
+The beginning of every Mobot control program will include header files. Each
 header file imports functions used for a number of tasks, such as printing
-data onto the screen or controlling the MoBot. The \texttt{mobot.h} header
+data onto the screen or controlling the Mobot. The \texttt{mobot.h} header
 file must be included in order to use the \texttt{CMobot} class and related
 robotic control functions.
 
 \begin{verbatim}
-#include <mobot.h> // Required for MoBot control functions
+#include <mobot.h> // Required for Mobot control functions
 \end{verbatim}
 
-Next, we must initialize the C++ class used to control the MoBot. 
+Next, we must initialize the C++ class used to control the Mobot. 
 
 \begin{verbatim}
 CMobot robot;
@@ -293,7 +293,7 @@ CMobot robot;
 
 This line
 initializes a new variable named \texttt{robot} which represents the remote
-MoBot module which we wish to control. This special variable is actually an
+Mobot module which we wish to control. This special variable is actually an
 instance of the \texttt{CMobot} class, which contains its own set of
 functions called ``methods'' or ``member functions''.
 
@@ -302,15 +302,15 @@ The next line,
 robot.connect();
 \end{verbatim}
 will connect our new variable, \texttt{robot}, to a
-MoBot that has been previously configured with the computer in the 
+Mobot that has been previously configured with the computer in the 
 process described in Section \ref{sec:pairing}.
 
-Note that there are two common methods to connect to a remote MoBot. 
+Note that there are two common methods to connect to a remote Mobot. 
 The most common method, demonstrated in the previous line of code, is
-used to connect to a MoBot that is already paired to the computer. It
-is also possible to connect to MoBots which are not paired with the 
+used to connect to a Mobot that is already paired to the computer. It
+is also possible to connect to Mobots which are not paired with the 
 computer. This method is necessary for connecting to multiple
-MoBots simultaneously, as only a single MoBot may be paired with the
+Mobots simultaneously, as only a single Mobot may be paired with the
 computer at a time. The second method uses the function
 \texttt{connectWithAddress()}, and its default usage is as such:
 \begin{verbatim}
@@ -319,11 +319,11 @@ int defaultChannel = 1;
 robot.connectWithAddress(address, defaultChannel);
 \end{verbatim}
 The string \texttt{"11:22:33:44:55:66"} represents the Bluetooth address
-of the MoBot, which must be known in advance. The channel number \texttt{1} 
+of the Mobot, which must be known in advance. The channel number \texttt{1} 
 represents the Bluetooth channel to connect to. Channel \texttt{1}
-is the default channel MoBots listen on for incoming connections, but
+is the default channel Mobots listen on for incoming connections, but
 may be set to other values depending on the type of robot. Detailed
-documentation for each of the MoBot functions, such as 
+documentation for each of the Mobot functions, such as 
 \texttt{connect()} and \texttt{connectAddress()}, are presented in
 Appendix \ref{sec:cmobot_api}.
 
@@ -332,7 +332,7 @@ The next line,
 robot.moveToZero();
 \end{verbatim}
 uses the \texttt{moveToZero()} member function. The
-\texttt{moveToZero} function causes the MoBot to move all of its motors to the
+\texttt{moveToZero} function causes the Mobot to move all of its motors to the
 zero position.
 
 The next line of code command joints 1 and 4 to rotate 360 degrees.
@@ -358,7 +358,7 @@ If desired, values in radians
 may also be converted to degrees using the counterpart function,
 \texttt{deg2rad()}.
 Joints 1 and 4 are the faceplates
-of the MoBot which are sometimes used to act as "wheels".
+of the Mobot which are sometimes used to act as "wheels".
 
 \subsection{\texttt{returnval.ch}, A Basic Ch Mobot Program Which Checks Return Values}
 \subsubsection{Source Code}
@@ -457,7 +457,7 @@ The first several lines,
 
 CMobot robot;
 
-/* Connect to the paired MoBot */
+/* Connect to the paired Mobot */
 robot.connect();
 
 /* Set the robot to "home" position, where all joint angles are 0 degrees. */
@@ -583,7 +583,7 @@ robot and connect to the robot with the following lines.
 \begin{verbatim}
 CMobot robot;
 
-/* Connect to the paired MoBot */
+/* Connect to the paired Mobot */
 robot.connect();
 \end{verbatim}
 
@@ -624,7 +624,7 @@ code:
 \begin{verbatim}
 robot.motionStand();
 \end{verbatim}
-This line of code causes the MoBot to perform a sequence of motions causing it to
+This line of code causes the Mobot to perform a sequence of motions causing it to
 stand up on a faceplate. After the robot has stood up, the next line of code,
 \begin{verbatim}
 sleep(3); // Stand still for three seconds
@@ -655,7 +655,7 @@ The first portion of the program,
 
 CMobot robot;
 
-/* Connect to the paired MoBot */
+/* Connect to the paired Mobot */
 robot.connect()
 /* Set the robot to "home" position, where all joint angles are 0 degrees. */
 robot.moveToZero();
@@ -733,9 +733,9 @@ the robot stands up and then flips, end over end. The argument provided to the
 function, ``5'' in this case, is the number of times to perform the motion.
 
 \section{Detailed Examples of Preprogrammed Motions and Writing Customized Motions}
-To help the user become acquainted with the MoBot control programs, sample
+To help the user become acquainted with the Mobot control programs, sample
 programs will be presented in this section to illustrate the basics and minimum requirements of
-a MoBot control program. The sample programs are located at 
+a Mobot control program. The sample programs are located at 
 \texttt{CHHOME/package/chmobot/demos}, where \texttt{CHHOME} is the 
 Ch home directory, such as \texttt{C:$\backslash$Ch} for Windows. For Windows,
 it is located at \texttt{C:$\backslash$Ch$\backslash$package$\backslash$chmobot$\backslash$demos} by default. 
@@ -749,14 +749,14 @@ can be implemented.
 
 \subsubsection{Demo Code for \texttt{inchworm2.ch} Explained}
 The first portion of the code is identical to the previous demo, and performs
-the same function of declaring a MoBot variable and connecting to a 
-paired MoBot.
+the same function of declaring a Mobot variable and connecting to a 
+paired Mobot.
 \begin{verbatim}
 #include <mobot.h>
 
 CMobot robot;
 
-/* Connect to the paired MoBot */
+/* Connect to the paired Mobot */
 robot.connect();
 \end{verbatim}
 
@@ -792,7 +792,7 @@ Finally, we perform the actual inchworm motion. The inchworm motion is a gait de
 by a sequence of motions performed by the body joints. The motions are as such:
 \begin{enumerate}
 \item The first body joint, referred to as joint A, rotates towards the ground.
-This drags the MoBot towards the direction of joint A. (Figure \ref{fig:inchworm2})
+This drags the Mobot towards the direction of joint A. (Figure \ref{fig:inchworm2})
 \item The other body joint, joint B, rotates towards the ground. Since the center
 of gravity is currently positioned over joint A, this causes the trailing body 
 joint to slide toward joint A. (Figure \ref{fig:inchworm3})
@@ -802,7 +802,7 @@ joint to slide toward joint A. (Figure \ref{fig:inchworm3})
 \end{enumerate}
 The direction of travel depends on the selection of the initial body joint. In
 the following code example, joint 2 is chosen as the initial body joint to move.
-In this case, the MoBot will traverse towards joint 2. The entire motion is
+In this case, the Mobot will traverse towards joint 2. The entire motion is
 encapsulated in a ``for'' loop which executes the entire motion four times.
 \begin{verbatim}
 /* Do the inchworm gait four times */
@@ -833,7 +833,7 @@ are executed:
 robot.moveJointTo(ROBOT_JOINT2, -85);
 robot.moveJointTo(ROBOT_JOINT3, 70);
 \end{verbatim}
-These movement commands cause the MoBot to curl up into a fetal position with
+These movement commands cause the Mobot to curl up into a fetal position with
 both of its endplates facing toward the ground. The next line, 
 
 \begin{verbatim}
@@ -842,22 +842,22 @@ sleep(1);
 causes the program to pause for one second before continuing. This allows the
 robot to settle down, in case it was still in motion from the last movement.
 
-Next, the MoBot rotates one 
+Next, the Mobot rotates one 
 of the endplates by 45 degrees. 
 \begin{verbatim}
 robot.moveJointTo(ROBOT_JOINT1, 45);
 \end{verbatim}
-This endplate will eventually become the ``foot'' of the standing MoBot. Next,
-the MoBot lifts itself into a standing position, balancing on its endplate.
+This endplate will eventually become the ``foot'' of the standing Mobot. Next,
+the Mobot lifts itself into a standing position, balancing on its endplate.
 \begin{verbatim}
 robot.moveJointTo(ROBOT_JOINT2, 20);
 \end{verbatim}
 Note that the previous joint angle for Joint 2, a body joint, was -85 degrees. 
 This motion causes joint 2 to rotate all the way to a 20 degree position, which
-lift up the body of the MoBot such that the MoBot is balancing on faceplate joint 1.
+lift up the body of the Mobot such that the Mobot is balancing on faceplate joint 1.
 
 Finally, we rotate joint 1, the foot joint, for three seconds which causes the
-entire MoBot to rotate in place. The speed is first set to 45 degrees per second to make the
+entire Mobot to rotate in place. The speed is first set to 45 degrees per second to make the
 rotation a slow rotation. Next, the \texttt{moveContinuousTime} member function
 is used to continuously rotate a joint for a desired amount of time.
 \begin{verbatim}
@@ -874,7 +874,7 @@ forcefully held in place at its current position. More information regarding the
 macros may be found in Section \ref{sec:robotJointState_t}.
 
 \section{\label{sec:blocking}Blocking and Non-Blocking Functions}
-All of the MoBot movement functions may be designated as either ``blocking'' 
+All of the Mobot movement functions may be designated as either ``blocking'' 
 functions or ``non-blocking'' functions. A blocking function is a function which
 does not return while operations are being performed. All standard C functions,
 such as \texttt{printf()}, are blocking functions. The
@@ -1029,7 +1029,7 @@ The first block of code,
 #include <mobot.h>
 CMobot robot;
 
-/* Connect to the paired MoBot */
+/* Connect to the paired Mobot */
 robot.connect();
 \end{verbatim}
 initialize the program and connect to the remote robot. Next, a series of
@@ -1059,7 +1059,7 @@ The first lines of the program,
 #include <mobot.h>
 CMobot robot;
 
-/* Connect to the paired MoBot */
+/* Connect to the paired Mobot */
 robot.connect();
 
 /* Set the robot to "home" position, where all joint angles are 0 degrees. */
@@ -1117,7 +1117,7 @@ robot.moveToZero();
 
 
 \section{Controlling Multiple Modules}
-The MoBot control software is designed to be able to control multiple modules
+The Mobot control software is designed to be able to control multiple modules
 simultaneously. There are some important differences in the program 
 which enable the control of multiple modules. A small demo program which
 controls two modules simultaneously will first be presented, followed by
@@ -1133,8 +1133,8 @@ The first two lines of interest appear as such:
   CMobot robot2;
 \end{verbatim}
 These two lines declare two separate variables which will represent the
-two separate MoBot modules. Next, we need to connect each variable to
-a physically separate MoBot. This is done with the following lines.
+two separate Mobot modules. Next, we need to connect each variable to
+a physically separate Mobot. This is done with the following lines.
 \begin{verbatim}
   robot1.connect();
   robot2.connect();
@@ -1176,7 +1176,7 @@ the robots have finished moving before the program continues.
   robot2.motionInchwormLeftNB(4);
 \end{verbatim}
 Similar to the calls to \texttt{moveToZeroNB()}, this block of code instructs 
-the first MoBot to stand and the second MoBot to perform the inchworm motion four times.
+the first Mobot to stand and the second Mobot to perform the inchworm motion four times.
 Note that we call the non-blocking versions of the
 functions, \texttt{motionStandNB()} and \texttt{motionInchwormLeftNB()}. Since these functions are
 non-blocking, both robots will effectively perform the motions simultaneously. 
@@ -1348,33 +1348,49 @@ group.motionUnstand(); /* Make the robots get back down from standing */
 makes both robots move back down from a standing position into a prone
 position.
 
-\section{Application Examples}
+\section{Data Acquisition}
 \subsection{Example 1}
 \subsubsection{Problem Statement}
-Rotate a faceplate joint 720 degrees at 45 degrees
- second. Plot the relationship between joint angle versus time for the 
- duration of the joint's movement at a rate of 10 data points per second.
+Roll a robot forward by rotating the wheels 720 degrees at 45 degrees per
+second. Record the motion of joint 1 during the motion and display a plot
+of the joint angle versus time.
 
 \subsubsection{\texttt{dataAcquisition.ch} Source Code}
+\verbatiminput{../demos/chdemos/dataAcquisition.ch}
+
+\section{Recalibrating the Mobot}
+It is possible to recalibrate the Mobot's zero positions. To recalibrate
+the Mobot, perform the following steps:
+\begin{itemize}
+\item Press both of the Mobot's ``A'' and ``B'' buttons simultaneously. The
+blue status LED light on the Mobot should blink several times and then remain
+off.
+\item Power off the Mobot.
+\item Manually move the Mobot joints into the correct zero position. This may be
+done visually, or by using flat surfaces as a guide.
+\item Power on the Mobot while it is in the correct zero position. After calibration,
+the Mobot will perform a short movement routine to test all of its joints. The
+Mobot has now been recalibrated.
+\end{itemize}
 
 \newpage
 \appendix
 \section{\label{sec:datatypes}Data Types}
 The data types defined in the header file \texttt{mobot.h} are described in
 this appendix.
-These data types are used by the MoBot library to represent 
+These data types are used by the Mobot library to represent 
 certain values, such as joint id's and motor directions.
 
 \begin{tabular}{p{3.5cm}p{10cm}} \hline 
 Data Type& Description \\
 \hline 
-\texttt{robotJointId\_t} & An enumerated value that indicates a MoBot joint. \\
-\texttt{robotJointState\_t} & The current state of a MoBot joint. \\
+\texttt{robotJointId\_t} & An enumerated value that indicates a Mobot joint. \\
+\texttt{robotJointState\_t} & The current state of a Mobot joint. \\
 \hline
 \end{tabular}
 
 \subsection{\label{sec:robotJointId_t}\texttt{robotJointId\_t}}
-This datatype is an enumerated type used to identify a joint on the MoBot. Valid
+This datatype is an enumerated type used to identify a joint on the Mobot. Valid
 values for this type are:
 \begin{verbatim}
 typedef enum mobot_joints_e {
@@ -1393,10 +1409,10 @@ typedef enum mobot_joints_e {
 \begin{tabular}{p{3cm}p{10cm}} \hline 
 Value & Description \\
 \hline 
-\texttt{ROBOT\_JOINT1} & Joint number 1 on the MoBot, which is a faceplate joint. \\
-\texttt{ROBOT\_JOINT2} & Joint number 2 on the MoBot, which is a body joint. \\
-\texttt{ROBOT\_JOINT3} & Joint number 3 on the MoBot, which is a body joint. \\
-\texttt{ROBOT\_JOINT4} & Joint number 4 on the MoBot, which is a faceplate joint. \\
+\texttt{ROBOT\_JOINT1} & Joint number 1 on the Mobot, which is a faceplate joint. \\
+\texttt{ROBOT\_JOINT2} & Joint number 2 on the Mobot, which is a body joint. \\
+\texttt{ROBOT\_JOINT3} & Joint number 3 on the Mobot, which is a body joint. \\
+\texttt{ROBOT\_JOINT4} & Joint number 4 on the Mobot, which is a faceplate joint. \\
 \hline
 \end{tabular}
 
