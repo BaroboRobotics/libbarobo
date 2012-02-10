@@ -1,9 +1,9 @@
 /* Filename: dataAcquisition.ch
- * Make a graph of the robot's joint angle versus time */
+ * Make a graph of the robot's joint angle versus time1 */
 
 #include <mobot.h>
 #include <chplot.h>
-#include <time.h>
+#include <numeric.h>
 
 int main() {
   CMobot robot;
@@ -14,46 +14,49 @@ int main() {
   double timeInterval = 0.1; /* Seconds */
 
   /* Figure out how many data points we will need. First, figure out the
-   * approximate amount of time the movement should take. */
+   * approximate amount of time1 the movement should take. */
   double movementTime = angle / speed; /* Seconds */
+  /* Add an extra second of recording time to make sure the entire movement is
+   * recorded */
+  movementTime = movementTime + 1; 
   int numDataPoints = movementTime / timeInterval; /* Unitless */
-  /* Add 20 more data points to make sure we capture the end of the motion */
-  numDataPoints += 20;
 
   /* Initialize the arrays to be used to store data */
-  array double x[numDataPoints];
-  array double y[numDataPoints];
+  array double time1[numDataPoints];
+  array double angles1[numDataPoints];
+
+  /* Declare plotting variables */
+  CPlot plot1, plot2;
+  array double angles1_unwrapped[numDataPoints];
 
   /* Start the motion. First, move robot to zero position */
   robot.moveToZero();
-  /* Wait for joints to settle */
-  msleep(1000);
   /* Set the joint 1 speed to 45 degrees/second */
   robot.setJointSpeed(ROBOT_JOINT1, speed);
-  /* Move the joint 720 degrees */
-  robot.moveNB(angle, 0, 0, angle);
 
   /* Start capturing data */
-  int i;
-  double time = 0;
-  for(i = 0; i < numDataPoints; i++) {
-    x[i] = time;
-    robot.getJointAngle(ROBOT_JOINT1, angle);
-    y[i] = angle;
-    msleep(100-44);
-    //usleep(50000);
-    time += 0.1;
-  }
+  robot.recordAngle(ROBOT_JOINT1, time1, angles1, numDataPoints, timeInterval * 1000);
+
+  /* Move the joint 720 degrees */
+  robot.moveNB(angle, 0, 0, angle);
+  robot.moveWait();
+  
+  /* Wait for recording to finish */
+  robot.recordWait();
 
   /* Plot the data */
-  CPlot plot;
-  /* Convert y to radians */
-  y = y * M_PI / 180.0;
-  array double y_unwrapped[numDataPoints];
-  unwrap(y_unwrapped, y);
-  /* Convert back to degrees */
-  y_unwrapped = y_unwrapped * 180.0 / M_PI;
-  plot.data2D(x, y_unwrapped);
-  plot.plotting();
+  plot1.title("Original Data for Joint Angle 1 versus Time");
+  plot1.label(PLOT_AXIS_X, "Time (seconds)");
+  plot1.label(PLOT_AXIS_Y, "Angle (degrees)");
+  plot1.data2D(time1, angles1);
+  plot1.plotting();
+
+  /* Plot the unwrapped data */
+  unwrapdeg(angles1_unwrapped, angles1);
+  plot2.title("Unwrapped Data for Joint Angle 1 versus Time");
+  plot2.label(PLOT_AXIS_X, "Time (seconds)");
+  plot2.label(PLOT_AXIS_Y, "Angle (degrees)");
+  plot2.data2D(time1, angles1_unwrapped);
+  plot2.plotting();
   return 0;
 }

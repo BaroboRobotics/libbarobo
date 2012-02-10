@@ -643,6 +643,18 @@ int CMobot::recordAngle(int id, double time[:], double angle[:], int num, int ms
     dlrunfun(fptr, &retval, recordAngle, this, id, time, angle, num, msecs);
     return retval;
 }
+int CMobot::recordAngles(double time[:], double angle1[:], double angle2[:], double angle3[:], double angle4[:], int num, int msecs) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "recordAngles_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, recordAngles, this, time, angle1, angle2, angle3, angle4, num, msecs);
+    return retval;
+}
 int CMobot::recordWait() {
     void *fptr;
     int retval;

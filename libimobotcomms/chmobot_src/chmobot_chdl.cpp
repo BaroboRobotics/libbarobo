@@ -529,6 +529,33 @@ EXPORTCH int recordAngle_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int recordAngles_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double* time;
+    double* angle1;
+    double* angle2;
+    double* angle3;
+    double* angle4;
+    int num;
+    int msecs;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    time = Ch_VaArg(interp, ap, double*);
+    angle1 = Ch_VaArg(interp, ap, double*);
+    angle2 = Ch_VaArg(interp, ap, double*);
+    angle3 = Ch_VaArg(interp, ap, double*);
+    angle4 = Ch_VaArg(interp, ap, double*);
+    num = Ch_VaArg(interp, ap, int);
+    msecs = Ch_VaArg(interp, ap, int);
+    retval = mobot->recordAngles(time, angle1, angle2, angle3, angle4, num, msecs);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int recordWait_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

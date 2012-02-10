@@ -76,6 +76,9 @@ typedef struct recordAngleArg_s
   robotJointId_t id;
   double *time;
   double *angle;
+  double *angle2;
+  double *angle3;
+  double *angle4;
   int num;
   int msecs;
 } recordAngleArg_t;
@@ -125,8 +128,22 @@ class CMobot {
     int moveToZeroNB();
 #ifdef _CH_
     int recordAngle(robotJointId_t id, double time[:], double angle[:], int num, int msecs);
+    int recordAngles(double time[:], 
+                     double angle1[:], 
+                     double angle2[:], 
+                     double angle3[:], 
+                     double angle4[:], 
+                     int num, 
+                     int msecs);
 #else
     int recordAngle(robotJointId_t id, double time[], double angle[], int num, int msecs);
+    int recordAngles(double time[], 
+                     double angle1[], 
+                     double angle2[], 
+                     double angle3[], 
+                     double angle4[], 
+                     int num, 
+                     int msecs);
 #endif
     int recordWait();
     int setJointSpeed(robotJointId_t id, double speed);
