@@ -6,14 +6,10 @@
   |---------|--------|        |---------|--------|     
  1|    2     |   3   | 4 <=> 1|    2    |   3    | 4
   |---------|--------|        |---------|--------|
-
 */
-
 #include <mobot.h>
-
 CMobot robot1;
 CMobot robot2;
-
 int i;
 
 /* Connect robot variables to the robot modules. */
@@ -55,7 +51,7 @@ robot1.moveToNB(0, -45, 45, 0);
 robot2.moveToNB(0, -45, 45, 0);
 robot1.moveWait();
 robot2.moveWait();
-sleep(4);
+sleep(3);
 robot1.moveToNB(0, -90, 0, 0);
 robot2.moveToNB(0, 0, 90,  0);
 robot1.moveWait();
@@ -75,7 +71,7 @@ robot1.moveToNB(0, 0, 90, 0);
 robot2.moveToNB(0, -90,  0, 0);
 robot1.moveWait();
 robot2.moveWait();
-sleep(4);
+sleep(3);
 robot1.moveToNB(0, -90, 0, 0);
 robot2.moveToNB(0, 0, 90,  0);
 robot1.moveWait();
@@ -90,7 +86,7 @@ robot1.moveToNB(0, 0, 90, 0);
 robot2.moveToNB(0, -90,  0, 0);
 robot1.moveWait();
 robot2.moveWait();
-sleep(4);
+sleep(3);
 /* walk left*/
 for(i = 0;i <3; i++){
     robot1.moveToNB(0, -60, 30, 0);

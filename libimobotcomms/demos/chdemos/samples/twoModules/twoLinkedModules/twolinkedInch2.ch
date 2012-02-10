@@ -6,8 +6,7 @@
   |---------|--------|        |---------|--------|     
  1|    2     |   3   | 4 <=> 1|    2    |   3    | 4
   |---------|--------|        |---------|--------|   
-   */
-
+*/
 #include <mobot.h>
 int i;
 CMobot robot1;
@@ -18,7 +17,6 @@ robot1.connect();
 robot2.connect();
 
 /* Set the robot to "home" position, where all joint angles are 0 degrees. */
-
 robot1.moveToZeroNB();
 robot2.moveToZeroNB();
 robot1.moveWait();

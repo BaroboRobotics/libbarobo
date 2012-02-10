@@ -6,10 +6,8 @@
  |---------|--------|     |---------|--------|        |---------|--------|   
 1|    2    |   3    | 4 X1|    2    |   3    | 4 X 1  |    2    |   3    | 4 
  |---------|--------|     |---------|--------|        |---------|--------|   
-   */
-
+*/
 #include <mobot.h>
-
 CMobot robot1;
 CMobot robot2;
 CMobot robot3;
@@ -124,7 +122,7 @@ robot2.moveWait();
 robot3.moveWait();
 sleep(2);
 
-/* third motion */
+/* tenth motion */
 robot1.moveToNB(0, 0, 90, 0);
 robot2.moveToNB(0, 0, 0, 0);
 robot3.moveToNB(0, -90, 0,  0);
@@ -133,7 +131,7 @@ robot2.moveWait();
 robot3.moveWait();
 sleep(2);
 
-/* tenth motion */
+/* 11th motion */
 robot1.moveJointNB(ROBOT_JOINT4, 90);
 robot2.moveToNB(0, 0, 0, 0);
 robot3.moveJointNB(ROBOT_JOINT1, 90);

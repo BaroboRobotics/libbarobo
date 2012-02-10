@@ -1,4 +1,4 @@
-/* Filename: walk.ch
+/* Filename: lift.ch
    Control two modules and make them stand simultaneously.
    The joint4 of the first robot should be connected to the joint1 
    of the second robot. 
@@ -6,8 +6,7 @@
   |---------|--------|        |---------|--------|     
  1|    2     |   3   | 4 <=> 1|    2    |   3    | 4
   |---------|--------|        |---------|--------|   
-   */
-
+*/
 #include <mobot.h>
 int i;
 CMobot robot1;
@@ -23,33 +22,22 @@ robot2.moveToZeroNB();
 robot1.moveWait();
 robot2.moveWait();
 
-/* lift */
-robot1.moveToNB(0, 0, 90, 0);
-robot2.moveToNB(0, -90,  0, 0);
+/* rolling */
+robot1.motionRollForwardNB(2*360);
+robot2.motionRollForwardNB(2*360);
 robot1.moveWait();
 robot2.moveWait();
 
-/* walk left*/
-for(i = 0;i <3; i++){
-    robot1.moveToNB(0, -60, 30, 0);
-    robot1.motionWait();
-    robot2.moveToNB(0, -30, 60, 0);
-    robot2.motionWait();
-    robot1.moveToNB(0, 0, 90, 0);
-    robot1.motionWait();
-    robot2.moveToNB(0, -90,  0, 0);
-    robot2.motionWait();
-}
+robot1.motionRollBackwardNB(2*360);
+robot2.motionRollBackwardNB(2*360);
+robot1.moveWait();
+robot2.moveWait();
+/*
+robot1.moveContinuousNB(ROBOT_JOINT_FORWARD, ROBOT_JOINT_HOLD, 
+                        ROBOT_JOINT_HOLD, ROBOT_JOINT_FORWARD);
+robot2.moveContinuousNB(ROBOT_JOINT_FORWARD, ROBOT_JOINT_HOLD, 
+                        ROBOT_JOINT_HOLD, ROBOT_JOINT_FORWARD);
+robot1.moveWait();
+robot2.moveWait();
+*/
 
-/* walk right*/
-for(i = 0;i <3; i++){
-    robot2.moveTo(0, -30, 60, 0);
-    robot2.motionWait();
-    robot1.moveTo(0, -60, 30, 0);
-    robot1.motionWait();
-
-    robot2.moveToNB(0, -90,  0, 0);
-    robot2.motionWait();
-    robot1.moveToNB(0, 0, 90, 0);
-    robot1.motionWait();
-}

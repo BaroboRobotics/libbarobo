@@ -1,13 +1,14 @@
 /* Filename: dance.ch
- * Control multiple MoBot modules simultaneously using the CMobotGroup class */
-
+ * Control multiple MoBot modules simultaneously using the CMobotGroup class. 
+   You may place the four robots as follows:
+      Robot1   Robot2
+      Robot3   Robot4
+*/
 #include <mobot.h>
-
 CMobot robot1;
 CMobot robot2;
 CMobot robot3;
 CMobot robot4;
-
 CMobotGroup group;
 
 /* Connect to the robots listed in the configuration file. */

@@ -6,13 +6,10 @@
   |---------|--------|        |---------|--------|     
  1|    2    |   3    | 4 <=> 1|    2    |   3    | 4
   |---------|--------|        |---------|--------|
-  */
-
+*/
 #include <mobot.h>
-
 CMobot robot1;
 CMobot robot2;
-
 int i;
 
 /* Connect robot variables to the robot modules. */
