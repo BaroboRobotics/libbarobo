@@ -125,10 +125,10 @@ void CiMobotController_WindowsDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_speed2, m_edit_MotorSpeed2);
 	DDX_Control(pDX, IDC_EDIT_speed3, m_edit_MotorSpeed3);
 	DDX_Control(pDX, IDC_EDIT_speed4, m_edit_MotorSpeed4);
-	DDX_Control(pDX, IDC_EDIT_setpos1, m_edit_setspd1);
-	DDX_Control(pDX, IDC_EDIT_setpos2, m_edit_setspd2);
-	DDX_Control(pDX, IDC_EDIT_setpos3, m_edit_setspd3);
-	DDX_Control(pDX, IDC_EDIT_setpos4, m_edit_setspd4);
+	DDX_Control(pDX, IDC_EDIT_setpos1, m_edit_setpos1);
+	DDX_Control(pDX, IDC_EDIT_setpos2, m_edit_setpos2);
+	DDX_Control(pDX, IDC_EDIT_setpos3, m_edit_setpos3);
+	DDX_Control(pDX, IDC_EDIT_setpos4, m_edit_setpos4);
 	DDX_Control(pDX, IDC_EDIT_setspd1, m_edit_setspd1);
 	DDX_Control(pDX, IDC_EDIT_setspd2, m_edit_setspd2);
 	DDX_Control(pDX, IDC_EDIT_setspd3, m_edit_setspd3);
@@ -473,9 +473,9 @@ void CiMobotController_WindowsDlg::UpdateSpeedSliders(int i, double speed)
 {
 		m_slider_Speeds[i]->SetPos( 180 - speed);
 		m_speeds[i] = speed;
-    wchar_t buf[200];
-    swprintf(buf, L"%lf", speed);
-    m_edit_MotorSpeeds[i]->SetWindowTextW(buf);
+    TCHAR buf[200];
+    _stprintf(buf, TEXT("%lf"), speed);
+    m_edit_MotorSpeeds[i]->SetWindowText(buf);
 }
 
 void CiMobotController_WindowsDlg::OnLbnSelchangeListgaits()
@@ -700,7 +700,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonrollleft()
 
 void CiMobotController_WindowsDlg::handlerLEFT()
 {
-  iMobotComms.motionTurnLeftNB(90);
+  iMobotComms.motionTurnLeftNB(360);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollright()
@@ -710,7 +710,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonrollright()
 
 void CiMobotController_WindowsDlg::handlerRIGHT()
 {
-  iMobotComms.motionTurnRightNB(90);
+  iMobotComms.motionTurnRightNB(360);
 }
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonrollback()
@@ -930,25 +930,25 @@ void CiMobotController_WindowsDlg::handlerSETPOS()
 	double pos;
 	int len;
 	memset(str, 0, sizeof(TCHAR)*80);
-	len = m_edit_setspd1.GetLine(0, str, 79);
+	len = m_edit_setpos1.GetLine(0, str, 79);
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
 		iMobotComms.moveJointToNB(ROBOT_JOINT1, pos);
 	}
 	memset(str, 0, sizeof(TCHAR)*80);
-	len = m_edit_setspd2.GetLine(0, str, 79);
+	len = m_edit_setpos2.GetLine(0, str, 79);
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
 		iMobotComms.moveJointToNB(ROBOT_JOINT2, pos);
 	}
 	memset(str, 0, sizeof(TCHAR)*80);
-	len = m_edit_setspd3.GetLine(0, str, 79);
+	len = m_edit_setpos3.GetLine(0, str, 79);
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
 		iMobotComms.moveJointToNB(ROBOT_JOINT3, pos);
 	}
 	memset(str, 0, sizeof(TCHAR)*80);
-	len = m_edit_setspd4.GetLine(0, str, 79);
+	len = m_edit_setpos4.GetLine(0, str, 79);
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
 		iMobotComms.moveJointToNB(ROBOT_JOINT4, pos);
