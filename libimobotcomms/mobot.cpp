@@ -611,9 +611,10 @@ int Mobot_moveContinuousTime(br_comms_t* comms,
                                   robotJointState_t dir2,
                                   robotJointState_t dir3,
                                   robotJointState_t dir4,
-                                  int msecs)
+                                  double seconds)
 {
   int i;
+  int msecs = seconds * 1000;
   Mobot_moveContinuousNB(comms, dir1, dir2, dir3, dir4);
 #ifdef _WIN32
   Sleep(msecs);
@@ -634,8 +635,9 @@ int Mobot_moveJointContinuousNB(br_comms_t* comms, robotJointId_t id, robotJoint
   return 0;
 }
 
-int Mobot_moveJointContinuousTime(br_comms_t* comms, robotJointId_t id, robotJointState_t dir, int msecs)
+int Mobot_moveJointContinuousTime(br_comms_t* comms, robotJointId_t id, robotJointState_t dir, double seconds)
 {
+  int msecs = seconds * 1000;
   Mobot_moveJointContinuousNB(comms, id, dir);
 #ifdef _WIN32
   Sleep(msecs);
@@ -810,10 +812,11 @@ int Mobot_moveWait(br_comms_t* comms)
 }
 
 void* Mobot_recordAngleThread(void* arg);
-int Mobot_recordAngle(br_comms_t* comms, robotJointId_t id, double* time, double* angle, int num, int msecs)
+int Mobot_recordAngle(br_comms_t* comms, robotJointId_t id, double* time, double* angle, int num, double timeInterval)
 {
   THREAD_T thread;
   recordAngleArg_t *rArg;
+  int msecs = timeInterval * 1000;
   if(comms->recordingInProgress[id-1]) {
     return -1;
   }
@@ -874,11 +877,12 @@ int Mobot_recordAngles(br_comms_t* comms,
                       double* angle3,
                       double* angle4,
                       int num,
-                      int msecs)
+                      double timeInterval)
 {
   int i;
   THREAD_T thread;
   recordAngleArg_t *rArg;
+  int msecs = timeInterval * 1000;
   for(i = 0; i < 4; i++) {
     if(comms->recordingInProgress[i]) {
       return -1;
@@ -1641,9 +1645,9 @@ int CMobot::moveJointContinuousNB(robotJointId_t id, robotJointState_t dir)
   return Mobot_moveJointContinuousNB(&_comms, id, dir);
 }
 
-int CMobot::moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, int msecs)
+int CMobot::moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, double seconds)
 {
-  return Mobot_moveJointContinuousTime(&_comms, id, dir, msecs);
+  return Mobot_moveJointContinuousTime(&_comms, id, dir, seconds);
 }
 
 int CMobot::moveJoint(robotJointId_t id, double angle)
@@ -1722,9 +1726,9 @@ int CMobot::moveContinuousNB( robotJointState_t dir1, robotJointState_t dir2, ro
   return Mobot_moveContinuousNB(&_comms, dir1, dir2, dir3, dir4);
 }
 
-int CMobot::moveContinuousTime( robotJointState_t dir1, robotJointState_t dir2, robotJointState_t dir3, robotJointState_t dir4, int msecs)
+int CMobot::moveContinuousTime( robotJointState_t dir1, robotJointState_t dir2, robotJointState_t dir3, robotJointState_t dir4, double seconds)
 {
-  return Mobot_moveContinuousTime(&_comms, dir1, dir2, dir3, dir4, msecs);
+  return Mobot_moveContinuousTime(&_comms, dir1, dir2, dir3, dir4, seconds);
 }
 
 int CMobot::moveTo( double angle1,
@@ -1773,9 +1777,9 @@ int CMobot::moveWait()
   return Mobot_moveWait(&_comms);
 }
 
-int CMobot::recordAngle(robotJointId_t id, double* time, double* angle, int num, int msecs)
+int CMobot::recordAngle(robotJointId_t id, double* time, double* angle, int num, double seconds)
 {
-  return Mobot_recordAngle(&_comms, id, time, angle, num, msecs);
+  return Mobot_recordAngle(&_comms, id, time, angle, num, seconds);
 }
 
 int CMobot::recordWait()
@@ -1789,9 +1793,9 @@ int CMobot::recordAngles(double *time,
     double *angle3, 
     double *angle4, 
     int num, 
-    int msecs)
+    double seconds)
 {
-  return Mobot_recordAngles(&_comms, time, angle1, angle2, angle3, angle4, num, msecs);
+  return Mobot_recordAngles(&_comms, time, angle1, angle2, angle3, angle4, num, seconds);
 }
 
 int CMobot::stop()
@@ -1981,8 +1985,9 @@ int CMobotGroup::moveContinuousTime(robotJointState_t dir1,
                            robotJointState_t dir2, 
                            robotJointState_t dir3, 
                            robotJointState_t dir4, 
-                           int msecs)
+                           double seconds)
 {
+  int msecs = seconds * 1000.0;
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->moveContinuousNB(dir1, dir2, dir3, dir4);
   }
@@ -2005,8 +2010,9 @@ int CMobotGroup::moveJointContinuousNB(robotJointId_t id, robotJointState_t dir)
   return 0;
 }
 
-int CMobotGroup::moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, int msecs)
+int CMobotGroup::moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, double seconds)
 {
+  int msecs = seconds * 1000.0;
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->moveJointContinuousNB(id, dir);
   }

@@ -136,14 +136,14 @@ DLLIMPORT int Mobot_moveContinuousTime(br_comms_t* comms,
                                   robotJointState_t dir2,
                                   robotJointState_t dir3,
                                   robotJointState_t dir4,
-                                  int msecs);
+                                  double seconds);
 DLLIMPORT int Mobot_moveJoint(br_comms_t* comms, robotJointId_t id, double angle);
 DLLIMPORT int Mobot_moveJointNB(br_comms_t* comms, robotJointId_t id, double angle);
 DLLIMPORT int Mobot_moveJointContinuousNB(br_comms_t* comms, robotJointId_t id, robotJointState_t dir);
 DLLIMPORT int Mobot_moveJointContinuousTime(br_comms_t* comms, 
                                             robotJointId_t id, 
                                             robotJointState_t dir, 
-                                            int msecs);
+                                            double seconds);
 DLLIMPORT int Mobot_moveJointTo(br_comms_t* comms, robotJointId_t id, double angle);
 DLLIMPORT int Mobot_moveJointToNB(br_comms_t* comms, robotJointId_t id, double angle);
 DLLIMPORT int Mobot_moveJointWait(br_comms_t* comms, robotJointId_t id);
@@ -165,7 +165,7 @@ DLLIMPORT int Mobot_recordAngle(br_comms_t* comms,
                                 double* time, 
                                 double* angle, 
                                 int num, 
-                                int msecs);
+                                double timeInterval);
 DLLIMPORT int Mobot_recordAngles(br_comms_t* comms, 
                                  double *time, 
                                  double* angle1, 
@@ -173,7 +173,7 @@ DLLIMPORT int Mobot_recordAngles(br_comms_t* comms,
                                  double* angle3,
                                  double* angle4,
                                  int num,
-                                 int msecs);
+                                 double timeInterval);
 DLLIMPORT int Mobot_recordWait(br_comms_t* comms);
 DLLIMPORT int Mobot_setJointDirection(br_comms_t* comms, robotJointId_t id, robotJointState_t dir);
 DLLIMPORT int Mobot_setJointSpeed(br_comms_t* comms, robotJointId_t id, double speed);

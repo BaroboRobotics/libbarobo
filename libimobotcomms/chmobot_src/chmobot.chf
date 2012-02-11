@@ -475,7 +475,7 @@ int CMobot::moveContinuousNB(int dir1, int dir2, int dir3, int dir4) {
     dlrunfun(fptr, &retval, moveContinuousNB, this, dir1, dir2, dir3, dir4);
     return retval;
 }
-int CMobot::moveContinuousTime(int dir1, int dir2, int dir3, int dir4, int msecs) {
+int CMobot::moveContinuousTime(int dir1, int dir2, int dir3, int dir4, double seconds) {
     void *fptr;
     int retval;
 
@@ -484,7 +484,7 @@ int CMobot::moveContinuousTime(int dir1, int dir2, int dir3, int dir4, int msecs
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, moveContinuousTime, this, dir1, dir2, dir3, dir4, msecs);
+    dlrunfun(fptr, &retval, moveContinuousTime, this, dir1, dir2, dir3, dir4, seconds);
     return retval;
 }
 int CMobot::moveJointContinuousNB(int id, int dir) {
@@ -499,7 +499,7 @@ int CMobot::moveJointContinuousNB(int id, int dir) {
     dlrunfun(fptr, &retval, moveJointContinuousNB, this, id, dir);
     return retval;
 }
-int CMobot::moveJointContinuousTime(int id, int dir, int msecs) {
+int CMobot::moveJointContinuousTime(int id, int dir, double seconds) {
     void *fptr;
     int retval;
 
@@ -508,7 +508,7 @@ int CMobot::moveJointContinuousTime(int id, int dir, int msecs) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, moveJointContinuousTime, this, id, dir, msecs);
+    dlrunfun(fptr, &retval, moveJointContinuousTime, this, id, dir, seconds);
     return retval;
 }
 int CMobot::moveJoint(int id, double angle) {
@@ -631,7 +631,7 @@ int CMobot::moveWait() {
     dlrunfun(fptr, &retval, moveWait, this);
     return retval;
 }
-int CMobot::recordAngle(int id, double time[:], double angle[:], int num, int msecs) {
+int CMobot::recordAngle(int id, double time[:], double angle[:], int num, double seconds) {
     void *fptr;
     int retval;
 
@@ -640,10 +640,10 @@ int CMobot::recordAngle(int id, double time[:], double angle[:], int num, int ms
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, recordAngle, this, id, time, angle, num, msecs);
+    dlrunfun(fptr, &retval, recordAngle, this, id, time, angle, num, seconds);
     return retval;
 }
-int CMobot::recordAngles(double time[:], double angle1[:], double angle2[:], double angle3[:], double angle4[:], int num, int msecs) {
+int CMobot::recordAngles(double time[:], double angle1[:], double angle2[:], double angle3[:], double angle4[:], int num, double seconds) {
     void *fptr;
     int retval;
 
@@ -652,7 +652,7 @@ int CMobot::recordAngles(double time[:], double angle1[:], double angle2[:], dou
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, recordAngles, this, time, angle1, angle2, angle3, angle4, num, msecs);
+    dlrunfun(fptr, &retval, recordAngles, this, time, angle1, angle2, angle3, angle4, num, seconds);
     return retval;
 }
 int CMobot::recordWait() {
@@ -1132,7 +1132,7 @@ int CMobotGroup::moveContinuousNB(int dir1, int dir2, int dir3, int dir4) {
     dlrunfun(fptr, &retval, moveContinuousNB, this, dir1, dir2, dir3, dir4);
     return retval;
 }
-int CMobotGroup::moveContinuousTime(int dir1, int dir2, int dir3, int dir4, int msecs) {
+int CMobotGroup::moveContinuousTime(int dir1, int dir2, int dir3, int dir4, double seconds) {
     void *fptr;
     int retval;
 
@@ -1141,7 +1141,7 @@ int CMobotGroup::moveContinuousTime(int dir1, int dir2, int dir3, int dir4, int 
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, moveContinuousTime, this, dir1, dir2, dir3, dir4, msecs);
+    dlrunfun(fptr, &retval, moveContinuousTime, this, dir1, dir2, dir3, dir4, seconds);
     return retval;
 }
 int CMobotGroup::moveJointContinuousNB(int id, int dir) {
@@ -1156,7 +1156,7 @@ int CMobotGroup::moveJointContinuousNB(int id, int dir) {
     dlrunfun(fptr, &retval, moveJointContinuousNB, this, id, dir);
     return retval;
 }
-int CMobotGroup::moveJointContinuousTime(int id, int dir, int msecs) {
+int CMobotGroup::moveJointContinuousTime(int id, int dir, double seconds) {
     void *fptr;
     int retval;
 
@@ -1165,7 +1165,7 @@ int CMobotGroup::moveJointContinuousTime(int id, int dir, int msecs) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, moveJointContinuousTime, this, id, dir, msecs);
+    dlrunfun(fptr, &retval, moveJointContinuousTime, this, id, dir, seconds);
     return retval;
 }
 int CMobotGroup::moveJointTo(int id, double angle) {

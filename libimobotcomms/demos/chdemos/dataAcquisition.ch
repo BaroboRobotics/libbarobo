@@ -33,9 +33,10 @@ int main() {
   robot.moveToZero();
   /* Set the joint 1 speed to 45 degrees/second */
   robot.setJointSpeed(ROBOT_JOINT1, speed);
+  robot.setJointSpeed(ROBOT_JOINT4, speed);
 
   /* Start capturing data */
-  robot.recordAngle(ROBOT_JOINT1, time1, angles1, numDataPoints, timeInterval * 1000);
+  robot.recordAngle(ROBOT_JOINT1, time1, angles1, numDataPoints, timeInterval);
 
   /* Move the joint 720 degrees */
   robot.moveNB(angle, 0, 0, angle);
@@ -49,6 +50,7 @@ int main() {
   plot1.label(PLOT_AXIS_X, "Time (seconds)");
   plot1.label(PLOT_AXIS_Y, "Angle (degrees)");
   plot1.data2D(time1, angles1);
+  plot1.grid(PLOT_ON);
   plot1.plotting();
 
   /* Plot the unwrapped data */
@@ -57,6 +59,7 @@ int main() {
   plot2.label(PLOT_AXIS_X, "Time (seconds)");
   plot2.label(PLOT_AXIS_Y, "Angle (degrees)");
   plot2.data2D(time1, angles1_unwrapped);
+  plot2.grid(PLOT_ON);
   plot2.plotting();
   return 0;
 }

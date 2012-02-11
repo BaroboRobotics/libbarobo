@@ -533,7 +533,7 @@ rotate the faceplates forward at the necessary rate to achieve a forward speed o
 Finally, the last two lines,
 \begin{verbatim}
 printf("Move continuously for 3 seconds.\n");
-robot.moveContinuousTime(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_FORWARD, 3000);
+robot.moveContinuousTime(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_FORWARD, 3);
 \end{verbatim}
 roll the robot forward for three seconds.
 
@@ -862,7 +862,7 @@ rotation a slow rotation. Next, the \texttt{moveContinuousTime} member function
 is used to continuously rotate a joint for a desired amount of time.
 \begin{verbatim}
 robot.setJointSpeed(ROBOT_JOINT1, 45);
-robot.moveContinuousTime(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_HOLD, 3000);
+robot.moveContinuousTime(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_HOLD, 3);
 \end{verbatim}
 
 The macros \texttt{ROBOT\_FORWARD} and \texttt{ROBOT\_BACKWARD}
