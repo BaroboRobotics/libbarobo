@@ -6,7 +6,7 @@ PKGDIR=$(PACKAGE)-$(VERSION)/$(PACKAGE)
 target: libmobot.dl
 
 libmobot.dl: mobot.o chmobot_chdl.o
-	ch dllink libmobot.dl cplusplus mobot.o chmobot_chdl.o -lbluetooth -lpthread
+	ch dllink libmobot.dl cplusplus mobot.o chmobot_chdl.o -lbluetooth -lpthread -lrt
 
 mobot.o: ../mobot.cpp $(HEADERS)
 	ch dlcomp libmobot.dl cplusplus ../mobot.cpp
@@ -34,7 +34,7 @@ createpkg: libmobot.dl
 	cp libmobot.dl $(PKGDIR)/dl
 	cp ../mobot.h $(PKGDIR)/include
 	cp ../docs/mobot.pdf $(PKGDIR)/docs
-	cp ../demos/chdemos/*.ch $(PKGDIR)/demos
+	cp -R ../demos/chdemos/* $(PKGDIR)/demos
 	cp Makefile $(PACKAGE)-$(VERSION)
 	cp Readme.txt $(PACKAGE)-$(VERSION)
 	zip -rq $(PACKAGE)-$(VERSION).zip $(PACKAGE)-$(VERSION)

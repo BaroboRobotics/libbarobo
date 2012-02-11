@@ -38,6 +38,8 @@
 #endif
 
 #define MOTORMAXSPEED (90.0*M_PI/180.0)
+#define angle2distance(radius, angle) ((radius) * ((angle) * M_PI / 180.0))
+#define distance2angle(radius, distance) (((distance) / (radius)) * 180 / M_PI)
 
 extern int g_numConnected;
 
@@ -69,6 +71,19 @@ extern "C" {
   DLLIMPORT double deg2rad(double deg);
   DLLIMPORT double rad2deg(double rad);
 }
+
+typedef struct recordAngleArg_s 
+{
+  br_comms_t* comms;
+  robotJointId_t id;
+  double *time;
+  double *angle;
+  double *angle2;
+  double *angle3;
+  double *angle4;
+  int num;
+  int msecs;
+} recordAngleArg_t;
 #endif
 
 #ifndef C_ONLY
@@ -99,9 +114,9 @@ class CMobot {
                            robotJointState_t dir2, 
                            robotJointState_t dir3, 
                            robotJointState_t dir4, 
-                           int msecs);
+                           double seconds);
     int moveJointContinuousNB(robotJointId_t id, robotJointState_t dir);
-    int moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, int msecs);
+    int moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, double seconds);
     int moveJoint(robotJointId_t id, double angle);
     int moveJointNB(robotJointId_t id, double angle);
     int moveJointTo(robotJointId_t id, double angle);
@@ -113,10 +128,31 @@ class CMobot {
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
+#ifdef _CH_
+    int recordAngle(robotJointId_t id, double time[:], double angle[:], int num, double seconds);
+    int recordAngles(double time[:], 
+                     double angle1[:], 
+                     double angle2[:], 
+                     double angle3[:], 
+                     double angle4[:], 
+                     int num, 
+                     double seconds);
+#else
+    int recordAngle(robotJointId_t id, double time[], double angle[], int num, double seconds);
+    int recordAngles(double time[], 
+                     double angle1[], 
+                     double angle2[], 
+                     double angle3[], 
+                     double angle4[], 
+                     int num, 
+                     double seconds);
+#endif
+    int recordWait();
     int setJointSpeed(robotJointId_t id, double speed);
     int setJointSpeeds(double speed1, double speed2, double speed3, double speed4);
     int setJointSpeedRatio(robotJointId_t id, double ratio);
     int setJointSpeedRatios(double ratios1, double ratios2, double ratios3, double ratios4);
+    int setMotorPower(robotJointId_t id, int power);
     int setTwoWheelRobotSpeed(double speed, double radius);
     int stop();
 
@@ -174,9 +210,9 @@ class CMobotGroup
                            robotJointState_t dir2, 
                            robotJointState_t dir3, 
                            robotJointState_t dir4, 
-                           int msecs);
+                           double seconds);
     int moveJointContinuousNB(robotJointId_t id, robotJointState_t dir);
-    int moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, int msecs);
+    int moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, double seconds);
     int moveJointTo(robotJointId_t id, double angle);
     int moveJointToNB(robotJointId_t id, double angle);
     int moveJointWait(robotJointId_t id);
@@ -186,9 +222,9 @@ class CMobotGroup
     int moveToZero();
     int moveToZeroNB();
     int setJointSpeed(robotJointId_t id, double speed);
-    int setJointSpeeds(robotJointId_t id, double speeds[4]);
+    int setJointSpeeds(double speed1, double speed2, double speed3, double speed4);
     int setJointSpeedRatio(robotJointId_t id, double ratio);
-    int setJointSpeedRatios(robotJointId_t id, double ratios[4]);
+    int setJointSpeedRatios(double ratio1, double ratio2, double ratio3, double ratio4);
     int setTwoWheelRobotSpeed(double speed, double radius);
     int stop();
 

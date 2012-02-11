@@ -291,7 +291,7 @@ EXPORTCH int moveContinuousTime_chdl(void *varg) {
     robotJointState_t dir2;
     robotJointState_t dir3;
     robotJointState_t dir4;
-    int msecs;
+    double seconds;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
@@ -300,8 +300,8 @@ EXPORTCH int moveContinuousTime_chdl(void *varg) {
     dir2 = Ch_VaArg(interp, ap, robotJointState_t);
     dir3 = Ch_VaArg(interp, ap, robotJointState_t);
     dir4 = Ch_VaArg(interp, ap, robotJointState_t);
-    msecs = Ch_VaArg(interp, ap, int);
-    retval = mobot->moveContinuousTime(dir1, dir2, dir3, dir4, msecs);
+    seconds = Ch_VaArg(interp, ap, double);
+    retval = mobot->moveContinuousTime(dir1, dir2, dir3, dir4, seconds);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -329,15 +329,15 @@ EXPORTCH int moveJointContinuousTime_chdl(void *varg) {
     class CMobot *mobot;
     robotJointId_t id;
     robotJointState_t dir;
-    int msecs;
+    double seconds;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobot *);
     id = Ch_VaArg(interp, ap, robotJointId_t);
     dir = Ch_VaArg(interp, ap, robotJointState_t);
-    msecs = Ch_VaArg(interp, ap, int);
-    retval = mobot->moveJointContinuousTime(id, dir, msecs);
+    seconds = Ch_VaArg(interp, ap, double);
+    retval = mobot->moveJointContinuousTime(id, dir, seconds);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -506,6 +506,69 @@ EXPORTCH int moveToZeroNB_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int recordAngle_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    robotJointId_t id;
+    double* time;
+    double* angle;
+    int num;
+    double seconds;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
+    time = Ch_VaArg(interp, ap, double*);
+    angle = Ch_VaArg(interp, ap, double*);
+    num = Ch_VaArg(interp, ap, int);
+    seconds = Ch_VaArg(interp, ap, double);
+    retval = mobot->recordAngle(id, time, angle, num, seconds);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int recordAngles_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double* time;
+    double* angle1;
+    double* angle2;
+    double* angle3;
+    double* angle4;
+    int num;
+    double seconds;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    time = Ch_VaArg(interp, ap, double*);
+    angle1 = Ch_VaArg(interp, ap, double*);
+    angle2 = Ch_VaArg(interp, ap, double*);
+    angle3 = Ch_VaArg(interp, ap, double*);
+    angle4 = Ch_VaArg(interp, ap, double*);
+    num = Ch_VaArg(interp, ap, int);
+    seconds = Ch_VaArg(interp, ap, double);
+    retval = mobot->recordAngles(time, angle1, angle2, angle3, angle4, num, seconds);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int recordWait_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    retval = mobot->recordWait();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int setJointSpeed_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -523,6 +586,28 @@ EXPORTCH int setJointSpeed_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int setJointSpeeds_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    robotJointId_t id;
+    double speed1;
+    double speed2;
+    double speed3;
+    double speed4;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    speed1 = Ch_VaArg(interp, ap, double);
+    speed2 = Ch_VaArg(interp, ap, double);
+    speed3 = Ch_VaArg(interp, ap, double);
+    speed4 = Ch_VaArg(interp, ap, double);
+    retval = mobot->setJointSpeeds(speed1, speed2, speed3, speed4);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int setJointSpeedRatio_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -536,6 +621,44 @@ EXPORTCH int setJointSpeedRatio_chdl(void *varg) {
     id = Ch_VaArg(interp, ap, robotJointId_t);
     speed = Ch_VaArg(interp, ap, double);
     retval = mobot->setJointSpeedRatio(id, speed);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int setJointSpeedRatios_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double ratio1;
+    double ratio2;
+    double ratio3;
+    double ratio4;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    ratio1 = Ch_VaArg(interp, ap, double );
+    ratio2 = Ch_VaArg(interp, ap, double );
+    ratio3 = Ch_VaArg(interp, ap, double );
+    ratio4 = Ch_VaArg(interp, ap, double );
+    retval = mobot->setJointSpeedRatios(ratio1, ratio2, ratio3, ratio4);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int setMotorPower_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    robotJointId_t id;
+    int power;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
+    power = Ch_VaArg(interp, ap, int);
+    retval = mobot->setMotorPower(id, power);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -989,7 +1112,7 @@ EXPORTCH int CMG_moveContinuousTime_chdl(void *varg) {
     robotJointState_t dir2;
     robotJointState_t dir3;
     robotJointState_t dir4;
-    int msecs;
+    double seconds;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
@@ -998,8 +1121,8 @@ EXPORTCH int CMG_moveContinuousTime_chdl(void *varg) {
     dir2 = Ch_VaArg(interp, ap, robotJointState_t);
     dir3 = Ch_VaArg(interp, ap, robotJointState_t);
     dir4 = Ch_VaArg(interp, ap, robotJointState_t);
-    msecs = Ch_VaArg(interp, ap, int);
-    retval = mobot->moveContinuousTime(dir1, dir2, dir3, dir4, msecs);
+    seconds = Ch_VaArg(interp, ap, double );
+    retval = mobot->moveContinuousTime(dir1, dir2, dir3, dir4, seconds);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -1027,15 +1150,15 @@ EXPORTCH int CMG_moveJointContinuousTime_chdl(void *varg) {
     class CMobotGroup *mobot;
     robotJointId_t id;
     robotJointState_t dir;
-    int msecs;
+    double seconds;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
     id = Ch_VaArg(interp, ap, robotJointId_t);
     dir = Ch_VaArg(interp, ap, robotJointState_t);
-    msecs = Ch_VaArg(interp, ap, int);
-    retval = mobot->moveJointContinuousTime(id, dir, msecs);
+    seconds = Ch_VaArg(interp, ap, double);
+    retval = mobot->moveJointContinuousTime(id, dir, seconds);
     Ch_VaEnd(interp, ap);
     return retval;
 }

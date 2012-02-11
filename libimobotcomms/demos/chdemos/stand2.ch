@@ -1,8 +1,6 @@
 /* Filename: stand2.ch 
  * Make a MoBot stand up on a faceplate */
-
 #include <mobot.h>
-
 CMobot robot;
 
 /* Connect to the paired MoBot */
@@ -29,5 +27,5 @@ robot.moveJointTo(ROBOT_JOINT2, 20);
 
 /* Pan the robot around for 3 seconds at 45 degrees per second*/
 robot.setJointSpeed(ROBOT_JOINT1, 45);
-robot.moveContinuousTime(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_HOLD, 3000);
+robot.moveContinuousTime(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_HOLD, 3);
 

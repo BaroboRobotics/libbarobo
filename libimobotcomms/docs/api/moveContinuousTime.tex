@@ -15,7 +15,7 @@ int CMobot::moveContinuousTime( robotJointState_t dir1,
                                 robotJointState_t dir2, 
                                 robotJointState_t dir3, 
                                 robotJointState_t dir4, 
-                                int msecs);
+                                double seconds);
 \end{verbatim}
 
 \noindent
@@ -30,19 +30,14 @@ The function returns 0 on success and non-zero otherwise.\\
 {\bf Parameters}\\
 Each direction parameter specifies the direction the joint should move. The types
 are enumerated in \texttt{mobot.h} and have the following values:
-\begin{itemize}
-\item \texttt{ROBOT\_NEUTRAL} : The joint should not move.
-\item \texttt{ROBOT\_FORWARD} : The joint will begin moving in the positive direction.
-\item \texttt{ROBOT\_BACKWARD}: The joint will begin moving in the negative direction.
-\item \texttt{ROBOT\_HOLD}: The joint will actively hold its current position.
-\end{itemize}
-The \texttt{msecs} parameter is the time to perform the movement, in milliseconds.
+\input{jointStateTable}
+The \texttt{seconds} parameter is the time to perform the movement, in seconds.
 \\
 
 \noindent
 {\bf Description}\\
 This function causes joints of a robot to begin moving. The joints will continue moving
-until the joint hits a joint limit, or the time specified in the \texttt{msecs} parameter
+until the joint hits a joint limit, or the time specified in the \texttt{seconds} parameter
 is reached. This function will block until the motion is completed.\\
 
 \noindent
