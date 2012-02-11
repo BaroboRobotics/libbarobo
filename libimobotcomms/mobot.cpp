@@ -865,8 +865,9 @@ void* Mobot_recordAngleThread(void* arg)
     }
   }
   rArg->comms->recordingInProgress[rArg->id-1] = 0;
-  return NULL;
 #endif
+  return NULL;
+
 }
 
 void* recordAnglesThread(void* arg);
@@ -938,8 +939,9 @@ void* recordAnglesThread(void* arg)
   for(i = 0; i < 4; i++) {
     rArg->comms->recordingInProgress[i] = 0;
   }
-  return NULL;
 #endif
+  return NULL;
+
 }
 
 int Mobot_recordWait(br_comms_t* comms)
@@ -947,7 +949,11 @@ int Mobot_recordWait(br_comms_t* comms)
   int i;
   for(i = 0; i < 4; i++) {
     while(comms->recordingInProgress[i]) {
+#ifndef _WIN32
       usleep(100000);
+#else
+	  Sleep(100);
+#endif
     }
   }
   return 0;
