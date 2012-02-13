@@ -1,4 +1,4 @@
-/* Filename: group.ch
+/* Filename: groups.ch
  * Control multiple MoBot modules simultaneously using the CMobotGroup class */
 #include <mobot.h>
 CMobot robot1;
