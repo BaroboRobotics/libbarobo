@@ -1,5 +1,5 @@
 /* Filename: groups.ch
- * Control multiple MoBot modules simultaneously using the CMobotGroup class */
+ * Control multiple Mobot groups simultaneously using the CMobotGroup class */
 #include <mobot.h>
 CMobot robot1;
 CMobot robot2;
@@ -33,8 +33,19 @@ groupB.addRobot(robot1);
 groupB.addRobot(robot2);
 
 /* Group C */
-groupC.addRobot(robot1);
-groupC.addRobot(robot2);
+groupC.addRobot(robot3);
+groupC.addRobot(robot4);
+
+/* Group D */
+groupD.addRobot(robot1);
+groupD.addRobot(robot2);
+groupD.addRobot(robot3);
+
+/* Make group B roll forward and group C roll backward at the same time */
+groupB.motionRollForwardNB(360);
+groupC.motionRollBackwardNB(360);
+groupB.motionWait();
+groupC.motionWait();
 
 /* Make all the robot stand up */
 groupA.motionStand();
@@ -46,9 +57,8 @@ groupC.moveNB(-360, 0, 0, -360);
 groupB.moveWait();
 groupC.moveWait();
 
-/* Make robot 4 unstand and inchworm while the remaining robots spin a couple
- * more times */
-groupC.moveNB(720, 0, 0, 720);
+/* Make robot 4 unstand and inchworm while the remaining robots spin. */
+groupD.moveContinuousNB(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_FORWARD);
 robot4.motionUnstand();
 robot4.motionInchwormLeft(2);
-groupC.moveWait();
+groupD.motionUnstand();

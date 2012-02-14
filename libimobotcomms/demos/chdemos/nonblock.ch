@@ -1,9 +1,9 @@
 /* File: nonblock.ch
-   use the non-blocking functoin move() . */
+   use the non-blocking functoin moveNB() . */
 #include <mobot.h>
 CMobot robot;
 
-/* Connect to the paired MoBot */
+/* Connect to the paired Mobot */
 robot.connect();
 
 robot.moveToZero();

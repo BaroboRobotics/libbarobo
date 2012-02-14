@@ -3,7 +3,7 @@
 #include <mobot.h>
 CMobot robot;
 
-/* Connect to the paired MoBot */
+/* Connect to the paired Mobot */
 robot.connect();
 
 /* Set robot motors to speed of 0.50 */

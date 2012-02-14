@@ -1,9 +1,9 @@
 /* Filename: stand.ch 
- * Make a MoBot stand up on a faceplate */
+ * Make a Mobot stand up on a faceplate */
 #include <mobot.h>
 CMobot robot;
 
-/* Connect to the MoBot */
+/* Connect to the Mobot */
 robot.connect();
 /* Run the built-in motionStand function */
 robot.motionStand();

@@ -1,5 +1,5 @@
 /* Filename: lift.ch
-   Control two modules and make them stand simultaneously.
+   Lift two connected robots.
    Joint 4 of the 1st robot should be connected to 
    Joint 1 of the 2nd robot as
            1st                       2nd

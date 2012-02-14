@@ -1,9 +1,9 @@
 /* Filename: start.ch 
- * Move the robot endplates. */
+ * Move the robot faceplates. */
 #include <mobot.h>
 CMobot robot;
 
-/* Connect to the paired MoBot */
+/* Connect to the paired Mobot */
 robot.connect();
 
 /* Set the robot to "home" position, where all joint angles are 0 degrees. */

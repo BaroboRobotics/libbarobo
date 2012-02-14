@@ -1,5 +1,5 @@
 /* Filename: dance.ch
- * Control multiple MoBot modules simultaneously using the CMobotGroup class. 
+ * Control multiple Mobot modules simultaneously using the CMobotGroup class. 
    You may place the four robots as follows:
       Robot1   Robot2
       Robot3   Robot4
