@@ -829,6 +829,7 @@ int Mobot_recordAngle(br_comms_t* comms, robotJointId_t id, double* time, double
   rArg->msecs = msecs;
   comms->recordingInProgress[id-1] = 1;
   THREAD_CREATE(&thread, Mobot_recordAngleThread, rArg);
+  return 0;
 }
 
 #ifndef _WIN32
@@ -865,8 +866,31 @@ void* Mobot_recordAngleThread(void* arg)
     }
   }
   rArg->comms->recordingInProgress[rArg->id-1] = 0;
-  return NULL;
+#else
+  recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
+  int i;
+  DWORD cur_time, itime;
+  unsigned int dt;
+  double start_time;
+  for(i = 0; i < rArg->num; i++) {
+    cur_time = GetTickCount();
+    Mobot_getJointAngleTime(rArg->comms, rArg->id, &rArg->time[i], &rArg->angle[i]);
+    if(i == 0) {
+      start_time = rArg->time[i];
+    }
+    rArg->time[i] = rArg->time[i] - start_time;
+    /* Convert angle to degrees */
+    rArg->angle[i] = RAD2DEG(rArg->angle[i]);
+    itime = GetTickCount();
+    dt = itime - cur_time;
+    if(dt < (rArg->msecs)) {
+      Sleep(rArg->msecs - dt);
+    }
+  }
+  rArg->comms->recordingInProgress[rArg->id-1] = 0;
 #endif
+  return NULL;
+
 }
 
 void* recordAnglesThread(void* arg);
@@ -901,6 +925,7 @@ int Mobot_recordAngles(br_comms_t* comms,
     comms->recordingInProgress[i] = 1;
   }
   THREAD_CREATE(&thread, recordAnglesThread, rArg);
+  return 0;
 }
 
 void* recordAnglesThread(void* arg)
@@ -938,8 +963,42 @@ void* recordAnglesThread(void* arg)
   for(i = 0; i < 4; i++) {
     rArg->comms->recordingInProgress[i] = 0;
   }
-  return NULL;
+#else
+  recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
+  int i;
+  DWORD cur_time, itime;
+  unsigned int dt;
+  double start_time;
+  for(i = 0; i < rArg->num; i++) {
+    cur_time = GetTickCount();
+    Mobot_getJointAnglesTime(
+        rArg->comms, 
+        &rArg->time[i], 
+        &rArg->angle[i], 
+        &rArg->angle2[i], 
+        &rArg->angle3[i], 
+        &rArg->angle4[i]);
+    if(i == 0) {
+      start_time = rArg->time[i];
+    }
+    rArg->time[i] = rArg->time[i] - start_time;
+    /* Convert angle to degrees */
+    rArg->angle[i] = RAD2DEG(rArg->angle[i]);
+    rArg->angle2[i] = RAD2DEG(rArg->angle2[i]);
+    rArg->angle3[i] = RAD2DEG(rArg->angle3[i]);
+    rArg->angle4[i] = RAD2DEG(rArg->angle4[i]);
+    itime = GetTickCount();
+    dt = itime - cur_time;
+    if(dt < (rArg->msecs)) {
+      Sleep(rArg->msecs - dt);
+    }
+  }
+  for(i = 0; i < 4; i++) {
+    rArg->comms->recordingInProgress[i] = 0;
+  }
 #endif
+  return NULL;
+
 }
 
 int Mobot_recordWait(br_comms_t* comms)
@@ -947,7 +1006,11 @@ int Mobot_recordWait(br_comms_t* comms)
   int i;
   for(i = 0; i < 4; i++) {
     while(comms->recordingInProgress[i]) {
+#ifndef _WIN32
       usleep(100000);
+#else
+	  Sleep(100);
+#endif
     }
   }
   return 0;
