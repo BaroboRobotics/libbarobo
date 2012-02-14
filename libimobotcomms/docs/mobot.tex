@@ -266,6 +266,68 @@ preprogrammed motions for the Mobot. To execute a preprogrammed motion, simply
 click on the name of the motion you wish to execute, and then click the button
 labeled ``Play''.
 
+\subsection{Application Example}
+\subsubsection{Problem Statement}
+A robot has two 3.5 inch diameter wheels. It is moving at a constant velocity
+by turning its wheels 45 degrees per second. 
+\begin{enumerate}
+\item How long will it take for the robot to rotate its wheels 2 full rotations, or 720 degrees?
+\item During that time, how far should the robot travel? Verify your results by measuring
+the distance the real robot travels during the calculated time.
+\end{enumerate}
+
+\subsubsection{Problem Solution}
+\begin{enumerate}
+\item We are given that a robot is turning its wheels at 45 degrees per second, and 
+needs to rotate the wheels 720 degrees. The amount of time this will take is
+\begin{equation*}
+\frac{720 ~\mathrm{degrees}}{45 ~\mathrm{degrees/second}} = 16 ~\mathrm{seconds}
+\end{equation*}
+
+\item The circumference of a circle can be determined with the equation
+\begin{equation*}
+c = 2 \pi r
+\end{equation*}, where $r$ is the radius of the circle. Since our robot will
+turn its wheels two full rotations during the motion, it will travel 2 circumferences
+in distance. Thus, the distance the robot should travel is
+\begin{equation*}
+d = 2 \times c = 2 \times (2 \pi r) = 4 \pi r
+\end{equation*}
+The radius of a circle is half of its diameter, which is $3.5 / 2 = 1.75$ inches, 
+in our case. Plugging in our numbers, we have
+\begin{equation*}
+d = 4 \times \pi \times 1.75 = 21.99
+\end{equation*}
+Our robot should travel approximately 22 inches during the 16 second motion.
+\end{enumerate}
+
+To verify these results with a real robot the RobotController program may be used.
+\begin{enumerate}
+\item Affix two 3.5 inch diameter wheels to the faceplates.
+\item Set the joint speeds for joints 1 and 4 to 45 degrees per second. This may
+be done by typing "45" into the appropriate text boxes for joint 1 and 4 speeds at 
+the bottom left of the RobotController and then clicking the "Set" button.
+\item While holding the robot off the ground, make the robot begin turning its wheels
+by clicking on the up arrows for joints 1 and 4 in the ``Individual Joint Control"
+section of the RobotController.
+\item Using a stopwatch, place the robot on the ground and time its progress
+for 16 seconds. The distance the robot travels should be approximately 22 inches.
+\end{enumerate}
+
+Alternatively, the following method may be used:
+\begin{enumerate}
+\item Set the robot on the ground.
+\item Set the joint speeds of joints 1 and 4 to 45 degrees per second.
+\item Click on the ``Up'' arrow in the ``Rolling Control'' section of the
+Robot Controller. This will roll the robot forward by rotating the faceplates
+360 degrees.
+\item Once the robot has stopped moving, click again on the ``Up'' arrow. This
+will roll the robot an additional 360 degrees, thereby rolling each of the wheels
+a total of 720 degrees.
+\item The distance the robot has traveled can then be measured, and should be
+approximately 22 inches.
+\end{enumerate}
+
 \section{Getting Started with Programming the Mobot}
 Before the Ch program is executed, the Bluetooth addresses of the robots
 need to be added using the RobotController as described in Section \ref{sec:pairing}.
