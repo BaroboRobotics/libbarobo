@@ -11,7 +11,7 @@
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::recordAngle(robotJointId_t id, double time[:], double angle[:], int num, int msecs);
+int CMobot::recordAngle(robotJointId_t id, double time[:], double angle[:], int num, double seconds);
 \end{verbatim}
 
 \noindent
@@ -34,7 +34,8 @@ discussed in Section \ref{sec:robotJointId_t} on page
 \texttt{time} & An array which will store time values for each of the angle readings. \\
 \texttt{angle} & An array which will store the angle values for each time. \\
 \texttt{num} & The size of the arrays. \\
-\texttt{msecs} & The number of milliseconds between angle readings.
+\texttt{seconds} & The number of seconds between angle readings. The minimum value allowed for
+this variable is 0.05.
 \end{tabular}
 \end{description}
 
@@ -42,13 +43,15 @@ discussed in Section \ref{sec:robotJointId_t} on page
 {\bf Description}\\
 This function is used to accurately record the motion of a Mobot joint at a relatively fast
 rate. The function will fill the \texttt{time} and \texttt{angle} arrays with data
-at the rate specified by \texttt{msecs}. If the communication speed cannot maintain 
+at the rate specified by \texttt{seconds}. If the communication speed cannot maintain 
 the requested rate, (if \texttt{msecs} is too low, in other words), the function will
-collect data as fast as possible. 
+collect data as fast as possible. The minimum value for \texttt{seconds} is 0.05, but
+the actual minimum time will depend on other factors, such as communication noise and
+distance to the robot.
 
 The length of time to collect the data can be calculated by the formula \\
 \begin{equation*}
-\text{seconds} = (\text{num} \times \text{msecs}) / 1000
+\text{Total Time} = (\text{num} \times \text{seconds}) 
 \end{equation*}
 
 This function is a non-blocking function. After calling this function, a call to
@@ -60,5 +63,5 @@ This function is a non-blocking function. After calling this function, a call to
 
 \noindent
 {\bf See Also}\\
-\texttt{recordAngles(), recordWait()}
+\texttt{recordAngles(), recordWait()} \\
 %\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

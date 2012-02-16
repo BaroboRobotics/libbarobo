@@ -4,7 +4,7 @@
 CMobot robot; 
 double angle1, angle4;
 
-/* Connect to the paired MoBot */
+/* Connect to the paired Mobot */
 if(robot.connect())
 {
     printf("Failed to connect to the robot.\n");

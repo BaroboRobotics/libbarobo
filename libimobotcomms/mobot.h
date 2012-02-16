@@ -37,7 +37,6 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-#define MOTORMAXSPEED (90.0*M_PI/180.0)
 #define angle2distance(radius, angle) ((radius) * ((angle) * M_PI / 180.0))
 #define distance2angle(radius, distance) (((distance) / (radius)) * 180 / M_PI)
 

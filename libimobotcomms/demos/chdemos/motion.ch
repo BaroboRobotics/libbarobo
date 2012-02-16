@@ -3,7 +3,7 @@
 #include <mobot.h>
 CMobot robot;
 
-/* Connect to the paired MoBot */
+/* Connect to the paired Mobot */
 robot.connect();
 
 /* Set the robot to "home" position, where all joint angles are 0 degrees. */
@@ -20,4 +20,4 @@ robot.motionTurnRight(360);
 robot.motionStand();
 robot.move(360, 0, 0, 360);
 robot.motionUnstand();
-robot.motionTumble(5);
+robot.motionTumble(2);

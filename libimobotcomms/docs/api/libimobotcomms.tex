@@ -38,40 +38,23 @@ and select the menu item ``Robot $\rightarrow$ Configure Robot Bluetooth''. \\
 \texttt{isMoving()} & This function is used to check if any joints are currently in motion. \\
 \texttt{move()} & Move all four joints of the robot by specified angles. \\
 \texttt{moveNB()} & Identical to \texttt{move()} but non-blocking. \\
-
-\begin{comment}
-\hline
-\end{tabular}
-\end{center}
-\label{mobilec_api_cbinary}
-\end{table}
-
-\addtocounter{table}{-1}
-\begin{table}[!H]
-%\capstart
-\begin{center}
-\caption{CMobot Member Functions (Continued).}
-\begin{tabular}{p{38 mm}p{77 mm}}
-%\begin{tabular}{ll}
-\hline
-Function & Description \\
-\hline
-\end{comment}
-
 \texttt{moveContinuousNB()} & Move joints continuously. Joints will move untill stopped.\\
 \texttt{moveContinuousTime()} & Move joints continuously for a certain amount of time.\\
-\texttt{moveTo()} & Move all four joints of the robot to specified absolute angles. \\
-\texttt{moveToNB()} & Identical to \texttt{moveTo()} but non-blocking. \\
 \texttt{moveJoint()} & Move a joint. \\
 \texttt{moveJointNB()} & Move a joint. \\
 \texttt{moveJointTo()} & Set the desired motor position for a joint. \\
 \texttt{moveJointToNB()} & Identical to \texttt{moveJointTo()} but non-blocking. \\
 \texttt{moveJointWait()} & Wait until the specified motor has stopped moving. \\
-\texttt{moveWait()} & Wait until all motors have stopped moving. \\
+\texttt{moveTo()} & Move all four joints of the robot to specified absolute angles. \\
+\texttt{moveToNB()} & Identical to \texttt{moveTo()} but non-blocking. \\
 \texttt{moveToZero()} & Instruct all motors to go to their zero positions. \\
 \texttt{moveToZeroNB()} & Identical to \texttt{moveToZero()} but non-blocking. \\
+\texttt{moveWait()} & Wait until all motors have stopped moving. \\
 %\texttt{setJointDirection()} & Set the motor direction of a motor. Set
 %to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
+\texttt{recordAngle()} & Begin recording the angle of a joint. \\
+\texttt{recordAngles()} & Begin recording the angle of all joints. \\
+\texttt{recordWait()} & Wait for recording operations to finish. \\
 \texttt{setJointSpeed()} & Set a motor's speed setting in radians per second. \\
 \texttt{setJointSpeeds()} & Set all motor speeds in radians per second. \\
 \texttt{setJointSpeedRatio()} & Set a joints speed setting to a fraction of its maximum speed, a value between 0 and 1. \\
@@ -148,13 +131,15 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \input{api/move}
 \input{api/moveContinuousNB}
 \input{api/moveContinuousTime}
-\input{api/moveTo}
 \input{api/moveJoint}
 \input{api/moveJointTo}
 \input{api/moveJointWait}
-\input{api/moveWait}
+\input{api/moveTo}
 \input{api/moveToZero}
+\input{api/moveWait}
 \input{api/recordAngle}
+\input{api/recordAngles}
+\input{api/recordWait}
 %\input{api/setJointDirection}
 \input{api/setJointSpeed}
 \input{api/setJointSpeedRatio}

@@ -829,6 +829,7 @@ int Mobot_recordAngle(br_comms_t* comms, robotJointId_t id, double* time, double
   rArg->msecs = msecs;
   comms->recordingInProgress[id-1] = 1;
   THREAD_CREATE(&thread, Mobot_recordAngleThread, rArg);
+  return 0;
 }
 
 #ifndef _WIN32
@@ -862,6 +863,28 @@ void* Mobot_recordAngleThread(void* arg)
     dt = diff_msecs(cur_time, itime);
     if(dt < (rArg->msecs)) {
       usleep(rArg->msecs*1000 - dt*1000);
+    }
+  }
+  rArg->comms->recordingInProgress[rArg->id-1] = 0;
+#else
+  recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
+  int i;
+  DWORD cur_time, itime;
+  unsigned int dt;
+  double start_time;
+  for(i = 0; i < rArg->num; i++) {
+    cur_time = GetTickCount();
+    Mobot_getJointAngleTime(rArg->comms, rArg->id, &rArg->time[i], &rArg->angle[i]);
+    if(i == 0) {
+      start_time = rArg->time[i];
+    }
+    rArg->time[i] = rArg->time[i] - start_time;
+    /* Convert angle to degrees */
+    rArg->angle[i] = RAD2DEG(rArg->angle[i]);
+    itime = GetTickCount();
+    dt = itime - cur_time;
+    if(dt < (rArg->msecs)) {
+      Sleep(rArg->msecs - dt);
     }
   }
   rArg->comms->recordingInProgress[rArg->id-1] = 0;
@@ -902,6 +925,7 @@ int Mobot_recordAngles(br_comms_t* comms,
     comms->recordingInProgress[i] = 1;
   }
   THREAD_CREATE(&thread, recordAnglesThread, rArg);
+  return 0;
 }
 
 void* recordAnglesThread(void* arg)
@@ -934,6 +958,39 @@ void* recordAnglesThread(void* arg)
     dt = diff_msecs(cur_time, itime);
     if(dt < (rArg->msecs)) {
       usleep(rArg->msecs*1000 - dt*1000);
+    }
+  }
+  for(i = 0; i < 4; i++) {
+    rArg->comms->recordingInProgress[i] = 0;
+  }
+#else
+  recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
+  int i;
+  DWORD cur_time, itime;
+  unsigned int dt;
+  double start_time;
+  for(i = 0; i < rArg->num; i++) {
+    cur_time = GetTickCount();
+    Mobot_getJointAnglesTime(
+        rArg->comms, 
+        &rArg->time[i], 
+        &rArg->angle[i], 
+        &rArg->angle2[i], 
+        &rArg->angle3[i], 
+        &rArg->angle4[i]);
+    if(i == 0) {
+      start_time = rArg->time[i];
+    }
+    rArg->time[i] = rArg->time[i] - start_time;
+    /* Convert angle to degrees */
+    rArg->angle[i] = RAD2DEG(rArg->angle[i]);
+    rArg->angle2[i] = RAD2DEG(rArg->angle2[i]);
+    rArg->angle3[i] = RAD2DEG(rArg->angle3[i]);
+    rArg->angle4[i] = RAD2DEG(rArg->angle4[i]);
+    itime = GetTickCount();
+    dt = itime - cur_time;
+    if(dt < (rArg->msecs)) {
+      Sleep(rArg->msecs - dt);
     }
   }
   for(i = 0; i < 4; i++) {
@@ -1337,8 +1394,13 @@ int Mobot_motionTumble(br_comms_t* comms, int num)
     Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(0));
     Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(0));
     Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(80));
-    Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(45));
+    if(i != (num-1)) {
+      Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(45));
+    }
   }
+  Mobot_moveJointToNB(comms, ROBOT_JOINT2, 0);
+  Mobot_moveJointToNB(comms, ROBOT_JOINT3, 0);
+  Mobot_moveWait(comms);
   return 0;
 }
 

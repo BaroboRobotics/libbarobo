@@ -4,9 +4,9 @@
 int setMotorDirection(int motor, int direction)
 {
   if(g_isConnected) {
-    return Mobot_setJointDirection(imobotComms, (robotJointId_t)motor, (robotJointDirection_t)direction);
+    return Mobot_setJointDirection(imobotComms, (robotJointId_t)motor, (robotJointState_t)direction);
   } else if (g_localInit) {
-    return iMobot_setJointDirection(iMobot, (robotJointId_t)motor, (robotJointDirection_t)direction);
+    return iMobot_setJointDirection(iMobot, (robotJointId_t)motor, (robotJointState_t)direction);
   } else {
     fprintf(stderr, "Error: Not initialized or connected.\n");
     return -1;

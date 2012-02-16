@@ -68,14 +68,15 @@ typedef enum robotJointState_e
 } robotJointState_t;
 #endif
 
-#ifndef ROBOT_JOINT_DIRECTION_T
-#define ROBOT_JOINT_DIRECTION_T
-typedef enum robotJointDirection_e
+#ifndef ROBOT_JOINT_STATE_E
+#define ROBOT_JOINT_STATE_E
+typedef enum robotJointState_e
 {
-  ROBOT_NEUTRAL,
-  ROBOT_FORWARD,
-  ROBOT_BACKWARD
-} robotJointDirection_t;
+    ROBOT_NEUTRAL = 0,
+    ROBOT_FORWARD,
+    ROBOT_BACKWARD,
+    ROBOT_HOLD,
+} robotJointState_t;
 #endif
 
 #ifdef __cplusplus
@@ -91,7 +92,7 @@ typedef struct iMobot_s {
 } iMobot_t;
 
 int iMobot_getJointAngle(iMobot_t* iMobot, robotJointId_t id, double *angle);
-int iMobot_getJointDirection(iMobot_t* iMobot, robotJointId_t id, robotJointDirection_t *dir);
+int iMobot_getJointDirection(iMobot_t* iMobot, robotJointId_t id, robotJointState_t *dir);
 int iMobot_getJointMaxSpeed(iMobot_t* iMobot, robotJointId_t id, double *maxSpeed);
 int iMobot_getJointSpeed(iMobot_t* iMobot, robotJointId_t id, double *speed);
 int iMobot_getJointState(iMobot_t* iMobot, robotJointId_t id, robotJointState_t *state);
@@ -111,15 +112,15 @@ int iMobot_moveNB(iMobot_t* iMobot,
                 double angle3,
                 double angle4 );
 int iMobot_moveContinuous(iMobot_t* iMobot,
-                                  robotJointDirection_t dir1,
-                                  robotJointDirection_t dir2,
-                                  robotJointDirection_t dir3,
-                                  robotJointDirection_t dir4);
+                                  robotJointState_t dir1,
+                                  robotJointState_t dir2,
+                                  robotJointState_t dir3,
+                                  robotJointState_t dir4);
 int iMobot_moveContinuousTime(iMobot_t* comms,
-                                  robotJointDirection_t dir1,
-                                  robotJointDirection_t dir2,
-                                  robotJointDirection_t dir3,
-                                  robotJointDirection_t dir4,
+                                  robotJointState_t dir1,
+                                  robotJointState_t dir2,
+                                  robotJointState_t dir3,
+                                  robotJointState_t dir4,
                                   int msecs);
 int iMobot_moveTo(iMobot_t* iMobot,
                 double angle1,
@@ -138,7 +139,7 @@ int iMobot_moveJointToNB(iMobot_t* iMobot, robotJointId_t id, double angle);
 int iMobot_moveToZero(iMobot_t* iMobot);
 int iMobot_moveToZeroNB(iMobot_t* iMobot);
 int iMobot_moveWait(iMobot_t* iMobot);
-int iMobot_setJointDirection(iMobot_t* iMobot, robotJointId_t id, robotJointDirection_t direction);
+int iMobot_setJointDirection(iMobot_t* iMobot, robotJointId_t id, robotJointState_t direction);
 int iMobot_setJointSpeed(iMobot_t* iMobot, robotJointId_t id, double speed);
 int iMobot_setJointSpeedRatio(iMobot_t* iMobot, robotJointId_t id, double ratio);
 int iMobot_setTwoWheelRobotSpeed(iMobot_t* iMobot, double speed, double radius, char unit[]);
@@ -195,13 +196,13 @@ class CiMobot {
     int moveJointWait(robotJointId_t id);
 #ifndef _CH_
   private:
-    int getJointDirection(robotJointId_t id, robotJointDirection_t &direction);
-    int setJointDirection(robotJointId_t id, robotJointDirection_t direction);
+    int getJointDirection(robotJointId_t id, robotJointState_t &direction);
+    int setJointDirection(robotJointId_t id, robotJointState_t direction);
     iMobot_t _iMobot;
 #else
   private:
-    int getJointDirection(robotJointId_t id, robotJointDirection_t &direction);
-    int setJointDirection(robotJointId_t id, robotJointDirection_t direction);
+    int getJointDirection(robotJointId_t id, robotJointState_t &direction);
+    int setJointDirection(robotJointId_t id, robotJointState_t direction);
     static void *g_chimobot_dlhandle;
     static int g_chimobot_dlcount;
 #endif

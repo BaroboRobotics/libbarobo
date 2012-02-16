@@ -1,9 +1,9 @@
 /* Filename: stand2.ch 
- * Make a MoBot stand up on a faceplate */
+ * Make a Mobot stand up on a faceplate */
 #include <mobot.h>
 CMobot robot;
 
-/* Connect to the paired MoBot */
+/* Connect to the paired Mobot */
 robot.connect();
 
 /* Set robot motors to speed of 90 degrees per second */

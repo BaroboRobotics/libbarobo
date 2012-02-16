@@ -4,7 +4,7 @@
 #include <math.h>
 CMobot robot;
 
-/* Connect to the paired MoBot */
+/* Connect to the paired Mobot */
 robot.connect();
 
 /* Set the robot to "home" position, where all joint angles are 0 degrees. */
@@ -25,8 +25,8 @@ robot.setJointSpeed(ROBOT_JOINT4, 90);
 printf("Roll forward 360 degrees.\n");
 robot.motionRollForward(360);
 
-speed = (3.5/2) * M_PI / 2;      // 2.75 inch/s 
-radius = 3.5/2;     // radius is 1.75 
+speed = (3.5/2) * M_PI / 2; // 2.75 inch/s 
+radius = 3.5/2;             // radius is 1.75 
 robot.setTwoWheelRobotSpeed(speed, radius);
 
 printf("Move 360 degrees.\n");

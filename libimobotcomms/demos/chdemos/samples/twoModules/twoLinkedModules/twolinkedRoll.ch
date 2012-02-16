@@ -3,9 +3,9 @@
    The joint4 of the first robot should be connected to the joint1 
    of the second robot. 
            1st                         2nd
-  |---------|--------|        |---------|--------|     
- 1|    2     |   3   | 4 <=> 1|    2    |   3    | 4
-  |---------|--------|        |---------|--------|   
+   |---------|--------|       |---------|--------|     
+ 1 |    2    |    3   | 4 X 1 |    2    |   3    | 4
+   |---------|--------|       |---------|--------|   
 */
 #include <mobot.h>
 int i;
@@ -32,12 +32,3 @@ robot1.motionRollBackwardNB(2*360);
 robot2.motionRollBackwardNB(2*360);
 robot1.moveWait();
 robot2.moveWait();
-/*
-robot1.moveContinuousNB(ROBOT_JOINT_FORWARD, ROBOT_JOINT_HOLD, 
-                        ROBOT_JOINT_HOLD, ROBOT_JOINT_FORWARD);
-robot2.moveContinuousNB(ROBOT_JOINT_FORWARD, ROBOT_JOINT_HOLD, 
-                        ROBOT_JOINT_HOLD, ROBOT_JOINT_FORWARD);
-robot1.moveWait();
-robot2.moveWait();
-*/
-

@@ -29,5 +29,6 @@ robot2.motionWait();
 robot1.motionUnstandNB();
 robot2.motionInchwormRightNB(4);
 robot1.motionWait();
+robot1.motionTumble(1);
 robot2.motionWait();
 

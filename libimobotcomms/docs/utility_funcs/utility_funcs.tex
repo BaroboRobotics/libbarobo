@@ -1,0 +1,32 @@
+%\lhead{libimobotcomms API Documentation}
+\noindent
+There are several utility functions which are useful when programming for
+the Mobot. 
+
+\begin{table}[!h]
+%\capstart
+\begin{center}
+\caption{Mobot Utility Functions.}
+\begin{tabular}{p{38 mm}p{110 mm}}
+%\begin{tabular}{ll}
+\hline
+Function & Description \\
+\hline
+%\texttt{pose()} \dotfill & Pose multiple joints of the robot. \\
+\texttt{angle2distance()} & Calculates the angle a wheel has turned from the
+radius and distance traveled.\\
+\texttt{deg2rad()} & Converts degrees to radians. \\
+\texttt{distance2angle()} & Calculates the distance traveled by a wheel from the wheel's radius and angle turned.\\
+\texttt{rad2deg()} & Converts radians to degrees.\\
+\hline
+\end{tabular}
+\end{center}
+\label{mobilec_api_cbinary}
+\end{table}
+
+\clearpage
+\newpage
+\input{utility_funcs/angle2distance}
+\input{utility_funcs/deg2rad}
+\input{utility_funcs/distance2angle}
+\input{utility_funcs/rad2deg}

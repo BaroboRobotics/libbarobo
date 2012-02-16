@@ -3,7 +3,7 @@
 #include <mobot.h>
 CMobot robot;
 
-/* Connect to the paired MoBot */
+/* Connect to the paired Mobot */
 robot.connect();
 
 /* Set robot motors to speed of 0.50 */
@@ -18,9 +18,9 @@ int i, num = 4;
 double angle2 = -45;
 double angle3 = 45;
 for(i = 0; i < num; i++) {
-  robot.moveJointTo(ROBOT_JOINT2, angle2);
-  robot.moveJointTo(ROBOT_JOINT3, angle3);
-  robot.moveJointTo(ROBOT_JOINT2, 0);
-  robot.moveJointTo(ROBOT_JOINT3, 0);
+    robot.moveJointTo(ROBOT_JOINT2, angle2); /* Move joint 2 */
+    robot.moveJointTo(ROBOT_JOINT3, angle3); /* Move joint 3 */
+    robot.moveJointTo(ROBOT_JOINT2, 0);      /* Move joint 2 */
+    robot.moveJointTo(ROBOT_JOINT3, 0);      /* Move joint 3 back to zero position */
 }
 

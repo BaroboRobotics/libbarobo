@@ -21,7 +21,7 @@
 \vspace*{2.5cm}
 {\Huge\sf\bf Mobot User's Guide}\\
 \vspace*{2.5cm}
-{\Large\bf Version 1.3}
+{\Large\bf Version 1.3.6}
 \vspace{4.5cm}
 
 \includegraphics[width=4in]{images/Mobot_Camera_Stand.JPG}
@@ -32,7 +32,15 @@
 \newpage
 \tableofcontents
 \newpage
-\section{The \texttt{CMobot} Mobot Remote Control Library}
+\section{Introduction}
+The Mobot is a breakthrough modular robot. A single Mobot module is a fully 
+functional robot capable of performing many possible motions. The Mobot
+can als obe used as a building block to create robots with different
+geometric configurations. 
+This documentation introduces the basic computer setup required for controlling 
+the Mobot, as well as several demo programs and a complete reference for all
+API function provided with the \texttt{CMobot} and \texttt{CMobotGroup} library.
+
 The \texttt{CMobot} library is a collection of functions geared towards
 controlling the motors and reading sensor values of a Mobot module via the
 Bluetooth wireless protocol. The functions are designed to be intuitive
@@ -53,9 +61,6 @@ locations and positive directions of the four joints of a Mobot module. The
 joints 1 and 4 shown in the figure are fully rotational and have no joint limits.
 Joints 2 and 3, however, can only move in the range -90 to +90 degrees.
 
-This documentation introduces the basic computer setup required for controlling 
-the Mobot, as well as several demo programs and a complete reference for all
-API function provided with the \texttt{CMobot} and \texttt{CMobotGroup} library.
 
 \section{\label{sec:pairing}Configuring Mobots for Remote Control}
 Mobot modules should be configured the first time they are used with 
@@ -261,14 +266,77 @@ preprogrammed motions for the Mobot. To execute a preprogrammed motion, simply
 click on the name of the motion you wish to execute, and then click the button
 labeled ``Play''.
 
+\subsection{Application Example}
+\subsubsection{Problem Statement}
+A robot has two 3.5 inch diameter wheels. It is moving at a constant velocity
+by turning its wheels 45 degrees per second. 
+\begin{enumerate}
+\item How long will it take for the robot to rotate its wheels 2 full rotations? (720 degrees)
+\item During that time, how far should the robot travel? Verify your results by measuring
+the distance the real robot travels during the calculated time.
+\end{enumerate}
+
+\subsubsection{Problem Solution}
+\begin{enumerate}
+\item We are given that a robot is turning its wheels at a constant speed of 45 degrees per second, and 
+needs to rotate the wheels 720 degrees. The amount of time this will take is
+\begin{equation*}
+\frac{720 ~\mathrm{degrees}}{45 ~\mathrm{degrees/second}} = 16 ~\mathrm{seconds}
+\end{equation*}
+
+\item The circumference of a circle can be determined with the equation
+\begin{equation*}
+c = 2 \pi r
+\end{equation*} where $r$ is the radius of the circle. Since our robot will
+turn its wheels two full rotations during the motion, it will travel 2 circumferences
+in distance. Thus, the distance the robot should travel is
+\begin{equation*}
+d = 2 \times c = 2 \times (2 \pi r) = 4 \pi r
+\end{equation*}
+The radius of a circle is half of its diameter, which is $3.5 / 2 = 1.75$ inches, 
+in our case. Plugging in our numbers, we have
+\begin{equation*}
+d = 4 \times \pi \times 1.75 = 21.99
+\end{equation*}
+Our robot should travel approximately 22 inches during the 16 second motion.
+\end{enumerate}
+
+To verify these results with a real robot the RobotController program may be used.
+\begin{enumerate}
+\item Affix two 3.5 inch diameter wheels to the faceplates.
+\item Set the joint speeds for joints 1 and 4 to 45 degrees per second. This may
+be done by typing "45" into the appropriate text boxes for joint 1 and 4 speeds at 
+the bottom left of the RobotController and then clicking the "Set" button.
+\item Type ``720'' into the text edit boxes below joints 1 and 4 in the joint
+position section of the GUI.
+\item Click the ``Move'' button. Joints 1 and 4 will turn 720 degrees, rolling
+the robot forward. The motion may be timed with a stopwatch.
+\end{enumerate}
+
 \section{Getting Started with Programming the Mobot}
+The RobotController can be used to control the Mobot for simple tasks and applications.
+For more complicated applications, computer programs are better suited for controlling
+the Mobot.
+Mobot can be controlled using a C/C++ program through Ch, a C/C++ interpreter.
+Ch Professional Edition or Ch Student Edition software is required to run the 
+demo programs for controlling Mobot. Ch is available from SoftIntegration, Inc. at 
+\texttt{http://www.softintegration.com}
+
 Before the Ch program is executed, the Bluetooth addresses of the robots
 need to be added using the RobotController as described in Section \ref{sec:pairing}.
 If a robot is already connected to the RobotController, disconnect
 from the robot before running the Ch program, or close the RobotController application.
 
+To help the user become acquainted with the Mobot control programs, sample
+programs will be presented in this section to illustrate the basics and minimum requirements of
+a Mobot control program. The sample programs are located at 
+\texttt{CHHOME/package/chmobot/demos}, where \texttt{CHHOME} is the 
+Ch home directory, such as \texttt{C:$\backslash$Ch} for Windows. For Windows,
+it is located at \texttt{C:$\backslash$Ch$\backslash$package$\backslash$chmobot$\backslash$demos} by default. 
+
+
 The first demo presents a minimal program which connects to a Mobot and
-moves some joints.
+moves joints 1 and 4.
 
 \subsection{\texttt{start.ch}, A Basic Ch Mobot Program}
 \subsubsection{\texttt{start.ch} Source Code}
@@ -295,7 +363,7 @@ This line
 initializes a new variable named \texttt{robot} which represents the remote
 Mobot module which we wish to control. This special variable is actually an
 instance of the \texttt{CMobot} class, which contains its own set of
-functions called ``methods'' or ``member functions''.
+functions called ``methods'', ``member functions'', or simply ``functions''.
 
 The next line,
 \begin{verbatim}
@@ -327,13 +395,20 @@ documentation for each of the Mobot functions, such as
 \texttt{connect()} and \texttt{connectAddress()}, are presented in
 Appendix \ref{sec:cmobot_api}.
 
+\begin{figure}
+  \centering
+  \includegraphics[width=3in]{images/inchworm1.jpg}
+  \caption{The robot in zero position}
+  \label{fig:zeroposition}
+\end{figure}
+
 The next line,
 \begin{verbatim}
 robot.moveToZero();
 \end{verbatim}
 uses the \texttt{moveToZero()} member function. The
 \texttt{moveToZero} function causes the Mobot to move all of its motors to the
-zero position.
+zero position, as shown in Figure \ref{fig:zeroposition}.
 
 The next line of code command joints 1 and 4 to rotate 360 degrees.
 \begin{verbatim}
@@ -368,7 +443,6 @@ of the Mobot which are sometimes used to act as "wheels".
 The first portion of the code, the lines
 \begin{verbatim}
 #include <mobot.h>
-
 CMobot robot;
 \end{verbatim}
 set up our program for controlling robots as seen in previous demos. The next line,
@@ -422,7 +496,6 @@ values, and then used as the function arguments for the \texttt{move()} function
 The first portion of the program, 
 \begin{verbatim}
 #include <mobot.h>
-
 CMobot robot;
 
 /* Connect to a robot */
@@ -439,7 +512,13 @@ the current angle of one of the robotic joints. The next line,
 robot.getJointAngle(ROBOT_JOINT1, angle);
 \end{verbatim}
 retrieves the current angle of joint 1, which is one of the faceplates of the
-robot. Finally, the last line of the program,
+robot. 
+\texttt{ROBOT\_JOINT1} is an enumerated value
+defined in the header file \texttt{mobot.h}. Detailed information
+for all enumerated values defined in \texttt{mobot.h} can be found in 
+Appendix \ref{sec:datatypes}.
+
+Finally, the last line of the program,
 \begin{verbatim}
 printf("The current joint angle for joint 1 is %lf degrees.\n", angle);
 \end{verbatim}
@@ -509,12 +588,13 @@ print a message to the screen and rolls the robot forward by rotating the facepl
 
 The next lines,
 \begin{verbatim}
-speed = (3.5/2) * M_PI / 2;      // 2.75 inch/s 
-radius = 3.5/2;     // radius is 1.75 
+speed = (3.5/2) * M_PI / 2; // 2.75 inch/s 
+radius = 3.5/2;             // radius is 1.75 
 robot.setTwoWheelRobotSpeed(speed, radius);
 \end{verbatim}
 use the \texttt{setTwoWheelRobotSpeed()} function to set the faceplate joint
-speeds. The \texttt{setTwoWheelRobotSpeed()} function takes a desired speed
+speeds for a robot acting as a two wheeled car. The
+\texttt{setTwoWheelRobotSpeed()} function takes a desired speed
 and the radius of the wheels as arguments and calculates the necessary
 rotational speed of the faceplate wheels to achieve the desired speed. Note
 that the units for the speed must match the units for the radius. For instance,
@@ -536,6 +616,18 @@ printf("Move continuously for 3 seconds.\n");
 robot.moveContinuousTime(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_FORWARD, 3);
 \end{verbatim}
 roll the robot forward for three seconds.
+The enumerated values \texttt{ROBOT\_FORWARD} and \texttt{ROBOT\_BACKWARD}
+indicate the forward and backward directions for each motor to turn, respectively. 
+\texttt{ROBOT\_NEUTRAL} indicates that the motor should not turn, but
+should remain flexible and backdrivable. \texttt{ROBOT\_HOLD}
+indicates that the joint will not turn, and that the joint will be 
+forcefully held in place at its current position. More information regarding these
+macros may be found in Section \ref{sec:robotJointState_t}. In the previous
+line of code, joints 1 and 4 
+move forward while joints 2 and 3 hold their current positions. The
+last argument  of the function \texttt{moveContinuousTime()} specifies the
+duration of time to move or hold the motors in seconds.
+
 
 \section{\label{sec:preprogrammed_motions}Preprogrammed Motions}
 The robot API contains functions for executing preprogrammed motions. The 
@@ -593,11 +685,6 @@ robot.setJointSpeedRatio(ROBOT_JOINT2, 0.50);
 robot.setJointSpeedRatio(ROBOT_JOINT3, 0.50);
 \end{verbatim}
 
-\texttt{ROBOT\_JOINT2} and \texttt{ROBOT\_JOINT3} are enumerated values 
-defined in the header file \texttt{mobot.h}. Detailed information
-for all enumerated values defined in \texttt{mobot.h} can be found in 
-Appendix \ref{sec:datatypes}.
-
 We then move the robot to its zero position in preparation for the 
 inchworm gait.
 \begin{verbatim}
@@ -630,7 +717,10 @@ stand up on a faceplate. After the robot has stood up, the next line of code,
 sleep(3); // Stand still for three seconds
 \end{verbatim}
 pauses the program for three seconds, causing the robot to remain still for three
-seconds. After the pause is over, the line
+seconds. If you would like to pause a program for less than one second, use the 
+function \texttt{msleep(msecs)} to pause for ``msecs'' milliseconds.
+
+After the pause is over, the line
 \begin{verbatim}
 robot.move(2*360, 0, 0, 2*360);
 \end{verbatim}
@@ -650,9 +740,7 @@ The first portion of the program,
 \begin{verbatim}
 /* Filename: tumble.ch 
  * Tumbling robot */
-
 #include <mobot.h>
-
 CMobot robot;
 
 /* Connect to the paired Mobot */
@@ -665,10 +753,10 @@ to a flat zero position, similar to previous demos.
 
 Next, we make the robot perform the tumbling motion with the following line:
 \begin{verbatim}
-robot.motionTumble(5);
+robot.motionTumble(2);
 \end{verbatim}
-The argument, ``5'', indicates that the tumbling motion should be performed
-five times.
+The argument, ``2'', indicates that the tumbling motion should be performed
+two times.
 
 \subsection{\texttt{motion.ch}: A Demo Using Multiple Preprogrammed Motions}
 \subsubsection{\texttt{motion.ch} Source Code}
@@ -726,20 +814,17 @@ robot.motionUnstand();
 
 Finally, we perform the tumbling motion. 
 \begin{verbatim}
-robot.motionTumble(5);
+robot.motionTumble(2);
 \end{verbatim}
 The tumbling motion is a movement in which
 the robot stands up and then flips, end over end. The argument provided to the
-function, ``5'' in this case, is the number of times to perform the motion.
+function, ``2'' in this case, is the number of times to perform the motion.
 
 \section{Detailed Examples of Preprogrammed Motions and Writing Customized Motions}
-To help the user become acquainted with the Mobot control programs, sample
-programs will be presented in this section to illustrate the basics and minimum requirements of
-a Mobot control program. The sample programs are located at 
-\texttt{CHHOME/package/chmobot/demos}, where \texttt{CHHOME} is the 
-Ch home directory, such as \texttt{C:$\backslash$Ch} for Windows. For Windows,
-it is located at \texttt{C:$\backslash$Ch$\backslash$package$\backslash$chmobot$\backslash$demos} by default. 
-
+In the previous sections, preprogrammed motions have been demonstrated. In this section,
+the inner workings of the preprogrammed motions will be discussed, as well as various
+methods of designing and creating custom motions. Some more complex motions, such as 
+"motionTumble()" and "motionUnstand()" will be discussed in Section \ref{sec:blocking}.
 \subsection{Inchworm Gait Demo}
 The next demo will illustrate how a simple gait known as the ``Inchworm'' gait 
 can be implemented.
@@ -753,7 +838,6 @@ the same function of declaring a Mobot variable and connecting to a
 paired Mobot.
 \begin{verbatim}
 #include <mobot.h>
-
 CMobot robot;
 
 /* Connect to the paired Mobot */
@@ -761,7 +845,7 @@ robot.connect();
 \end{verbatim}
 
 The next lines of code set the joint speeds for the two body joints, joints 
-two and three, to 50\% speed. They are set to fifty percent speed in order to 
+2 and 3, to 50\% speed. They are set to fifty percent speed in order to 
 slow the motion down in order to minimize slippage.
 
 \begin{verbatim}
@@ -783,7 +867,7 @@ robot.moveToZero();
   \subfloat[Move joint 2]{\label{fig:inchworm2}\includegraphics[width=1in]{images/inchworm2.jpg}}
   \subfloat[Move joint 3]{\label{fig:inchworm3}\includegraphics[width=1in]{images/inchworm4.jpg}}
   \subfloat[Move joint 2]{\label{fig:inchworm4}\includegraphics[width=1in]{images/inchworm3.jpg}}
-  \subfloat[End]{\label{fig:inchworm5}\includegraphics[width=1in]{images/inchworm1.jpg}}
+  \subfloat[Move joint 3 back to zero position]{\label{fig:inchworm5}\includegraphics[width=1in]{images/inchworm1.jpg}}
   \caption{The inchworm motion}
   \label{fig:inchworm}
 \end{figure}
@@ -810,10 +894,10 @@ int i, num = 4;
 double angle2 = -45;
 double angle3 = 45;
 for(i = 0; i < num; i++) {
-    robot.moveJointTo(ROBOT_JOINT2, angle2);
-    robot.moveJointTo(ROBOT_JOINT3, angle3);
-    robot.moveJointTo(ROBOT_JOINT2, 0);
-    robot.moveJointTo(ROBOT_JOINT3, 0);
+    robot.moveJointTo(ROBOT_JOINT2, angle2); /* Move joint 2 */
+    robot.moveJointTo(ROBOT_JOINT3, angle3); /* Move joint 3 */
+    robot.moveJointTo(ROBOT_JOINT2, 0);      /* Move joint 2 */
+    robot.moveJointTo(ROBOT_JOINT3, 0);      /* Move joint 3 bace to zero position*/
 }
 \end{verbatim}
 The values of the variables \texttt{angle2} and \texttt{angle3} may also be modified
@@ -834,7 +918,7 @@ robot.moveJointTo(ROBOT_JOINT2, -85);
 robot.moveJointTo(ROBOT_JOINT3, 70);
 \end{verbatim}
 These movement commands cause the Mobot to curl up into a fetal position with
-both of its endplates facing toward the ground. The next line, 
+both of its faceplates facing toward the ground. The next line, 
 
 \begin{verbatim}
 sleep(1);
@@ -843,7 +927,7 @@ causes the program to pause for one second before continuing. This allows the
 robot to settle down, in case it was still in motion from the last movement.
 
 Next, the Mobot rotates one 
-of the endplates by 45 degrees. 
+of the faceplates by 45 degrees. 
 \begin{verbatim}
 robot.moveJointTo(ROBOT_JOINT1, 45);
 \end{verbatim}
@@ -864,14 +948,6 @@ is used to continuously rotate a joint for a desired amount of time.
 robot.setJointSpeed(ROBOT_JOINT1, 45);
 robot.moveContinuousTime(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_HOLD, 3);
 \end{verbatim}
-
-The macros \texttt{ROBOT\_FORWARD} and \texttt{ROBOT\_BACKWARD}
-indicate the directions for each motor to turn. The macro
-\texttt{ROBOT\_NEUTRAL} indicates that the motor should not turn, but
-should remain flexible and backdrivable. The macro \texttt{ROBOT\_HOLD}
-indicates that the joint will not turn, and that the joint will be 
-forcefully held in place at its current position. More information regarding these
-macros may be found in Section \ref{sec:robotJointState_t}.
 
 \section{\label{sec:blocking}Blocking and Non-Blocking Functions}
 All of the Mobot movement functions may be designated as either ``blocking'' 
@@ -906,9 +982,9 @@ this document.
 \item \texttt{moveContinuousTime()}
 \item \texttt{moveJoint()}
 \item \texttt{moveJointTo()}
+\item \texttt{moveJointWait()}
 \item \texttt{moveTo()}
 \item \texttt{moveToZero()}
-\item \texttt{moveJointWait()}
 \item \texttt{moveWait()}
 \item \texttt{motionArch()}
 \item \texttt{motionInchwormLeft()}
@@ -967,6 +1043,16 @@ is returning true. In other words, in plain english, as long as the robot is mov
 the program will print the message ``robot is moving...''. As soon as the robot completes
 its motion, the loop will break and the message ``move finished!'' is printed.
 
+Alternatively, there is a commented line of code that appears in the program, which
+appears as
+\begin{verbatim}
+robot.move(720, 0, 0, 720); // Non-Blocking version
+\end{verbatim}
+If the \texttt{moveNB()} function is replaced with the \texttt{move()} function in this program,
+the message ``robot is moving...'' is never printed to the screen. This is due to the
+fact that \texttt{move()} is a blocking function, and by the time the program continues past
+the \texttt{move()} statement, the robot has already stopped moving.
+
 \subsubsection{\texttt{nonblock2.ch} Source Code}
 \verbatiminput{../demos/chdemos/nonblock2.ch}
 \subsubsection{\texttt{nonblock2.ch} Source Code Explanation}
@@ -976,8 +1062,8 @@ similar to previous demos. The last two lines in the program appear like so:
 robot.moveJointNB(ROBOT_JOINT1, 360); // Non-Blocking version
 robot.moveJoint(ROBOT_JOINT4, 360);
 \end{verbatim}
-The first line turns joint 1 360 degrees. However, since it is a non-blocking function,
-the program immediately continues to the next line. The second line turns joint 4
+The first line turns joint 1 for 360 degrees. However, since it is moved with a non-blocking function,
+the program immediately continues to the next line. The second line turns joint 4 for
 360 degrees. Because computer programs execute so fast compared to the physical
 motion of the robots, this program effectively begins rotating joints 1 and 4 
 simultaneously. Since the function \texttt{moveJoint()} is a blocking function,
@@ -1012,7 +1098,9 @@ In order to wait for all motions to finish, the last line of the program is
 robot.motionWait();
 \end{verbatim}
 The \texttt{motionWait()} function will wait until all robot motions are finished.
-If a program contains non-blocking functions, it is typically necessary to 
+
+Note that
+if a program contains non-blocking functions, it is typically necessary to 
 call a waiting function such as \texttt{moveWait()} or \texttt{motionWait()}
 before the program terminates. If a waiting function is not called, the program
 may terminate before the motion has been completed, which may halt the robot
@@ -1039,7 +1127,7 @@ robot.moveJointToNB(ROBOT_JOINT2, -85);
 robot.moveJointToNB(ROBOT_JOINT3, 45);
 \end{verbatim}
 Because both of these function calls are non-blocking, this function will
-effectively move joints two and three simultaneously. Since these are both
+effectively move joints 2 and 3 simultaneously. Since these are both
 non-blocking functions, a call to \texttt{moveWait()} is necessary to
 wait for the robot to complete its motions, as done in the next line:
 \begin{verbatim}
@@ -1070,14 +1158,13 @@ initialize the proper variables and connections as seen in previous demos.
 Next, we begin the tumbling motion. We consider each tumbling motion to be the 
 robot flipping over twice. The reason the robot flips twice per tumble is so that
 when the tumbling motion is done, the robot ends right side up. 
-A for loop is used to to tumble ``n'' times, as shown in the following code:
+A for loop is used to to tumble ``num'' times, as shown in the following code:
 \begin{verbatim}
-int n = 2;
-int i;
-for(i = 0; i < n; i++) {
+int i, num = 2;
+for(i = 0; i < num; i++) {
 \end{verbatim}
-These lines create two new variables, ``n'' and ``i'', which hold the number
-of times to tumble, and act as the loop counter variable, respectively. 
+These lines create two new variables, ``i'' and ``num'', which are the loop
+counter, and the number of times to tumble, respectively. 
 
 Inside the loop, two tumbling motions are performed. The first tumbling
 motion appears as such:
@@ -1101,10 +1188,17 @@ is balancing on joint 1.
     robot.moveJointTo(ROBOT_JOINT3, 0);
     robot.moveJointTo(ROBOT_JOINT2, 0);
     robot.moveJointTo(ROBOT_JOINT3, 80);
-    robot.moveJointTo(ROBOT_JOINT3, 45);
+    if(i != (num-1)) { /* Do not perform this motion on the last tumble */
+        robot.moveJointTo(ROBOT_JOINT3, 45);
+    }
 }
 \end{verbatim}
-The entire motion, consisting of two flips, are performed ``n'' times. After
+The \texttt{if} statement prevents the last motion from being executed
+when the robot is on its last tumble. This is because the last motion in the
+loop is a prepatory motion for the next tumble, which is not needed if the
+robot is currently performing its last tumble. 
+
+The entire motion, consisting of two flips, are performed ``num'' times. After
 the loop is completed, the robot is made to fall back down into a prone
 positions with the following lines of code:
 \begin{verbatim}
@@ -1206,6 +1300,7 @@ Finally, the following lines,
 robot1.motionUnstandNB();
 robot2.motionInchwormRightNB(4);
 robot1.motionWait();
+robot1.motionTumble(1);
 robot2.motionWait();
 \end{verbatim}
 make the first robot come back down from its standing position and the second robot
@@ -1213,19 +1308,15 @@ inchworm to the right four times simultaneously. Note that the function
 \texttt{motionWait()} is used to wait for motions, which are compound
 movements, to finish. This is similar to how
 the function \texttt{moveWait()} is used to wait for individual movements
-to finish.
+to finish. After \texttt{robot1} finishes unstanding, it will begin 
+a tumbling motion. Since the tumbling motion function is called before the call
+to \texttt{robot2.motionWait()}, \texttt{robot1} will begin tumbling even if
+\texttt{robot2} has finished its previous motion, which was inchworming 4 times.
 
 \subsection{Controlling Multiple Connected Modules}
 \subsubsection{\texttt{lift.ch}, Lifting Demo}
 \verbatiminput{../demos/chdemos/lift.ch}
 \subsubsection{\texttt{lift.ch} Source Code Explanation}
-\begin{figure}
-  \centering
-  \subfloat[First lift]{\label{fig:lift1}\includegraphics[width=2in]{images/lift1_v2.jpg}}
-  \subfloat[Second lift]{\label{fig:lift2}\includegraphics[width=2in]{images/lift2_v2.jpg}}
-  \caption{Lifting motion with two connected modules}
-  \label{fig:lift}
-\end{figure}
 This demo is designed to lift two connected modules up into
 a two-legged standing configuration. The robots are connected such that the fourth
 joint of robot one is connected to the first joint of robot two. The two connect robots
@@ -1246,6 +1337,14 @@ robot2.moveWait();
 rotate the joints on either end of the compound robot to perform the 
 first portion of the lift, as shown in Figure \ref{fig:lift1}. The motion is performed as two non-blocking
 calls to \texttt{moveNB()} and then waiting for both movements to finish.
+
+\begin{figure}
+  \centering
+  \subfloat[First lift]{\label{fig:lift1}\includegraphics[width=2in]{images/lift1_v2.jpg}}
+  \subfloat[Second lift]{\label{fig:lift2}\includegraphics[width=2in]{images/lift2_v2.jpg}}
+  \caption{Lifting motion with two connected modules}
+  \label{fig:lift}
+\end{figure}
 
 The next lines rotate the inner joints of the compound robot to lift the robot
 one step higher, as shown is Figure \ref{fig:lift2}.
@@ -1299,7 +1398,6 @@ The first lines of interest appear as such:
 \begin{verbatim}
 CMobot robot1;
 CMobot robot2;
-
 CMobotGroup group;
 \end{verbatim}
 
@@ -1325,48 +1423,641 @@ Finally, we wish for all of the robots in our robot group, namely
 by a standing motion. This is done with the following lines:
 
 \begin{verbatim}
-group.motionInchwormLeft(4); /* Cause both robots to inchworm left 4 times */
-group.motionStand(); /* Cause both robots to stand */
+group.motionInchwormLeft(4);  /* Both robots inchworm left 4 times */
+group.motionStand();          /* Both robots stand */
 \end{verbatim}
 
 After the robots stand up, the line
 \begin{verbatim}
-group.move(360, 0, 0, 360); /* Joints 1 and 4 rotate 360 degrees */
+group.move(360, 0, 0, 360);   /* Joints 1 and 4 rotate 360 degrees */
 \end{verbatim}
 makes the robots perform a 360 degree rotation on their faceplates
 while standing.
 
 The next line, 
 \begin{verbatim}
-sleep(3); /* Make the robots stand still for 3 seconds */
+sleep(3);                     /* Robots stand still for 3 seconds */
 \end{verbatim}
 makes the robots stand still for three seconds. After standing
 still for three seconds, the line
 \begin{verbatim}
-group.motionUnstand(); /* Make the robots get back down from standing */
+group.motionUnstand();        /* Robots get back down from standing */
 \end{verbatim}
 makes both robots move back down from a standing position into a prone
 position.
 
+\subsection{Demo Program \texttt{groups.ch}}
+\subsubsection{\texttt{groups.ch} Source Code}
+\verbatiminput{../demos/chdemos/groups.ch}
+\subsubsection{Demo Explanation}
+The program begins by including the \texttt{mobot.h} header file
+and declaring a number of robot variables and robot group variables.
+\begin{verbatim}
+#include <mobot.h>
+CMobot robot1;
+CMobot robot2;
+CMobot robot3;
+CMobot robot4;
+CMobotGroup groupA;
+CMobotGroup groupB;
+CMobotGroup groupC;
+CMobotGroup groupD;
+\end{verbatim}
+
+Next, we connect our four robot variables to the first four robots 
+configured in our RobotController.
+\begin{verbatim}
+robot1.connect();
+robot2.connect();
+robot3.connect();
+robot4.connect();
+\end{verbatim}
+
+Now we begin adding our robots to their groups. We will have four different groups, and each robot
+will belong to more than one group. They will be organized as such:
+\begin{itemize}
+\item Group A: robot1, robot2, robot3, robot4
+\item Group B: robot1, robot2
+\item Group C: robot3, robot4
+\item Group D: robot1, robot2, robot3
+\end{itemize}
+The following code divides the robots up into our groups.
+\begin{verbatim}
+/* Group A */
+groupA.addRobot(robot1);
+groupA.addRobot(robot2);
+groupA.addRobot(robot3);
+groupA.addRobot(robot4);
+
+/* Group B */
+groupB.addRobot(robot1);
+groupB.addRobot(robot2);
+
+/* Group C */
+groupC.addRobot(robot3);
+groupC.addRobot(robot4);
+
+/* Group D */
+groupD.addRobot(robot1);
+groupD.addRobot(robot2);
+groupD.addRobot(robot3);
+\end{verbatim}
+
+Now we perform some group oriented motions. First, we will have group B roll forward and group C
+roll backward simultaneously. This is done with calls to non-blocking functions and using the
+function \texttt{motionWait()} to wait for the non-blocking functions to finish.
+\begin{verbatim}
+/* Make group B roll forward and group C roll backward at the same time */
+groupB.motionRollForwardNB(360);
+groupC.motionRollBackwardNB(360);
+groupB.motionWait();
+groupC.motionWait();
+\end{verbatim}
+
+Next, we make all the robots, which are members of the group \texttt{groupA}, 
+stand up.
+\begin{verbatim}
+/* Make all the robot stand up */
+groupA.motionStand();
+\end{verbatim}
+
+While the robots are standing, we want group B to spin counter-clockwise, and group
+C to spin clockwise. To do this, we use the non-blocking function \texttt{moveNB()}
+and then wait for the movements to finish with \texttt{moveWait()}.
+\begin{verbatim}
+/* Make robots 1 and 2 (Group B) rotate counter-clockwise and robots 3 and 4
+ * (Group C) rotate clockwise. */
+groupB.moveNB(360, 0, 0, 360);
+groupC.moveNB(-360, 0, 0, -360);
+groupB.moveWait();
+groupC.moveWait();
+\end{verbatim}
+
+Finally, we want robots 1, 2, and 3 to spin while robot 4 unstands and inchworms twice.
+As soon as robot 4 is done inchworming, we want robots 1, 2, and 3 to unstand as well.
+We do this by using a non-blocking continuous move function, \texttt{moveContinuousNB()}.
+While the group is moving, we unstand robot 4 and inchworm it twice. After robot 4 is
+done inchworming, we unstand Group D.
+\begin{verbatim}
+/* Make robot 4 unstand and inchworm while the remaining robots spin. */
+groupD.moveContinuousNB(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_FORWARD);
+robot4.motionUnstand();
+robot4.motionInchwormLeft(2);
+groupD.motionUnstand();
+\end{verbatim}
+
 \section{Data Acquisition}
 \subsection{Example 1}
 \subsubsection{Problem Statement}
-Roll a robot forward by rotating the wheels 720 degrees at 45 degrees per
+Roll a robot forward by rotating the wheels 720 degrees at a constant speed of 45 degrees per
 second. Record the motion of joint 1 during the motion and display a plot
-of the joint angle versus time.
+of the joint angle versus time. The motion should show that the joint angle $\theta$
+is a linear function of time in the form $\theta = 45t$.
 
 \subsubsection{\texttt{dataAcquisition.ch} Source Code}
 \verbatiminput{../demos/chdemos/dataAcquisition.ch}
 
+\subsubsection{\texttt{dataAcquisition.ch} Explained}
+The first block of code,
+\begin{verbatim}
+#include <mobot.h>
+#include <chplot.h>
+#include <numeric.h>
+CMobot robot;
+\end{verbatim}
+includes header files and declares our robot variable. The header file
+\texttt{chplot.h} is necessary for plotting figures, which will be done later in the
+program. The header file \texttt{numeric.h} is necessary for creating and manipulating
+computational arrays, which are also used in this program. Both plotting and computational
+arrays are are covered in the Ch User's Guide.
+
+Next some variables are declared. First, we declare a variable to hold our
+desired speed:
+\begin{verbatim}
+double speed = 45; /* Degrees/second */
+\end{verbatim}
+Now we declare a variable to hold the angle we want to rotate our faceplate joints:
+\begin{verbatim}
+double angle = 720; /* Degrees */
+\end{verbatim}
+And another variable to hold our polling interval:
+\begin{verbatim}
+double timeInterval = 0.1; /* Seconds */
+\end{verbatim}
+The variable \texttt{timeInterval} holds the time in seconds between data acquisition
+events. The value 0.1 indicates that new data should be acquired from the robot
+every 0.1 seconds, or ten times a second, in other words. Lower values will result in faster
+rates of data acquisition and smoother plots. 
+
+Next, we need to determine how long to record the data. This requires us to estimate the 
+amount of time our motion will take. We will perform a motion in which the wheels of the
+robot turn 720 degrees at 45 degrees a second. To find the amount of time the movement 
+will take, we can use the formula
+\begin{equation*}
+t = \frac{\theta}{\omega}
+\end{equation*}
+where $\theta$ is the angle to turn the joint and $\omega$ is the speed at which the
+joint is turning. The line
+\begin{verbatim}
+double movementTime = angle / speed; /* Seconds */
+\end{verbatim}
+performs this calculation and stores the result in a variable called \texttt{movementTime}.
+
+Because physical systems are never mathematically precise, we must account for some
+potential fluctuations during the motion of the robot. Because we want to be sure 
+to record the motion in its entirety, it is beneficial to record for a timespan that
+is actually longer than the estimated movement time. The next line:
+\begin{verbatim}
+movementTime = movementTime + 1; 
+\end{verbatim}
+adds another second to the estimated movement time.
+
+Finally, we calculate the number of data points which will be captured during our 
+recording session. This information is necessary so that we know how big to make
+the computational arrays which will be used to store the data. The number
+of data points can be determined by the formula
+\begin{equation*}
+N = \frac{t}{\Delta t}
+\end{equation*}
+where $t$ is the total movement time and $\Delta t$ is the time interval between
+readings.
+
+Next, we declare some computational arrays to hold the data we will record.
+\begin{verbatim}
+array double time[numDataPoints];
+array double angles1[numDataPoints];
+\end{verbatim}
+Note that we have used the variable \texttt{numDataPoints} to specify the size
+of our arrays. The \texttt{recordAngle()} function, used later to record the data,
+requires two arrays to store data. The first array will store a series of timestamps
+for each data point. Timestamps are stored for greater accuracy of the data. Although
+the user is able to request a certain time interval, wireless and communication 
+uncertainties may contribute to some fluctuation in communication times and speeds. 
+In order to ensure accurate data, as the Mobot sends joint data to the computer, 
+the Mobot will place an accurate timestamp on each piece of data as it was recorded
+on the Mobot itself. These timestamps are stored in the \texttt{time} array and
+the joint angles will be stored in the \texttt{angles1} array.
+
+The last variables we will declare are related to generating a plot to display
+the captured data. 
+\begin{verbatim}
+CPlot plot1, plot2, plot3;
+array double angles1_unwrapped[numDataPoints];
+\end{verbatim}
+The variables \texttt{plot1} and \texttt{plot2} will hold the two plots we will
+generate, and the computational array \texttt{angles1\_unwrapped} will hold
+the ``unwrapped'' data recorded from the robot. More discussion regarding
+unwrapping data will be presented towards the end of this demo.
+
+Before we begin the robot's motion, we first move it to zero position and set the
+joints to the correct speeds with the following lines of code:
+\begin{verbatim}
+/* Start the motion. First, move robot to zero position */
+robot.moveToZero();
+/* Set the joint 1 speed to 45 degrees/second */
+robot.setJointSpeed(ROBOT_JOINT1, speed);
+robot.setJointSpeed(ROBOT_JOINT4, speed);
+\end{verbatim}
+
+Next, we start capturing the data by using the \texttt{recordAngle()} function:
+\begin{verbatim}
+robot.recordAngle(ROBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
+\end{verbatim}
+
+The recording process begins immediately and continues in the background. Now,
+we may perform the motion we wish to record, which is to simply rotate each of
+the faceplates by the amount desired:
+\begin{verbatim}
+robot.move(angle, 0, 0, angle);
+\end{verbatim}
+
+After we have performed all of our motions, we need to ensure that the recording
+process which had been running in the background is completed. We used the function
+\texttt{recordWait()} to make the program wait for any currently recording tasks
+to finish:
+\begin{verbatim}
+robot.recordWait();
+\end{verbatim}
+
+After data has been recorded, we use our previously declared plotting variables to 
+generate plots of the data. We will generate two separate plots. First, we simply
+plot the original raw data directly from the Mobot.
+\begin{verbatim}
+plot1.title("Original Data for Joint Angle 1 versus Time");
+plot1.label(PLOT_AXIS_X, "Time (seconds)");
+plot1.label(PLOT_AXIS_Y, "Angle (degrees)");
+plot1.data2D(time, angles1);
+plot1.grid(PLOT_ON);
+plot1.plotting();
+\end{verbatim}
+The previous lines of code set the plot title, set the X-axis label, set the Y-axis label,
+insert the plot data, turn the grid on, and plot the data, respectively. The plot
+that is generated is shown in Figure \ref{fig:dataacq1_fig1}. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4in]{images/dataacq1_plot1.png}
+\caption{\label{fig:dataacq1_fig1} The original data recorded by \texttt{dataAcquisition.ch}.}
+\end{figure}
+
+Figure \ref{fig:dataacq1_fig1} appears to show
+a zig-zag pattern for the angle of the joint. This is because the raw angle data obtained
+from a Mobot is only in the range -180 degrees to 180 degrees. When a joint rotates
+past 180 degrees, the angle reading switches over -180 degrees. In order to get rid of the
+zig-zagging of the data, the data must be ``unwrapped''. This is done with the \texttt{unwrapdeg()}
+function, as done in the following line of code:
+\begin{verbatim}
+unwrapdeg(angles1_unwrapped, angles1);
+\end{verbatim}
+The function places the unwrapped version of the \texttt{angles1} array into our array
+\texttt{angles1\_unwrapped}. Next, we plot the unwrapped data in a similar method 
+to plotting our wrapped data:
+\begin{verbatim}
+plot2.title("Unwrapped Data for Joint Angle 1 versus Time");
+plot2.label(PLOT_AXIS_X, "Time (seconds)");
+plot2.label(PLOT_AXIS_Y, "Angle (degrees)");
+plot2.data2D(time, angles1_unwrapped);
+plot2.grid(PLOT_ON);
+plot2.plotting();
+\end{verbatim}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4in]{images/dataacq1_plot2.png}
+\caption{\label{fig:dataacq1_fig2} The unwrapped data recorded by \texttt{dataAcquisition.ch}.}
+\end{figure}
+
+Figure \ref{fig:dataacq1_fig2} displays the unwrapped data. It shows the motion as 
+one fluid motion starting at 0 degrees and ending at 720 degrees. 
+
+Finally, we want to generate a plot where the beginning of the motion correctly starts
+at time 0. Looking at Figure \ref{fig:dataacq1_fig2}, you will notice that there is about
+a fraction of a second delay before the joints actually start moving. For our final plot, we want
+to display a plot of the same data, but shifted to the left so that the motion starts at
+time zero. This will make it easier to verify the speed of the joint and the time it takes
+to get to 720 degrees. 
+
+To do this, we need to scan the angle data to find out when the joint actually starts moving.
+First, we declare a variable that will store the time at which the joint starts moving.
+\begin{verbatim}
+double startTime;
+\end{verbatim}
+Next, we begin looping through all of the angle data readings.
+We want to find the first angle reading where the absolute value of the angle is greater
+than zero. When we find that, we can break out of the loop.
+\begin{verbatim}
+i = 0;
+while((abs(angles1_unwrapped[i]) < 1) && (i < numDataPoints)) {
+  i++;
+}
+\end{verbatim}
+
+After the loop, the counter variable, 'i', should hold the element index of the first element
+where the angle has started changing. Thus, the value of \texttt{time[i]} will hold
+the time where the angle starts. We now store that in our variable:
+\begin{verbatim}
+startTime = time[i];
+\end{verbatim}
+If we subtract that value from all of our time stamps, we will effectively shift our 
+graph to the left such that the first non-zero value for the angle will be on the
+y-axis.
+\begin{verbatim}
+time = time - startTime;
+\end{verbatim}
+Now, we plot our data.
+\begin{verbatim}
+unwrapdeg(angles1_unwrapped, angles1);
+plot3.title("Unwrapped and shifted Data for Joint Angle 1 versus Time");
+plot3.label(PLOT_AXIS_X, "Time (seconds)");
+plot3.label(PLOT_AXIS_Y, "Angle (degrees)");
+plot3.data2D(time, angles1_unwrapped);
+plot3.grid(PLOT_ON);
+plot3.plotting();
+\end{verbatim}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4in]{images/dataacq1_plot3.png}
+\caption{\label{fig:dataacq1_fig3} The unwrapped and shifted data recorded by \texttt{dataAcquisition.ch}.}
+\end{figure}
+
+Figure \ref{fig:dataacq1_fig3}  displays our unwrapped data that has been time shifted. It can be seen
+that the beginning of the motion now happens at time 0, and it may be verified that the
+line generated is very close to the expected function, $\theta = 45 t$.
+
+\subsection{Example 2}
+It is also possible to record the joint angles for all four joints simultaneously
+with the \texttt{recordAngles()} function. The function is conceptually similar
+to \texttt{recordAngle()}, except that it obtains 4 joint angles for each timestamp.
+
+\subsubsection{Problem Statement}
+Record and plot the motion of all 4 joints of the Mobot as it performs the
+following two motions:
+\begin{enumerate}
+\item Turn right by rotating joints 360 degrees.
+\item Inchworm to the left twice.
+\end{enumerate}
+
+\subsubsection{\texttt{dataAcquisition2.ch} Source Code}
+\verbatiminput{../demos/chdemos/dataAcquisition2.ch}
+
+\subsubsection{\texttt{dataAcquisition2.ch} Explained}
+Similar to the previous data acquisition demo, we begin by including
+header files, declaring our robot variable, and connecting to the robot:
+\begin{verbatim}
+#include <mobot.h>
+#include <chplot.h>
+#include <numeric.h>
+CMobot robot;
+
+/* Connect to the robot */
+robot.connect();
+\end{verbatim}
+
+We also set our data acquisition interval, movement time, and calculate
+the number of data points:
+\begin{verbatim}
+double timeInterval = 0.1; /* Seconds */
+
+/* Record for 20 seconds */
+double movementTime = 20;
+int numDataPoints = movementTime / timeInterval; /* Unitless */
+\end{verbatim}
+For this motion, the value of 20 seconds was decided through trial-and-error.
+For complex motions such as inchworming, it is difficult to accurately estimate the 
+amount of time the motion will take to complete. Through experimentation and experience,
+it was determined that 20 seconds allowed for a sufficient amount of time to record the 
+turning motion and the inchworming motion. 
+
+Next, we declare our computational arrays for storing data and plotting, similar to 
+the previous demo. One main difference is we declare a separate computational array
+to store data for each joint angle.
+\begin{verbatim}
+/* Initialize the arrays to be used to store data */
+array double time[numDataPoints];
+array double angles1[numDataPoints];
+array double angles2[numDataPoints];
+array double angles3[numDataPoints];
+array double angles4[numDataPoints];
+
+/* Declare plotting variables */
+CPlot plot1, plot2;
+array double angles1_unwrapped[numDataPoints];
+array double angles2_unwrapped[numDataPoints];
+array double angles3_unwrapped[numDataPoints];
+array double angles4_unwrapped[numDataPoints];
+\end{verbatim}
+
+Before we begin the motion, we set all the joint speeds to 45 degrees/second
+and move the robot into its zero postition.
+\begin{verbatim}
+/* Set all joint speeds to 45 degrees/second */
+robot.setJointSpeeds(45, 45, 45, 45);
+
+/* Start the motion. First, move robot to zero position */
+robot.moveToZero();
+\end{verbatim}
+
+Next, we begin recording the data.
+\begin{verbatim}
+robot.recordAngles(time, angles1, angles2, angles3, angles4, numDataPoints, timeInterval);
+\end{verbatim}
+
+Similar to \texttt{recordAngle()}, the recording process occurs in the background as
+the main program continues. We next execute our desired motions:
+\begin{verbatim}
+robot.motionTurnRight(360);
+robot.motionInchwormLeft(2);
+\end{verbatim}
+
+Finally, we wait for the recording to finish.
+\begin{verbatim}
+robot.recordWait();
+\end{verbatim}
+
+Now that all of the data has been acquired, we unwrap and plot the data.
+\begin{verbatim}
+unwrapdeg(angles1_unwrapped, angles1);
+unwrapdeg(angles2_unwrapped, angles2);
+unwrapdeg(angles3_unwrapped, angles3);
+unwrapdeg(angles4_unwrapped, angles4);
+plot2.title("Unwrapped Data for Joint Angles versus Time");
+plot2.label(PLOT_AXIS_X, "Time (seconds)");
+plot2.label(PLOT_AXIS_Y, "Angle (degrees)");
+plot2.data2D(time, angles1_unwrapped);
+plot2.data2D(time, angles2_unwrapped);
+plot2.data2D(time, angles3_unwrapped);
+plot2.data2D(time, angles4_unwrapped);
+plot2.legend("Joint 1", 0);
+plot2.legend("Joint 2", 1);
+plot2.legend("Joint 3", 2);
+plot2.legend("Joint 4", 3);
+plot2.grid(PLOT_ON);
+plot2.plotting();
+\end{verbatim}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4in]{images/dataacq2_plot1.png}
+\caption{\label{fig:dataacq2_fig1} The unwrapped data recorded by \texttt{dataAcquisition2.ch}.}
+\end{figure}
+
+Figure \ref{fig:dataacq2_fig1} shows the captured data from the Mobot. During the first
+part of the motions, joints 1 and 4 move in opposite directions to rotate the robot to
+the right. After rotating 360 degrees, joints 2 and 3 move to inchworm the robot to the
+left twice.
+
+\subsection{Example 3}
+\subsubsection{Problem Statement}
+A robot is equipped with 3.5 inch diameter wheels. Write a piece of code which rolls the
+robot forward at 2.5 inches per second for a distance of 12 inches. 
+
+\subsubsection{\texttt{dataAcquisition3.ch} Source Code}
+\verbatiminput{../demos/chdemos/dataAcquisition3.ch}
+
+\subsubsection{\texttt{dataAcquisition3.ch} Explained}
+The first lines include header files and set up the robot similar to the previous
+demos:
+\begin{verbatim}
+#include <mobot.h>
+#include <chplot.h>
+#include <numeric.h>
+CMobot robot;
+
+/* Connect to the robot */
+robot.connect();
+\end{verbatim}
+
+Next, we initialize some variables. First, we make a variable to store the speed
+we want to move the robot.
+\begin{verbatim}
+double speed = 2.5; /* inches / second */
+\end{verbatim}
+
+Next, a variable for the distance.
+\begin{verbatim}
+double distance = 12; /* inches */
+\end{verbatim}
+
+And a variable for the wheel radius...
+\begin{verbatim}
+double radius = 3.5/2.0; /* inches */
+\end{verbatim}
+
+Now we wish to calculate the angle that the wheels need to turn in order to
+travel a distance of 12 inches. To do this, we use a function called
+\texttt{distance2angle()}. The \texttt{distance2angle()} function 
+takes a wheel radius and the distance as arguments and returns the angle
+the wheel must turn to travel that distance. 
+\begin{verbatim}
+double angle = distance2angle(radius, distance); /* degrees */
+\end{verbatim}
+
+For the next step, we must calculate our estimated movement time, similar to the
+\texttt{dataAcquisition.ch} demo presented earlier. 
+\begin{verbatim}
+double movementTime = distance / speed; /* Seconds */
+\end{verbatim}
+
+Is in previous demos, we include an extra second in our movement time. We
+also calculate the number of data points based on the total movement time
+and the time interval.
+\begin{verbatim}
+movementTime = movementTime + 1; 
+double timeInterval = 0.1; /* seconds */
+int numDataPoints = movementTime / timeInterval; /* Unitless */
+\end{verbatim}
+
+Now, we allocate our computational arrays for storing data. We have arrays 
+for the time, angles, and also distances.
+\begin{verbatim}
+array double time[numDataPoints];
+array double angles1[numDataPoints];
+array double distances[numDataPoints];
+
+/* Declare plotting variables */
+CPlot plot;
+array double angles1_unwrapped[numDataPoints];
+\end{verbatim}
+
+Before beginning the motion, we move the robot to zero position and set the 
+wheel speeds.
+\begin{verbatim}
+/* Start the motion. First, move robot to zero position */
+robot.moveToZero();
+/* Set robot wheel speed */
+robot.setTwoWheelRobotSpeed(speed, radius);
+\end{verbatim}
+
+Start recording the angle of the first joint.
+\begin{verbatim}
+robot.recordAngle(ROBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
+\end{verbatim}
+
+Move the robot forward by the angle calculated earlier with \texttt{distance2angle()}.
+\begin{verbatim}
+robot.motionRollForward(angle);
+\end{verbatim}
+
+Wait for the recording to finish.
+\begin{verbatim}
+robot.recordWait();
+\end{verbatim}
+
+Finally, we want to unwrap and shift the data and convert the angle readings to a distance.
+The unwrap and shifting process is identical to Example 1 of this section. 
+We convert the angles back to a distance using the \texttt{angle2distance()} function,
+which takes the radius of a wheel and the angle moved in degrees as arguments and
+return the distance traveled. The arguments can be single variables or computational
+arrays. If the angle argument is a computational array, the value returned is also
+a computational array.
+\begin{verbatim}
+/* Unwrap the data */
+unwrapdeg(angles1_unwrapped, angles1);
+/* Shift the data */
+double startTime;
+for(i = 0; i < numDataPoints; i++) {
+  if(abs(angles1_unwrapped[i]) > 1) {
+    break;
+  }
+}
+startTime = time[i];
+/* Subtract the start time from all time stamps */
+for(i = 0; i < numDataPoints; i++) {
+  time[i] = time[i] - startTime;
+}
+/* Convert angles to displacement */
+distances = angle2distance(radius, angles1_unwrapped);
+\end{verbatim}
+
+Finally, we create a plot of the data.
+\begin{verbatim}
+plot.title("Displacement versus Time");
+plot.label(PLOT_AXIS_X, "Time (seconds)");
+plot.label(PLOT_AXIS_Y, "Displacement (inches)");
+plot.data2D(time, distances);
+plot.grid(PLOT_ON);
+plot.plotting();
+\end{verbatim}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4in]{images/dataacq3_plot1.png}
+\caption{\label{fig:dataacq3_fig1} The unwrapped data recorded by \texttt{dataAcquisition2.ch}.}
+\end{figure}
+
+Figure \ref{fig:dataacq3_fig1} displays the distance data acquired during the motion. It can
+be seen that the robot traveled to a distance of 12 inches, and then stopped. 
+
 \section{Recalibrating the Mobot}
-It is possible to recalibrate the Mobot's zero positions. To recalibrate
+A user may recalibrate the Mobot's zero positions if necessary. To recalibrate
 the Mobot, perform the following steps:
 \begin{itemize}
 \item Press both of the Mobot's ``A'' and ``B'' buttons simultaneously. The
 blue status LED light on the Mobot should blink several times and then remain
 off.
 \item Power off the Mobot.
-\item Manually move the Mobot joints into the correct zero position. This may be
+\item Manually move the Mobot joints into the correct zero position, as shown in Figure \ref{fig:zeroposition}. This may be
 done visually, or by using flat surfaces as a guide.
 \item Power on the Mobot while it is in the correct zero position. After calibration,
 the Mobot will perform a short movement routine to test all of its joints. The
@@ -1448,6 +2139,8 @@ Value & Description \\
 \input{cmobotgroup_api/cmobotgroup.tex}
 % Index
 %\addcontentsline{toc}{chapter}{Index}
+
+\section{\label{sec:utility_functions}Miscellaneous Utility Functions}
 \printindex
 
 \end{document}
