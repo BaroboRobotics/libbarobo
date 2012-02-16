@@ -1,0 +1,22 @@
+int shiftTime(array double time[:], array double angle[:], int n, double threshhold)
+{
+  int i;
+  for(i = 0; i < n; i++) {
+    if(abs(angle[i]) > threshhold) {
+      break;
+    }
+  }
+  double startTime;
+  startTime = time[i];
+  /* Shift time values */
+  int j;
+  for(j = 0; j < n; j++) {
+    if(j < i) {
+      time[j] = 0;
+      angle[j] = angle[i];
+    } else {
+      time[j] = time[j] - startTime;
+    }
+  }
+  return i;
+}
