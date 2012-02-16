@@ -11,7 +11,7 @@
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::recordAngles(robotJointId_t id, double time[:], double angle1[:], double angle2[:], double angle3[:], double angle4[:], int num, int msecs);
+int CMobot::recordAngles(robotJointId_t id, double time[:], double angle1[:], double angle2[:], double angle3[:], double angle4[:], int num, double seconds);
 \end{verbatim}
 
 \noindent
@@ -37,7 +37,7 @@ discussed in Section \ref{sec:robotJointId_t} on page
 \texttt{angle3} & An array which will store the angle values for joint 3. \\
 \texttt{angle4} & An array which will store the angle values for joint 4. \\
 \texttt{num} & The size of the arrays. \\
-\texttt{msecs} & The number of milliseconds between angle readings.
+\texttt{seconds} & The number of seconds between angle readings.
 \end{tabular}
 \end{description}
 
@@ -45,14 +45,16 @@ discussed in Section \ref{sec:robotJointId_t} on page
 {\bf Description}\\
 This function is used to accurately record the motion of a Mobot joint at a relatively fast
 rate. The function will fill the \texttt{time} and \texttt{angle} arrays with data
-at the rate specified by \texttt{msecs}. A typical value for \texttt{msecs} is 100, or
+at the rate specified by \texttt{seconds}. A typical value for \texttt{seconds} is 0.1, or
 polling 10 times a second. If the communication speed cannot maintain 
 the requested rate, (if \texttt{msecs} is too low, in other words), the function will
-collect data as fast as possible. 
+collect data as fast as possible. The lowest allowable rate is 0.05, however there is
+no guarantee that data will actually be collected at that rate, due to communication noise,
+distance to the module, etc.
 
 The length of time to collect the data can be calculated by the formula \\
 \begin{equation*}
-\text{seconds} = (\text{num} \times \text{msecs}) / 1000
+\text{Total Time} = (\text{num} \times \text{seconds}) 
 \end{equation*}
 
 This function is a non-blocking function. After calling this function, a call to

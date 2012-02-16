@@ -52,6 +52,9 @@ and select the menu item ``Robot $\rightarrow$ Configure Robot Bluetooth''. \\
 \texttt{moveWait()} & Wait until all motors have stopped moving. \\
 %\texttt{setJointDirection()} & Set the motor direction of a motor. Set
 %to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
+\texttt{recordAngle()} & Begin recording the angle of a joint. \\
+\texttt{recordAngles()} & Begin recording the angle of all joints. \\
+\texttt{recordWait()} & Wait for recording operations to finish. \\
 \texttt{setJointSpeed()} & Set a motor's speed setting in radians per second. \\
 \texttt{setJointSpeeds()} & Set all motor speeds in radians per second. \\
 \texttt{setJointSpeedRatio()} & Set a joints speed setting to a fraction of its maximum speed, a value between 0 and 1. \\
@@ -136,6 +139,7 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \input{api/moveWait}
 \input{api/recordAngle}
 \input{api/recordAngles}
+\input{api/recordWait}
 %\input{api/setJointDirection}
 \input{api/setJointSpeed}
 \input{api/setJointSpeedRatio}

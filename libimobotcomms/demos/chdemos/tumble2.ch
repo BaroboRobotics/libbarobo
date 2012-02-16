@@ -25,7 +25,7 @@ for(i = 0; i < num; i++) {
     robot.moveJointTo(ROBOT_JOINT3, 0);
     robot.moveJointTo(ROBOT_JOINT2, 0);
     robot.moveJointTo(ROBOT_JOINT3, 80);
-    if(i != (num-1)) {
+    if(i != (num-1)) { /* Do not perform this motion on the last tumble */
         robot.moveJointTo(ROBOT_JOINT3, 45);
     }
 }

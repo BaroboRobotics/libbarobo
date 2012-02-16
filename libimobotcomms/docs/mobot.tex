@@ -21,7 +21,7 @@
 \vspace*{2.5cm}
 {\Huge\sf\bf Mobot User's Guide}\\
 \vspace*{2.5cm}
-{\Large\bf Version 1.3}
+{\Large\bf Version 1.3.6}
 \vspace{4.5cm}
 
 \includegraphics[width=4in]{images/Mobot_Camera_Stand.JPG}
@@ -278,7 +278,7 @@ the distance the real robot travels during the calculated time.
 
 \subsubsection{Problem Solution}
 \begin{enumerate}
-\item We are given that a robot is turning its wheels at 45 degrees per second, and 
+\item We are given that a robot is turning its wheels at a constant speed of 45 degrees per second, and 
 needs to rotate the wheels 720 degrees. The amount of time this will take is
 \begin{equation*}
 \frac{720 ~\mathrm{degrees}}{45 ~\mathrm{degrees/second}} = 16 ~\mathrm{seconds}
@@ -287,7 +287,7 @@ needs to rotate the wheels 720 degrees. The amount of time this will take is
 \item The circumference of a circle can be determined with the equation
 \begin{equation*}
 c = 2 \pi r
-\end{equation*}, where $r$ is the radius of the circle. Since our robot will
+\end{equation*} where $r$ is the radius of the circle. Since our robot will
 turn its wheels two full rotations during the motion, it will travel 2 circumferences
 in distance. Thus, the distance the robot should travel is
 \begin{equation*}
@@ -307,28 +307,16 @@ To verify these results with a real robot the RobotController program may be use
 \item Set the joint speeds for joints 1 and 4 to 45 degrees per second. This may
 be done by typing "45" into the appropriate text boxes for joint 1 and 4 speeds at 
 the bottom left of the RobotController and then clicking the "Set" button.
-\item While holding the robot off the ground, make the robot begin turning its wheels
-by clicking on the up arrows for joints 1 and 4 in the ``Individual Joint Control"
-section of the RobotController.
-\item Using a stopwatch, place the robot on the ground and time its progress
-for 16 seconds. The distance the robot travels should be approximately 22 inches.
-\end{enumerate}
-
-Alternatively, the following method may be used:
-\begin{enumerate}
-\item Set the robot on the ground.
-\item Set the joint speeds of joints 1 and 4 to 45 degrees per second.
-\item Click on the ``Up'' arrow in the ``Rolling Control'' section of the
-Robot Controller. This will roll the robot forward by rotating the faceplates
-360 degrees.
-\item Once the robot has stopped moving, click again on the ``Up'' arrow. This
-will roll the robot an additional 360 degrees, thereby rolling each of the wheels
-a total of 720 degrees.
-\item The distance the robot has traveled can then be measured, and should be
-approximately 22 inches.
+\item Type ``720'' into the text edit boxes below joints 1 and 4 in the joint
+position section of the GUI.
+\item Click the ``Move'' button. Joints 1 and 4 will turn 720 degrees, rolling
+the robot forward. The motion may be timed with a stopwatch.
 \end{enumerate}
 
 \section{Getting Started with Programming the Mobot}
+The RobotController can be used to control the Mobot for simple tasks and applications.
+For more complicated applications, computer programs are better suited for controlling
+the Mobot.
 Mobot can be controlled using a C/C++ program through Ch, a C/C++ interpreter.
 Ch Professional Edition or Ch Student Edition software is required to run the 
 demo programs for controlling Mobot. Ch is available from SoftIntegration, Inc. at 
@@ -908,8 +896,8 @@ double angle3 = 45;
 for(i = 0; i < num; i++) {
     robot.moveJointTo(ROBOT_JOINT2, angle2); /* Move joint 2 */
     robot.moveJointTo(ROBOT_JOINT3, angle3); /* Move joint 3 */
-    robot.moveJointTo(ROBOT_JOINT2, 0);      /* Extend joint 2 */
-    robot.moveJointTo(ROBOT_JOINT3, 0);      /* Extend joint 3 */
+    robot.moveJointTo(ROBOT_JOINT2, 0);      /* Move joint 2 */
+    robot.moveJointTo(ROBOT_JOINT3, 0);      /* Move joint 3 bace to zero position*/
 }
 \end{verbatim}
 The values of the variables \texttt{angle2} and \texttt{angle3} may also be modified
@@ -1074,7 +1062,7 @@ similar to previous demos. The last two lines in the program appear like so:
 robot.moveJointNB(ROBOT_JOINT1, 360); // Non-Blocking version
 robot.moveJoint(ROBOT_JOINT4, 360);
 \end{verbatim}
-The first line turns joint 1 360 degrees. However, since it is moved with a non-blocking function,
+The first line turns joint 1 for 360 degrees. However, since it is moved with a non-blocking function,
 the program immediately continues to the next line. The second line turns joint 4 for
 360 degrees. Because computer programs execute so fast compared to the physical
 motion of the robots, this program effectively begins rotating joints 1 and 4 
@@ -1200,7 +1188,7 @@ is balancing on joint 1.
     robot.moveJointTo(ROBOT_JOINT3, 0);
     robot.moveJointTo(ROBOT_JOINT2, 0);
     robot.moveJointTo(ROBOT_JOINT3, 80);
-    if(i != (num-1)) {
+    if(i != (num-1)) { /* Do not perform this motion on the last tumble */
         robot.moveJointTo(ROBOT_JOINT3, 45);
     }
 }
@@ -1561,9 +1549,10 @@ groupD.motionUnstand();
 \section{Data Acquisition}
 \subsection{Example 1}
 \subsubsection{Problem Statement}
-Roll a robot forward by rotating the wheels 720 degrees at 45 degrees per
+Roll a robot forward by rotating the wheels 720 degrees at a constant speed of 45 degrees per
 second. Record the motion of joint 1 during the motion and display a plot
-of the joint angle versus time.
+of the joint angle versus time. The motion should show that the joint angle $\theta$
+is a linear function of time in the form $\theta = 45t$.
 
 \subsubsection{\texttt{dataAcquisition.ch} Source Code}
 \verbatiminput{../demos/chdemos/dataAcquisition.ch}
@@ -1585,7 +1574,7 @@ arrays are are covered in the Ch User's Guide.
 Next some variables are declared. First, we declare a variable to hold our
 desired speed:
 \begin{verbatim}
-double speed = 45; /* Degrees / second */
+double speed = 45; /* Degrees/second */
 \end{verbatim}
 Now we declare a variable to hold the angle we want to rotate our faceplate joints:
 \begin{verbatim}
@@ -1635,7 +1624,7 @@ readings.
 
 Next, we declare some computational arrays to hold the data we will record.
 \begin{verbatim}
-array double time1[numDataPoints];
+array double time[numDataPoints];
 array double angles1[numDataPoints];
 \end{verbatim}
 Note that we have used the variable \texttt{numDataPoints} to specify the size
@@ -1646,13 +1635,13 @@ the user is able to request a certain time interval, wireless and communication
 uncertainties may contribute to some fluctuation in communication times and speeds. 
 In order to ensure accurate data, as the Mobot sends joint data to the computer, 
 the Mobot will place an accurate timestamp on each piece of data as it was recorded
-on the Mobot itself. These timestamps are stored in the \texttt{time1} array and
+on the Mobot itself. These timestamps are stored in the \texttt{time} array and
 the joint angles will be stored in the \texttt{angles1} array.
 
 The last variables we will declare are related to generating a plot to display
 the captured data. 
 \begin{verbatim}
-CPlot plot1, plot2;
+CPlot plot1, plot2, plot3;
 array double angles1_unwrapped[numDataPoints];
 \end{verbatim}
 The variables \texttt{plot1} and \texttt{plot2} will hold the two plots we will
@@ -1672,7 +1661,7 @@ robot.setJointSpeed(ROBOT_JOINT4, speed);
 
 Next, we start capturing the data by using the \texttt{recordAngle()} function:
 \begin{verbatim}
-robot.recordAngle(ROBOT_JOINT1, time1, angles1, numDataPoints, timeInterval);
+robot.recordAngle(ROBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
 \end{verbatim}
 
 The recording process begins immediately and continues in the background. Now,
@@ -1697,7 +1686,7 @@ plot the original raw data directly from the Mobot.
 plot1.title("Original Data for Joint Angle 1 versus Time");
 plot1.label(PLOT_AXIS_X, "Time (seconds)");
 plot1.label(PLOT_AXIS_Y, "Angle (degrees)");
-plot1.data2D(time1, angles1);
+plot1.data2D(time, angles1);
 plot1.grid(PLOT_ON);
 plot1.plotting();
 \end{verbatim}
@@ -1727,7 +1716,7 @@ to plotting our wrapped data:
 plot2.title("Unwrapped Data for Joint Angle 1 versus Time");
 plot2.label(PLOT_AXIS_X, "Time (seconds)");
 plot2.label(PLOT_AXIS_Y, "Angle (degrees)");
-plot2.data2D(time1, angles1_unwrapped);
+plot2.data2D(time, angles1_unwrapped);
 plot2.grid(PLOT_ON);
 plot2.plotting();
 \end{verbatim}
@@ -1740,6 +1729,61 @@ plot2.plotting();
 
 Figure \ref{fig:dataacq1_fig2} displays the unwrapped data. It shows the motion as 
 one fluid motion starting at 0 degrees and ending at 720 degrees. 
+
+Finally, we want to generate a plot where the beginning of the motion correctly starts
+at time 0. Looking at Figure \ref{fig:dataacq1_fig2}, you will notice that there is about
+a fraction of a second delay before the joints actually start moving. For our final plot, we want
+to display a plot of the same data, but shifted to the left so that the motion starts at
+time zero. This will make it easier to verify the speed of the joint and the time it takes
+to get to 720 degrees. 
+
+To do this, we need to scan the angle data to find out when the joint actually starts moving.
+First, we declare a variable that will store the time at which the joint starts moving.
+\begin{verbatim}
+double startTime;
+\end{verbatim}
+Next, we begin looping through all of the angle data readings.
+We want to find the first angle reading where the absolute value of the angle is greater
+than zero. When we find that, we can break out of the loop.
+\begin{verbatim}
+i = 0;
+while((abs(angles1_unwrapped[i]) < 1) && (i < numDataPoints)) {
+  i++;
+}
+\end{verbatim}
+
+After the loop, the counter variable, 'i', should hold the element index of the first element
+where the angle has started changing. Thus, the value of \texttt{time[i]} will hold
+the time where the angle starts. We now store that in our variable:
+\begin{verbatim}
+startTime = time[i];
+\end{verbatim}
+If we subtract that value from all of our time stamps, we will effectively shift our 
+graph to the left such that the first non-zero value for the angle will be on the
+y-axis.
+\begin{verbatim}
+time = time - startTime;
+\end{verbatim}
+Now, we plot our data.
+\begin{verbatim}
+unwrapdeg(angles1_unwrapped, angles1);
+plot3.title("Unwrapped and shifted Data for Joint Angle 1 versus Time");
+plot3.label(PLOT_AXIS_X, "Time (seconds)");
+plot3.label(PLOT_AXIS_Y, "Angle (degrees)");
+plot3.data2D(time, angles1_unwrapped);
+plot3.grid(PLOT_ON);
+plot3.plotting();
+\end{verbatim}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4in]{images/dataacq1_plot3.png}
+\caption{\label{fig:dataacq1_fig3} The unwrapped and shifted data recorded by \texttt{dataAcquisition.ch}.}
+\end{figure}
+
+Figure \ref{fig:dataacq1_fig3}  displays our unwrapped data that has been time shifted. It can be seen
+that the beginning of the motion now happens at time 0, and it may be verified that the
+line generated is very close to the expected function, $\theta = 45 t$.
 
 \subsection{Example 2}
 It is also possible to record the joint angles for all four joints simultaneously
@@ -1790,7 +1834,7 @@ the previous demo. One main difference is we declare a separate computational ar
 to store data for each joint angle.
 \begin{verbatim}
 /* Initialize the arrays to be used to store data */
-array double time1[numDataPoints];
+array double time[numDataPoints];
 array double angles1[numDataPoints];
 array double angles2[numDataPoints];
 array double angles3[numDataPoints];
@@ -1804,14 +1848,19 @@ array double angles3_unwrapped[numDataPoints];
 array double angles4_unwrapped[numDataPoints];
 \end{verbatim}
 
-Before we begin the motion, we move the robot into its zero postition.
+Before we begin the motion, we set all the joint speeds to 45 degrees/second
+and move the robot into its zero postition.
 \begin{verbatim}
+/* Set all joint speeds to 45 degrees/second */
+robot.setJointSpeeds(45, 45, 45, 45);
+
+/* Start the motion. First, move robot to zero position */
 robot.moveToZero();
 \end{verbatim}
 
 Next, we begin recording the data.
 \begin{verbatim}
-robot.recordAngles(time1, angles1, angles2, angles3, angles4, numDataPoints, timeInterval);
+robot.recordAngles(time, angles1, angles2, angles3, angles4, numDataPoints, timeInterval);
 \end{verbatim}
 
 Similar to \texttt{recordAngle()}, the recording process occurs in the background as
@@ -1835,10 +1884,10 @@ unwrapdeg(angles4_unwrapped, angles4);
 plot2.title("Unwrapped Data for Joint Angles versus Time");
 plot2.label(PLOT_AXIS_X, "Time (seconds)");
 plot2.label(PLOT_AXIS_Y, "Angle (degrees)");
-plot2.data2D(time1, angles1_unwrapped);
-plot2.data2D(time1, angles2_unwrapped);
-plot2.data2D(time1, angles3_unwrapped);
-plot2.data2D(time1, angles4_unwrapped);
+plot2.data2D(time, angles1_unwrapped);
+plot2.data2D(time, angles2_unwrapped);
+plot2.data2D(time, angles3_unwrapped);
+plot2.data2D(time, angles4_unwrapped);
 plot2.legend("Joint 1", 0);
 plot2.legend("Joint 2", 1);
 plot2.legend("Joint 3", 2);
@@ -1922,7 +1971,7 @@ int numDataPoints = movementTime / timeInterval; /* Unitless */
 Now, we allocate our computational arrays for storing data. We have arrays 
 for the time, angles, and also distances.
 \begin{verbatim}
-array double time1[numDataPoints];
+array double time[numDataPoints];
 array double angles1[numDataPoints];
 array double distances[numDataPoints];
 
@@ -1942,7 +1991,7 @@ robot.setTwoWheelRobotSpeed(speed, radius);
 
 Start recording the angle of the first joint.
 \begin{verbatim}
-robot.recordAngle(ROBOT_JOINT1, time1, angles1, numDataPoints, timeInterval);
+robot.recordAngle(ROBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
 \end{verbatim}
 
 Move the robot forward by the angle calculated earlier with \texttt{distance2angle()}.
@@ -1955,19 +2004,38 @@ Wait for the recording to finish.
 robot.recordWait();
 \end{verbatim}
 
-Finally, we want to unwrap the data and convert the angle readings to a distance. 
+Finally, we want to unwrap and shift the data and convert the angle readings to a distance.
+The unwrap and shifting process is identical to Example 1 of this section. 
 We convert the angles back to a distance using the \texttt{angle2distance()} function,
 which takes the radius of a wheel and the angle moved in degrees as arguments and
 return the distance traveled. The arguments can be single variables or computational
 arrays. If the angle argument is a computational array, the value returned is also
 a computational array.
+\begin{verbatim}
+/* Unwrap the data */
+unwrapdeg(angles1_unwrapped, angles1);
+/* Shift the data */
+double startTime;
+for(i = 0; i < numDataPoints; i++) {
+  if(abs(angles1_unwrapped[i]) > 1) {
+    break;
+  }
+}
+startTime = time[i];
+/* Subtract the start time from all time stamps */
+for(i = 0; i < numDataPoints; i++) {
+  time[i] = time[i] - startTime;
+}
+/* Convert angles to displacement */
+distances = angle2distance(radius, angles1_unwrapped);
+\end{verbatim}
 
 Finally, we create a plot of the data.
 \begin{verbatim}
 plot.title("Displacement versus Time");
 plot.label(PLOT_AXIS_X, "Time (seconds)");
 plot.label(PLOT_AXIS_Y, "Displacement (inches)");
-plot.data2D(time1, distances);
+plot.data2D(time, distances);
 plot.grid(PLOT_ON);
 plot.plotting();
 \end{verbatim}
@@ -2071,6 +2139,8 @@ Value & Description \\
 \input{cmobotgroup_api/cmobotgroup.tex}
 % Index
 %\addcontentsline{toc}{chapter}{Index}
+
+\section{\label{sec:utility_functions}Miscellaneous Utility Functions}
 \printindex
 
 \end{document}

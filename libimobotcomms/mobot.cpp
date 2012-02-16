@@ -1394,8 +1394,13 @@ int Mobot_motionTumble(br_comms_t* comms, int num)
     Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(0));
     Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(0));
     Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(80));
-    Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(45));
+    if(i != (num-1)) {
+      Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(45));
+    }
   }
+  Mobot_moveJointToNB(comms, ROBOT_JOINT2, 0);
+  Mobot_moveJointToNB(comms, ROBOT_JOINT3, 0);
+  Mobot_moveWait(comms);
   return 0;
 }
 
