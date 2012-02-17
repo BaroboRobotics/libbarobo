@@ -1,4 +1,4 @@
-/* Filename: walk.ch
+/* Filename: twoLinkedWalk.ch
    Control two modules and make them stand simultaneously.
    The joint4 of the first robot should be connected to the joint1 
    of the second robot. 

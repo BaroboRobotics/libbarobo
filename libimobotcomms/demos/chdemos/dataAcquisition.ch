@@ -9,7 +9,6 @@ CMobot robot;
 /* Connect to the robot */
 robot.connect();
 
-int i; 
 double speed = 45; /* Degrees/second */
 double angle = 720; /* Degrees */
 double timeInterval = 0.1; /* Seconds */
@@ -28,7 +27,10 @@ array double angles1[numDataPoints];
 
 /* Declare plotting variables */
 CPlot plot1, plot2, plot3;
-array double angles1_unwrapped[numDataPoints];
+array double angles1Unwrapped[numDataPoints];
+
+/* Declare time shifted data */
+double tolerance = 1.0; /* Degrees */
 
 /* Start the motion. First, move robot to zero position */
 robot.moveToZero();
@@ -54,30 +56,23 @@ plot1.grid(PLOT_ON);
 plot1.plotting();
 
 /* Plot the unwrapped data */
-unwrapdeg(angles1_unwrapped, angles1);
+unwrapdeg(angles1Unwrapped, angles1);
 plot2.title("Unwrapped Data for Joint Angle 1 versus Time");
 plot2.label(PLOT_AXIS_X, "Time (seconds)");
 plot2.label(PLOT_AXIS_Y, "Angle (degrees)");
-plot2.data2D(time, angles1_unwrapped);
+plot2.data2D(time, angles1Unwrapped);
 plot2.grid(PLOT_ON);
 plot2.plotting();
 
 /* Adjust the time delay */
-/* First ,find the first occurance of an angle that is greater than +- 1 degree */
-double startTime; 
-i = 0;
-while((abs(angles1_unwrapped[i]) < 1) && (i < numDataPoints)) {
-  i++;
-}
-startTime = time[i];
-/* Subtract the start time from all time stamps */
-time = time - startTime;
+/* Shift the time so the movement starts at time 0 */
+shiftTime(tolerance, numDataPoints, time, angles1Unwrapped);
+
 /* Plot the data */
-unwrapdeg(angles1_unwrapped, angles1);
 plot3.title("Unwrapped and shifted Data for Joint Angle 1 versus Time");
 plot3.label(PLOT_AXIS_X, "Time (seconds)");
 plot3.label(PLOT_AXIS_Y, "Angle (degrees)");
-plot3.data2D(time, angles1_unwrapped);
+plot3.data2D(time, angles1Unwrapped);
 plot3.grid(PLOT_ON);
 plot3.plotting();
 

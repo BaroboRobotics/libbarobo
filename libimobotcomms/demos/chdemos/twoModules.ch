@@ -4,7 +4,7 @@
 CMobot robot1;
 CMobot robot2;
 
-/* Connect robot variables to the robot modules. The */
+/* Connect robot variables to the robot modules. */
 robot1.connect();
 robot2.connect();
 

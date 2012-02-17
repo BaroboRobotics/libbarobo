@@ -243,10 +243,15 @@ the position of the slider is moved, the Mobot will move its joints to match the
 sliders. 
 
 Underneath the sliders, there are four text entry boxes. The text boxes
-accept specific angles for each joint which the user may type in. When 
-the ``Move'' button is clicked, each joint will move to their respective 
-desired positions. If any text entry is left blank, the corresponding joint will
+accept specific angles for each joint which the user may type in. If 
+the ``MoveTo'' button is clicked, each joint will move to their respective 
+desired absolute positions. If any text entry is left blank, the corresponding joint will
 not move. 
+
+If the ``Move'' button is clicked, the program treats the angles entered by the
+user as a relative amount to move. For instance, if the value ``360'' is entered
+into the box for joint 1 and ``Move'' is clicked, the joint will rotate one full
+rotation, no matter where the joint was when the motion began.
 \begin{comment}
 The second method for moving the joints is by entering the exact angles for the
 joints. Below each of the four sliders lies a text entry box. Values in degrees
@@ -424,7 +429,7 @@ degrees. The function is implemented in Ch with the code
 double rad2deg(double radians)
 {
     double degrees;
-    radians = radians * 180.0 / M_PI;
+    degrees = radians * 180.0 / M_PI;
     return degrees;
 }
 \end{verbatim}
@@ -1763,7 +1768,6 @@ shiftTime(tolerance, numDataPoints, time, angles1Unwrapped);
 Finally, we plot the shifted data.
 
 \begin{verbatim}
-unwrapdeg(angles1_unwrapped, angles1);
 plot3.title("Unwrapped and shifted Data for Joint Angle 1 versus Time");
 plot3.label(PLOT_AXIS_X, "Time (seconds)");
 plot3.label(PLOT_AXIS_Y, "Angle (degrees)");
@@ -1781,6 +1785,14 @@ plot3.plotting();
 Figure \ref{fig:dataacq1_fig3}  displays our unwrapped data that has been time shifted. It can be seen
 that the beginning of the motion now happens at time 0, and it may be verified that the
 line generated is very close to the expected function, $\theta = 45 t$.
+
+In many applications, the user may only be interested in the unwrapped, time shifted data. 
+In such a case, a simplified version of the program may be used. The program 
+\texttt{dataAcquisition1.ch} below removes the intermediate plots and can be modified
+to solve other data acquisition problems.
+
+\subsubsection{\texttt{dataAcquisition1.ch} Source Code}
+\verbatiminput{../demos/chdemos/dataAcquisition1.ch}
 
 \subsection{Example 2}
 It is also possible to record the joint angles for all four joints simultaneously
@@ -2167,6 +2179,7 @@ Value & Description \\
 %\addcontentsline{toc}{chapter}{Index}
 
 \section{\label{sec:utility_functions}Miscellaneous Utility Functions}
+\input{utility_funcs/utility_funcs.tex}
 \printindex
 
 \end{document}
