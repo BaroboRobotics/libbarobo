@@ -1874,7 +1874,9 @@ robot.recordAngles(time, angles1, angles2, angles3, angles4, numDataPoints, time
 \end{verbatim}
 
 Similar to \texttt{recordAngle()}, the recording process occurs in the background as
-the main program continues. We next execute our desired motions:
+the main program continues. We next execute our desired motions, which are to turn the
+robot to the right by rotating each wheel 360 degrees, and then inchworming to
+the left twice:
 \begin{verbatim}
 robot.motionTurnRight(360);
 robot.motionInchwormLeft(2);
@@ -1932,7 +1934,8 @@ left twice.
 \subsection{Example 3}
 \subsubsection{Problem Statement}
 A robot is equipped with 3.5 inch diameter wheels. Write a piece of code which rolls the
-robot forward at 2.5 inches per second for a distance of 12 inches. 
+robot forward at constant speed of 2.5 inches per second for a distance of 12 inches. 
+Verify that the data is linear and follows the relation $d = 2.5t$
 
 \subsubsection{\texttt{dataAcquisition3.ch} Source Code}
 \verbatiminput{../demos/chdemos/dataAcquisition3.ch}
@@ -2043,9 +2046,9 @@ arrays. If the angle argument is a computational array, the value returned is al
 a computational array. The \texttt{angle2distance()} function converts the angle
 to a distance using the following formula.
 \begin{equation*}
-d = \left(\theta \frac{180}{\pi}\right) r
+d = \left(\theta \frac{\pi}{180}\right) r
 \end{equation*}
-where $d$ is the distance travelled, $\theta$ is the angle rotated, and $r$ is the
+where $d$ is the distance travelled, $\theta$ is the angle rotated in degrees, and $r$ is the
 radius of the wheel. The units of distance for $d$ will be the same units as those
 chosen for $r$. For instance, if $r$ is expressed in inches, the result 
 
@@ -2083,7 +2086,7 @@ d = 2.5t
 which may be verified on the graph. Furthermore, the time that it should take to reach 
 12 inches is 
 \begin{equation}
-t = d / 2.5 = 12 / 2.5 = 4.8 \text{seconds}
+t = d / 2.5 = 12 / 2.5 = 4.8 ~\text{seconds}
 \end{equation}
 which may also be verified from the graph.
 
