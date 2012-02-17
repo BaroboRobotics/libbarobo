@@ -200,6 +200,7 @@ BEGIN_MESSAGE_MAP(CiMobotController_WindowsDlg, CDialog)
 	ON_COMMAND(ID_FILE_EXIT, &CiMobotController_WindowsDlg::OnFileExit)
 	ON_BN_CLICKED(IDC_BUTTON_MOVETOZERO, &CiMobotController_WindowsDlg::OnBnClickedButtonMovetozero)
 	ON_BN_CLICKED(IDC_BUTTON_SETSPD, &CiMobotController_WindowsDlg::OnBnClickedButtonSetspd)
+	ON_BN_CLICKED(IDC_BUTTON_MOVE, &CiMobotController_WindowsDlg::OnBnClickedButtonMove)
 END_MESSAGE_MAP()
 
 
@@ -401,7 +402,7 @@ void CiMobotController_WindowsDlg::handlerPlay()
     case 6: iMobotComms.motionStand(); break;
     case 7: iMobotComms.motionTurnLeft(360); break;
     case 8: iMobotComms.motionTurnRight(360); break;
-    case 9: iMobotComms.motionTumble(2); break;
+    case 9: iMobotComms.motionTumble(1); break;
     case 10: iMobotComms.motionUnstand(); break;
     default: break;
   }
@@ -866,6 +867,7 @@ DWORD WINAPI HandlerThread(void* arg)
           case B_M3B: dlg->handlerM3B(); break;
           case B_M4B: dlg->handlerM4B(); break;
           case B_SETPOS: dlg->handlerSETPOS(); break;
+          case B_MOVE: dlg->handlerMOVE(); break;                         
           case B_SETSPD: dlg->handlerSETSPD(); break;
           case B_FORWARD: dlg->handlerFORWARD(); break;
           case B_STOP: dlg->handlerSTOP(); break;
@@ -952,6 +954,44 @@ void CiMobotController_WindowsDlg::handlerSETPOS()
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
 		iMobotComms.moveJointToNB(ROBOT_JOINT4, pos);
+	}
+}
+
+void CiMobotController_WindowsDlg::OnBnClickedButtonMove()
+{
+  g_buttonState[B_MOVE].clicked = 1;
+  return;
+}
+
+void CiMobotController_WindowsDlg::handlerMOVE()
+{
+	/* Get strings for all of the edit boxes containing values */
+	TCHAR str[80];
+	double pos;
+	int len;
+	memset(str, 0, sizeof(TCHAR)*80);
+	len = m_edit_setpos1.GetLine(0, str, 79);
+	if(len > 0) {
+		_stscanf(str, TEXT("%lf"), &pos);
+		iMobotComms.moveJointNB(ROBOT_JOINT1, pos);
+	}
+	memset(str, 0, sizeof(TCHAR)*80);
+	len = m_edit_setpos2.GetLine(0, str, 79);
+	if(len > 0) {
+		_stscanf(str, TEXT("%lf"), &pos);
+		iMobotComms.moveJointNB(ROBOT_JOINT2, pos);
+	}
+	memset(str, 0, sizeof(TCHAR)*80);
+	len = m_edit_setpos3.GetLine(0, str, 79);
+	if(len > 0) {
+		_stscanf(str, TEXT("%lf"), &pos);
+		iMobotComms.moveJointNB(ROBOT_JOINT3, pos);
+	}
+	memset(str, 0, sizeof(TCHAR)*80);
+	len = m_edit_setpos4.GetLine(0, str, 79);
+	if(len > 0) {
+		_stscanf(str, TEXT("%lf"), &pos);
+		iMobotComms.moveJointNB(ROBOT_JOINT4, pos);
 	}
 }
 
@@ -1140,3 +1180,4 @@ void CiMobotController_WindowsDlg::handlerSETSPD()
     UpdateSpeedSliders(3, pos);
 	}
 }
+
