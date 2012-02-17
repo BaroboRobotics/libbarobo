@@ -667,14 +667,7 @@ int Mobot_moveJointNB(br_comms_t* comms, robotJointId_t id, double angle)
 
 int Mobot_moveJointTo(br_comms_t* comms, robotJointId_t id, double angle)
 {
-  char buf[160];
-  int status;
-  int bytes_read;
-  sprintf(buf, "SET_MOTOR_POSITION %d %lf", id, angle);
-  status = SendToIMobot(comms, buf, strlen(buf)+1);
-  if(status < 0) return status;
-  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
-  if(strcmp(buf, "OK")) return -1;
+  Mobot_moveJointToNB(comms, id, angle);
   /* Wait for the motion to finish */
   return Mobot_moveJointWait(comms, id);
 }
@@ -697,6 +690,16 @@ int Mobot_moveJointToNB(br_comms_t* comms, robotJointId_t id, double angle)
   char buf[160];
   int status;
   int bytes_read;
+  if((id == ROBOT_JOINT2) || (id == ROBOT_JOINT3)) {
+    if(angle > 90) {
+      fprintf(stderr, "Warning: Angle for joint %d set beyond limits.\n", (int)(id + 1));
+      angle = 90;
+    }
+    if(angle < -90) {
+      fprintf(stderr, "Warning: Angle for joint %d set beyond limits.\n", (int)(id + 1));
+      angle = -90;
+    }
+  }
   sprintf(buf, "SET_MOTOR_POSITION %d %lf", id, angle);
   status = SendToIMobot(comms, buf, strlen(buf)+1);
   if(status < 0) return status;
