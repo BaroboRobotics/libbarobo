@@ -168,7 +168,7 @@ BEGIN
     CTEXT           "2",IDC_STATIC,174,150,24,8
     CTEXT           "3",IDC_STATIC,204,150,24,8
     CTEXT           "4",IDC_STATIC,234,150,24,8
-    LTEXT           "Joint speed ( [0, 180] deg/sec)",IDC_STATIC,12,138,100,8
+    LTEXT           "Joint speed ( [0, 120] deg/sec)",IDC_STATIC,12,138,100,8
     PUSHBUTTON      "Move",IDC_BUTTON_MOVE,204,282,54,12
 END
 
