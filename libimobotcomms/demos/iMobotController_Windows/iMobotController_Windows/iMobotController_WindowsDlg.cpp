@@ -12,6 +12,8 @@
 #define new DEBUG_NEW
 #endif
 
+#define MAXSPD 120
+
 CRITICAL_SECTION UpdateGuiCriticalSection;
 buttonState_t g_buttonState[B_NUMBUTTONS];
 
@@ -439,14 +441,14 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonconnect()
 void CiMobotController_WindowsDlg::InitSliders()
 {
 	for(int i = 0; i < 2; i++) {
-		m_slider_Speeds[i]->SetRange(0, 180, TRUE);
-		m_slider_Speeds[i]->SetPos(45);
+		m_slider_Speeds[i]->SetRange(0, MAXSPD, TRUE);
+		m_slider_Speeds[i]->SetPos(MAXSPD - 45);
 		m_slider_Positions[i]->SetRange(-90, 90, TRUE);
 		m_slider_Positions[i]->SetPos(0);
 	}
 	for(int i = 2; i < 4; i++) {
-		m_slider_Speeds[i]->SetRange(0, 180, TRUE);
-		m_slider_Speeds[i]->SetPos(45);
+		m_slider_Speeds[i]->SetRange(0, MAXSPD, TRUE);
+		m_slider_Speeds[i]->SetPos(MAXSPD - 45);
 		m_slider_Positions[i]->SetRange(-180, 180, TRUE);
 		m_slider_Positions[i]->SetPos(0);
 	}
@@ -463,7 +465,7 @@ void CiMobotController_WindowsDlg::UpdateSliders()
 		m_positions[i] = (int) position;
 		speed = 45;
 		iMobotComms.setJointSpeed((robotJointId_t)(i+1), speed);
-		m_slider_Speeds[i]->SetPos( 180 - speed );
+		m_slider_Speeds[i]->SetPos( MAXSPD - speed );
 		m_speeds[i] = speed;
     wchar_t buf[200];
     swprintf(buf, L"%lf", speed);
@@ -473,7 +475,7 @@ void CiMobotController_WindowsDlg::UpdateSliders()
 
 void CiMobotController_WindowsDlg::UpdateSpeedSliders(int i, double speed)
 {
-		m_slider_Speeds[i]->SetPos( 180 - speed);
+		m_slider_Speeds[i]->SetPos( MAXSPD - speed);
 		m_speeds[i] = speed;
     TCHAR buf[200];
     _stprintf(buf, TEXT("%lf"), speed);
@@ -836,7 +838,7 @@ DWORD WINAPI HandlerThread(void* arg)
       }
 
       /* Check the speed */
-      speed = 180 - dlg->m_slider_Speeds[i]->GetPos();
+      speed = MAXSPD - dlg->m_slider_Speeds[i]->GetPos();
       if(speed != dlg->m_speeds[i]) {
         mobot->setJointSpeed((robotJointId_t)(i+1), (double)speed);
         dlg->m_speeds[i] = speed;
