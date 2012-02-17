@@ -1037,6 +1037,9 @@ int Mobot_setJointSpeed(br_comms_t* comms, robotJointId_t id, double speed)
   char buf[160];
   int status;
   int bytes_read;
+  if(speed > comms->maxSpeed[(int)id-1]) {
+    fprintf(stderr, "Warning: Speed setting exceeds maximum speed.\n");
+  }
   comms->jointSpeeds[id-1] = speed;
   sprintf(buf, "SET_MOTOR_SPEED %d %lf", id, speed);
   status = SendToIMobot(comms, buf, strlen(buf)+1);
