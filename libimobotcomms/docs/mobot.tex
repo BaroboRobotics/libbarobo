@@ -243,10 +243,15 @@ the position of the slider is moved, the Mobot will move its joints to match the
 sliders. 
 
 Underneath the sliders, there are four text entry boxes. The text boxes
-accept specific angles for each joint which the user may type in. When 
-the ``Move'' button is clicked, each joint will move to their respective 
-desired positions. If any text entry is left blank, the corresponding joint will
+accept specific angles for each joint which the user may type in. If 
+the ``MoveTo'' button is clicked, each joint will move to their respective 
+desired absolute positions. If any text entry is left blank, the corresponding joint will
 not move. 
+
+If the ``Move'' button is clicked, the program treats the angles entered by the
+user as a relative amount to move. For instance, if the value ``360'' is entered
+into the box for joint 1 and ``Move'' is clicked, the joint will rotate one full
+rotation, no matter where the joint was when the motion began.
 \begin{comment}
 The second method for moving the joints is by entering the exact angles for the
 joints. Below each of the four sliders lies a text entry box. Values in degrees
@@ -424,7 +429,7 @@ degrees. The function is implemented in Ch with the code
 double rad2deg(double radians)
 {
     double degrees;
-    radians = radians * 180.0 / M_PI;
+    degrees = radians * 180.0 / M_PI;
     return degrees;
 }
 \end{verbatim}
@@ -1763,7 +1768,6 @@ shiftTime(tolerance, numDataPoints, time, angles1Unwrapped);
 Finally, we plot the shifted data.
 
 \begin{verbatim}
-unwrapdeg(angles1_unwrapped, angles1);
 plot3.title("Unwrapped and shifted Data for Joint Angle 1 versus Time");
 plot3.label(PLOT_AXIS_X, "Time (seconds)");
 plot3.label(PLOT_AXIS_Y, "Angle (degrees)");
@@ -1781,6 +1785,14 @@ plot3.plotting();
 Figure \ref{fig:dataacq1_fig3}  displays our unwrapped data that has been time shifted. It can be seen
 that the beginning of the motion now happens at time 0, and it may be verified that the
 line generated is very close to the expected function, $\theta = 45 t$.
+
+In many applications, the user may only be interested in the unwrapped, time shifted data. 
+In such a case, a simplified version of the program may be used. The program 
+\texttt{dataAcquisition1.ch} below removes the intermediate plots and can be modified
+to solve other data acquisition problems.
+
+\subsubsection{\texttt{dataAcquisition1.ch} Source Code}
+\verbatiminput{../demos/chdemos/dataAcquisition1.ch}
 
 \subsection{Example 2}
 It is also possible to record the joint angles for all four joints simultaneously
@@ -1862,7 +1874,9 @@ robot.recordAngles(time, angles1, angles2, angles3, angles4, numDataPoints, time
 \end{verbatim}
 
 Similar to \texttt{recordAngle()}, the recording process occurs in the background as
-the main program continues. We next execute our desired motions:
+the main program continues. We next execute our desired motions, which are to turn the
+robot to the right by rotating each wheel 360 degrees, and then inchworming to
+the left twice:
 \begin{verbatim}
 robot.motionTurnRight(360);
 robot.motionInchwormLeft(2);
@@ -1920,7 +1934,8 @@ left twice.
 \subsection{Example 3}
 \subsubsection{Problem Statement}
 A robot is equipped with 3.5 inch diameter wheels. Write a piece of code which rolls the
-robot forward at 2.5 inches per second for a distance of 12 inches. 
+robot forward at constant speed of 2.5 inches per second for a distance of 12 inches. 
+Verify that the data is linear and follows the relation $d = 2.5t$
 
 \subsubsection{\texttt{dataAcquisition3.ch} Source Code}
 \verbatiminput{../demos/chdemos/dataAcquisition3.ch}
@@ -2031,9 +2046,9 @@ arrays. If the angle argument is a computational array, the value returned is al
 a computational array. The \texttt{angle2distance()} function converts the angle
 to a distance using the following formula.
 \begin{equation*}
-d = \left(\theta \frac{180}{\pi}\right) r
+d = \left(\theta \frac{\pi}{180}\right) r
 \end{equation*}
-where $d$ is the distance travelled, $\theta$ is the angle rotated, and $r$ is the
+where $d$ is the distance travelled, $\theta$ is the angle rotated in degrees, and $r$ is the
 radius of the wheel. The units of distance for $d$ will be the same units as those
 chosen for $r$. For instance, if $r$ is expressed in inches, the result 
 
@@ -2071,7 +2086,7 @@ d = 2.5t
 which may be verified on the graph. Furthermore, the time that it should take to reach 
 12 inches is 
 \begin{equation}
-t = d / 2.5 = 12 / 2.5 = 4.8 \text{seconds}
+t = d / 2.5 = 12 / 2.5 = 4.8 ~\text{seconds}
 \end{equation}
 which may also be verified from the graph.
 
@@ -2167,6 +2182,7 @@ Value & Description \\
 %\addcontentsline{toc}{chapter}{Index}
 
 \section{\label{sec:utility_functions}Miscellaneous Utility Functions}
+\input{utility_funcs/utility_funcs.tex}
 \printindex
 
 \end{document}
