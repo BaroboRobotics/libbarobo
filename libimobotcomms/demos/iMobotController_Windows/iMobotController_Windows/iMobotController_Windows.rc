@@ -306,6 +306,7 @@ BEGIN
     POPUP "Help"
     BEGIN
         MENUITEM "Help",                        ID_HELP_HELP
+        MENUITEM "Demos",                       ID_HELP_DEMOS
         MENUITEM "About RobotController",       ID_HELP_ABOUTROBOTCONTROLLER
     END
 END

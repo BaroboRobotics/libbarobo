@@ -207,6 +207,7 @@ public:
   CEdit m_edit_setspd4;
   afx_msg void OnBnClickedButtonMove();
   void handlerMOVE();
+  afx_msg void OnHelpDemos();
 };
 
 DWORD WINAPI HandlerThread(void*);

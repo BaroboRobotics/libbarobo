@@ -201,6 +201,7 @@ BEGIN_MESSAGE_MAP(CiMobotController_WindowsDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_MOVETOZERO, &CiMobotController_WindowsDlg::OnBnClickedButtonMovetozero)
 	ON_BN_CLICKED(IDC_BUTTON_SETSPD, &CiMobotController_WindowsDlg::OnBnClickedButtonSetspd)
 	ON_BN_CLICKED(IDC_BUTTON_MOVE, &CiMobotController_WindowsDlg::OnBnClickedButtonMove)
+	ON_COMMAND(ID_HELP_DEMOS, &CiMobotController_WindowsDlg::OnHelpDemos)
 END_MESSAGE_MAP()
 
 
@@ -824,7 +825,7 @@ DWORD WINAPI HandlerThread(void* arg)
       position = -dlg->m_slider_Positions[i]->GetPos();
       if(lastPosition[i] != position) {
         if(initialized) {
-          mobot->moveJointToPIDNB((robotJointId_t)(i+1), (double) position);
+          mobot->moveJointToNB((robotJointId_t)(i+1), (double) position);
         }
         g_buttonState[S_M1P + i].clicked = 0;
         lastPosition[i] = position;
@@ -941,12 +942,18 @@ void CiMobotController_WindowsDlg::handlerSETPOS()
 	len = m_edit_setpos2.GetLine(0, str, 79);
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
+    if((pos < -90) || (pos > 90)) {
+      MessageBox(L"Error: Joint 2 position setting beyond join limits.");
+    }
 		iMobotComms.moveJointToNB(ROBOT_JOINT2, pos);
 	}
 	memset(str, 0, sizeof(TCHAR)*80);
 	len = m_edit_setpos3.GetLine(0, str, 79);
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
+    if((pos < -90) || (pos > 90)) {
+      MessageBox(L"Error: Joint 3 position setting beyond join limits.");
+    }
 		iMobotComms.moveJointToNB(ROBOT_JOINT3, pos);
 	}
 	memset(str, 0, sizeof(TCHAR)*80);
@@ -1181,3 +1188,31 @@ void CiMobotController_WindowsDlg::handlerSETSPD()
 	}
 }
 
+
+void CiMobotController_WindowsDlg::OnHelpDemos()
+{
+  USES_CONVERSION;
+  TCHAR chHome[MAX_PATH];
+  TCHAR command[MAX_PATH];
+  getChHome(chHome);
+  _stprintf(command, TEXT("%s\\bin\\chide.exe %s\\package\\chmobot\\demos\\*"), chHome, chHome);
+  //sprintf(command, "file://%s\\package\\chmobot\\docs\\index.html", "C:\\Ch");
+  //GotoURL(command, 0);
+  //system(T2A(command));
+  STARTUPINFO si;
+  PROCESS_INFORMATION pi;
+  ZeroMemory(&si, sizeof(si));
+  si.cb = sizeof(si);
+  ZeroMemory(&pi, sizeof(pi));
+  CreateProcess(
+	  NULL,
+	  command,
+      NULL,
+      NULL,
+      FALSE,
+      0,
+      NULL,
+      NULL,
+      &si,
+      &pi );
+}
