@@ -30,7 +30,8 @@ array double distances[numDataPoints];
 
 /* Declare plotting variables */
 CPlot plot;
-array double angles1_unwrapped[numDataPoints];
+array double angles1Unwrapped[numDataPoints];
+double tolerance = 1.0; /* Degrees */
 
 /* Start the motion. First, move robot to zero position */
 robot.moveToZero();
@@ -47,22 +48,11 @@ robot.motionRollForward(angle);
 robot.recordWait();
 
 /* Unwrap the data */
-unwrapdeg(angles1_unwrapped, angles1);
+unwrapdeg(angles1Unwrapped, angles1);
 /* Shift the data */
-double startTime;
-int i;
-for(i = 0; i < numDataPoints; i++) {
-  if(abs(angles1_unwrapped[i]) > 1) {
-    break;
-  }
-}
-startTime = time[i];
-/* Subtract the start time from all time stamps */
-for(i = 0; i < numDataPoints; i++) {
-  time[i] = time[i] - startTime;
-}
+shiftTime(tolerance, numDataPoints, time, angles1Unwrapped);
 /* Convert angles to displacement */
-distances = angle2distance(radius, angles1_unwrapped);
+distances = angle2distance(radius, angles1Unwrapped);
 
 /* Plot the unwrapped data */
 plot.title("Displacement versus Time");

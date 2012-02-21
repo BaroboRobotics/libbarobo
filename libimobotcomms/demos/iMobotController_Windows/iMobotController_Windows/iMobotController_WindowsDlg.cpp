@@ -12,6 +12,8 @@
 #define new DEBUG_NEW
 #endif
 
+#define MAXSPD 120
+
 CRITICAL_SECTION UpdateGuiCriticalSection;
 buttonState_t g_buttonState[B_NUMBUTTONS];
 
@@ -200,6 +202,8 @@ BEGIN_MESSAGE_MAP(CiMobotController_WindowsDlg, CDialog)
 	ON_COMMAND(ID_FILE_EXIT, &CiMobotController_WindowsDlg::OnFileExit)
 	ON_BN_CLICKED(IDC_BUTTON_MOVETOZERO, &CiMobotController_WindowsDlg::OnBnClickedButtonMovetozero)
 	ON_BN_CLICKED(IDC_BUTTON_SETSPD, &CiMobotController_WindowsDlg::OnBnClickedButtonSetspd)
+	ON_BN_CLICKED(IDC_BUTTON_MOVE, &CiMobotController_WindowsDlg::OnBnClickedButtonMove)
+	ON_COMMAND(ID_HELP_DEMOS, &CiMobotController_WindowsDlg::OnHelpDemos)
 END_MESSAGE_MAP()
 
 
@@ -401,7 +405,7 @@ void CiMobotController_WindowsDlg::handlerPlay()
     case 6: iMobotComms.motionStand(); break;
     case 7: iMobotComms.motionTurnLeft(360); break;
     case 8: iMobotComms.motionTurnRight(360); break;
-    case 9: iMobotComms.motionTumble(2); break;
+    case 9: iMobotComms.motionTumble(1); break;
     case 10: iMobotComms.motionUnstand(); break;
     default: break;
   }
@@ -437,14 +441,14 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonconnect()
 void CiMobotController_WindowsDlg::InitSliders()
 {
 	for(int i = 0; i < 2; i++) {
-		m_slider_Speeds[i]->SetRange(0, 180, TRUE);
-		m_slider_Speeds[i]->SetPos(45);
+		m_slider_Speeds[i]->SetRange(0, MAXSPD, TRUE);
+		m_slider_Speeds[i]->SetPos(MAXSPD - 45);
 		m_slider_Positions[i]->SetRange(-90, 90, TRUE);
 		m_slider_Positions[i]->SetPos(0);
 	}
 	for(int i = 2; i < 4; i++) {
-		m_slider_Speeds[i]->SetRange(0, 180, TRUE);
-		m_slider_Speeds[i]->SetPos(45);
+		m_slider_Speeds[i]->SetRange(0, MAXSPD, TRUE);
+		m_slider_Speeds[i]->SetPos(MAXSPD - 45);
 		m_slider_Positions[i]->SetRange(-180, 180, TRUE);
 		m_slider_Positions[i]->SetPos(0);
 	}
@@ -461,7 +465,7 @@ void CiMobotController_WindowsDlg::UpdateSliders()
 		m_positions[i] = (int) position;
 		speed = 45;
 		iMobotComms.setJointSpeed((robotJointId_t)(i+1), speed);
-		m_slider_Speeds[i]->SetPos( 180 - speed );
+		m_slider_Speeds[i]->SetPos( MAXSPD - speed );
 		m_speeds[i] = speed;
     wchar_t buf[200];
     swprintf(buf, L"%lf", speed);
@@ -471,7 +475,7 @@ void CiMobotController_WindowsDlg::UpdateSliders()
 
 void CiMobotController_WindowsDlg::UpdateSpeedSliders(int i, double speed)
 {
-		m_slider_Speeds[i]->SetPos( 180 - speed);
+		m_slider_Speeds[i]->SetPos( MAXSPD - speed);
 		m_speeds[i] = speed;
     TCHAR buf[200];
     _stprintf(buf, TEXT("%lf"), speed);
@@ -823,7 +827,7 @@ DWORD WINAPI HandlerThread(void* arg)
       position = -dlg->m_slider_Positions[i]->GetPos();
       if(lastPosition[i] != position) {
         if(initialized) {
-          mobot->moveJointToPIDNB((robotJointId_t)(i+1), (double) position);
+          mobot->moveJointToNB((robotJointId_t)(i+1), (double) position);
         }
         g_buttonState[S_M1P + i].clicked = 0;
         lastPosition[i] = position;
@@ -834,7 +838,7 @@ DWORD WINAPI HandlerThread(void* arg)
       }
 
       /* Check the speed */
-      speed = 180 - dlg->m_slider_Speeds[i]->GetPos();
+      speed = MAXSPD - dlg->m_slider_Speeds[i]->GetPos();
       if(speed != dlg->m_speeds[i]) {
         mobot->setJointSpeed((robotJointId_t)(i+1), (double)speed);
         dlg->m_speeds[i] = speed;
@@ -866,6 +870,7 @@ DWORD WINAPI HandlerThread(void* arg)
           case B_M3B: dlg->handlerM3B(); break;
           case B_M4B: dlg->handlerM4B(); break;
           case B_SETPOS: dlg->handlerSETPOS(); break;
+          case B_MOVE: dlg->handlerMOVE(); break;                         
           case B_SETSPD: dlg->handlerSETSPD(); break;
           case B_FORWARD: dlg->handlerFORWARD(); break;
           case B_STOP: dlg->handlerSTOP(); break;
@@ -939,12 +944,18 @@ void CiMobotController_WindowsDlg::handlerSETPOS()
 	len = m_edit_setpos2.GetLine(0, str, 79);
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
+    if((pos < -90) || (pos > 90)) {
+      MessageBox(L"Error: Joint 2 position setting beyond join limits.");
+    }
 		iMobotComms.moveJointToNB(ROBOT_JOINT2, pos);
 	}
 	memset(str, 0, sizeof(TCHAR)*80);
 	len = m_edit_setpos3.GetLine(0, str, 79);
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
+    if((pos < -90) || (pos > 90)) {
+      MessageBox(L"Error: Joint 3 position setting beyond join limits.");
+    }
 		iMobotComms.moveJointToNB(ROBOT_JOINT3, pos);
 	}
 	memset(str, 0, sizeof(TCHAR)*80);
@@ -952,6 +963,44 @@ void CiMobotController_WindowsDlg::handlerSETPOS()
 	if(len > 0) {
 		_stscanf(str, TEXT("%lf"), &pos);
 		iMobotComms.moveJointToNB(ROBOT_JOINT4, pos);
+	}
+}
+
+void CiMobotController_WindowsDlg::OnBnClickedButtonMove()
+{
+  g_buttonState[B_MOVE].clicked = 1;
+  return;
+}
+
+void CiMobotController_WindowsDlg::handlerMOVE()
+{
+	/* Get strings for all of the edit boxes containing values */
+	TCHAR str[80];
+	double pos;
+	int len;
+	memset(str, 0, sizeof(TCHAR)*80);
+	len = m_edit_setpos1.GetLine(0, str, 79);
+	if(len > 0) {
+		_stscanf(str, TEXT("%lf"), &pos);
+		iMobotComms.moveJointNB(ROBOT_JOINT1, pos);
+	}
+	memset(str, 0, sizeof(TCHAR)*80);
+	len = m_edit_setpos2.GetLine(0, str, 79);
+	if(len > 0) {
+		_stscanf(str, TEXT("%lf"), &pos);
+		iMobotComms.moveJointNB(ROBOT_JOINT2, pos);
+	}
+	memset(str, 0, sizeof(TCHAR)*80);
+	len = m_edit_setpos3.GetLine(0, str, 79);
+	if(len > 0) {
+		_stscanf(str, TEXT("%lf"), &pos);
+		iMobotComms.moveJointNB(ROBOT_JOINT3, pos);
+	}
+	memset(str, 0, sizeof(TCHAR)*80);
+	len = m_edit_setpos4.GetLine(0, str, 79);
+	if(len > 0) {
+		_stscanf(str, TEXT("%lf"), &pos);
+		iMobotComms.moveJointNB(ROBOT_JOINT4, pos);
 	}
 }
 
@@ -1139,4 +1188,32 @@ void CiMobotController_WindowsDlg::handlerSETSPD()
 		iMobotComms.setJointSpeed(ROBOT_JOINT4, pos);
     UpdateSpeedSliders(3, pos);
 	}
+}
+
+void CiMobotController_WindowsDlg::OnHelpDemos()
+{
+  USES_CONVERSION;
+  TCHAR chHome[MAX_PATH];
+  TCHAR command[MAX_PATH];
+  getChHome(chHome);
+  _stprintf(command, TEXT("%s\\bin\\chide.exe %s\\package\\chmobot\\demos"), chHome, chHome);
+  //sprintf(command, "file://%s\\package\\chmobot\\docs\\index.html", "C:\\Ch");
+  //GotoURL(command, 0);
+  //system(T2A(command));
+  STARTUPINFO si;
+  PROCESS_INFORMATION pi;
+  ZeroMemory(&si, sizeof(si));
+  si.cb = sizeof(si);
+  ZeroMemory(&pi, sizeof(pi));
+  CreateProcess(
+	  NULL,
+	  command,
+      NULL,
+      NULL,
+      FALSE,
+      0,
+      NULL,
+      NULL,
+      &si,
+      &pi );
 }

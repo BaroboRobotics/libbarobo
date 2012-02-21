@@ -11,7 +11,9 @@
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::recordAngles(robotJointId_t id, double time[:], double angle1[:], double angle2[:], double angle3[:], double angle4[:], int num, double seconds);
+int CMobot::recordAngles(double time[], double angle1[], double angle2[], 
+                         double angle3[], double angle4[], int num, 
+                         double seconds);
 \end{verbatim}
 
 \noindent
@@ -28,15 +30,12 @@ The function returns 0 on success and non-zero otherwise.\\
 \begin{description}
 \item               
 \begin{tabular}{p{15 mm}p{145 mm}}
-\texttt{id} & The joint number. This is an enumerated type 
-discussed in Section \ref{sec:robotJointId_t} on page
-\pageref{sec:robotJointId_t}.\\
 \texttt{time} & An array which will store time values for each of the angle readings. \\
 \texttt{angle1} & An array which will store the angle values for joint 1. \\
 \texttt{angle2} & An array which will store the angle values for joint 2. \\
 \texttt{angle3} & An array which will store the angle values for joint 3. \\
 \texttt{angle4} & An array which will store the angle values for joint 4. \\
-\texttt{num} & The size of the arrays. \\
+\texttt{num} & The number of elements of the arrays. \\
 \texttt{seconds} & The number of seconds between angle readings.
 \end{tabular}
 \end{description}
@@ -44,7 +43,8 @@ discussed in Section \ref{sec:robotJointId_t} on page
 \noindent
 {\bf Description}\\
 This function is used to accurately record the motion of a Mobot joint at a relatively fast
-rate. The function will fill the \texttt{time} and \texttt{angle} arrays with data
+rate. The function will fill the \texttt{time}, \texttt{angle1},
+\texttt{angle2}, \texttt{angle3}, and \texttt{angle4} arrays with data
 at the rate specified by \texttt{seconds}. A typical value for \texttt{seconds} is 0.1, or
 polling 10 times a second. If the communication speed cannot maintain 
 the requested rate, (if \texttt{msecs} is too low, in other words), the function will

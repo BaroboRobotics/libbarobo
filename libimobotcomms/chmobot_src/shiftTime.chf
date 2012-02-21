@@ -1,0 +1,43 @@
+int shiftTime(
+    double threshold,
+    int numElements,
+    array double time[:], 
+    ...
+    )
+{
+  int i, j, vacount, thresholdIndex;
+  va_list ap;
+  
+  va_start(ap, data);
+  vacount = va_count(ap);
+  double *angles[vacount];
+  double startAngle[vacount];
+  for(i = 0; i < vacount; i++) {
+    angles[i] = (double *)va_arg(ap, double *);
+    startAngle[i] = angles[i][0];
+  }
+
+  for(i = 0; i < numElements; i++) {
+    for(j = 0; j < vacount; j++) {
+      if( abs(angles[j][i] - startAngle[j]) > threshold ) {
+        thresholdIndex = i;
+        i = numElements;
+        break;
+      }
+    }
+  }
+  double startTime;
+  startTime = time[thresholdIndex];
+  /* Shift timeShifted values */
+  for(j = 0; j < numElements; j++) {
+    if(j < thresholdIndex) {
+      time[j] = 0;
+      for(i = 0; i < vacount; i++) {
+        angles[i][j] = angles[i][thresholdIndex];
+      }
+    } else {
+      time[j] = time[j] - startTime;
+    }
+  }
+  return i;
+}

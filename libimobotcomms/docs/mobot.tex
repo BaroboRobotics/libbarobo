@@ -243,10 +243,15 @@ the position of the slider is moved, the Mobot will move its joints to match the
 sliders. 
 
 Underneath the sliders, there are four text entry boxes. The text boxes
-accept specific angles for each joint which the user may type in. When 
-the ``Move'' button is clicked, each joint will move to their respective 
-desired positions. If any text entry is left blank, the corresponding joint will
+accept specific angles for each joint which the user may type in. If 
+the ``MoveTo'' button is clicked, each joint will move to their respective 
+desired absolute positions. If any text entry is left blank, the corresponding joint will
 not move. 
+
+If the ``Move'' button is clicked, the program treats the angles entered by the
+user as a relative amount to move. For instance, if the value ``360'' is entered
+into the box for joint 1 and ``Move'' is clicked, the joint will rotate one full
+rotation, no matter where the joint was when the motion began.
 \begin{comment}
 The second method for moving the joints is by entering the exact angles for the
 joints. Below each of the four sliders lies a text entry box. Values in degrees
@@ -266,7 +271,7 @@ preprogrammed motions for the Mobot. To execute a preprogrammed motion, simply
 click on the name of the motion you wish to execute, and then click the button
 labeled ``Play''.
 
-\subsection{Application Example}
+\subsection{Application Example for Learning Algebra}
 \subsubsection{Problem Statement}
 A robot has two 3.5 inch diameter wheels. It is moving at a constant velocity
 by turning its wheels 45 degrees per second. 
@@ -424,7 +429,7 @@ degrees. The function is implemented in Ch with the code
 double rad2deg(double radians)
 {
     double degrees;
-    radians = radians * 180.0 / M_PI;
+    degrees = radians * 180.0 / M_PI;
     return degrees;
 }
 \end{verbatim}
@@ -1546,7 +1551,7 @@ robot4.motionInchwormLeft(2);
 groupD.motionUnstand();
 \end{verbatim}
 
-\section{Data Acquisition}
+\section{Data Acquisition, Data Processing, and Application Examples for Learning Algebra}
 \subsection{Example 1}
 \subsubsection{Problem Statement}
 Roll a robot forward by rotating the wheels 720 degrees at a constant speed of 45 degrees per
@@ -1564,6 +1569,9 @@ The first block of code,
 #include <chplot.h>
 #include <numeric.h>
 CMobot robot;
+
+/* Connect to the robot */
+robot.connect();
 \end{verbatim}
 includes header files and declares our robot variable. The header file
 \texttt{chplot.h} is necessary for plotting figures, which will be done later in the
@@ -1620,7 +1628,11 @@ of data points can be determined by the formula
 N = \frac{t}{\Delta t}
 \end{equation*}
 where $t$ is the total movement time and $\Delta t$ is the time interval between
-readings.
+readings. We declare a new variable based on the previous equation called \texttt{numDataPoints} with 
+the following line of code:
+\begin{verbatim}
+int numDataPoints = movementTime / timeInterval; /* Unitless */
+\end{verbatim}
 
 Next, we declare some computational arrays to hold the data we will record.
 \begin{verbatim}
@@ -1642,12 +1654,20 @@ The last variables we will declare are related to generating a plot to display
 the captured data. 
 \begin{verbatim}
 CPlot plot1, plot2, plot3;
-array double angles1_unwrapped[numDataPoints];
+array double angles1Unwrapped[numDataPoints];
 \end{verbatim}
 The variables \texttt{plot1} and \texttt{plot2} will hold the two plots we will
-generate, and the computational array \texttt{angles1\_unwrapped} will hold
+generate, and the computational array \texttt{angles1Unwrapped} will hold
 the ``unwrapped'' data recorded from the robot. More discussion regarding
 unwrapping data will be presented towards the end of this demo.
+
+Finally, the last variable declared is \texttt{tolerance}. This variable 
+holds a value in degrees. This tolerance declared here is the tolerance used
+later to detect the time where motion first begins. Because the data recording 
+process typically starts a fraction of a second before the motion begins, the
+plotted motions may not begin at time zero. When detecting the time of the
+first motion, if any joint moves by an amount more than the tolerance value, 
+that time is taken to be the beginning of the motion.
 
 Before we begin the robot's motion, we first move it to zero position and set the
 joints to the correct speeds with the following lines of code:
@@ -1737,36 +1757,17 @@ to display a plot of the same data, but shifted to the left so that the motion s
 time zero. This will make it easier to verify the speed of the joint and the time it takes
 to get to 720 degrees. 
 
-To do this, we need to scan the angle data to find out when the joint actually starts moving.
-First, we declare a variable that will store the time at which the joint starts moving.
+To do this, we use the \texttt{shiftTime()} function. The \texttt{shiftTime()} function
+is used to shift graphs of data to the left by detecting the first moment a joint begins
+moving. The following code shifts the data to the left so that it appears that the motion begins
+right at time 0.
 \begin{verbatim}
-double startTime;
-\end{verbatim}
-Next, we begin looping through all of the angle data readings.
-We want to find the first angle reading where the absolute value of the angle is greater
-than zero. When we find that, we can break out of the loop.
-\begin{verbatim}
-i = 0;
-while((abs(angles1_unwrapped[i]) < 1) && (i < numDataPoints)) {
-  i++;
-}
+shiftTime(tolerance, numDataPoints, time, angles1Unwrapped);
 \end{verbatim}
 
-After the loop, the counter variable, 'i', should hold the element index of the first element
-where the angle has started changing. Thus, the value of \texttt{time[i]} will hold
-the time where the angle starts. We now store that in our variable:
+Finally, we plot the shifted data.
+
 \begin{verbatim}
-startTime = time[i];
-\end{verbatim}
-If we subtract that value from all of our time stamps, we will effectively shift our 
-graph to the left such that the first non-zero value for the angle will be on the
-y-axis.
-\begin{verbatim}
-time = time - startTime;
-\end{verbatim}
-Now, we plot our data.
-\begin{verbatim}
-unwrapdeg(angles1_unwrapped, angles1);
 plot3.title("Unwrapped and shifted Data for Joint Angle 1 versus Time");
 plot3.label(PLOT_AXIS_X, "Time (seconds)");
 plot3.label(PLOT_AXIS_Y, "Angle (degrees)");
@@ -1784,6 +1785,14 @@ plot3.plotting();
 Figure \ref{fig:dataacq1_fig3}  displays our unwrapped data that has been time shifted. It can be seen
 that the beginning of the motion now happens at time 0, and it may be verified that the
 line generated is very close to the expected function, $\theta = 45 t$.
+
+In many applications, the user may only be interested in the unwrapped, time shifted data. 
+In such a case, a simplified version of the program may be used. The program 
+\texttt{dataAcquisition1.ch} below removes the intermediate plots and can be modified
+to solve other data acquisition problems.
+
+\subsubsection{\texttt{dataAcquisition1.ch} Source Code}
+\verbatiminput{../demos/chdemos/dataAcquisition1.ch}
 
 \subsection{Example 2}
 It is also possible to record the joint angles for all four joints simultaneously
@@ -1846,6 +1855,7 @@ array double angles1_unwrapped[numDataPoints];
 array double angles2_unwrapped[numDataPoints];
 array double angles3_unwrapped[numDataPoints];
 array double angles4_unwrapped[numDataPoints];
+double tolerance = 1.0; /* 1 degree for time shifting */
 \end{verbatim}
 
 Before we begin the motion, we set all the joint speeds to 45 degrees/second
@@ -1864,7 +1874,9 @@ robot.recordAngles(time, angles1, angles2, angles3, angles4, numDataPoints, time
 \end{verbatim}
 
 Similar to \texttt{recordAngle()}, the recording process occurs in the background as
-the main program continues. We next execute our desired motions:
+the main program continues. We next execute our desired motions, which are to turn the
+robot to the right by rotating each wheel 360 degrees, and then inchworming to
+the left twice:
 \begin{verbatim}
 robot.motionTurnRight(360);
 robot.motionInchwormLeft(2);
@@ -1875,12 +1887,18 @@ Finally, we wait for the recording to finish.
 robot.recordWait();
 \end{verbatim}
 
-Now that all of the data has been acquired, we unwrap and plot the data.
+Now that all of the data has been acquired, we unwrap, shift, and plot the data.
 \begin{verbatim}
 unwrapdeg(angles1_unwrapped, angles1);
 unwrapdeg(angles2_unwrapped, angles2);
 unwrapdeg(angles3_unwrapped, angles3);
 unwrapdeg(angles4_unwrapped, angles4);
+/* Shift the time so the movement starts at time 0 */
+shiftTime(tolerance, numDataPoints, time, 
+          angles1_unwrapped, 
+          angles2_unwrapped, 
+          angles3_unwrapped, 
+          angles4_unwrapped);
 plot2.title("Unwrapped Data for Joint Angles versus Time");
 plot2.label(PLOT_AXIS_X, "Time (seconds)");
 plot2.label(PLOT_AXIS_Y, "Angle (degrees)");
@@ -1895,11 +1913,17 @@ plot2.legend("Joint 4", 3);
 plot2.grid(PLOT_ON);
 plot2.plotting();
 \end{verbatim}
+Note that the previous call to \texttt{shiftTime()} appears different than the previous
+example. The \texttt{shiftTime()} function is able to accept any number of data
+arrays per time array to shift. The function tests the tolerance angle on all of the
+input data arrays, seeking the first occurance of a movement greater than the tolerance
+for all of the data arrays. This makes the plotted motion begin right at time 0 on
+the plot.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=4in]{images/dataacq2_plot1.png}
-\caption{\label{fig:dataacq2_fig1} The unwrapped data recorded by \texttt{dataAcquisition2.ch}.}
+\caption{\label{fig:dataacq2_fig1} The unwrapped and shifted data recorded by \texttt{dataAcquisition2.ch}.}
 \end{figure}
 
 Figure \ref{fig:dataacq2_fig1} shows the captured data from the Mobot. During the first
@@ -1910,7 +1934,8 @@ left twice.
 \subsection{Example 3}
 \subsubsection{Problem Statement}
 A robot is equipped with 3.5 inch diameter wheels. Write a piece of code which rolls the
-robot forward at 2.5 inches per second for a distance of 12 inches. 
+robot forward at constant speed of 2.5 inches per second for a distance of 12 inches. 
+Verify that the data is linear and follows the relation $d = 2.5t$
 
 \subsubsection{\texttt{dataAcquisition3.ch} Source Code}
 \verbatiminput{../demos/chdemos/dataAcquisition3.ch}
@@ -1953,6 +1978,13 @@ the wheel must turn to travel that distance.
 double angle = distance2angle(radius, distance); /* degrees */
 \end{verbatim}
 
+Internally, the angle in degrees is calculated by the formula
+\begin{equation*}
+\theta  = \left(\frac{d}{r} \right) * 180 / \pi
+\end{equation*}
+where $\theta$ is the angle in degrees, $d$ is the distance travelled, 
+and $r$ is the radius of the wheel.
+
 For the next step, we must calculate our estimated movement time, similar to the
 \texttt{dataAcquisition.ch} demo presented earlier. 
 \begin{verbatim}
@@ -1977,7 +2009,8 @@ array double distances[numDataPoints];
 
 /* Declare plotting variables */
 CPlot plot;
-array double angles1_unwrapped[numDataPoints];
+array double angles1Unwrapped[numDataPoints];
+double tolerance = 1.0; /* Degrees */
 \end{verbatim}
 
 Before beginning the motion, we move the robot to zero position and set the 
@@ -2010,24 +2043,22 @@ We convert the angles back to a distance using the \texttt{angle2distance()} fun
 which takes the radius of a wheel and the angle moved in degrees as arguments and
 return the distance traveled. The arguments can be single variables or computational
 arrays. If the angle argument is a computational array, the value returned is also
-a computational array.
+a computational array. The \texttt{angle2distance()} function converts the angle
+to a distance using the following formula.
+\begin{equation*}
+d = \left(\theta \frac{\pi}{180}\right) r
+\end{equation*}
+where $d$ is the distance travelled, $\theta$ is the angle rotated in degrees, and $r$ is the
+radius of the wheel. The units of distance for $d$ will be the same units as those
+chosen for $r$. For instance, if $r$ is expressed in inches, the result 
+
 \begin{verbatim}
 /* Unwrap the data */
 unwrapdeg(angles1_unwrapped, angles1);
 /* Shift the data */
-double startTime;
-for(i = 0; i < numDataPoints; i++) {
-  if(abs(angles1_unwrapped[i]) > 1) {
-    break;
-  }
-}
-startTime = time[i];
-/* Subtract the start time from all time stamps */
-for(i = 0; i < numDataPoints; i++) {
-  time[i] = time[i] - startTime;
-}
+shiftTime(tolerance, numDataPoints, time, angles1Unwrapped);
 /* Convert angles to displacement */
-distances = angle2distance(radius, angles1_unwrapped);
+distances = angle2distance(radius, angles1Unwrapped);
 \end{verbatim}
 
 Finally, we create a plot of the data.
@@ -2047,7 +2078,17 @@ plot.plotting();
 \end{figure}
 
 Figure \ref{fig:dataacq3_fig1} displays the distance data acquired during the motion. It can
-be seen that the robot traveled to a distance of 12 inches, and then stopped. 
+be seen that the robot traveled to a distance of 12 inches, and then stopped. The
+expected relation between time and distance is the linear function 
+\begin{equation*}
+d = 2.5t
+\end{equation*}
+which may be verified on the graph. Furthermore, the time that it should take to reach 
+12 inches is 
+\begin{equation}
+t = d / 2.5 = 12 / 2.5 = 4.8 ~\text{seconds}
+\end{equation}
+which may also be verified from the graph.
 
 \section{Recalibrating the Mobot}
 A user may recalibrate the Mobot's zero positions if necessary. To recalibrate
@@ -2141,6 +2182,7 @@ Value & Description \\
 %\addcontentsline{toc}{chapter}{Index}
 
 \section{\label{sec:utility_functions}Miscellaneous Utility Functions}
+\input{utility_funcs/utility_funcs.tex}
 \printindex
 
 \end{document}

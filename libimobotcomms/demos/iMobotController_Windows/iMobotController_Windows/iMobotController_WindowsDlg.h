@@ -43,6 +43,7 @@ typedef enum button_e
   S_M3P, 
   S_M4P, 
   B_SETPOS,
+  B_MOVE,
   B_SETSPD,
   B_MOVETOZERO,
   B_NUMBUTTONS
@@ -204,6 +205,9 @@ public:
   CEdit m_edit_setspd2;
   CEdit m_edit_setspd3;
   CEdit m_edit_setspd4;
+  afx_msg void OnBnClickedButtonMove();
+  void handlerMOVE();
+  afx_msg void OnHelpDemos();
 };
 
 DWORD WINAPI HandlerThread(void*);
