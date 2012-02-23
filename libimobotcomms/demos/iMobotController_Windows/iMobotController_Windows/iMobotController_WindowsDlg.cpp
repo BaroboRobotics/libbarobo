@@ -440,16 +440,16 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonconnect()
 
 void CiMobotController_WindowsDlg::InitSliders()
 {
-	for(int i = 0; i < 2; i++) {
-		m_slider_Speeds[i]->SetRange(0, MAXSPD, TRUE);
-		m_slider_Speeds[i]->SetPos(MAXSPD - 45);
-		m_slider_Positions[i]->SetRange(-90, 90, TRUE);
-		m_slider_Positions[i]->SetPos(0);
-	}
-	for(int i = 2; i < 4; i++) {
+	for(int i = 0; i <= 3; i=i+3) {
 		m_slider_Speeds[i]->SetRange(0, MAXSPD, TRUE);
 		m_slider_Speeds[i]->SetPos(MAXSPD - 45);
 		m_slider_Positions[i]->SetRange(-180, 180, TRUE);
+		m_slider_Positions[i]->SetPos(0);
+	}
+	for(int i = 1; i < 3; i++) {
+		m_slider_Speeds[i]->SetRange(0, MAXSPD, TRUE);
+		m_slider_Speeds[i]->SetPos(MAXSPD - 45);
+		m_slider_Positions[i]->SetRange(-90, 90, TRUE);
 		m_slider_Positions[i]->SetPos(0);
 	}
 }
@@ -1196,11 +1196,6 @@ void CiMobotController_WindowsDlg::OnHelpDemos()
   TCHAR chHome[MAX_PATH];
   TCHAR command[MAX_PATH];
   getChHome(chHome);
-  for(int i = 0; i < _tcslen(chHome); i++) {
-	  if(chHome[i] == (TCHAR)'/') {
-		  chHome[i] = (TCHAR)'\\';
-	  }
-  }
   _stprintf(command, TEXT("%s\\bin\\chide.exe %s\\package\\chmobot\\demos"), chHome, chHome);
   //sprintf(command, "file://%s\\package\\chmobot\\docs\\index.html", "C:\\Ch");
   //GotoURL(command, 0);
