@@ -20,8 +20,10 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#ifndef __MACH__
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/rfcomm.h>
+#endif
 #else
 //#include <types.h>
 #include <winsock2.h>
@@ -93,6 +95,7 @@ class CMobot {
     ~CMobot();
     int connect();
     int connectWithAddress(const char address[], int channel);
+    int connectWithTTY(const char ttyfilename[]);
     int disconnect();
     int isConnected();
     int isMoving();
