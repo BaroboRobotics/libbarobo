@@ -65,8 +65,11 @@ void ConfigFileDialog::OnBnClickedButtonAdd()
   USES_CONVERSION;
   TCHAR text[256];
   LPCSTR address;
+  int count;
   memset(text, 0, sizeof(TCHAR)*256);
-  _edit_AddressBox.GetLine(0, text, 255);
+  ((DWORD*)text)[0] = 256;
+  count = _edit_AddressBox.GetLine(0, text, 255);
+  text[count] = (TCHAR)'\0';
   /* Convert from wide char to normal char */
   //size_t convertedChars = 0;
   //size_t origsize = wcslen(text)+1;
