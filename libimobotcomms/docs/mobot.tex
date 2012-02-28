@@ -2090,19 +2090,27 @@ t = d / 2.5 = 12 / 2.5 = 4.8 ~\text{seconds}
 \end{equation}
 which may also be verified from the graph.
 
-\section{Recalibrating the Mobot}
+\section{Using the On-Board Buttons}
+\subsection{Running the On-Board Joint Test program}
+The Mobot comes with a demo test program hard-coded into the on-board
+computer. The test program is designed to test the Mobot's joints range of 
+motion and make sure everything is working properly. The test program will
+move the robot continuously until the Mobot is shut off.
+
+To run the test program, simply hold the ``A'' button for 3 seconds. After
+3 seconds have passed, the blue LED should blink 3 times quickly, and the
+demo motion will begin.
+
+\subsection{Recalibrating the Mobot's Zero Position}
 A user may recalibrate the Mobot's zero positions if necessary. To recalibrate
 the Mobot, perform the following steps:
 \begin{itemize}
-\item Press both of the Mobot's ``A'' and ``B'' buttons simultaneously. The
-blue status LED light on the Mobot should blink several times and then remain
-off.
-\item Power off the Mobot.
-\item Manually move the Mobot joints into the correct zero position, as shown in Figure \ref{fig:zeroposition}. This may be
-done visually, or by using flat surfaces as a guide.
-\item Power on the Mobot while it is in the correct zero position. After calibration,
-the Mobot will perform a short movement routine to test all of its joints. The
-Mobot has now been recalibrated.
+\item Position the Mobot into its zero position. If the Mobot is currently
+actuating any of its joints, or if any joints feel ``stiff'', you may power the
+Mobot off and on again.
+\item While the Mobot is powered on, press both the ``A'' and ``B'' buttons
+simultaneously. The blue LED should flash quickly 3 times. The Mobot has now
+been recalibrated.
 \end{itemize}
 
 \newpage
