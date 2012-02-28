@@ -1277,10 +1277,6 @@ int Mobot_motionStand(br_comms_t* comms)
 #else
   sleep(1);
 #endif
-  if(Mobot_getJointSpeed(comms, ROBOT_JOINT2, &speed)) {
-    return -1;
-  }
-  Mobot_setJointSpeed(comms, ROBOT_JOINT2, DEG2RAD(30));
   Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(20));
   //Mobot_setJointSpeed(comms, ROBOT_JOINT2, speed);
   return 0;
@@ -2394,7 +2390,6 @@ void* CMobotGroup::motionStandThread(void* arg)
   cmg->moveJointTo(ROBOT_JOINT3, 70);
   cmg->moveWait();
   cmg->moveJointTo(ROBOT_JOINT1, 45);
-  cmg->setJointSpeed(ROBOT_JOINT2, 30);
   cmg->moveJointTo(ROBOT_JOINT2, 20);
   cmg->_motionInProgress--;
   return 0;
