@@ -314,6 +314,11 @@ int finishConnect(br_comms_t* comms)
   for(i = 4; i >= 1; i--) {
     Mobot_getJointMaxSpeed(comms, (robotJointId_t)i, &(comms->maxSpeed[i-1]));
   }
+  Mobot_setJointSpeeds( comms, 
+      DEG2RAD(45), 
+      DEG2RAD(45), 
+      DEG2RAD(45), 
+      DEG2RAD(45) );
   return 0;
 }
 
