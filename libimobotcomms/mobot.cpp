@@ -117,8 +117,27 @@ int Mobot_connect(br_comms_t* comms)
   {
     path[strlen(path)-1] = '\0';
   }
+#ifndef __MACH__ /* If Unix */
   /* Pass it on to connectWithAddress() */
   if(i = Mobot_connectWithAddress(comms, path, 1)) {
+    return i;
+  } else {
+    g_numConnected++;
+    return i;
+  }
+#else /* If Mac OS */
+#endif /* Fi Linux/Mac */
+  /* The format for the device should be /dev/tty.MOBOT-XXXX-SPP */
+  char chunk1[3];
+  char chunk2[3];
+  sscanf(path, "%*c%*c:%*c%*c:%*c%*c:%*c%*c:%c%c:%c%c", 
+      &chunk1[0], &chunk1[1],
+      &chunk2[0], &chunk2[1]);
+  chunk1[2] = '\0';
+  chunk2[2] = '\0';
+  sprintf(path, "/dev/tty.MOBOT-%s%s-SPP", chunk1, chunk2);
+  printf("Connecting to %s...\n", path);
+  if(i = Mobot_connectWithTTY(comms, path)) {
     return i;
   } else {
     g_numConnected++;
@@ -282,7 +301,7 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
 #ifndef _WIN32
 int Mobot_connectWithTTY(br_comms_t* comms, const char* ttyfilename)
 {
-  comms->socket = open(ttyfilename, O_RDWR | O_NOCTTY | O_NDELAY);
+  comms->socket = open(ttyfilename, O_RDWR | O_NOCTTY );
   if(comms->socket < 0) {
     perror("Unable to open tty port.");
     return -1;
@@ -1686,6 +1705,9 @@ CMobot::CMobot()
 CMobot::~CMobot()
 {
   stop();
+  if(_comms.connected) {
+    disconnect();
+  }
 }
 
 int CMobot::connect()
