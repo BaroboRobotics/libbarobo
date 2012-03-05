@@ -12,15 +12,17 @@
 @interface ConfigFile : NSObject <NSTableViewDataSource>{
 	NSString *configFileName;
 	FILE *fp;
-	NSArray *entries;
+	NSMutableArray *entries;
 }
 
 - (id) initWithFilename:(NSString*)fileName;
 - (void) addAddress:(NSString*)address;
-- (NSString*) getAddress:(int)index;
-- (void) moveAddressUp:(int)index;
-- (void) moveAddressDown:(int)index;
-- (void) refresh;
+- (void) removeAtIndex:(NSInteger)rowIndex;
+- (void) insertString:(NSString*)aString atIndex:(NSInteger)index;
+- (NSString*) getAddress:(NSInteger)index;
+- (void) moveAddressUp:(NSInteger)index;
+- (void) moveAddressDown:(NSInteger)index;
+- (void) writeFile;
 
 /* NSTableViewDataSource Protocol Functions */
 - (NSInteger) numberOfRowsInTableView:(NSTableView*) aTableView;

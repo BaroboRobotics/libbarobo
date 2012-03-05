@@ -18,18 +18,73 @@
 			[NSString stringWithContentsOfFile:fileName
 									  encoding:NSASCIIStringEncoding
 										 error:NULL];
-	entries = [fileContents componentsSeparatedByString:@"\n"];
+	entries = [NSMutableArray arrayWithArray:[fileContents componentsSeparatedByString:@"\n"]];
 	[entries retain];
 	return self;
 }
 
 - (void) addAddress:(NSString*)address {
-	/* We need to add the new address to the beginning of the array. 
-	 Since there is no "insert" method, we create a new array of 
-	 one element and append the original array. */
-	NSArray *newArray = [NSArray arrayWithObject:address];
-	entries = [newArray arrayByAddingObjectsFromArray:entries];
-	[self refresh];
+	[entries insertObject:address atIndex:0];
+}
+
+- (void) removeAtIndex:(NSInteger)rowIndex {
+	[entries removeObjectAtIndex:rowIndex];
+}
+
+- (void) insertString:(NSString*)aString atIndex:(NSInteger)index
+{
+	[entries insertObject:aString atIndex:index];
+}
+
+- (NSString*) getAddress:(NSInteger)index {
+	return [entries objectAtIndex:index];
+}
+
+- (void) moveAddressUp:(NSInteger)index {
+	/* Strategy: 
+	 - Save the text at index
+	 - Remove index
+	 - insert saved text at index-1
+	 */
+	NSString* address;
+	if (index >= ([entries count])) {
+		return;
+	}
+	if(index < 1) { return; }
+	address = [entries objectAtIndex:index];
+	[address retain];
+	[entries removeObjectAtIndex:index];
+	[entries insertObject:address atIndex:(index-1)];
+}
+
+- (void) moveAddressDown:(NSInteger)index {
+	/* Strategy: 
+	 - Save the text at index
+	 - Remove index
+	 - insert saved text at index+1
+	 */
+	NSString* address;
+	if (index >= ([entries count]-1)) {
+		return;
+	}
+	if(index < 0) { return; }
+	address = [entries objectAtIndex:index];
+	[address retain];
+	[entries removeObjectAtIndex:index];
+	[entries insertObject:address atIndex:(index+1)];
+}
+
+- (void) writeFile {
+	NSString *fileContents = [[NSString alloc] init];
+	int i;
+	for(i = 0 ; i < [entries count]; i++) {
+		fileContents = [fileContents stringByAppendingString:[entries objectAtIndex:i]];
+		fileContents = [fileContents stringByAppendingString:@"\n"];
+	}
+	[fileContents writeToFile:configFileName 
+				   atomically:false
+					 encoding:NSASCIIStringEncoding
+						error:NULL];
 }
 
 /* NSTableViewDataSource Protocol Functions */
@@ -47,10 +102,7 @@ objectValueForTableColumn:(NSTableColumn *)aTableColumn
  setObjectValue:(id)anObject 
  forTableColumn:(NSTableColumn*)aTableColumn 
 			row:(NSInteger)rowIndex {
-	/* Get the object */
-	NSString *object = [entries objectAtIndex:rowIndex];
-	/* Set the object to the new value */
-	[object initWithString:anObject];
+	[entries replaceObjectAtIndex:rowIndex withObject:anObject];
 }
 
 
