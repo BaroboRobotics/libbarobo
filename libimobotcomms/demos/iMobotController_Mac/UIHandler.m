@@ -71,7 +71,7 @@
 /* Button Handlers */
 
 - (IBAction) onButtonMoveToZero:(id)sender {
-	Mobot_moveToZero([self comms]);
+	Mobot_moveToZeroNB([self comms]);
 }
 
 - (IBAction) onButtonJoint1Forward:(id)sender {
@@ -121,5 +121,26 @@
 - (IBAction) onButtonJoint4Backward:(id)sender {
 	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT4, ROBOT_BACKWARD);
 }
+
+- (IBAction) onButtonRollForward:(id)sender {
+	Mobot_motionRollForwardNB(comms, DEG2RAD(360));
+}
+
+- (IBAction) onButtonRollBackward:(id)sender {
+	Mobot_motionRollBackwardNB(comms, DEG2RAD(360));
+}
+
+- (IBAction) onButtonRollLeft:(id)sender {
+	Mobot_motionTurnLeftNB(comms, DEG2RAD(360));
+}
+
+- (IBAction) onButtonRollRight:(id)sender {
+	Mobot_motionTurnRightNB(comms, DEG2RAD(360));
+}
+
+- (IBAction) onButtonStop:(id)sender {
+	Mobot_stop(comms);
+}
+
 
 @end

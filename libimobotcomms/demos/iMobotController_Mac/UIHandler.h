@@ -55,6 +55,10 @@
 - (IBAction) onButtonJoint2Backward:(id)sender;
 - (IBAction) onButtonJoint3Backward:(id)sender;
 - (IBAction) onButtonJoint4Backward:(id)sender;
-
+- (IBAction) onButtonRollForward:(id)sender;
+- (IBAction) onButtonRollBackward:(id)sender;
+- (IBAction) onButtonRollLeft:(id)sender;
+- (IBAction) onButtonRollRight:(id)sender;
+- (IBAction) onButtonStop:(id)sender;
 
 @end

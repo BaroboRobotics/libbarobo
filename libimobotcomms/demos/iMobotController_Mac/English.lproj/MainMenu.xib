@@ -2864,6 +2864,46 @@
 					</object>
 					<int key="connectionID">796</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">onButtonRollBackward:</string>
+						<reference key="source" ref="350964324"/>
+						<reference key="destination" ref="347845514"/>
+					</object>
+					<int key="connectionID">797</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">onButtonRollForward:</string>
+						<reference key="source" ref="350964324"/>
+						<reference key="destination" ref="171205891"/>
+					</object>
+					<int key="connectionID">798</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">onButtonRollLeft:</string>
+						<reference key="source" ref="350964324"/>
+						<reference key="destination" ref="713975001"/>
+					</object>
+					<int key="connectionID">800</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">onButtonRollRight:</string>
+						<reference key="source" ref="350964324"/>
+						<reference key="destination" ref="82964109"/>
+					</object>
+					<int key="connectionID">801</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">onButtonStop:</string>
+						<reference key="source" ref="350964324"/>
+						<reference key="destination" ref="160578849"/>
+					</object>
+					<int key="connectionID">802</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -4464,9 +4504,9 @@
 					<integer value="1"/>
 					<string>{74, 862}</string>
 					<string>{{6, 978}, {478, 20}}</string>
-					<string>{{26, 22}, {664, 466}}</string>
+					<string>{{-153, 71}, {664, 466}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{26, 22}, {664, 466}}</string>
+					<string>{{-153, 71}, {664, 466}}</string>
 					<integer value="1"/>
 					<string>{{33, 99}, {480, 360}}</string>
 					<string>{3.40282e+38, 3.40282e+38}</string>
@@ -4862,7 +4902,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">796</int>
+			<int key="maxID">802</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4887,9 +4927,19 @@
 							<string>onButtonJoint4Forward:</string>
 							<string>onButtonJoint4Stop:</string>
 							<string>onButtonMoveToZero:</string>
+							<string>onButtonRollBackward:</string>
+							<string>onButtonRollForward:</string>
+							<string>onButtonRollLeft:</string>
+							<string>onButtonRollRight:</string>
+							<string>onButtonStop:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -4922,6 +4972,11 @@
 							<string>onButtonJoint4Forward:</string>
 							<string>onButtonJoint4Stop:</string>
 							<string>onButtonMoveToZero:</string>
+							<string>onButtonRollBackward:</string>
+							<string>onButtonRollForward:</string>
+							<string>onButtonRollLeft:</string>
+							<string>onButtonRollRight:</string>
+							<string>onButtonStop:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -4975,6 +5030,26 @@
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">onButtonMoveToZero:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">onButtonRollBackward:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">onButtonRollForward:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">onButtonRollLeft:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">onButtonRollRight:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">onButtonStop:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 						</object>
