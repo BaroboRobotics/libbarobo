@@ -267,12 +267,16 @@
 								<string>080E96DDFE201D6D7F000001</string>
 								<string>29B97315FDCFA39411CA2CEA</string>
 								<string>29B97317FDCFA39411CA2CEA</string>
+								<string>29B97323FDCFA39411CA2CEA</string>
+								<string>1058C7A0FEA54F0111CA2CBB</string>
+								<string>1058C7A2FEA54F0111CA2CBB</string>
 								<string>1C37FABC05509CD000000102</string>
 								<string>1CC0EA4004350EF90041110B</string>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
+									<integer>4</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
@@ -297,7 +301,7 @@
 							<real>186</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>0 118 1152 724 0 0 1152 842 </string>
+						<string>1 118 1152 724 0 0 1152 842 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -315,7 +319,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>ConfigFile.m</string>
+								<string>iMobotController_MacAppDelegate.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -323,19 +327,24 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>ConfigFile.m</string>
+										<string>iMobotController_MacAppDelegate.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>7A6D0B1615056024004EC18C</string>
+										<string>7A6D0B98150593DC004EC18C</string>
 										<key>history</key>
 										<array>
 											<string>7A6D0A211501832E004EC18C</string>
-											<string>7A6D0AD91505531A004EC18C</string>
-											<string>7A6D0AF615055D7B004EC18C</string>
 											<string>7A6D0B0515055F1E004EC18C</string>
-											<string>7A6D0B0E15055FBE004EC18C</string>
-											<string>7A6D0B0F15055FBE004EC18C</string>
+											<string>7A6D0B2115056C2C004EC18C</string>
+											<string>7A6D0B2215056C2C004EC18C</string>
+											<string>7A6D0B2315056C2C004EC18C</string>
+											<string>7A6D0B7415058E48004EC18C</string>
+											<string>7A6D0B8B1505932F004EC18C</string>
+											<string>7A6D0B8C1505932F004EC18C</string>
+											<string>7A6D0B8D1505932F004EC18C</string>
+											<string>7A6D0B8E1505932F004EC18C</string>
+											<string>7A6D0B8F1505932F004EC18C</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -349,7 +358,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {944, 557}}</string>
 								<key>RubberWindowFrame</key>
-								<string>0 118 1152 724 0 0 1152 842 </string>
+								<string>1 118 1152 724 0 0 1152 842 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -369,7 +378,7 @@
 								<key>Frame</key>
 								<string>{{0, 562}, {944, 121}}</string>
 								<key>RubberWindowFrame</key>
-								<string>0 118 1152 724 0 0 1152 842 </string>
+								<string>1 118 1152 724 0 0 1152 842 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -533,7 +542,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>7A6D0B1715056024004EC18C</string>
+		<string>7A6D0B99150593DC004EC18C</string>
 		<string>7A6D0A57150185DA004EC18C</string>
 		<string>7A6D0A2B1501832E004EC18C</string>
 		<string>7A6D0A2C1501832E004EC18C</string>
@@ -543,7 +552,7 @@
 		<string>/Users/dko/Projects/iMobot_gumstix_api/libimobotcomms/demos/iMobotController_Mac/iMobotController_Mac.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>0 118 1152 724 0 0 1152 842 </string>
+	<string>1 118 1152 724 0 0 1152 842 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
@@ -559,12 +568,14 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>ConfigFile.m</string>
+								<string>mobot.h</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -581,8 +592,6 @@
 							<string>218pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>

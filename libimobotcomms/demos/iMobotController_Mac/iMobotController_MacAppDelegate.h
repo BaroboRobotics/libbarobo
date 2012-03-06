@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "ConfigFile.h"
+#import "UIHandler.h"
 
 @interface iMobotController_MacAppDelegate : NSObject <NSApplicationDelegate> {
     NSWindow *window;
@@ -16,15 +17,20 @@
 	NSTextField *addAddressTextField;
 	
 	ConfigFile *configFile;
+	UIHandler *uiHandler;
+	
+	br_comms_t *comms;
 }
 
 @property (assign) IBOutlet NSWindow *window;
 @property (retain) IBOutlet NSWindow *configWindow;
 @property (retain) IBOutlet NSTableView *addressesTableView;
 @property (retain) IBOutlet NSTextField *addAddressTextField;
+@property (retain) IBOutlet UIHandler *uiHandler;
 
 /* Menu Handlers */
 - (IBAction) onMenuConfigureConfigure:(id)sender;
+- (IBAction) onMenuConnectConnect:(id)sender;
 
 /* Config dialog handlers */
 - (IBAction) onButtonConfigOK:(id)sender;

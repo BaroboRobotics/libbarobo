@@ -14,12 +14,19 @@
 @synthesize configWindow;
 @synthesize addressesTableView;
 @synthesize addAddressTextField;
+@synthesize uiHandler;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	// Insert code here to initialize your application 
 	configFile = [[ConfigFile alloc] init];
 	[configFile initWithFilename:@"/Users/dko/.Barobo.config"];
 	[addressesTableView setDataSource:configFile];
+	comms = (br_comms_t*)malloc(sizeof(br_comms_t));
+	Mobot_init(comms);
+}
+
+- (void)applicationDidBecomeActive:(NSNotification *)notification {
+	uiHandler = [[UIHandler alloc] init];
 }
 
 /* Menu Handlers */
@@ -28,6 +35,10 @@
 	[addressesTableView reloadData];
 	//[configWindow display];
 	[configWindow orderFront:self];
+}
+
+- (IBAction) onMenuConnectConnect:(id)sender {
+	Mobot_connect(comms);
 }
 
 /* Config Dialog Button Handlers */

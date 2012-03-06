@@ -68,10 +68,15 @@ typedef enum robotJointState_e
 #endif
 
 #ifndef _CH_
+
+#ifdef __cplusplus
 extern "C" {
+#endif
   DLLIMPORT double deg2rad(double deg);
   DLLIMPORT double rad2deg(double rad);
+#ifdef __cplusplus
 }
+#endif
 
 typedef struct recordAngleArg_s 
 {
