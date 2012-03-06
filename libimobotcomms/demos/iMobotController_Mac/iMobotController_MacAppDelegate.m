@@ -23,10 +23,11 @@
 	[addressesTableView setDataSource:configFile];
 	comms = (br_comms_t*)malloc(sizeof(br_comms_t));
 	Mobot_init(comms);
+	[uiHandler initWithBRComms:comms];
 }
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
-	uiHandler = [[UIHandler alloc] init];
+
 }
 
 /* Menu Handlers */

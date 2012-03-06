@@ -319,7 +319,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>iMobotController_MacAppDelegate.m</string>
+								<string>UIHandler.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -327,11 +327,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>iMobotController_MacAppDelegate.m</string>
+										<string>UIHandler.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>7A6D0B98150593DC004EC18C</string>
+										<string>7A6D0BE315069781004EC18C</string>
 										<key>history</key>
 										<array>
 											<string>7A6D0A211501832E004EC18C</string>
@@ -339,12 +339,12 @@
 											<string>7A6D0B2115056C2C004EC18C</string>
 											<string>7A6D0B2215056C2C004EC18C</string>
 											<string>7A6D0B2315056C2C004EC18C</string>
-											<string>7A6D0B7415058E48004EC18C</string>
-											<string>7A6D0B8B1505932F004EC18C</string>
 											<string>7A6D0B8C1505932F004EC18C</string>
-											<string>7A6D0B8D1505932F004EC18C</string>
 											<string>7A6D0B8E1505932F004EC18C</string>
-											<string>7A6D0B8F1505932F004EC18C</string>
+											<string>7A6D0BBE15059998004EC18C</string>
+											<string>7A6D0BD415059B75004EC18C</string>
+											<string>7A6D0BE115069781004EC18C</string>
+											<string>7A6D0BE215069781004EC18C</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -542,7 +542,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>7A6D0B99150593DC004EC18C</string>
 		<string>7A6D0A57150185DA004EC18C</string>
 		<string>7A6D0A2B1501832E004EC18C</string>
 		<string>7A6D0A2C1501832E004EC18C</string>

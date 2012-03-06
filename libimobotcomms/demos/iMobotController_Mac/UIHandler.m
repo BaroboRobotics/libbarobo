@@ -29,6 +29,15 @@
 	return self;
 }
 
+- (id) initWithBRComms:(br_comms_t*)br_comms {
+	comms = br_comms;
+	return [self init];
+}
+
+- (br_comms_t*) comms {
+	return comms;
+}
+
 - (void) initSliders {
 	sliderSpeeds[0] = sliderSpeed1;
 	sliderSpeeds[1] = sliderSpeed2;
@@ -59,4 +68,7 @@
 - (void) main {
 }
 
+- (IBAction) onButtonMoveToZero:(id)sender {
+	Mobot_moveToZero([self comms]);
+}
 @end

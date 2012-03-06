@@ -21,6 +21,7 @@
 	NSSlider *sliderPosition3;
 	NSSlider *sliderPosition4;
 	NSSlider *sliderPositions[4];
+	br_comms_t *comms;
 }
 
 @property (retain) IBOutlet NSSlider *sliderSpeed1;
@@ -33,8 +34,14 @@
 @property (retain) IBOutlet NSSlider *sliderPosition3;
 @property (retain) IBOutlet NSSlider *sliderPosition4;
 
+- (br_comms_t*) comms;
+
 - (id) init;
+- (id) initWithBRComms:(br_comms_t*)br_comms;
 - (void) initSliders;
 - (void) main;
+
+/* UI Button Handlers */
+- (IBAction) onButtonMoveToZero:(id)sender;
 
 @end
