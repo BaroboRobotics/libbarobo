@@ -68,7 +68,58 @@
 - (void) main {
 }
 
+/* Button Handlers */
+
 - (IBAction) onButtonMoveToZero:(id)sender {
 	Mobot_moveToZero([self comms]);
 }
+
+- (IBAction) onButtonJoint1Forward:(id)sender {
+	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT1, ROBOT_FORWARD);
+}
+
+- (IBAction) onButtonJoint2Forward:(id)sender {
+	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT2, ROBOT_FORWARD);
+}
+
+- (IBAction) onButtonJoint3Forward:(id)sender {
+	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT3, ROBOT_FORWARD);
+}
+
+- (IBAction) onButtonJoint4Forward:(id)sender {
+	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT4, ROBOT_FORWARD);
+}
+
+- (IBAction) onButtonJoint1Stop:(id)sender {
+	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT1, ROBOT_HOLD);
+}
+
+- (IBAction) onButtonJoint2Stop:(id)sender {
+	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT2, ROBOT_HOLD);
+}
+
+- (IBAction) onButtonJoint3Stop:(id)sender {
+	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT3, ROBOT_HOLD);
+}
+
+- (IBAction) onButtonJoint4Stop:(id)sender {
+	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT4, ROBOT_HOLD);
+}
+
+- (IBAction) onButtonJoint1Backward:(id)sender {
+	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT1, ROBOT_BACKWARD);
+}
+
+- (IBAction) onButtonJoint2Backward:(id)sender {
+	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT2, ROBOT_BACKWARD);
+}
+
+- (IBAction) onButtonJoint3Backward:(id)sender {
+	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT3, ROBOT_BACKWARD);
+}
+
+- (IBAction) onButtonJoint4Backward:(id)sender {
+	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT4, ROBOT_BACKWARD);
+}
+
 @end

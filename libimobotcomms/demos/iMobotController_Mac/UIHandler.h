@@ -43,5 +43,18 @@
 
 /* UI Button Handlers */
 - (IBAction) onButtonMoveToZero:(id)sender;
+- (IBAction) onButtonJoint1Forward:(id)sender;
+- (IBAction) onButtonJoint2Forward:(id)sender;
+- (IBAction) onButtonJoint3Forward:(id)sender;
+- (IBAction) onButtonJoint4Forward:(id)sender;
+- (IBAction) onButtonJoint1Stop:(id)sender;
+- (IBAction) onButtonJoint2Stop:(id)sender;
+- (IBAction) onButtonJoint3Stop:(id)sender;
+- (IBAction) onButtonJoint4Stop:(id)sender;
+- (IBAction) onButtonJoint1Backward:(id)sender;
+- (IBAction) onButtonJoint2Backward:(id)sender;
+- (IBAction) onButtonJoint3Backward:(id)sender;
+- (IBAction) onButtonJoint4Backward:(id)sender;
+
 
 @end

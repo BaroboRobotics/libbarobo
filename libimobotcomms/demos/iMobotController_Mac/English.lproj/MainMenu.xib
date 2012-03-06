@@ -13,8 +13,8 @@
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="733"/>
-			<integer value="29"/>
 			<integer value="371"/>
+			<integer value="29"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2768,6 +2768,102 @@
 					</object>
 					<int key="connectionID">784</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">onButtonJoint1Backward:</string>
+						<reference key="source" ref="350964324"/>
+						<reference key="destination" ref="192453727"/>
+					</object>
+					<int key="connectionID">785</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">onButtonJoint1Forward:</string>
+						<reference key="source" ref="350964324"/>
+						<reference key="destination" ref="801771661"/>
+					</object>
+					<int key="connectionID">786</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">onButtonJoint1Stop:</string>
+						<reference key="source" ref="350964324"/>
+						<reference key="destination" ref="234717833"/>
+					</object>
+					<int key="connectionID">787</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">onButtonJoint2Backward:</string>
+						<reference key="source" ref="350964324"/>
+						<reference key="destination" ref="923488659"/>
+					</object>
+					<int key="connectionID">788</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">onButtonJoint2Forward:</string>
+						<reference key="source" ref="350964324"/>
+						<reference key="destination" ref="425100114"/>
+					</object>
+					<int key="connectionID">789</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">onButtonJoint2Stop:</string>
+						<reference key="source" ref="350964324"/>
+						<reference key="destination" ref="926379161"/>
+					</object>
+					<int key="connectionID">790</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">onButtonJoint3Backward:</string>
+						<reference key="source" ref="350964324"/>
+						<reference key="destination" ref="147209547"/>
+					</object>
+					<int key="connectionID">791</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">onButtonJoint3Forward:</string>
+						<reference key="source" ref="350964324"/>
+						<reference key="destination" ref="858998363"/>
+					</object>
+					<int key="connectionID">792</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">onButtonJoint3Stop:</string>
+						<reference key="source" ref="350964324"/>
+						<reference key="destination" ref="815137472"/>
+					</object>
+					<int key="connectionID">793</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">onButtonJoint4Backward:</string>
+						<reference key="source" ref="350964324"/>
+						<reference key="destination" ref="696676025"/>
+					</object>
+					<int key="connectionID">794</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">onButtonJoint4Forward:</string>
+						<reference key="source" ref="350964324"/>
+						<reference key="destination" ref="733586952"/>
+					</object>
+					<int key="connectionID">795</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">onButtonJoint4Stop:</string>
+						<reference key="source" ref="350964324"/>
+						<reference key="destination" ref="851915122"/>
+					</object>
+					<int key="connectionID">796</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -4363,14 +4459,14 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{525, 802}, {197, 73}}</string>
-					<string>{{57, 705}, {522, 20}}</string>
+					<string>{{14, 740}, {522, 20}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{74, 862}</string>
 					<string>{{6, 978}, {478, 20}}</string>
-					<string>{{44, 89}, {664, 466}}</string>
+					<string>{{26, 22}, {664, 466}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{44, 89}, {664, 466}}</string>
+					<string>{{26, 22}, {664, 466}}</string>
 					<integer value="1"/>
 					<string>{{33, 99}, {480, 360}}</string>
 					<string>{3.40282e+38, 3.40282e+38}</string>
@@ -4766,7 +4862,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">784</int>
+			<int key="maxID">796</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4775,14 +4871,112 @@
 					<string key="className">UIHandler</string>
 					<string key="superclassName">NSThread</string>
 					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">onButtonMoveToZero:</string>
-						<string key="NS.object.0">id</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>onButtonJoint1Backward:</string>
+							<string>onButtonJoint1Forward:</string>
+							<string>onButtonJoint1Stop:</string>
+							<string>onButtonJoint2Backward:</string>
+							<string>onButtonJoint2Forward:</string>
+							<string>onButtonJoint2Stop:</string>
+							<string>onButtonJoint3Backward:</string>
+							<string>onButtonJoint3Forward:</string>
+							<string>onButtonJoint3Stop:</string>
+							<string>onButtonJoint4Backward:</string>
+							<string>onButtonJoint4Forward:</string>
+							<string>onButtonJoint4Stop:</string>
+							<string>onButtonMoveToZero:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+						</object>
 					</object>
 					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">onButtonMoveToZero:</string>
-						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">onButtonMoveToZero:</string>
-							<string key="candidateClassName">id</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>onButtonJoint1Backward:</string>
+							<string>onButtonJoint1Forward:</string>
+							<string>onButtonJoint1Stop:</string>
+							<string>onButtonJoint2Backward:</string>
+							<string>onButtonJoint2Forward:</string>
+							<string>onButtonJoint2Stop:</string>
+							<string>onButtonJoint3Backward:</string>
+							<string>onButtonJoint3Forward:</string>
+							<string>onButtonJoint3Stop:</string>
+							<string>onButtonJoint4Backward:</string>
+							<string>onButtonJoint4Forward:</string>
+							<string>onButtonJoint4Stop:</string>
+							<string>onButtonMoveToZero:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBActionInfo">
+								<string key="name">onButtonJoint1Backward:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">onButtonJoint1Forward:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">onButtonJoint1Stop:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">onButtonJoint2Backward:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">onButtonJoint2Forward:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">onButtonJoint2Stop:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">onButtonJoint3Backward:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">onButtonJoint3Forward:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">onButtonJoint3Stop:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">onButtonJoint4Backward:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">onButtonJoint4Forward:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">onButtonJoint4Stop:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">onButtonMoveToZero:</string>
+								<string key="candidateClassName">id</string>
+							</object>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="outlets">
