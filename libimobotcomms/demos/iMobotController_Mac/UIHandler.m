@@ -21,6 +21,26 @@
 @synthesize sliderPosition3;
 @synthesize sliderPosition4;
 
+@synthesize textFieldSpeed1;
+@synthesize textFieldSpeed2;
+@synthesize textFieldSpeed3;
+@synthesize textFieldSpeed4;
+
+@synthesize textFieldSetSpeed1;
+@synthesize textFieldSetSpeed2;
+@synthesize textFieldSetSpeed3;
+@synthesize textFieldSetSpeed4;
+
+@synthesize textFieldPosition1;
+@synthesize textFieldPosition2;
+@synthesize textFieldPosition3;
+@synthesize textFieldPosition4;
+
+@synthesize textFieldSetPosition1;
+@synthesize textFieldSetPosition2;
+@synthesize textFieldSetPosition3;
+@synthesize textFieldSetPosition4;
+
 - (id) init {
 	if (self = [super init]) {
 		/* Initialize sliders */
@@ -63,9 +83,55 @@
 		[sliderPositions[i] setMinValue:-90];
 		[sliderPositions[i] setMaxValue:90];
 	}
+	
+	textFieldSpeeds[0] = textFieldSpeed1;
+	textFieldSpeeds[1] = textFieldSpeed2;
+	textFieldSpeeds[2] = textFieldSpeed3;
+	textFieldSpeeds[3] = textFieldSpeed4;
+	
+	textFieldSetSpeeds[0] = textFieldSetSpeed1;
+	textFieldSetSpeeds[1] = textFieldSetSpeed2;
+	textFieldSetSpeeds[2] = textFieldSetSpeed3;
+	textFieldSetSpeeds[3] = textFieldSetSpeed4;
+	
+	textFieldPositions[0] = textFieldPosition1;
+	textFieldPositions[1] = textFieldPosition2;
+	textFieldPositions[2] = textFieldPosition3;
+	textFieldPositions[3] = textFieldPosition4;
+	
+	textFieldSetPositions[0] = textFieldSetPosition1;
+	textFieldSetPositions[1] = textFieldSetPosition2;
+	textFieldSetPositions[2] = textFieldSetPosition3;
+	textFieldSetPositions[3] = textFieldSetPosition4;
 }
 
 - (void) main {
+	/* Main UI Processing Loop */
+	double timestamp;
+	double positions[4];
+	double speeds[4];
+	int i;
+
+	while(1) {
+		/* Get motor positions */
+		Mobot_getJointAnglesTime(comms, &timestamp, &positions[0], &positions[1], &positions[2], &positions[3]);
+
+		/* Check the slider positions. If the mouse is down, move the motors. */
+		for(i = 0; i < 4; i++) {
+			[textFieldPositions[i] setDoubleValue:RAD2DEG(positions[i])];
+			if( [sliderPositions[i] isMouseDown] ) {
+				Mobot_moveJointToPIDNB(comms, i+1, DEG2RAD([sliderPositions[i] doubleValue]));
+			} else {
+				/* Set the slider positions */
+				[sliderPositions[i] setDoubleValue:RAD2DEG(positions[i])];
+			}
+		}
+		/* Handle speed sliders and whatnot */
+		for(i = 0; i < 4; i++) {
+			speeds[i] = [sliderSpeeds[i] doubleValue];
+			[textFieldSpeeds[i] setDoubleValue:speeds[i]];
+		}
+	}
 }
 
 /* Button Handlers */

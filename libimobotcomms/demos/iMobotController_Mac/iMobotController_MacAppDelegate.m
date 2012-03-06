@@ -39,7 +39,11 @@
 }
 
 - (IBAction) onMenuConnectConnect:(id)sender {
-	Mobot_connect(comms);
+	if(Mobot_connect(comms)) {
+		/* Error message */
+	} else {
+		[uiHandler start];
+	}
 }
 
 /* Config Dialog Button Handlers */
