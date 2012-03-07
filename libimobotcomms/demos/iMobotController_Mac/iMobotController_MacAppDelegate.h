@@ -13,6 +13,7 @@
 @interface iMobotController_MacAppDelegate : NSObject <NSApplicationDelegate> {
     NSWindow *window;
 	NSWindow *configWindow;
+	NSWindow *connectFailedWindow;
 	NSTableView *addressesTableView;
 	NSTextField *addAddressTextField;
 	
@@ -24,6 +25,7 @@
 
 @property (assign) IBOutlet NSWindow *window;
 @property (retain) IBOutlet NSWindow *configWindow;
+@property (retain) IBOutlet NSWindow *connectFailedWindow;
 @property (retain) IBOutlet NSTableView *addressesTableView;
 @property (retain) IBOutlet NSTextField *addAddressTextField;
 @property (retain) IBOutlet UIHandler *uiHandler;

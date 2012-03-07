@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>7A6D0DF3150802A5004EC18C</string>
+						<string>7A6D0E0315080E6F004EC18C</string>
 						<key>history</key>
 						<array>
 							<string>7A6D0DC61507FFD7004EC18C</string>
@@ -317,7 +317,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>8</integer>
+									<integer>4</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
@@ -360,7 +360,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>UIHandler.m</string>
+								<string>iMobotController_MacAppDelegate.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -368,27 +368,27 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>UIHandler.m</string>
+										<string>iMobotController_MacAppDelegate.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>7A6D0DF2150802A5004EC18C</string>
+										<string>7A6D0E0215080E6F004EC18C</string>
 										<key>history</key>
 										<array>
 											<string>7A6D0A211501832E004EC18C</string>
 											<string>7A6D0B2215056C2C004EC18C</string>
 											<string>7A6D0B2315056C2C004EC18C</string>
-											<string>7A6D0D4F1507F79F004EC18C</string>
 											<string>7A6D0D521507F79F004EC18C</string>
 											<string>7A6D0C4E1506B53A004EC18C</string>
 											<string>7A6D0D9D1507FE2A004EC18C</string>
 											<string>7A6D0D9F1507FE2A004EC18C</string>
 											<string>7A6D0DE51508021C004EC18C</string>
 											<string>7A6D0DE61508021C004EC18C</string>
-											<string>7A6D0DEE150802A5004EC18C</string>
 											<string>7A6D0DEF150802A5004EC18C</string>
 											<string>7A6D0DF0150802A5004EC18C</string>
-											<string>7A6D0DF1150802A5004EC18C</string>
+											<string>7A6D0DFB15080E53004EC18C</string>
+											<string>7A6D0DFC15080E53004EC18C</string>
+											<string>7A6D0DFD15080E53004EC18C</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -586,7 +586,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>7A6D0DF4150802A5004EC18C</string>
+		<string>7A6D0E0415080E6F004EC18C</string>
 		<string>7A6D0DD8150800AD004EC18C</string>
 		<string>7A6D0DD9150800AD004EC18C</string>
 		<string>1C78EAAD065D492600B07095</string>

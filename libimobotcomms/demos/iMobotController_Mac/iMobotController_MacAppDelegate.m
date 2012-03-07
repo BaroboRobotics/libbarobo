@@ -12,6 +12,7 @@
 
 @synthesize window;
 @synthesize configWindow;
+@synthesize connectFailedWindow;
 @synthesize addressesTableView;
 @synthesize addAddressTextField;
 @synthesize uiHandler;
@@ -39,8 +40,10 @@
 }
 
 - (IBAction) onMenuConnectConnect:(id)sender {
+	[connectFailedWindow orderOut:sender];
 	if(Mobot_connect(comms)) {
 		/* Error message */
+		[connectFailedWindow orderFront:sender];
 	} else {
 		[uiHandler start];
 	}
