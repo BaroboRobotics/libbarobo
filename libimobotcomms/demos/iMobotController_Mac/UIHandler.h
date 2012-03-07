@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "UISlider.h"
+#import "Motions.h"
 #include <mobot.h>
 
 @interface UIHandler : NSThread {
@@ -46,6 +47,9 @@
 	NSTextField *textFieldSetPosition3;
 	NSTextField *textFieldSetPosition4;
 	NSTextField *textFieldSetPositions[4];
+	
+	NSTableView *tableViewMotions;
+	Motions *motions;
 
 	br_comms_t *comms;
 }
@@ -80,6 +84,8 @@
 @property (retain) IBOutlet NSTextField *textFieldSetPosition3;
 @property (retain) IBOutlet NSTextField *textFieldSetPosition4;
 
+@property (retain) IBOutlet NSTableView *tableViewMotions;
+
 - (br_comms_t*) comms;
 
 - (id) init;
@@ -109,5 +115,6 @@
 - (IBAction) onButtonSetSpeed:(id)sender;
 - (IBAction) onButtonMoveTo:(id)sender;
 - (IBAction) onButtonMove:(id)sender;
+- (IBAction) onButtonPlay:(id)sender;
 
 @end

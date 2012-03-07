@@ -41,11 +41,16 @@
 @synthesize textFieldSetPosition3;
 @synthesize textFieldSetPosition4;
 
+@synthesize tableViewMotions;
+
 - (id) init {
 	if (self = [super init]) {
 		/* Initialize sliders */
 		[self initSliders];
 	}
+	motions = [[Motions alloc] init];
+	[motions retain];
+	[tableViewMotions setDataSource:motions];
 	return self;
 }
 
@@ -109,8 +114,11 @@
 	/* Main UI Processing Loop */
 	double timestamp;
 	double positions[4];
-	double speeds[4];
 	int i;
+	
+	for(i = 0; i < 4; i++) {
+		[textFieldSpeeds[i] setDoubleValue:45];
+	}
 
 	while(1) {
 		/* Get motor positions */
@@ -125,11 +133,11 @@
 				/* Set the slider positions */
 				[sliderPositions[i] setDoubleValue:RAD2DEG(positions[i])];
 			}
-		}
-		/* Handle speed sliders and whatnot */
-		for(i = 0; i < 4; i++) {
-			speeds[i] = [sliderSpeeds[i] doubleValue];
-			[textFieldSpeeds[i] setDoubleValue:speeds[i]];
+			
+			if( [sliderSpeeds[i] isMouseDown] ) {
+				Mobot_setJointSpeed(comms, i+1, DEG2RAD([sliderSpeeds[i] doubleValue]));
+				[textFieldSpeeds[i] setDoubleValue:[sliderSpeeds[i] doubleValue]];
+			}
 		}
 	}
 }
@@ -236,5 +244,47 @@
 		}
 	}
 }
+
+- (IBAction) onButtonPlay:(id)sender {
+	NSInteger index = [tableViewMotions selectedRow];
+	switch(index) {
+		case MOTION_ARCH: 
+			Mobot_motionArchNB(comms, DEG2RAD(30));
+			break;
+		case MOTION_INCHWORMLEFT:
+			Mobot_motionInchwormLeftNB(comms, 1);
+			break;
+		case MOTION_INCHWORMRIGHT:
+			Mobot_motionInchwormRightNB(comms, 1);
+			break;
+		case MOTION_ROLLBACKWARD:
+			Mobot_motionRollBackwardNB(comms, DEG2RAD(360));
+			break;
+		case MOTION_ROLLFORWARD:
+			Mobot_motionRollForwardNB(comms, DEG2RAD(360));
+			break;
+		case MOTION_SKINNY:
+			Mobot_motionSkinnyNB(comms, DEG2RAD(90));
+			break;
+		case MOTION_STAND:
+			Mobot_motionStandNB(comms);
+			break;
+		case MOTION_TURNLEFT:
+			Mobot_motionTurnLeftNB(comms, DEG2RAD(360));
+			break;
+		case MOTION_TURNRIGHT:
+			Mobot_motionTurnRightNB(comms, DEG2RAD(360));
+			break;
+		case MOTION_TUMBLE:
+			Mobot_motionTumbleNB(comms, 1);
+			break;
+		case MOTION_UNSTAND:
+			Mobot_motionUnstandNB(comms);
+			break;
+		default:
+			return;
+	}
+}
+
 
 @end
