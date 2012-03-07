@@ -212,6 +212,7 @@ DLLIMPORT int Mobot_motionTurnRight(br_comms_t* comms, double angle);
 DLLIMPORT int Mobot_motionUnstand(br_comms_t* comms);
 
 /* Non-Blocking compound motion functions */
+DLLIMPORT int Mobot_motionArchNB(br_comms_t* comms, double angle);
 DLLIMPORT int Mobot_motionInchwormLeftNB(br_comms_t* comms);
 DLLIMPORT int Mobot_motionInchwormRightNB(br_comms_t* comms);
 DLLIMPORT int Mobot_motionRollBackwardNB(br_comms_t* comms, double angle);
