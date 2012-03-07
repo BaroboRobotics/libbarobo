@@ -208,5 +208,33 @@
 	Mobot_stop(comms);
 }
 
+- (IBAction) onButtonSetSpeed:(id)sender {
+	int i;
+	for(i = 0; i < 4; i++) {
+		if( [[textFieldSetSpeeds[i] stringValue] length] > 0) {
+			Mobot_setJointSpeed(comms, i+1, [textFieldSetSpeeds[i] doubleValue]);
+			[textFieldSpeeds[i] setDoubleValue:[textFieldSetSpeeds[i] doubleValue]];
+			[sliderSpeeds[i] setDoubleValue:[textFieldSetSpeeds[i] doubleValue]];
+		}
+	}
+}
+
+- (IBAction) onButtonMoveTo:(id)sender {
+	int i;
+	for(i = 0; i < 4; i++) {
+		if( [[textFieldSetPositions[i] stringValue] length] > 0) {
+			Mobot_moveJointToNB(comms, i+1, DEG2RAD([textFieldSetPositions[i] doubleValue]));
+		}
+	}
+}
+
+- (IBAction) onButtonMove:(id)sender {
+	int i;
+	for(i = 0; i < 4; i++) {
+		if( [[textFieldSetPositions[i] stringValue] length] > 0) {
+			Mobot_moveJointNB(comms, i+1, DEG2RAD([textFieldSetPositions[i] doubleValue]));
+		}
+	}
+}
 
 @end

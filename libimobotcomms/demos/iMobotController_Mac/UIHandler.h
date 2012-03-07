@@ -106,5 +106,8 @@
 - (IBAction) onButtonRollLeft:(id)sender;
 - (IBAction) onButtonRollRight:(id)sender;
 - (IBAction) onButtonStop:(id)sender;
+- (IBAction) onButtonSetSpeed:(id)sender;
+- (IBAction) onButtonMoveTo:(id)sender;
+- (IBAction) onButtonMove:(id)sender;
 
 @end
