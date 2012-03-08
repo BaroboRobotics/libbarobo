@@ -126,7 +126,6 @@ int Mobot_connect(br_comms_t* comms)
     return i;
   }
 #else /* If Mac OS */
-#endif /* Fi Linux/Mac */
   /* The format for the device should be /dev/tty.MOBOT-XXXX-SPP */
   char chunk1[3];
   char chunk2[3];
@@ -143,6 +142,7 @@ int Mobot_connect(br_comms_t* comms)
     g_numConnected++;
     return i;
   }
+#endif /* Fi Linux/Mac */
 #endif
 }
 int Mobot_connect_old(br_comms_t* comms)
@@ -344,7 +344,13 @@ int finishConnect(br_comms_t* comms)
 int Mobot_disconnect(br_comms_t* comms)
 {
 #ifndef _WIN32
-  close(comms->socket);
+  if(close(comms->socket)) {
+    /* Error closing file descriptor */
+  } else {
+    if(g_numConnected > 0) {
+      g_numConnected--;
+    }
+  }
 #else
   closesocket(comms->socket);
   //CloseHandle((LPVOID)comms->socket);
