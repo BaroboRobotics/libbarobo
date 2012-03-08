@@ -35,6 +35,7 @@
 - (IBAction) onMenuConnectConnect:(id)sender;
 - (IBAction) onMenuConnectDisconnect:(id)sender;
 - (IBAction) onMenuHelpHelp:(id)sender;
+- (IBAction) onMenuHelpDemos:(id)sender;
 
 /* Config dialog handlers */
 - (IBAction) onButtonConfigOK:(id)sender;

@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>7A6D0EEC150943FB004EC18C</string>
+						<string>7A6D0F1A15094940004EC18C</string>
 						<key>history</key>
 						<array>
 							<string>7A6D0DC61507FFD7004EC18C</string>
@@ -318,7 +318,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>3</integer>
+									<integer>4</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
@@ -361,7 +361,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>iMobotController_MacAppDelegate.h</string>
+								<string>iMobotController_MacAppDelegate.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -369,11 +369,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>iMobotController_MacAppDelegate.h</string>
+										<string>iMobotController_MacAppDelegate.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>7A6D0EEB150943FB004EC18C</string>
+										<string>7A6D0F1915094940004EC18C</string>
 										<key>history</key>
 										<array>
 											<string>7A6D0A211501832E004EC18C</string>
@@ -388,8 +388,8 @@
 											<string>7A6D0DF0150802A5004EC18C</string>
 											<string>7A6D0E40150826B2004EC18C</string>
 											<string>7A6D0E41150826B2004EC18C</string>
-											<string>7A6D0EE5150943D4004EC18C</string>
-											<string>7A6D0EE6150943D4004EC18C</string>
+											<string>7A6D0EF0150945B1004EC18C</string>
+											<string>7A6D0EF1150945B1004EC18C</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -587,7 +587,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>7A6D0EED150943FB004EC18C</string>
 		<string>7A6D0DD8150800AD004EC18C</string>
 		<string>7A6D0DD9150800AD004EC18C</string>
 		<string>1C78EAAD065D492600B07095</string>

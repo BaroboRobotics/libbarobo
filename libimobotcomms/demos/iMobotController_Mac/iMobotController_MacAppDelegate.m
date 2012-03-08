@@ -61,6 +61,11 @@
 	[[NSWorkspace sharedWorkspace] openURL:myUrl];
 }
 
+- (IBAction) onMenuHelpDemos:(id)sender {
+	[NSTask launchedTaskWithLaunchPath:@"/usr/local/ch/bin/chide" 
+							 arguments:[NSArray arrayWithObjects:@"-d", @"/usr/local/ch/package/chmobot/demos", nil]];
+}
+
 /* Config Dialog Button Handlers */
 - (IBAction) onButtonConfigOK:(id)sender {
 	[configFile writeFile];
