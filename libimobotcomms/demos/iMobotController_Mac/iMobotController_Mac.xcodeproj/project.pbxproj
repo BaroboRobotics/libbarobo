@@ -20,6 +20,7 @@
 		7A6D0B361505779B004EC18C /* libmobot.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A6D0B351505779B004EC18C /* libmobot.dylib */; };
 		7A6D0C6D1506B97F004EC18C /* UISlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6D0C6C1506B97F004EC18C /* UISlider.m */; };
 		7A6D0D431507F328004EC18C /* Motions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6D0D421507F328004EC18C /* Motions.m */; };
+		7A6D0F1D15094F36004EC18C /* Barobo_square.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A6D0F1C15094F36004EC18C /* Barobo_square.png */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -54,6 +55,7 @@
 		7A6D0D411507F328004EC18C /* Motions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Motions.h; sourceTree = "<group>"; };
 		7A6D0D421507F328004EC18C /* Motions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Motions.m; sourceTree = "<group>"; };
 		7A6D0D471507F46E004EC18C /* Motions.x.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Motions.x.h; sourceTree = "<group>"; };
+		7A6D0F1C15094F36004EC18C /* Barobo_square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Barobo_square.png; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* iMobotController_Mac-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "iMobotController_Mac-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* iMobotController_Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iMobotController_Mac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -141,6 +143,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				7A6D0F1C15094F36004EC18C /* Barobo_square.png */,
 				7A6D09D014FEADE0004EC18C /* stop.png */,
 				7A6D09CA14FEADC6004EC18C /* inch_left.png */,
 				7A6D09CB14FEADC6004EC18C /* inch_right.png */,
@@ -222,6 +225,7 @@
 				7A6D09CE14FEADC6004EC18C /* inch_right.png in Resources */,
 				7A6D09CF14FEADC6004EC18C /* move_back.png in Resources */,
 				7A6D09D114FEADE0004EC18C /* stop.png in Resources */,
+				7A6D0F1D15094F36004EC18C /* Barobo_square.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
