@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>7A6D0F34150950E3004EC18C</string>
+						<string>7A6D0F3D150951AC004EC18C</string>
 						<key>history</key>
 						<array>
 							<string>7A6D0DC61507FFD7004EC18C</string>
@@ -270,6 +270,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -357,7 +359,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>iMobotController_Mac-Info.plist</string>
+								<string>RobotController-Info.plist</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -365,11 +367,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>iMobotController_Mac-Info.plist</string>
+										<string>RobotController-Info.plist</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>7A6D0F33150950E3004EC18C</string>
+										<string>7A6D0F3C150951AC004EC18C</string>
 										<key>history</key>
 										<array>
 											<string>7A6D0A211501832E004EC18C</string>
@@ -584,14 +586,14 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>7A6D0F35150950E3004EC18C</string>
+		<string>7A6D0F3E150951AC004EC18C</string>
 		<string>7A6D0DD8150800AD004EC18C</string>
 		<string>7A6D0DD9150800AD004EC18C</string>
 		<string>1C78EAAD065D492600B07095</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>7A6D09BB14FD7D2C004EC18C</string>
 		<string>7A6D0DCD150800AD004EC18C</string>
-		<string>/Users/dko/Projects/iMobot_gumstix_api/libimobotcomms/demos/iMobotController_Mac/iMobotController_Mac.xcodeproj</string>
+		<string>/Users/dko/Projects/iMobot_gumstix_api/libimobotcomms/demos/iMobotController_Mac/RobotController.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>0 122 1152 720 0 0 1152 842 </string>

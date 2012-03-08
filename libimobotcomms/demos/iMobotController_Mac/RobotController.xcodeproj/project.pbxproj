@@ -33,7 +33,7 @@
 		1DDD58150DA1D0A300B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		256AC3D80F4B6AC300CF3369 /* iMobotController_MacAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iMobotController_MacAppDelegate.h; sourceTree = "<group>"; };
 		256AC3D90F4B6AC300CF3369 /* iMobotController_MacAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iMobotController_MacAppDelegate.m; sourceTree = "<group>"; };
-		256AC3F00F4B6AF500CF3369 /* iMobotController_Mac_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iMobotController_Mac_Prefix.pch; sourceTree = "<group>"; };
+		256AC3F00F4B6AF500CF3369 /* RobotController_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RobotController_Prefix.pch; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
@@ -56,8 +56,8 @@
 		7A6D0D421507F328004EC18C /* Motions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Motions.m; sourceTree = "<group>"; };
 		7A6D0D471507F46E004EC18C /* Motions.x.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Motions.x.h; sourceTree = "<group>"; };
 		7A6D0F1C15094F36004EC18C /* Barobo_square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Barobo_square.png; sourceTree = "<group>"; };
-		8D1107310486CEB800E47090 /* iMobotController_Mac-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "iMobotController_Mac-Info.plist"; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* iMobotController_Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iMobotController_Mac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107310486CEB800E47090 /* RobotController-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "RobotController-Info.plist"; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* RobotController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RobotController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,7 +114,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107320486CEB800E47090 /* iMobotController_Mac.app */,
+				8D1107320486CEB800E47090 /* RobotController.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -134,7 +134,7 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				256AC3F00F4B6AF500CF3369 /* iMobotController_Mac_Prefix.pch */,
+				256AC3F00F4B6AF500CF3369 /* RobotController_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
 			name = "Other Sources";
@@ -150,7 +150,7 @@
 				7A6D09CC14FEADC6004EC18C /* move_back.png */,
 				7A6D09C814FEAD6D004EC18C /* move_forward.png */,
 				7A6D09C214FD7EE4004EC18C /* joint_diagram3.png */,
-				8D1107310486CEB800E47090 /* iMobotController_Mac-Info.plist */,
+				8D1107310486CEB800E47090 /* RobotController-Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
 			);
@@ -170,9 +170,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8D1107260486CEB800E47090 /* iMobotController_Mac */ = {
+		8D1107260486CEB800E47090 /* RobotController */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "iMobotController_Mac" */;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "RobotController" */;
 			buildPhases = (
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
@@ -182,10 +182,10 @@
 			);
 			dependencies = (
 			);
-			name = iMobotController_Mac;
+			name = RobotController;
 			productInstallPath = "$(HOME)/Applications";
 			productName = iMobotController_Mac;
-			productReference = 8D1107320486CEB800E47090 /* iMobotController_Mac.app */;
+			productReference = 8D1107320486CEB800E47090 /* RobotController.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -193,7 +193,7 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "iMobotController_Mac" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "RobotController" */;
 			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -207,7 +207,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D1107260486CEB800E47090 /* iMobotController_Mac */,
+				8D1107260486CEB800E47090 /* RobotController */,
 			);
 		};
 /* End PBXProject section */
@@ -277,14 +277,14 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = iMobotController_Mac_Prefix.pch;
-				INFOPLIST_FILE = "iMobotController_Mac-Info.plist";
+				GCC_PREFIX_HEADER = RobotController_Prefix.pch;
+				INFOPLIST_FILE = "RobotController-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../..\"",
 				);
-				PRODUCT_NAME = iMobotController_Mac;
+				PRODUCT_NAME = RobotController;
 			};
 			name = Debug;
 		};
@@ -295,14 +295,14 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = iMobotController_Mac_Prefix.pch;
-				INFOPLIST_FILE = "iMobotController_Mac-Info.plist";
+				GCC_PREFIX_HEADER = RobotController_Prefix.pch;
+				INFOPLIST_FILE = "RobotController-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../..\"",
 				);
-				PRODUCT_NAME = iMobotController_Mac;
+				PRODUCT_NAME = RobotController;
 			};
 			name = Release;
 		};
@@ -337,7 +337,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "iMobotController_Mac" */ = {
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "RobotController" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4B08A954540054247B /* Debug */,
@@ -346,7 +346,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "iMobotController_Mac" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "RobotController" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,

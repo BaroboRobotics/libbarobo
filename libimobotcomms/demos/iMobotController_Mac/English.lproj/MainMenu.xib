@@ -12,11 +12,6 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="845"/>
-			<integer value="371"/>
-			<integer value="863"/>
-			<integer value="733"/>
-			<integer value="491"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -194,7 +189,7 @@
 								<bool key="EncodedWithXMLCoder">YES</bool>
 								<object class="NSMenuItem" id="105068016">
 									<reference key="NSMenu" ref="992780483"/>
-									<string key="NSTitle">iMobotController_Mac Help</string>
+									<string key="NSTitle">RobotController Help</string>
 									<string key="NSKeyEquiv">?</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -234,7 +229,7 @@
 				<nil key="NSViewClass"/>
 				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
 				<object class="NSView" key="NSWindowView" id="439893737">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2349,7 +2344,6 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{664, 466}</string>
-					<reference key="NSSuperview"/>
 					<bool key="NSViewIsLayerTreeHost">YES</bool>
 					<int key="NSViewLayerContentsRedrawPolicy">2</int>
 				</object>
@@ -2372,7 +2366,7 @@
 				<nil key="NSViewClass"/>
 				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
 				<object class="NSView" key="NSWindowView" id="866642371">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2625,7 +2619,6 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{299, 235}</string>
-					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1152, 842}}</string>
 				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
@@ -2641,8 +2634,9 @@
 				<string key="NSWindowTitle">Connect Failed</string>
 				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
+				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
 				<object class="NSView" key="NSWindowView" id="209698843">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2736,7 +2730,6 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{220, 116}</string>
-					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1152, 842}}</string>
 				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
@@ -2749,8 +2742,9 @@
 				<string key="NSWindowTitle">About RobotController</string>
 				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
+				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
 				<object class="NSView" key="NSWindowView" id="454837415">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2840,7 +2834,6 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{292, 110}</string>
-					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1152, 842}}</string>
 				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
@@ -4944,6 +4937,7 @@
 					<string>371.NSWindowTemplate.visibleAtLaunch</string>
 					<string>371.editorWindowContentRectSynchronizationRect</string>
 					<string>371.windowTemplate.maxSize</string>
+					<string>371.windowTemplate.minSize</string>
 					<string>372.IBPluginDependency</string>
 					<string>490.IBPluginDependency</string>
 					<string>491.IBEditorWindowLastContentRect</string>
@@ -5153,6 +5147,8 @@
 					<string>732.IBPluginDependency</string>
 					<string>732.IBWindowTemplateEditedContentRect</string>
 					<string>732.NSWindowTemplate.visibleAtLaunch</string>
+					<string>732.windowTemplate.maxSize</string>
+					<string>732.windowTemplate.minSize</string>
 					<string>733.IBPluginDependency</string>
 					<string>737.IBPluginDependency</string>
 					<string>737.IBViewBoundsToFrameTransform</string>
@@ -5193,6 +5189,8 @@
 					<string>845.IBPluginDependency</string>
 					<string>845.IBWindowTemplateEditedContentRect</string>
 					<string>845.NSWindowTemplate.visibleAtLaunch</string>
+					<string>845.windowTemplate.maxSize</string>
+					<string>845.windowTemplate.minSize</string>
 					<string>846.IBPluginDependency</string>
 					<string>847.IBPluginDependency</string>
 					<string>847.IBViewBoundsToFrameTransform</string>
@@ -5208,6 +5206,8 @@
 					<string>862.IBPluginDependency</string>
 					<string>862.IBWindowTemplateEditedContentRect</string>
 					<string>862.NSWindowTemplate.visibleAtLaunch</string>
+					<string>862.windowTemplate.maxSize</string>
+					<string>862.windowTemplate.minSize</string>
 					<string>863.IBPluginDependency</string>
 					<string>864.IBPluginDependency</string>
 					<string>865.IBPluginDependency</string>
@@ -5245,6 +5245,7 @@
 					<integer value="1"/>
 					<string>{{33, 99}, {480, 360}}</string>
 					<string>{3.40282e+38, 3.40282e+38}</string>
+					<string>{0, 0}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{438, 695}, {256, 63}}</string>
@@ -5568,6 +5569,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{134, 113}, {299, 235}}</string>
 					<boolean value="NO"/>
+					<string>{1.79769e+308, 1.79769e+308}</string>
+					<string>{0, 0}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSAffineTransform">
@@ -5625,6 +5628,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{205, 247}, {220, 116}}</string>
 					<boolean value="NO"/>
+					<string>{1.79769e+308, 1.79769e+308}</string>
+					<string>{0, 0}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSAffineTransform">
@@ -5642,6 +5647,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{173, 266}, {292, 110}}</string>
 					<boolean value="NO"/>
+					<string>{1.79769e+308, 1.79769e+308}</string>
+					<string>{0, 0}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

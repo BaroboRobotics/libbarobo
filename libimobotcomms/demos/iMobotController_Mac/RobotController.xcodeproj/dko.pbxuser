@@ -15,7 +15,7 @@
 			sepNavWindowFrame = "{{61, 237}, {750, 558}}";
 		};
 	};
-	256AC3F00F4B6AF500CF3369 /* iMobotController_Mac_Prefix.pch */ = {
+	256AC3F00F4B6AF500CF3369 /* RobotController_Prefix.pch */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {883, 525}}";
 			sepNavSelRange = "{0, 0}";
@@ -24,10 +24,10 @@
 	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
 		activeBuildConfigurationName = Debug;
-		activeExecutable = 7A6D09AB14FD7D25004EC18C /* iMobotController_Mac */;
-		activeTarget = 8D1107260486CEB800E47090 /* iMobotController_Mac */;
+		activeExecutable = 7A6D09AB14FD7D25004EC18C /* RobotController */;
+		activeTarget = 8D1107260486CEB800E47090 /* RobotController */;
 		addToTargets = (
-			8D1107260486CEB800E47090 /* iMobotController_Mac */,
+			8D1107260486CEB800E47090 /* RobotController */,
 		);
 		breakpoints = (
 			7A6D0A1D15018315004EC18C /* ConfigFile.m:22 */,
@@ -45,7 +45,7 @@
 		);
 		codeSenseManager = 7A6D09BE14FD7D2C004EC18C /* Code sense */;
 		executables = (
-			7A6D09AB14FD7D25004EC18C /* iMobotController_Mac */,
+			7A6D09AB14FD7D25004EC18C /* RobotController */,
 		);
 		perUserDictionary = {
 			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
@@ -489,6 +489,8 @@
 			7A6D0F2D150950A1004EC18C /* PBXTextBookmark */ = 7A6D0F2D150950A1004EC18C /* PBXTextBookmark */;
 			7A6D0F33150950E3004EC18C /* PlistBookmark */ = 7A6D0F33150950E3004EC18C /* PlistBookmark */;
 			7A6D0F34150950E3004EC18C /* PBXTextBookmark */ = 7A6D0F34150950E3004EC18C /* PBXTextBookmark */;
+			7A6D0F3C150951AC004EC18C /* PlistBookmark */ = 7A6D0F3C150951AC004EC18C /* PlistBookmark */;
+			7A6D0F3D150951AC004EC18C /* PBXTextBookmark */ = 7A6D0F3D150951AC004EC18C /* PBXTextBookmark */;
 		};
 		sourceControlManager = 7A6D09BD14FD7D2C004EC18C /* Source Control */;
 		userBuildSettings = {
@@ -501,7 +503,7 @@
 			sepNavVisRange = "{0, 257}";
 		};
 	};
-	7A6D09AB14FD7D25004EC18C /* iMobotController_Mac */ = {
+	7A6D09AB14FD7D25004EC18C /* RobotController */ = {
 		isa = PBXExecutable;
 		activeArgIndices = (
 		);
@@ -524,7 +526,7 @@
 		executableSystemSymbolLevel = 0;
 		executableUserSymbolLevel = 0;
 		libgmallocEnabled = 0;
-		name = iMobotController_Mac;
+		name = RobotController;
 		savedGlobals = {
 		};
 		showTypeColumn = 0;
@@ -617,7 +619,7 @@
 		ignoreCount = 0;
 		lineNumber = 22;
 		location = iMobotController_Mac;
-		modificationTime = 352932065.162829;
+		modificationTime = 352932261.470403;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -739,7 +741,7 @@
 		ignoreCount = 0;
 		lineNumber = 23;
 		location = iMobotController_Mac;
-		modificationTime = 352932065.162882;
+		modificationTime = 352932261.470449;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -1018,7 +1020,7 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = libobjc.A.dylib;
-		modificationTime = 352932065.807001;
+		modificationTime = 352932263.281543;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 		symbolName = objc_exception_throw;
@@ -1521,7 +1523,7 @@
 	};
 	7A6D0B2215056C2C004EC18C /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
-		fRef = 256AC3F00F4B6AF500CF3369 /* iMobotController_Mac_Prefix.pch */;
+		fRef = 256AC3F00F4B6AF500CF3369 /* RobotController_Prefix.pch */;
 		name = "iMobotController_Mac_Prefix.pch: 1";
 		rLen = 0;
 		rLoc = 0;
@@ -1830,7 +1832,7 @@
 		ignoreCount = 0;
 		lineNumber = 67;
 		location = iMobotController_Mac;
-		modificationTime = 352932065.162902;
+		modificationTime = 352932261.470467;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -1898,7 +1900,7 @@
 		ignoreCount = 0;
 		lineNumber = 35;
 		location = iMobotController_Mac;
-		modificationTime = 352932065.163288;
+		modificationTime = 352932261.470623;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -2170,7 +2172,7 @@
 		ignoreCount = 0;
 		lineNumber = 45;
 		location = iMobotController_Mac;
-		modificationTime = 352932065.163383;
+		modificationTime = 352932261.470722;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -2218,7 +2220,7 @@
 		ignoreCount = 0;
 		lineNumber = 89;
 		location = iMobotController_Mac;
-		modificationTime = 352932065.16346;
+		modificationTime = 352932261.470799;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -2306,7 +2308,7 @@
 		ignoreCount = 0;
 		lineNumber = 39;
 		location = iMobotController_Mac;
-		modificationTime = 352932065.16596;
+		modificationTime = 352932261.470874;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -2962,7 +2964,7 @@
 		ignoreCount = 0;
 		lineNumber = 39;
 		location = iMobotController_Mac;
-		modificationTime = 352932065.166326;
+		modificationTime = 352932261.470947;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -3030,7 +3032,7 @@
 		ignoreCount = 0;
 		lineNumber = 44;
 		location = iMobotController_Mac;
-		modificationTime = 352932065.166494;
+		modificationTime = 352932261.470969;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -3135,7 +3137,7 @@
 		ignoreCount = 0;
 		lineNumber = 23;
 		location = iMobotController_Mac;
-		modificationTime = 352932065.166519;
+		modificationTime = 352932261.470988;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -3287,7 +3289,7 @@
 		ignoreCount = 0;
 		lineNumber = 131;
 		location = iMobotController_Mac;
-		modificationTime = 352932065.166547;
+		modificationTime = 352932261.471005;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -4816,7 +4818,7 @@
 	};
 	7A6D0F2115095018004EC18C /* PlistBookmark */ = {
 		isa = PlistBookmark;
-		fRef = 8D1107310486CEB800E47090 /* iMobotController_Mac-Info.plist */;
+		fRef = 8D1107310486CEB800E47090 /* RobotController-Info.plist */;
 		fallbackIsa = PBXBookmark;
 		isK = 0;
 		kPath = (
@@ -4827,7 +4829,7 @@
 	};
 	7A6D0F2215095018004EC18C /* PlistBookmark */ = {
 		isa = PlistBookmark;
-		fRef = 8D1107310486CEB800E47090 /* iMobotController_Mac-Info.plist */;
+		fRef = 8D1107310486CEB800E47090 /* RobotController-Info.plist */;
 		fallbackIsa = PBXBookmark;
 		isK = 0;
 		kPath = (
@@ -4848,7 +4850,7 @@
 	};
 	7A6D0F271509503A004EC18C /* PlistBookmark */ = {
 		isa = PlistBookmark;
-		fRef = 8D1107310486CEB800E47090 /* iMobotController_Mac-Info.plist */;
+		fRef = 8D1107310486CEB800E47090 /* RobotController-Info.plist */;
 		fallbackIsa = PBXBookmark;
 		isK = 0;
 		kPath = (
@@ -4869,7 +4871,7 @@
 	};
 	7A6D0F2C150950A1004EC18C /* PlistBookmark */ = {
 		isa = PlistBookmark;
-		fRef = 8D1107310486CEB800E47090 /* iMobotController_Mac-Info.plist */;
+		fRef = 8D1107310486CEB800E47090 /* RobotController-Info.plist */;
 		fallbackIsa = PBXBookmark;
 		isK = 0;
 		kPath = (
@@ -4890,7 +4892,7 @@
 	};
 	7A6D0F33150950E3004EC18C /* PlistBookmark */ = {
 		isa = PlistBookmark;
-		fRef = 8D1107310486CEB800E47090 /* iMobotController_Mac-Info.plist */;
+		fRef = 8D1107310486CEB800E47090 /* RobotController-Info.plist */;
 		fallbackIsa = PBXBookmark;
 		isK = 0;
 		kPath = (
@@ -4910,10 +4912,32 @@
 		vrLen = 702;
 		vrLoc = 6927;
 	};
-	8D1107260486CEB800E47090 /* iMobotController_Mac */ = {
+	7A6D0F3C150951AC004EC18C /* PlistBookmark */ = {
+		isa = PlistBookmark;
+		fRef = 8D1107310486CEB800E47090 /* RobotController-Info.plist */;
+		fallbackIsa = PBXBookmark;
+		isK = 0;
+		kPath = (
+			CFBundleName,
+		);
+		name = "/Users/dko/Projects/iMobot_gumstix_api/libimobotcomms/demos/iMobotController_Mac/RobotController-Info.plist";
+		rLen = 0;
+		rLoc = 9223372036854775807;
+	};
+	7A6D0F3D150951AC004EC18C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A6D0B1915056A31004EC18C /* UIHandler.m */;
+		name = "UIHandler.m: 294";
+		rLen = 0;
+		rLoc = 7622;
+		rType = 0;
+		vrLen = 702;
+		vrLoc = 6927;
+	};
+	8D1107260486CEB800E47090 /* RobotController */ = {
 		activeExec = 0;
 		executables = (
-			7A6D09AB14FD7D25004EC18C /* iMobotController_Mac */,
+			7A6D09AB14FD7D25004EC18C /* RobotController */,
 		);
 	};
 }
