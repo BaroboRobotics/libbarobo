@@ -7,6 +7,7 @@
 //
 
 #import "iMobotController_MacAppDelegate.h"
+#import <Foundation/NSURL.h>
 
 @implementation iMobotController_MacAppDelegate
 
@@ -24,7 +25,6 @@
 	[addressesTableView setDataSource:configFile];
 	comms = (br_comms_t*)malloc(sizeof(br_comms_t));
 	Mobot_init(comms);
-	[uiHandler initWithBRComms:comms];
 }
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
@@ -45,8 +45,20 @@
 		/* Error message */
 		[connectFailedWindow orderFront:sender];
 	} else {
+		[uiHandler initWithBRComms:comms];
 		[uiHandler start];
 	}
+}
+
+- (IBAction) onMenuConnectDisconnect:(id)sender {
+	[uiHandler cancel];
+	while( [uiHandler isExecuting] );
+	Mobot_disconnect(comms);
+}
+
+- (IBAction) onMenuHelpHelp:(id)sender {
+	NSURL *myUrl = [NSURL URLWithString:@"file:///usr/local/ch/package/chmobot/docs/index.html"];
+	[[NSWorkspace sharedWorkspace] openURL:myUrl];
 }
 
 /* Config Dialog Button Handlers */

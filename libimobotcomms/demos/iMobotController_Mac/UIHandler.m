@@ -120,7 +120,7 @@
 		[textFieldSpeeds[i] setDoubleValue:45];
 	}
 
-	while(1) {
+	while(![self isCancelled]) {
 		/* Get motor positions */
 		Mobot_getJointAnglesTime(comms, &timestamp, &positions[0], &positions[1], &positions[2], &positions[3]);
 
@@ -139,6 +139,12 @@
 				[textFieldSpeeds[i] setDoubleValue:[sliderSpeeds[i] doubleValue]];
 			}
 		}
+	}
+	/* Reset text fields, sliders */
+	[self initSliders];
+	for(i = 0; i < 4; i++) {
+		[textFieldSpeeds[i] setStringValue:@""];
+		[textFieldPositions[i] setStringValue:@""];
 	}
 }
 
