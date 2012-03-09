@@ -12,6 +12,7 @@ if(CMAKE_HOST_WIN32)
 	  )
 	target_link_libraries(mobot Ws2_32)
 elseif(CMAKE_HOST_APPLE)
+  set(CMAKE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 	add_library(mobot SHARED
 	  mobot.cpp
 	  )

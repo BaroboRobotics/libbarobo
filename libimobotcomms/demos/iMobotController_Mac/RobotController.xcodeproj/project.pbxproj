@@ -17,14 +17,28 @@
 		7A6D09D114FEADE0004EC18C /* stop.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A6D09D014FEADE0004EC18C /* stop.png */; };
 		7A6D09D414FEB166004EC18C /* ConfigFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6D09D314FEB166004EC18C /* ConfigFile.m */; };
 		7A6D0B1A15056A31004EC18C /* UIHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6D0B1915056A31004EC18C /* UIHandler.m */; };
-		7A6D0B361505779B004EC18C /* libmobot.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A6D0B351505779B004EC18C /* libmobot.dylib */; };
 		7A6D0C6D1506B97F004EC18C /* UISlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6D0C6C1506B97F004EC18C /* UISlider.m */; };
 		7A6D0D431507F328004EC18C /* Motions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6D0D421507F328004EC18C /* Motions.m */; };
 		7A6D0F1D15094F36004EC18C /* Barobo_square.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A6D0F1C15094F36004EC18C /* Barobo_square.png */; };
+		7AB34FE3150A7C7500F20D5C /* libmobot.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AB34FE2150A7C7500F20D5C /* libmobot.dylib */; };
+		7AB350AB150A860600F20D5C /* libmobot.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7AB34FE2150A7C7500F20D5C /* libmobot.dylib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7AB3509E150A857700F20D5C /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+				7AB350AB150A860600F20D5C /* libmobot.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -48,7 +62,6 @@
 		7A6D0B1815056A31004EC18C /* UIHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIHandler.h; sourceTree = "<group>"; };
 		7A6D0B1915056A31004EC18C /* UIHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIHandler.m; sourceTree = "<group>"; };
 		7A6D0B3415057775004EC18C /* mobot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mobot.h; path = ../../mobot.h; sourceTree = SOURCE_ROOT; };
-		7A6D0B351505779B004EC18C /* libmobot.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libmobot.dylib; path = ../../libmobot.dylib; sourceTree = SOURCE_ROOT; };
 		7A6D0B86150590A9004EC18C /* mobot_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mobot_internal.h; path = ../../mobot_internal.h; sourceTree = SOURCE_ROOT; };
 		7A6D0C6B1506B97F004EC18C /* UISlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISlider.h; sourceTree = "<group>"; };
 		7A6D0C6C1506B97F004EC18C /* UISlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISlider.m; sourceTree = "<group>"; };
@@ -56,6 +69,7 @@
 		7A6D0D421507F328004EC18C /* Motions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Motions.m; sourceTree = "<group>"; };
 		7A6D0D471507F46E004EC18C /* Motions.x.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Motions.x.h; sourceTree = "<group>"; };
 		7A6D0F1C15094F36004EC18C /* Barobo_square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Barobo_square.png; sourceTree = "<group>"; };
+		7AB34FE2150A7C7500F20D5C /* libmobot.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; name = libmobot.dylib; path = ../../libmobot.dylib; sourceTree = SOURCE_ROOT; };
 		8D1107310486CEB800E47090 /* RobotController-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "RobotController-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* RobotController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RobotController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -66,7 +80,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
-				7A6D0B361505779B004EC18C /* libmobot.dylib in Frameworks */,
+				7AB34FE3150A7C7500F20D5C /* libmobot.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,7 +174,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				7A6D0B351505779B004EC18C /* libmobot.dylib */,
+				7AB34FE2150A7C7500F20D5C /* libmobot.dylib */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
@@ -177,6 +191,8 @@
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
+				7AB3509E150A857700F20D5C /* CopyFiles */,
+				7AB350B4150A862200F20D5C /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -230,6 +246,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7AB350B4150A862200F20D5C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#env > /tmp/srcroot\nEXECUTABLE=$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/$EXECUTABLE_NAME\nLIBMOBOT=$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/libmobot.dylib\n#echo $EXECUTABLE >> /tmp/srcroot\nOLD_DYLIB_PATH=`otool -L $EXECUTABLE | grep libmobot.dylib | sed '/libmobot.dylib/ s/(.*)//'`\n#echo $OLD_DYLIB_PATH >> /tmp/srcroot\ninstall_name_tool -change $OLD_DYLIB_PATH @executable_path/libmobot.dylib $EXECUTABLE\ninstall_name_tool -id libmobot.dylib $LIBMOBOT";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8D11072C0486CEB800E47090 /* Sources */ = {
@@ -310,11 +342,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = ../../;
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = macosx10.6;
@@ -325,10 +360,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = ../../;
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				PREBINDING = NO;
 				SDKROOT = macosx10.6;
 			};
