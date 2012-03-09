@@ -1,5 +1,6 @@
 
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <math.h>
 #include "mobot.h"
@@ -14,6 +15,11 @@
 
 #ifdef _CH_
 #include <stdarg.h>
+#endif
+
+#ifdef __MACH__
+#include <mach/clock.h>
+#include <mach/mach.h>
 #endif
 
 int g_numConnected = 0;
@@ -111,6 +117,7 @@ int Mobot_connect(br_comms_t* comms)
   {
     path[strlen(path)-1] = '\0';
   }
+#ifndef __MACH__ /* If Unix */
   /* Pass it on to connectWithAddress() */
   if(i = Mobot_connectWithAddress(comms, path, 1)) {
     return i;
@@ -118,6 +125,24 @@ int Mobot_connect(br_comms_t* comms)
     g_numConnected++;
     return i;
   }
+#else /* If Mac OS */
+  /* The format for the device should be /dev/tty.MOBOT-XXXX-SPP */
+  char chunk1[3];
+  char chunk2[3];
+  sscanf(path, "%*c%*c:%*c%*c:%*c%*c:%*c%*c:%c%c:%c%c", 
+      &chunk1[0], &chunk1[1],
+      &chunk2[0], &chunk2[1]);
+  chunk1[2] = '\0';
+  chunk2[2] = '\0';
+  sprintf(path, "/dev/tty.MOBOT-%s%s-SPP", chunk1, chunk2);
+  printf("Connecting to %s...\n", path);
+  if(i = Mobot_connectWithTTY(comms, path)) {
+    return i;
+  } else {
+    g_numConnected++;
+    return i;
+  }
+#endif /* Fi Linux/Mac */
 #endif
 }
 int Mobot_connect_old(br_comms_t* comms)
@@ -216,6 +241,7 @@ int Mobot_connect_old(br_comms_t* comms)
 
 int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel)
 {
+#ifndef __MACH__
   int status;
   int flags;
   char buf[256];
@@ -266,7 +292,24 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
 #endif
   finishConnect(comms);
   return status;
+#else
+  fprintf(stderr, "ERROR: connectWithAddress() is currently unavailable on the Mac platform.\n");
+  return -1;
+#endif
 }
+
+#ifndef _WIN32
+int Mobot_connectWithTTY(br_comms_t* comms, const char* ttyfilename)
+{
+  comms->socket = open(ttyfilename, O_RDWR | O_NOCTTY );
+  if(comms->socket < 0) {
+    perror("Unable to open tty port.");
+    return -1;
+  }
+  comms->connected = 1;
+  finishConnect(comms);
+}
+#endif
 
 /* finishConnect():
  * Perform final connecting tasks common to all connection methods */
@@ -301,7 +344,13 @@ int finishConnect(br_comms_t* comms)
 int Mobot_disconnect(br_comms_t* comms)
 {
 #ifndef _WIN32
-  close(comms->socket);
+  if(close(comms->socket)) {
+    /* Error closing file descriptor */
+  } else {
+    if(g_numConnected > 0) {
+      g_numConnected--;
+    }
+  }
 #else
   closesocket(comms->socket);
   //CloseHandle((LPVOID)comms->socket);
@@ -313,7 +362,9 @@ int Mobot_disconnect(br_comms_t* comms)
 int Mobot_init(br_comms_t* comms)
 {
   int i;
+#ifndef __MACH__
   memset(&comms->addr, 0, sizeof(sockaddr_t));
+#endif
   comms->connected = 0;
 #ifdef _WIN32
   WSADATA wsd;
@@ -859,7 +910,17 @@ void* Mobot_recordAngleThread(void* arg)
   unsigned int dt;
   double start_time;
   for(i = 0; i < rArg->num; i++) {
+#ifndef __MACH__
     clock_gettime(CLOCK_REALTIME, &cur_time);
+#else
+    clock_serv_t cclock;
+    mach_timespec_t mts;
+    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    clock_get_time(cclock, &mts);
+    mach_port_deallocate(mach_task_self(), cclock);
+    cur_time.tv_sec = mts.tv_sec;
+    cur_time.tv_nsec = mts.tv_nsec;
+#endif
     Mobot_getJointAngleTime(rArg->comms, rArg->id, &rArg->time[i], &rArg->angle[i]);
     if(i == 0) {
       start_time = rArg->time[i];
@@ -867,7 +928,15 @@ void* Mobot_recordAngleThread(void* arg)
     rArg->time[i] = rArg->time[i] - start_time;
     /* Convert angle to degrees */
     rArg->angle[i] = RAD2DEG(rArg->angle[i]);
+#ifndef __MACH__
     clock_gettime(CLOCK_REALTIME, &itime);
+#else
+    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    clock_get_time(cclock, &mts);
+    mach_port_deallocate(mach_task_self(), cclock);
+    cur_time.tv_sec = mts.tv_sec;
+    cur_time.tv_nsec = mts.tv_nsec;
+#endif
     dt = diff_msecs(cur_time, itime);
     if(dt < (rArg->msecs)) {
       usleep(rArg->msecs*1000 - dt*1000);
@@ -945,7 +1014,17 @@ void* recordAnglesThread(void* arg)
   unsigned int dt;
   double start_time;
   for(i = 0; i < rArg->num; i++) {
+#ifndef __MACH__
     clock_gettime(CLOCK_REALTIME, &cur_time);
+#else
+    clock_serv_t cclock;
+    mach_timespec_t mts;
+    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    clock_get_time(cclock, &mts);
+    mach_port_deallocate(mach_task_self(), cclock);
+    cur_time.tv_sec = mts.tv_sec;
+    cur_time.tv_nsec = mts.tv_nsec;
+#endif
     Mobot_getJointAnglesTime(
         rArg->comms, 
         &rArg->time[i], 
@@ -962,7 +1041,15 @@ void* recordAnglesThread(void* arg)
     rArg->angle2[i] = RAD2DEG(rArg->angle2[i]);
     rArg->angle3[i] = RAD2DEG(rArg->angle3[i]);
     rArg->angle4[i] = RAD2DEG(rArg->angle4[i]);
+#ifndef __MACH__
     clock_gettime(CLOCK_REALTIME, &itime);
+#else
+    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    clock_get_time(cclock, &mts);
+    mach_port_deallocate(mach_task_self(), cclock);
+    cur_time.tv_sec = mts.tv_sec;
+    cur_time.tv_nsec = mts.tv_nsec;
+#endif
     dt = diff_msecs(cur_time, itime);
     if(dt < (rArg->msecs)) {
       usleep(rArg->msecs*1000 - dt*1000);
@@ -1624,6 +1711,9 @@ CMobot::CMobot()
 CMobot::~CMobot()
 {
   stop();
+  if(_comms.connected) {
+    disconnect();
+  }
 }
 
 int CMobot::connect()
@@ -1634,6 +1724,11 @@ int CMobot::connect()
 int CMobot::connectWithAddress(const char* address, int channel)
 {
   return Mobot_connectWithAddress(&_comms, address, channel);
+}
+
+int CMobot::connectWithTTY(const char* ttyfilename)
+{
+  return Mobot_connectWithTTY(&_comms, ttyfilename);
 }
 
 int CMobot::disconnect()

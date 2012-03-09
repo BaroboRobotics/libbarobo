@@ -25,7 +25,9 @@ typedef struct br_comms_s
 #ifdef _WIN32
   HANDLE hSerial;
 #endif
+#ifndef __MACH__
   sockaddr_t addr;
+#endif
   double jointSpeeds[4];
   double maxSpeed[4];
   THREAD_T thread;
@@ -92,6 +94,9 @@ extern "C" {
 #endif /* _WIN32 */
 
 DLLIMPORT int Mobot_connect(br_comms_t* comms);
+#ifndef _WIN32
+DLLIMPORT int Mobot_connectWithTTY(br_comms_t* comms, const char* ttyfilename);
+#endif
 DLLIMPORT int Mobot_connectWithAddress(
     br_comms_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_disconnect(br_comms_t* comms);

@@ -20,8 +20,10 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#ifndef __MACH__
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/rfcomm.h>
+#endif
 #else
 //#include <types.h>
 #include <winsock2.h>
@@ -66,10 +68,15 @@ typedef enum robotJointState_e
 #endif
 
 #ifndef _CH_
+
+#ifdef __cplusplus
 extern "C" {
+#endif
   DLLIMPORT double deg2rad(double deg);
   DLLIMPORT double rad2deg(double rad);
+#ifdef __cplusplus
 }
+#endif
 
 typedef struct recordAngleArg_s 
 {
@@ -93,6 +100,7 @@ class CMobot {
     ~CMobot();
     int connect();
     int connectWithAddress(const char address[], int channel);
+    int connectWithTTY(const char ttyfilename[]);
     int disconnect();
     int isConnected();
     int isMoving();
