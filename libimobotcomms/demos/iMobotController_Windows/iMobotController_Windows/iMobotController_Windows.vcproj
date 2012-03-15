@@ -387,6 +387,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\robotManager.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -421,6 +425,10 @@
 						UsePrecompiledHeader="1"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\TeachingDialog.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
@@ -457,11 +465,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\robotManager.h"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.h"
 				>
 			</File>
 			<File
 				RelativePath=".\targetver.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TeachingDialog.h"
 				>
 			</File>
 		</Filter>
@@ -531,11 +547,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\iMobot_diagram.bmp"
+				RelativePath=".\res\icon4.ico"
 				>
 			</File>
 			<File
 				RelativePath="..\iMobot_diagram.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\iMobot_diagram.bmp"
 				>
 			</File>
 			<File

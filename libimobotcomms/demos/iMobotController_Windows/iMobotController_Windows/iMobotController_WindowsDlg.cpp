@@ -6,6 +6,7 @@
 #include "iMobotController_Windows.h"
 #include "iMobotController_WindowsDlg.h"
 #include "configFileDialog.h"
+#include "TeachingDialog.h"
 #include "gait.h"
 
 #ifdef _DEBUG
@@ -204,6 +205,7 @@ BEGIN_MESSAGE_MAP(CiMobotController_WindowsDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_SETSPD, &CiMobotController_WindowsDlg::OnBnClickedButtonSetspd)
 	ON_BN_CLICKED(IDC_BUTTON_MOVE, &CiMobotController_WindowsDlg::OnBnClickedButtonMove)
 	ON_COMMAND(ID_HELP_DEMOS, &CiMobotController_WindowsDlg::OnHelpDemos)
+	ON_COMMAND(ID_TEACHINGMODE_TEACHINGMODEDIALOG, &CiMobotController_WindowsDlg::OnTeachingmodeTeachingmodedialog)
 END_MESSAGE_MAP()
 
 
@@ -1253,5 +1255,10 @@ void CiMobotController_WindowsDlg::OnHelpDemos()
       NULL,
       &si,
       &pi );
-  
+}
+
+void CiMobotController_WindowsDlg::OnTeachingmodeTeachingmodedialog()
+{
+	CTeachingDialog dialog;
+	dialog.DoModal();
 }

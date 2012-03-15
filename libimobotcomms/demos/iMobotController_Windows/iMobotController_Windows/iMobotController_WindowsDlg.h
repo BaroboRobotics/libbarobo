@@ -208,6 +208,7 @@ public:
   afx_msg void OnBnClickedButtonMove();
   void handlerMOVE();
   afx_msg void OnHelpDemos();
+  afx_msg void OnTeachingmodeTeachingmodedialog();
 };
 
 DWORD WINAPI HandlerThread(void*);
