@@ -6,6 +6,7 @@
 #include "iMobotController_Windows.h"
 #include "iMobotController_WindowsDlg.h"
 #include "configFileDialog.h"
+#include "TeachingDialog.h"
 #include "gait.h"
 
 #ifdef _DEBUG
@@ -204,6 +205,7 @@ BEGIN_MESSAGE_MAP(CiMobotController_WindowsDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_SETSPD, &CiMobotController_WindowsDlg::OnBnClickedButtonSetspd)
 	ON_BN_CLICKED(IDC_BUTTON_MOVE, &CiMobotController_WindowsDlg::OnBnClickedButtonMove)
 	ON_COMMAND(ID_HELP_DEMOS, &CiMobotController_WindowsDlg::OnHelpDemos)
+	ON_COMMAND(ID_TEACHINGMODE_TEACHINGMODEDIALOG, &CiMobotController_WindowsDlg::OnTeachingmodeTeachingmodedialog)
 END_MESSAGE_MAP()
 
 
@@ -1196,11 +1198,12 @@ void CiMobotController_WindowsDlg::OnHelpDemos()
   TCHAR chHome[MAX_PATH];
   TCHAR command[MAX_PATH];
   getChHome(chHome);
-  //_stprintf(command, TEXT("%s\\bin\\chide.exe %s\\package\\chmobot\\demos"), chHome, chHome);
-  sprintf(command, TEXT("file://%s\\package\\chmobot\\docs\\index.html"), chHome);
-  GotoURL(command, 0);
+  _stprintf(command, 
+            TEXT("%s\\bin\\chide.exe -d %s\\package\\chmobot\\demos %s\\package\\chmobot\\demos\\start.ch "), 
+            chHome, chHome, chHome);
+  //_stprintf(command, TEXT("file://%s\\package\\chmobot\\docs\\index.html"), chHome);
+  //GotoURL(command, 0);
   //system(T2A(command));
-  /*
   STARTUPINFO si;
   PROCESS_INFORMATION pi;
   ZeroMemory(&si, sizeof(si));
@@ -1217,5 +1220,10 @@ void CiMobotController_WindowsDlg::OnHelpDemos()
       NULL,
       &si,
       &pi );
-  */
+}
+
+void CiMobotController_WindowsDlg::OnTeachingmodeTeachingmodedialog()
+{
+	CTeachingDialog dialog;
+	dialog.DoModal();
 }

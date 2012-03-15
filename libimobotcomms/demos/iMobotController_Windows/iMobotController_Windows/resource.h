@@ -24,9 +24,12 @@
 #define IDB_PNG2                        144
 #define IDB_BITMAP5                     145
 #define IDI_ICON2                       147
+#define IDI_ICON_GREENDOT               147
 #define IDI_ICON3                       150
 #define IDI_ICON_BAROBO                 150
 #define IDB_PNG3                        151
+#define IDD_DIALOG_TEACHING             152
+#define IDI_ICON_REDDOT                 153
 #define IDC_SLIDER_speed1               1000
 #define IDC_EDIT_speed1                 1001
 #define IDC_SLIDER_speed2               1002
@@ -65,8 +68,10 @@
 #define IDC_BUTTON_rollRight            1036
 #define IDC_BUTTON1                     1036
 #define IDC_BUTTON_ADD                  1036
+#define IDC_BUTTON_TEACHING_CONNECT     1036
 #define IDC_BUTTON_rollStop             1037
 #define IDC_LIST1                       1037
+#define IDC_LIST_AVAILABLEBOTS          1037
 #define IDC_BUTTON_rollBack             1038
 #define IDC_LIST2                       1038
 #define IDC_BUTTON_MOVEUP               1039
@@ -78,6 +83,7 @@
 #define IDC_EDIT_setpos4                1045
 #define IDC_BUTTON2                     1046
 #define IDC_BUTTON_GOPOS                1046
+#define IDC_BUTTON_TEACHING_DISCONNECT  1046
 #define IDC_JOINTPICTURE                1047
 #define IDC_BUTTON3                     1048
 #define IDC_BUTTON_MOVETOZERO           1048
@@ -88,6 +94,16 @@
 #define IDC_BUTTON_GOPOS2               1053
 #define IDC_BUTTON_SETSPD               1053
 #define IDC_BUTTON_MOVE                 1054
+#define IDC_BUTTON_TEACHING_MOVEUP      1056
+#define IDC_BUTTON_TEACHING_MOVEDOWN    1057
+#define IDC_LIST_RECORDEDMOTIONS        1058
+#define IDC_BUTTON_TEACHING_RECORD      1059
+#define IDC_CHECK_TEACHING_LOOPED       1060
+#define IDC_BUTTON_TEACHING_ADDDELAY    1061
+#define IDC_BUTTON_TEACHING_DELETEPOS   1062
+#define IDC_BUTTON_TEACHING_SAVE        1063
+#define IDC_LIST_CONNECTEDBOTS          1064
+#define IDC_EDIT_TEACHING_DELAY         1065
 #define ID_ROBOT_CONFIGUREROBOTBLUETOOTH 32771
 #define ID_ROBOT_CONNECTTOAROBOT        32772
 #define ID_FILE                         32773
@@ -96,14 +112,15 @@
 #define ID_HELP_ABOUTROBOTCONTROLLER    32776
 #define ID_FILE_EXIT                    32777
 #define ID_HELP_DEMOS                   32778
+#define ID_TEACHINGMODE_TEACHINGMODEDIALOG 32779
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        152
-#define _APS_NEXT_COMMAND_VALUE         32779
-#define _APS_NEXT_CONTROL_VALUE         1055
+#define _APS_NEXT_RESOURCE_VALUE        154
+#define _APS_NEXT_COMMAND_VALUE         32780
+#define _APS_NEXT_CONTROL_VALUE         1066
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
