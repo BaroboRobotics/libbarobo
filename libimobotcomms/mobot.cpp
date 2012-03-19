@@ -1733,10 +1733,12 @@ int CMobot::connectWithAddress(const char* address, int channel)
   return Mobot_connectWithAddress(&_comms, address, channel);
 }
 
+#ifndef _WIN32
 int CMobot::connectWithTTY(const char* ttyfilename)
 {
   return Mobot_connectWithTTY(&_comms, ttyfilename);
 }
+#endif
 
 int CMobot::disconnect()
 {
