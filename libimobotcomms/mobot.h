@@ -100,7 +100,9 @@ class CMobot {
     ~CMobot();
     int connect();
     int connectWithAddress(const char address[], int channel);
+#ifndef _WIN32
     int connectWithTTY(const char ttyfilename[]);
+#endif
     int disconnect();
     int isConnected();
     int isMoving();
