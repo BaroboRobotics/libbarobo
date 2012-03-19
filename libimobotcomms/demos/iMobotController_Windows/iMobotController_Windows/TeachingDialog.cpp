@@ -13,16 +13,17 @@ IMPLEMENT_DYNAMIC(CTeachingDialog, CDialog)
 CTeachingDialog::CTeachingDialog(CWnd* pParent /*=NULL*/)
 	: CDialog(CTeachingDialog::IDD, pParent)
 {
+  char path[MAX_PATH];
   /* Read the config file */
-  if(SHGetFolderPathA(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, _path) != S_OK) 
+  if(SHGetFolderPathA(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, path) != S_OK) 
   {
     /* Could not get the user's app data directory */
   } else {
     //MessageBox((LPCTSTR)path, (LPCTSTR)"Test");
     //fprintf(fp, "%s", path); 
   }
-  strcat(_path, "\\Barobo.config");
-  _robotManager.read(_path);
+  strcat(path, "\\Barobo.config");
+  _robotManager.read(path);
 
 }
 

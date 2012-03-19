@@ -2,6 +2,7 @@
 #define _ROBOT_MANAGER_H_
 
 #include "configFile.h"
+#include <mobot.h>
 
 #define MAX_CONNECTED 100
 
@@ -13,14 +14,16 @@ class RobotManager : public ConfigFile
     bool isConnected(int index);
     void setConnected(int index, bool connected);
     int connect(int index);
-    int disconnect(int index);
-    int moveUp(int index);
-    int moveDown(int index);
+    int disconnect(int connectIndex);
+    int moveUp(int connectIndex);
+    int moveDown(int connectIndex);
     int numConnected();
   private:
-    bool _connected[MAX_CONNECTED];
+    bool _connected[MAX_CONNECTED]; /* Index by ConfigFile */
     CMobot *_mobots[MAX_CONNECTED];
-    char _connectedAddresses[MAX_CONNECTED][80];
+    /* _connectAddresses is an array of pointers to 
+       ConfigFile::_addresses */
+    char *_connectedAddresses[MAX_CONNECTED];
 };
 
 #endif
