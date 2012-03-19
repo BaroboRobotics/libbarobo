@@ -15,9 +15,11 @@ class ConfigFile
     int remove(int index);
     int write();
 
+  protected:
+    char *_addresses[100];
+
   private:
     int _numEntries;
-    char *_addresses[100];
     char *_path;
 };
 
