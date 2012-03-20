@@ -136,7 +136,7 @@ int Mobot_connect(br_comms_t* comms)
   chunk1[2] = '\0';
   chunk2[2] = '\0';
   sprintf(path, "/dev/tty.MOBOT-%s%s-SPP", chunk1, chunk2);
-  printf("Connecting to %s...\n", path);
+  //printf("Connecting to %s...\n", path);
   if(i = Mobot_connectWithTTY(comms, path)) {
     return i;
   } else {
