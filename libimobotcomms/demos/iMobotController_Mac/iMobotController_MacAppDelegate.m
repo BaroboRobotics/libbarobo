@@ -20,8 +20,9 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	// Insert code here to initialize your application 
-	configFile = [[ConfigFile alloc] init];
-	[configFile initWithFilename:@"/Users/dko/.Barobo.config"];
+	NSString *path = @"~/.Barobo.config";
+	NSString *spath = [path stringByStandardizingPath];
+	configFile = [[ConfigFile alloc] initWithFilename:spath];
 	[addressesTableView setDataSource:configFile];
 	comms = (br_comms_t*)malloc(sizeof(br_comms_t));
 	Mobot_init(comms);
