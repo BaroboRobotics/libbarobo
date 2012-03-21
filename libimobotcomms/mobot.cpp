@@ -285,7 +285,29 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
     tries++;
   }
   if(status < 0) {
+#ifndef _WIN32
     perror("Error connecting.");
+#else
+	  LPVOID lpMsgBuf;
+	  FormatMessage( 
+		  FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+		  FORMAT_MESSAGE_FROM_SYSTEM | 
+		  FORMAT_MESSAGE_IGNORE_INSERTS,
+		  NULL,
+		  GetLastError(),
+		  MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+		  (LPTSTR) &lpMsgBuf,
+		  0,
+		  NULL 
+		  );
+	  // Process any inserts in lpMsgBuf.
+	  // ...
+	  // Display the string.
+	  //MessageBox( NULL, (LPCTSTR)lpMsgBuf, "Error", MB_OK | MB_ICONINFORMATION );
+	  fprintf(stderr, "Error Connecting: %s\n", lpMsgBuf);
+	  // Free the buffer.
+	  LocalFree( lpMsgBuf );
+#endif
     return -1;
   }
 #ifndef _WIN32
