@@ -1,5 +1,7 @@
 #pragma once
 #include "robotManager.h"
+#include "afxcmn.h"
+#include "afxwin.h"
 
 // CTeachingDialog dialog
 
@@ -20,4 +22,18 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 
+public:
+	CListCtrl listctrl_availableBots;
+	CListCtrl listctrl_connectedBots;
+	CListCtrl listctrl_recordedMotions;
+	CEdit edit_teachingDelay;
+	CButton button_teachingLoopCheck;
+	afx_msg void OnBnClickedButtonTeachingConnect();
+	afx_msg void OnBnClickedButtonTeachingMoveup();
+	afx_msg void OnBnClickedButtonTeachingMovedown();
+	afx_msg void OnBnClickedButtonTeachingDisconnect();
+	afx_msg void OnBnClickedButtonTeachingRecord();
+	afx_msg void OnBnClickedButtonTeachingAdddelay();
+	afx_msg void OnBnClickedButtonTeachingDeletepos();
+	afx_msg void OnBnClickedButtonTeachingSave();
 };
