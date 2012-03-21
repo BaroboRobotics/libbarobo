@@ -12,7 +12,9 @@
 @implementation ConfigFile
 
 - (id) initWithFilename:(NSString *)fileName {
-	configFileName = fileName;
+    //configFileName = [[NSString alloc] initWithString:fileName];
+    configFileName = [NSString stringWithString:fileName];
+	[configFileName retain];
 	/* Open the file, read the entries */
 	NSString *fileContents = 
 			[NSString stringWithContentsOfFile:fileName
