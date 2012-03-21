@@ -422,7 +422,25 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonconnect()
 	/* "Connect" button clicked */
 	if(iMobotComms.connect()) {
 		/* Error connecting */
-		MessageBox(L"Error connecting to robot.", L"Error");
+		LPVOID lpMsgBuf;
+		FormatMessage( 
+			FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+			FORMAT_MESSAGE_FROM_SYSTEM | 
+			FORMAT_MESSAGE_IGNORE_INSERTS,
+			NULL,
+			GetLastError(),
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+			(LPTSTR) &lpMsgBuf,
+			0,
+			NULL 
+			);
+		// Process any inserts in lpMsgBuf.
+		// ...
+		// Display the string.
+		MessageBox( (LPCTSTR)lpMsgBuf, TEXT("Error"), MB_OK | MB_ICONINFORMATION );
+		// Free the buffer.
+		LocalFree( lpMsgBuf );
+		//MessageBox(L"Error connecting to robot.", L"Error");
 	} else {
 		isConnected = true;
 		/* Update the positions of all the sliders and such */
