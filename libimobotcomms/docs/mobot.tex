@@ -21,7 +21,7 @@
 \vspace*{2.5cm}
 {\Huge\sf\bf Mobot User's Guide}\\
 \vspace*{2.5cm}
-{\Large\bf Version 1.4.1}
+{\Large\bf Version 1.4.3}
 \vspace{4.5cm}
 
 \includegraphics[width=4in]{images/Mobot_Camera_Stand.JPG}
@@ -73,8 +73,86 @@ The configuration is performed through the Barobo RobotController
 program. The remainder of the section contains step-by-step instructions
 and screenshots showing how to configure your Mobots.
 
-To start the provided Barobo Robot Control Program click on the icon labeled 
-``RobotController'' on your desktop, as shown in \ref{fig:barobo_icon.png}. The 
+\subsection{Bluetooth Pairing far Mac OS X}
+For the Mac OS X operating system, an additional initial step needs to be performed.
+Windows users may skip these steps directly to section \ref{sec:pairing_robotcontroller}
+on page \pageref{sec:pairing_robotcontroller}.
+
+To begin the pairing process, click on the Bluetooth icon on the applet tray,
+typically located on the top right portion of the screen. Figure \ref{fig:mac_pairing1}
+shows the Bluetooth icon on a typical Mac OS X system. Click on the icon to drop down
+a menu.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=3in]{images/mac_pairing1.png}
+\end{center}
+\caption{\label{fig:mac_pairing1} The Bluetooth Icon on a Mac OS X System.}
+\end{figure}
+
+The menu that is dropped down should appear similar to the one shown in Figure \ref{fig:mac_pairing2}.
+Next, click on the menu item labeled ``Set Up Bluetooth Device...''.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=3in]{images/mac_pairing2.png}
+\end{center}
+\caption{\label{fig:mac_pairing2} The Bluetooth Icon Dialog.}
+\end{figure}
+
+The previous step should start a dialog used to find and pair with Bluetooth devices. Make sure the
+Mobot is turned on, and it should appear as a device in the dialog, as shown in Figure \ref{fig:mac_pairing3}.
+If there are multiple Mobot devices, as shown in the figure, you may pinpoint the specific Mobot to pair
+with by looking inside the battery compartment on the side of the Mobot with the power switch. Inside,
+there is a sticker with the Mobot's unique ID number. The last four digits of the ID number will
+coincide with the Mobot's Bluetooth ID number. Once the correct Mobot is selected, click on the ``Continue''
+button.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=5in]{images/mac_pairing3.png}
+\end{center}
+\caption{\label{fig:mac_pairing3} The Bluetooth Pairing Dialog.}
+\end{figure}
+
+At this point, the pairing dialog will attempt to pair with the Mobot using a default pairing key, ``0000'', as
+shown in Figure \ref{fig:mac_pairing4}. This initial pairing attempt will fail because the Mobot pairing key
+is hard-coded to a value of ``1234''. Click on the button labeled ``Passcode Options...'' in order to 
+modify the passcode options. This should bring up the dialog shown in Figure \ref{fig:mac_pairing5}.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=5in]{images/mac_pairing4.png}
+\end{center}
+\caption{\label{fig:mac_pairing4} The Bluetooth Pairing Dialog.}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=5in]{images/mac_pairing5.png}
+\end{center}
+\caption{\label{fig:mac_pairing5} The Bluetooth Pairing Dialog.}
+\end{figure}
+
+In the dialog shown in Figure \ref{fig:mac_pairing5}, select the option to 
+``use a specific passcode'', and enter the value ``1234''. Next, 
+click on the ''OK'' button.
+
+You should be greeted with the dialog shown in Figure \ref{fig:mac_pairing6}, which indicates that the Mobot
+has successfully paired. At this point, you may continue on with the rest of the pairing process, or 
+repeat this step for all Mobots that need to be paired before continuing.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=5in]{images/mac_pairing6.png}
+\end{center}
+\caption{\label{fig:mac_pairing6} The Bluetooth Pairing Success Dialog.}
+\end{figure}
+
+
+\subsection{\label{sec:pairing_robotcontroller} Adding Bluetooth Addresses of Robots in RobotController.}
+First, start the provided Barobo RobotController application.
+In Windows, start the provided Barobo Robot Control Program by clicking on the icon labeled 
+``RobotController'' on your desktop, as shown in \ref{fig:barobo_icon.png}. On Mac OS X systems,
+the RobotController application is located inside the ``Applications'' folder in Finder. The 
 control dialog as shown in Figure \ref{fig:shot1.png} should pop up.
 \begin{figure}[H]
 \begin{center}
@@ -90,7 +168,6 @@ control dialog as shown in Figure \ref{fig:shot1.png} should pop up.
 \caption{\label{fig:shot1.png} The graphical user interface of the RobotController.}
 \end{figure}
 
-\subsection{Adding Bluetooth Addresses of Robots in RobotController.}
 Click on the menu item ``Configure $\rightarrow$ Configure Robot Bluetooth'', as
 shown in Figure \ref{fig:shot3.png}.
 
