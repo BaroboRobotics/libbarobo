@@ -8,6 +8,7 @@
 #ifndef _WIN32
 #include <unistd.h>
 #include <fcntl.h>
+#include <errno.h>
 #else
 #include <windows.h>
 #include <shlobj.h>
@@ -275,13 +276,17 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
   int tries = 0;
   while(status < 0) {
     if(tries > 2) {
-      return -1;
+      break;
     }
     status = connect(comms->socket, (const struct sockaddr *)&comms->addr, sizeof(comms->addr));
     if(status == 0) {
       comms->connected = 1;
     } 
     tries++;
+  }
+  if(status < 0) {
+    perror("Error connecting.");
+    return -1;
   }
 #ifndef _WIN32
   /* Make the socket non-blocking */
