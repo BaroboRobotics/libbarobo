@@ -1651,6 +1651,9 @@ int str2ba(const char *str, bdaddr_t *ba)
 int SendToIMobot(br_comms_t* comms, const char* str, int len)
 {
   int err = 0;
+  if(comms->connected == 0) {
+    return -1;
+  }
   MUTEX_LOCK(comms->commsLock);
 #if 0
   char* str;
@@ -1746,7 +1749,7 @@ int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
 #endif
     } else {
       err = -1;
-      break;
+      return -1;
     }
     if(err < 0) break;
     for(i = 0; i < err; i++, j++) {

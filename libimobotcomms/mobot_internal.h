@@ -73,7 +73,8 @@ typedef enum mobot_motor_direction_e
 
 #ifndef _CH_
 
-#define DEF_MOTOR_SPEED 0.50
+#define DEF_MOTOR_SPEED 45
+#define DEF_MOTOR_MAXSPEED 120
 
 #ifndef C_ONLY
 #ifdef __cplusplus
