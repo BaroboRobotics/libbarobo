@@ -42,10 +42,19 @@
 }
 
 - (IBAction) onMenuConnectConnect:(id)sender {
+	int i;
+	NSString *errMsg;
+	NSString *msg;
 	[connectFailedWindow orderOut:sender];
-	if(Mobot_connect(comms)) {
+	if(i = Mobot_connect(comms)) {
 		/* Error message */
-		[errorMessageLabel setStringValue:[NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding]];
+		if(i == -2) {
+			msg = @"Make sure there are no other programs \ncurrently connected to the Mobot.";
+		} else {
+			errMsg = [[NSString alloc] initWithCString:strerror(errno) encoding:NSASCIIStringEncoding];
+			msg = errMsg;
+		}
+		[errorMessageLabel setStringValue:msg];
 		[connectFailedWindow orderFront:sender];
 	} else {
 		[uiHandler initWithBRComms:comms];
