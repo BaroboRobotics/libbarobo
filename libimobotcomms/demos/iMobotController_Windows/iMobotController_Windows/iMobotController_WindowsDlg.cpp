@@ -419,6 +419,7 @@ afx_msg void CiMobotController_WindowsDlg::OnTimer(UINT nIDEvent)
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonconnect()
 {
+	TCHAR msgbuf[512];
 	/* "Connect" button clicked */
 	if(iMobotComms.connect()) {
 		/* Error connecting */
@@ -428,7 +429,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonconnect()
 			FORMAT_MESSAGE_FROM_SYSTEM | 
 			FORMAT_MESSAGE_IGNORE_INSERTS,
 			NULL,
-			GetLastError(),
+			WSAGetLastError(),
 			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
 			(LPTSTR) &lpMsgBuf,
 			0,
@@ -437,7 +438,14 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonconnect()
 		// Process any inserts in lpMsgBuf.
 		// ...
 		// Display the string.
-		MessageBox( (LPCTSTR)lpMsgBuf, TEXT("Error"), MB_OK | MB_ICONINFORMATION );
+		//_stprintf(msgbuf, TEXT("%d"), WSAGetLastError());
+		if(WSAGetLastError() == 10048) {
+			_stprintf(msgbuf, TEXT("%s\nMake sure there are no other programs currently connected to the Mobot."),(LPTSTR)lpMsgBuf);
+		} else {
+			_tcscpy(msgbuf, (LPTSTR)lpMsgBuf);
+		}
+		//MessageBox( (LPCTSTR)lpMsgBuf, TEXT("Error"), MB_OK | MB_ICONINFORMATION );
+		MessageBox( (LPCTSTR)msgbuf, TEXT("Error"), MB_OK | MB_ICONINFORMATION );
 		// Free the buffer.
 		LocalFree( lpMsgBuf );
 		//MessageBox(L"Error connecting to robot.", L"Error");
