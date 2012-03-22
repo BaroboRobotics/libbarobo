@@ -16,6 +16,7 @@
 	NSWindow *connectFailedWindow;
 	NSTableView *addressesTableView;
 	NSTextField *addAddressTextField;
+	NSTextField *errorMessageLabel;
 	
 	ConfigFile *configFile;
 	UIHandler *uiHandler;
@@ -28,6 +29,7 @@
 @property (retain) IBOutlet NSWindow *connectFailedWindow;
 @property (retain) IBOutlet NSTableView *addressesTableView;
 @property (retain) IBOutlet NSTextField *addAddressTextField;
+@property (retain) IBOutlet NSTextField *errorMessageLabel;
 @property (retain) IBOutlet UIHandler *uiHandler;
 
 /* Menu Handlers */

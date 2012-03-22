@@ -16,6 +16,7 @@
 @synthesize connectFailedWindow;
 @synthesize addressesTableView;
 @synthesize addAddressTextField;
+@synthesize errorMessageLabel;
 @synthesize uiHandler;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
@@ -44,6 +45,7 @@
 	[connectFailedWindow orderOut:sender];
 	if(Mobot_connect(comms)) {
 		/* Error message */
+		[errorMessageLabel setStringValue:[NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding]];
 		[connectFailedWindow orderFront:sender];
 	} else {
 		[uiHandler initWithBRComms:comms];

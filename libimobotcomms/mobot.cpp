@@ -9,6 +9,8 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <libgen.h>
+#include <signal.h>
 #else
 #include <windows.h>
 #include <shlobj.h>
@@ -329,6 +331,31 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
 #ifndef _WIN32
 int Mobot_connectWithTTY(br_comms_t* comms, const char* ttyfilename)
 {
+  FILE *lockfile;
+  char *filename = strdup(ttyfilename);
+  char lockfileName[MAX_PATH];
+  int pid;
+  /* Open the lock file, if it exists */
+  sprintf(lockfileName, "/tmp/%s.lock", basename(filename));
+  lockfile = fopen(lockfileName, "r");
+  if(lockfile == NULL) {
+    /* Lock file does not exist. Proceed. */
+  } else {
+    /* Lockfile exists. Need to check PID in the lock file and see if that
+     * process is still running. */
+    fscanf(lockfile, "%d", &pid);
+    if(pid > 0 && kill(pid,0) < 0 && errno == ESRCH) {
+      /* Lock file is stale. Delete it */
+      unlink(lockfileName);
+    } else {
+      /* The tty device is locked. Return error code. */
+      fprintf(stderr, "Error: Another application is already connected to the Mobot.\n");
+      free(filename);
+      fclose(lockfile);
+      return -2;
+    }
+  }
+  fclose(lockfile);
   comms->socket = open(ttyfilename, O_RDWR | O_NOCTTY );
   if(comms->socket < 0) {
     perror("Unable to open tty port.");
@@ -336,6 +363,14 @@ int Mobot_connectWithTTY(br_comms_t* comms, const char* ttyfilename)
   }
   comms->connected = 1;
   finishConnect(comms);
+  /* Finished connecting. Create the lockfile. */
+  lockfile = fopen(lockfileName, "w");
+  if(lockfile == NULL) {
+    fprintf(stderr, "Fatal error. %s:%d\n", __FILE__, __LINE__);
+    return -1;
+  }
+  fprintf(lockfile, "%d", getpid());
+  fclose(lockfile);
   return 0;
 }
 #endif
