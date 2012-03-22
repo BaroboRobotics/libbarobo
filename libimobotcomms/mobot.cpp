@@ -1682,6 +1682,7 @@ int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
 #endif
     } else {
       err = -1;
+      break;
     }
     if(err < 0) break;
     for(i = 0; i < err; i++, j++) {
