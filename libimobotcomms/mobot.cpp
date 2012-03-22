@@ -439,6 +439,8 @@ int Mobot_init(br_comms_t* comms)
   for(i = 0; i < 4; i++) {
     comms->jointSpeeds[i] = DEF_MOTOR_SPEED;
     comms->recordingInProgress[i] = 0;
+    /* Set the default maximum speed to something reasonable */
+    comms->maxSpeed[i] = DEF_MOTOR_MAXSPEED;
   }
   THREAD_CREATE(&comms->thread, nullThread, NULL);
   comms->commsLock = (MUTEX_T*)malloc(sizeof(MUTEX_T));
