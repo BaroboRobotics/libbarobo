@@ -103,6 +103,30 @@ int CMobot::getJointMaxSpeed(int id, double & speed) {
     dlrunfun(fptr, &retval, NULL, this, id, &speed);
     return retval;
 }
+int CMobot::getJointSafetyAngle(double & angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "getJointSafetyAngle_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, &angle);
+    return retval;
+}
+int CMobot::getJointSafetyAngleTimeout(double & seconds) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "getJointSafetyAngleTimeout_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, &seconds);
+    return retval;
+}
 int CMobot::getJointSpeed(int id, double & speed) {
     void *fptr;
     int retval;
@@ -665,6 +689,30 @@ int CMobot::recordWait() {
         return -1;
     }
     dlrunfun(fptr, &retval, recordWait, this);
+    return retval;
+}
+int CMobot::setJointSafetyAngle(double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "setJointSafetyAngle_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setJointSafetyAngle, this, angle);
+    return retval;
+}
+int CMobot::setJointSafetyAngleTimeout(double seconds) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "setJointSafetyAngleTimeout_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setJointSafetyAngleTimeout, this, seconds);
     return retval;
 }
 int CMobot::setJointSpeed(int id, double speed) {

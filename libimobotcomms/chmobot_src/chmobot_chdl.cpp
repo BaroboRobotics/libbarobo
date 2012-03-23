@@ -127,6 +127,36 @@ EXPORTCH int getJointMaxSpeed_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int getJointSafetyAngle_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double* angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    angle = Ch_VaArg(interp, ap, double *);
+    retval = mobot->getJointSafetyAngle(*angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int getJointSafetyAngleTimeout_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double* seconds;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    seconds = Ch_VaArg(interp, ap, double *);
+    retval = mobot->getJointSafetyAngleTimeout(*seconds);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int getJointSpeed_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -565,6 +595,36 @@ EXPORTCH int recordWait_chdl(void *varg) {
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobot *);
     retval = mobot->recordWait();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int setJointSafetyAngle_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->setJointSafetyAngle(angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int setJointSafetyAngleTimeout_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double seconds;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    seconds = Ch_VaArg(interp, ap, double);
+    retval = mobot->setJointSafetyAngleTimeout(seconds);
     Ch_VaEnd(interp, ap);
     return retval;
 }
