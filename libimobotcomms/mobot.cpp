@@ -608,6 +608,42 @@ int Mobot_getJointMaxSpeed(br_comms_t* comms, robotJointId_t id, double *maxSpee
   return 0;
 }
 
+int Mobot_getJointSafetyAngle(br_comms_t* comms, double *angle) 
+{
+  char buf[160];
+  int status;
+  int bytes_read;
+  int ispeed;
+  while(1) {
+    sprintf(buf, "GET_MOTOR_SAFETY_LIMIT");
+    status = SendToIMobot(comms, buf, strlen(buf)+1);
+    if(status < 0) return status;
+    bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
+    if(!strcmp(buf, "ERROR")) return -1;
+    if(!strncmp("MSL ", buf, 4)) {break;}
+  }
+  sscanf(buf, "MSL %lf", angle);
+  return 0;
+}
+
+int Mobot_getJointSafetyAngleTimeout(br_comms_t* comms, double *seconds) 
+{
+  char buf[160];
+  int status;
+  int bytes_read;
+  int ispeed;
+  while(1) {
+    sprintf(buf, "GET_MOTOR_SAFETY_TIMEOUT");
+    status = SendToIMobot(comms, buf, strlen(buf)+1);
+    if(status < 0) return status;
+    bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
+    if(!strcmp(buf, "ERROR")) return -1;
+    if(!strncmp("MST ", buf, 4)) {break;}
+  }
+  sscanf(buf, "MST %lf", seconds);
+  return 0;
+}
+
 int Mobot_getJointSpeed(br_comms_t* comms, robotJointId_t id, double *speed)
 {
   char buf[160];
@@ -1220,6 +1256,32 @@ int Mobot_setJointDirection(br_comms_t* comms, robotJointId_t id, robotJointStat
   int status;
   int bytes_read;
   sprintf(buf, "SET_MOTOR_DIRECTION %d %d", id, dir);
+  status = SendToIMobot(comms, buf, strlen(buf)+1);
+  if(status < 0) return status;
+  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
+  if(strcmp(buf, "OK")) return -1;
+  return 0;
+}
+
+int Mobot_setJointSafetyAngle(br_comms_t* comms, double angle)
+{
+  char buf[160];
+  int status;
+  int bytes_read;
+  sprintf(buf, "SET_MOTOR_SAFETY_LIMIT %lf", angle);
+  status = SendToIMobot(comms, buf, strlen(buf)+1);
+  if(status < 0) return status;
+  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
+  if(strcmp(buf, "OK")) return -1;
+  return 0;
+}
+
+int Mobot_setJointSafetyAngleTimeout(br_comms_t* comms, double seconds)
+{
+  char buf[160];
+  int status;
+  int bytes_read;
+  sprintf(buf, "SET_MOTOR_SAFETY_TIMEOUT %lf", seconds);
   status = SendToIMobot(comms, buf, strlen(buf)+1);
   if(status < 0) return status;
   bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
@@ -1855,9 +1917,12 @@ int CMobot::isMoving()
   return Mobot_isMoving(&_comms);
 }
 
-int CMobot::setJointDirection(robotJointId_t id, robotJointState_t dir)
+int CMobot::getJointAngle(robotJointId_t id, double &angle)
 {
-  return Mobot_setJointDirection(&_comms, id, dir);
+  int err;
+  err = Mobot_getJointAngle(&_comms, id, &angle);
+  angle = RAD2DEG(angle);
+  return err;
 }
 
 int CMobot::getJointDirection(robotJointId_t id, robotJointState_t &dir)
@@ -1865,29 +1930,25 @@ int CMobot::getJointDirection(robotJointId_t id, robotJointState_t &dir)
   return Mobot_getJointDirection(&_comms, id, &dir);
 }
 
-int CMobot::setJointSpeed(robotJointId_t id, double speed)
+int CMobot::getJointMaxSpeed(robotJointId_t id, double &maxSpeed)
 {
-  return Mobot_setJointSpeed(&_comms, id, DEG2RAD(speed));
+  int err = Mobot_getJointMaxSpeed(&_comms, id, &maxSpeed);
+  maxSpeed = DEG2RAD(maxSpeed);
+  return err;
 }
 
-int CMobot::setJointSpeeds(double speed1, double speed2, double speed3, double speed4)
+int CMobot::getJointSafetyAngle(double &angle)
 {
-  return Mobot_setJointSpeeds(
-      &_comms, 
-      DEG2RAD(speed1), 
-      DEG2RAD(speed2), 
-      DEG2RAD(speed3), 
-      DEG2RAD(speed4));
+  int r;
+  double a;
+  r = Mobot_getJointSafetyAngle(&_comms, &a);
+  angle = RAD2DEG(a);
+  return r;
 }
 
-int CMobot::setJointSpeedRatio(robotJointId_t id, double ratio)
+int CMobot::getJointSafetyAngleTimeout(double &seconds)
 {
-  return Mobot_setJointSpeedRatio(&_comms, id, ratio);
-}
-
-int CMobot::setJointSpeedRatios(double ratio1, double ratio2, double ratio3, double ratio4)
-{
-  return Mobot_setJointSpeedRatios(&_comms, ratio1, ratio2, ratio3, ratio4);
+  return Mobot_getJointSafetyAngleTimeout(&_comms, &seconds);
 }
 
 int CMobot::getJointSpeed(robotJointId_t id, double &speed)
@@ -1896,6 +1957,11 @@ int CMobot::getJointSpeed(robotJointId_t id, double &speed)
   err = Mobot_getJointSpeed(&_comms, id, &speed);
   speed = RAD2DEG(speed);
   return err;
+}
+
+int CMobot::getJointSpeedRatio(robotJointId_t id, double &ratio)
+{
+  return Mobot_getJointSpeedRatio(&_comms, id, &ratio);
 }
 
 int CMobot::getJointSpeeds(double &speed1, double &speed2, double &speed3, double &speed4)
@@ -1909,64 +1975,9 @@ int CMobot::getJointSpeeds(double &speed1, double &speed2, double &speed3, doubl
   return err;
 }
 
-int CMobot::getJointSpeedRatio(robotJointId_t id, double &ratio)
-{
-  return Mobot_getJointSpeedRatio(&_comms, id, &ratio);
-}
-
 int CMobot::getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3, double &ratio4)
 {
   return Mobot_getJointSpeedRatios(&_comms, &ratio1, &ratio2, &ratio3, &ratio4);
-}
-
-int CMobot::moveJointContinuousNB(robotJointId_t id, robotJointState_t dir)
-{
-  return Mobot_moveJointContinuousNB(&_comms, id, dir);
-}
-
-int CMobot::moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, double seconds)
-{
-  return Mobot_moveJointContinuousTime(&_comms, id, dir, seconds);
-}
-
-int CMobot::moveJoint(robotJointId_t id, double angle)
-{
-  return Mobot_moveJoint(&_comms, id, DEG2RAD(angle));
-}
-
-int CMobot::moveJointNB(robotJointId_t id, double angle)
-{
-  return Mobot_moveJointNB(&_comms, id, DEG2RAD(angle));
-}
-
-int CMobot::moveJointTo(robotJointId_t id, double angle)
-{
-  return Mobot_moveJointTo(&_comms, id, DEG2RAD(angle));
-}
-
-int CMobot::moveJointToNB(robotJointId_t id, double angle)
-{
-  return Mobot_moveJointToNB(&_comms, id, DEG2RAD(angle));
-}
-
-int CMobot::moveJointToPIDNB(robotJointId_t id, double angle)
-{
-  return Mobot_moveJointToPIDNB(&_comms, id, DEG2RAD(angle));
-}
-
-int CMobot::getJointAngle(robotJointId_t id, double &angle)
-{
-  int err;
-  err = Mobot_getJointAngle(&_comms, id, &angle);
-  angle = RAD2DEG(angle);
-  return err;
-}
-
-int CMobot::getJointMaxSpeed(robotJointId_t id, double &maxSpeed)
-{
-  int err = Mobot_getJointMaxSpeed(&_comms, id, &maxSpeed);
-  maxSpeed = DEG2RAD(maxSpeed);
-  return err;
 }
 
 int CMobot::getJointState(robotJointId_t id, robotJointState_t &state)
@@ -2010,6 +2021,46 @@ int CMobot::moveContinuousTime( robotJointState_t dir1, robotJointState_t dir2, 
   return Mobot_moveContinuousTime(&_comms, dir1, dir2, dir3, dir4, seconds);
 }
 
+int CMobot::moveJointContinuousNB(robotJointId_t id, robotJointState_t dir)
+{
+  return Mobot_moveJointContinuousNB(&_comms, id, dir);
+}
+
+int CMobot::moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, double seconds)
+{
+  return Mobot_moveJointContinuousTime(&_comms, id, dir, seconds);
+}
+
+int CMobot::moveJoint(robotJointId_t id, double angle)
+{
+  return Mobot_moveJoint(&_comms, id, DEG2RAD(angle));
+}
+
+int CMobot::moveJointNB(robotJointId_t id, double angle)
+{
+  return Mobot_moveJointNB(&_comms, id, DEG2RAD(angle));
+}
+
+int CMobot::moveJointTo(robotJointId_t id, double angle)
+{
+  return Mobot_moveJointTo(&_comms, id, DEG2RAD(angle));
+}
+
+int CMobot::moveJointToNB(robotJointId_t id, double angle)
+{
+  return Mobot_moveJointToNB(&_comms, id, DEG2RAD(angle));
+}
+
+int CMobot::moveJointToPIDNB(robotJointId_t id, double angle)
+{
+  return Mobot_moveJointToPIDNB(&_comms, id, DEG2RAD(angle));
+}
+
+int CMobot::moveJointWait(robotJointId_t id)
+{
+  return Mobot_moveJointWait(&_comms, id);
+}
+
 int CMobot::moveTo( double angle1,
                           double angle2,
                           double angle3,
@@ -2036,6 +2087,11 @@ int CMobot::moveToNB( double angle1,
       DEG2RAD(angle4));
 }
 
+int CMobot::moveWait()
+{
+  return Mobot_moveWait(&_comms);
+}
+
 int CMobot::moveToZero()
 {
   return Mobot_moveToZero(&_comms);
@@ -2046,24 +2102,9 @@ int CMobot::moveToZeroNB()
   return Mobot_moveToZeroNB(&_comms);
 }
 
-int CMobot::moveJointWait(robotJointId_t id)
-{
-  return Mobot_moveJointWait(&_comms, id);
-}
-
-int CMobot::moveWait()
-{
-  return Mobot_moveWait(&_comms);
-}
-
 int CMobot::recordAngle(robotJointId_t id, double* time, double* angle, int num, double seconds)
 {
   return Mobot_recordAngle(&_comms, id, time, angle, num, seconds);
-}
-
-int CMobot::recordWait()
-{
-  return Mobot_recordWait(&_comms);
 }
 
 int CMobot::recordAngles(double *time, 
@@ -2077,9 +2118,50 @@ int CMobot::recordAngles(double *time,
   return Mobot_recordAngles(&_comms, time, angle1, angle2, angle3, angle4, num, seconds);
 }
 
-int CMobot::stop()
+int CMobot::recordWait()
 {
-  return Mobot_stop(&_comms);
+  return Mobot_recordWait(&_comms);
+}
+
+int CMobot::setJointSafetyAngle(double angle)
+{
+  angle = DEG2RAD(angle);
+  return Mobot_setJointSafetyAngle(&_comms, angle);
+}
+
+int CMobot::setJointSafetyAngleTimeout(double seconds)
+{
+  return Mobot_setJointSafetyAngleTimeout(&_comms, seconds);
+}
+
+int CMobot::setJointDirection(robotJointId_t id, robotJointState_t dir)
+{
+  return Mobot_setJointDirection(&_comms, id, dir);
+}
+
+int CMobot::setJointSpeed(robotJointId_t id, double speed)
+{
+  return Mobot_setJointSpeed(&_comms, id, DEG2RAD(speed));
+}
+
+int CMobot::setJointSpeeds(double speed1, double speed2, double speed3, double speed4)
+{
+  return Mobot_setJointSpeeds(
+      &_comms, 
+      DEG2RAD(speed1), 
+      DEG2RAD(speed2), 
+      DEG2RAD(speed3), 
+      DEG2RAD(speed4));
+}
+
+int CMobot::setJointSpeedRatio(robotJointId_t id, double ratio)
+{
+  return Mobot_setJointSpeedRatio(&_comms, id, ratio);
+}
+
+int CMobot::setJointSpeedRatios(double ratio1, double ratio2, double ratio3, double ratio4)
+{
+  return Mobot_setJointSpeedRatios(&_comms, ratio1, ratio2, ratio3, ratio4);
 }
 
 int CMobot::setMotorPower(robotJointId_t id, int power)
@@ -2090,6 +2172,11 @@ int CMobot::setMotorPower(robotJointId_t id, int power)
 int CMobot::setTwoWheelRobotSpeed(double speed, double radius)
 {
   return Mobot_setTwoWheelRobotSpeed(&_comms, speed, radius);
+}
+
+int CMobot::stop()
+{
+  return Mobot_stop(&_comms);
 }
 
 int CMobot::motionArch(double angle)

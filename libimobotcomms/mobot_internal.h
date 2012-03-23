@@ -116,6 +116,8 @@ DLLIMPORT int Mobot_getJointAnglesTime(br_comms_t* comms,
                                        double *angle4);
 DLLIMPORT int Mobot_getJointDirection(br_comms_t* comms, robotJointId_t id, robotJointState_t *dir);
 DLLIMPORT int Mobot_getJointMaxSpeed(br_comms_t* comms, robotJointId_t, double *maxSpeed);
+DLLIMPORT int Mobot_getJointSafetyAngle(br_comms_t* comms, double *angle);
+DLLIMPORT int Mobot_getJointSafetyAngleTimeout(br_comms_t* comms, double *seconds);
 DLLIMPORT int Mobot_getJointSpeed(br_comms_t* comms, robotJointId_t id, double *speed);
 DLLIMPORT int Mobot_getJointSpeedRatio(br_comms_t* comms, robotJointId_t id, double *ratio);
 DLLIMPORT int Mobot_getJointSpeedRatios(br_comms_t* comms, 
@@ -184,6 +186,8 @@ DLLIMPORT int Mobot_recordAngles(br_comms_t* comms,
                                  double timeInterval);
 DLLIMPORT int Mobot_recordWait(br_comms_t* comms);
 DLLIMPORT int Mobot_setJointDirection(br_comms_t* comms, robotJointId_t id, robotJointState_t dir);
+DLLIMPORT int Mobot_setJointSafetyAngle(br_comms_t* comms, double angle);
+DLLIMPORT int Mobot_setJointSafetyAngleTimeout(br_comms_t* comms, double seconds);
 DLLIMPORT int Mobot_setJointSpeed(br_comms_t* comms, robotJointId_t id, double speed);
 DLLIMPORT int Mobot_setJointSpeedRatio(br_comms_t* comms, robotJointId_t id, double ratio);
 DLLIMPORT int Mobot_setJointSpeeds(br_comms_t* comms, 

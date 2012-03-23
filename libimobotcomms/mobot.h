@@ -108,6 +108,8 @@ class CMobot {
     int isMoving();
     int getJointAngle(robotJointId_t id, double &angle);
     int getJointMaxSpeed(robotJointId_t id, double &maxSpeed);
+    int getJointSafetyAngle(double &angle);
+    int getJointSafetyAngleTimeout(double &seconds);
     int getJointSpeed(robotJointId_t id, double &speed);
     int getJointSpeedRatio(robotJointId_t id, double &ratio);
     int getJointSpeeds(double &speed1, double &speed2, double &speed3, double &speed4);
@@ -157,6 +159,8 @@ class CMobot {
                      double seconds);
 #endif
     int recordWait();
+    int setJointSafetyAngle(double angle);
+    int setJointSafetyAngleTimeout(double seconds);
     int setJointSpeed(robotJointId_t id, double speed);
     int setJointSpeeds(double speed1, double speed2, double speed3, double speed4);
     int setJointSpeedRatio(robotJointId_t id, double ratio);
