@@ -1345,6 +1345,29 @@ EXPORTCH int CMG_setJointSpeedRatio_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int CMG_setJointSpeedRatios_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotGroup *mobot;
+    robotJointId_t id;
+    double ratio1;
+    double ratio2;
+    double ratio3;
+    double ratio4;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
+    ratio1 = Ch_VaArg(interp, ap, double);
+    ratio2 = Ch_VaArg(interp, ap, double);
+    ratio3 = Ch_VaArg(interp, ap, double);
+    ratio4 = Ch_VaArg(interp, ap, double);
+    retval = mobot->setJointSpeedRatios(ratio1, ratio2, ratio3, ratio4);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int CMG_setTwoWheelRobotSpeed_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
