@@ -478,6 +478,40 @@ int Mobot_isMoving(br_comms_t* comms)
   return moving;
 }
 
+int Mobot_getButtonVoltage(br_comms_t* comms, double *voltage)
+{
+  char buf[160];
+  int status;
+  int bytes_read;
+  while(1) {
+    sprintf(buf, "GET_BUTTON_VOLTAGE");
+    status = SendToIMobot(comms, buf, strlen(buf)+1);
+    if(status < 0) return status;
+    bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
+    if(!strcmp(buf, "ERROR")) return -1;
+    if(!strncmp("BV ", buf, 2)) {break;}
+  }
+  sscanf(buf, "BV %lf", voltage);
+  return 0;
+}
+
+int Mobot_getEncoderVoltage(br_comms_t* comms, int pinNumber, double *voltage)
+{
+  char buf[160];
+  int status;
+  int bytes_read;
+  while(1) {
+    sprintf(buf, "GET_ENCODER_VOLTAGE %d", pinNumber);
+    status = SendToIMobot(comms, buf, strlen(buf)+1);
+    if(status < 0) return status;
+    bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
+    if(!strcmp(buf, "ERROR")) return -1;
+    if(!strncmp("V ", buf, 2)) {break;}
+  }
+  sscanf(buf, "V %lf", voltage);
+  return 0;
+}
+
 int Mobot_getJointAngle(br_comms_t* comms, robotJointId_t id, double *angle)
 {
   char buf[160];

@@ -104,6 +104,8 @@ DLLIMPORT int Mobot_disconnect(br_comms_t* comms);
 DLLIMPORT int Mobot_init(br_comms_t* comms);
 DLLIMPORT int Mobot_isConnected(br_comms_t* comms);
 DLLIMPORT int Mobot_isMoving(br_comms_t* comms);
+DLLIMPORT int Mobot_getButtonVoltage(br_comms_t* comms, double *voltage);
+DLLIMPORT int Mobot_getEncoderVoltage(br_comms_t* comms, int pinNumber, double *voltage);
 DLLIMPORT int Mobot_getJointAngle(br_comms_t* comms, robotJointId_t id, double *angle);
 DLLIMPORT int Mobot_getJointAngleTime(br_comms_t* comms, robotJointId_t id, double *time, double *angle);
 DLLIMPORT int Mobot_getJointAnglesTime(br_comms_t* comms, 
