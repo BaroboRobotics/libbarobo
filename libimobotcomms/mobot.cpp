@@ -604,6 +604,8 @@ int Mobot_getJointMaxSpeed(br_comms_t* comms, robotJointId_t id, double *maxSpee
     if(!strncmp("MAXSPD ", buf, 7)) {break;}
   }
   sscanf(buf, "MAXSPD %lf", maxSpeed);
+  /* FIXME: Hard coded Max speed is 135, but should be 120 */
+  *maxSpeed = DEG2RAD(120);
   comms->maxSpeed[(int)id-1] = *maxSpeed;
   return 0;
 }
@@ -1933,7 +1935,7 @@ int CMobot::getJointDirection(robotJointId_t id, robotJointState_t &dir)
 int CMobot::getJointMaxSpeed(robotJointId_t id, double &maxSpeed)
 {
   int err = Mobot_getJointMaxSpeed(&_comms, id, &maxSpeed);
-  maxSpeed = DEG2RAD(maxSpeed);
+  maxSpeed = RAD2DEG(maxSpeed);
   return err;
 }
 
