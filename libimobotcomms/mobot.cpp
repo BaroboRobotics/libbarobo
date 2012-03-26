@@ -306,7 +306,7 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
 	  // ...
 	  // Display the string.
 	  //MessageBox( NULL, (LPCTSTR)lpMsgBuf, "Error", MB_OK | MB_ICONINFORMATION );
-	  fprintf(stderr, "Error Connecting: %s\n", lpMsgBuf);
+	  fprintf(stderr, "Error Connecting: %s", lpMsgBuf);
 	  if(WSAGetLastError() == 10048) {
 		  fprintf(stderr, "Make sure there are no other programs currently connected to the Mobot.\n");
 	  }
