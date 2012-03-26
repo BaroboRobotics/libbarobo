@@ -1222,7 +1222,7 @@ void CiMobotController_WindowsDlg::OnHelpDemos()
   TCHAR chHome[MAX_PATH];
   TCHAR command[MAX_PATH];
   getChHome(chHome);
-  _stprintf(command, TEXT("%s\\bin\\chide.exe -d %s\\package\\chmobot\\demos"), chHome, chHome);
+  _stprintf(command, TEXT("%s\\bin\\chide.exe -d %s\\package\\chmobot\\demos %s\\package\\chmobot\\demos\\start.ch"), chHome, chHome, chHome);
   //_stprintf(command, TEXT("file://%s\\package\\chmobot\\docs\\index.html"), chHome);
   //GotoURL(command, 0);
   //system(T2A(command));
