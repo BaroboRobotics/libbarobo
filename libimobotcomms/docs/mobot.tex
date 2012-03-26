@@ -21,7 +21,7 @@
 \vspace*{2.5cm}
 {\Huge\sf\bf Mobot User's Guide}\\
 \vspace*{2.5cm}
-{\Large\bf Version 1.4.3}
+{\Large\bf Version 1.4.6}
 \vspace{4.5cm}
 
 \includegraphics[width=4in]{images/Mobot_Camera_Stand.JPG}
@@ -639,8 +639,8 @@ function.
 
 The next two lines,
 \begin{verbatim}
-robot.setJointSpeed(ROBOT_JOINT1, 90);
-robot.setJointSpeed(ROBOT_JOINT4, 90);
+robot.setJointSpeed(ROBOT_JOINT1, 60);
+robot.setJointSpeed(ROBOT_JOINT4, 60);
 \end{verbatim}
 set the joint speed settings for the two faceplate joints to 90 degrees per second.
 
@@ -649,7 +649,7 @@ The next lines,
 //robot.setJointSpeedRatio(ROBOT_JOINT1, 0.5);
 //robot.setJointSpeedRatio(ROBOT_JOINT4, 0.5);
 
-//robot.setJointSpeeds(90, 0, 0, 90);
+//robot.setJointSpeeds(60, 0, 0, 60);
 \end{verbatim}
 are two alternate ways of setting the joint speeds of the faceplate joints. 
 The member function \texttt{setJointSpeedRatio()} sets the joint speeds as a ratio of the 
@@ -670,7 +670,7 @@ print a message to the screen and rolls the robot forward by rotating the facepl
 
 The next lines,
 \begin{verbatim}
-speed = (3.5/2) * M_PI / 2; // 2.75 inch/s 
+speed = 1.83; // = (3.5/2) * M_PI * 60/180 (inch/s)
 radius = 3.5/2;             // radius is 1.75 
 robot.setTwoWheelRobotSpeed(speed, radius);
 \end{verbatim}
@@ -682,7 +682,9 @@ rotational speed of the faceplate wheels to achieve the desired speed. Note
 that the units for the speed must match the units for the radius. For instance,
 if the radius is provided in inches, the desired speed must be provided in 
 inches per second. If the radius is provided in centimeters, the speed must
-be provided in centimeters per second, and so on.
+be provided in centimeters per second, and so on. In this example, specifying 
+the speed of the two wheeled robot at 1.83 inches per second is equivalent to setting
+the speeds of the two wheels at 60 degrees per second.
 
 The following two lines,
 \begin{verbatim}
@@ -690,7 +692,7 @@ printf("Move 360 degrees.\n");
 robot.move(360, 0, 0, 360);
 \end{verbatim}
 rotate the faceplates forward at the necessary rate to achieve a forward speed of
-2.75 inches per second.
+1.83 inches per second.
 
 Finally, the last two lines,
 \begin{verbatim}
@@ -1654,7 +1656,7 @@ includes header files and declares our robot variable. The header file
 \texttt{chplot.h} is necessary for plotting figures, which will be done later in the
 program. The header file \texttt{numeric.h} is necessary for creating and manipulating
 computational arrays, which are also used in this program. Both plotting and computational
-arrays are are covered in the Ch User's Guide.
+arrays are covered in {\it Ch User's Guide}.
 
 Next some variables are declared. First, we declare a variable to hold our
 desired speed:
