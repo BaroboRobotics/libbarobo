@@ -22,4 +22,3 @@ robot.motionStand(); // stand up
 robot.move(2*360, 0, 0, 2*360);
 robot.motionUnstand();
 robot.motionTumble(2);
-

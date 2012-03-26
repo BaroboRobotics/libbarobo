@@ -12,9 +12,11 @@
                         -------
                            4
 All switches are on the top when three modules are assembled.
-In the initial configuration, joints 3 for all three modules are bended 90 degrees. */
+Before assembling, please make sure every modules are in the home position.
+*/
 #include <mobot.h>
 
+void initilization(void);
 void moveForward(int);
 void makeTurn(int);
 void standUpSideDown(int);
@@ -33,13 +35,38 @@ void main(void)
     robot2.connect();
     robot3.connect();
 
+    initilization();
     //standUpSideDown(2);
     show();
     moveForward(2);
     makeTurn(90);
     moveForward(2);
 }
+void initilization(void)
+{
+    /* Set the robot to "home" position, where all joint angles are 0 degrees. */
+    robot1.moveToZeroNB();
+    robot2.moveToZeroNB();
+    robot3.moveToZeroNB();
+    robot1.moveWait();
+    robot2.moveWait();
+    robot3.moveWait();
+    // move joint 3 of robots to 90 degree
+    robot1.moveToNB(0, 0, 90, 0);
+    robot2.moveToNB(0, 0, 90, 0);
+    robot3.moveToNB(0, 0, 90, 0);
+    robot1.moveWait();
+    robot2.moveWait();
+    robot3.moveWait();
 
+    // move joint 2 of robots to -90 degree
+    robot1.moveToNB(0, -90, 0, 0);
+    robot2.moveToNB(0, -90, 0, 0);
+    robot3.moveToNB(0, -90, 0, 0);
+    robot1.moveWait();
+    robot2.moveWait();
+    robot3.moveWait();
+}
 void moveForward(int n)
 {
     int i;

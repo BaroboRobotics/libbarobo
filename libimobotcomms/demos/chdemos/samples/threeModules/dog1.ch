@@ -1,24 +1,26 @@
 /* Filename: dog1.ch
    Control three modules and make them tumble three times in one direction.
-        4
+        1
      -------
-      |   |
-     3|   |
-      |   |
-     ------- 3rd
       |   |
      2|   |
       |   |
+     ------- 3rd
+      |   |
+     3|   |
+      |   |
      --------
-     \  1   /
-     /\    /\2
-   \/ 1\  /1 \/
+     \  4   /
+     /\    /\3
+   \/ 4\  /4 \/
    |\  /\/\  /|
-2nd| \/2   \/ |  1st
-   |  \    /  |3
-   |  |3   |  |
+2nd| \/3   \/ |  1st
+   |  \    /  |2
+   |  |2   |  |
   ------  ------
-    4        4
+    1        1
+All switches are located at the positions with "3" marked.
+Before assembling, please make sure each module is in the home position.
 */
 #include <mobot.h>
 CMobot robot1;
