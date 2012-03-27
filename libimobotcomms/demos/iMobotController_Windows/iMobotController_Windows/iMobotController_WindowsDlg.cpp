@@ -419,9 +419,15 @@ afx_msg void CiMobotController_WindowsDlg::OnTimer(UINT nIDEvent)
 
 void CiMobotController_WindowsDlg::OnBnClickedButtonconnect()
 {
+	int i;
 	TCHAR msgbuf[512];
 	/* "Connect" button clicked */
-	if(iMobotComms.connect()) {
+	if(i = iMobotComms.connect()) {
+		if (i == -3) {
+			MessageBox( TEXT("Address format incorrect."), TEXT("Error"), MB_OK | MB_ICONINFORMATION );
+		} else if (i == -4) {
+			MessageBox( TEXT("No configured robots. Add robots in the \"Configure -> Configure Robot Bluetooth\" dialog."), TEXT("Error"), MB_OK | MB_ICONINFORMATION );
+		} else {
 		/* Error connecting */
 		LPVOID lpMsgBuf;
 		FormatMessage( 
@@ -449,6 +455,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonconnect()
 		// Free the buffer.
 		LocalFree( lpMsgBuf );
 		//MessageBox(L"Error connecting to robot.", L"Error");
+		}
 	} else {
 		isConnected = true;
 		/* Update the positions of all the sliders and such */
