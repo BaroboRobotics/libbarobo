@@ -9,7 +9,7 @@ may be used to control the robot.
 %\capstart
 \begin{center}
 \caption{CMobot Member Functions.}
-\begin{tabular}{p{38 mm}p{110 mm}}
+\begin{tabular}{p{48 mm}p{110 mm}}
 %\begin{tabular}{ll}
 \hline
 Function & Description \\
@@ -29,6 +29,8 @@ and select the menu item ``Robot $\rightarrow$ Configure Robot Bluetooth''. \\
 \texttt{getJointAngle()} & Get a joint's angle. \\
 %\texttt{getJointDirection()} & Gets a motor's currently assigned direction. \\
 \texttt{getJointMaxSpeed()} & Get a joint's maximum speed in radians per second. \\
+\texttt{getJointSafetyAngle()} & Get the robot's safety angle limit. \\
+\texttt{getJointSafetyAngleTimeout()} & Get the robot's safety angle limit timeout. \\
 \texttt{getJointSpeed()} & Get a motor's current speed setting in radians per second. \\
 \texttt{getJointSpeeds()} & Get all motor's current speed settings in radians per second. \\
 \texttt{getJointSpeedRatio()} & Get a motor's speed as a ratio of the motor's maximum speed. \\
@@ -55,6 +57,8 @@ and select the menu item ``Robot $\rightarrow$ Configure Robot Bluetooth''. \\
 \texttt{recordAngle()} & Begin recording the angle of a joint. \\
 \texttt{recordAngles()} & Begin recording the angle of all joints. \\
 \texttt{recordWait()} & Wait for recording operations to finish. \\
+\texttt{setJointSafetyAngle()} & Set the robot's safety angle limit. \\
+\texttt{setJointSafetyAngleTimeout()} & Set the robot's safety angle limit timeout. \\
 \texttt{setJointSpeed()} & Set a motor's speed setting in radians per second. \\
 \texttt{setJointSpeeds()} & Set all motor speeds in radians per second. \\
 \texttt{setJointSpeedRatio()} & Set a joints speed setting to a fraction of its maximum speed, a value between 0 and 1. \\
@@ -109,6 +113,8 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \input{api/getJointAngle}
 %\input{api/getJointDirection}
 \input{api/getJointMaxSpeed}
+\input{api/getJointSafetyAngle}
+\input{api/getJointSafetyAngleTimeout}
 \input{api/getJointSpeed}
 \input{api/getJointSpeedRatio}
 \input{api/getJointSpeedRatios}
@@ -141,6 +147,8 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \input{api/recordAngles}
 \input{api/recordWait}
 %\input{api/setJointDirection}
+\input{api/setJointSafetyAngle}
+\input{api/setJointSafetyAngleTimeout}
 \input{api/setJointSpeed}
 \input{api/setJointSpeedRatio}
 \input{api/setJointSpeedRatios}
