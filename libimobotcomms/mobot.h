@@ -178,6 +178,7 @@ class CMobot {
     int motionStand();
     int motionTurnLeft(double angle);
     int motionTurnRight(double angle);
+    int motionTumbleBackward(int num);
     int motionTumbleForward(int num);
     int motionUnstand();
 
@@ -191,6 +192,7 @@ class CMobot {
     int motionStandNB();
     int motionTurnLeftNB(double angle);
     int motionTurnRightNB(double angle);
+    int motionTumbleBackwardNB(int num);
     int motionTumbleForwardNB(int num);
     int motionUnstandNB();
     int motionWait();
@@ -268,6 +270,9 @@ class CMobotGroup
     int motionTurnRight(double angle);
     int motionTurnRightNB(double angle);
     static void* motionTurnRightThread(void*);
+    int motionTumbleBackward(int num);
+    int motionTumbleBackwardNB(int num);
+    static void* motionTumbleBackwardThread(void*);
     int motionTumbleForward(int num);
     int motionTumbleForwardNB(int num);
     static void* motionTumbleForwardThread(void*);
