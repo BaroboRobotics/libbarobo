@@ -403,28 +403,28 @@ int CMobot::motionTurnRightNB(double angle) {
     dlrunfun(fptr, &retval, motionTurnRightNB, this, angle);
     return retval;
 }
-int CMobot::motionTumble(int num) {
+int CMobot::motionTumbleForward(int num) {
     void *fptr;
     int retval;
 
-    fptr = dlsym(g_chmobot_dlhandle, "motionTumble_chdl");
+    fptr = dlsym(g_chmobot_dlhandle, "motionTumbleForward_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionTumble, this, num);
+    dlrunfun(fptr, &retval, motionTumbleForward, this, num);
     return retval;
 }
-int CMobot::motionTumbleNB(int num) {
+int CMobot::motionTumbleForwardNB(int num) {
     void *fptr;
     int retval;
 
-    fptr = dlsym(g_chmobot_dlhandle, "motionTumbleNB_chdl");
+    fptr = dlsym(g_chmobot_dlhandle, "motionTumbleForwardNB_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionTumbleNB, this, num);
+    dlrunfun(fptr, &retval, motionTumbleForwardNB, this, num);
     return retval;
 }
 int CMobot::motionUnstand() {
@@ -1084,28 +1084,28 @@ int CMobotGroup::motionTurnRightNB(double angle) {
     dlrunfun(fptr, &retval, motionTurnRightNB, this, angle);
     return retval;
 }
-int CMobotGroup::motionTumble(int num) {
+int CMobotGroup::motionTumbleForward(int num) {
     void *fptr;
     int retval;
 
-    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_motionTumble_chdl");
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_motionTumbleForward_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionTumble, this, num);
+    dlrunfun(fptr, &retval, motionTumbleForward, this, num);
     return retval;
 }
-int CMobotGroup::motionTumbleNB(int num) {
+int CMobotGroup::motionTumbleForwardNB(int num) {
     void *fptr;
     int retval;
 
-    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_motionTumbleNB_chdl");
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_motionTumbleForwardNB_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionTumbleNB, this, num);
+    dlrunfun(fptr, &retval, motionTumbleForwardNB, this, num);
     return retval;
 }
 int CMobotGroup::motionUnstand() {

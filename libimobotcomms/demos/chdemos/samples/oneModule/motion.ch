@@ -21,4 +21,4 @@ robot.motionStand(); // stand up
 /* Spin the robot around two revolutions while spinning the top */
 robot.move(2*360, 0, 0, 2*360);
 robot.motionUnstand();
-robot.motionTumble(2);
+robot.motionTumbleForward(2);

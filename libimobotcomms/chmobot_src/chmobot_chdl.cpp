@@ -981,7 +981,7 @@ EXPORTCH int motionTurnRightNB_chdl(void *varg) {
     return retval;
 }
 
-EXPORTCH int motionTumble_chdl(void *varg) {
+EXPORTCH int motionTumbleForward_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CMobot *mobot;
@@ -991,11 +991,11 @@ EXPORTCH int motionTumble_chdl(void *varg) {
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobot *);
     num = Ch_VaArg(interp, ap, int);
-    retval = mobot->motionTumble(num);
+    retval = mobot->motionTumbleForward(num);
     Ch_VaEnd(interp, ap);
     return retval;
 }
-EXPORTCH int motionTumbleNB_chdl(void *varg) {
+EXPORTCH int motionTumbleForwardNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CMobot *mobot;
@@ -1005,7 +1005,7 @@ EXPORTCH int motionTumbleNB_chdl(void *varg) {
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobot *);
     num = Ch_VaArg(interp, ap, int);
-    retval = mobot->motionTumbleNB(num);
+    retval = mobot->motionTumbleForwardNB(num);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -1715,7 +1715,7 @@ EXPORTCH int CMG_motionTurnRightNB_chdl(void *varg) {
     return retval;
 }
 
-EXPORTCH int CMG_motionTumble_chdl(void *varg) {
+EXPORTCH int CMG_motionTumbleForward_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CMobotGroup *mobot;
@@ -1725,11 +1725,11 @@ EXPORTCH int CMG_motionTumble_chdl(void *varg) {
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
     num = Ch_VaArg(interp, ap, int);
-    retval = mobot->motionTumble(num);
+    retval = mobot->motionTumbleForward(num);
     Ch_VaEnd(interp, ap);
     return retval;
 }
-EXPORTCH int CMG_motionTumbleNB_chdl(void *varg) {
+EXPORTCH int CMG_motionTumbleForwardNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CMobotGroup *mobot;
@@ -1739,7 +1739,7 @@ EXPORTCH int CMG_motionTumbleNB_chdl(void *varg) {
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
     num = Ch_VaArg(interp, ap, int);
-    retval = mobot->motionTumbleNB(num);
+    retval = mobot->motionTumbleForwardNB(num);
     Ch_VaEnd(interp, ap);
     return retval;
 }

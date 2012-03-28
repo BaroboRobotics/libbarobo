@@ -1633,7 +1633,7 @@ int Mobot_motionTurnRightNB(br_comms_t* comms, double angle)
   return 0;
 }
 
-int Mobot_motionTumble(br_comms_t* comms, int num)
+int Mobot_motionTumbleForward(br_comms_t* comms, int num)
 {
   int i;
   Mobot_moveToZero(comms);
@@ -1665,19 +1665,19 @@ int Mobot_motionTumble(br_comms_t* comms, int num)
   return 0;
 }
 
-void* motionTumbleThread(void* arg)
+void* motionTumbleForwardThread(void* arg)
 {
   br_comms_t* comms = (br_comms_t*)arg;
-  Mobot_motionTumble(comms, comms->motionArgInt);
+  Mobot_motionTumbleForward(comms, comms->motionArgInt);
   comms->motionInProgress--;
   return NULL;
 }
 
-int Mobot_motionTumbleNB(br_comms_t* comms, int num)
+int Mobot_motionTumbleForwardNB(br_comms_t* comms, int num)
 {
   comms->motionArgInt = num;
   comms->motionInProgress++;
-  THREAD_CREATE(&comms->thread, motionTumbleThread, comms);
+  THREAD_CREATE(&comms->thread, motionTumbleForwardThread, comms);
   return 0;
 }
 
@@ -2251,14 +2251,14 @@ int CMobot::motionStandNB()
   return Mobot_motionStandNB(&_comms);
 }
 
-int CMobot::motionTumble(int num)
+int CMobot::motionTumbleForward(int num)
 {
-  return Mobot_motionTumble(&_comms, num);
+  return Mobot_motionTumbleForward(&_comms, num);
 }
 
-int CMobot::motionTumbleNB(int num)
+int CMobot::motionTumbleForwardNB(int num)
 {
-  return Mobot_motionTumbleNB(&_comms, num);
+  return Mobot_motionTumbleForwardNB(&_comms, num);
 }
 
 int CMobot::motionTurnLeft(double angle)
@@ -2741,23 +2741,23 @@ void* CMobotGroup::motionTurnRightThread(void* arg)
   return NULL;
 }
 
-int CMobotGroup::motionTumble(int num)
+int CMobotGroup::motionTumbleForward(int num)
 {
   argInt = num;
   _motionInProgress++;
-  motionTumbleThread(this);
+  motionTumbleForwardThread(this);
   return 0;
 }
 
-int CMobotGroup::motionTumbleNB(int num)
+int CMobotGroup::motionTumbleForwardNB(int num)
 {
   argInt = num;
   _motionInProgress++;
-  THREAD_CREATE(_thread, motionTumbleThread, this);
+  THREAD_CREATE(_thread, motionTumbleForwardThread, this);
   return 0;
 }
 
-void* CMobotGroup::motionTumbleThread(void* arg)
+void* CMobotGroup::motionTumbleForwardThread(void* arg)
 {
   int i;
   CMobotGroup* cmg = (CMobotGroup*)arg;
