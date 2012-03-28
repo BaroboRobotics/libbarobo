@@ -1644,19 +1644,19 @@ int Mobot_motionTumbleBackward(br_comms_t* comms, int num)
 #endif
 
   for(i = 0; i < num; i++) {
-    Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(-85));
-    Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(80));
+    Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(85));
+    Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(-80));
     Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(0));
     Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(0));
-    Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(80));
-    Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(45));
-    Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(-85));
-    Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(80));
+    Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(-80));
+    Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(-45));
+    Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(85));
+    Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(-80));
     Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(0));
     Mobot_moveJointTo(comms, ROBOT_JOINT3, DEG2RAD(0));
-    Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(80));
+    Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(-80));
     if(i != (num-1)) {
-      Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(45));
+      Mobot_moveJointTo(comms, ROBOT_JOINT2, DEG2RAD(-45));
     }
   }
   Mobot_moveJointToNB(comms, ROBOT_JOINT3, 0);
@@ -2820,8 +2820,8 @@ void* CMobotGroup::motionTumbleBackwardThread(void* arg)
   int i;
   CMobotGroup* cmg = (CMobotGroup*)arg;
   cmg->moveToZero();
-  cmg->moveJointTo(ROBOT_JOINT3, -85);
-  cmg->moveJointTo(ROBOT_JOINT2, 80);
+  cmg->moveJointTo(ROBOT_JOINT3, 85);
+  cmg->moveJointTo(ROBOT_JOINT2, -80);
 #ifndef _WIN32
   sleep(1);
 #else
@@ -2832,15 +2832,15 @@ void* CMobotGroup::motionTumbleBackwardThread(void* arg)
     if((i%2) == 0) {
       cmg->moveJointTo(ROBOT_JOINT3, 0);
       cmg->moveJointTo(ROBOT_JOINT2, 0);
-      cmg->moveJointTo(ROBOT_JOINT3, 60);
-      cmg->moveJointTo(ROBOT_JOINT2, -85);
-      cmg->moveJointTo(ROBOT_JOINT3, 80);
+      cmg->moveJointTo(ROBOT_JOINT3, -60);
+      cmg->moveJointTo(ROBOT_JOINT2, 85);
+      cmg->moveJointTo(ROBOT_JOINT3, -80);
     } else {
       cmg->moveJointTo(ROBOT_JOINT2, 0);
       cmg->moveJointTo(ROBOT_JOINT3, 0);
-      cmg->moveJointTo(ROBOT_JOINT2, 60);
-      cmg->moveJointTo(ROBOT_JOINT3, -85);
-      cmg->moveJointTo(ROBOT_JOINT2, 80);
+      cmg->moveJointTo(ROBOT_JOINT2, -60);
+      cmg->moveJointTo(ROBOT_JOINT3, 85);
+      cmg->moveJointTo(ROBOT_JOINT2, -80);
     }
   }
 
