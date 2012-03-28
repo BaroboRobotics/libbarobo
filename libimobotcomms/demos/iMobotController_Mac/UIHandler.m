@@ -282,10 +282,10 @@
 			Mobot_motionTurnRightNB(comms, DEG2RAD(360));
 			break;
 		case MOTION_TUMBLEBACKWARD:
-			Mobot_motionTumbleBackwardNB(comms, 1);
+			Mobot_motionTumbleRightNB(comms, 1);
 			break;
 		case MOTION_TUMBLEFORWARD:
-			Mobot_motionTumbleForwardNB(comms, 1);
+			Mobot_motionTumbleLeftNB(comms, 1);
 			break;
 		case MOTION_UNSTAND:
 			Mobot_motionUnstandNB(comms);

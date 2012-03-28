@@ -2,19 +2,19 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CMobot::motionTumbleBackward()}\index{CMobot::motionTumbleBackward()}}\\
-{\LARGE \texttt{CMobot::motionTumbleBackwardNB()}\index{CMobot::motionTumbleBackwardNB()}}\\
+{\LARGE \texttt{CMobot::motionTumbleRight()}\index{CMobot::motionTumbleRight()}}\\
+{\LARGE \texttt{CMobot::motionTumbleRightNB()}\index{CMobot::motionTumbleRightNB()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{motionTumbleBackward()}
-\addcontentsline{toc}{section}{motionTumbleBackwardNB()}
+\addcontentsline{toc}{section}{motionTumbleRight()}
+\addcontentsline{toc}{section}{motionTumbleRightNB()}
 
 \noindent
 {\bf Synopsis}
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::motionTumbleBackward(int num);
-int CMobot::motionTumbleBackwardNB(int num);
+int CMobot::motionTumbleRight(int num);
+int CMobot::motionTumbleRightNB(int num);
 \end{verbatim}
 
 \noindent
@@ -39,17 +39,17 @@ The function returns 0 on success and non-zero otherwise.\\
 {\bf Description}\\
 \vspace{-12pt}
 \begin{quote}
-{\bf CMobot::motionTumbleBackward()}\\
+{\bf CMobot::motionTumbleRight()}\\
 This causes the robot to tumble end over end. The argument, \texttt{num},
 indicates the number of times to tumble.
 
-{\bf CMobot::motionTumbleBackwardNB()}\\
+{\bf CMobot::motionTumbleRightNB()}\\
 This causes the robot to tumble end over end. The argument, \texttt{num},
 indicates the number of times to tumble.
 
 This function has both a blocking and non-blocking version.
-The blocking version, \texttt{motionTumbleBackward()}, will block until the
-robot motion has completed. The non-blocking version, \texttt{motionTumbleBackwardNB()},
+The blocking version, \texttt{motionTumbleRight()}, will block until the
+robot motion has completed. The non-blocking version, \texttt{motionTumbleRightNB()},
 will return immediately, and the motion will be performed asynchronously.\\
 \end{quote}
 

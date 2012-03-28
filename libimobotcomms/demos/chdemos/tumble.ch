@@ -9,4 +9,4 @@ robot.connect();
 robot.moveToZero();
 
 /* Tumble two times */
-robot.motionTumbleForward(2);
+robot.motionTumbleLeft(2);

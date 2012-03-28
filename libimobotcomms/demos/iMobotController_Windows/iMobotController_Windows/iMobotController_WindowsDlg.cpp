@@ -407,8 +407,8 @@ void CiMobotController_WindowsDlg::handlerPlay()
     case 6: iMobotComms.motionStand(); break;
     case 7: iMobotComms.motionTurnLeft(360); break;
     case 8: iMobotComms.motionTurnRight(360); break;
-    case 9: iMobotComms.motionTumbleBackward(1); break;
-    case 10: iMobotComms.motionTumbleForward(1); break;
+    case 9: iMobotComms.motionTumbleRight(1); break;
+    case 10: iMobotComms.motionTumbleLeft(1); break;
     case 11: iMobotComms.motionUnstand(); break;
     default: break;
   }

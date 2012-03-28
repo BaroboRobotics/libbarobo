@@ -733,9 +733,9 @@ clearance.
 rolling profile.
 \item \texttt{motionStand()}: This function causes the robot to stand up onto a 
   faceplate, assuming the camera platform position.
-\item \texttt{motionTumbleBackward()}: This function causes the robot to perform the
+\item \texttt{motionTumbleRight()}: This function causes the robot to perform the
 tumbling motion, flipping end over end.
-\item \texttt{motionTumbleForward()}: This function causes the robot to perform the
+\item \texttt{motionTumbleLeft()}: This function causes the robot to perform the
 tumbling motion, flipping end over end.
 \item \texttt{motionTurnLeft()}: This function uses the robot's faceplates as wheels, turning
   them in opposite directions in order to rotate the robot towards its left.
@@ -817,7 +817,7 @@ robot.motionUnstand();
 \end{verbatim}
 causes the robot to drop back down into a flat position.
 
-\subsection{\texttt{tumble.ch}: A Demo Using the \texttt{motionTumbleForward()} Preprogrammed
+\subsection{\texttt{tumble.ch}: A Demo Using the \texttt{motionTumbleLeft()} Preprogrammed
 Motion}
 \subsubsection{\texttt{tumble.ch} Source Code}
 \verbatiminput{../demos/chdemos/tumble.ch}
@@ -839,7 +839,7 @@ to a flat zero position, similar to previous demos.
 
 Next, we make the robot perform the tumbling motion with the following line:
 \begin{verbatim}
-robot.motionTumbleForward(2);
+robot.motionTumbleLeft(2);
 \end{verbatim}
 The argument, ``2'', indicates that the tumbling motion should be performed
 two times.
@@ -900,7 +900,7 @@ robot.motionUnstand();
 
 Finally, we perform the tumbling motion. 
 \begin{verbatim}
-robot.motionTumbleForward(2);
+robot.motionTumbleLeft(2);
 \end{verbatim}
 The tumbling motion is a movement in which
 the robot stands up and then flips, end over end. The argument provided to the
@@ -910,7 +910,7 @@ function, ``2'' in this case, is the number of times to perform the motion.
 In the previous sections, preprogrammed motions have been demonstrated. In this section,
 the inner workings of the preprogrammed motions will be discussed, as well as various
 methods of designing and creating custom motions. Some more complex motions, such as 
-"motionTumbleForward()" and "motionUnstand()" will be discussed in Section \ref{sec:blocking}.
+"motionTumbleLeft()" and "motionUnstand()" will be discussed in Section \ref{sec:blocking}.
 \subsection{Inchworm Gait Demo}
 The next demo will illustrate how a simple gait known as the ``Inchworm'' gait 
 can be implemented.
@@ -1079,8 +1079,8 @@ this document.
 \item \texttt{motionRollForward()}
 \item \texttt{motionSkinny()}
 \item \texttt{motionStand()}
-\item \texttt{motionTumbleBackward()}
-\item \texttt{motionTumbleForward()}
+\item \texttt{motionTumbleRight()}
+\item \texttt{motionTumbleLeft()}
 \item \texttt{motionTurnLeft()}
 \item \texttt{motionTurnRight()}
 \item \texttt{motionUnstand()}
@@ -1101,8 +1101,8 @@ this document.
 \item \texttt{motionRollForwardNB()}
 \item \texttt{motionSkinnyNB()}
 \item \texttt{motionStandNB()}
-\item \texttt{motionTumbleBackwardNB()}
-\item \texttt{motionTumbleForwardNB()}
+\item \texttt{motionTumbleRightNB()}
+\item \texttt{motionTumbleLeftNB()}
 \item \texttt{motionTurnLeftNB()}
 \item \texttt{motionTurnRightNB()}
 \item \texttt{motionUnstandNB()}
@@ -1388,7 +1388,7 @@ Finally, the following lines,
 robot1.motionUnstandNB();
 robot2.motionInchwormRightNB(4);
 robot1.motionWait();
-robot1.motionTumbleForward(1);
+robot1.motionTumbleLeft(1);
 robot2.motionWait();
 \end{verbatim}
 make the first robot come back down from its standing position and the second robot
