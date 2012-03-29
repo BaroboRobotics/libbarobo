@@ -357,9 +357,9 @@ void CiMobotController_WindowsDlg::InitGaits()
 	addGait(gait);
 	gait = new Gait(L"Turn Right");
 	addGait(gait);
-	gait = new Gait(L"Tumble Backward");
+	gait = new Gait(L"Tumble Left");
 	addGait(gait);
-	gait = new Gait(L"Tumble Forward");
+	gait = new Gait(L"Tumble Right");
 	addGait(gait);
 	gait = new Gait(L"Unstand");
 	addGait(gait);
@@ -407,8 +407,8 @@ void CiMobotController_WindowsDlg::handlerPlay()
     case 6: iMobotComms.motionStand(); break;
     case 7: iMobotComms.motionTurnLeft(360); break;
     case 8: iMobotComms.motionTurnRight(360); break;
-    case 9: iMobotComms.motionTumbleRight(1); break;
-    case 10: iMobotComms.motionTumbleLeft(1); break;
+    case 9: iMobotComms.motionTumbleLeft(1); break;
+    case 10: iMobotComms.motionTumbleRight(1); break;
     case 11: iMobotComms.motionUnstand(); break;
     default: break;
   }
