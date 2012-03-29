@@ -279,13 +279,13 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>4</integer>
+									<integer>8</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 15}, {186, 661}}</string>
+							<string>{{0, 15}, {186, 659}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -297,14 +297,14 @@
 					<key>GeometryConfiguration</key>
 					<dict>
 						<key>Frame</key>
-						<string>{{0, 0}, {203, 679}}</string>
+						<string>{{0, 0}, {203, 677}}</string>
 						<key>GroupTreeTableConfiguration</key>
 						<array>
 							<string>MainColumn</string>
 							<real>186</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>0 122 1152 720 0 0 1152 842 </string>
+						<string>0 124 1152 718 0 0 1152 842 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -322,7 +322,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>iMobotController_MacAppDelegate.m</string>
+								<string>UIHandler.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -330,11 +330,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>iMobotController_MacAppDelegate.m</string>
+										<string>UIHandler.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>7AF464FC151BC61900965B9A</string>
+										<string>7A85C89B1523E218006C8009</string>
 										<key>history</key>
 										<array>
 											<string>7A6D0A211501832E004EC18C</string>
@@ -343,16 +343,16 @@
 											<string>7A6D0C4E1506B53A004EC18C</string>
 											<string>7A6D0D9D1507FE2A004EC18C</string>
 											<string>7A6D0D9F1507FE2A004EC18C</string>
-											<string>7A6D0DE51508021C004EC18C</string>
 											<string>7A6D0DEF150802A5004EC18C</string>
-											<string>7A6D0DF0150802A5004EC18C</string>
 											<string>7A6D0E40150826B2004EC18C</string>
-											<string>7A6D0E41150826B2004EC18C</string>
 											<string>7A6D0F3C150951AC004EC18C</string>
 											<string>7A32428615190DED0011BD82</string>
 											<string>7A32429C151948290011BD82</string>
 											<string>7AF4644E151A9A9300965B9A</string>
-											<string>7AF464F5151BC58D00965B9A</string>
+											<string>7A85C8911523E1A2006C8009</string>
+											<string>7A85C8981523E218006C8009</string>
+											<string>7A85C8991523E218006C8009</string>
+											<string>7A85C89A1523E218006C8009</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -364,14 +364,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {944, 508}}</string>
+								<string>{{0, 0}, {944, 506}}</string>
 								<key>RubberWindowFrame</key>
-								<string>0 122 1152 720 0 0 1152 842 </string>
+								<string>0 124 1152 718 0 0 1152 842 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>508pt</string>
+							<string>506pt</string>
 						</dict>
 						<dict>
 							<key>ContentConfiguration</key>
@@ -384,9 +384,9 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 513}, {944, 166}}</string>
+								<string>{{0, 511}, {944, 166}}</string>
 								<key>RubberWindowFrame</key>
-								<string>0 122 1152 720 0 0 1152 842 </string>
+								<string>0 124 1152 718 0 0 1152 842 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -410,9 +410,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>7AF46490151BBFA300965B9A</string>
+				<string>7A85C86F1523CA87006C8009</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>7AF46491151BBFA300965B9A</string>
+				<string>7A85C8701523CA87006C8009</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -550,16 +550,16 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>7AF464FD151BC61900965B9A</string>
-		<string>7AF4649B151BBFA300965B9A</string>
-		<string>7AF4649C151BBFA300965B9A</string>
+		<string>7A85C89C1523E218006C8009</string>
+		<string>7A85C87A1523CA87006C8009</string>
+		<string>7A85C87B1523CA87006C8009</string>
 		<string>1C78EAAD065D492600B07095</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>7A6D09BB14FD7D2C004EC18C</string>
 		<string>/Users/dko/Projects/iMobot_gumstix_api/libimobotcomms/demos/iMobotController_Mac/RobotController.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>0 122 1152 720 0 0 1152 842 </string>
+	<string>0 124 1152 718 0 0 1152 842 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
@@ -636,7 +636,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>7A6D09BB14FD7D2C004EC18C</string>
-				<string>7AF46492151BBFA300965B9A</string>
+				<string>7A85C8711523CA87006C8009</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -758,13 +758,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>7AF46493151BBFA300965B9A</string>
+				<string>7A85C8721523CA87006C8009</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>7AF46494151BBFA300965B9A</string>
-				<string>7AF46495151BBFA300965B9A</string>
-				<string>7AF46496151BBFA300965B9A</string>
-				<string>7AF46497151BBFA300965B9A</string>
-				<string>7AF46498151BBFA300965B9A</string>
+				<string>7A85C8731523CA87006C8009</string>
+				<string>7A85C8741523CA87006C8009</string>
+				<string>7A85C8751523CA87006C8009</string>
+				<string>7A85C8761523CA87006C8009</string>
+				<string>7A85C8771523CA87006C8009</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>
@@ -926,7 +926,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C78EAAD065D492600B07095</string>
-				<string>7AF46499151BBFA300965B9A</string>
+				<string>7A85C8781523CA87006C8009</string>
 				<string>1C78EAAC065D492600B07095</string>
 			</array>
 			<key>ToolbarConfiguration</key>

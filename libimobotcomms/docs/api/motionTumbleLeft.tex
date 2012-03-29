@@ -1,0 +1,59 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobot::motionTumbleLeft()}\index{CMobot::motionTumbleLeft()}}\\
+{\LARGE \texttt{CMobot::motionTumbleLeftNB()}\index{CMobot::motionTumbleLeftNB()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{motionTumbleLeft()}
+\addcontentsline{toc}{section}{motionTumbleLeftNB()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobot::motionTumbleLeft(int num);
+int CMobot::motionTumbleLeftNB(int num);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Make the robot tumble end over end.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{10 mm}p{145 mm}}
+\texttt{num} & The number of times to tumble. \\
+\end{tabular}
+\end{description}
+
+\noindent
+{\bf Description}\\
+\vspace{-12pt}
+\begin{quote}
+{\bf CMobot::motionTumbleLeft()}\\
+This causes the robot to tumble end over end. The argument, \texttt{num},
+indicates the number of times to tumble.
+
+{\bf CMobot::motionTumbleLeftNB()}\\
+This causes the robot to tumble end over end. The argument, \texttt{num},
+indicates the number of times to tumble.
+
+This function has both a blocking and non-blocking version.
+The blocking version, \texttt{motionTumbleLeft()}, will block until the
+robot motion has completed. The non-blocking version, \texttt{motionTumbleLeftNB()},
+will return immediately, and the motion will be performed asynchronously.\\
+\end{quote}
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

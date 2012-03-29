@@ -10,7 +10,6 @@
 2nd 1|    2    |   3    | 4    
      |---------|--------|     
 */
-
 #include <mobot.h>
 CMobot robot1;
 CMobot robot2;
