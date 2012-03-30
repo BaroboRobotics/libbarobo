@@ -413,15 +413,15 @@ int Mobot_disconnect(br_comms_t* comms)
 #ifndef _WIN32
   if(close(comms->socket)) {
     /* Error closing file descriptor */
-  } else {
-    if(g_numConnected > 0) {
-      g_numConnected--;
-    }
-  }
+    return -1;
+  } 
 #else
   closesocket(comms->socket);
   //CloseHandle((LPVOID)comms->socket);
 #endif
+  if(g_numConnected > 0) {
+    g_numConnected--;
+  }
   comms->connected = 0;
   return 0;
 }
