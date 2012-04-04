@@ -2206,6 +2206,17 @@ simultaneously. The blue LED should flash quickly 3 times. The Mobot has now
 been recalibrated.
 \end{itemize}
 
+\subsection{Testing the Robot's Zero Position}
+Button ``B'' may be used to toggle the robot between holding its zero position 
+or relaxing all of its joints. Press and hold the ``B'' button until the blue
+LED flashes. It should take no longer than 1 second. If the Mobot is currently relaxed,
+the Mobot will move to zero position and hold its position. If the ``B'' button is pressed again, the 
+Mobot will relax its motors, allowing the user to reposition the Mobot.
+
+This function is typically used to check the Mobot's zero position to make sure
+it is properly calibrated. The button may also be used to relax a Mobot that
+is currently holding any of its joints at a position.
+
 \newpage
 \appendix
 \section{\label{sec:datatypes}Data Types}
