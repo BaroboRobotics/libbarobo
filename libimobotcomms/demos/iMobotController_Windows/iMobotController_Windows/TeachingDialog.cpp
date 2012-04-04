@@ -96,7 +96,11 @@ void CTeachingDialog::OnBnClickedButtonTeachingMovedown()
 
 void CTeachingDialog::OnBnClickedButtonTeachingDisconnect()
 {
-	// TODO: Add your control notification handler code here
+	int connectIndex;
+	connectIndex = listctrl_connectedBots.GetSelectionMark();
+	if(connectIndex == -1) { return; }
+	_robotManager.disconnect(connectIndex);
+	refresh();
 }
 
 void CTeachingDialog::OnBnClickedButtonTeachingRecord()

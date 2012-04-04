@@ -57,6 +57,11 @@ int RobotManager::disconnect(int connectIndex)
     }
   }
   if(foundEntry == 0) { return -1; }
+  /* Need to shift addresses up */
+  int j;
+  for(j = connectIndex+1; j < numConnected(); j++) {
+	_connectedAddresses[j-1] = _connectedAddresses[j];
+  }
   _connected[i] = false;
   _mobots[connectIndex]->disconnect();
   return 0; 
