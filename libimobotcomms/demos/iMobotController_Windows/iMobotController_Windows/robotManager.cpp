@@ -26,23 +26,22 @@ void RobotManager::setConnected(int index, bool connected)
   _connected[index] = connected;
 }
 
-int RobotManager::connect(int index)
+int RobotManager::connect(int availableIndex)
 {
   int i;
-  int err;
+  int index;
+  int err = 0;
   CMobot *mobot = new CMobot;
+#if 0 /* DEBUG */
   if(err = mobot->connectWithAddress( getEntry(index), 1 )) {
     return err;
   }
-  _connected[index] = true;
-  /* Insert the newly connected robot to the top of the list. First, we must
-   * move all of the existing entries down */
-  for(i = numConnected() - 1; i > 0; i--) {
-    _mobots[i+1] = _mobots[i];
-    _connectedAddresses[i+1] = _connectedAddresses[i];
-  }
-  _mobots[0] = mobot;
-  _connectedAddresses[0] = _addresses[index];
+#endif
+  /* Insert the newly connected robot to the bottom of the list. */
+  _mobots[numConnected()] = mobot;
+  _connectedAddresses[numConnected()] = 
+	  _addresses[availableIndexToIndex(availableIndex)];
+  _connected[availableIndexToIndex(availableIndex)] = true;
   return err;
 }
 
@@ -99,4 +98,32 @@ int RobotManager::numConnected()
     }
   }
   return num;
+}
+
+const char* RobotManager::getConnected(int connectIndex) {
+	if(connectIndex < 0 || connectIndex >= numConnected()) {
+		return NULL;
+	}
+	return _connectedAddresses[connectIndex];
+}
+
+int RobotManager::availableIndexToIndex(int availableIndex)
+{
+	int index = 0;
+	int i;
+	if(availableIndex < 0 || availableIndex > numAvailable()) {
+		return -1;
+	}
+	for(index = 0, i = 0; i <= availableIndex; index++) {
+		if(_connected[index] == false) {
+			i++;
+		}
+	}
+	index--;
+	return index;
+}
+
+int RobotManager::numAvailable()
+{
+	return numEntries() - numConnected();
 }

@@ -36,4 +36,5 @@ public:
 	afx_msg void OnBnClickedButtonTeachingAdddelay();
 	afx_msg void OnBnClickedButtonTeachingDeletepos();
 	afx_msg void OnBnClickedButtonTeachingSave();
+	void refresh();
 };

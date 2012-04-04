@@ -13,11 +13,14 @@ class RobotManager : public ConfigFile
     ~RobotManager();
     bool isConnected(int index);
     void setConnected(int index, bool connected);
-    int connect(int index);
+    int connect(int availableIndex);
     int disconnect(int connectIndex);
     int moveUp(int connectIndex);
     int moveDown(int connectIndex);
     int numConnected();
+	const char* getConnected(int connectIndex);
+	int availableIndexToIndex(int index);
+	int numAvailable();
   private:
     bool _connected[MAX_CONNECTED]; /* Index by ConfigFile */
     CMobot *_mobots[MAX_CONNECTED];

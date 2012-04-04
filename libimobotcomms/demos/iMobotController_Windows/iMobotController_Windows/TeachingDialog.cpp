@@ -24,8 +24,7 @@ CTeachingDialog::CTeachingDialog(CWnd* pParent /*=NULL*/)
   }
   strcat(path, "\\Barobo.config");
   _robotManager.read(path);
-  /* Set up the list ctrls */
-  listctrl_availableBots
+
 }
 
 CTeachingDialog::~CTeachingDialog()
@@ -40,6 +39,21 @@ void CTeachingDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LIST_RECORDEDMOTIONS, listctrl_recordedMotions);
 	DDX_Control(pDX, IDC_EDIT_TEACHING_DELAY, edit_teachingDelay);
 	DDX_Control(pDX, IDC_CHECK_TEACHING_LOOPED, button_teachingLoopCheck);
+	/* Set up the list ctrls */
+	listctrl_availableBots.InsertColumn(
+		0, 
+		TEXT("Mobot Address"),
+		LVCFMT_LEFT,
+		120,
+		-1);
+	listctrl_connectedBots.InsertColumn(
+		0,
+		TEXT("Mobot Address"),
+		LVCFMT_LEFT,
+		120,
+		-1);
+	//listctrl_availableBots.InsertItem(0, TEXT("Test Item"));
+	refresh();
 }
 
 
@@ -60,6 +74,14 @@ END_MESSAGE_MAP()
 void CTeachingDialog::OnBnClickedButtonTeachingConnect()
 {
 	// TODO: Add your control notification handler code here
+	/* Get the selected item */
+	int index;
+	index = listctrl_availableBots.GetSelectionMark();
+	if(index == -1) {
+		return;
+	}
+	_robotManager.connect(index);
+	refresh();
 }
 
 void CTeachingDialog::OnBnClickedButtonTeachingMoveup()
@@ -95,4 +117,29 @@ void CTeachingDialog::OnBnClickedButtonTeachingDeletepos()
 void CTeachingDialog::OnBnClickedButtonTeachingSave()
 {
 	// TODO: Add your control notification handler code here
+}
+
+void CTeachingDialog::refresh()
+{
+	int i;
+	USES_CONVERSION;
+	/* Clear the list controls */
+	listctrl_availableBots.DeleteAllItems();
+	/* Populate available bots listctrl */
+	for(i = 0; i < _robotManager.numEntries(); i++) {
+		if(!_robotManager.isConnected(i)) {
+			listctrl_availableBots.InsertItem(
+				listctrl_availableBots.GetItemCount(),
+				A2T(_robotManager.getEntry(i))
+				);
+		}
+	}
+	/* Populate connected bots listctrl */
+	listctrl_connectedBots.DeleteAllItems();
+	for(i = 0; i < _robotManager.numConnected(); i++) {
+		listctrl_connectedBots.InsertItem(
+			i,
+			A2T(_robotManager.getConnected(i))
+			);
+	}
 }
