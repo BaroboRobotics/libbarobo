@@ -42,6 +42,12 @@ void* nullThread(void* arg)
   return NULL;
 }
 
+/* Return Error Codes:
+   -1 : General Error
+   -2 : Lockfile Exists
+   -3 : Address Format Incorrect
+   -4 : Not enough entries in the configuration file
+   */
 int finishConnect(br_comms_t* comms);
 int Mobot_connect(br_comms_t* comms)
 {
@@ -70,7 +76,7 @@ int Mobot_connect(br_comms_t* comms)
   /* Read the correct line */
   for(i = 0; i < g_numConnected+1; i++) {
     if(fgets(path, MAX_PATH, fp) == NULL) {
-      return -1;
+      return -4;
     }
   }
   fclose(fp);
@@ -82,6 +88,10 @@ int Mobot_connect(br_comms_t* comms)
   {
     path[strlen(path)-1] = '\0';
   }
+  /* Make sure the format is correct */
+  if(strlen(path) != 17) {
+    return -3;
+  }
   /* Pass it on to connectWithAddress() */
   if(i = Mobot_connectWithAddress(comms, path, 1)) {
     return i;
@@ -89,7 +99,7 @@ int Mobot_connect(br_comms_t* comms)
     g_numConnected++;
     return i;
   }
-#else
+#else /* if not Windows */
   /* Try to open the barobo configuration file. */
 #define MAX_PATH 512
   FILE *fp;
