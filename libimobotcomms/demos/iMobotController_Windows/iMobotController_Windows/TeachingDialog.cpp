@@ -86,12 +86,22 @@ void CTeachingDialog::OnBnClickedButtonTeachingConnect()
 
 void CTeachingDialog::OnBnClickedButtonTeachingMoveup()
 {
-	// TODO: Add your control notification handler code here
+	int connectIndex = listctrl_connectedBots.GetSelectionMark();
+	if(connectIndex == -1) {return;}
+	if(connectIndex == 0) {return;}
+	_robotManager.moveUp(connectIndex);
+	refresh();
+	listctrl_connectedBots.SetSelectionMark(connectIndex-1);
 }
 
 void CTeachingDialog::OnBnClickedButtonTeachingMovedown()
 {
-	// TODO: Add your control notification handler code here
+	int connectIndex = listctrl_connectedBots.GetSelectionMark();
+	if(connectIndex == -1) {return;}
+	if(connectIndex >= (_robotManager.numConnected()-1)) {return;}
+	_robotManager.moveDown(connectIndex);
+	refresh();
+	listctrl_connectedBots.SetSelectionMark(connectIndex+1);
 }
 
 void CTeachingDialog::OnBnClickedButtonTeachingDisconnect()
