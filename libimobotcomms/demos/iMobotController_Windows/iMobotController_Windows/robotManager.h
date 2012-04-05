@@ -3,6 +3,7 @@
 
 #include "configFile.h"
 #include <mobot.h>
+#include "RecordMobot.h"
 
 #define MAX_CONNECTED 100
 
@@ -21,9 +22,10 @@ class RobotManager : public ConfigFile
 	const char* getConnected(int connectIndex);
 	int availableIndexToIndex(int index);
 	int numAvailable();
+	CRecordMobot* getMobot(int connectIndex);
   private:
     bool _connected[MAX_CONNECTED]; /* Index by ConfigFile */
-    CMobot *_mobots[MAX_CONNECTED];
+    CRecordMobot *_mobots[MAX_CONNECTED];
     /* _connectAddresses is an array of pointers to 
        ConfigFile::_addresses */
     char *_connectedAddresses[MAX_CONNECTED];

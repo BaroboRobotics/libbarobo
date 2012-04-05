@@ -31,7 +31,7 @@ int RobotManager::connect(int availableIndex)
   int i;
   int index;
   int err = 0;
-  CMobot *mobot = new CMobot;
+  CRecordMobot *mobot = new CRecordMobot;
 #if 0 /* DEBUG */
   if(err = mobot->connectWithAddress( getEntry(index), 1 )) {
     return err;
@@ -57,18 +57,19 @@ int RobotManager::disconnect(int connectIndex)
     }
   }
   if(foundEntry == 0) { return -1; }
-  /* Need to shift addresses up */
+  _mobots[connectIndex]->disconnect();
+  /* Need to shift addresses and mobots up */
   int j;
   for(j = connectIndex+1; j < numConnected(); j++) {
 	_connectedAddresses[j-1] = _connectedAddresses[j];
+	_mobots[j-1] = _mobots[j];
   }
   _connected[i] = false;
-  _mobots[connectIndex]->disconnect();
   return 0; 
 }
 
 int RobotManager::moveUp(int connectIndex) {
-  CMobot* tempMobot;
+  CRecordMobot* tempMobot;
   char* tempAddr;
   if(connectIndex < 1 || connectIndex >= numConnected()) return -1;
   /* Swap the robot with the one prior */
@@ -82,7 +83,7 @@ int RobotManager::moveUp(int connectIndex) {
 }
 
 int RobotManager::moveDown(int connectIndex) {
-  CMobot* tempMobot;
+  CRecordMobot* tempMobot;
   char* tempAddr;
   if(connectIndex < 0 || connectIndex >= (numConnected()-1)) return -1;
   tempMobot = _mobots[connectIndex + 1];
@@ -131,4 +132,12 @@ int RobotManager::availableIndexToIndex(int availableIndex)
 int RobotManager::numAvailable()
 {
 	return numEntries() - numConnected();
+}
+
+CRecordMobot* RobotManager::getMobot(int connectIndex)
+{
+	if(connectIndex < 0 || connectIndex >= numConnected()) {
+		return NULL;
+	}
+	return _mobots[connectIndex];
 }

@@ -115,7 +115,10 @@ void CTeachingDialog::OnBnClickedButtonTeachingDisconnect()
 
 void CTeachingDialog::OnBnClickedButtonTeachingRecord()
 {
-	// TODO: Add your control notification handler code here
+	int i;
+	for(i = 0; i < _robotManager.numConnected(); i++) {
+		_robotManager.getMobot(i)->record();
+	}
 }
 
 void CTeachingDialog::OnBnClickedButtonTeachingAdddelay()

@@ -387,13 +387,10 @@
 				>
 			</File>
 			<File
-<<<<<<< Updated upstream
-=======
 				RelativePath=".\RecordMobot.cpp"
 				>
 			</File>
 			<File
->>>>>>> Stashed changes
 				RelativePath=".\robotManager.cpp"
 				>
 			</File>
@@ -559,13 +556,10 @@
 			</File>
 			<File
 				RelativePath=".\res\icon4.ico"
-<<<<<<< Updated upstream
-=======
 				>
 			</File>
 			<File
 				RelativePath=".\res\iMobot_diagram.bmp"
->>>>>>> Stashed changes
 				>
 			</File>
 			<File
@@ -573,15 +567,7 @@
 				>
 			</File>
 			<File
-<<<<<<< Updated upstream
-				RelativePath=".\res\iMobot_diagram.bmp"
-				>
-			</File>
-			<File
-				RelativePath=".\res\iMobot_diagram.png"
-=======
 				RelativePath="..\..\..\..\libimobot\Demos\GtkGui\interface\imobot_diagram.png"
->>>>>>> Stashed changes
 				>
 			</File>
 			<File

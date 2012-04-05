@@ -16,5 +16,5 @@ CRecordMobot::~CRecordMobot(void)
 int CRecordMobot::record(void)
 {
 	/* Get the robots positions */
-
+	return 0;
 }
