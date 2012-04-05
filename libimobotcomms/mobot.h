@@ -107,6 +107,7 @@ class CMobot {
     int isConnected();
     int isMoving();
     int getJointAngle(robotJointId_t id, double &angle);
+    int getJointAngles(double &angle1, double &angle2, double &angle3, double &angle4);
     int getJointMaxSpeed(robotJointId_t id, double &maxSpeed);
     int getJointSafetyAngle(double &angle);
     int getJointSafetyAngleTimeout(double &seconds);

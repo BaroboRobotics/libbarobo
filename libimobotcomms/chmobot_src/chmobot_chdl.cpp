@@ -110,6 +110,27 @@ EXPORTCH int getJointAngle_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int getJointAngles_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double* angle1;
+    double* angle2;
+    double* angle3;
+    double* angle4;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    angle1 = Ch_VaArg(interp, ap, double *);
+    angle2 = Ch_VaArg(interp, ap, double *);
+    angle3 = Ch_VaArg(interp, ap, double *);
+    angle4 = Ch_VaArg(interp, ap, double *);
+    retval = mobot->getJointAngles(*angle1, *angle2, *angle3, *angle4);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int getJointMaxSpeed_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

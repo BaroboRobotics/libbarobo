@@ -1985,6 +1985,22 @@ int CMobot::getJointAngle(robotJointId_t id, double &angle)
   return err;
 }
 
+int CMobot::getJointAngles(
+    double &angle1,
+    double &angle2,
+    double &angle3,
+    double &angle4)
+{
+  double time;
+  return Mobot_getJointAnglesTime(
+      &_comms, 
+      &time,
+      &angle1,
+      &angle2,
+      &angle3,
+      &angle4);
+}
+
 int CMobot::getJointDirection(robotJointId_t id, robotJointState_t &dir)
 {
   return Mobot_getJointDirection(&_comms, id, &dir);

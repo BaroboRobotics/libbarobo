@@ -91,6 +91,18 @@ int CMobot::getJointAngle(int id, double & angle) {
     dlrunfun(fptr, &retval, NULL, this, id, &angle);
     return retval;
 }
+int CMobot::getJointAngles(double &angle1, double &angle2, double &angle3, double &angle4) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "getJointAngles_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, &angle1, &angle2, &angle3, &angle4);
+    return retval;
+}
 int CMobot::getJointMaxSpeed(int id, double & speed) {
     void *fptr;
     int retval;
