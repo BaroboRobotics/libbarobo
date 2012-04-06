@@ -10,10 +10,10 @@ enum motionType_e
 struct motion_s
 {
 	enum motionType_e motionType;
-	union data {
+	union data_u {
 		double sleepDuration;
 		double pos[4];
-	};
+	} data;
 };
 
 class CRecordMobot :
@@ -23,10 +23,9 @@ public:
 	CRecordMobot(void);
 	~CRecordMobot(void);
 	int record();
-	int playback();
-	int stopPlayback();
+	int play(int index);
 private:
 	int _numMotions;
-	struct motion_s *_motions;
+	struct motion_s **_motions;
 	int _numMotionsAllocated;
 };

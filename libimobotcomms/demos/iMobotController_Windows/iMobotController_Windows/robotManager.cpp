@@ -32,11 +32,9 @@ int RobotManager::connect(int availableIndex)
   int index;
   int err = 0;
   CRecordMobot *mobot = new CRecordMobot;
-#if 0 /* DEBUG */
   if(err = mobot->connectWithAddress( getEntry(index), 1 )) {
     return err;
   }
-#endif
   /* Insert the newly connected robot to the bottom of the list. */
   _mobots[numConnected()] = mobot;
   _connectedAddresses[numConnected()] = 

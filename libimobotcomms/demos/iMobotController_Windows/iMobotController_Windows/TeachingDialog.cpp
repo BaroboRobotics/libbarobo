@@ -66,6 +66,7 @@ BEGIN_MESSAGE_MAP(CTeachingDialog, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_TEACHING_ADDDELAY, &CTeachingDialog::OnBnClickedButtonTeachingAdddelay)
 	ON_BN_CLICKED(IDC_BUTTON_TEACHING_DELETEPOS, &CTeachingDialog::OnBnClickedButtonTeachingDeletepos)
 	ON_BN_CLICKED(IDC_BUTTON_TEACHING_SAVE, &CTeachingDialog::OnBnClickedButtonTeachingSave)
+	ON_BN_CLICKED(IDC_BUTTON_play, &CTeachingDialog::OnBnClickedButtonplay)
 END_MESSAGE_MAP()
 
 
@@ -158,5 +159,18 @@ void CTeachingDialog::refresh()
 			i,
 			A2T(_robotManager.getConnected(i))
 			);
+	}
+}
+void CTeachingDialog::OnBnClickedButtonplay()
+{
+	int i, j, done;
+	done = 0;
+	for(i = 0; !done ; i++) {
+		for(j = 0; j < _robotManager.numConnected(); j++) {
+			if(_robotManager.getMobot(j)->play(j)) {
+				done = 1;
+				break;
+			}
+		}
 	}
 }

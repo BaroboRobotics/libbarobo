@@ -37,4 +37,5 @@ public:
 	afx_msg void OnBnClickedButtonTeachingDeletepos();
 	afx_msg void OnBnClickedButtonTeachingSave();
 	void refresh();
+	afx_msg void OnBnClickedButtonplay();
 };
