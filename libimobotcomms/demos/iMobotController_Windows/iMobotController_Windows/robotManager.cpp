@@ -32,6 +32,7 @@ int RobotManager::connect(int availableIndex)
   int index;
   int err = 0;
   CRecordMobot *mobot = new CRecordMobot;
+  index = availableIndexToIndex(availableIndex);
   if(err = mobot->connectWithAddress( getEntry(index), 1 )) {
     return err;
   }

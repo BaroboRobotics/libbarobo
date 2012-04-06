@@ -167,10 +167,13 @@ void CTeachingDialog::OnBnClickedButtonplay()
 	done = 0;
 	for(i = 0; !done ; i++) {
 		for(j = 0; j < _robotManager.numConnected(); j++) {
-			if(_robotManager.getMobot(j)->play(j)) {
+			if(_robotManager.getMobot(j)->play(i)) {
 				done = 1;
 				break;
 			}
+		}
+		for(j = 0; j < _robotManager.numConnected(); j++) {
+			_robotManager.getMobot(j)->moveWait();
 		}
 	}
 }

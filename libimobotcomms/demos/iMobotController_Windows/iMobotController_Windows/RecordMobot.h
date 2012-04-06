@@ -1,5 +1,5 @@
 #pragma once
-#include "c:\documents and settings\dko\projects\barobo\imobot_gumstix_api\libimobotcomms\mobot.h"
+#include <mobot.h>
 
 enum motionType_e
 {
