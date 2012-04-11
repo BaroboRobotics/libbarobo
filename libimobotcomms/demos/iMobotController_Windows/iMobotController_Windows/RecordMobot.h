@@ -20,12 +20,16 @@ class CRecordMobot :
 	public CMobot
 {
 public:
-	CRecordMobot(void);
+	CRecordMobot(TCHAR* name);
 	~CRecordMobot(void);
 	int record();
+	int addDelay(double seconds);
 	int play(int index);
+	int getMotionType(int index);
+	int getMotionString(int index, TCHAR* buf);
 private:
 	int _numMotions;
 	struct motion_s **_motions;
 	int _numMotionsAllocated;
+	TCHAR _name[80];
 };

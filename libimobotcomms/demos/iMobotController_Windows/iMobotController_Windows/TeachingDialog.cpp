@@ -125,6 +125,16 @@ void CTeachingDialog::OnBnClickedButtonTeachingRecord()
 void CTeachingDialog::OnBnClickedButtonTeachingAdddelay()
 {
 	// TODO: Add your control notification handler code here
+	TCHAR buf[80];
+	edit_teachingDelay.GetLine(0, buf, 80);
+	if(_tcslen(buf) <= 0) { return; }
+	double delay;
+	_stscanf(buf, TEXT("%lf"), &delay);
+	if(delay <= 0) {return;}
+	int i;
+	for(i = 0; i < _robotManager.numConnected(); i++) {
+		_robotManager.getMobot(i)->addDelay(delay);
+	}
 }
 
 void CTeachingDialog::OnBnClickedButtonTeachingDeletepos()
@@ -161,19 +171,33 @@ void CTeachingDialog::refresh()
 			);
 	}
 }
+
 void CTeachingDialog::OnBnClickedButtonplay()
 {
+	THREAD_T thread;
+	THREAD_CREATE(&thread, playThread, &_robotManager);
+}
+
+void* playThread(void* arg)
+{
+	RobotManager *robotManager;
+	robotManager = (RobotManager*)arg;
 	int i, j, done;
 	done = 0;
 	for(i = 0; !done ; i++) {
-		for(j = 0; j < _robotManager.numConnected(); j++) {
-			if(_robotManager.getMobot(j)->play(i)) {
+		for(j = 0; j < robotManager->numConnected(); j++) {
+			if(robotManager->getMobot(j)->getMotionType(i) == MOTION_SLEEP) {
+				robotManager->getMobot(j)->play(i);
+				break;
+			}
+			if(robotManager->getMobot(j)->play(i)) {
 				done = 1;
 				break;
 			}
 		}
-		for(j = 0; j < _robotManager.numConnected(); j++) {
-			_robotManager.getMobot(j)->moveWait();
+		for(j = 0; j < robotManager->numConnected(); j++) {
+			robotManager->getMobot(j)->moveWait();
 		}
 	}
+	return NULL;
 }

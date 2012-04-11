@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "robotManager.h"
 
 RobotManager::RobotManager()
@@ -31,7 +32,9 @@ int RobotManager::connect(int availableIndex)
   int i;
   int index;
   int err = 0;
-  CRecordMobot *mobot = new CRecordMobot;
+  TCHAR name[80];
+  swprintf(name, TEXT("robot%d"), numConnected()+1);
+  CRecordMobot *mobot = new CRecordMobot(name);
   index = availableIndexToIndex(availableIndex);
   if(err = mobot->connectWithAddress( getEntry(index), 1 )) {
     return err;

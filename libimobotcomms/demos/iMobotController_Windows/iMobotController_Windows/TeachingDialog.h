@@ -3,6 +3,17 @@
 #include "afxcmn.h"
 #include "afxwin.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void* playThread(void *arg);
+
+#ifdef __cplusplus
+}
+#endif
+
+
 // CTeachingDialog dialog
 
 class CTeachingDialog : public CDialog

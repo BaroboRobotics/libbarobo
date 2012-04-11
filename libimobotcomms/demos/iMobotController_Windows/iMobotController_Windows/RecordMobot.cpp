@@ -1,11 +1,12 @@
 #include "StdAfx.h"
 #include "RecordMobot.h"
 
-CRecordMobot::CRecordMobot(void)
+CRecordMobot::CRecordMobot(TCHAR *name)
 {
 	_numMotions = 0;
 	_motions = (struct motion_s**)malloc(sizeof(struct motion_s*) * 100);
 	_numMotionsAllocated = 100;
+	_tcscpy(_name, name);
 }
 
 CRecordMobot::~CRecordMobot(void)
@@ -30,6 +31,17 @@ int CRecordMobot::record(void)
 	return 0;
 }
 
+int CRecordMobot::addDelay(double seconds)
+{
+	struct motion_s* motion;
+	motion = (struct motion_s*)malloc(sizeof(struct motion_s));
+	motion->motionType = MOTION_SLEEP;
+	motion->data.sleepDuration = seconds;
+	_motions[_numMotions] = motion;
+	_numMotions++;
+	return 0;
+}
+
 int CRecordMobot::play(int index)
 {
 	if (index < 0 || index >= _numMotions) {
@@ -41,4 +53,23 @@ int CRecordMobot::play(int index)
 		_motions[index]->data.pos[2],
 		_motions[index]->data.pos[3]
 	);
+}
+
+int CRecordMobot::getMotionType(int index)
+{
+	if (index < 0 || index >= _numMotions) {
+		return -1;
+	}
+	return _motions[index]->motionType;
+}
+
+int CRecordMobot::getMotionString(int index, TCHAR* buf)
+{
+	swprintf(buf, TEXT("%s.moveToNB(%lf, %lf, %lf, %lf);\n"),
+		_name,
+		_motions[index]->data.pos[0],
+		_motions[index]->data.pos[1],
+		_motions[index]->data.pos[2],
+		_motions[index]->data.pos[3] );
+	return 0;
 }
