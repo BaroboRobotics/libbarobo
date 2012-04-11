@@ -79,38 +79,38 @@ void moveForward(int n)
     {
         // step A
         robot1.moveToNB(0, -80, -30, turnAngle);
-        robot2.moveToNB(40, -95, 0, 0);
+        robot2.moveToNB(40, -90, 0, 0);
         robot3.moveToNB(-40, -90, 0, 0);
         robot1.moveWait();
         robot2.moveWait();
         robot3.moveWait();
         // step B
         robot1.moveToNB(0, -80, -30, turnAngle);
-        robot2.moveToNB(-20, -95, 0, 0);
+        robot2.moveToNB(-20, -90, 0, 0);
         robot3.moveToNB(20, -90, 0, 0);
         robot1.moveWait();
         robot2.moveWait();
         robot3.moveWait();
         // step C
         robot1.moveToNB(0, -60, 30, turnAngle);
-        robot2.moveToNB(0, -95, 0, 0);
+        robot2.moveToNB(0, -90, 0, 0);
         robot3.moveToNB(0, -90, 0, 0);
         robot1.moveWait();
         robot2.moveWait();
         robot3.moveWait();
         // step D
-        robot2.moveToNB(-20, -95, 0, 0);
+        robot2.moveToNB(-20, -90, 0, 0);
         robot3.moveToNB(20, -90, 0, 0);
         robot2.moveWait();
         robot3.moveWait();
         robot1.moveTo(0, -90, 80, turnAngle);
-        robot2.moveToNB(90, -95, 0, 0);
+        robot2.moveToNB(90, -90, 0, 0);
         robot3.moveToNB(-90, -90, 0, 0);
         robot2.moveWait();
         robot3.moveWait();
         robot1.moveTo(0, -90, -90, turnAngle);
         robot1.moveToNB(0, -90, -50, turnAngle);
-        robot2.moveToNB(50, -95, 0, 0);
+        robot2.moveToNB(50, -90, 0, 0);
         robot3.moveToNB(-50, -90, 0, 0);
         robot1.moveWait();
         robot2.moveWait();
@@ -122,7 +122,7 @@ void makeTurn(int degree)
 {
     // go to the home position
     robot1.moveToNB(0, -80, -40, turnAngle);
-    robot2.moveToNB(40, -95, 0, 0);
+    robot2.moveToNB(40, -90, 0, 0);
     robot3.moveToNB(-40, -90, 0, 0);
     robot1.moveWait();
     robot2.moveWait();
@@ -137,7 +137,7 @@ void standUpSideDown(int n)
 {
     int i;
     robot1.moveToNB(0, -90, 0, turnAngle);
-    robot2.moveToNB(-90, -95, 0, 0);
+    robot2.moveToNB(-90, -90, 0, 0);
     robot3.moveToNB(90, -90, 0, 0);
     robot1.moveWait();
     robot2.moveWait();
@@ -145,14 +145,14 @@ void standUpSideDown(int n)
 
     robot1.moveTo(0, 0, 0, turnAngle);
 
-    for (i = 0; i < n; i++)
+    for (i = 0; i < n; i = i+1)
     {
         robot2.moveToNB(-90, 0, 90, 0);
         robot3.moveToNB(90, 0, 90, 0);
         robot2.moveWait();
         robot3.moveWait();
 
-        robot2.moveToNB(-90, -95, 0, 0);
+        robot2.moveToNB(-90, -90, 0, 0);
         robot3.moveToNB(90, -90, 0, 0);
         robot2.moveWait();
         robot3.moveWait();
@@ -160,7 +160,7 @@ void standUpSideDown(int n)
     
     robot1.moveTo(0, -90, 0, turnAngle);
     robot1.moveTo(0, -45, 45, turnAngle);
-    robot2.moveToNB(0, -95, 0, 0);
+    robot2.moveToNB(0, -90, 0, 0);
     robot3.moveToNB(0, -90, 0, 0);
     robot2.moveWait();
     robot3.moveWait();
@@ -168,35 +168,67 @@ void standUpSideDown(int n)
 
 void show(void)
 {
-
+    int i;
     robot1.setJointSpeedRatios(0.15, 0.15, 0.15, 0.3);
     robot2.setJointSpeedRatios(0.15, 0.3, 0.3, 0.15);
     robot3.setJointSpeedRatios(0.15, 0.3, 0.3, 0.15);
 
     robot1.moveToNB(0, -90, -20, turnAngle);
-    robot2.moveToNB(20, -95, 0, 0);
+    robot2.moveToNB(20, -90, 0, 0);
     robot3.moveToNB(-20, -90, 0, 0);
     robot1.moveWait();
     robot2.moveWait();
     robot3.moveWait();
 
-    robot2.moveToNB(30, 0, 90, 0);
-    robot3.moveToNB(-30, 0, 90, 0);
+    robot1.moveToNB(0, -90, -30, turnAngle);
+    robot2.moveToNB(20, 0, 90, 0);
+    robot3.moveToNB(-20, 0, 90, 0);
+    robot1.moveWait();
     robot2.moveWait();
     robot3.moveWait();
 
-    robot2.moveJointNB(ROBOT_JOINT1, -180);
-    robot3.moveJointNB(ROBOT_JOINT1, 180);
+    robot1.moveToNB(0, -90, -30, turnAngle);
+    robot2.moveJointNB(ROBOT_JOINT1, -90);
+    robot3.moveJointNB(ROBOT_JOINT1, 90);
+    robot1.moveWait();
+    robot2.moveWait();
+    robot3.moveWait();
+    
+    robot1.moveToNB(0, -90, -30, turnAngle);
+    robot2.moveToNB(-70, -90, 0, 0);
+    robot3.moveToNB(70, -90, 0, 0);
+    robot1.moveWait();
+    robot2.moveWait();
+    robot3.moveWait();
+    
+    for(i = 0; i<1; i = i+1){
+    robot2.moveTo(-70, -90, 60, 0);
+    robot3.moveTo(70, -90, 60, 0);
+    robot2.moveTo(-70, -90, 0, 0);
+    robot3.moveTo(70, -90, 0, 0);
+    }
+    
+    robot1.moveToNB(0, -90, -30, turnAngle);
+    robot2.moveToNB(-70, 0, 90, 0);
+    robot3.moveToNB(70, 0, 90, 0);
+    robot1.moveWait();
+    robot2.moveWait();
+    robot3.moveWait();
+    
+    robot1.moveToNB(0, -90, -30, turnAngle);
+    robot2.moveJointNB(ROBOT_JOINT1, -90);
+    robot3.moveJointNB(ROBOT_JOINT1, 90);
+    robot1.moveWait();
     robot2.moveWait();
     robot3.moveWait();
 
-    robot2.moveToNB(-150, -95, 0, 0);
-    robot3.moveToNB(150, -90, 0, 0);
+    robot2.moveToNB(-160, -90, 0, 0);
+    robot3.moveToNB(160, -90, 0, 0);
     robot2.moveWait();
     robot3.moveWait();
 
-    robot2.moveToNB(-150, 0, 90, 0);
-    robot3.moveToNB(150, 0, 90, 0);
+    robot2.moveToNB(-160, 0, 90, 0);
+    robot3.moveToNB(160, 0, 90, 0);
     robot2.moveWait();
     robot3.moveWait();
 
@@ -207,8 +239,8 @@ void show(void)
     robot2.moveWait();
     robot3.moveWait();
 
-    robot2.moveToNB(30, -95, 0, 0);
-    robot3.moveToNB(-30, -90, 0, 0);
+    robot2.moveToNB(20, -90, 0, 0);
+    robot3.moveToNB(-20, -90, 0, 0);
     robot2.moveWait();
     robot3.moveWait();
 }
