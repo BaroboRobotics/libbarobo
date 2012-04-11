@@ -1468,7 +1468,6 @@ EXPORTCH int CMG_setJointSpeedRatios_chdl(void *varg) {
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
-    id = Ch_VaArg(interp, ap, robotJointId_t);
     ratio1 = Ch_VaArg(interp, ap, double);
     ratio2 = Ch_VaArg(interp, ap, double);
     ratio3 = Ch_VaArg(interp, ap, double);
