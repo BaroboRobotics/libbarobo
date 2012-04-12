@@ -73,3 +73,24 @@ int CRecordMobot::getMotionString(int index, TCHAR* buf)
 		_motions[index]->data.pos[3] );
 	return 0;
 }
+
+int CRecordMobot::removeMotion(int index)
+{
+	if(index < 0 || index >= numMotions()) {
+		return -1;
+	}
+	/* Free the motion */
+	free(_motions[index]);
+	/* Shift everything lower than the motion up by one */
+	int i;
+	for(i = index+1; i < _numMotions; i++) {
+		_motions[i-1] = _motions[i];
+	}
+	_numMotions--;
+	return 0;
+}
+
+int CRecordMobot::numMotions()
+{
+	return _numMotions;
+}

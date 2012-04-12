@@ -172,6 +172,32 @@ void CTeachingDialog::refresh()
 	}
 }
 
+void CTeachingDialog::refreshRecordedMotions(int highlightedIndex)
+{
+	/* Pick the first connect robot in the list, go through all the motions.. */
+	if(_robotManager.numConnected() <= 0) {
+		return;
+	}
+	int i;
+	CRecordMobot *mobot;
+	mobot = _robotManager.getMobot(0);
+	for(i = 0; i < mobot->numMotions(); i++) {
+		switch(mobot->getMotionType(i)) {
+			case MOTION_POS:
+				listctrl_recordedMotions.InsertItem(
+					listctrl_recordedMotions.GetItemCount(),
+					TEXT("Pose")
+					);
+				break;
+			case MOTION_SLEEP:
+				listctrl_recordedMotions.InsertItem(
+					listctrl_recordedMotions.GetItemCount(),
+					TEXT("Delay")
+					);
+		}
+	}
+}
+
 void CTeachingDialog::OnBnClickedButtonplay()
 {
 	THREAD_T thread;

@@ -48,5 +48,6 @@ public:
 	afx_msg void OnBnClickedButtonTeachingDeletepos();
 	afx_msg void OnBnClickedButtonTeachingSave();
 	void refresh();
+	void refreshRecordedMotions(int highlightedIndex);
 	afx_msg void OnBnClickedButtonplay();
 };

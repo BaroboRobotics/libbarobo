@@ -27,6 +27,8 @@ public:
 	int play(int index);
 	int getMotionType(int index);
 	int getMotionString(int index, TCHAR* buf);
+	int removeMotion(int index);
+	int numMotions();
 private:
 	int _numMotions;
 	struct motion_s **_motions;
