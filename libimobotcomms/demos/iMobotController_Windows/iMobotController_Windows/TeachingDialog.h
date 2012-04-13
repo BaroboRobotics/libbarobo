@@ -50,4 +50,10 @@ public:
 	void refresh();
 	void refreshRecordedMotions(int highlightedIndex);
 	afx_msg void OnBnClickedButtonplay();
+	RobotManager* getRobotManager();
+	CButton button_play;
+	CButton button_stop;
+	afx_msg void OnBnClickedButtonstop();
+	int haltPlayFlag; /* If this flag is enabled, the current 
+					  "play" operation should be canceled. */
 };

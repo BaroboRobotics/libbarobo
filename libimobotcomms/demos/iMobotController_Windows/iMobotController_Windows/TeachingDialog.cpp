@@ -13,6 +13,7 @@ IMPLEMENT_DYNAMIC(CTeachingDialog, CDialog)
 CTeachingDialog::CTeachingDialog(CWnd* pParent /*=NULL*/)
 	: CDialog(CTeachingDialog::IDD, pParent)
 {
+  haltPlayFlag = 0;
   char path[MAX_PATH];
   /* Read the config file */
   if(SHGetFolderPathA(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, path) != S_OK) 
@@ -52,8 +53,16 @@ void CTeachingDialog::DoDataExchange(CDataExchange* pDX)
 		LVCFMT_LEFT,
 		120,
 		-1);
+	listctrl_recordedMotions.InsertColumn(
+		0,
+		TEXT("Recorded Motions"),
+		LVCFMT_LEFT,
+		120,
+		-1);
 	//listctrl_availableBots.InsertItem(0, TEXT("Test Item"));
 	refresh();
+	DDX_Control(pDX, IDC_BUTTON_play, button_play);
+	DDX_Control(pDX, IDC_BUTTON_stop, button_stop);
 }
 
 
@@ -67,6 +76,7 @@ BEGIN_MESSAGE_MAP(CTeachingDialog, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_TEACHING_DELETEPOS, &CTeachingDialog::OnBnClickedButtonTeachingDeletepos)
 	ON_BN_CLICKED(IDC_BUTTON_TEACHING_SAVE, &CTeachingDialog::OnBnClickedButtonTeachingSave)
 	ON_BN_CLICKED(IDC_BUTTON_play, &CTeachingDialog::OnBnClickedButtonplay)
+	ON_BN_CLICKED(IDC_BUTTON_stop, &CTeachingDialog::OnBnClickedButtonstop)
 END_MESSAGE_MAP()
 
 
@@ -120,6 +130,7 @@ void CTeachingDialog::OnBnClickedButtonTeachingRecord()
 	for(i = 0; i < _robotManager.numConnected(); i++) {
 		_robotManager.getMobot(i)->record();
 	}
+	refreshRecordedMotions(-1);
 }
 
 void CTeachingDialog::OnBnClickedButtonTeachingAdddelay()
@@ -135,6 +146,7 @@ void CTeachingDialog::OnBnClickedButtonTeachingAdddelay()
 	for(i = 0; i < _robotManager.numConnected(); i++) {
 		_robotManager.getMobot(i)->addDelay(delay);
 	}
+	refreshRecordedMotions(-1);
 }
 
 void CTeachingDialog::OnBnClickedButtonTeachingDeletepos()
@@ -178,39 +190,61 @@ void CTeachingDialog::refreshRecordedMotions(int highlightedIndex)
 	if(_robotManager.numConnected() <= 0) {
 		return;
 	}
+	listctrl_recordedMotions.DeleteAllItems();
 	int i;
 	CRecordMobot *mobot;
 	mobot = _robotManager.getMobot(0);
 	for(i = 0; i < mobot->numMotions(); i++) {
 		switch(mobot->getMotionType(i)) {
 			case MOTION_POS:
-				listctrl_recordedMotions.InsertItem(
-					listctrl_recordedMotions.GetItemCount(),
-					TEXT("Pose")
-					);
+				if(i == highlightedIndex) {
+					listctrl_recordedMotions.InsertItem(
+						listctrl_recordedMotions.GetItemCount(),
+						TEXT("Pose <--")
+						);
+				} else {
+					listctrl_recordedMotions.InsertItem(
+						listctrl_recordedMotions.GetItemCount(),
+						TEXT("Pose")
+						);
+				}
 				break;
 			case MOTION_SLEEP:
-				listctrl_recordedMotions.InsertItem(
-					listctrl_recordedMotions.GetItemCount(),
-					TEXT("Delay")
-					);
+				if(i == highlightedIndex) {
+					listctrl_recordedMotions.InsertItem(
+						listctrl_recordedMotions.GetItemCount(),
+						TEXT("Delay <--")
+						);
+				} else {
+					listctrl_recordedMotions.InsertItem(
+						listctrl_recordedMotions.GetItemCount(),
+						TEXT("Delay")
+						);
+				}
 		}
+	}
+	if(highlightedIndex >= 0) {
+		listctrl_recordedMotions.SetHotItem(highlightedIndex);
 	}
 }
 
 void CTeachingDialog::OnBnClickedButtonplay()
 {
 	THREAD_T thread;
-	THREAD_CREATE(&thread, playThread, &_robotManager);
+	button_play.EnableWindow(false);
+	THREAD_CREATE(&thread, playThread, this);
 }
 
 void* playThread(void* arg)
 {
-	RobotManager *robotManager;
-	robotManager = (RobotManager*)arg;
+	CTeachingDialog *teachingDialog;
+	teachingDialog = (CTeachingDialog*)arg;
+	RobotManager* robotManager;
+	robotManager = teachingDialog->getRobotManager();
 	int i, j, done;
 	done = 0;
 	for(i = 0; !done ; i++) {
+		teachingDialog->refreshRecordedMotions(i);
 		for(j = 0; j < robotManager->numConnected(); j++) {
 			if(robotManager->getMobot(j)->getMotionType(i) == MOTION_SLEEP) {
 				robotManager->getMobot(j)->play(i);
@@ -224,6 +258,24 @@ void* playThread(void* arg)
 		for(j = 0; j < robotManager->numConnected(); j++) {
 			robotManager->getMobot(j)->moveWait();
 		}
+		if(teachingDialog->haltPlayFlag) {
+			teachingDialog->haltPlayFlag = 0;
+			break;
+		}
 	}
+	for(j = 0; j < robotManager->numConnected(); j++) {
+		robotManager->getMobot(j)->stop();
+	}
+	teachingDialog->button_play.EnableWindow(true);
+	teachingDialog->refreshRecordedMotions(-1);
 	return NULL;
+}
+
+RobotManager* CTeachingDialog::getRobotManager()
+{
+	return &_robotManager;
+}
+void CTeachingDialog::OnBnClickedButtonstop()
+{
+	haltPlayFlag = 1;
 }

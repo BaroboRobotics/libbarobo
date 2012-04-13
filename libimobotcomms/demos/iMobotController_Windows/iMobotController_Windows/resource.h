@@ -87,6 +87,7 @@
 #define IDC_JOINTPICTURE                1047
 #define IDC_BUTTON3                     1048
 #define IDC_BUTTON_MOVETOZERO           1048
+#define IDC_BUTTON_stop                 1048
 #define IDC_EDIT_setspd1                1049
 #define IDC_EDIT_setspd2                1050
 #define IDC_EDIT_setspd3                1051
@@ -104,6 +105,7 @@
 #define IDC_BUTTON_TEACHING_SAVE        1063
 #define IDC_LIST_CONNECTEDBOTS          1064
 #define IDC_EDIT_TEACHING_DELAY         1065
+#define IDC_BUTTON4                     1066
 #define ID_ROBOT_CONFIGUREROBOTBLUETOOTH 32771
 #define ID_ROBOT_CONNECTTOAROBOT        32772
 #define ID_FILE                         32773
@@ -120,7 +122,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        154
 #define _APS_NEXT_COMMAND_VALUE         32780
-#define _APS_NEXT_CONTROL_VALUE         1066
+#define _APS_NEXT_CONTROL_VALUE         1067
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

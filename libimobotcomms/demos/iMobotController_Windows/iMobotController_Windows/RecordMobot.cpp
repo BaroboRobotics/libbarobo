@@ -47,12 +47,17 @@ int CRecordMobot::play(int index)
 	if (index < 0 || index >= _numMotions) {
 		return -1;
 	}
-	return moveToNB(
-		_motions[index]->data.pos[0],
-		_motions[index]->data.pos[1],
-		_motions[index]->data.pos[2],
-		_motions[index]->data.pos[3]
-	);
+	if(_motions[index]->motionType == MOTION_POS) {
+		return moveToNB(
+			_motions[index]->data.pos[0],
+			_motions[index]->data.pos[1],
+			_motions[index]->data.pos[2],
+			_motions[index]->data.pos[3]
+		);
+	} else if (_motions[index]->motionType == MOTION_SLEEP) {
+		Sleep(_motions[index]->data.sleepDuration * 1000);
+		return 0;
+	}
 }
 
 int CRecordMobot::getMotionType(int index)
