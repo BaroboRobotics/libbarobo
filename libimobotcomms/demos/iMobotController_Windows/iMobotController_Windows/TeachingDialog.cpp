@@ -151,7 +151,15 @@ void CTeachingDialog::OnBnClickedButtonTeachingAdddelay()
 
 void CTeachingDialog::OnBnClickedButtonTeachingDeletepos()
 {
-	// TODO: Add your control notification handler code here
+	/* Get the highlighted line */
+	int index;
+	index = listctrl_recordedMotions.GetSelectionMark();
+	if(index < 0) return;
+	int i;
+	for(i = 0; i < _robotManager.numConnected(); i++) {
+		_robotManager.getMobot(i)->removeMotion(index);
+	}
+	refreshRecordedMotions(-1);
 }
 
 void CTeachingDialog::OnBnClickedButtonTeachingSave()
@@ -251,8 +259,13 @@ void* playThread(void* arg)
 				break;
 			}
 			if(robotManager->getMobot(j)->play(i)) {
-				done = 1;
-				break;
+				if(teachingDialog->button_teachingLoopCheck.GetCheck() == BST_CHECKED) {
+					i = -1;
+					break;
+				}	else {
+					done = 1;
+					break;
+				}
 			}
 		}
 		for(j = 0; j < robotManager->numConnected(); j++) {
