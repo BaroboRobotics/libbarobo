@@ -430,7 +430,9 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonconnect()
 			MessageBox( TEXT("Address format incorrect."), TEXT("Error"), MB_OK | MB_ICONINFORMATION );
 		} else if (i == -4) {
 			MessageBox( TEXT("No configured robots. Add robots in the \"Configure -> Configure Robot Bluetooth\" dialog."), TEXT("Error"), MB_OK | MB_ICONINFORMATION );
-		} else {
+		} else if (i == -5) {
+			MessageBox( TEXT("A bluetooth device could not be found on this computer. You may need to attach\n an external Bluetooth dongle to continue."), TEXT("Error"), MB_OK | MB_ICONINFORMATION );
+    } else {
 		/* Error connecting */
 		LPVOID lpMsgBuf;
 		FormatMessage( 
