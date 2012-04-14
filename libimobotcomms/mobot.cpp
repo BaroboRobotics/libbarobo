@@ -320,8 +320,8 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
 	  fprintf(stderr, "Error Connecting: %s", lpMsgBuf);
 	  if(WSAGetLastError() == 10048) {
 		  fprintf(stderr, "Make sure there are no other programs currently connected to the Mobot.\n");
-	  } else if (WLAGetLastError() == 10047) {
-      fprintf(stderr, "A bluetooth device could not be found on this computer. You may need to attach\n an external Bluetooth dongle to continue.\n");
+	  } else if (WSAGetLastError() == 10047 || WSAGetLastError() == 10050) {
+      fprintf(stderr, "A bluetooth device could not be found on this computer. You may need to attach\nan external Bluetooth dongle to continue.\n");
       err = -5;
     }
 	  // Free the buffer.
