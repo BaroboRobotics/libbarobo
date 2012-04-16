@@ -77,6 +77,9 @@ BEGIN_MESSAGE_MAP(CTeachingDialog, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_TEACHING_SAVE, &CTeachingDialog::OnBnClickedButtonTeachingSave)
 	ON_BN_CLICKED(IDC_BUTTON_play, &CTeachingDialog::OnBnClickedButtonplay)
 	ON_BN_CLICKED(IDC_BUTTON_stop, &CTeachingDialog::OnBnClickedButtonstop)
+	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_RECORDEDMOTIONS, &CTeachingDialog::OnLvnItemchangedListRecordedmotions)
+	ON_NOTIFY(LVN_ITEMACTIVATE, IDC_LIST_RECORDEDMOTIONS, &CTeachingDialog::OnLvnItemActivateListRecordedmotions)
+	ON_NOTIFY(LVN_ENDLABELEDIT, IDC_LIST_RECORDEDMOTIONS, &CTeachingDialog::OnLvnEndlabeleditListRecordedmotions)
 END_MESSAGE_MAP()
 
 
@@ -195,6 +198,7 @@ void CTeachingDialog::refresh()
 void CTeachingDialog::refreshRecordedMotions(int highlightedIndex)
 {
 	/* Pick the first connect robot in the list, go through all the motions.. */
+	TCHAR buf[200];
 	if(_robotManager.numConnected() <= 0) {
 		return;
 	}
@@ -203,32 +207,17 @@ void CTeachingDialog::refreshRecordedMotions(int highlightedIndex)
 	CRecordMobot *mobot;
 	mobot = _robotManager.getMobot(0);
 	for(i = 0; i < mobot->numMotions(); i++) {
-		switch(mobot->getMotionType(i)) {
-			case MOTION_POS:
-				if(i == highlightedIndex) {
-					listctrl_recordedMotions.InsertItem(
-						listctrl_recordedMotions.GetItemCount(),
-						TEXT("Pose <--")
-						);
-				} else {
-					listctrl_recordedMotions.InsertItem(
-						listctrl_recordedMotions.GetItemCount(),
-						TEXT("Pose")
-						);
-				}
-				break;
-			case MOTION_SLEEP:
-				if(i == highlightedIndex) {
-					listctrl_recordedMotions.InsertItem(
-						listctrl_recordedMotions.GetItemCount(),
-						TEXT("Delay <--")
-						);
-				} else {
-					listctrl_recordedMotions.InsertItem(
-						listctrl_recordedMotions.GetItemCount(),
-						TEXT("Delay")
-						);
-				}
+		if(i == highlightedIndex) {
+			swprintf(buf, TEXT("%s <--"), mobot->getMotionName(i)); 
+			listctrl_recordedMotions.InsertItem(
+				listctrl_recordedMotions.GetItemCount(),
+				buf
+				);
+		} else {
+			listctrl_recordedMotions.InsertItem(
+				listctrl_recordedMotions.GetItemCount(),
+				mobot->getMotionName(i)
+				);
 		}
 	}
 	if(highlightedIndex >= 0) {
@@ -291,4 +280,37 @@ RobotManager* CTeachingDialog::getRobotManager()
 void CTeachingDialog::OnBnClickedButtonstop()
 {
 	haltPlayFlag = 1;
+}
+
+void CTeachingDialog::OnLvnItemchangedListRecordedmotions(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
+	// TODO: Add your control notification handler code here
+	*pResult = 0;
+}
+
+void CTeachingDialog::OnLvnItemActivateListRecordedmotions(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMIA = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	// TODO: Add your control notification handler code here
+	*pResult = 0;
+	/*
+	listctrl_recordedMotions.EditLabel(
+		listctrl_recordedMotions.GetSelectionMark() );
+		*/
+}
+
+void CTeachingDialog::OnLvnEndlabeleditListRecordedmotions(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	NMLVDISPINFO *pDispInfo = reinterpret_cast<NMLVDISPINFO*>(pNMHDR);
+	// TODO: Add your control notification handler code here
+	int i;
+	int index = pDispInfo->item.iItem;
+	for(i = 0; i < _robotManager.numConnected(); i++) {
+		_robotManager.getMobot(i)->setMotionName(
+			index,
+			pDispInfo->item.pszText );
+	}
+	refreshRecordedMotions(-1);
+	*pResult = 0;
 }

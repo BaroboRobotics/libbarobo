@@ -26,8 +26,10 @@ int CRecordMobot::record(void)
 	motion->data.pos[1] = angles[1];
 	motion->data.pos[2] = angles[2];
 	motion->data.pos[3] = angles[3];
+	motion->name = _tcsdup(TEXT("Pose"));
 	_motions[_numMotions] = motion;
 	_numMotions++;
+	
 	return 0;
 }
 
@@ -37,6 +39,7 @@ int CRecordMobot::addDelay(double seconds)
 	motion = (struct motion_s*)malloc(sizeof(struct motion_s));
 	motion->motionType = MOTION_SLEEP;
 	motion->data.sleepDuration = seconds;
+	motion->name = _tcsdup(TEXT("Delay"));
 	_motions[_numMotions] = motion;
 	_numMotions++;
 	return 0;
@@ -76,6 +79,24 @@ int CRecordMobot::getMotionString(int index, TCHAR* buf)
 		_motions[index]->data.pos[1],
 		_motions[index]->data.pos[2],
 		_motions[index]->data.pos[3] );
+	return 0;
+}
+
+const TCHAR* CRecordMobot::getMotionName(int index)
+{
+	if(index < 0 || index >= _numMotions) {
+		return NULL;
+	}
+	return _motions[index]->name;
+}
+
+int CRecordMobot::setMotionName(int index, const TCHAR* name)
+{
+	if(index < 0 || index >= _numMotions) {
+		return -1;
+	}
+	free (_motions[index]->name);
+	_motions[index]->name = _tcsdup(name);
 	return 0;
 }
 

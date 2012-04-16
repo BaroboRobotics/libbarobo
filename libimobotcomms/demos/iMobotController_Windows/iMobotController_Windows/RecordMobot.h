@@ -14,6 +14,7 @@ struct motion_s
 		double sleepDuration;
 		double pos[4];
 	} data;
+	TCHAR* name;
 };
 
 class CRecordMobot :
@@ -27,6 +28,8 @@ public:
 	int play(int index);
 	int getMotionType(int index);
 	int getMotionString(int index, TCHAR* buf);
+	const TCHAR* getMotionName(int index);
+	int setMotionName(int index, const TCHAR* name);
 	int removeMotion(int index);
 	int numMotions();
 private:

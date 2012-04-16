@@ -56,4 +56,7 @@ public:
 	afx_msg void OnBnClickedButtonstop();
 	int haltPlayFlag; /* If this flag is enabled, the current 
 					  "play" operation should be canceled. */
+	afx_msg void OnLvnItemchangedListRecordedmotions(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnLvnItemActivateListRecordedmotions(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnLvnEndlabeleditListRecordedmotions(NMHDR *pNMHDR, LRESULT *pResult);
 };
