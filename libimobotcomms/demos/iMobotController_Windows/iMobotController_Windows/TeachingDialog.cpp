@@ -340,6 +340,7 @@ void CTeachingDialog::OnRecordedMotionContextMenu(CPoint point, void *arg)
 		}
 	}
 	if(index == -1) {return;}
+	dlg->contextMenuIndex = index;
 	CMenu mnuPopupMain;
 	mnuPopupMain.LoadMenu(IDR_MENU_RECORDEDMOTIONPOPUP);
 	CMenu *mnuPopup = mnuPopupMain.GetSubMenu(0);

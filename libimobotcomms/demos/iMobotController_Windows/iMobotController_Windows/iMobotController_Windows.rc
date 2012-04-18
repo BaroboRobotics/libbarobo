@@ -351,7 +351,7 @@ END
 
 IDR_MENU_RECORDEDMOTIONPOPUP MENU 
 BEGIN
-    POPUP "Rename"
+    POPUP "RECORDED_MOTION_CONTEXT_POPUP"
     BEGIN
         MENUITEM "Rename",                      ID_RENAME_REMOVE
         MENUITEM "Remove",                      ID_RENAME_REMOVE32782

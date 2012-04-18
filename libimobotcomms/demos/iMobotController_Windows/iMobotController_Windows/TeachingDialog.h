@@ -62,4 +62,5 @@ public:
 	afx_msg void OnLvnEndlabeleditListRecordedmotions(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnNMRClickListRecordedmotions(NMHDR *pNMHDR, LRESULT *pResult);
 	static void OnRecordedMotionContextMenu(CPoint point, void *arg);
+	int contextMenuIndex;
 };
