@@ -349,6 +349,15 @@ BEGIN
     END
 END
 
+IDR_MENU_RECORDEDMOTIONPOPUP MENU 
+BEGIN
+    POPUP "Rename"
+    BEGIN
+        MENUITEM "Rename",                      ID_RENAME_REMOVE
+        MENUITEM "Remove",                      ID_RENAME_REMOVE32782
+    END
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

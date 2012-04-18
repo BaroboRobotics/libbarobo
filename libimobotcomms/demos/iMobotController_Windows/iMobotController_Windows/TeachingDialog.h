@@ -2,6 +2,7 @@
 #include "robotManager.h"
 #include "afxcmn.h"
 #include "afxwin.h"
+#include "ListCtrlCtx.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,7 +37,7 @@ protected:
 public:
 	CListCtrl listctrl_availableBots;
 	CListCtrl listctrl_connectedBots;
-	CListCtrl listctrl_recordedMotions;
+	CListCtrlCtx listctrl_recordedMotions;
 	CEdit edit_teachingDelay;
 	CButton button_teachingLoopCheck;
 	afx_msg void OnBnClickedButtonTeachingConnect();
@@ -59,4 +60,6 @@ public:
 	afx_msg void OnLvnItemchangedListRecordedmotions(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnLvnItemActivateListRecordedmotions(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnLvnEndlabeleditListRecordedmotions(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnNMRClickListRecordedmotions(NMHDR *pNMHDR, LRESULT *pResult);
+	static void OnRecordedMotionContextMenu(CPoint point, void *arg);
 };

@@ -30,6 +30,8 @@
 #define IDB_PNG3                        151
 #define IDD_DIALOG_TEACHING             152
 #define IDI_ICON_REDDOT                 153
+#define IDR_MENU2                       154
+#define IDR_MENU_RECORDEDMOTIONPOPUP    154
 #define IDC_SLIDER_speed1               1000
 #define IDC_EDIT_speed1                 1001
 #define IDC_SLIDER_speed2               1002
@@ -115,13 +117,16 @@
 #define ID_FILE_EXIT                    32777
 #define ID_HELP_DEMOS                   32778
 #define ID_TEACHINGMODE_TEACHINGMODEDIALOG 32779
+#define ID_RENAME                       32780
+#define ID_RENAME_REMOVE                32781
+#define ID_RENAME_REMOVE32782           32782
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        154
-#define _APS_NEXT_COMMAND_VALUE         32780
+#define _APS_NEXT_RESOURCE_VALUE        155
+#define _APS_NEXT_COMMAND_VALUE         32783
 #define _APS_NEXT_CONTROL_VALUE         1067
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

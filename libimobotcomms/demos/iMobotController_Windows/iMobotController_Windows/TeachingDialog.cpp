@@ -25,7 +25,7 @@ CTeachingDialog::CTeachingDialog(CWnd* pParent /*=NULL*/)
   }
   strcat(path, "\\Barobo.config");
   _robotManager.read(path);
-
+  listctrl_recordedMotions.setContextMenuCallback(&CTeachingDialog::OnRecordedMotionContextMenu, this);
 }
 
 CTeachingDialog::~CTeachingDialog()
@@ -80,6 +80,7 @@ BEGIN_MESSAGE_MAP(CTeachingDialog, CDialog)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_RECORDEDMOTIONS, &CTeachingDialog::OnLvnItemchangedListRecordedmotions)
 	ON_NOTIFY(LVN_ITEMACTIVATE, IDC_LIST_RECORDEDMOTIONS, &CTeachingDialog::OnLvnItemActivateListRecordedmotions)
 	ON_NOTIFY(LVN_ENDLABELEDIT, IDC_LIST_RECORDEDMOTIONS, &CTeachingDialog::OnLvnEndlabeleditListRecordedmotions)
+	ON_NOTIFY(NM_RCLICK, IDC_LIST_RECORDEDMOTIONS, &CTeachingDialog::OnNMRClickListRecordedmotions)
 END_MESSAGE_MAP()
 
 
@@ -313,4 +314,34 @@ void CTeachingDialog::OnLvnEndlabeleditListRecordedmotions(NMHDR *pNMHDR, LRESUL
 	}
 	refreshRecordedMotions(-1);
 	*pResult = 0;
+}
+
+void CTeachingDialog::OnNMRClickListRecordedmotions(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	//LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<NMITEMACTIVATE>(pNMHDR);
+	// TODO: Add your control notification handler code here
+	*pResult = 0;
+}
+
+void CTeachingDialog::OnRecordedMotionContextMenu(CPoint point, void *arg)
+{
+	CTeachingDialog *dlg = (CTeachingDialog*)arg;
+	CPoint cl_point;
+	cl_point = point;
+	dlg->listctrl_recordedMotions.ScreenToClient(&cl_point);
+	/* We want to pop up a context menu on the cursor, if it is over an item */
+	int i, index = -1;
+	CRect rect;
+	for(i = 0; i < dlg->listctrl_recordedMotions.GetItemCount(); i++) {
+		dlg->listctrl_recordedMotions.GetItemRect(i, &rect, LVIR_BOUNDS);
+		if(rect.PtInRect(cl_point)) {
+			index = i;
+			break;
+		}
+	}
+	if(index == -1) {return;}
+	CMenu mnuPopupMain;
+	mnuPopupMain.LoadMenu(IDR_MENU_RECORDEDMOTIONPOPUP);
+	CMenu *mnuPopup = mnuPopupMain.GetSubMenu(0);
+	mnuPopup->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON, point.x, point.y, dlg);
 }

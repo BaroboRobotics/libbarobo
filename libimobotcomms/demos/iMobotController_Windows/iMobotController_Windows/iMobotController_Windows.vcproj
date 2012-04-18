@@ -383,6 +383,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ListCtrlContext.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\mobot.cpp"
 				>
 			</File>
@@ -458,6 +462,18 @@
 			</File>
 			<File
 				RelativePath=".\iMobotController_WindowsDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ListCtrlContext.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ListCtrlCtx.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ListCtrlCtx.h"
 				>
 			</File>
 			<File
@@ -559,19 +575,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\iMobot_diagram.bmp"
-				>
-			</File>
-			<File
 				RelativePath="..\iMobot_diagram.bmp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\libimobot\Demos\GtkGui\interface\imobot_diagram.png"
+				RelativePath=".\res\iMobot_diagram.bmp"
 				>
 			</File>
 			<File
 				RelativePath=".\res\iMobot_diagram.png"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\libimobot\Demos\GtkGui\interface\imobot_diagram.png"
 				>
 			</File>
 			<File
