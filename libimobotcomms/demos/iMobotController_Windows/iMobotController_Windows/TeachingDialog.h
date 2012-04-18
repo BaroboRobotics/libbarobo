@@ -47,6 +47,7 @@ public:
 	afx_msg void OnBnClickedButtonTeachingRecord();
 	afx_msg void OnBnClickedButtonTeachingAdddelay();
 	afx_msg void OnBnClickedButtonTeachingDeletepos();
+	void DeleteRecordedMotion(int index);
 	afx_msg void OnBnClickedButtonTeachingSave();
 	void refresh();
 	void refreshRecordedMotions(int highlightedIndex);
@@ -63,4 +64,6 @@ public:
 	afx_msg void OnNMRClickListRecordedmotions(NMHDR *pNMHDR, LRESULT *pResult);
 	static void OnRecordedMotionContextMenu(CPoint point, void *arg);
 	int contextMenuIndex;
+	afx_msg void OnContextRename();
+	afx_msg void OnContextRemove();
 };

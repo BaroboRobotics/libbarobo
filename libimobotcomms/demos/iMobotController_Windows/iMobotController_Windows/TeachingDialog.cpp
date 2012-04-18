@@ -81,6 +81,8 @@ BEGIN_MESSAGE_MAP(CTeachingDialog, CDialog)
 	ON_NOTIFY(LVN_ITEMACTIVATE, IDC_LIST_RECORDEDMOTIONS, &CTeachingDialog::OnLvnItemActivateListRecordedmotions)
 	ON_NOTIFY(LVN_ENDLABELEDIT, IDC_LIST_RECORDEDMOTIONS, &CTeachingDialog::OnLvnEndlabeleditListRecordedmotions)
 	ON_NOTIFY(NM_RCLICK, IDC_LIST_RECORDEDMOTIONS, &CTeachingDialog::OnNMRClickListRecordedmotions)
+	ON_COMMAND(ID_RENAME_REMOVE, &CTeachingDialog::OnContextRename)
+	ON_COMMAND(ID_RENAME_REMOVE32782, &CTeachingDialog::OnContextRemove)
 END_MESSAGE_MAP()
 
 
@@ -159,6 +161,11 @@ void CTeachingDialog::OnBnClickedButtonTeachingDeletepos()
 	int index;
 	index = listctrl_recordedMotions.GetSelectionMark();
 	if(index < 0) return;
+	DeleteRecordedMotion(index);
+}
+
+void CTeachingDialog::DeleteRecordedMotion(int index)
+{
 	int i;
 	for(i = 0; i < _robotManager.numConnected(); i++) {
 		_robotManager.getMobot(i)->removeMotion(index);
@@ -345,4 +352,14 @@ void CTeachingDialog::OnRecordedMotionContextMenu(CPoint point, void *arg)
 	mnuPopupMain.LoadMenu(IDR_MENU_RECORDEDMOTIONPOPUP);
 	CMenu *mnuPopup = mnuPopupMain.GetSubMenu(0);
 	mnuPopup->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON, point.x, point.y, dlg);
+}
+
+void CTeachingDialog::OnContextRename()
+{
+	listctrl_recordedMotions.EditLabel(contextMenuIndex);
+}
+
+void CTeachingDialog::OnContextRemove()
+{
+	DeleteRecordedMotion(contextMenuIndex);
 }
