@@ -177,7 +177,15 @@ void CTeachingDialog::DeleteRecordedMotion(int index)
 
 void CTeachingDialog::OnBnClickedButtonTeachingSave()
 {
-	// TODO: Add your control notification handler code here
+  /* Pop up the save file dialog */
+  CFileDialog dlgFile(
+      false,
+      TEXT(".ch"),
+      NULL);
+  if( dlgFile.DoModal() == IDOK ) {
+    CString pathname = dlgFile.GetPathName();
+
+  }
 }
 
 void CTeachingDialog::refresh()

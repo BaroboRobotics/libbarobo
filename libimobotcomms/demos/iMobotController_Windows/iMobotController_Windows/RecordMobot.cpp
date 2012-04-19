@@ -14,6 +14,17 @@ CRecordMobot::~CRecordMobot(void)
 	free(_motions);
 }
 
+int CRecordMobot::connectWithAddress(const char address[], int channel)
+{
+  strcpy(_address, address);
+  return CMobot::connectWithAddress(address, channel);
+}
+
+const char* CRecordMobot::getAddress()
+{
+  return _address;
+}
+
 int CRecordMobot::record(void)
 {
 	/* Get the robots positions */

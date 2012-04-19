@@ -23,6 +23,9 @@ class CRecordMobot :
 public:
 	CRecordMobot(TCHAR* name);
 	~CRecordMobot(void);
+  /* Override the default connection function to save the address */
+  int connectWithAddress(const char address[], int channel);
+  const char* getAddress();
 	int record();
 	int addDelay(double seconds);
 	int play(int index);
@@ -40,4 +43,5 @@ private:
 	struct motion_s **_motions;
 	int _numMotionsAllocated;
 	TCHAR _name[80];
+  char _address[80];
 };

@@ -1,12 +1,17 @@
 #ifndef _ROBOT_MANAGER_H_
 #define _ROBOT_MANAGER_H_
 
+#include <string.h>
+#include <string>
+#include <atlstr.h>
+
 #include "configFile.h"
 #include <mobot.h>
 #include "RecordMobot.h"
 
 #define MAX_CONNECTED 100
 
+using namespace std;
 class RobotManager : public ConfigFile
 {
   public:
@@ -19,10 +24,11 @@ class RobotManager : public ConfigFile
     int moveUp(int connectIndex);
     int moveDown(int connectIndex);
     int numConnected();
-	const char* getConnected(int connectIndex);
-	int availableIndexToIndex(int index);
-	int numAvailable();
-	CRecordMobot* getMobot(int connectIndex);
+    const char* getConnected(int connectIndex);
+    int availableIndexToIndex(int index);
+    int numAvailable();
+    CRecordMobot* getMobot(int connectIndex);
+    CString generateProgram();
   private:
     bool _connected[MAX_CONNECTED]; /* Index by ConfigFile */
     CRecordMobot *_mobots[MAX_CONNECTED];
