@@ -355,6 +355,8 @@ BEGIN
     BEGIN
         MENUITEM "Rename",                      ID_RENAME_REMOVE
         MENUITEM "Remove",                      ID_RENAME_REMOVE32782
+        MENUITEM "Move Up",                     ID_RECORDED_MOVEUP
+        MENUITEM "Move Down",                   ID_RECORDED_MOVEDOWN
     END
 END
 

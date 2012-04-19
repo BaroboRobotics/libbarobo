@@ -100,13 +100,15 @@ int CRecordMobot::setMotionName(int index, const TCHAR* name)
 	return 0;
 }
 
-int CRecordMobot::removeMotion(int index)
+int CRecordMobot::removeMotion(int index, bool releaseData)
 {
 	if(index < 0 || index >= numMotions()) {
 		return -1;
 	}
 	/* Free the motion */
-	free(_motions[index]);
+  if(releaseData) {
+    free(_motions[index]);
+  }
 	/* Shift everything lower than the motion up by one */
 	int i;
 	for(i = index+1; i < _numMotions; i++) {
@@ -114,6 +116,33 @@ int CRecordMobot::removeMotion(int index)
 	}
 	_numMotions--;
 	return 0;
+}
+
+int CRecordMobot::moveMotion(int fromindex, int toindex)
+{
+  if(fromindex < 0 || fromindex >= _numMotions) {
+    return -1;
+  }
+  if(toindex < 0 || toindex >= _numMotions) {
+    return -1;
+  }
+  if(fromindex == toindex) {
+    return 0;
+  }
+  /* Save the motion at fromindex */
+  struct motion_s* motion = _motions[fromindex];
+  /* Now, remove _motions[fromindex] */
+  removeMotion(fromindex, false);
+  //if(toindex > fromindex) {toindex--;}
+  /* Make a space for the new motion at 'toindex' */
+  int i;
+  for(i = _numMotions - 1; i >= toindex; i--) {
+    _motions[i+1] = _motions[i];
+  }
+  _motions[toindex] = motion;
+  _numMotions++;
+  
+  return 0;
 }
 
 int CRecordMobot::numMotions()

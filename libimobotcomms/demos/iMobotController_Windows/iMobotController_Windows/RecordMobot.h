@@ -30,7 +30,10 @@ public:
 	int getMotionString(int index, TCHAR* buf);
 	const TCHAR* getMotionName(int index);
 	int setMotionName(int index, const TCHAR* name);
-	int removeMotion(int index);
+	int removeMotion(int index, bool releaseData = true);
+  /* moveMotion:
+     Copy motion 'fromindex', insert to 'toindex', delete 'fromindex' */
+	int moveMotion(int fromindex, int toindex);
 	int numMotions();
 private:
 	int _numMotions;

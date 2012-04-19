@@ -66,4 +66,6 @@ public:
 	int contextMenuIndex;
 	afx_msg void OnContextRename();
 	afx_msg void OnContextRemove();
+  afx_msg void OnRecordPopupMoveup();
+  afx_msg void OnRecordPopupMovedown();
 };
