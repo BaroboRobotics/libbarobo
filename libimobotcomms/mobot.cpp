@@ -268,8 +268,13 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
 
 #ifdef _WIN32
   if(comms->socket == INVALID_SOCKET) {
-    printf("Could not bind to socket. Error %d\n", WSAGetLastError());
-    return -1;
+    err = WSAGetLastError();
+    printf("Could not bind to socket. Error %d\n", err);
+    if(err == 10047) {
+      return -5;
+    } else {
+      return -1;
+    }
   }
 #endif
 
@@ -318,10 +323,11 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
 	  // Display the string.
 	  //MessageBox( NULL, (LPCTSTR)lpMsgBuf, "Error", MB_OK | MB_ICONINFORMATION );
 	  fprintf(stderr, "Error Connecting: %s", lpMsgBuf);
-	  if(WSAGetLastError() == 10048) {
+    int wsaerror = WSAGetLastError();
+	  if(wsaerror == 10048) {
 		  fprintf(stderr, "Make sure there are no other programs currently connected to the Mobot.\n");
-	  } else if (WLAGetLastError() == 10047) {
-      fprintf(stderr, "A bluetooth device could not be found on this computer. You may need to attach\n an external Bluetooth dongle to continue.\n");
+	  } else if (wsaerror == 10047 || wsaerror == 10050) {
+      fprintf(stderr, "A bluetooth device could not be found on this computer. You may need to attach\nan external Bluetooth dongle to continue.\n");
       err = -5;
     }
 	  // Free the buffer.
