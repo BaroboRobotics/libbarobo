@@ -271,6 +271,7 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
     err = WSAGetLastError();
     printf("Could not bind to socket. Error %d\n", err);
     if(err == 10047) {
+      fprintf(stderr, "A bluetooth device could not be found on this computer. You may need to attach\nan external Bluetooth dongle to continue.\n");
       return -5;
     } else {
       return -1;
