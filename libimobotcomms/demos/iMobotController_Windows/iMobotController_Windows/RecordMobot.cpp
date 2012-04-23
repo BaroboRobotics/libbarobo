@@ -84,12 +84,19 @@ int CRecordMobot::getMotionType(int index)
 
 int CRecordMobot::getMotionString(int index, TCHAR* buf)
 {
-	swprintf(buf, TEXT("%s.moveToNB(%lf, %lf, %lf, %lf);\n"),
-		_name,
-		_motions[index]->data.pos[0],
-		_motions[index]->data.pos[1],
-		_motions[index]->data.pos[2],
-		_motions[index]->data.pos[3] );
+  switch(_motions[index]->motionType) {
+    case MOTION_POS:
+      swprintf(buf, TEXT("%s.moveToNB(%lf, %lf, %lf, %lf);"),
+          _name,
+          _motions[index]->data.pos[0],
+          _motions[index]->data.pos[1],
+          _motions[index]->data.pos[2],
+          _motions[index]->data.pos[3] );
+      break;
+    case MOTION_SLEEP:
+      swprintf(buf, TEXT("msleep(%d);"), _motions[index]->data.sleepDuration * 1000);
+      break;
+  }
 	return 0;
 }
 

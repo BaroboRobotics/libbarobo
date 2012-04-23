@@ -177,14 +177,33 @@ void CTeachingDialog::DeleteRecordedMotion(int index)
 
 void CTeachingDialog::OnBnClickedButtonTeachingSave()
 {
+  bool looped;
+  if(button_teachingLoopCheck.GetCheck() == BST_CHECKED) {
+    looped = true;
+  } else {
+    looped = false;
+  }
   /* Pop up the save file dialog */
   CFileDialog dlgFile(
       false,
-      TEXT(".ch"),
-      NULL);
+      _T(".ch"),
+      NULL,
+      OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+      _T("Ch Programs (*.ch)|*.ch|Text Files|*.txt|All Files (*.*)|*.*||"));
   if( dlgFile.DoModal() == IDOK ) {
     CString pathname = dlgFile.GetPathName();
-
+    FILE *fp = _tfopen((LPCTSTR)pathname, _T("w"));
+    if(fp == NULL) {
+			MessageBox( 
+          TEXT("Could not save to file."), 
+          TEXT("Error"), 
+          MB_OK | MB_ICONINFORMATION );
+      return;
+    }
+    CString *program = _robotManager.generateProgram(looped);
+    _ftprintf(fp, (LPCTSTR)*program);
+    fclose(fp);
+    delete program;
   }
 }
 

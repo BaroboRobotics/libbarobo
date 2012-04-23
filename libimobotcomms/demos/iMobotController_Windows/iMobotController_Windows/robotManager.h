@@ -3,14 +3,16 @@
 
 #include <string.h>
 #include <string>
-#include <atlstr.h>
+//#include <atlstr.h>
+#include <afx.h>
 
 #include "configFile.h"
 #include <mobot.h>
 #include "RecordMobot.h"
 
 #define MAX_CONNECTED 100
-
+template class __declspec(dllimport) CStringT<TCHAR, StrTraitMFC<TCHAR, ChTraitsCRT<TCHAR> > >;
+template class __declspec(dllimport) CSimpleStringT<TCHAR>;
 using namespace std;
 class RobotManager : public ConfigFile
 {
@@ -28,7 +30,7 @@ class RobotManager : public ConfigFile
     int availableIndexToIndex(int index);
     int numAvailable();
     CRecordMobot* getMobot(int connectIndex);
-    CString generateProgram();
+    CString* generateProgram(bool looped = false);
   private:
     bool _connected[MAX_CONNECTED]; /* Index by ConfigFile */
     CRecordMobot *_mobots[MAX_CONNECTED];
