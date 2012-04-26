@@ -22,7 +22,7 @@ int main()
     Mobot_getButtonVoltage(comms, &voltage);
     printf("BUTTON: %lf", voltage);
     printf("\n");
-    usleep(100000);
+    //usleep(10000);
   }
 
   return 0;
