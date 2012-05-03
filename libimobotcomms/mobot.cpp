@@ -25,6 +25,8 @@
 #include <mach/mach.h>
 #endif
 
+#include "commands.h"
+
 int g_numConnected = 0;
 
 double deg2rad(double deg)
@@ -1817,7 +1819,7 @@ int str2ba(const char *str, bdaddr_t *ba)
 }
 #endif
 
-int SendToIMobot(br_comms_t* comms, const char* str, int len)
+int SendToIMobot(br_comms_t* comms, const uint8_t* str, int len)
 {
   int err = 0;
   if(comms->connected == 0) {
@@ -1858,7 +1860,37 @@ int SendToIMobot(br_comms_t* comms, const char* str, int len)
   }
 }
 
-int RecvFromIMobot(br_comms_t* comms, char* buf, int size)
+int RecvFromIMobot(br_comms_t* comms, uint8_t* buf, int size)
+{
+  int err = 0;
+  int tries = 100;
+  int n, bytes = 0;
+  uint8_t tmpbuf[256];
+  int done = 0;
+  /* Receive a command from the remote device. */
+  while(!done) {
+    /* Read a segment of the message */
+    while(tries >= 0) {
+      err = read(comms->socket, tmpbuf, 255);
+      if(err < 0) {
+        tries--;
+        //printf("*");
+        usleep(1000);
+      } else {
+        break;
+      }
+    }
+    /* If we could not receive any data at all, break out */
+    if(err < 0) {
+      MUTEX_UNLOCK(comms->commsLock);
+      return -1;
+    }
+    /* Make sure we received the whole segment by checking the data size */
+    memcpy()
+  }
+}
+
+int RecvFromIMobot2(br_comms_t* comms, char* buf, int size)
 {
   int err = 0;
   int i = 0;
