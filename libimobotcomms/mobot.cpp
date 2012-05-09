@@ -502,78 +502,86 @@ int Mobot_isMoving(br_comms_t* comms)
 
 int Mobot_getButtonVoltage(br_comms_t* comms, double *voltage)
 {
-  uint8_t buf[160];
+  uint8_t buf[32];
+  float f;
   int status;
-  int bytes_read;
-  /*
-  while(1) {
-    sprintf(buf, "GET_BUTTON_VOLTAGE");
-    status = SendToIMobot(comms, buf, strlen(buf)+1);
-    if(status < 0) return status;
-    bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
-    if(!strcmp(buf, "ERROR")) return -1;
-    if(!strncmp("BV ", buf, 2)) {break;}
+  status = SendToIMobot(comms, BTCMD(CMD_GETBUTTONVOLTAGE), NULL, 0);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
   }
-  sscanf(buf, "BV %lf", voltage);
-  */
+  /* Make sure the data size is correct */
+  if(buf[1] != 7) {
+    return -1;
+  }
+  /* Copy the data */
+  memcpy(&f, &buf[2], 4);
+  *voltage = f;
   return 0;
 }
 
 int Mobot_getEncoderVoltage(br_comms_t* comms, int pinNumber, double *voltage)
 {
-  char buf[160];
+  uint8_t buf[32];
+  float f;
   int status;
-  int bytes_read;
-  /*
-  while(1) {
-    sprintf(buf, "GET_ENCODER_VOLTAGE %d", pinNumber);
-    status = SendToIMobot(comms, buf, strlen(buf)+1);
-    if(status < 0) return status;
-    bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
-    if(!strcmp(buf, "ERROR")) return -1;
-    if(!strncmp("V ", buf, 2)) {break;}
+  buf[0] = pinNumber;
+  status = SendToIMobot(comms, BTCMD(CMD_GETBUTTONVOLTAGE), buf, 1);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
   }
-  sscanf(buf, "V %lf", voltage);
-  */
+  /* Make sure the data size is correct */
+  if(buf[1] != 7) {
+    return -1;
+  }
+  /* Copy the data */
+  memcpy(&f, &buf[2], 4);
+  *voltage = f;
   return 0;
 }
 
 int Mobot_getJointAngle(br_comms_t* comms, robotJointId_t id, double *angle)
 {
-  char buf[160];
+  uint8_t buf[32];
+  float f;
   int status;
-  int bytes_read;
-  /*
-  while(1) {
-    sprintf(buf, "GET_MOTOR_POSITION %d", id);
-    status = SendToIMobot(comms, buf, strlen(buf)+1);
-    if(status < 0) return status;
-    bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
-    if(!strcmp(buf, "ERROR")) return -1;
-    if(!strncmp("POS ", buf, 4)) {break;}
+  buf[0] = (uint8_t)id-1;
+  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORANGLE), buf, 1);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
   }
-  sscanf(buf, "POS %lf", angle);
-  */
+  /* Make sure the data size is correct */
+  if(buf[1] != 7) {
+    return -1;
+  }
+  /* Copy the data */
+  memcpy(&f, &buf[2], 4);
+  *angle = f;
   return 0;
 }
 
 int Mobot_getJointAngleTime(br_comms_t* comms, robotJointId_t id, double *time, double *angle)
 {
-  char buf[160];
+  uint8_t buf[32];
+  float f;
+  uint32_t millis;
   int status;
-  int bytes_read;
-  long unsigned int millis;
-  /*
-  while(1) {
-    sprintf(buf, "GET_MOTOR_TIMEPOSITION %d", id);
-    status = SendToIMobot(comms, buf, strlen(buf)+1);
-    if(status < 0) return status;
-    bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
-    if(!strcmp(buf, "ERROR")) return -1;
-    if(!strncmp("TIMEPOS ", buf, 8)) {break;}
+  buf[0] = (uint8_t)id-1;
+  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORANGLETIMESTAMP), buf, 1);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
   }
-  sscanf(buf, "TIMEPOS %lu %lf", &millis, angle);
-  */
+  /* Make sure the data size is correct */
+  if(buf[1] != 0x0b) {
+    return -1;
+  }
+  /* Copy the data */
+  memcpy(&millis, &buf[2], 4);
+  memcpy(&f, &buf[6], 4);
+  *angle = f;
   *time = millis / 1000.0;
   return 0;
 }
@@ -585,54 +593,60 @@ int Mobot_getJointAnglesTime(br_comms_t* comms,
                              double *angle3,
                              double *angle4)
 {
-  char buf[160];
+  uint8_t buf[32];
+  float f;
+  uint32_t millis;
   int status;
-  int bytes_read;
-  long unsigned int millis;
-  /*
-  while(1) {
-    sprintf(buf, "GET_MOTOR_ANGLES");
-    status = SendToIMobot(comms, buf, strlen(buf)+1);
-    if(status < 0) return status;
-    bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
-    if(!strcmp(buf, "ERROR")) return -1;
-    if(!strncmp("ANGLES ", buf, 7)) {break;}
+  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORANGLESTIMESTAMP), NULL, 0);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
   }
-  sscanf(buf, "ANGLES %lu %lf %lf %lf %lf", &millis, angle1, angle2, angle3, angle4);
+  /* Make sure the data size is correct */
+  if(buf[1] != 0x17) {
+    return -1;
+  }
+  /* Copy the data */
+  memcpy(&millis, &buf[2], 4);
   *time = millis / 1000.0;
-  */
+  /* Copy 4 joint angles */
+  memcpy(&f, &buf[6], 4);
+  *angle1 = f;
+  memcpy(&f, &buf[10], 4);
+  *angle2 = f;
+  memcpy(&f, &buf[14], 4);
+  *angle3 = f;
+  memcpy(&f, &buf[18], 4);
+  *angle4 = f;
   return 0;
 }
 
 int Mobot_getJointDirection(br_comms_t* comms, robotJointId_t id, robotJointState_t *dir)
 {
-  char buf[160];
+  uint8_t buf[32];
   int status;
-  int bytes_read;
-  /*
-  while(1) {
-    sprintf(buf, "GET_MOTOR_DIRECTION %d", id);
-    status = SendToIMobot(comms, buf, strlen(buf)+1);
-    if(status < 0) return status;
-    bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
-    if(!strcmp(buf, "ERROR")) return -1;
-    if(!strncmp("DIR ", buf, 4)) {break;}
+  buf[0] = (uint8_t)id-1;
+  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORDIR), buf, 1);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
   }
-  sscanf(buf, "DIR %d", (int*)dir);
-  */
+  /* Make sure the data size is correct */
+  if(buf[1] != 0x04) {
+    return -1;
+  }
+  *dir = (robotJointState_t)buf[2];
   return 0;
 }
 
 int Mobot_getJointMaxSpeed(br_comms_t* comms, robotJointId_t id, double *maxSpeed)
 {
+  float f;
   uint8_t buf[64];
   int status;
   int bytes_read;
-  buf[0] = BTCMD(CMD_GETMOTORMAXSPEED);
-  buf[1] = 0x04;
-  buf[2] = (uint8_t) id;
-  buf[3] = MSG_SENDEND;
-  status = SendToIMobot(comms, buf, 4);
+  buf[0] = (uint8_t) id-1;
+  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORMAXSPEED), &buf[0], 1);
   if(status < 0) return status;
   if(RecvFromIMobot(comms, buf, sizeof(buf))) {
     return -1;
@@ -642,67 +656,66 @@ int Mobot_getJointMaxSpeed(br_comms_t* comms, robotJointId_t id, double *maxSpee
     return -1;
   }
   /* Copy the data */
-  memcpy(maxSpeed, &buf[2], 4);
+  memcpy(&f, &buf[2], 4);
+  *maxSpeed = f;
   return 0;
 }
 
 int Mobot_getJointSafetyAngle(br_comms_t* comms, double *angle) 
 {
-  char buf[160];
+  uint8_t buf[32];
+  float f;
   int status;
-  int bytes_read;
-  int ispeed;
-  /*
-  while(1) {
-    sprintf(buf, "GET_MOTOR_SAFETY_LIMIT");
-    status = SendToIMobot(comms, buf, strlen(buf)+1);
-    if(status < 0) return status;
-    bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
-    if(!strcmp(buf, "ERROR")) return -1;
-    if(!strncmp("MSL ", buf, 4)) {break;}
+  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORSAFETYLIMIT), NULL, 0);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
   }
-  sscanf(buf, "MSL %lf", angle);
-  */
+  /* Make sure the data size is correct */
+  if(buf[1] != 0x07) {
+    return -1;
+  }
+  memcpy(&f, &buf[2], 4);
+  *angle = f;
   return 0;
 }
 
 int Mobot_getJointSafetyAngleTimeout(br_comms_t* comms, double *seconds) 
 {
-  char buf[160];
+  uint8_t buf[32];
+  float f;
   int status;
-  int bytes_read;
-  int ispeed;
-  /*
-  while(1) {
-    sprintf(buf, "GET_MOTOR_SAFETY_TIMEOUT");
-    status = SendToIMobot(comms, buf, strlen(buf)+1);
-    if(status < 0) return status;
-    bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
-    if(!strcmp(buf, "ERROR")) return -1;
-    if(!strncmp("MST ", buf, 4)) {break;}
+  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORSAFETYTIMEOUT), NULL, 0);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
   }
-  sscanf(buf, "MST %lf", seconds);
-  */
+  /* Make sure the data size is correct */
+  if(buf[1] != 0x07) {
+    return -1;
+  }
+  memcpy(&f, &buf[2], 4);
+  *seconds = f;
   return 0;
 }
 
 int Mobot_getJointSpeed(br_comms_t* comms, robotJointId_t id, double *speed)
 {
-  char buf[160];
+  uint8_t buf[32];
+  float f;
   int status;
-  int bytes_read;
-  int ispeed;
-  /*
-  while(1) {
-    sprintf(buf, "GET_MOTOR_SPEED %d", id);
-    status = SendToIMobot(comms, buf, strlen(buf)+1);
-    if(status < 0) return status;
-    bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
-    if(!strcmp(buf, "ERROR")) return -1;
-    if(!strncmp("SPD ", buf, 4)) {break;}
+  buf[0] = (uint8_t)id-1;
+  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORSPEED), buf, 1);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
   }
-  sscanf(buf, "SPD %lf", speed);
-  */
+  /* Make sure the data size is correct */
+  if(buf[1] != 0x07) {
+    return -1;
+  }
+  memcpy(&f, &buf[2], 4);
+  *speed = f;
   return 0;
 }
 
@@ -729,20 +742,19 @@ int Mobot_getJointSpeedRatios(br_comms_t* comms, double *ratio1, double *ratio2,
 
 int Mobot_getJointState(br_comms_t* comms, robotJointId_t id, robotJointState_t *state)
 {
-  char buf[160];
+  uint8_t buf[32];
   int status;
-  int bytes_read;
-  /*
-  while(1) {
-    sprintf(buf, "GET_MOTOR_STATE %d", id);
-    status = SendToIMobot(comms, buf, strlen(buf)+1);
-    if(status < 0) return status;
-    bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
-    if(!strcmp(buf, "ERROR")) return -1;
-    if(!strncmp("ST ", buf, 3)) {break;}
+  buf[0] = (uint8_t)id-1;
+  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORSTATE), buf, 1);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
   }
-  sscanf(buf, "ST %d", (int*)state);
-  */
+  /* Make sure the data size is correct */
+  if(buf[1] != 0x04) {
+    return -1;
+  }
+  *state = (robotJointState_t)buf[2];
   return 0;
 }
 
@@ -762,10 +774,7 @@ int Mobot_getJointSpeeds(br_comms_t* comms, double *speed1, double *speed2, doub
 int Mobot_getStatus(br_comms_t* comms)
 {
   uint8_t buf[64];
-  buf[0] = BTCMD(CMD_STATUS);
-  buf[1] = 3;
-  buf[2] = MSG_SENDEND;
-  SendToIMobot(comms, buf, 3);
+  SendToIMobot(comms, BTCMD(CMD_STATUS), NULL, 0);
   RecvFromIMobot(comms, buf, 64);
   if(buf[0] != RESP_OK) {
     return -1;
@@ -785,29 +794,12 @@ int Mobot_move(br_comms_t* comms,
                                double angle3,
                                double angle4)
 {
-  double angles[4];
-  double curAngles[4];
-  int i;
-  angles[0] = angle1;
-  angles[1] = angle2;
-  angles[2] = angle3;
-  angles[3] = angle4;
-  for(i = 0; i < 4; i++) {
-    if(angles[i] == 0) {
-      continue;
-    }
-    if(Mobot_getJointAngle(comms, (robotJointId_t)(i+1), &curAngles[i])) {
-      return -1;
-    }
-  }
-  for(i = 0; i < 4; i++) {
-    if(angles[i] == 0) {
-      continue;
-    }
-    if(Mobot_moveJointToNB(comms, (robotJointId_t)(i+1), angles[i] + curAngles[i])) {
-      return -1;
-    }
-  }
+  Mobot_moveNB(comms, 
+      angle1,
+      angle2,
+      angle3,
+      angle4);
+
   /* Wait for the motion to complete */
   return Mobot_moveWait(comms);
 }
@@ -821,22 +813,35 @@ int Mobot_moveNB(br_comms_t* comms,
   double angles[4];
   double curAngles[4];
   int i;
+  double time;
+  uint8_t buf[32];
+  float f;
   angles[0] = angle1;
   angles[1] = angle2;
   angles[2] = angle3;
   angles[3] = angle4;
+  /* Get the current joint angles */
+  Mobot_getJointAnglesTime(comms, &time, 
+      &curAngles[0],
+      &curAngles[1],
+      &curAngles[2],
+      &curAngles[3] );
+  /* Calculate new angles */
   for(i = 0; i < 4; i++) {
-    if(Mobot_getJointAngle(comms, (robotJointId_t)(i+1), &curAngles[i])) {
-      return -1;
-    }
+    angles[i] = curAngles[i] + angles[i];
   }
+  /* Set up message buffer */
   for(i = 0; i < 4; i++) {
-    if(angles[i] == 0) {
-      continue;
-    }
-    if(Mobot_moveJointToNB(comms, (robotJointId_t)(i+1), angles[i] + curAngles[i])) {
-      return -1;
-    }
+    f = angles[i];
+    memcpy(&buf[i*4], &f, 4);
+  }
+  SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLES), buf, 4*4);
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 0x03) {
+    return -1;
   }
   return 0;
 }
@@ -935,24 +940,29 @@ int Mobot_moveJointTo(br_comms_t* comms, robotJointId_t id, double angle)
 
 int Mobot_moveJointToPIDNB(br_comms_t* comms, robotJointId_t id, double angle)
 {
-  char buf[160];
+  uint8_t buf[32];
+  float f;
   int status;
-  int bytes_read;
-  /*
-  sprintf(buf, "SET_MOTOR_POSITION_PID %d %lf", id, angle);
-  status = SendToIMobot(comms, buf, strlen(buf)+1);
+  buf[0] = (uint8_t)id-1;
+  f = angle;
+  memcpy(&buf[1], &f, 4);
+  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLEPID), buf, 5);
   if(status < 0) return status;
-  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
-  if(strcmp(buf, "OK")) return -1;
-  */
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
   return 0;
 }
 
 int Mobot_moveJointToNB(br_comms_t* comms, robotJointId_t id, double angle)
 {
-  char buf[160];
+  uint8_t buf[32];
+  float f;
   int status;
-  int bytes_read;
   if((id == ROBOT_JOINT2) || (id == ROBOT_JOINT3)) {
     if(angle > 90) {
       fprintf(stderr, "Warning: Angle for joint %d set beyond limits.\n", (int)(id + 1));
@@ -963,13 +973,18 @@ int Mobot_moveJointToNB(br_comms_t* comms, robotJointId_t id, double angle)
       angle = -90;
     }
   }
-  /*
-  sprintf(buf, "SET_MOTOR_POSITION %d %lf", id, angle);
-  status = SendToIMobot(comms, buf, strlen(buf)+1);
+  buf[0] = (uint8_t)id-1;
+  f = angle;
+  memcpy(&buf[1], &f, 4);
+  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLE), buf, 5);
   if(status < 0) return status;
-  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
-  if(strcmp(buf, "OK")) return -1;
-  */
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
   return 0;
 }
 
@@ -1002,25 +1017,12 @@ int Mobot_moveJointWait(br_comms_t* comms, robotJointId_t id)
 
 int Mobot_moveToZero(br_comms_t* comms)
 {
-  int i;
-  for(i = 1; i < 5; i++) {
-    if(Mobot_moveJointToNB(comms, (robotJointId_t)i, 0)) {
-      return -1;
-    }
-  }
-  /* Wait for the motion to finish */
-  return Mobot_moveWait(comms);
+  return Mobot_moveTo(comms, 0, 0, 0, 0);
 }
 
 int Mobot_moveToZeroNB(br_comms_t* comms)
 {
-  int i;
-  for(i = 1; i < 5; i++) {
-    if(Mobot_moveJointToNB(comms, (robotJointId_t)i, 0)) {
-      return -1;
-    }
-  }
-  return 0;
+  return Mobot_moveToNB(comms, 0, 0, 0, 0);
 }
 
 int Mobot_moveTo(br_comms_t* comms,
@@ -1029,19 +1031,11 @@ int Mobot_moveTo(br_comms_t* comms,
                                double angle3,
                                double angle4)
 {
-  if(Mobot_moveJointToNB(comms, ROBOT_JOINT1, angle1)) {
-    return -1;
-  }
-  if(Mobot_moveJointToNB(comms, ROBOT_JOINT2, angle2)) {
-    return -1;
-  }
-  if(Mobot_moveJointToNB(comms, ROBOT_JOINT3, angle3)) {
-    return -1;
-  }
-  if(Mobot_moveJointToNB(comms, ROBOT_JOINT4, angle4)) {
-    return -1;
-  }
-  /* Wait for motion to finish */
+  Mobot_moveToNB(comms, 
+      angle1, 
+      angle2, 
+      angle3, 
+      angle4 );
   return Mobot_moveWait(comms);
 }
 
@@ -1051,19 +1045,26 @@ int Mobot_moveToNB(br_comms_t* comms,
                                double angle3,
                                double angle4)
 {
-  if(Mobot_moveJointToNB(comms, ROBOT_JOINT1, angle1)) {
+  uint8_t buf[32];
+  float f;
+  int status;
+  f = angle1;
+  memcpy(&buf[0], &f, 4);
+  f = angle2;
+  memcpy(&buf[4], &f, 4);
+  f = angle3;
+  memcpy(&buf[8], &f, 4);
+  f = angle4;
+  memcpy(&buf[12], &f, 4);
+  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLES), buf, 16);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
     return -1;
   }
-  if(Mobot_moveJointToNB(comms, ROBOT_JOINT2, angle2)) {
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
     return -1;
   }
-  if(Mobot_moveJointToNB(comms, ROBOT_JOINT3, angle3)) {
-    return -1;
-  }
-  if(Mobot_moveJointToNB(comms, ROBOT_JOINT4, angle4)) {
-    return -1;
-  }
-  return 0;
 }
 
 int Mobot_moveWait(br_comms_t* comms)
@@ -1322,65 +1323,78 @@ int Mobot_recordWait(br_comms_t* comms)
 
 int Mobot_setJointDirection(br_comms_t* comms, robotJointId_t id, robotJointState_t dir)
 {
-  char buf[160];
+  uint8_t buf[32];
+  float f;
   int status;
-  int bytes_read;
-  /*
-  sprintf(buf, "SET_MOTOR_DIRECTION %d %d", id, dir);
-  status = SendToIMobot(comms, buf, strlen(buf)+1);
+  buf[0] = (uint8_t)id-1;
+  buf[1] = (uint8_t) dir;
+  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORDIR), buf, 2);
   if(status < 0) return status;
-  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
-  if(strcmp(buf, "OK")) return -1;
-  */
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
   return 0;
 }
 
 int Mobot_setJointSafetyAngle(br_comms_t* comms, double angle)
 {
-  char buf[160];
+  uint8_t buf[32];
+  float f;
   int status;
-  int bytes_read;
-  /*
-  sprintf(buf, "SET_MOTOR_SAFETY_LIMIT %lf", angle);
-  status = SendToIMobot(comms, buf, strlen(buf)+1);
+  f = angle;
+  memcpy(&buf[0], &f, 4);
+  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORSAFETYLIMIT), buf, 4);
   if(status < 0) return status;
-  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
-  if(strcmp(buf, "OK")) return -1;
-  */
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
   return 0;
 }
 
 int Mobot_setJointSafetyAngleTimeout(br_comms_t* comms, double seconds)
 {
-  char buf[160];
+  uint8_t buf[32];
+  float f;
   int status;
-  int bytes_read;
-  /*
-  sprintf(buf, "SET_MOTOR_SAFETY_TIMEOUT %lf", seconds);
-  status = SendToIMobot(comms, buf, strlen(buf)+1);
+  f = seconds;
+  memcpy(&buf[0], &f, 4);
+  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORSAFETYTIMEOUT), buf, 4);
   if(status < 0) return status;
-  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
-  if(strcmp(buf, "OK")) return -1;
-  */
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
   return 0;
 }
 
 int Mobot_setJointSpeed(br_comms_t* comms, robotJointId_t id, double speed)
 {
-  char buf[160];
+  uint8_t buf[32];
+  float f;
   int status;
-  int bytes_read;
-  if(speed > comms->maxSpeed[(int)id-1]) {
-    fprintf(stderr, "Warning: Speed setting exceeds maximum speed.\n");
-  }
-  /*
-  comms->jointSpeeds[id-1] = speed;
-  sprintf(buf, "SET_MOTOR_SPEED %d %lf", id, speed);
-  status = SendToIMobot(comms, buf, strlen(buf)+1);
+  f = speed;
+  buf[0] = (uint8_t)id-1;
+  memcpy(&buf[1], &f, 4);
+  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORSPEED), buf, 5);
   if(status < 0) return status;
-  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
-  if(strcmp(buf, "OK")) return -1;
-  */
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
   return 0;
 }
 
@@ -1444,15 +1458,18 @@ int Mobot_setJointSpeeds(br_comms_t* comms, double speed1, double speed2, double
 
 int Mobot_stop(br_comms_t* comms)
 {
-  char buf[160];
+  uint8_t buf[32];
+  float f;
   int status;
-  int bytes_read;
-  /*
-  status = SendToIMobot(comms, "STOP", 5);
+  status = SendToIMobot(comms, BTCMD(CMD_STOP), NULL, 0);
   if(status < 0) return status;
-  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
-  if(!strcmp(buf, "ERROR")) return -1;
-  */
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
   return 0;
 }
 
@@ -1877,14 +1894,21 @@ int str2ba(const char *str, bdaddr_t *ba)
 }
 #endif
 
-int SendToIMobot(br_comms_t* comms, const uint8_t* str, int len)
+int SendToIMobot(br_comms_t* comms, uint8_t cmd, const void* data, int datasize)
 {
   int err = 0;
   int i;
+  int len;
+  uint8_t str[64];
   if(comms->connected == 0) {
     return -1;
   }
   MUTEX_LOCK(comms->commsLock);
+  str[0] = cmd;
+  str[1] = datasize + 3;
+  if(datasize > 0) memcpy(&str[2], data, datasize);
+  str[datasize+2] = MSG_SENDEND;
+  len = datasize + 3;
 #if 0
   char* str;
   str = (char*)malloc(strlen(buf)+2);
@@ -1930,45 +1954,77 @@ int RecvFromIMobot(br_comms_t* comms, uint8_t* buf, int size)
   int tries = 100;
   int n, bytes = 0;
   uint8_t tmpbuf[256];
+  uint8_t byte;
   int done = 0;
   int i;
 
-  /* Receive the message one byte at a time */
+  printf("RECV: ");
+  /* Get the first byte */
+  tries = 100;
+  while(tries >= 0) {
+    err = read(comms->socket, &byte, 1);
+    if(err < 0) {
+      tries--;
+      //printf("*");
+      usleep(10000);
+    } else {
+      printf("0x%x ", byte);
+      break;
+    }
+  }
+  /* Check for timeout */
+  if(err < 0) {
+    /* Timed out receiving a byte. */
+    MUTEX_UNLOCK(comms->commsLock);
+    return -1;
+  }
+  /* Make sure it is a valid response */
+  if(byte != RESP_OK) {
+    /* Not a valid response. */
+    /* Clear the buffer */
+    usleep(250000);
+    read(comms->socket, tmpbuf, 255);
+    MUTEX_UNLOCK(comms->commsLock);
+    return -1;
+  }
+      
+  /* We have a byte to process */
+  buf[bytes] = byte;
+  bytes++;
 
-  /* Receive a command from the remote device. */
+  /* Receive the message one byte at a time */
   while(!done) {
-    /* Read a segment of the message */
+    /* Read a byte. Try 100 times... */
+    tries = 100;
     while(tries >= 0) {
-      err = read(comms->socket, tmpbuf, 255);
+      err = read(comms->socket, &byte, 1);
       if(err < 0) {
         tries--;
         //printf("*");
         usleep(10000);
       } else {
+        printf("0x%x ", byte);
         break;
       }
     }
-    /* If we could not receive any data at all, break out */
+    /* Check for timeout */
     if(err < 0) {
+      /* Timed out receiving a byte. */
       MUTEX_UNLOCK(comms->commsLock);
       return -1;
     }
-    /* Make sure we received the whole segment by checking the data size */
-    memcpy(&buf[bytes], tmpbuf, err);
-    bytes += err;
-    if(bytes >= 2) {
-      if(bytes == buf[1]) {
-        done = 1;
-      }
-      tries = 100;
+    /* We have a byte to process */
+    buf[bytes] = byte;
+    bytes++;
+    /* Check to see if we've received the whole message */
+    if(buf[1] == bytes) {
+      MUTEX_UNLOCK(comms->commsLock);
+      done = 1;
     }
   }
-  MUTEX_UNLOCK(comms->commsLock);
-  printf("RECV: ");
-  for(i = 0; i < bytes; i++) {
-    printf("0x%x ", buf[i]);
-  }
+
   printf("\n");
+  MUTEX_UNLOCK(comms->commsLock);
   return 0;
 }
 

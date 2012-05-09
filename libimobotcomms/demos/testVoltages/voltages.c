@@ -1,6 +1,7 @@
 /* Filename: voltages.c
  * Prints all encoder voltages in a tabular format */
 #include <mobot.h>
+#include <stdlib.h>
 
 int main()
 {

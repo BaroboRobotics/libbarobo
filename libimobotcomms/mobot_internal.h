@@ -241,7 +241,7 @@ DLLIMPORT int Mobot_motionUnstandNB(br_comms_t* comms);
 DLLIMPORT int Mobot_motionWait(br_comms_t* comms);
 
 /* Utility Functions */
-int SendToIMobot(br_comms_t* comms, const uint8_t* str, int len);
+int SendToIMobot(br_comms_t* comms, uint8_t cmd, const void* data, int datasize);
 int RecvFromIMobot(br_comms_t* comms, uint8_t* buf, int size);
 
 #endif /* Not _CH_ */
