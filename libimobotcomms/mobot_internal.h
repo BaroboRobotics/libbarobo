@@ -36,6 +36,16 @@ typedef struct br_comms_s
   int motionArgInt;
   double motionArgDouble;
   int recordingInProgress[4];
+
+  THREAD_T commsThread;
+  uint8_t recvBuf[64];
+  int recvBuf_ready;
+  MUTEX_T* recvBuf_lock;
+  COND_T*  recvBuf_cond;
+  int recvBuf_bytes;
+  int commsBusy;
+  MUTEX_T* commsBusy_lock;
+  COND_T* commsBusy_cond;
 } br_comms_t;
 #endif
 
@@ -244,6 +254,7 @@ DLLIMPORT int Mobot_motionWait(br_comms_t* comms);
 /* Utility Functions */
 int SendToIMobot(br_comms_t* comms, uint8_t cmd, const void* data, int datasize);
 int RecvFromIMobot(br_comms_t* comms, uint8_t* buf, int size);
+void* commsEngine(void* arg);
 
 #endif /* Not _CH_ */
 

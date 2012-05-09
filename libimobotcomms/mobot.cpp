@@ -341,11 +341,12 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
   }
 #ifndef _WIN32
   /* Make the socket non-blocking */
-  flags = fcntl(comms->socket, F_GETFL, 0);
-  fcntl(comms->socket, F_SETFL, flags | O_NONBLOCK);
+  //flags = fcntl(comms->socket, F_GETFL, 0);
+  //fcntl(comms->socket, F_SETFL, flags | O_NONBLOCK);
   /* Wait for the MoBot to get ready */
   sleep(1);
-  read(comms->socket, buf, 255);
+  /* Start the comms engine */
+  THREAD_CREATE(&comms->commsThread, commsEngine, comms);
 #endif
   finishConnect(comms);
   return status;
@@ -483,6 +484,16 @@ int Mobot_init(br_comms_t* comms)
   comms->commsLock = (MUTEX_T*)malloc(sizeof(MUTEX_T));
   MUTEX_INIT(comms->commsLock);
   comms->motionInProgress = 0;
+  MUTEX_NEW(comms->recvBuf_lock);
+  MUTEX_INIT(comms->recvBuf_lock);
+  COND_NEW(comms->recvBuf_cond);
+  COND_INIT(comms->recvBuf_cond);
+  comms->recvBuf_ready = 0;
+  MUTEX_NEW(comms->commsBusy_lock);
+  MUTEX_INIT(comms->commsBusy_lock);
+  COND_NEW(comms->commsBusy_cond);
+  COND_INIT(comms->commsBusy_cond);
+  comms->commsBusy = 0;
   return 0;
 }
 
@@ -1935,6 +1946,7 @@ int SendToIMobot(br_comms_t* comms, uint8_t cmd, const void* data, int datasize)
     return -1;
   }
   MUTEX_LOCK(comms->commsLock);
+  comms->recvBuf_ready = 0;
   str[0] = cmd;
   str[1] = datasize + 3;
   if(datasize > 0) memcpy(&str[2], data, datasize);
@@ -1981,80 +1993,21 @@ int SendToIMobot(br_comms_t* comms, uint8_t cmd, const void* data, int datasize)
 
 int RecvFromIMobot(br_comms_t* comms, uint8_t* buf, int size)
 {
-  int err = 0;
-  int tries = 100;
-  int n, bytes = 0;
-  uint8_t tmpbuf[256];
-  uint8_t byte;
-  int done = 0;
+  /* Wait until transaction is ready */
+  MUTEX_LOCK(comms->recvBuf_lock);
+  while(!comms->recvBuf_ready) {
+    COND_WAIT(comms->recvBuf_cond, comms->recvBuf_lock);
+  }
+  memcpy(buf, comms->recvBuf, comms->recvBuf_bytes);
+
+  /* Print out results */
   int i;
-
-  printf("RECV: ");
-  /* Get the first byte */
-  tries = 100;
-  while(tries >= 0) {
-    err = read(comms->socket, &byte, 1);
-    if(err < 0) {
-      tries--;
-      //printf("*");
-      usleep(10000);
-    } else {
-      printf("0x%x ", byte);
-      break;
-    }
+  for(i = 0; i < buf[1]; i++) {
+    printf("0x%2x ", buf[i]);
   }
-  /* Check for timeout */
-  if(err < 0) {
-    /* Timed out receiving a byte. */
-    MUTEX_UNLOCK(comms->commsLock);
-    return -1;
-  }
-  /* Make sure it is a valid response */
-  if(byte != RESP_OK) {
-    /* Not a valid response. */
-    /* Clear the buffer */
-    usleep(250000);
-    read(comms->socket, tmpbuf, 255);
-    MUTEX_UNLOCK(comms->commsLock);
-    return -1;
-  }
-      
-  /* We have a byte to process */
-  buf[bytes] = byte;
-  bytes++;
-
-  /* Receive the message one byte at a time */
-  while(!done) {
-    /* Read a byte. Try 100 times... */
-    tries = 100;
-    while(tries >= 0) {
-      err = read(comms->socket, &byte, 1);
-      if(err < 0) {
-        tries--;
-        //printf("*");
-        usleep(10000);
-      } else {
-        printf("0x%x ", byte);
-        break;
-      }
-    }
-    /* Check for timeout */
-    if(err < 0) {
-      /* Timed out receiving a byte. */
-      MUTEX_UNLOCK(comms->commsLock);
-      return -1;
-    }
-    /* We have a byte to process */
-    buf[bytes] = byte;
-    bytes++;
-    /* Check to see if we've received the whole message */
-    if(buf[1] == bytes) {
-      MUTEX_UNLOCK(comms->commsLock);
-      done = 1;
-    }
-  }
-
   printf("\n");
+
+  MUTEX_UNLOCK(comms->recvBuf_lock);
   MUTEX_UNLOCK(comms->commsLock);
   return 0;
 }
@@ -2139,6 +2092,64 @@ int RecvFromIMobot2(br_comms_t* comms, char* buf, int size)
   } else {
     return 0;
   }
+}
+
+/* The comms engine will watch the incoming comm channel for any message. If a
+ * message is expected, it will get the data to RecvFromIMobot(). If it was
+ * triggered by an event, then the appropriate callback will be called. */
+void* commsEngine(void* arg)
+{
+  br_comms_t* comms = (br_comms_t*)arg;
+  uint8_t byte;
+  int bytes = 0;
+  int err;
+  int isResponse;
+
+  while(1) {
+    /* Try and receive a byte */
+    err = read(comms->socket, &byte, 1);
+    if(err < 0) {
+      continue;
+    }
+    /* Received a byte. If it is the first one, check to see if it is a
+     * response or a triggered event */
+    if(bytes == 0) {
+      if( (byte == RESP_OK) ||
+          (byte == RESP_ERR)
+          ) {
+        MUTEX_LOCK(comms->commsBusy_lock);
+        comms->commsBusy = 1;
+        COND_SIGNAL(comms->commsBusy_cond);
+        MUTEX_UNLOCK(comms->commsBusy_lock);
+        isResponse = 1;
+      } else {
+        isResponse = 0;
+      }
+    }
+    if(isResponse) {
+      MUTEX_LOCK(comms->recvBuf_lock);
+      comms->recvBuf[bytes] = byte;
+      bytes++;
+      MUTEX_UNLOCK(comms->recvBuf_lock);
+      if( (bytes >= 2) &&
+          (comms->recvBuf[1] == bytes) )
+      {
+        /* We have received the entire response */
+        MUTEX_LOCK(comms->recvBuf_lock);
+        comms->recvBuf_ready = 1;
+        comms->recvBuf_bytes = bytes;
+        COND_BROADCAST(comms->recvBuf_cond);
+        MUTEX_UNLOCK(comms->recvBuf_lock);
+        /* Reset state vars */
+        bytes = 0;
+        MUTEX_LOCK(comms->commsBusy_lock);
+        comms->commsBusy = 0;
+        COND_SIGNAL(comms->commsBusy_cond);
+        MUTEX_UNLOCK(comms->commsBusy_lock);
+      }
+    }
+  }
+  return NULL;
 }
 
 #ifndef C_ONLY
