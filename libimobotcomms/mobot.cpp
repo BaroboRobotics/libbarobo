@@ -49,6 +49,8 @@ void* nullThread(void* arg)
    -2 : Lockfile Exists
    -3 : Address Format Incorrect
    -4 : Not enough entries in the configuration file
+   -5 : Bluetooth device not found
+   -6 : Protocol version mismatch
    */
 int finishConnect(br_comms_t* comms);
 int Mobot_connect(br_comms_t* comms)
@@ -415,6 +417,16 @@ int finishConnect(br_comms_t* comms)
 #else
     Sleep(200);
 #endif
+  }
+  /* Get the protocol version; make sure it matches ours */
+  int version;
+  version = Mobot_getVersion(comms); 
+  if(version != CMD_NUMCOMMANDS) {
+    Mobot_disconnect(comms);
+    fprintf(stderr, "Error. Bluetooth protocol version mismatch.\n");
+    fprintf(stderr, "Mobot Firmware Protocol Version: %d\n", version);
+    fprintf(stderr, "CMobot Library Protocol Version: %d\n", CMD_NUMCOMMANDS);
+    return -6;
   }
   /* Get the joint max speeds */
   for(i = 4; i >= 1; i--) {
@@ -786,6 +798,25 @@ int Mobot_getStatus(br_comms_t* comms)
     return -1;
   }
   return 0;
+}
+
+int Mobot_getVersion(br_comms_t* comms)
+{
+  uint8_t buf[16];
+  int version;
+  SendToIMobot(comms, BTCMD(CMD_GETVERSION), NULL, 0);
+  RecvFromIMobot(comms, buf, 16);
+  if(buf[0] != RESP_OK) {
+    return -1;
+  }
+  if(buf[1] != 4 ) {
+    return -1;
+  }
+  if(buf[3] != RESP_END) {
+    return -1;
+  }
+  version = buf[2];
+  return version;
 }
 
 int Mobot_move(br_comms_t* comms,

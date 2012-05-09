@@ -127,6 +127,7 @@ DLLIMPORT int Mobot_getJointSpeedRatios(br_comms_t* comms,
                                         double *ratio4);
 DLLIMPORT int Mobot_getJointState(br_comms_t* comms, robotJointId_t id, robotJointState_t *state);
 DLLIMPORT int Mobot_getStatus(br_comms_t* comms);
+DLLIMPORT int Mobot_getVersion(br_comms_t* comms);
 DLLIMPORT int Mobot_move(br_comms_t* comms,
                                double angle1,
                                double angle2,

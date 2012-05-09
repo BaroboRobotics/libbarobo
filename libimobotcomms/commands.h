@@ -143,6 +143,11 @@ enum protocol_commands_e {
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_STOP,
 
+/* CMD_GETVERSION: Gets the protocol version. Currently, this value is just CMD_NUMCOMMANDS.
+ * Command format: [CMD] [0x03] [0x00]
+ * Expected Response: [0x10] [0x04] [1byte version] [0x11] */
+  CMD_GETVERSION,
+
   CMD_NUMCOMMANDS
 };
 
