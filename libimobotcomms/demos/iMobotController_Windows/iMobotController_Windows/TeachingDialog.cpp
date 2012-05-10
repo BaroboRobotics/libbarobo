@@ -85,6 +85,7 @@ BEGIN_MESSAGE_MAP(CTeachingDialog, CDialog)
 	ON_COMMAND(ID_RENAME_REMOVE32782, &CTeachingDialog::OnContextRemove)
   ON_COMMAND(ID_RECORDED_MOVEUP, &CTeachingDialog::OnRecordPopupMoveup)
   ON_COMMAND(ID_RECORDED_MOVEDOWN, &CTeachingDialog::OnRecordPopupMovedown)
+  ON_COMMAND(ID_RECORDED_GOTOPOSE, &CTeachingDialog::OnRecordedGotopose)
 END_MESSAGE_MAP()
 
 
@@ -412,4 +413,13 @@ void CTeachingDialog::OnRecordPopupMovedown()
     _robotManager.getMobot(i)->moveMotion(contextMenuIndex, contextMenuIndex+1);
   }
   refreshRecordedMotions(-1);
+}
+
+void CTeachingDialog::OnRecordedGotopose()
+{
+  int i;
+  refreshRecordedMotions(contextMenuIndex);
+  for(i = 0; i < _robotManager.numConnected(); i++) {
+    _robotManager.getMobot(i)->play(contextMenuIndex);
+  }
 }

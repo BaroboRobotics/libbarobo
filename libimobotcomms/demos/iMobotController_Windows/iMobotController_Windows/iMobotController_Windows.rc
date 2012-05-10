@@ -337,15 +337,15 @@ BEGIN
         MENUITEM "Connect to Robot",            ID_ROBOT_CONNECTTOAROBOT
         MENUITEM "Disconnect from Robot",       ID_CONNECT_DISCONNECTFROMROBOT
     END
+    POPUP "Teaching Mode"
+    BEGIN
+        MENUITEM "Teaching Mode Dialog",        ID_TEACHINGMODE_TEACHINGMODEDIALOG
+    END
     POPUP "Help"
     BEGIN
         MENUITEM "Help",                        ID_HELP_HELP
         MENUITEM "Demos",                       ID_HELP_DEMOS
         MENUITEM "About RobotController",       ID_HELP_ABOUTROBOTCONTROLLER
-    END
-    POPUP "Teaching Mode"
-    BEGIN
-        MENUITEM "Teaching Mode Dialog",        ID_TEACHINGMODE_TEACHINGMODEDIALOG
     END
 END
 
@@ -353,6 +353,7 @@ IDR_MENU_RECORDEDMOTIONPOPUP MENU
 BEGIN
     POPUP "RECORDED_MOTION_CONTEXT_POPUP"
     BEGIN
+        MENUITEM "Go To Pose",                  ID_RECORDED_GOTOPOSE
         MENUITEM "Rename",                      ID_RENAME_REMOVE
         MENUITEM "Remove",                      ID_RENAME_REMOVE32782
         MENUITEM "Move Up",                     ID_RECORDED_MOVEUP

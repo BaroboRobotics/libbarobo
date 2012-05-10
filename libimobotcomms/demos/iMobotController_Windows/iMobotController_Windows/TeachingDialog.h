@@ -68,4 +68,5 @@ public:
 	afx_msg void OnContextRemove();
   afx_msg void OnRecordPopupMoveup();
   afx_msg void OnRecordPopupMovedown();
+  afx_msg void OnRecordedGotopose();
 };
