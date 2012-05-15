@@ -49,8 +49,18 @@ typedef struct br_comms_s
 
   MUTEX_T* callback_lock;
   int callbackEnabled;
-  void (buttonCallback)(int button, int buttonDown);
+  void (*buttonCallback)(int button, int buttonDown);
 } br_comms_t;
+#endif
+
+#ifndef CALLBACK_ARG_S
+#define CALLBACK_ARG_S
+typedef struct callbackArg_s
+{
+  br_comms_t* comms;
+  int button;
+  int buttonDown;
+} callbackArg_t;
 #endif
 
 #ifndef ROBOT_JOINTS_E
@@ -115,6 +125,7 @@ DLLIMPORT int Mobot_connectWithTTY(br_comms_t* comms, const char* ttyfilename);
 DLLIMPORT int Mobot_connectWithAddress(
     br_comms_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_disconnect(br_comms_t* comms);
+DLLIMPORT int Mobot_enableButtonCallback(br_comms_t* comms, void (*buttonCallback)(int button, int buttonDown));
 DLLIMPORT int Mobot_init(br_comms_t* comms);
 DLLIMPORT int Mobot_isConnected(br_comms_t* comms);
 DLLIMPORT int Mobot_isMoving(br_comms_t* comms);
@@ -259,6 +270,7 @@ DLLIMPORT int Mobot_motionWait(br_comms_t* comms);
 int SendToIMobot(br_comms_t* comms, uint8_t cmd, const void* data, int datasize);
 int RecvFromIMobot(br_comms_t* comms, uint8_t* buf, int size);
 void* commsEngine(void* arg);
+void* callbackThread(void* arg);
 
 #endif /* Not _CH_ */
 

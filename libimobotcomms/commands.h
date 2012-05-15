@@ -19,7 +19,6 @@
 
 /* Button Callback Messages */
 /* Command format:
- * 0     1      2-5                       6                               7                         8                        9
  * [CMD] [0x0A] [4 byte timestamp millis] [1 byte events triggered mask] [1 byte buttons down mask] [1 byte buttons up mask] [0x00]
  * No Response Expected */
 #define EVENT_BUTTON 0x20
@@ -165,7 +164,7 @@ enum protocol_commands_e {
  * instead send button events to the server host. 
  * Command Format: [CMD] [0x04] [1 byte true/false] [0x00]
  * Expected Response: [0x10] [0x03] [0x11] */
-  CMD_SETBUTTONHANDLER,
+  CMD_ENABLEBUTTONHANDLER,
 
   CMD_NUMCOMMANDS
 };

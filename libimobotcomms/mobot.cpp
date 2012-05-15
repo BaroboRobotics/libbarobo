@@ -461,14 +461,14 @@ int Mobot_disconnect(br_comms_t* comms)
   return 0;
 }
 
-int Mobot_enableButtonCallback(br_comms_t* comms, void (buttonCallback)(int button, int buttonDown))
+int Mobot_enableButtonCallback(br_comms_t* comms, void (*buttonCallback)(int button, int buttonDown))
 {
   uint8_t buf[16];
   int status;
   MUTEX_LOCK(comms->callback_lock);
   /* Send a message to the Mobot */
   buf[0] = 1;
-  status = SendToIMobot(comms, BTCMD(CMD_SETBUTTONHANDLER), buf, 1);
+  status = SendToIMobot(comms, BTCMD(CMD_ENABLEBUTTONHANDLER), buf, 1);
   if(status < 0) return status;
   if(RecvFromIMobot(comms, buf, sizeof(buf))) {
     MUTEX_UNLOCK(comms->callback_lock);
@@ -2186,6 +2186,7 @@ void* commsEngine(void* arg)
       }
     } else {
       /* It was a user triggered event */
+      printf("Event Byte: 0x%x\n", byte);
       MUTEX_LOCK(comms->recvBuf_lock);
       comms->recvBuf[bytes] = byte;
       bytes++;
@@ -2200,9 +2201,16 @@ void* commsEngine(void* arg)
           int bit;
           uint8_t events = comms->recvBuf[6];
           uint8_t buttonDown = comms->recvBuf[7];
+          THREAD_T callbackThreadHandle;
+          callbackArg_t* callbackArg;
           for(bit = 0; bit < 2; bit++) {
             if(events & (1<<bit)) {
-              comms->buttonCallback(bit, (buttonDown & (1<<bit)) ? 1 : 0 );
+              callbackArg = (callbackArg_t*)malloc(sizeof(callbackArg_t));
+              callbackArg->comms = comms;
+              callbackArg->button = bit;
+              callbackArg->buttonDown = (buttonDown & (1<<bit)) ? 1 : 0;
+              //comms->buttonCallback(bit, (buttonDown & (1<<bit)) ? 1 : 0 );
+              THREAD_CREATE(&callbackThreadHandle, callbackThread, callbackArg);
             }
           }
         }
@@ -2212,8 +2220,8 @@ void* commsEngine(void* arg)
         comms->commsBusy = 0;
         COND_SIGNAL(comms->commsBusy_cond);
         MUTEX_UNLOCK(comms->commsBusy_lock);
+        MUTEX_UNLOCK(comms->callback_lock);
       }
-      MUTEX_UNLOCK(comms->callback_lock);
     }
   }
   return NULL;
@@ -2221,7 +2229,13 @@ void* commsEngine(void* arg)
 
 void* callbackThread(void* arg)
 {
-  br_comms_t* comms = arg;
+  callbackArg_t *cbArg = (callbackArg_t*)arg;
+  /* Just run the callback function */
+  cbArg->comms->buttonCallback(
+      cbArg->button,
+      cbArg->buttonDown );
+  free(cbArg);
+  return NULL;
 }
 
 #ifndef C_ONLY
