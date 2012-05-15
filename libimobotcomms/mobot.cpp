@@ -461,7 +461,7 @@ int Mobot_disconnect(br_comms_t* comms)
   return 0;
 }
 
-int Mobot_enableButtonCallback(br_comms_t* comms, void (*buttonCallback)(int button, int buttonDown))
+int Mobot_enableButtonCallback(br_comms_t* comms, void* robot, void (*buttonCallback)(void* robot, int button, int buttonDown))
 {
   uint8_t buf[16];
   int status;
@@ -480,8 +480,9 @@ int Mobot_enableButtonCallback(br_comms_t* comms, void (*buttonCallback)(int but
     return -1;
   }
 
-  comms->buttonCallback = buttonCallback;
+  comms->buttonCallback = (void(*)(void*,int,int))buttonCallback;
   comms->callbackEnabled = 1;
+  comms->mobot = robot;
   MUTEX_UNLOCK(comms->callback_lock);
   return 0;
 }
@@ -2232,6 +2233,7 @@ void* callbackThread(void* arg)
   callbackArg_t *cbArg = (callbackArg_t*)arg;
   /* Just run the callback function */
   cbArg->comms->buttonCallback(
+      cbArg->comms->mobot,
       cbArg->button,
       cbArg->buttonDown );
   free(cbArg);

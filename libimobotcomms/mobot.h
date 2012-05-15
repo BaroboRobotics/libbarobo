@@ -202,6 +202,7 @@ class CMobot {
     int getJointDirection(robotJointId_t id, robotJointState_t &dir);
     int setJointDirection(robotJointId_t id, robotJointState_t dir);
     br_comms_t _comms;
+    void (*buttonCallback)(CMobot *robot, int button, int buttonDown);
 #else
   public:
     static void *g_chmobot_dlhandle;

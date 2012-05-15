@@ -1,7 +1,7 @@
 #include <mobot.h>
 
 br_comms_t comms;
-void cb(int button, int buttonEvent)
+void cb(void* mobot, int button, int buttonEvent)
 {
   double time;
   double angle1;
@@ -27,7 +27,7 @@ int main()
 {
   Mobot_init(&comms);
   Mobot_connect(&comms);
-  Mobot_enableButtonCallback(&comms, cb);
+  Mobot_enableButtonCallback(&comms, NULL, cb);
   while(1) {
     sleep(10);
   }
