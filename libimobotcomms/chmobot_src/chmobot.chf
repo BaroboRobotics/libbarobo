@@ -79,6 +79,31 @@ int CMobot::disconnect() {
     dlrunfun(fptr, &retval, disconnect, this);
     return retval;
 }
+int CMobot::disableButtonCallback() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "disableButtonCallback_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this);
+    return retval;
+}
+int CMobot::enableButtonCallback(void (*buttonCallback)(CMobot* robot, int button, int buttonDown))
+{
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "enableButtonCallback_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, buttonCallback);
+    return retval;
+}
 int CMobot::getJointAngle(int id, double & angle) {
     void *fptr;
     int retval;
