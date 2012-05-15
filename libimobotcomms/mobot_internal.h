@@ -8,6 +8,8 @@
 #ifndef _WIN32
 typedef struct sockaddr_rc sockaddr_t;
 #else
+typedef unsigned char uint8_t;
+typedef unsigned __int32 uint32_t;
 #define AF_BLUETOOTH AF_BTH
 #define BTPROTO_RFCOMM BTHPROTO_RFCOMM
 typedef SOCKADDR_BTH sockaddr_t;

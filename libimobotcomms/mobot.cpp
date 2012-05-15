@@ -339,15 +339,13 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
 #endif
     return err;
   }
-#ifndef _WIN32
   /* Make the socket non-blocking */
   //flags = fcntl(comms->socket, F_GETFL, 0);
   //fcntl(comms->socket, F_SETFL, flags | O_NONBLOCK);
   /* Wait for the MoBot to get ready */
-  sleep(1);
+  //sleep(1);
   /* Start the comms engine */
   THREAD_CREATE(&comms->commsThread, commsEngine, comms);
-#endif
   finishConnect(comms);
   return status;
 #else
@@ -2022,7 +2020,7 @@ int SendToIMobot(br_comms_t* comms, uint8_t cmd, const void* data, int datasize)
   /* To send to the iMobot, we need to append the terminating character, '$' */
   if(comms->connected == 1) {
 #ifdef _WIN32
-    err = send(comms->socket, str, len, 0);
+    err = send(comms->socket, (const char*)str, len, 0);
 #else
     err = write(comms->socket, str, len);
 #endif
@@ -2161,7 +2159,11 @@ void* commsEngine(void* arg)
 
   while(1) {
     /* Try and receive a byte */
+#ifndef _WIN32
     err = read(comms->socket, &byte, 1);
+#else
+    err = recvfrom(comms->socket, (char*)&byte, 1, 0, (struct sockaddr*)0, 0);
+#endif
     if(err < 0) {
       continue;
     }
