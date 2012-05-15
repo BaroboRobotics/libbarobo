@@ -1,6 +1,7 @@
 /* Filename: voltages.c
  * Prints all encoder voltages in a tabular format */
 #include <mobot.h>
+#include <stdlib.h>
 
 int main()
 {
@@ -22,7 +23,7 @@ int main()
     Mobot_getButtonVoltage(comms, &voltage);
     printf("BUTTON: %lf", voltage);
     printf("\n");
-    usleep(100000);
+    //usleep(10000);
   }
 
   return 0;

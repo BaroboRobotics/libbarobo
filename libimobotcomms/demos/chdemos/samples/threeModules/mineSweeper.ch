@@ -1,5 +1,5 @@
-/* Filename: tank.ch
-   Control three modules as a tank.
+/* Filename: minesweeper.ch
+   Control three modules as a mine sweeper.
                4
             -------
              |   |

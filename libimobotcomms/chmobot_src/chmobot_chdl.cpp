@@ -67,6 +67,34 @@ EXPORTCH int disconnect_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int disableButtonCallback_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    retval = mobot->disableButtonCallback();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int enableButtonCallback_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    void (*cb)(CMobot*,int,int);
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    cb = (void(*)(CMobot*,int,int))Ch_VaArg(interp, ap, void*);
+    retval = mobot->enableButtonCallback(cb);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int isConnected_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -1468,7 +1496,6 @@ EXPORTCH int CMG_setJointSpeedRatios_chdl(void *varg) {
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
-    id = Ch_VaArg(interp, ap, robotJointId_t);
     ratio1 = Ch_VaArg(interp, ap, double);
     ratio2 = Ch_VaArg(interp, ap, double);
     ratio3 = Ch_VaArg(interp, ap, double);

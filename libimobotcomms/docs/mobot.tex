@@ -251,6 +251,14 @@ program that controls a robot, the robot should not currently be connected to an
 other application, including the RobotController, other Ch programs, and other
 programs on other computers.
 
+Furthermore, please note that Bluetooth devices have a maximum limit of connected 
+devices. The maximum limit is 7 devices connected simultaneously. This means that 
+a maximum of 7 Mobots may be connected to a computer simultaneously, if no
+other devices are connected. If, for instance, two other devices are currently 
+connected, such as a bluetooth enabled phone and a bluetooth mouse, then the 
+maximum number of connected Mobots decreases to 5, for a total of 7 connected 
+devices.
+
 \section{ The Robot Remote Control Program }
 \begin{figure}[H]
 \begin{center}
@@ -275,6 +283,10 @@ displays a schematic diagram of the Mobot, displaying motor positions.
 Underneath the diagram, there is a large button with the text 
 ``Move To Zero''. When clicked, this button will command the connected
 Mobot to rotate all of its joints to a flat ``Zero'' position.
+
+It is also possible to move the Mobot into zero position using the
+on-board buttons. Please refer to Section \ref{sec:zeroposition} on
+page \pageref{sec:zeroposition} for more details.
 
 \subsection{Individual Joint Control}
 The second section, located at the top-middle section of the interface,
@@ -2206,7 +2218,7 @@ simultaneously. The blue LED should flash quickly 3 times. The Mobot has now
 been recalibrated.
 \end{itemize}
 
-\subsection{Testing the Robot's Zero Position}
+\subsection{\label{sec:zeroposition}Testing the Robot's Zero Position}
 Button ``B'' may be used to toggle the robot between holding its zero position 
 or relaxing all of its joints. Press and hold the ``B'' button until the blue
 LED flashes. It should take no longer than 1 second. If the Mobot is currently relaxed,

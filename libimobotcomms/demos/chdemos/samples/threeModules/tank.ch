@@ -6,14 +6,14 @@ the vertical view of the tank
 1|    2    |   3   ^| 4
  |---------|--------|
        |-------|
-       |   4   | 3rd
+       |   1   | 3rd
        |-------|
  |---------|--------|
 1|    2    |   3   ^| 4
  |---------|--------|            
           2nd                        
-The symbol ^ indicates the switche on robots.
-The joint 4 of the third robot is the connecting point and the switch of the third robot
+The symbol ^ indicates the switch on robots.
+The joint 1 of the third robot is the connecting point and the switch of the third robot
 is near the second robot.
 */
 #include <mobot.h>
@@ -38,16 +38,16 @@ robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();
 
-/* gun ready */
-robot3.moveJoint(ROBOT_JOINT3, 90);
+/* "gun" ready */
+robot3.moveJoint(ROBOT_JOINT2, -90);
 
-/* gun scan */
-robot3.moveTo(0, 0, 90, 360);
+/* "gun" scan */
+robot3.moveTo(360, -90, 0, 0);
 
 /* move forward */
 robot1.motionRollForwardNB(360);
 robot2.motionRollForwardNB(360);
-robot3.moveToNB(0, 0, 90, 360);
+robot3.moveToNB(360, -90, 0, 0);
 robot1.motionWait();
 robot2.motionWait();
 robot3.moveWait();
@@ -55,15 +55,23 @@ robot3.moveWait();
 /* move backward */
 robot1.motionRollForwardNB(-360);
 robot2.motionRollForwardNB(-360);
-robot3.moveToNB(0, 0, 90, -360);
+robot3.moveToNB(-360, -90, 0, 0);
 robot1.motionWait();
 robot2.motionWait();
 robot3.moveWait();
 
+/* moving the "gun"*/
+robot3.moveTo(0, -45, 45, 0);
+robot3.moveTo(360, -45, 45, 0);
+robot3.moveTo(0, 0, 90, 0);
+robot3.moveTo(360, 0, 90, 0);
+robot3.moveTo(0, 0, 0, 0);
+robot3.moveTo(360, 0, 0, 0);
+
 /* turn right */
-robot1.motionTurnRightNB(90);
-robot2.motionTurnRightNB(90);
-robot3.moveToNB(0, 0, 90, -90);
+robot1.motionTurnRightNB(180);
+robot2.motionTurnRightNB(180);
+robot3.moveToNB(-90, -90, 0, 0);
 robot1.motionWait();
 robot2.motionWait();
 robot3.moveWait();
@@ -71,7 +79,7 @@ robot3.moveWait();
 /* turn left */
 robot1.motionTurnLeftNB(180);
 robot2.motionTurnLeftNB(180);
-robot3.moveToNB(0, 0, 90, 90);
+robot3.moveToNB(90, -90, 0, 0);
 robot1.motionWait();
 robot2.motionWait();
 robot3.moveWait();
