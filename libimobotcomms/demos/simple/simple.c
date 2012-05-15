@@ -29,7 +29,8 @@ int main()
   Mobot_connect(&comms);
   Mobot_enableButtonCallback(&comms, NULL, cb);
   while(1) {
-    sleep(10);
+    sleep(5);
+    Mobot_moveToZero(&comms);
   }
   return 0;
 }

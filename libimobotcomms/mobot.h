@@ -104,6 +104,8 @@ class CMobot {
     int connectWithTTY(const char ttyfilename[]);
 #endif
     int disconnect();
+    int enableButtonCallback(void (*buttonCallback)(CMobot* robot, int button, int buttonDown));
+    int disableButtonCallback();
     int isConnected();
     int isMoving();
     int getJointAngle(robotJointId_t id, double &angle);

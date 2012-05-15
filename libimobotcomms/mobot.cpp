@@ -489,7 +489,23 @@ int Mobot_enableButtonCallback(br_comms_t* comms, void* robot, void (*buttonCall
 
 int Mobot_disableButtonCallback(br_comms_t* comms)
 {
+  uint8_t buf[16];
+  int status;
   MUTEX_LOCK(comms->callback_lock);
+  /* Send a message to the Mobot */
+  buf[0] = 0;
+  status = SendToIMobot(comms, BTCMD(CMD_ENABLEBUTTONHANDLER), buf, 1);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    MUTEX_UNLOCK(comms->callback_lock);
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 0x03) {
+    MUTEX_UNLOCK(comms->callback_lock);
+    return -1;
+  }
+
   comms->buttonCallback = NULL;
   comms->callbackEnabled = 0;
   MUTEX_UNLOCK(comms->callback_lock);
@@ -2275,6 +2291,19 @@ int CMobot::connectWithTTY(const char* ttyfilename)
 int CMobot::disconnect()
 {
   return Mobot_disconnect(&_comms);
+}
+
+int CMobot::enableButtonCallback(void (*buttonCallback)(CMobot* robot, int button, int buttonDown))
+{
+  return Mobot_enableButtonCallback(
+      &_comms,
+      this,
+      (void(*)(void*,int,int))buttonCallback);
+}
+
+int CMobot::disableButtonCallback()
+{
+  return Mobot_disableButtonCallback(&_comms);
 }
 
 int CMobot::isConnected()
