@@ -46,6 +46,10 @@ typedef struct br_comms_s
   int commsBusy;
   MUTEX_T* commsBusy_lock;
   COND_T* commsBusy_cond;
+
+  MUTEX_T* callback_lock;
+  int callbackEnabled;
+  void (buttonCallback)(int button, int buttonDown);
 } br_comms_t;
 #endif
 

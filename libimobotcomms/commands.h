@@ -17,6 +17,13 @@
 #define RESP_END 0x11
 #define RESP_ERR 0xff
 
+/* Button Callback Messages */
+/* Command format:
+ * 0     1      2-5                       6                               7                         8                        9
+ * [CMD] [0x0A] [4 byte timestamp millis] [1 byte events triggered mask] [1 byte buttons down mask] [1 byte buttons up mask] [0x00]
+ * No Response Expected */
+#define EVENT_BUTTON 0x20
+
 #define CMD_START 0x30
 
 #define BTCMD(cmd) ((cmd) + CMD_START)
@@ -147,6 +154,18 @@ enum protocol_commands_e {
  * Command format: [CMD] [0x03] [0x00]
  * Expected Response: [0x10] [0x04] [1byte version] [0x11] */
   CMD_GETVERSION,
+
+/* CMD_BLINKLED: Blink the LED with a certain millisecond delay a certain
+ * number of times 
+ * Command format: [CMD] [0x08] [4 byte unsigned long millisecond delay] [1 byte number of blinks] [0x00]
+ * Expected Response: [0x10] [0x03] [0x11] */
+  CMD_BLINKLED,
+
+/* CMD_ENABLEBUTTONHANDLER: Disable the default button handler routines and
+ * instead send button events to the server host. 
+ * Command Format: [CMD] [0x04] [1 byte true/false] [0x00]
+ * Expected Response: [0x10] [0x03] [0x11] */
+  CMD_SETBUTTONHANDLER,
 
   CMD_NUMCOMMANDS
 };

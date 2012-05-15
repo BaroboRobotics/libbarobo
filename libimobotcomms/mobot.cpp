@@ -461,6 +461,40 @@ int Mobot_disconnect(br_comms_t* comms)
   return 0;
 }
 
+int Mobot_enableButtonCallback(br_comms_t* comms, void (buttonCallback)(int button, int buttonDown))
+{
+  uint8_t buf[16];
+  int status;
+  MUTEX_LOCK(comms->callback_lock);
+  /* Send a message to the Mobot */
+  buf[0] = 1;
+  status = SendToIMobot(comms, BTCMD(CMD_SETBUTTONHANDLER), buf, 1);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    MUTEX_UNLOCK(comms->callback_lock);
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 0x03) {
+    MUTEX_UNLOCK(comms->callback_lock);
+    return -1;
+  }
+
+  comms->buttonCallback = buttonCallback;
+  comms->callbackEnabled = 1;
+  MUTEX_UNLOCK(comms->callback_lock);
+  return 0;
+}
+
+int Mobot_disableButtonCallback(br_comms_t* comms)
+{
+  MUTEX_LOCK(comms->callback_lock);
+  comms->buttonCallback = NULL;
+  comms->callbackEnabled = 0;
+  MUTEX_UNLOCK(comms->callback_lock);
+  return 0;
+}
+
 int Mobot_init(br_comms_t* comms)
 {
   int i;
@@ -494,6 +528,9 @@ int Mobot_init(br_comms_t* comms)
   COND_NEW(comms->commsBusy_cond);
   COND_INIT(comms->commsBusy_cond);
   comms->commsBusy = 0;
+  MUTEX_NEW(comms->callback_lock);
+  MUTEX_INIT(comms->callback_lock);
+  comms->callbackEnabled = 0;
   return 0;
 }
 
@@ -2114,13 +2151,13 @@ void* commsEngine(void* arg)
     /* Received a byte. If it is the first one, check to see if it is a
      * response or a triggered event */
     if(bytes == 0) {
+      MUTEX_LOCK(comms->commsBusy_lock);
+      comms->commsBusy = 1;
+      COND_SIGNAL(comms->commsBusy_cond);
+      MUTEX_UNLOCK(comms->commsBusy_lock);
       if( (byte == RESP_OK) ||
           (byte == RESP_ERR)
           ) {
-        MUTEX_LOCK(comms->commsBusy_lock);
-        comms->commsBusy = 1;
-        COND_SIGNAL(comms->commsBusy_cond);
-        MUTEX_UNLOCK(comms->commsBusy_lock);
         isResponse = 1;
       } else {
         isResponse = 0;
@@ -2147,9 +2184,44 @@ void* commsEngine(void* arg)
         COND_SIGNAL(comms->commsBusy_cond);
         MUTEX_UNLOCK(comms->commsBusy_lock);
       }
+    } else {
+      /* It was a user triggered event */
+      MUTEX_LOCK(comms->recvBuf_lock);
+      comms->recvBuf[bytes] = byte;
+      bytes++;
+      MUTEX_UNLOCK(comms->recvBuf_lock);
+      if( (bytes >= 2) &&
+          (comms->recvBuf[1] == bytes) )
+      {
+        /* We got the entire message */
+        MUTEX_LOCK(comms->callback_lock);
+        if(comms->callbackEnabled) {
+          /* Call the callback multiple times depending on the events */
+          int bit;
+          uint8_t events = comms->recvBuf[6];
+          uint8_t buttonDown = comms->recvBuf[7];
+          for(bit = 0; bit < 2; bit++) {
+            if(events & (1<<bit)) {
+              comms->buttonCallback(bit, (buttonDown & (1<<bit)) ? 1 : 0 );
+            }
+          }
+        }
+        /* Reset state vars */
+        bytes = 0;
+        MUTEX_LOCK(comms->commsBusy_lock);
+        comms->commsBusy = 0;
+        COND_SIGNAL(comms->commsBusy_cond);
+        MUTEX_UNLOCK(comms->commsBusy_lock);
+      }
+      MUTEX_UNLOCK(comms->callback_lock);
     }
   }
   return NULL;
+}
+
+void* callbackThread(void* arg)
+{
+  br_comms_t* comms = arg;
 }
 
 #ifndef C_ONLY
