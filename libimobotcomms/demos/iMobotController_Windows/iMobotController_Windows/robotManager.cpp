@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "robotManager.h"
+#include "TeachingDialog.h"
 
 RobotManager::RobotManager()
 {
@@ -39,6 +40,8 @@ int RobotManager::connect(int availableIndex)
   if(err = mobot->connectWithAddress( getEntry(index), 1 )) {
     return err;
   }
+  /* Enable the button callback */
+  mobot->enableButtonCallback(CTeachingDialog::OnMobotButton);
   /* Insert the newly connected robot to the bottom of the list. */
   _mobots[numConnected()] = mobot;
   _connectedAddresses[numConnected()] = 

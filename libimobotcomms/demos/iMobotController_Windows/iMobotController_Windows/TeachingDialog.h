@@ -3,6 +3,7 @@
 #include "afxcmn.h"
 #include "afxwin.h"
 #include "ListCtrlCtx.h"
+#include "Resource.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -27,11 +28,11 @@ public:
 
 // Dialog Data
 	enum { IDD = IDD_DIALOG_TEACHING };
+  static RobotManager _robotManager;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-  RobotManager _robotManager;
-
+  
 	DECLARE_MESSAGE_MAP()
 
 public:
@@ -69,4 +70,7 @@ public:
   afx_msg void OnRecordPopupMoveup();
   afx_msg void OnRecordPopupMovedown();
   afx_msg void OnRecordedGotopose();
+  static void OnMobotButton(CMobot *robot, int button, int buttonDown);
 };
+
+extern CTeachingDialog *g_teachingDialog;

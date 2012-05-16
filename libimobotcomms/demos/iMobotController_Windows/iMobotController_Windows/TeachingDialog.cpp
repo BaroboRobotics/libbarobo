@@ -5,7 +5,8 @@
 #include "iMobotController_Windows.h"
 #include "TeachingDialog.h"
 
-
+CTeachingDialog *g_teachingDialog;
+RobotManager CTeachingDialog::_robotManager;
 // CTeachingDialog dialog
 
 IMPLEMENT_DYNAMIC(CTeachingDialog, CDialog)
@@ -422,4 +423,19 @@ void CTeachingDialog::OnRecordedGotopose()
   for(i = 0; i < _robotManager.numConnected(); i++) {
     _robotManager.getMobot(i)->play(contextMenuIndex);
   }
+}
+
+void CTeachingDialog::OnMobotButton(CMobot *robot, int button, int buttonDown)
+{
+  int i;
+  if(buttonDown == 0) {
+    return;
+  }
+  if(button != 0) {
+    return;
+  }
+	for(i = 0; i < g_teachingDialog->_robotManager.numConnected(); i++) {
+		g_teachingDialog->_robotManager.getMobot(i)->record();
+	}
+	g_teachingDialog->refreshRecordedMotions(-1);
 }
