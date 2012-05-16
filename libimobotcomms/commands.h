@@ -63,6 +63,17 @@ enum protocol_commands_e {
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_SETMOTORANGLES,
 
+/* CMD_SETMOTORANGLES: Set the motor joint angles.
+ * Command format: [CMD] [0x13] [0x????????] [0x????????] [0x????????] [0x????????]  [0x00]
+ * Expected Response: [0x10] [0x03] [0x11] */
+  CMD_SETMOTORANGLESABS,
+
+/* CMD_SETMOTORANGLESDIRECT: Set the motor joint angles. Motors explicitely
+ * move in whatever direction is closest to the motor goal position. 
+ * Command format: [CMD] [0x13] [0x????????] [0x????????] [0x????????] [0x????????]  [0x00]
+ * Expected Response: [0x10] [0x03] [0x11] */
+  CMD_SETMOTORANGLESDIRECT,
+
 /* CMD_SETMOTORANGLESPID: Set the motor joint angles.
  * Command format: [CMD] [0x13] [0x????????] [0x????????] [0x????????] [0x????????]  [0x00]
  * Expected Response: [0x10] [0x03] [0x11] */
@@ -73,25 +84,51 @@ enum protocol_commands_e {
  * Expected Response: [0x10] [0x13] [16 bytes of 4 float values] [0x11] */
   CMD_GETMOTORANGLES,
 
+/* CMD_GETMOTORANGLESABS: Get the motor joint angles. Angles are not
+ * normalized, so multi-rotational angles may be returned. 
+ * Command format: [CMD] [0x03] [0x00]
+ * Expected Response: [0x10] [0x13] [16 bytes of 4 float values] [0x11] */
+  CMD_GETMOTORANGLESABS,
+
 /* CMD_GETMOTORANGLETIMESTAMP: Get the motor joint angles with a timestamp.
  * Command format: [CMD] [0x03] [0x00]
  * Expected Response: [0x10] [0x17] [4 byte timestamp] [16 bytes motor data] [0x11] */
   CMD_GETMOTORANGLESTIMESTAMP,
+
+/* CMD_GETMOTORANGLETIMESTAMPABS: Get the motor joint angles with a timestamp.
+ * Command format: [CMD] [0x03] [0x00]
+ * Expected Response: [0x10] [0x17] [4 byte timestamp] [16 bytes motor data] [0x11] */
+  CMD_GETMOTORANGLESTIMESTAMPABS,
 
 /* CMD_SETMOTORANGLE: set a motor joint angle.
  * Command format: [CMD] [0x08] [1 byte motor ID] [4 byte float angle] [0x00]
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_SETMOTORANGLE,
 
+/* CMD_SETMOTORANGLEABS: set a motor joint angle.
+ * Command format: [CMD] [0x08] [1 byte motor ID] [4 byte float angle] [0x00]
+ * Expected Response: [0x10] [0x03] [0x11] */
+  CMD_SETMOTORANGLEABS,
+
+/* CMD_SETMOTORANGLEDIRECT: set a motor joint angle.
+ * Command format: [CMD] [0x08] [1 byte motor ID] [4 byte float angle] [0x00]
+ * Expected Response: [0x10] [0x03] [0x11] */
+  CMD_SETMOTORANGLEDIRECT,
+
 /* CMD_SETMOTORANGLEPID: set a motor joint angle.
  * Command format: [CMD] [0x08] [1 byte motor ID] [4 byte float angle] [0x00]
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_SETMOTORANGLEPID,
 
-/* CMD_GETMOTORANGLE: set a motor joint angle.
+/* CMD_GETMOTORANGLE: get a motor joint angle.
  * Command format: [CMD] [0x04] [1 byte motor ID] [0x00]
  * Expected Response: [0x10] [0x07] [4 byte float angle] [0x11] */
   CMD_GETMOTORANGLE,
+
+/* CMD_GETMOTORANGLEABS: get a motor joint angle.
+ * Command format: [CMD] [0x04] [1 byte motor ID] [0x00]
+ * Expected Response: [0x10] [0x07] [4 byte float angle] [0x11] */
+  CMD_GETMOTORANGLEABS,
 
 /* CMD_GETMOTORANGLETIMESTAMP: get a motor joint angle with a timestamp.
  * Command format: [CMD] [0x04] [1 byte motor ID] [0x00]

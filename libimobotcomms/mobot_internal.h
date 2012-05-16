@@ -135,9 +135,26 @@ DLLIMPORT int Mobot_isMoving(br_comms_t* comms);
 DLLIMPORT int Mobot_getButtonVoltage(br_comms_t* comms, double *voltage);
 DLLIMPORT int Mobot_getEncoderVoltage(br_comms_t* comms, int pinNumber, double *voltage);
 DLLIMPORT int Mobot_getJointAngle(br_comms_t* comms, robotJointId_t id, double *angle);
+DLLIMPORT int Mobot_getJointAngleAbs(br_comms_t* comms, robotJointId_t id, double *angle);
 DLLIMPORT int Mobot_getJointAngleTime(br_comms_t* comms, robotJointId_t id, double *time, double *angle);
 DLLIMPORT int Mobot_getJointAnglesTime(br_comms_t* comms, 
                                        double *time, 
+                                       double *angle1, 
+                                       double *angle2, 
+                                       double *angle3, 
+                                       double *angle4);
+DLLIMPORT int Mobot_getJointAngles(br_comms_t* comms, 
+                                       double *angle1, 
+                                       double *angle2, 
+                                       double *angle3, 
+                                       double *angle4);
+DLLIMPORT int Mobot_getJointAnglesAbsTime(br_comms_t* comms, 
+                                       double *time, 
+                                       double *angle1, 
+                                       double *angle2, 
+                                       double *angle3, 
+                                       double *angle4);
+DLLIMPORT int Mobot_getJointAnglesAbs(br_comms_t* comms, 
                                        double *angle1, 
                                        double *angle2, 
                                        double *angle3, 
@@ -185,14 +202,38 @@ DLLIMPORT int Mobot_moveJointContinuousTime(br_comms_t* comms,
                                             robotJointState_t dir, 
                                             double seconds);
 DLLIMPORT int Mobot_moveJointTo(br_comms_t* comms, robotJointId_t id, double angle);
+DLLIMPORT int Mobot_moveJointToAbs(br_comms_t* comms, robotJointId_t id, double angle);
+DLLIMPORT int Mobot_moveJointToDirect(br_comms_t* comms, robotJointId_t id, double angle);
 DLLIMPORT int Mobot_moveJointToNB(br_comms_t* comms, robotJointId_t id, double angle);
+DLLIMPORT int Mobot_moveJointToAbsNB(br_comms_t* comms, robotJointId_t id, double angle);
+DLLIMPORT int Mobot_moveJointToDirectNB(br_comms_t* comms, robotJointId_t id, double angle);
 DLLIMPORT int Mobot_moveJointWait(br_comms_t* comms, robotJointId_t id);
 DLLIMPORT int Mobot_moveTo(br_comms_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
                                double angle4);
+DLLIMPORT int Mobot_moveToAbs(br_comms_t* comms,
+                               double angle1,
+                               double angle2,
+                               double angle3,
+                               double angle4);
+DLLIMPORT int Mobot_moveToDirect(br_comms_t* comms,
+                               double angle1,
+                               double angle2,
+                               double angle3,
+                               double angle4);
 DLLIMPORT int Mobot_moveToNB(br_comms_t* comms,
+                               double angle1,
+                               double angle2,
+                               double angle3,
+                               double angle4);
+DLLIMPORT int Mobot_moveToAbsNB(br_comms_t* comms,
+                               double angle1,
+                               double angle2,
+                               double angle3,
+                               double angle4);
+DLLIMPORT int Mobot_moveToDirectNB(br_comms_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
