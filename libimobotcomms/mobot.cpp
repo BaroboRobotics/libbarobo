@@ -1160,6 +1160,7 @@ int Mobot_moveToNB(br_comms_t* comms,
   if(buf[1] != 3) {
     return -1;
   }
+  return 0;
 }
 
 int Mobot_moveWait(br_comms_t* comms)
@@ -2347,7 +2348,7 @@ int CMobot::getJointAngles(
   angle2 = RAD2DEG(angle2);
   angle3 = RAD2DEG(angle3);
   angle4 = RAD2DEG(angle4);
-
+  return 0;
 }
 
 int CMobot::getJointDirection(robotJointId_t id, robotJointState_t &dir)
