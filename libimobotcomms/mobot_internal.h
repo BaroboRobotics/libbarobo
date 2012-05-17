@@ -121,6 +121,7 @@ extern "C" {
 #define DLLIMPORT
 #endif /* _WIN32 */
 
+DLLIMPORT int Mobot_blinkLED(br_comms_t* comms, double delay, int numBlinks);
 DLLIMPORT int Mobot_connect(br_comms_t* comms);
 #ifndef _WIN32
 DLLIMPORT int Mobot_connectWithTTY(br_comms_t* comms, const char* ttyfilename);

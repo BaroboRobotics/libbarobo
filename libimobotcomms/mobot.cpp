@@ -442,6 +442,27 @@ int finishConnect(br_comms_t* comms)
   return 0;
 }
 
+int Mobot_blinkLED(br_comms_t* comms, double delay, int numBlinks)
+{
+  uint8_t buf[8];
+  float f;
+  int status;
+  uint32_t millis;
+  millis = delay*1000.0;
+  memcpy(&buf[0], &millis, 4);
+  buf[4] = (uint8_t)numBlinks;
+  status = SendToIMobot(comms, BTCMD(CMD_BLINKLED), buf, 5);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
+  return 0;
+}
+
 int Mobot_disconnect(br_comms_t* comms)
 {
 #ifndef _WIN32
@@ -2556,6 +2577,11 @@ CMobot::~CMobot()
   if(_comms.connected) {
     disconnect();
   }
+}
+
+int CMobot::blinkLED(double delay, int numBlinks)
+{
+  return Mobot_blinkLED(&_comms, delay, numBlinks);
 }
 
 int CMobot::connect()

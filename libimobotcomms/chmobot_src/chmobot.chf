@@ -43,6 +43,18 @@ CMobot::~CMobot() {
   }
 }
 
+int CMobot::blinkLED(double delay, int numBlinks) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "blinkLED_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, delay, numBlinks);
+    return retval;
+}
 int CMobot::connect() {
     void *fptr;
     int retval;

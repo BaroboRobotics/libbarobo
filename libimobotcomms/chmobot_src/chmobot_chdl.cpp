@@ -24,6 +24,23 @@ EXPORTCH void CMobot_dCMobot_chdl(void *varg) {
   return;
 }
 
+EXPORTCH int blinkLED_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double delay;
+    int numBlinks;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    delay = Ch_VaArg(interp, ap, double);
+    numBlinks = Ch_VaArg(interp, ap, int);
+    retval = mobot->blinkLED(delay, numBlinks);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int connect_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

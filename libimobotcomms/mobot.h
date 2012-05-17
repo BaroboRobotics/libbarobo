@@ -98,6 +98,7 @@ class CMobot {
   public:
     CMobot();
     ~CMobot();
+    int blinkLED(double delay, int numBlinks);
     int connect();
     int connectWithAddress(const char address[], int channel);
 #ifndef _WIN32
