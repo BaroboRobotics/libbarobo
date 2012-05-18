@@ -42,6 +42,7 @@ int RobotManager::connect(int availableIndex)
   }
   /* Enable the button callback */
   mobot->enableButtonCallback(CTeachingDialog::OnMobotButton);
+  mobot->setJointSpeedRatios(1, 1, 1, 1);
   /* Insert the newly connected robot to the bottom of the list. */
   _mobots[numConnected()] = mobot;
   _connectedAddresses[numConnected()] = 

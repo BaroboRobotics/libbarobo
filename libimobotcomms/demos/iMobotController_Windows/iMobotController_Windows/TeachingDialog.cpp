@@ -15,6 +15,7 @@ CTeachingDialog::CTeachingDialog(CWnd* pParent /*=NULL*/)
 	: CDialog(CTeachingDialog::IDD, pParent)
 {
   haltPlayFlag = 0;
+  isPlaying = 0;
   char path[MAX_PATH];
   /* Read the config file */
   if(SHGetFolderPathA(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, path) != S_OK) 
@@ -64,6 +65,7 @@ void CTeachingDialog::DoDataExchange(CDataExchange* pDX)
 	refresh();
 	DDX_Control(pDX, IDC_BUTTON_play, button_play);
 	DDX_Control(pDX, IDC_BUTTON_stop, button_stop);
+  DDX_Control(pDX, IDC_BUTTONCLEARALL, button_clear);
 }
 
 
@@ -78,6 +80,7 @@ BEGIN_MESSAGE_MAP(CTeachingDialog, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_TEACHING_SAVE, &CTeachingDialog::OnBnClickedButtonTeachingSave)
 	ON_BN_CLICKED(IDC_BUTTON_play, &CTeachingDialog::OnBnClickedButtonplay)
 	ON_BN_CLICKED(IDC_BUTTON_stop, &CTeachingDialog::OnBnClickedButtonstop)
+  ON_BN_CLICKED(IDC_BUTTONCLEARALL, &CTeachingDialog::OnBnClickedButtonclear)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_RECORDEDMOTIONS, &CTeachingDialog::OnLvnItemchangedListRecordedmotions)
 	ON_NOTIFY(LVN_ITEMACTIVATE, IDC_LIST_RECORDEDMOTIONS, &CTeachingDialog::OnLvnItemActivateListRecordedmotions)
 	ON_NOTIFY(LVN_ENDLABELEDIT, IDC_LIST_RECORDEDMOTIONS, &CTeachingDialog::OnLvnEndlabeleditListRecordedmotions)
@@ -275,6 +278,7 @@ void* playThread(void* arg)
 {
 	CTeachingDialog *teachingDialog;
 	teachingDialog = (CTeachingDialog*)arg;
+  teachingDialog->isPlaying = true;
 	RobotManager* robotManager;
 	robotManager = teachingDialog->getRobotManager();
 	int i, j, done;
@@ -307,6 +311,7 @@ void* playThread(void* arg)
 	for(j = 0; j < robotManager->numConnected(); j++) {
 		robotManager->getMobot(j)->stop();
 	}
+  teachingDialog->isPlaying = false;
 	teachingDialog->button_play.EnableWindow(true);
 	teachingDialog->refreshRecordedMotions(-1);
 	return NULL;
@@ -427,15 +432,65 @@ void CTeachingDialog::OnRecordedGotopose()
 
 void CTeachingDialog::OnMobotButton(CMobot *robot, int button, int buttonDown)
 {
+  /* Button A: Record Motion 
+   * Button B: Playback / Stop
+   * Both Buttons: Reset motions */
+  static unsigned int lastState = 0;
+  unsigned int newState;
+  static bool debounce = false;
   int i;
+
+  /* Calculate the new state */
+  if(buttonDown) {
+    robot->blinkLED(0.1, 2);
+    newState = lastState | (1<<button);
+  } else {
+    newState = lastState & ~(1<<button);
+  }
+  if(debounce) {
+    /* Must wait until all buttons are up */
+    if(newState == 0) {
+      debounce = false;
+      lastState = newState;
+      return;
+    } else {
+      lastState = newState;
+      return;
+    }
+  }
+
+  /* If a button release event is detected, use the last state to determine the action */
   if(buttonDown == 0) {
-    return;
+    if(lastState == 0x01) {
+      /* Button A press/release */
+      for(i = 0; i < g_teachingDialog->_robotManager.numConnected(); i++) {
+		    g_teachingDialog->_robotManager.getMobot(i)->record();
+	    }
+	    g_teachingDialog->refreshRecordedMotions(-1);
+    }
+    if(lastState == 0x02) {
+      /* Button B press/release */
+      /* If it is not playing play. Otherwise, stop. */
+      if(g_teachingDialog->isPlaying) {
+        g_teachingDialog->haltPlayFlag = 1;
+      } else {
+        g_teachingDialog->OnBnClickedButtonplay();
+      }
+    }
+    if(lastState == 0x03) {
+      /* Buttons A/B Pressed, one released */
+      debounce = true;
+      g_teachingDialog->OnBnClickedButtonclear();
+    }
   }
-  if(button != 0) {
-    return;
-  }
-	for(i = 0; i < g_teachingDialog->_robotManager.numConnected(); i++) {
-		g_teachingDialog->_robotManager.getMobot(i)->record();
+  lastState = newState;
+}
+
+void CTeachingDialog::OnBnClickedButtonclear()
+{
+  int i;
+	for(i = 0; i < _robotManager.numConnected(); i++) {
+		_robotManager.getMobot(i)->clearAllMotions();
 	}
-	g_teachingDialog->refreshRecordedMotions(-1);
+	refreshRecordedMotions(-1);
 }

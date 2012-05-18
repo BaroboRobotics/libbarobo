@@ -29,7 +29,7 @@ int CRecordMobot::record(void)
 {
 	/* Get the robots positions */
 	double angles[4];
-	getJointAngles(angles[0], angles[1], angles[2], angles[3]);
+	getJointAnglesAbs(angles[0], angles[1], angles[2], angles[3]);
 	struct motion_s* motion;
 	motion = (struct motion_s*)malloc(sizeof(struct motion_s));
 	motion->motionType = MOTION_POS;
@@ -62,7 +62,7 @@ int CRecordMobot::play(int index)
 		return -1;
 	}
 	if(_motions[index]->motionType == MOTION_POS) {
-		return moveToNB(
+		return moveToAbsNB(
 			_motions[index]->data.pos[0],
 			_motions[index]->data.pos[1],
 			_motions[index]->data.pos[2],
@@ -134,6 +134,16 @@ int CRecordMobot::removeMotion(int index, bool releaseData)
 	}
 	_numMotions--;
 	return 0;
+}
+
+int CRecordMobot::clearAllMotions()
+{
+  int i;
+  for(i = 0; i < _numMotions; i++) {
+    free(_motions[i]);
+  }
+  _numMotions = 0;
+  return 0;
 }
 
 int CRecordMobot::moveMotion(int fromindex, int toindex)

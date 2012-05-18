@@ -1262,6 +1262,7 @@ void CiMobotController_WindowsDlg::OnHelpDemos()
 void CiMobotController_WindowsDlg::OnTeachingmodeTeachingmodedialog()
 {
 	CTeachingDialog dialog;
+  g_teachingDialog = &dialog;
 	dialog.DoModal();
 }
 

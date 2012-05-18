@@ -56,9 +56,12 @@ public:
 	RobotManager* getRobotManager();
 	CButton button_play;
 	CButton button_stop;
+  CButton button_clear;
 	afx_msg void OnBnClickedButtonstop();
+  afx_msg void OnBnClickedButtonclear();
 	int haltPlayFlag; /* If this flag is enabled, the current 
 					  "play" operation should be canceled. */
+  int isPlaying;
 	afx_msg void OnLvnItemchangedListRecordedmotions(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnLvnItemActivateListRecordedmotions(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnLvnEndlabeleditListRecordedmotions(NMHDR *pNMHDR, LRESULT *pResult);
