@@ -1,5 +1,14 @@
 #ifndef _MOBOTCOMMS_H_
 #define _MOBOTCOMMS_H_
+
+#ifdef SWIG
+#define DLLIMPORT
+%module mobot
+%{
+#include "mobot.h"
+%}
+#endif
+
 #include <math.h>
 
 #ifdef _CH_
@@ -93,7 +102,7 @@ typedef struct recordAngleArg_s
 #endif
 
 #ifndef C_ONLY
-#if defined (__cplusplus) || defined (_CH_)
+#if defined (__cplusplus) || defined (_CH_) || defined (SWIG)
 class CMobot {
   public:
     CMobot();
