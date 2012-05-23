@@ -1,6 +1,7 @@
 #pragma once
 #include "afxcmn.h"
 #include "robotManager.h"
+#include "afxwin.h"
 
 
 // CDialogConnect dialog
@@ -31,4 +32,6 @@ public:
   afx_msg void OnBnClickedButtonTeachingDisconnect();
   afx_msg void OnBnClickedButtonTeachingMoveup();
   afx_msg void OnBnClickedButtonTeachingMovedown();
+  afx_msg void OnBnClickedButtonAddnewbot();
+  CEdit m_edit_newRobotAddress;
 };

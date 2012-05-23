@@ -105,7 +105,6 @@
 #define IDC_LIST_RECORDEDMOTIONS        1058
 #define IDC_BUTTON_REMOVEBOT            1058
 #define IDC_BUTTON_TEACHING_RECORD      1059
-#define IDC_BUTTON_REMOVEBOT2           1059
 #define IDC_BUTTON_ADDNEWBOT            1059
 #define IDC_CHECK_TEACHING_LOOPED       1060
 #define IDC_BUTTON_TEACHING_ADDDELAY    1061
@@ -116,6 +115,7 @@
 #define IDC_BUTTON4                     1066
 #define IDC_BUTTONCLEARALL              1066
 #define IDC_TAB1                        1067
+#define IDC_EDIT_ROBOTADDRESS           1068
 #define ID_ROBOT_CONFIGUREROBOTBLUETOOTH 32771
 #define ID_ROBOT_CONNECTTOAROBOT        32772
 #define ID_FILE                         32773
@@ -138,7 +138,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        159
 #define _APS_NEXT_COMMAND_VALUE         32786
-#define _APS_NEXT_CONTROL_VALUE         1068
+#define _APS_NEXT_CONTROL_VALUE         1069
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

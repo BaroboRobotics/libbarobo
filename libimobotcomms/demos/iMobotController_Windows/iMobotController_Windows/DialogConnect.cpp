@@ -68,19 +68,20 @@ void CDialogConnect::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_LIST_CONNECTEDBOTS, m_listCtrl_connectedBots);
 
   /* Set up list controls */
-	m_listCtrl_availableBots.InsertColumn(
-		0, 
-		TEXT("Mobot Address"),
-		LVCFMT_LEFT,
-		120,
-		-1);
-	m_listCtrl_connectedBots.InsertColumn(
-		0,
-		TEXT("Mobot Address"),
-		LVCFMT_LEFT,
-		120,
-		-1);
+  m_listCtrl_availableBots.InsertColumn(
+    0, 
+    TEXT("Mobot Address"),
+    LVCFMT_LEFT,
+    120,
+    -1);
+  m_listCtrl_connectedBots.InsertColumn(
+    0,
+    TEXT("Mobot Address"),
+    LVCFMT_LEFT,
+    120,
+    -1);
   refreshLists();
+  DDX_Control(pDX, IDC_EDIT_ROBOTADDRESS, m_edit_newRobotAddress);
 }
 
 
@@ -89,6 +90,7 @@ BEGIN_MESSAGE_MAP(CDialogConnect, CDialog)
   ON_BN_CLICKED(IDC_BUTTON_TEACHING_DISCONNECT, &CDialogConnect::OnBnClickedButtonTeachingDisconnect)
   ON_BN_CLICKED(IDC_BUTTON_TEACHING_MOVEUP, &CDialogConnect::OnBnClickedButtonTeachingMoveup)
   ON_BN_CLICKED(IDC_BUTTON_TEACHING_MOVEDOWN, &CDialogConnect::OnBnClickedButtonTeachingMovedown)
+  ON_BN_CLICKED(IDC_BUTTON_ADDNEWBOT, &CDialogConnect::OnBnClickedButtonAddnewbot)
 END_MESSAGE_MAP()
 
 
@@ -123,4 +125,24 @@ void CDialogConnect::OnBnClickedButtonTeachingMoveup()
 void CDialogConnect::OnBnClickedButtonTeachingMovedown()
 {
   // TODO: Add your control notification handler code here
+}
+
+void CDialogConnect::OnBnClickedButtonAddnewbot()
+{
+  /* Get the text from the correct edit and put it in the config file */
+  USES_CONVERSION;
+  TCHAR text[256];
+  LPCSTR address;
+  int count;
+  memset(text, 0, sizeof(TCHAR)*256);
+  ((DWORD*)text)[0] = 256;
+  count = m_edit_newRobotAddress.GetLine(0, text, 255);
+  text[count] = (TCHAR)'\0';
+  /* Convert from wide char to normal char */
+  //size_t convertedChars = 0;
+  //size_t origsize = wcslen(text)+1;
+  //wcstombs_s(&convertedChars, address, origsize, text, _TRUNCATE);
+  address = T2CA(text);
+  m_robotManager.addEntry(address);
+  refreshLists();
 }
