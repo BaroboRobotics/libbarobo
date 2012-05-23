@@ -100,11 +100,37 @@ void CDialogConnect::OnBnClickedButtonTeachingConnect()
 {
 	/* Get the selected item */
 	int index;
+  int err;
 	index = m_listCtrl_availableBots.GetSelectionMark();
 	if(index == -1) {
 		return;
 	}
-	m_robotManager.connect(index);
+	err = m_robotManager.connect(index);
+  if(err) {
+    switch (err) {
+      case -1:
+        MessageBox( TEXT("Error connecting."), TEXT("Error"), MB_OK | MB_ICONINFORMATION );
+        break;
+      case -2:
+        MessageBox( TEXT("Error connecting. Another application is already connected to this Mobot."), TEXT("Error"), MB_OK | MB_ICONINFORMATION );
+        break;
+      case -3:
+        MessageBox( TEXT("Error connecting. Address format is incorrect."), TEXT("Error"), MB_OK | MB_ICONINFORMATION );
+        break;
+      case -4:
+        MessageBox( TEXT("Error connecting. Not enough Mobot address entries in configuration file."), TEXT("Error"), MB_OK | MB_ICONINFORMATION );
+        break;
+      case -5:
+        MessageBox( TEXT("Error connecting. Bluetooth dongle/device not found on local computer."), TEXT("Error"), MB_OK | MB_ICONINFORMATION );
+        break;
+      case -6:
+        MessageBox( TEXT("Error connecting. Mobot firmware version mismatch."), TEXT("Error"), MB_OK | MB_ICONINFORMATION );
+        break;
+      default:
+        MessageBox( TEXT("Error connecting."), TEXT("Error"), MB_OK | MB_ICONINFORMATION );
+        break;
+    }
+  }
 	refreshLists();
 }
 
@@ -144,5 +170,6 @@ void CDialogConnect::OnBnClickedButtonAddnewbot()
   //wcstombs_s(&convertedChars, address, origsize, text, _TRUNCATE);
   address = T2CA(text);
   m_robotManager.addEntry(address);
+  m_robotManager.write();
   refreshLists();
 }

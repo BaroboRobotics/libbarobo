@@ -99,6 +99,14 @@ class CMobot {
     CMobot();
     ~CMobot();
     int blinkLED(double delay, int numBlinks);
+/* connect() Return Error Codes:
+   -1 : General Error
+   -2 : Lockfile Exists
+   -3 : Address Format Incorrect
+   -4 : Not enough entries in the configuration file
+   -5 : Bluetooth device not found
+   -6 : Protocol version mismatch
+   */
     int connect();
     int connectWithAddress(const char address[], int channel);
 #ifndef _WIN32
