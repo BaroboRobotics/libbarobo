@@ -32,8 +32,10 @@
 #define IDI_ICON_REDDOT                 153
 #define IDR_MENU2                       154
 #define IDR_MENU_RECORDEDMOTIONPOPUP    154
-#define IDD_DIALOG2                     156
 #define IDD_DIALOG_MAINTABCTRL          156
+#define IDD_DIALOG_CONNECT              157
+#define IDD_DIALOG2                     158
+#define IDD_DIALOG_PROGRAM              158
 #define IDC_SLIDER_speed1               1000
 #define IDC_EDIT_speed1                 1001
 #define IDC_SLIDER_speed2               1002
@@ -132,7 +134,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        157
+#define _APS_NEXT_RESOURCE_VALUE        159
 #define _APS_NEXT_COMMAND_VALUE         32786
 #define _APS_NEXT_CONTROL_VALUE         1068
 #define _APS_NEXT_SYMED_VALUE           101

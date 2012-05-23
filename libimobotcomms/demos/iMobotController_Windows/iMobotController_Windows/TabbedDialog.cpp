@@ -36,6 +36,11 @@ BOOL CTabbedDialog::OnInitDialog()
     1,
     text,
     0, 0, 0, 0);
+
+  m_connectDlg.Create(CDialogConnect::IDD, this);
+  m_programDlg.Create(CDialogProgram::IDD, this);
+
+  RefreshTabContent();
   return TRUE;
 }
 
@@ -47,7 +52,22 @@ void CTabbedDialog::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CTabbedDialog, CDialog)
+  ON_NOTIFY(TCN_SELCHANGE, IDC_TAB1, &CTabbedDialog::OnTcnSelchangeTab1)
 END_MESSAGE_MAP()
 
 
+void CTabbedDialog::RefreshTabContent()
+{
+  /* Get the selected tab */
+  int activeTab = m_tabCtrl.GetCurSel();
+  m_connectDlg.ShowWindow(activeTab == 0? SW_SHOW : SW_HIDE);
+  m_programDlg.ShowWindow(activeTab == 1? SW_SHOW : SW_HIDE);
+}
+
 // CTabbedDialog message handlers
+
+void CTabbedDialog::OnTcnSelchangeTab1(NMHDR *pNMHDR, LRESULT *pResult)
+{
+  RefreshTabContent();
+  *pResult = 0;
+}
