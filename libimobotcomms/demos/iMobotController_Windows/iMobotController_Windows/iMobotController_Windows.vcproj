@@ -435,6 +435,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\TabbedDialog.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\TeachingDialog.cpp"
 				>
 			</File>
@@ -498,6 +502,10 @@
 			</File>
 			<File
 				RelativePath=".\stdafx.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TabbedDialog.h"
 				>
 			</File>
 			<File
@@ -579,19 +587,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\iMobot_diagram.bmp"
-				>
-			</File>
-			<File
 				RelativePath="..\iMobot_diagram.bmp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\libimobot\Demos\GtkGui\interface\imobot_diagram.png"
+				RelativePath=".\res\iMobot_diagram.bmp"
 				>
 			</File>
 			<File
 				RelativePath=".\res\iMobot_diagram.png"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\libimobot\Demos\GtkGui\interface\imobot_diagram.png"
 				>
 			</File>
 			<File
