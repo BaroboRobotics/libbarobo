@@ -34,7 +34,6 @@
 #define IDR_MENU_RECORDEDMOTIONPOPUP    154
 #define IDD_DIALOG_MAINTABCTRL          156
 #define IDD_DIALOG_CONNECT              157
-#define IDD_DIALOG2                     158
 #define IDD_DIALOG_PROGRAM              158
 #define IDC_SLIDER_speed1               1000
 #define IDC_EDIT_speed1                 1001
@@ -104,7 +103,10 @@
 #define IDC_BUTTON_TEACHING_MOVEUP      1056
 #define IDC_BUTTON_TEACHING_MOVEDOWN    1057
 #define IDC_LIST_RECORDEDMOTIONS        1058
+#define IDC_BUTTON_REMOVEBOT            1058
 #define IDC_BUTTON_TEACHING_RECORD      1059
+#define IDC_BUTTON_REMOVEBOT2           1059
+#define IDC_BUTTON_ADDNEWBOT            1059
 #define IDC_CHECK_TEACHING_LOOPED       1060
 #define IDC_BUTTON_TEACHING_ADDDELAY    1061
 #define IDC_BUTTON_TEACHING_DELETEPOS   1062
