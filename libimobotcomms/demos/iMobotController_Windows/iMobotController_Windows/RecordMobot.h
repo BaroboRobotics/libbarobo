@@ -34,6 +34,7 @@ public:
 	const TCHAR* getMotionName(int index);
 	int setMotionName(int index, const TCHAR* name);
 	int removeMotion(int index, bool releaseData = true);
+  int clearAllMotions();
   /* moveMotion:
      Copy motion 'fromindex', insert to 'toindex', delete 'fromindex' */
 	int moveMotion(int fromindex, int toindex);

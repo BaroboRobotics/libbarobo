@@ -108,6 +108,7 @@
 #define IDC_LIST_CONNECTEDBOTS          1064
 #define IDC_EDIT_TEACHING_DELAY         1065
 #define IDC_BUTTON4                     1066
+#define IDC_BUTTONCLEARALL              1066
 #define ID_ROBOT_CONFIGUREROBOTBLUETOOTH 32771
 #define ID_ROBOT_CONNECTTOAROBOT        32772
 #define ID_FILE                         32773
