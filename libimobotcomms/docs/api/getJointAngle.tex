@@ -3,6 +3,7 @@
 \rule{4.5in}{0.015in}\\
 \noindent
 {\LARGE \texttt{CMobot::getJointAngle()}\index{CMobot::getJointAngle()}}\\
+{\LARGE \texttt{CMobot::getJointAngleAbs()}\index{CMobot::getJointAngleAbs()}}\\
 %\phantomsection
 \addcontentsline{toc}{section}{getJointAngle()}
 
@@ -12,6 +13,7 @@
 \begin{verbatim}
 #include <mobot.h>
 int CMobot::getJointAngle(robotJointId_t id, double &angle);
+int CMobot::getJointAngleAbs(robotJointId_t id, double &angle);
 \end{verbatim}
 
 \noindent
@@ -41,7 +43,16 @@ represents the motor's angle in degrees.  \\
 {\bf Description}\\
 This function gets the current motor angle of a robot's motor. The
 angle returned is in units of degrees and is accurate to roughly $\pm0.17$
-degrees. \\
+degrees. 
+
+The function \texttt{getJointAngle()} always returns an angle between -180 and
++180 degrees. The \texttt{getJointAngleAbs()} function, however, gets the total
+angle the joint has turned since the robot has been powered on. For instance, 
+if the faceplate joint 1 has been rotated two full rotations after initial powerup,
+  the function \texttt{getJointAngle()} will report that the joint is at angle 0,
+  whereas the function \texttt{getJointAngleAbs()} will report that the joint
+  angle is 720 degrees.
+\\
 
 \noindent
 {\bf Example}\\

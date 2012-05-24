@@ -1,0 +1,59 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobot::blinkLED()}\index{CMobot::blinkLED()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{blinkLED()}
+\addcontentsline{toc}{section}{moveNB()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobot::blinkLED(double delay, int numBlinks);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Blink the on-board LED on a Mobot module.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{15 mm}p{125 mm}}
+\texttt{delay} & The amount of time between blinks. \\
+\texttt{numBlinks} & The number of times to blink the LED. \\
+\end{tabular}
+\end{description}
+\noindent
+{\bf Description}\\
+\vspace{-12pt}
+This function is used to blink or flash the LED on a Mobot module. The first
+argument, \texttt{delay}, is used to control the speed of the blinking
+LED, and the second argument, \texttt{numBlinks}, controls the number of times
+to blink. For instance, the line
+\begin{verbatim}
+robot.blinkLED(0.1, 10);
+\end{verbatim}
+would cause a robot to blink 10 times fast, and the line
+\begin{verbatim}
+robot.blinkLED(1, 2);
+\end{verbatim}
+would cause the robot to do two slow blinks.
+
+\noindent
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

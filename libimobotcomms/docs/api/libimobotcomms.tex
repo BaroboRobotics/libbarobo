@@ -20,12 +20,15 @@ is called automatically and should not be called explicitly. \\
 \texttt{\textasciitilde CMobot()} & The CMobot destructor function. This function
 is called automatically and should not be called explicitly. \\
 & \\
+\texttt{blinkLED()} & Blink the LED on a Mobot module. \\
 \texttt{connect()} & Connect to a remote robot module. This function 
 connects to the first robot listed in the Barobo configuration file. To
 edit the configuration file, use the robot control graphical user interface,
 and select the menu item ``Robot $\rightarrow$ Configure Robot Bluetooth''. \\
 \texttt{connectWithAddress()} & Connect to a robot module by specifying its Bluetooth address. \\
 \texttt{disconnect()} & Disconnect from a robot module. \\
+\texttt{disableButtonCallback()} & Reverts a Mobot's buttons to their factory-default functions. \\
+\texttt{enableButtonCallback()} & Enables a user-driven callback for handling button-press events on a module. \\
 \texttt{getJointAngle()} & Get a joint's angle. \\
 %\texttt{getJointDirection()} & Gets a motor's currently assigned direction. \\
 \texttt{getJointMaxSpeed()} & Get a joint's maximum speed in radians per second. \\
@@ -109,6 +112,7 @@ Compound Motions & These are convenience functions of commonly used compound mot
 
 \clearpage
 \newpage
+\input{api/blinkLED}
 \input{api/connect}
 \input{api/connectWithAddress}
 \input{api/disconnect}
@@ -142,8 +146,12 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \input{api/moveContinuousTime}
 \input{api/moveJoint}
 \input{api/moveJointTo}
+\input{api/moveJointToAbs}
+\input{api/moveJointToDirect}
 \input{api/moveJointWait}
 \input{api/moveTo}
+\input{api/moveToAbs}
+\input{api/moveToDirect}
 \input{api/moveToZero}
 \input{api/moveWait}
 \input{api/recordAngle}
