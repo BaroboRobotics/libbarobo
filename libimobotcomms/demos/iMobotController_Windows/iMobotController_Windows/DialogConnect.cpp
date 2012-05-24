@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "iMobotController_Windows.h"
 #include "DialogConnect.h"
+#include "TabbedDialog.h"
 
 
 // CDialogConnect dialog
@@ -13,17 +14,12 @@ IMPLEMENT_DYNAMIC(CDialogConnect, CDialog)
 CDialogConnect::CDialogConnect(CWnd* pParent /*=NULL*/)
 	: CDialog(CDialogConnect::IDD, pParent)
 {
-  char path[MAX_PATH];
-  /* Read the config file */
-  if(SHGetFolderPathA(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, path) != S_OK) 
-  {
-    /* Could not get the user's app data directory */
+  CTabbedDialog* td = (CTabbedDialog*)pParent;
+  if(td != NULL) {
+    m_robotManager = td->GetRobotManager();
   } else {
-    //MessageBox((LPCTSTR)path, (LPCTSTR)"Test");
-    //fprintf(fp, "%s", path); 
+    m_robotManager = NULL;
   }
-  strcat(path, "\\Barobo.config");
-  m_robotManager.read(path);
 }
 
 CDialogConnect::~CDialogConnect()
@@ -43,20 +39,20 @@ void CDialogConnect::refreshLists()
 	/* Clear the list controls */
 	m_listCtrl_availableBots.DeleteAllItems();
 	/* Populate available bots listctrl */
-	for(i = 0; i < m_robotManager.numEntries(); i++) {
-		if(!m_robotManager.isConnected(i)) {
+	for(i = 0; i < m_robotManager->numEntries(); i++) {
+		if(!m_robotManager->isConnected(i)) {
 			m_listCtrl_availableBots.InsertItem(
 				m_listCtrl_availableBots.GetItemCount(),
-				A2T(m_robotManager.getEntry(i))
+				A2T(m_robotManager->getEntry(i))
 				);
 		}
 	}
 	/* Populate connected bots listctrl */
 	m_listCtrl_connectedBots.DeleteAllItems();
-	for(i = 0; i < m_robotManager.numConnected(); i++) {
+	for(i = 0; i < m_robotManager->numConnected(); i++) {
 		m_listCtrl_connectedBots.InsertItem(
 			i,
-			A2T(m_robotManager.getConnected(i))
+			A2T(m_robotManager->getConnected(i))
 			);
 	}
 }
@@ -105,7 +101,7 @@ void CDialogConnect::OnBnClickedButtonTeachingConnect()
 	if(index == -1) {
 		return;
 	}
-	err = m_robotManager.connect(index);
+	err = m_robotManager->connect(index);
   if(err) {
     switch (err) {
       case -1:
@@ -139,7 +135,7 @@ void CDialogConnect::OnBnClickedButtonTeachingDisconnect()
 	int connectIndex;
 	connectIndex = m_listCtrl_connectedBots.GetSelectionMark();
 	if(connectIndex == -1) { return; }
-	m_robotManager.disconnect(connectIndex);
+	m_robotManager->disconnect(connectIndex);
 	refreshLists();
 }
 
@@ -169,7 +165,7 @@ void CDialogConnect::OnBnClickedButtonAddnewbot()
   //size_t origsize = wcslen(text)+1;
   //wcstombs_s(&convertedChars, address, origsize, text, _TRUNCATE);
   address = T2CA(text);
-  m_robotManager.addEntry(address);
-  m_robotManager.write();
+  m_robotManager->addEntry(address);
+  m_robotManager->write();
   refreshLists();
 }

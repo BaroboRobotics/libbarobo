@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "robotManager.h"
-#include "TeachingDialog.h"
+#include "DialogTeaching.h"
 
 RobotManager::RobotManager()
 {
@@ -41,7 +41,7 @@ int RobotManager::connect(int availableIndex)
     return err;
   }
   /* Enable the button callback */
-  mobot->enableButtonCallback(CTeachingDialog::OnMobotButton);
+  mobot->enableButtonCallback(CDialogTeaching::OnMobotButton);
   mobot->setJointSpeedRatios(1, 1, 1, 1);
   /* Insert the newly connected robot to the bottom of the list. */
   _mobots[numConnected()] = mobot;

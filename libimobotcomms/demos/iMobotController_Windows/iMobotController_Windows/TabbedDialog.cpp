@@ -13,11 +13,29 @@ IMPLEMENT_DYNAMIC(CTabbedDialog, CDialog)
 CTabbedDialog::CTabbedDialog(CWnd* pParent /*=NULL*/)
 	: CDialog(CTabbedDialog::IDD, pParent)
 {
+  char path[MAX_PATH];
+  /* Read the config file */
+  if(SHGetFolderPathA(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, path) != S_OK) 
+  {
+    /* Could not get the user's app data directory */
+  } else {
+    //MessageBox((LPCTSTR)path, (LPCTSTR)"Test");
+    //fprintf(fp, "%s", path); 
+  }
+  strcat(path, "\\Barobo.config");
+  m_robotManager = new RobotManager;
+  m_robotManager->read(path);
 
+  m_connectDlg = new CDialogConnect(this);
+  m_programDlg = new CDialogProgram(this);
+  m_teachingDlg = new CDialogTeaching(this);
 }
 
 CTabbedDialog::~CTabbedDialog()
 {
+  delete m_connectDlg;
+  delete m_programDlg;
+  delete m_teachingDlg;
 }
 
 BOOL CTabbedDialog::OnInitDialog()
@@ -36,9 +54,16 @@ BOOL CTabbedDialog::OnInitDialog()
     1,
     text,
     0, 0, 0, 0);
+  text = TEXT("Pose Teaching");
+  m_tabCtrl.InsertItem(
+    TCIF_TEXT,
+    2,
+    text,
+    0, 0, 0, 0);
 
-  m_connectDlg.Create(CDialogConnect::IDD, this);
-  m_programDlg.Create(CDialogProgram::IDD, this);
+  m_connectDlg->Create(CDialogConnect::IDD, this);
+  m_programDlg->Create(CDialogProgram::IDD, this);
+  m_teachingDlg->Create(CDialogTeaching::IDD, this);
 
   RefreshTabContent();
   return TRUE;
@@ -55,13 +80,18 @@ BEGIN_MESSAGE_MAP(CTabbedDialog, CDialog)
   ON_NOTIFY(TCN_SELCHANGE, IDC_TAB1, &CTabbedDialog::OnTcnSelchangeTab1)
 END_MESSAGE_MAP()
 
+RobotManager* CTabbedDialog::GetRobotManager()
+{
+  return m_robotManager;
+}  
 
 void CTabbedDialog::RefreshTabContent()
 {
   /* Get the selected tab */
   int activeTab = m_tabCtrl.GetCurSel();
-  m_connectDlg.ShowWindow(activeTab == 0? SW_SHOW : SW_HIDE);
-  m_programDlg.ShowWindow(activeTab == 1? SW_SHOW : SW_HIDE);
+  m_connectDlg->ShowWindow(activeTab == 0? SW_SHOW : SW_HIDE);
+  m_programDlg->ShowWindow(activeTab == 1? SW_SHOW : SW_HIDE);
+  m_teachingDlg->ShowWindow(activeTab == 2? SW_SHOW : SW_HIDE);
 }
 
 // CTabbedDialog message handlers

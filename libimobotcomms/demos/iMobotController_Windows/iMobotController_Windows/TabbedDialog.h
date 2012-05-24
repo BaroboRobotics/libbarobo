@@ -2,6 +2,7 @@
 #include "afxcmn.h"
 #include "DialogConnect.h"
 #include "DialogProgram.h"
+#include "DialogTeaching.h"
 
 
 // CTabbedDialog dialog
@@ -22,10 +23,14 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
 	DECLARE_MESSAGE_MAP()
+private:
+  RobotManager *m_robotManager;
 public:
   CTabCtrl m_tabCtrl;
-  CDialogConnect m_connectDlg;
-  CDialogProgram m_programDlg;
+  CDialogConnect *m_connectDlg;
+  CDialogProgram *m_programDlg;
+  CDialogTeaching *m_teachingDlg;
+  RobotManager* GetRobotManager();
   void RefreshTabContent();
   afx_msg void OnTcnSelchangeTab1(NMHDR *pNMHDR, LRESULT *pResult);
 };

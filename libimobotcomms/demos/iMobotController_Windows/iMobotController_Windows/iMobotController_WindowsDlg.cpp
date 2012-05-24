@@ -6,7 +6,7 @@
 #include "iMobotController_Windows.h"
 #include "iMobotController_WindowsDlg.h"
 #include "configFileDialog.h"
-#include "TeachingDialog.h"
+#include "DialogTeaching.h"
 #include "gait.h"
 
 #ifdef _DEBUG
@@ -1261,7 +1261,7 @@ void CiMobotController_WindowsDlg::OnHelpDemos()
 
 void CiMobotController_WindowsDlg::OnTeachingmodeTeachingmodedialog()
 {
-	CTeachingDialog dialog;
+	CDialogTeaching dialog;
   g_teachingDialog = &dialog;
 	dialog.DoModal();
 }

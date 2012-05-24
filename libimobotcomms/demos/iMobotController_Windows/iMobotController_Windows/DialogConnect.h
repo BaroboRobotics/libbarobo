@@ -24,11 +24,13 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 
+private:
+  RobotManager* m_robotManager;
+
 public:
   CListCtrl m_listCtrl_availableBots;
   CListCtrl m_listCtrl_connectedBots;
   CEdit m_edit_newRobotAddress;
-  RobotManager m_robotManager;
   afx_msg void OnBnClickedButtonTeachingConnect();
   afx_msg void OnBnClickedButtonTeachingDisconnect();
   afx_msg void OnBnClickedButtonTeachingMoveup();

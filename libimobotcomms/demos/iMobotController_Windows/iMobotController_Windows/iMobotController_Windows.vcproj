@@ -379,6 +379,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DialogTeaching.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\gait.cpp"
 				>
 			</File>
@@ -446,10 +450,6 @@
 				RelativePath=".\TabbedDialog.cpp"
 				>
 			</File>
-			<File
-				RelativePath=".\TeachingDialog.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -474,6 +474,10 @@
 			</File>
 			<File
 				RelativePath=".\DialogProgram.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DialogTeaching.h"
 				>
 			</File>
 			<File
@@ -526,10 +530,6 @@
 			</File>
 			<File
 				RelativePath=".\targetver.h"
-				>
-			</File>
-			<File
-				RelativePath=".\TeachingDialog.h"
 				>
 			</File>
 		</Filter>
@@ -603,19 +603,19 @@
 				>
 			</File>
 			<File
-				RelativePath="..\iMobot_diagram.bmp"
-				>
-			</File>
-			<File
 				RelativePath=".\res\iMobot_diagram.bmp"
 				>
 			</File>
 			<File
-				RelativePath=".\res\iMobot_diagram.png"
+				RelativePath="..\iMobot_diagram.bmp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\..\libimobot\Demos\GtkGui\interface\imobot_diagram.png"
+				>
+			</File>
+			<File
+				RelativePath=".\res\iMobot_diagram.png"
 				>
 			</File>
 			<File
