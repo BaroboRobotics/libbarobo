@@ -57,7 +57,7 @@ robot3.moveToNB(90, 0, 90,  0);
 robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();
-sleep(1);
+delay(1);
 
 /* tripleLinked one third motion */
 robot1.moveToNB(0, 0, 90, 90);
@@ -66,7 +66,7 @@ robot3.moveToNB(90, -90, 0,  0);
 robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();
-sleep(1);
+delay(1);
 /* tripleLinked one Fourth motion */
 robot1.moveJointNB(ROBOT_JOINT4, -90);
 robot2.moveToNB(0, 0, 0, 0);
@@ -74,7 +74,7 @@ robot3.moveJointNB(ROBOT_JOINT1, -90);
 robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();
-sleep(1);
+delay(1);
 
 robot1.moveToNB(0, 0, 90, 0);
 robot2.moveToNB(0, 0, 0, 0);
@@ -82,7 +82,7 @@ robot3.moveToNB(0, -90, 0,  0);
 robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();
-sleep(1);
+delay(1);
 
 /*single module one */
 robot4.motionRollForward(1.5*360);
@@ -97,7 +97,7 @@ robot3.moveToNB(0, -90, 0,  0);
 robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();
-sleep(1);
+delay(1);
 
 /* 12th motion */
 robot1.moveToNB(0,  -90, 0, 90);
@@ -106,7 +106,7 @@ robot3.moveToNB(90, 0, 90,  0);
 robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();
-sleep(2);
+delay(2);
 
 /* 14th motion */
 robot1.moveToZeroNB();

@@ -208,7 +208,7 @@ void show(void)
         robot3.moveTo(70, -90, 0, 0);
     }
     /*
-sleep(1);
+delay(1);
     robot1.moveToNB(0, -90, -30, turnAngle);
     robot2.moveToNB(-70, 0, 90, 0);
     robot3.moveToNB(70, 0, 90, 0);

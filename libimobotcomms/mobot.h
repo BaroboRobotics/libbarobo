@@ -83,6 +83,7 @@ extern "C" {
 #endif
   DLLIMPORT double deg2rad(double deg);
   DLLIMPORT double rad2deg(double rad);
+  DLLIMPORT void delay(double seconds);
 #ifdef __cplusplus
 }
 #endif
@@ -320,6 +321,14 @@ class CMobotGroup
 
 #endif /* If C++ or CH */
 #endif /* C_ONLY */
+
+#ifndef _CH_
+extern "C" {
+#endif
+extern void delay(double seconds);
+#ifndef _CH_
+};
+#endif
 
 #ifdef _CH_
 void * CMobot::g_chmobot_dlhandle = NULL;

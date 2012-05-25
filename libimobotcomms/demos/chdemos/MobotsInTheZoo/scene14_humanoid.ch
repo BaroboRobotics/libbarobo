@@ -58,11 +58,11 @@ robot3.moveWait();
 
 // first step
 robot3.moveJointTo(ROBOT_JOINT3, -90);
-sleep(1);
+delay(1);
 robot1.moveTo(0, 45, 45, 45);
 robot2.moveTo(0, -45, -45, 45);
 robot3.moveJointTo(ROBOT_JOINT3, 90);
-sleep(1);
+delay(1);
 robot1.moveTo(0, 0, 0, 45);
 robot2.moveTo(0, 45, 45, 45);
 

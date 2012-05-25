@@ -822,11 +822,10 @@ robot.motionStand();
 This line of code causes the Mobot to perform a sequence of motions causing it to
 stand up on a faceplate. After the robot has stood up, the next line of code,
 \begin{verbatim}
-sleep(3); // Stand still for three seconds
+delay(3); // Stand still for three seconds
 \end{verbatim}
 pauses the program for three seconds, causing the robot to remain still for three
-seconds. If you would like to pause a program for less than one second, use the 
-function \texttt{msleep(msecs)} to pause for ``msecs'' milliseconds.
+seconds. 
 
 After the pause is over, the line
 \begin{verbatim}
@@ -1029,7 +1028,7 @@ These movement commands cause the Mobot to curl up into a fetal position with
 both of its faceplates facing toward the ground. The next line, 
 
 \begin{verbatim}
-sleep(1);
+delay(1);
 \end{verbatim}
 causes the program to pause for one second before continuing. This allows the
 robot to settle down, in case it was still in motion from the last movement.
@@ -1546,7 +1545,7 @@ while standing.
 
 The next line, 
 \begin{verbatim}
-sleep(3);                     /* Robots stand still for 3 seconds */
+delay(3);                     /* Robots stand still for 3 seconds */
 \end{verbatim}
 makes the robots stand still for three seconds. After standing
 still for three seconds, the line

@@ -58,7 +58,7 @@ robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();
 
-sleep(2);
+delay(2);
 
 /* third motion */
 robot1.moveToNB(0, 0, 90, 90);
@@ -68,7 +68,7 @@ robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();
 
-sleep(2);
+delay(2);
 
 /* fourth motion: spin the middle one */
 robot1.moveJointNB(ROBOT_JOINT4, 270);
@@ -78,7 +78,7 @@ robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();
 
-sleep(2);
+delay(2);
 
 /* fifth motion */
 robot1.moveToNB(0, 45, 90, 0);
@@ -88,7 +88,7 @@ robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();
 
-sleep(2);
+delay(2);
 
 /* sixth motion */
 robot1.moveToNB(45, 45, 90, 45);
@@ -97,7 +97,7 @@ robot3.moveToNB(45, -90, -45,  45);
 robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();
-sleep(2);
+delay(2);
 
 /* seventh motion */
 robot1.moveToNB(0, 45, 90, 0);
@@ -106,7 +106,7 @@ robot3.moveToNB(0, -90, -45,  0);
 robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();
-sleep(2);
+delay(2);
 
 /* eighth motion */
 robot1.moveToNB(-45, 45, 90, -45);
@@ -115,7 +115,7 @@ robot3.moveToNB(-45, -90, -45,  -45);
 robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();
-sleep(2);
+delay(2);
 
 /* ninth motion */
 robot1.moveToNB(0, 45, 90, 0);
@@ -124,7 +124,7 @@ robot3.moveToNB(0, -90, -45,  0);
 robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();
-sleep(2);
+delay(2);
 
 /* tenth motion */
 robot1.moveToNB(0, 0, 90, 0);
@@ -133,7 +133,7 @@ robot3.moveToNB(0, -90, 0,  0);
 robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();
-sleep(2);
+delay(2);
 
 /* 11th motion */
 robot1.moveJointNB(ROBOT_JOINT4, 90);
@@ -142,7 +142,7 @@ robot3.moveJointNB(ROBOT_JOINT1, 90);
 robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();
-sleep(2);
+delay(2);
 
 /* 12th motion */
 robot1.moveToNB(0,  -90, 0, 90);
@@ -151,7 +151,7 @@ robot3.moveToNB(90, 0, 90,  0);
 robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();
-sleep(2);
+delay(2);
 
 /* 13th motion */
 robot1.moveJointNB(ROBOT_JOINT4, -90);
@@ -160,7 +160,7 @@ robot3.moveJointNB(ROBOT_JOINT1, -90);
 robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();
-sleep(2);
+delay(2);
 
 /* 14th motion */
 robot1.moveToZeroNB();
