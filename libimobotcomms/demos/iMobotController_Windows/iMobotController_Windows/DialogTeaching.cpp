@@ -19,6 +19,7 @@ CDialogTeaching::CDialogTeaching(CWnd* pParent /*=NULL*/)
   haltPlayFlag = 0;
   isPlaying = 0;
   listctrl_recordedMotions.setContextMenuCallback(&CDialogTeaching::OnRecordedMotionContextMenu, this);
+  g_teachingDialog = this;
 }
 
 CDialogTeaching::~CDialogTeaching()
