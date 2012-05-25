@@ -29,5 +29,5 @@ group.motionInchwormLeft(2); /* Cause both robots to inchworm left 2 times */
 group.motionInchwormRight(2);
 group.motionStand(); /* Cause both robots to stand */
 group.move(360, 0, 0, 360);
-sleep(3); /* Make the robots stand still for 3 seconds */
+delay(3); /* Make the robots stand still for 3 seconds */
 group.motionUnstand(); /* Make the robots get back down from standing */

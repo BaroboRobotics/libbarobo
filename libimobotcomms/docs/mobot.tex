@@ -21,7 +21,7 @@
 \vspace*{2.5cm}
 {\Huge\sf\bf Mobot User's Guide}\\
 \vspace*{2.5cm}
-{\Large\bf Version 1.5}
+{\Large\bf Version 1.6}
 \vspace{4.5cm}
 
 \includegraphics[width=4in]{images/Mobot_Camera_Stand.JPG}
@@ -60,7 +60,6 @@ Figure \ref{fig:joint_diagram_verbose.png} shows a schematic diagram displaying 
 locations and positive directions of the four joints of a Mobot module. The
 joints 1 and 4 shown in the figure are fully rotational and have no joint limits.
 Joints 2 and 3, however, can only move in the range -90 to +90 degrees.
-
 
 \section{\label{sec:pairing}Configuring Mobots for Remote Control}
 Mobot modules should be configured the first time they are used with 
@@ -822,11 +821,10 @@ robot.motionStand();
 This line of code causes the Mobot to perform a sequence of motions causing it to
 stand up on a faceplate. After the robot has stood up, the next line of code,
 \begin{verbatim}
-sleep(3); // Stand still for three seconds
+delay(3); // Stand still for three seconds
 \end{verbatim}
 pauses the program for three seconds, causing the robot to remain still for three
-seconds. If you would like to pause a program for less than one second, use the 
-function \texttt{msleep(msecs)} to pause for ``msecs'' milliseconds.
+seconds. 
 
 After the pause is over, the line
 \begin{verbatim}
@@ -1029,7 +1027,7 @@ These movement commands cause the Mobot to curl up into a fetal position with
 both of its faceplates facing toward the ground. The next line, 
 
 \begin{verbatim}
-sleep(1);
+delay(1);
 \end{verbatim}
 causes the program to pause for one second before continuing. This allows the
 robot to settle down, in case it was still in motion from the last movement.
@@ -1546,7 +1544,7 @@ while standing.
 
 The next line, 
 \begin{verbatim}
-sleep(3);                     /* Robots stand still for 3 seconds */
+delay(3);                     /* Robots stand still for 3 seconds */
 \end{verbatim}
 makes the robots stand still for three seconds. After standing
 still for three seconds, the line

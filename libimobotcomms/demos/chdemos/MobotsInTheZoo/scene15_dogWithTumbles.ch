@@ -74,7 +74,7 @@ for (i = 0; i < 1; i++)
     robot3.moveTo(0, -5, 92, 90);
     robot1.moveTo(0, -55, 63.5, 90);
     robot2.moveTo(0, -5, 92.5, 90);
-    sleep(1);
+    delay(1);
     robot1.moveToNB(0, 0, -63.5, 90);
     robot3.moveToNB(0, 0, 63.5, 90);
     robot1.moveWait();
@@ -133,7 +133,7 @@ for (i = 0; i < 1; i++) {
     robot2.moveTo(0, 5, -96, 90);
     robot1.moveTo(0, 55, -63.5, 90);
     robot3.moveTo(0, 5, -92.5, 90);
-sleep(1);
+delay(1);
     robot1.moveToNB(0, 0, 63.5, 90);
     robot2.moveToNB(0, 0, -63.5, 90);
     robot1.moveWait();

@@ -17,7 +17,7 @@ robot.moveJointTo(ROBOT_JOINT2, -85);
 robot.moveJointTo(ROBOT_JOINT3, 70);
 
 /* Wait a second for the robot to settle down */
-sleep(1);
+delay(1);
 
 /* Rotate the bottom faceplate by 45 degrees */
 robot.moveJointTo(ROBOT_JOINT1, 45);

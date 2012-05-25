@@ -1,6 +1,8 @@
 /* Filename: start.ch 
  * Move the robot faceplates. */
 #include <mobot.h>
+
+printf("%lf\n", rad2deg(4));
 CMobot robot;
 
 /* Connect to the paired Mobot */
