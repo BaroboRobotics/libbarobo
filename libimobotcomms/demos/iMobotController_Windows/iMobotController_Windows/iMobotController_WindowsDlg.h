@@ -52,6 +52,8 @@ typedef enum button_e
 // CiMobotController_WindowsDlg dialog
 class CiMobotController_WindowsDlg : public CDialog
 {
+  DECLARE_DYNAMIC(CiMobotController_WindowsDlg)
+
 public:
 // Construction
 	CiMobotController_WindowsDlg(CWnd* pParent = NULL);	// motionStandard constructor

@@ -3,6 +3,7 @@
 #include "DialogConnect.h"
 #include "DialogProgram.h"
 #include "DialogTeaching.h"
+#include "iMobotController_WindowsDlg.h"
 
 
 // CTabbedDialog dialog
@@ -30,6 +31,7 @@ public:
   CDialogConnect *m_connectDlg;
   CDialogProgram *m_programDlg;
   CDialogTeaching *m_teachingDlg;
+  CiMobotController_WindowsDlg  *m_robotControllerDlg;
   RobotManager* GetRobotManager();
   void RefreshTabContent();
   afx_msg void OnTcnSelchangeTab1(NMHDR *pNMHDR, LRESULT *pResult);

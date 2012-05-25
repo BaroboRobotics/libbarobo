@@ -8,6 +8,7 @@
 #include "configFileDialog.h"
 #include "DialogTeaching.h"
 #include "gait.h"
+#include "resource.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -58,6 +59,7 @@ END_MESSAGE_MAP()
 // CiMobotController_WindowsDlg dialog
 
 
+IMPLEMENT_DYNAMIC(CiMobotController_WindowsDlg, CDialog)
 
 CiMobotController_WindowsDlg::CiMobotController_WindowsDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CiMobotController_WindowsDlg::IDD, pParent)
@@ -160,7 +162,7 @@ void CiMobotController_WindowsDlg::OnOK()
 }
 
 BEGIN_MESSAGE_MAP(CiMobotController_WindowsDlg, CDialog)
-	ON_WM_SYSCOMMAND()
+	//ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	//ON_WM_TIMER()
@@ -172,7 +174,6 @@ BEGIN_MESSAGE_MAP(CiMobotController_WindowsDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_Motor4Forward, &CiMobotController_WindowsDlg::OnBnClickedButtonMotor4forward)
 	ON_LBN_SELCHANGE(IDC_LIST_gaits, &CiMobotController_WindowsDlg::OnLbnSelchangeListgaits)
 	ON_EN_CHANGE(IDC_EDIT_position4, &CiMobotController_WindowsDlg::OnEnChangeEditposition4)
-	//ON_STN_CLICKED(IDC_STATIC_IROBOT_PICTURE, &CiMobotController_WindowsDlg::OnStnClickedStaticImobotPicture)
 	ON_BN_CLICKED(IDC_BUTTON_Motor2Forward, &CiMobotController_WindowsDlg::OnBnClickedButtonMotor2forward)
 	ON_BN_CLICKED(IDC_BUTTON_Motor3Forward, &CiMobotController_WindowsDlg::OnBnClickedButtonMotor3forward)
 	ON_BN_CLICKED(IDC_BUTTON_Motor1Stop, &CiMobotController_WindowsDlg::OnBnClickedButtonMotor1stop)
@@ -196,6 +197,7 @@ BEGIN_MESSAGE_MAP(CiMobotController_WindowsDlg, CDialog)
 	ON_COMMAND(ID_ROBOT_CONFIGUREROBOTBLUETOOTH, &CiMobotController_WindowsDlg::OnRobotConfigurerobotbluetooth)
 	ON_EN_CHANGE(IDC_EDIT_setpos1, &CiMobotController_WindowsDlg::OnEnChangeEditsetpos1)
 	ON_BN_CLICKED(IDC_BUTTON_GOPOS, &CiMobotController_WindowsDlg::OnBnClickedButtonGopos)
+  /*
 	ON_COMMAND(ID_ROBOT_CONNECTTOAROBOT, &CiMobotController_WindowsDlg::OnRobotConnecttoarobot)
 	ON_COMMAND(ID_CONNECT_DISCONNECTFROMROBOT, &CiMobotController_WindowsDlg::OnConnectDisconnectfromrobot)
 	ON_COMMAND(ID_HELP_HELP, &CiMobotController_WindowsDlg::OnHelpHelp)
@@ -206,6 +208,7 @@ BEGIN_MESSAGE_MAP(CiMobotController_WindowsDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_MOVE, &CiMobotController_WindowsDlg::OnBnClickedButtonMove)
 	ON_COMMAND(ID_HELP_DEMOS, &CiMobotController_WindowsDlg::OnHelpDemos)
 	ON_COMMAND(ID_TEACHINGMODE_TEACHINGMODEDIALOG, &CiMobotController_WindowsDlg::OnTeachingmodeTeachingmodedialog)
+  */
 END_MESSAGE_MAP()
 
 
@@ -218,6 +221,7 @@ BOOL CiMobotController_WindowsDlg::OnInitDialog()
 	// Add "About..." menu item to system menu.
 
 	// IDM_ABOUTBOX must be in the system command range.
+#if 0
 	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
 	ASSERT(IDM_ABOUTBOX < 0xF000);
 
@@ -237,6 +241,7 @@ BOOL CiMobotController_WindowsDlg::OnInitDialog()
 	//  when the application's main window is not a dialog
 	SetIcon(m_hIcon, TRUE);			// Set big icon
 	SetIcon(m_hIcon, FALSE);		// Set small icon
+#endif
 
 	// TODO: Add extra initialization here
 
