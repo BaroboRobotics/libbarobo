@@ -147,9 +147,11 @@ class CMobot {
     int moveTo(double angle1, double angle2, double angle3, double angle4);
     int moveToAbs(double angle1, double angle2, double angle3, double angle4);
     int moveToDirect(double angle1, double angle2, double angle3, double angle4);
+    int moveToPID(double angle1, double angle2, double angle3, double angle4);
     int moveToNB(double angle1, double angle2, double angle3, double angle4);
     int moveToAbsNB(double angle1, double angle2, double angle3, double angle4);
     int moveToDirectNB(double angle1, double angle2, double angle3, double angle4);
+    int moveToPIDNB(double angle1, double angle2, double angle3, double angle4);
     int moveWait();
     int moveToZero();
     int moveToZeroNB();

@@ -224,6 +224,11 @@ DLLIMPORT int Mobot_moveToDirect(br_comms_t* comms,
                                double angle2,
                                double angle3,
                                double angle4);
+DLLIMPORT int Mobot_moveToPID(br_comms_t* comms,
+                               double angle1,
+                               double angle2,
+                               double angle3,
+                               double angle4);
 DLLIMPORT int Mobot_moveToNB(br_comms_t* comms,
                                double angle1,
                                double angle2,
@@ -235,6 +240,11 @@ DLLIMPORT int Mobot_moveToAbsNB(br_comms_t* comms,
                                double angle3,
                                double angle4);
 DLLIMPORT int Mobot_moveToDirectNB(br_comms_t* comms,
+                               double angle1,
+                               double angle2,
+                               double angle3,
+                               double angle4);
+DLLIMPORT int Mobot_moveToPIDNB(br_comms_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
