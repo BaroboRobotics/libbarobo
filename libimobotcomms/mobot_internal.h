@@ -6,6 +6,7 @@
 #endif
 
 #ifndef _WIN32
+#include <stdint.h>
 typedef struct sockaddr_rc sockaddr_t;
 #else
 typedef unsigned char uint8_t;
