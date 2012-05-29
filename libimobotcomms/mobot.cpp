@@ -3677,30 +3677,34 @@ void* CMobotGroup::motionTumbleRightThread(void* arg)
 {
   int i;
   CMobotGroup* cmg = (CMobotGroup*)arg;
+  int num = cmg->argInt;
+
   cmg->moveToZero();
-  cmg->moveJointTo(ROBOT_JOINT3, 85);
-  cmg->moveJointTo(ROBOT_JOINT2, -80);
 #ifndef _WIN32
   sleep(1);
 #else
   Sleep(1000);
 #endif
 
-  for(i = 0; i < cmg->argInt; i++) {
-    if((i%2) == 0) {
-      cmg->moveJointTo(ROBOT_JOINT3, 0);
-      cmg->moveJointTo(ROBOT_JOINT2, 0);
-      cmg->moveJointTo(ROBOT_JOINT3, -60);
-      cmg->moveJointTo(ROBOT_JOINT2, 85);
-      cmg->moveJointTo(ROBOT_JOINT3, -80);
-    } else {
-      cmg->moveJointTo(ROBOT_JOINT2, 0);
-      cmg->moveJointTo(ROBOT_JOINT3, 0);
-      cmg->moveJointTo(ROBOT_JOINT2, -60);
-      cmg->moveJointTo(ROBOT_JOINT3, 85);
-      cmg->moveJointTo(ROBOT_JOINT2, -80);
+  for(i = 0; i < num; i++) {
+    cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(85));
+    cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(-80));
+    cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(0));
+    cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(0));
+    cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(-80));
+    cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(-45));
+    cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(85));
+    cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(-80));
+    cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(0));
+    cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(0));
+    cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(-80));
+    if(i != (num-1)) {
+      cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(-45));
     }
   }
+  cmg->moveJointToNB(ROBOT_JOINT3, 0);
+  cmg->moveJointToNB(ROBOT_JOINT2, 0);
+  cmg->moveWait();
 
   cmg->_motionInProgress--;
   return NULL;
@@ -3726,31 +3730,34 @@ void* CMobotGroup::motionTumbleLeftThread(void* arg)
 {
   int i;
   CMobotGroup* cmg = (CMobotGroup*)arg;
+  int num = cmg->argInt;
+
   cmg->moveToZero();
-  cmg->moveJointTo(ROBOT_JOINT2, -85);
-  cmg->moveJointTo(ROBOT_JOINT3, 80);
 #ifndef _WIN32
   sleep(1);
 #else
   Sleep(1000);
 #endif
 
-  for(i = 0; i < cmg->argInt; i++) {
-    if((i%2) == 0) {
-      cmg->moveJointTo(ROBOT_JOINT2, 0);
-      cmg->moveJointTo(ROBOT_JOINT3, 0);
-      cmg->moveJointTo(ROBOT_JOINT2, 60);
-      cmg->moveJointTo(ROBOT_JOINT3, -85);
-      cmg->moveJointTo(ROBOT_JOINT2, 80);
-    } else {
-      cmg->moveJointTo(ROBOT_JOINT3, 0);
-      cmg->moveJointTo(ROBOT_JOINT2, 0);
-      cmg->moveJointTo(ROBOT_JOINT3, 60);
-      cmg->moveJointTo(ROBOT_JOINT2, -85);
-      cmg->moveJointTo(ROBOT_JOINT3, 80);
+  for(i = 0; i < num; i++) {
+    cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(-85));
+    cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(80));
+    cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(0));
+    cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(0));
+    cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(80));
+    cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(45));
+    cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(-85));
+    cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(80));
+    cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(0));
+    cmg->moveJointTo(ROBOT_JOINT2, DEG2RAD(0));
+    cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(80));
+    if(i != (num-1)) {
+      cmg->moveJointTo(ROBOT_JOINT3, DEG2RAD(45));
     }
   }
-
+  cmg->moveJointToNB(ROBOT_JOINT2, 0);
+  cmg->moveJointToNB(ROBOT_JOINT3, 0);
+  cmg->moveWait();
   cmg->_motionInProgress--;
   return NULL;
 }

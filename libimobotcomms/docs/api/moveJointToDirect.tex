@@ -1,0 +1,78 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobot::moveJointToDirect()}\index{CMobot::moveJointToDirect()}}\\
+{\LARGE \texttt{CMobot::moveJointToDirectNB()}\index{CMobot::moveJointToDirectNB()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{moveJointToDirect()}
+\addcontentsline{toc}{section}{moveJointToDirectNB()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobot::moveJointToDirect(robotJointId_t id, double angle);
+int CMobot::moveJointToDirectNB(robotJointId_t id, double angle);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Move a joint on the robot to an absolute position taking the shortest direction possible.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{10 mm}p{145 mm}}
+\texttt{id} & The joint number to wait for. \\
+\texttt{angle} & The absolute angle in degrees to move the motor to.  \\
+\end{tabular}
+\end{description}
+
+\noindent
+{\bf Description}\\
+\vspace{-12pt}
+
+\begin{quote}
+{\bf CMobot::moveJointToDirect()}\\
+This function commands the motor to move to a position specified in degrees at
+the current motor's speed. The current motor speed may be set with the
+\texttt{setJointSpeed()} member function. Please note that if the motor speed
+is set to zero, the motor will not move after calling the
+\texttt{moveJointToDirect()} function. 
+
+{\bf CMobot::moveJointToDirectNB()}\\
+This function commands the motor to move to a position specified in degrees at
+the current motor's speed. The current motor speed may be set with the
+\texttt{setJointSpeed()} member function. Please note that if the motor speed
+is set to zero, the motor will not move after calling the
+\texttt{moveJointToDirectNB()} function. 
+
+The function \texttt{moveJointToDirectNB()} is the non-blocking version of
+the \texttt{moveJointToDirect()} function, which means that the function will return
+immediately and the physical robot motion will occur asynchronously. For
+more details on blocking and non-blocking functions, please refer to 
+Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\
+\end{quote}
+
+Note that the main difference between this function and its sister function,
+\texttt{moveJointTo()}, is that this function explicitely moves the motor in
+whichever direction is the shortest to achieve its goal.
+
+\noindent
+{\bf Example}\\
+Please see the example in Section \ref{sec:democode} on page \pageref{sec:democode}.\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+\texttt{connectWithAddress()}
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\
