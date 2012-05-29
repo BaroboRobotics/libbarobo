@@ -83,7 +83,9 @@ extern "C" {
 #endif
   DLLIMPORT double deg2rad(double deg);
   DLLIMPORT double rad2deg(double rad);
-  //DLLIMPORT void delay(double seconds);
+#ifndef SWIG
+  DLLIMPORT void delay(double seconds);
+#endif
 #ifdef __cplusplus
 }
 #endif
@@ -119,6 +121,17 @@ class CMobot {
     int disableButtonCallback();
     int isConnected();
     int isMoving();
+#ifdef SWIG
+    %apply double & OUTPUT {double &angle};
+    %apply double & OUTPUT {double &angle1, double &angle2, double &angle3, double &angle4};
+    %apply double & OUTPUT {double &maxSpeed};
+    %apply double & OUTPUT {double &seconds};
+    %apply double & OUTPUT {double &speed};
+    %apply double & OUTPUT {double &ratio};
+    %apply double & OUTPUT {double &speed1, double &speed2, double &speed3, double &speed4};
+    %apply double & OUTPUT {double &ratio1, double &ratio2, double &ratio3, double &ratio4};
+    %apply double & OUTPUT {robotJointState_t &state};
+#endif
     int getJointAngle(robotJointId_t id, double &angle);
     int getJointAngleAbs(robotJointId_t id, double &angle);
     int getJointAngles(double &angle1, double &angle2, double &angle3, double &angle4);
