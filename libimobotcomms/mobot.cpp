@@ -345,9 +345,7 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
   //fcntl(comms->socket, F_SETFL, flags | O_NONBLOCK);
   /* Wait for the MoBot to get ready */
   //sleep(1);
-  /* Start the comms engine */
-  THREAD_CREATE(&comms->commsThread, commsEngine, comms);
-  finishConnect(comms);
+  status = finishConnect(comms);
   return status;
 #else
   fprintf(stderr, "ERROR: connectWithAddress() is currently unavailable on the Mac platform.\n");
@@ -362,6 +360,7 @@ int Mobot_connectWithTTY(br_comms_t* comms, const char* ttyfilename)
   char *filename = strdup(ttyfilename);
   char lockfileName[MAX_PATH];
   int pid;
+  int status;
   /* Open the lock file, if it exists */
   sprintf(lockfileName, "/tmp/%s.lock", basename(filename));
   lockfile = fopen(lockfileName, "r");
@@ -389,7 +388,8 @@ int Mobot_connectWithTTY(br_comms_t* comms, const char* ttyfilename)
     return -1;
   }
   comms->connected = 1;
-  finishConnect(comms);
+  status = finishConnect(comms);
+  if(status) return status;
   /* Finished connecting. Create the lockfile. */
   lockfile = fopen(lockfileName, "w");
   if(lockfile == NULL) {
@@ -408,6 +408,8 @@ int finishConnect(br_comms_t* comms)
 {
   int i;
   uint8_t buf[256];
+  /* Start the comms engine */
+  THREAD_CREATE(&comms->commsThread, commsEngine, comms);
   while(1) {
     if(Mobot_getStatus(comms) == 0) {
       break;

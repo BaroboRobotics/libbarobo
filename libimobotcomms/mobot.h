@@ -335,14 +335,8 @@ class CMobotGroup
 #endif /* If C++ or CH */
 #endif /* C_ONLY */
 
-#ifndef _CH_
-extern "C" {
-#endif
-#ifndef SWIG
+#ifdef _CH_
 extern void delay(double seconds);
-#endif
-#ifndef _CH_
-};
 #endif
 
 #ifdef _CH_
