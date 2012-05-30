@@ -4,6 +4,7 @@
 #ifdef SWIG
 #define DLLIMPORT
 %module mobot
+%feature("autodoc", "1");
 %{
 #include "mobot.h"
 %}
