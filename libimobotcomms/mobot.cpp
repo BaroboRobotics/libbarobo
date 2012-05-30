@@ -2513,7 +2513,6 @@ void* commsEngine(void* arg)
       }
     } else {
       /* It was a user triggered event */
-      printf("Event Byte: 0x%x\n", byte);
       MUTEX_LOCK(comms->recvBuf_lock);
       comms->recvBuf[bytes] = byte;
       bytes++;
