@@ -83,7 +83,9 @@ extern "C" {
 #endif
   DLLIMPORT double deg2rad(double deg);
   DLLIMPORT double rad2deg(double rad);
+#ifndef SWIG
   DLLIMPORT void delay(double seconds);
+#endif
 #ifdef __cplusplus
 }
 #endif
@@ -127,6 +129,17 @@ class CMobot {
     int disableButtonCallback();
     int isConnected();
     int isMoving();
+#ifdef SWIG
+    %apply double & OUTPUT {double &angle};
+    %apply double & OUTPUT {double &angle1, double &angle2, double &angle3, double &angle4};
+    %apply double & OUTPUT {double &maxSpeed};
+    %apply double & OUTPUT {double &seconds};
+    %apply double & OUTPUT {double &speed};
+    %apply double & OUTPUT {double &ratio};
+    %apply double & OUTPUT {double &speed1, double &speed2, double &speed3, double &speed4};
+    %apply double & OUTPUT {double &ratio1, double &ratio2, double &ratio3, double &ratio4};
+    %apply double & OUTPUT {robotJointState_t &state};
+#endif
     int getJointAngle(robotJointId_t id, double &angle);
     int getJointAngleAbs(robotJointId_t id, double &angle);
     int getJointAngles(double &angle1, double &angle2, double &angle3, double &angle4);
@@ -165,9 +178,11 @@ class CMobot {
     int moveTo(double angle1, double angle2, double angle3, double angle4);
     int moveToAbs(double angle1, double angle2, double angle3, double angle4);
     int moveToDirect(double angle1, double angle2, double angle3, double angle4);
+    int moveToPID(double angle1, double angle2, double angle3, double angle4);
     int moveToNB(double angle1, double angle2, double angle3, double angle4);
     int moveToAbsNB(double angle1, double angle2, double angle3, double angle4);
     int moveToDirectNB(double angle1, double angle2, double angle3, double angle4);
+    int moveToPIDNB(double angle1, double angle2, double angle3, double angle4);
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
@@ -330,12 +345,8 @@ class CMobotGroup
 #endif /* If C++ or CH */
 #endif /* C_ONLY */
 
-#ifndef _CH_
-extern "C" {
-#endif
+#ifdef _CH_
 extern void delay(double seconds);
-#ifndef _CH_
-};
 #endif
 
 #ifdef _CH_

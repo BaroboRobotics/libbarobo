@@ -345,9 +345,7 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
   //fcntl(comms->socket, F_SETFL, flags | O_NONBLOCK);
   /* Wait for the MoBot to get ready */
   //sleep(1);
-  /* Start the comms engine */
-  THREAD_CREATE(&comms->commsThread, commsEngine, comms);
-  finishConnect(comms);
+  status = finishConnect(comms);
   return status;
 #else
   fprintf(stderr, "ERROR: connectWithAddress() is currently unavailable on the Mac platform.\n");
@@ -362,6 +360,7 @@ int Mobot_connectWithTTY(br_comms_t* comms, const char* ttyfilename)
   char *filename = strdup(ttyfilename);
   char lockfileName[MAX_PATH];
   int pid;
+  int status;
   /* Open the lock file, if it exists */
   sprintf(lockfileName, "/tmp/%s.lock", basename(filename));
   lockfile = fopen(lockfileName, "r");
@@ -389,7 +388,8 @@ int Mobot_connectWithTTY(br_comms_t* comms, const char* ttyfilename)
     return -1;
   }
   comms->connected = 1;
-  finishConnect(comms);
+  status = finishConnect(comms);
+  if(status) return status;
   /* Finished connecting. Create the lockfile. */
   lockfile = fopen(lockfileName, "w");
   if(lockfile == NULL) {
@@ -408,6 +408,8 @@ int finishConnect(br_comms_t* comms)
 {
   int i;
   uint8_t buf[256];
+  /* Start the comms engine */
+  THREAD_CREATE(&comms->commsThread, commsEngine, comms);
   while(1) {
     if(Mobot_getStatus(comms) == 0) {
       break;
@@ -1376,6 +1378,21 @@ int Mobot_moveToDirect(br_comms_t* comms,
   return Mobot_moveWait(comms);
 }
 
+
+int Mobot_moveToPID(br_comms_t* comms,
+                               double angle1,
+                               double angle2,
+                               double angle3,
+                               double angle4)
+{
+  Mobot_moveToPIDNB(comms, 
+      angle1, 
+      angle2, 
+      angle3, 
+      angle4 );
+  return Mobot_moveWait(comms);
+}
+
 int Mobot_moveToNB(br_comms_t* comms,
                                double angle1,
                                double angle2,
@@ -1452,6 +1469,35 @@ int Mobot_moveToDirectNB(br_comms_t* comms,
   f = angle4;
   memcpy(&buf[12], &f, 4);
   status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLESDIRECT), buf, 16);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
+  return 0;
+}
+
+int Mobot_moveToPIDNB(br_comms_t* comms,
+                               double angle1,
+                               double angle2,
+                               double angle3,
+                               double angle4)
+{
+  uint8_t buf[32];
+  float f;
+  int status;
+  f = angle1;
+  memcpy(&buf[0], &f, 4);
+  f = angle2;
+  memcpy(&buf[4], &f, 4);
+  f = angle3;
+  memcpy(&buf[8], &f, 4);
+  f = angle4;
+  memcpy(&buf[12], &f, 4);
+  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLESPID), buf, 16);
   if(status < 0) return status;
   if(RecvFromIMobot(comms, buf, sizeof(buf))) {
     return -1;
@@ -2511,7 +2557,6 @@ void* commsEngine(void* arg)
       }
     } else {
       /* It was a user triggered event */
-      printf("Event Byte: 0x%x\n", byte);
       MUTEX_LOCK(comms->recvBuf_lock);
       comms->recvBuf[bytes] = byte;
       bytes++;
@@ -2886,6 +2931,19 @@ int CMobot::moveToDirect( double angle1,
       DEG2RAD(angle4));
 }
 
+int CMobot::moveToPID( double angle1,
+                          double angle2,
+                          double angle3,
+                          double angle4)
+{
+  return Mobot_moveToPID(
+      &_comms, 
+      DEG2RAD(angle1), 
+      DEG2RAD(angle2), 
+      DEG2RAD(angle3), 
+      DEG2RAD(angle4));
+}
+
 int CMobot::moveToNB( double angle1,
                           double angle2,
                           double angle3,
@@ -2918,6 +2976,19 @@ int CMobot::moveToDirectNB( double angle1,
                           double angle4)
 {
   return Mobot_moveToDirectNB(
+      &_comms, 
+      DEG2RAD(angle1), 
+      DEG2RAD(angle2), 
+      DEG2RAD(angle3), 
+      DEG2RAD(angle4));
+}
+
+int CMobot::moveToPIDNB( double angle1,
+                          double angle2,
+                          double angle3,
+                          double angle4)
+{
+  return Mobot_moveToPIDNB(
       &_comms, 
       DEG2RAD(angle1), 
       DEG2RAD(angle2), 
