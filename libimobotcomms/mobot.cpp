@@ -52,8 +52,8 @@ void* nullThread(void* arg)
    -5 : Bluetooth device not found
    -6 : Protocol version mismatch
    */
-int finishConnect(br_comms_t* comms);
-int Mobot_connect(br_comms_t* comms)
+int finishConnect(mobot_t* comms);
+int Mobot_connect(mobot_t* comms)
 {
 #ifdef _WIN32
   /* Find the user's local appdata directory */
@@ -163,101 +163,8 @@ int Mobot_connect(br_comms_t* comms)
 #endif /* Fi Linux/Mac */
 #endif
 }
-int Mobot_connect_old(br_comms_t* comms)
-{
-#ifndef _WIN32
-  fprintf(stderr, 
-      "ERROR; Function Mobot_connect() is not yet implemented \n"
-      "on non-Windows systems. Please use Mobot_connectWithAddress() \n"
-      "instead.\n");
-  return -1;
-#else
-  char buf[80];
 
-/* NUM_PORTS indicates the number of Windows COM ports to check for connections
- * to the robot. */
-#define NUM_PORTS 30
-  int i;
-  for(i = 1; i < NUM_PORTS; i++) {
-    sprintf(buf, "\\\\.\\COM%d", i);
-    printf("Trying %s...\n", buf);
-    comms->hSerial = CreateFileA(buf, 
-        GENERIC_READ | GENERIC_WRITE,
-        0,
-        0,
-        OPEN_EXISTING,
-        FILE_ATTRIBUTE_NORMAL,
-        0);
-    if(comms->hSerial == INVALID_HANDLE_VALUE) {
-      printf("Could not open serial handle.\n");
-      continue;
-    }
-    /* Set up the properties */
-    DCB dcbSerialParams = {0};
-    dcbSerialParams.DCBlength=sizeof(dcbSerialParams);
-    if(!GetCommState(comms->hSerial, &dcbSerialParams)) {
-      // error getting state
-      printf("Could not get serial properties.\n");
-      continue;
-    }
-    dcbSerialParams.BaudRate = CBR_57600;
-    dcbSerialParams.ByteSize = 8;
-    dcbSerialParams.StopBits = ONESTOPBIT;
-    dcbSerialParams.Parity = NOPARITY;
-    if(!SetCommState(comms->hSerial, &dcbSerialParams)) {
-      // error setting state
-      printf("Could not set serial properties.\n");
-      continue;
-    }
-
-    /* Set up timeouts */
-    COMMTIMEOUTS timeouts = {0};
-    timeouts.ReadIntervalTimeout = 50;
-    timeouts.ReadTotalTimeoutConstant = 50;
-    timeouts.ReadTotalTimeoutMultiplier = 10;
-    timeouts.WriteTotalTimeoutConstant = 50;
-    timeouts.WriteTotalTimeoutMultiplier = 10;
-    if(!SetCommTimeouts(comms->hSerial, &timeouts)) {
-      // Error setting timeouts
-      printf("Could not set timeouts.\n");
-      continue;
-    }
-
-    /* Send status request message to the robot*/
-    DWORD bytes;
-    if(!WriteFile(comms->hSerial, "GET_IMOBOT_STATUS", strlen("GET_IMOBOT_STATUS")+1, &bytes, NULL)) {
-      printf("Could not send status request message.\n");
-      CloseHandle(comms->hSerial);
-      continue;
-    }
-    printf("Wrote %d bytes.\n", bytes);
-    Sleep(250);
-    /* Check response message */
-    if(!ReadFile(comms->hSerial, buf, 79, &bytes, NULL)) {
-      printf("Could not receive response message.\n");
-      CloseHandle(comms->hSerial);
-      continue;
-    }
-    if(strcmp(buf, "IMOBOT READY")) {
-      printf("Incorrect response message: %s.\n", buf);
-      CloseHandle(comms->hSerial);
-      continue;
-    } else {
-      comms->connected = 2;
-      break;
-    }
-  }
-  /* At this point, we _should_ be connected */
-  if(i != NUM_PORTS) {
-    finishConnect(comms);
-    return 0;
-  } else {
-    return -1;
-  }
-#endif
-}
-
-int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel)
+int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
 {
   int err = -1;
 #ifndef __MACH__
@@ -285,13 +192,13 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
 
   // set the connection parameters (who to connect to)
 #ifndef _WIN32
-  comms->addr.rc_family = AF_BLUETOOTH;
-  comms->addr.rc_channel = (uint8_t) channel;
-  str2ba( address, &comms->addr.rc_bdaddr );
+  comms->addr->rc_family = AF_BLUETOOTH;
+  comms->addr->rc_channel = (uint8_t) channel;
+  str2ba( address, &comms->addr->rc_bdaddr );
 #else
-  comms->addr.addressFamily = AF_BTH;
-  str2ba( address, (bdaddr_t*)&comms->addr.btAddr);
-  comms->addr.port = channel;
+  comms->addr->addressFamily = AF_BTH;
+  str2ba( address, (bdaddr_t*)&comms->addr->btAddr);
+  comms->addr->port = channel;
 #endif
 
   // connect to server
@@ -301,7 +208,7 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
     if(tries > 2) {
       break;
     }
-    status = connect(comms->socket, (const struct sockaddr *)&comms->addr, sizeof(comms->addr));
+    status = connect(comms->socket, (const struct sockaddr *)comms->addr, sizeof(*comms->addr));
     if(status == 0) {
       comms->connected = 1;
     } 
@@ -354,7 +261,7 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
 }
 
 #ifndef _WIN32
-int Mobot_connectWithTTY(br_comms_t* comms, const char* ttyfilename)
+int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
 {
   FILE *lockfile;
   char *filename = strdup(ttyfilename);
@@ -404,12 +311,12 @@ int Mobot_connectWithTTY(br_comms_t* comms, const char* ttyfilename)
 
 /* finishConnect():
  * Perform final connecting tasks common to all connection methods */
-int finishConnect(br_comms_t* comms)
+int finishConnect(mobot_t* comms)
 {
   int i;
   uint8_t buf[256];
   /* Start the comms engine */
-  THREAD_CREATE(&comms->commsThread, commsEngine, comms);
+  THREAD_CREATE(comms->commsThread, commsEngine, comms);
   while(1) {
     if(Mobot_getStatus(comms) == 0) {
       break;
@@ -444,7 +351,7 @@ int finishConnect(br_comms_t* comms)
   return 0;
 }
 
-int Mobot_blinkLED(br_comms_t* comms, double delay, int numBlinks)
+int Mobot_blinkLED(mobot_t* comms, double delay, int numBlinks)
 {
   uint8_t buf[8];
   float f;
@@ -465,7 +372,7 @@ int Mobot_blinkLED(br_comms_t* comms, double delay, int numBlinks)
   return 0;
 }
 
-int Mobot_disconnect(br_comms_t* comms)
+int Mobot_disconnect(mobot_t* comms)
 {
 #ifndef _WIN32
   if(close(comms->socket)) {
@@ -483,7 +390,7 @@ int Mobot_disconnect(br_comms_t* comms)
   return 0;
 }
 
-int Mobot_enableButtonCallback(br_comms_t* comms, void* robot, void (*buttonCallback)(void* robot, int button, int buttonDown))
+int Mobot_enableButtonCallback(mobot_t* comms, void* robot, void (*buttonCallback)(void* robot, int button, int buttonDown))
 {
   uint8_t buf[16];
   int status;
@@ -509,7 +416,7 @@ int Mobot_enableButtonCallback(br_comms_t* comms, void* robot, void (*buttonCall
   return 0;
 }
 
-int Mobot_disableButtonCallback(br_comms_t* comms)
+int Mobot_disableButtonCallback(mobot_t* comms)
 {
   uint8_t buf[16];
   int status;
@@ -534,11 +441,12 @@ int Mobot_disableButtonCallback(br_comms_t* comms)
   return 0;
 }
 
-int Mobot_init(br_comms_t* comms)
+int Mobot_init(mobot_t* comms)
 {
   int i;
 #ifndef __MACH__
-  memset(&comms->addr, 0, sizeof(sockaddr_t));
+  comms->addr = (sockaddr_t*)malloc(sizeof(sockaddr_t));
+  memset(comms->addr, 0, sizeof(sockaddr_t));
 #endif
   comms->connected = 0;
 #ifdef _WIN32
@@ -553,7 +461,9 @@ int Mobot_init(br_comms_t* comms)
     /* Set the default maximum speed to something reasonable */
     comms->maxSpeed[i] = DEF_MOTOR_MAXSPEED;
   }
-  THREAD_CREATE(&comms->thread, nullThread, NULL);
+  comms->thread = (THREAD_T*)malloc(sizeof(THREAD_T));
+  comms->commsThread = (THREAD_T*)malloc(sizeof(THREAD_T));
+  THREAD_CREATE(comms->thread, nullThread, NULL);
   comms->commsLock = (MUTEX_T*)malloc(sizeof(MUTEX_T));
   MUTEX_INIT(comms->commsLock);
   comms->motionInProgress = 0;
@@ -573,7 +483,7 @@ int Mobot_init(br_comms_t* comms)
   return 0;
 }
 
-int Mobot_isConnected(br_comms_t* comms)
+int Mobot_isConnected(mobot_t* comms)
 {
   if(comms->connected > 0) {
     return 1;
@@ -582,7 +492,7 @@ int Mobot_isConnected(br_comms_t* comms)
   }
 }
 
-int Mobot_isMoving(br_comms_t* comms)
+int Mobot_isMoving(mobot_t* comms)
 {
   int moving = 0;
   robotJointState_t state;
@@ -599,7 +509,7 @@ int Mobot_isMoving(br_comms_t* comms)
   return moving;
 }
 
-int Mobot_getButtonVoltage(br_comms_t* comms, double *voltage)
+int Mobot_getButtonVoltage(mobot_t* comms, double *voltage)
 {
   uint8_t buf[32];
   float f;
@@ -619,7 +529,7 @@ int Mobot_getButtonVoltage(br_comms_t* comms, double *voltage)
   return 0;
 }
 
-int Mobot_getEncoderVoltage(br_comms_t* comms, int pinNumber, double *voltage)
+int Mobot_getEncoderVoltage(mobot_t* comms, int pinNumber, double *voltage)
 {
   uint8_t buf[32];
   float f;
@@ -640,7 +550,7 @@ int Mobot_getEncoderVoltage(br_comms_t* comms, int pinNumber, double *voltage)
   return 0;
 }
 
-int Mobot_getJointAngle(br_comms_t* comms, robotJointId_t id, double *angle)
+int Mobot_getJointAngle(mobot_t* comms, robotJointId_t id, double *angle)
 {
   uint8_t buf[32];
   float f;
@@ -661,7 +571,7 @@ int Mobot_getJointAngle(br_comms_t* comms, robotJointId_t id, double *angle)
   return 0;
 }
 
-int Mobot_getJointAngleAbs(br_comms_t* comms, robotJointId_t id, double *angle)
+int Mobot_getJointAngleAbs(mobot_t* comms, robotJointId_t id, double *angle)
 {
   uint8_t buf[32];
   float f;
@@ -682,7 +592,7 @@ int Mobot_getJointAngleAbs(br_comms_t* comms, robotJointId_t id, double *angle)
   return 0;
 }
 
-int Mobot_getJointAngleTime(br_comms_t* comms, robotJointId_t id, double *time, double *angle)
+int Mobot_getJointAngleTime(mobot_t* comms, robotJointId_t id, double *time, double *angle)
 {
   uint8_t buf[32];
   float f;
@@ -706,7 +616,7 @@ int Mobot_getJointAngleTime(br_comms_t* comms, robotJointId_t id, double *time, 
   return 0;
 }
 
-int Mobot_getJointAngles(br_comms_t* comms, 
+int Mobot_getJointAngles(mobot_t* comms, 
                              double *angle1,
                              double *angle2,
                              double *angle3,
@@ -737,7 +647,7 @@ int Mobot_getJointAngles(br_comms_t* comms,
   return 0;
 }
 
-int Mobot_getJointAnglesTime(br_comms_t* comms, 
+int Mobot_getJointAnglesTime(mobot_t* comms, 
                              double *time, 
                              double *angle1,
                              double *angle2,
@@ -772,7 +682,7 @@ int Mobot_getJointAnglesTime(br_comms_t* comms,
   return 0;
 }
 
-int Mobot_getJointAnglesAbs(br_comms_t* comms, 
+int Mobot_getJointAnglesAbs(mobot_t* comms, 
                              double *angle1,
                              double *angle2,
                              double *angle3,
@@ -804,7 +714,7 @@ int Mobot_getJointAnglesAbs(br_comms_t* comms,
   return 0;
 }
 
-int Mobot_getJointAnglesAbsTime(br_comms_t* comms, 
+int Mobot_getJointAnglesAbsTime(mobot_t* comms, 
                              double *time, 
                              double *angle1,
                              double *angle2,
@@ -839,7 +749,7 @@ int Mobot_getJointAnglesAbsTime(br_comms_t* comms,
   return 0;
 }
 
-int Mobot_getJointDirection(br_comms_t* comms, robotJointId_t id, robotJointState_t *dir)
+int Mobot_getJointDirection(mobot_t* comms, robotJointId_t id, robotJointState_t *dir)
 {
   uint8_t buf[32];
   int status;
@@ -857,7 +767,7 @@ int Mobot_getJointDirection(br_comms_t* comms, robotJointId_t id, robotJointStat
   return 0;
 }
 
-int Mobot_getJointMaxSpeed(br_comms_t* comms, robotJointId_t id, double *maxSpeed)
+int Mobot_getJointMaxSpeed(mobot_t* comms, robotJointId_t id, double *maxSpeed)
 {
   float f;
   uint8_t buf[64];
@@ -879,7 +789,7 @@ int Mobot_getJointMaxSpeed(br_comms_t* comms, robotJointId_t id, double *maxSpee
   return 0;
 }
 
-int Mobot_getJointSafetyAngle(br_comms_t* comms, double *angle) 
+int Mobot_getJointSafetyAngle(mobot_t* comms, double *angle) 
 {
   uint8_t buf[32];
   float f;
@@ -898,7 +808,7 @@ int Mobot_getJointSafetyAngle(br_comms_t* comms, double *angle)
   return 0;
 }
 
-int Mobot_getJointSafetyAngleTimeout(br_comms_t* comms, double *seconds) 
+int Mobot_getJointSafetyAngleTimeout(mobot_t* comms, double *seconds) 
 {
   uint8_t buf[32];
   float f;
@@ -917,7 +827,7 @@ int Mobot_getJointSafetyAngleTimeout(br_comms_t* comms, double *seconds)
   return 0;
 }
 
-int Mobot_getJointSpeed(br_comms_t* comms, robotJointId_t id, double *speed)
+int Mobot_getJointSpeed(mobot_t* comms, robotJointId_t id, double *speed)
 {
   uint8_t buf[32];
   float f;
@@ -937,7 +847,7 @@ int Mobot_getJointSpeed(br_comms_t* comms, robotJointId_t id, double *speed)
   return 0;
 }
 
-int Mobot_getJointSpeedRatio(br_comms_t* comms, robotJointId_t id, double *ratio)
+int Mobot_getJointSpeedRatio(mobot_t* comms, robotJointId_t id, double *ratio)
 {
   double speed;
   Mobot_getJointSpeed(comms, id, &speed);
@@ -945,7 +855,7 @@ int Mobot_getJointSpeedRatio(br_comms_t* comms, robotJointId_t id, double *ratio
   return 0;
 }
 
-int Mobot_getJointSpeedRatios(br_comms_t* comms, double *ratio1, double *ratio2, double *ratio3, double *ratio4)
+int Mobot_getJointSpeedRatios(mobot_t* comms, double *ratio1, double *ratio2, double *ratio3, double *ratio4)
 {
   double *ratios[4];
   ratios[0] = ratio1;
@@ -958,7 +868,7 @@ int Mobot_getJointSpeedRatios(br_comms_t* comms, double *ratio1, double *ratio2,
   return 0;
 }
 
-int Mobot_getJointState(br_comms_t* comms, robotJointId_t id, robotJointState_t *state)
+int Mobot_getJointState(mobot_t* comms, robotJointId_t id, robotJointState_t *state)
 {
   uint8_t buf[32];
   int status;
@@ -976,7 +886,7 @@ int Mobot_getJointState(br_comms_t* comms, robotJointId_t id, robotJointState_t 
   return 0;
 }
 
-int Mobot_getJointSpeeds(br_comms_t* comms, double *speed1, double *speed2, double *speed3, double *speed4)
+int Mobot_getJointSpeeds(mobot_t* comms, double *speed1, double *speed2, double *speed3, double *speed4)
 {
   double *speeds[4];
   speeds[0] = speed1;
@@ -989,7 +899,7 @@ int Mobot_getJointSpeeds(br_comms_t* comms, double *speed1, double *speed2, doub
   return 0;
 }
 
-int Mobot_getStatus(br_comms_t* comms)
+int Mobot_getStatus(mobot_t* comms)
 {
   uint8_t buf[64];
   SendToIMobot(comms, BTCMD(CMD_STATUS), NULL, 0);
@@ -1006,7 +916,7 @@ int Mobot_getStatus(br_comms_t* comms)
   return 0;
 }
 
-int Mobot_getVersion(br_comms_t* comms)
+int Mobot_getVersion(mobot_t* comms)
 {
   uint8_t buf[16];
   int version;
@@ -1025,7 +935,7 @@ int Mobot_getVersion(br_comms_t* comms)
   return version;
 }
 
-int Mobot_move(br_comms_t* comms,
+int Mobot_move(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -1041,7 +951,7 @@ int Mobot_move(br_comms_t* comms,
   return Mobot_moveWait(comms);
 }
 
-int Mobot_moveNB(br_comms_t* comms,
+int Mobot_moveNB(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -1083,7 +993,7 @@ int Mobot_moveNB(br_comms_t* comms,
   return 0;
 }
 
-int Mobot_moveContinuousNB(br_comms_t* comms,
+int Mobot_moveContinuousNB(mobot_t* comms,
                                   robotJointState_t dir1,
                                   robotJointState_t dir2,
                                   robotJointState_t dir3,
@@ -1109,7 +1019,7 @@ int Mobot_moveContinuousNB(br_comms_t* comms,
   return 0;
 }
 
-int Mobot_moveContinuousTime(br_comms_t* comms,
+int Mobot_moveContinuousTime(mobot_t* comms,
                                   robotJointState_t dir1,
                                   robotJointState_t dir2,
                                   robotJointState_t dir3,
@@ -1131,14 +1041,14 @@ int Mobot_moveContinuousTime(br_comms_t* comms,
   return 0;
 }
 
-int Mobot_moveJointContinuousNB(br_comms_t* comms, robotJointId_t id, robotJointState_t dir)
+int Mobot_moveJointContinuousNB(mobot_t* comms, robotJointId_t id, robotJointState_t dir)
 {
   Mobot_setJointSpeed(comms, id, comms->jointSpeeds[(int)id-1]);
   Mobot_setJointDirection(comms, id, dir);
   return 0;
 }
 
-int Mobot_moveJointContinuousTime(br_comms_t* comms, robotJointId_t id, robotJointState_t dir, double seconds)
+int Mobot_moveJointContinuousTime(mobot_t* comms, robotJointId_t id, robotJointState_t dir, double seconds)
 {
   int msecs = seconds * 1000;
   Mobot_moveJointContinuousNB(comms, id, dir);
@@ -1150,7 +1060,7 @@ int Mobot_moveJointContinuousTime(br_comms_t* comms, robotJointId_t id, robotJoi
   return 0;
 }
 
-int Mobot_moveJoint(br_comms_t* comms, robotJointId_t id, double angle)
+int Mobot_moveJoint(mobot_t* comms, robotJointId_t id, double angle)
 {
   double curAngle;
   if(Mobot_getJointAngle(comms, id, &curAngle)) {
@@ -1159,7 +1069,7 @@ int Mobot_moveJoint(br_comms_t* comms, robotJointId_t id, double angle)
   return Mobot_moveJointTo(comms, id, curAngle + angle);
 }
 
-int Mobot_moveJointNB(br_comms_t* comms, robotJointId_t id, double angle)
+int Mobot_moveJointNB(mobot_t* comms, robotJointId_t id, double angle)
 {
   double curAngle;
   if(Mobot_getJointAngle(comms, id, &curAngle)) {
@@ -1168,28 +1078,28 @@ int Mobot_moveJointNB(br_comms_t* comms, robotJointId_t id, double angle)
   return Mobot_moveJointToNB(comms, id, curAngle + angle);
 }
 
-int Mobot_moveJointTo(br_comms_t* comms, robotJointId_t id, double angle)
+int Mobot_moveJointTo(mobot_t* comms, robotJointId_t id, double angle)
 {
   Mobot_moveJointToNB(comms, id, angle);
   /* Wait for the motion to finish */
   return Mobot_moveJointWait(comms, id);
 }
 
-int Mobot_moveJointToAbs(br_comms_t* comms, robotJointId_t id, double angle)
+int Mobot_moveJointToAbs(mobot_t* comms, robotJointId_t id, double angle)
 {
   Mobot_moveJointToAbsNB(comms, id, angle);
   /* Wait for the motion to finish */
   return Mobot_moveJointWait(comms, id);
 }
 
-int Mobot_moveJointToDirect(br_comms_t* comms, robotJointId_t id, double angle)
+int Mobot_moveJointToDirect(mobot_t* comms, robotJointId_t id, double angle)
 {
   Mobot_moveJointToDirectNB(comms, id, angle);
   /* Wait for the motion to finish */
   return Mobot_moveJointWait(comms, id);
 }
 
-int Mobot_moveJointToPIDNB(br_comms_t* comms, robotJointId_t id, double angle)
+int Mobot_moveJointToPIDNB(mobot_t* comms, robotJointId_t id, double angle)
 {
   uint8_t buf[32];
   float f;
@@ -1209,7 +1119,7 @@ int Mobot_moveJointToPIDNB(br_comms_t* comms, robotJointId_t id, double angle)
   return 0;
 }
 
-int Mobot_moveJointToNB(br_comms_t* comms, robotJointId_t id, double angle)
+int Mobot_moveJointToNB(mobot_t* comms, robotJointId_t id, double angle)
 {
   uint8_t buf[32];
   float f;
@@ -1239,7 +1149,7 @@ int Mobot_moveJointToNB(br_comms_t* comms, robotJointId_t id, double angle)
   return 0;
 }
 
-int Mobot_moveJointToAbsNB(br_comms_t* comms, robotJointId_t id, double angle)
+int Mobot_moveJointToAbsNB(mobot_t* comms, robotJointId_t id, double angle)
 {
   uint8_t buf[32];
   float f;
@@ -1269,7 +1179,7 @@ int Mobot_moveJointToAbsNB(br_comms_t* comms, robotJointId_t id, double angle)
   return 0;
 }
 
-int Mobot_moveJointToDirectNB(br_comms_t* comms, robotJointId_t id, double angle)
+int Mobot_moveJointToDirectNB(mobot_t* comms, robotJointId_t id, double angle)
 {
   uint8_t buf[32];
   float f;
@@ -1299,7 +1209,7 @@ int Mobot_moveJointToDirectNB(br_comms_t* comms, robotJointId_t id, double angle
   return 0;
 }
 
-int Mobot_moveJointWait(br_comms_t* comms, robotJointId_t id)
+int Mobot_moveJointWait(mobot_t* comms, robotJointId_t id)
 {
   robotJointState_t state;
   /* Make sure there is no non-blocking function running */
@@ -1326,17 +1236,17 @@ int Mobot_moveJointWait(br_comms_t* comms, robotJointId_t id)
   return 0;
 }
 
-int Mobot_moveToZero(br_comms_t* comms)
+int Mobot_moveToZero(mobot_t* comms)
 {
   return Mobot_moveTo(comms, 0, 0, 0, 0);
 }
 
-int Mobot_moveToZeroNB(br_comms_t* comms)
+int Mobot_moveToZeroNB(mobot_t* comms)
 {
   return Mobot_moveToNB(comms, 0, 0, 0, 0);
 }
 
-int Mobot_moveTo(br_comms_t* comms,
+int Mobot_moveTo(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -1350,7 +1260,7 @@ int Mobot_moveTo(br_comms_t* comms,
   return Mobot_moveWait(comms);
 }
 
-int Mobot_moveToAbs(br_comms_t* comms,
+int Mobot_moveToAbs(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -1364,7 +1274,7 @@ int Mobot_moveToAbs(br_comms_t* comms,
   return Mobot_moveWait(comms);
 }
 
-int Mobot_moveToDirect(br_comms_t* comms,
+int Mobot_moveToDirect(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -1379,7 +1289,7 @@ int Mobot_moveToDirect(br_comms_t* comms,
 }
 
 
-int Mobot_moveToPID(br_comms_t* comms,
+int Mobot_moveToPID(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -1393,7 +1303,7 @@ int Mobot_moveToPID(br_comms_t* comms,
   return Mobot_moveWait(comms);
 }
 
-int Mobot_moveToNB(br_comms_t* comms,
+int Mobot_moveToNB(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -1422,7 +1332,7 @@ int Mobot_moveToNB(br_comms_t* comms,
   return 0;
 }
 
-int Mobot_moveToAbsNB(br_comms_t* comms,
+int Mobot_moveToAbsNB(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -1451,7 +1361,7 @@ int Mobot_moveToAbsNB(br_comms_t* comms,
   return 0;
 }
 
-int Mobot_moveToDirectNB(br_comms_t* comms,
+int Mobot_moveToDirectNB(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -1480,7 +1390,7 @@ int Mobot_moveToDirectNB(br_comms_t* comms,
   return 0;
 }
 
-int Mobot_moveToPIDNB(br_comms_t* comms,
+int Mobot_moveToPIDNB(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -1509,7 +1419,7 @@ int Mobot_moveToPIDNB(br_comms_t* comms,
   return 0;
 }
 
-int Mobot_moveWait(br_comms_t* comms)
+int Mobot_moveWait(mobot_t* comms)
 {
   int i;
   /* Make sure there is no non-blocking function running */
@@ -1523,7 +1433,7 @@ int Mobot_moveWait(br_comms_t* comms)
 }
 
 void* Mobot_recordAngleThread(void* arg);
-int Mobot_recordAngle(br_comms_t* comms, robotJointId_t id, double* time, double* angle, int num, double timeInterval)
+int Mobot_recordAngle(mobot_t* comms, robotJointId_t id, double* time, double* angle, int num, double timeInterval)
 {
   THREAD_T thread;
   recordAngleArg_t *rArg;
@@ -1623,7 +1533,7 @@ void* Mobot_recordAngleThread(void* arg)
 }
 
 void* recordAnglesThread(void* arg);
-int Mobot_recordAngles(br_comms_t* comms, 
+int Mobot_recordAngles(mobot_t* comms, 
                       double *time, 
                       double* angle1, 
                       double* angle2,
@@ -1748,7 +1658,7 @@ void* recordAnglesThread(void* arg)
 
 }
 
-int Mobot_recordWait(br_comms_t* comms)
+int Mobot_recordWait(mobot_t* comms)
 {
   int i;
   for(i = 0; i < 4; i++) {
@@ -1763,7 +1673,7 @@ int Mobot_recordWait(br_comms_t* comms)
   return 0;
 }
 
-int Mobot_setJointDirection(br_comms_t* comms, robotJointId_t id, robotJointState_t dir)
+int Mobot_setJointDirection(mobot_t* comms, robotJointId_t id, robotJointState_t dir)
 {
   uint8_t buf[32];
   float f;
@@ -1782,7 +1692,7 @@ int Mobot_setJointDirection(br_comms_t* comms, robotJointId_t id, robotJointStat
   return 0;
 }
 
-int Mobot_setJointSafetyAngle(br_comms_t* comms, double angle)
+int Mobot_setJointSafetyAngle(mobot_t* comms, double angle)
 {
   uint8_t buf[32];
   float f;
@@ -1801,7 +1711,7 @@ int Mobot_setJointSafetyAngle(br_comms_t* comms, double angle)
   return 0;
 }
 
-int Mobot_setJointSafetyAngleTimeout(br_comms_t* comms, double seconds)
+int Mobot_setJointSafetyAngleTimeout(mobot_t* comms, double seconds)
 {
   uint8_t buf[32];
   float f;
@@ -1820,7 +1730,7 @@ int Mobot_setJointSafetyAngleTimeout(br_comms_t* comms, double seconds)
   return 0;
 }
 
-int Mobot_setJointSpeed(br_comms_t* comms, robotJointId_t id, double speed)
+int Mobot_setJointSpeed(mobot_t* comms, robotJointId_t id, double speed)
 {
   uint8_t buf[32];
   float f;
@@ -1840,7 +1750,7 @@ int Mobot_setJointSpeed(br_comms_t* comms, robotJointId_t id, double speed)
   return 0;
 }
 
-int Mobot_setJointSpeedRatio(br_comms_t* comms, robotJointId_t id, double ratio)
+int Mobot_setJointSpeedRatio(mobot_t* comms, robotJointId_t id, double ratio)
 {
   if((ratio < 0) || (ratio > 1)) {
     return -1;
@@ -1848,7 +1758,7 @@ int Mobot_setJointSpeedRatio(br_comms_t* comms, robotJointId_t id, double ratio)
   return Mobot_setJointSpeed(comms, id, ratio * comms->maxSpeed[(int)id-1]);
 }
 
-int Mobot_setJointSpeedRatios(br_comms_t* comms, double ratio1, double ratio2, double ratio3, double ratio4)
+int Mobot_setJointSpeedRatios(mobot_t* comms, double ratio1, double ratio2, double ratio3, double ratio4)
 {
   double ratios[4];
   ratios[0] = ratio1;
@@ -1861,7 +1771,7 @@ int Mobot_setJointSpeedRatios(br_comms_t* comms, double ratio1, double ratio2, d
   return 0;
 }
 
-int Mobot_setMotorPower(br_comms_t* comms, robotJointId_t id, int power)
+int Mobot_setMotorPower(mobot_t* comms, robotJointId_t id, int power)
 {
   char buf[160];
   int status;
@@ -1876,7 +1786,7 @@ int Mobot_setMotorPower(br_comms_t* comms, robotJointId_t id, int power)
   return 0;
 }
 
-int Mobot_setTwoWheelRobotSpeed(br_comms_t* comms, double speed, double radius)
+int Mobot_setTwoWheelRobotSpeed(mobot_t* comms, double speed, double radius)
 {
   double omega;
   omega = speed/radius;
@@ -1885,7 +1795,7 @@ int Mobot_setTwoWheelRobotSpeed(br_comms_t* comms, double speed, double radius)
   return 0;
 }
 
-int Mobot_setJointSpeeds(br_comms_t* comms, double speed1, double speed2, double speed3, double speed4)
+int Mobot_setJointSpeeds(mobot_t* comms, double speed1, double speed2, double speed3, double speed4)
 {
   double speeds[4];
   speeds[0] = speed1;
@@ -1898,7 +1808,7 @@ int Mobot_setJointSpeeds(br_comms_t* comms, double speed1, double speed2, double
   return 0;
 }
 
-int Mobot_stop(br_comms_t* comms)
+int Mobot_stop(mobot_t* comms)
 {
   uint8_t buf[32];
   float f;
@@ -1915,7 +1825,7 @@ int Mobot_stop(br_comms_t* comms)
   return 0;
 }
 
-int Mobot_motionArch(br_comms_t* comms, double angle)
+int Mobot_motionArch(mobot_t* comms, double angle)
 {
   Mobot_moveJointToNB(comms, ROBOT_JOINT2, -angle/2.0);
   Mobot_moveJointToNB(comms, ROBOT_JOINT3, angle/2.0);
@@ -1926,21 +1836,21 @@ int Mobot_motionArch(br_comms_t* comms, double angle)
 
 void* motionArchThread(void* arg)
 {
-  br_comms_t* comms = (br_comms_t*)arg;
+  mobot_t* comms = (mobot_t*)arg;
   Mobot_motionArch(comms, comms->motionArgDouble);
   comms->motionInProgress--;
   return NULL;
 }
 
-int Mobot_motionArchNB(br_comms_t* comms, double angle)
+int Mobot_motionArchNB(mobot_t* comms, double angle)
 {
   comms->motionArgDouble = angle;
   comms->motionInProgress++;
-  THREAD_CREATE(&comms->thread, motionArchThread, comms);
+  THREAD_CREATE(comms->thread, motionArchThread, comms);
   return 0;
 }
 
-int Mobot_motionInchwormLeft(br_comms_t* comms, int num)
+int Mobot_motionInchwormLeft(mobot_t* comms, int num)
 {
   int i;
   Mobot_moveJointToNB(comms, ROBOT_JOINT2, 0);
@@ -1959,22 +1869,22 @@ int Mobot_motionInchwormLeft(br_comms_t* comms, int num)
 
 void* motionInchwormLeftThread(void* arg)
 {
-  br_comms_t* comms = (br_comms_t*)arg;
+  mobot_t* comms = (mobot_t*)arg;
   Mobot_motionInchwormLeft(comms, comms->motionArgInt);
   comms->motionInProgress--;
   return NULL;
 }
 
-int Mobot_motionInchwormLeftNB(br_comms_t* comms, int num)
+int Mobot_motionInchwormLeftNB(mobot_t* comms, int num)
 {
   /* Make sure the old thread has joined */
   comms->motionInProgress++;
   comms->motionArgInt = num;
-  THREAD_CREATE(&comms->thread, motionInchwormLeftThread, comms);
+  THREAD_CREATE(comms->thread, motionInchwormLeftThread, comms);
   return 0;
 }
 
-int Mobot_motionInchwormRight(br_comms_t* comms, int num)
+int Mobot_motionInchwormRight(mobot_t* comms, int num)
 {
   int i;
   Mobot_moveJointToNB(comms, ROBOT_JOINT2, 0);
@@ -1993,21 +1903,21 @@ int Mobot_motionInchwormRight(br_comms_t* comms, int num)
 
 void* motionInchwormRightThread(void* arg)
 {
-  br_comms_t* comms = (br_comms_t*)arg;
-  Mobot_motionInchwormRight((br_comms_t*)arg, comms->motionArgInt);
-  ((br_comms_t*)arg)->motionInProgress--;
+  mobot_t* comms = (mobot_t*)arg;
+  Mobot_motionInchwormRight((mobot_t*)arg, comms->motionArgInt);
+  ((mobot_t*)arg)->motionInProgress--;
   return NULL;
 }
 
-int Mobot_motionInchwormRightNB(br_comms_t* comms, int num)
+int Mobot_motionInchwormRightNB(mobot_t* comms, int num)
 {
   comms->motionArgInt = num;
   comms->motionInProgress++;
-  THREAD_CREATE(&comms->thread, motionInchwormRightThread, comms);
+  THREAD_CREATE(comms->thread, motionInchwormRightThread, comms);
   return 0;
 }
 
-int Mobot_motionRollBackward(br_comms_t* comms, double angle)
+int Mobot_motionRollBackward(mobot_t* comms, double angle)
 {
   double motorPosition[2];
   Mobot_getJointAngle(comms, ROBOT_JOINT1, &motorPosition[0]);
@@ -2020,21 +1930,21 @@ int Mobot_motionRollBackward(br_comms_t* comms, double angle)
 
 void* motionRollBackwardThread(void* arg)
 {
-  br_comms_t* comms = (br_comms_t*)arg;
-  Mobot_motionRollBackward((br_comms_t*)arg, comms->motionArgDouble);
-  ((br_comms_t*)arg)->motionInProgress--;
+  mobot_t* comms = (mobot_t*)arg;
+  Mobot_motionRollBackward((mobot_t*)arg, comms->motionArgDouble);
+  ((mobot_t*)arg)->motionInProgress--;
   return NULL;
 }
 
-int Mobot_motionRollBackwardNB(br_comms_t* comms, double angle)
+int Mobot_motionRollBackwardNB(mobot_t* comms, double angle)
 {
   comms->motionArgDouble = angle;
   comms->motionInProgress++;
-  THREAD_CREATE(&comms->thread, motionRollBackwardThread, comms);
+  THREAD_CREATE(comms->thread, motionRollBackwardThread, comms);
   return 0;
 }
 
-int Mobot_motionRollForward(br_comms_t* comms, double angle)
+int Mobot_motionRollForward(mobot_t* comms, double angle)
 {
   double motorPosition[2];
   Mobot_getJointAngle(comms, ROBOT_JOINT1, &motorPosition[0]);
@@ -2047,21 +1957,21 @@ int Mobot_motionRollForward(br_comms_t* comms, double angle)
 
 void* motionRollForwardThread(void* arg)
 {
-  br_comms_t* comms = (br_comms_t*)arg;
-  Mobot_motionRollForward((br_comms_t*)arg, comms->motionArgDouble);
-  ((br_comms_t*)arg)->motionInProgress--;
+  mobot_t* comms = (mobot_t*)arg;
+  Mobot_motionRollForward((mobot_t*)arg, comms->motionArgDouble);
+  ((mobot_t*)arg)->motionInProgress--;
   return NULL;
 }
 
-int Mobot_motionRollForwardNB(br_comms_t* comms, double angle)
+int Mobot_motionRollForwardNB(mobot_t* comms, double angle)
 {
   comms->motionArgDouble = angle;
   comms->motionInProgress++;
-  THREAD_CREATE(&comms->thread, motionRollForwardThread, comms);
+  THREAD_CREATE(comms->thread, motionRollForwardThread, comms);
   return 0;
 }
 
-int Mobot_motionStand(br_comms_t* comms)
+int Mobot_motionStand(mobot_t* comms)
 {
   double speed;
   Mobot_moveToZero(comms);
@@ -2082,12 +1992,12 @@ int Mobot_motionStand(br_comms_t* comms)
 
 void* motionStandThread(void* arg)
 {
-  Mobot_motionStand((br_comms_t*)arg);
-  ((br_comms_t*)arg)->motionInProgress--;
+  Mobot_motionStand((mobot_t*)arg);
+  ((mobot_t*)arg)->motionInProgress--;
   return NULL;
 }
 
-int Mobot_motionSkinny(br_comms_t* comms, double angle)
+int Mobot_motionSkinny(mobot_t* comms, double angle)
 {
   Mobot_moveJointToNB(comms, ROBOT_JOINT2, angle);
   Mobot_moveJointToNB(comms, ROBOT_JOINT3, angle);
@@ -2097,28 +2007,28 @@ int Mobot_motionSkinny(br_comms_t* comms, double angle)
 
 void* motionSkinnyThread(void* arg)
 {
-  br_comms_t* comms = (br_comms_t*)arg;
-  Mobot_motionSkinny((br_comms_t*)arg, comms->motionArgDouble);
-  ((br_comms_t*)arg)->motionInProgress--;
+  mobot_t* comms = (mobot_t*)arg;
+  Mobot_motionSkinny((mobot_t*)arg, comms->motionArgDouble);
+  ((mobot_t*)arg)->motionInProgress--;
   return NULL;
 }
 
-int Mobot_motionSkinnyNB(br_comms_t* comms, double angle)
+int Mobot_motionSkinnyNB(mobot_t* comms, double angle)
 {
   comms->motionArgDouble = angle;
   comms->motionInProgress++;
-  THREAD_CREATE(&comms->thread, motionSkinnyThread, comms);
+  THREAD_CREATE(comms->thread, motionSkinnyThread, comms);
   return 0;
 }
 
-int Mobot_motionStandNB(br_comms_t* comms)
+int Mobot_motionStandNB(mobot_t* comms)
 {
   comms->motionInProgress++;
-  THREAD_CREATE(&comms->thread, motionStandThread, comms);
+  THREAD_CREATE(comms->thread, motionStandThread, comms);
   return 0;
 }
 
-int Mobot_motionTurnLeft(br_comms_t* comms, double angle)
+int Mobot_motionTurnLeft(mobot_t* comms, double angle)
 {
   double motorPosition[2];
   Mobot_getJointAngle(comms, ROBOT_JOINT1, &motorPosition[0]);
@@ -2131,21 +2041,21 @@ int Mobot_motionTurnLeft(br_comms_t* comms, double angle)
 
 void* motionTurnLeftThread(void* arg)
 {
-  br_comms_t* comms = (br_comms_t*)arg;
-  Mobot_motionTurnLeft((br_comms_t*)arg, comms->motionArgDouble);
-  ((br_comms_t*)arg)->motionInProgress--;
+  mobot_t* comms = (mobot_t*)arg;
+  Mobot_motionTurnLeft((mobot_t*)arg, comms->motionArgDouble);
+  ((mobot_t*)arg)->motionInProgress--;
   return NULL;
 }
 
-int Mobot_motionTurnLeftNB(br_comms_t* comms, double angle)
+int Mobot_motionTurnLeftNB(mobot_t* comms, double angle)
 {
   comms->motionInProgress++;
   comms->motionArgDouble = angle;
-  THREAD_CREATE(&comms->thread, motionTurnLeftThread, comms);
+  THREAD_CREATE(comms->thread, motionTurnLeftThread, comms);
   return 0;
 }
 
-int Mobot_motionTurnRight(br_comms_t* comms, double angle)
+int Mobot_motionTurnRight(mobot_t* comms, double angle)
 {
   double motorPosition[2];
   Mobot_getJointAngle(comms, ROBOT_JOINT1, &motorPosition[0]);
@@ -2158,21 +2068,21 @@ int Mobot_motionTurnRight(br_comms_t* comms, double angle)
 
 void* motionTurnRightThread(void* arg)
 {
-  br_comms_t* comms = (br_comms_t*)arg;
-  Mobot_motionTurnRight((br_comms_t*)arg, comms->motionArgDouble);
-  ((br_comms_t*)arg)->motionInProgress--;
+  mobot_t* comms = (mobot_t*)arg;
+  Mobot_motionTurnRight((mobot_t*)arg, comms->motionArgDouble);
+  ((mobot_t*)arg)->motionInProgress--;
   return NULL;
 }
 
-int Mobot_motionTurnRightNB(br_comms_t* comms, double angle)
+int Mobot_motionTurnRightNB(mobot_t* comms, double angle)
 {
   comms->motionArgDouble = angle;
   comms->motionInProgress++;
-  THREAD_CREATE(&comms->thread, motionTurnRightThread, comms);
+  THREAD_CREATE(comms->thread, motionTurnRightThread, comms);
   return 0;
 }
 
-int Mobot_motionTumbleRight(br_comms_t* comms, int num)
+int Mobot_motionTumbleRight(mobot_t* comms, int num)
 {
   int i;
   Mobot_moveToZero(comms);
@@ -2206,21 +2116,21 @@ int Mobot_motionTumbleRight(br_comms_t* comms, int num)
 
 void* motionTumbleRightThread(void* arg)
 {
-  br_comms_t* comms = (br_comms_t*)arg;
+  mobot_t* comms = (mobot_t*)arg;
   Mobot_motionTumbleRight(comms, comms->motionArgInt);
   comms->motionInProgress--;
   return NULL;
 }
 
-int Mobot_motionTumbleRightNB(br_comms_t* comms, int num)
+int Mobot_motionTumbleRightNB(mobot_t* comms, int num)
 {
   comms->motionArgInt = num;
   comms->motionInProgress++;
-  THREAD_CREATE(&comms->thread, motionTumbleRightThread, comms);
+  THREAD_CREATE(comms->thread, motionTumbleRightThread, comms);
   return 0;
 }
 
-int Mobot_motionTumbleLeft(br_comms_t* comms, int num)
+int Mobot_motionTumbleLeft(mobot_t* comms, int num)
 {
   int i;
   Mobot_moveToZero(comms);
@@ -2254,21 +2164,21 @@ int Mobot_motionTumbleLeft(br_comms_t* comms, int num)
 
 void* motionTumbleLeftThread(void* arg)
 {
-  br_comms_t* comms = (br_comms_t*)arg;
+  mobot_t* comms = (mobot_t*)arg;
   Mobot_motionTumbleLeft(comms, comms->motionArgInt);
   comms->motionInProgress--;
   return NULL;
 }
 
-int Mobot_motionTumbleLeftNB(br_comms_t* comms, int num)
+int Mobot_motionTumbleLeftNB(mobot_t* comms, int num)
 {
   comms->motionArgInt = num;
   comms->motionInProgress++;
-  THREAD_CREATE(&comms->thread, motionTumbleLeftThread, comms);
+  THREAD_CREATE(comms->thread, motionTumbleLeftThread, comms);
   return 0;
 }
 
-int Mobot_motionUnstand(br_comms_t* comms)
+int Mobot_motionUnstand(mobot_t* comms)
 {
   double speed;
   Mobot_moveToZero(comms);
@@ -2281,19 +2191,19 @@ int Mobot_motionUnstand(br_comms_t* comms)
 
 void* motionUnstandThread(void* arg)
 {
-  Mobot_motionUnstand((br_comms_t*)arg);
-  ((br_comms_t*)arg)->motionInProgress--;
+  Mobot_motionUnstand((mobot_t*)arg);
+  ((mobot_t*)arg)->motionInProgress--;
   return NULL;
 }
 
-int Mobot_motionUnstandNB(br_comms_t* comms)
+int Mobot_motionUnstandNB(mobot_t* comms)
 {
   comms->motionInProgress++;
-  THREAD_CREATE(&comms->thread, motionUnstandThread, comms);
+  THREAD_CREATE(comms->thread, motionUnstandThread, comms);
   return 0;
 }
 
-int Mobot_motionWait(br_comms_t* comms)
+int Mobot_motionWait(mobot_t* comms)
 {
   while(comms->motionInProgress) {
 #ifdef _WIN32
@@ -2336,7 +2246,7 @@ int str2ba(const char *str, bdaddr_t *ba)
 }
 #endif
 
-int SendToIMobot(br_comms_t* comms, uint8_t cmd, const void* data, int datasize)
+int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
 {
   int err = 0;
   int i;
@@ -2375,14 +2285,7 @@ int SendToIMobot(br_comms_t* comms, uint8_t cmd, const void* data, int datasize)
     err = write(comms->socket, str, len);
 #endif
   } else if (comms->connected == 2) {
-#ifdef _WIN32
-    DWORD bytes;
-    if(!WriteFile(comms->hSerial, str, len, &bytes, NULL)) {
-      err = -1;
-    }
-#else
     err = -1;
-#endif
   } else {
     err = -1;
   }
@@ -2393,7 +2296,7 @@ int SendToIMobot(br_comms_t* comms, uint8_t cmd, const void* data, int datasize)
   }
 }
 
-int RecvFromIMobot(br_comms_t* comms, uint8_t* buf, int size)
+int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
 {
   /* Wait until transaction is ready */
   MUTEX_LOCK(comms->recvBuf_lock);
@@ -2416,7 +2319,7 @@ int RecvFromIMobot(br_comms_t* comms, uint8_t* buf, int size)
   return 0;
 }
 
-int RecvFromIMobot2(br_comms_t* comms, char* buf, int size)
+int RecvFromIMobot2(mobot_t* comms, char* buf, int size)
 {
   int err = 0;
   int i = 0;
@@ -2466,14 +2369,7 @@ int RecvFromIMobot2(br_comms_t* comms, char* buf, int size)
       }
 #endif
     } else if (comms->connected == 2) {
-#ifdef _WIN32
-      if(!ReadFile(comms->hSerial, tmp, 256, &bytes, NULL)) {
-        err = -1;
-      }
-      err = bytes;
-#else
       err = -1;
-#endif
     } else {
       err = -1;
       return -1;
@@ -2503,7 +2399,7 @@ int RecvFromIMobot2(br_comms_t* comms, char* buf, int size)
  * triggered by an event, then the appropriate callback will be called. */
 void* commsEngine(void* arg)
 {
-  br_comms_t* comms = (br_comms_t*)arg;
+  mobot_t* comms = (mobot_t*)arg;
   uint8_t byte;
   int bytes = 0;
   int err;
@@ -2613,7 +2509,7 @@ void* callbackThread(void* arg)
 
 CMobot::CMobot()
 {
-  _comms = (br_comms_t*)malloc(sizeof(br_comms_t));
+  _comms = (mobot_t*)malloc(sizeof(mobot_t));
   Mobot_init(_comms);
 }
 

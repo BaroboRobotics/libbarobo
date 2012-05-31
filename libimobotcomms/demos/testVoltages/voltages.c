@@ -8,7 +8,7 @@ int main()
   int pins[] = {5, 6, 4, 3, 1, 2};
   int i;
   double voltage;
-  br_comms_t* comms = (br_comms_t*)malloc(sizeof(br_comms_t));
+  mobot_t* comms = (mobot_t*)malloc(sizeof(mobot_t));
   Mobot_init(comms);
   if(Mobot_connect(comms)) {
     printf("Error connecting.\n");

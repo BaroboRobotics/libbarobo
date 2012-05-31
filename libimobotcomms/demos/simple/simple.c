@@ -1,6 +1,6 @@
 #include <mobot.h>
 
-br_comms_t comms;
+mobot_t comms;
 void cb(void* mobot, int button, int buttonEvent)
 {
   double time;
