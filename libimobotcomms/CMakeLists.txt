@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 2.6)
 
 project(LIBIMOBOTCOMMS)
 
+add_definitions(-DNONRELEASE)
 
 if(CMAKE_HOST_WIN32)
 	add_library(mobot STATIC

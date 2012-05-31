@@ -41,16 +41,23 @@
 #endif
 #endif /* Not if CH */
 
-#ifndef _CH_
-#include "mobot_internal.h"
-#endif
-
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
 
 #define angle2distance(radius, angle) ((radius) * ((angle) * M_PI / 180.0))
 #define distance2angle(radius, distance) (((distance) / (radius)) * 180 / M_PI)
+
+#ifdef NONRELEASE
+#ifndef _CH_
+#include "mobot_internal.h"
+#endif
+#else
+#define DLLIMPORT
+struct br_comms_s;
+typedef struct br_comms_s br_comms_t;
+#define THREAD_T void
+#endif
 
 extern int g_numConnected;
 
@@ -240,7 +247,7 @@ class CMobot {
   private:
     int getJointDirection(robotJointId_t id, robotJointState_t &dir);
     int setJointDirection(robotJointId_t id, robotJointState_t dir);
-    br_comms_t _comms;
+    br_comms_t *_comms;
     void (*buttonCallback)(CMobot *robot, int button, int buttonDown);
 #else
   public:
