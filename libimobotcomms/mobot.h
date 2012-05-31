@@ -62,7 +62,7 @@
 
 #ifndef BR_COMMS_S
 #define BR_COMMS_S
-typedef struct br_comms_s
+typedef struct mobot_s
 {
   int socket;
   int connected;
@@ -92,7 +92,7 @@ typedef struct br_comms_s
   int callbackEnabled;
   void (*buttonCallback)(void* robot, int button, int buttonDown);
   void* mobot;
-} br_comms_t;
+} mobot_t;
 #endif
 
 extern int g_numConnected;
@@ -136,7 +136,7 @@ extern "C" {
 
 typedef struct recordAngleArg_s 
 {
-  br_comms_t* comms;
+  mobot_t* comms;
   robotJointId_t id;
   double *time;
   double *angle;
@@ -283,7 +283,7 @@ class CMobot {
   private:
     int getJointDirection(robotJointId_t id, robotJointState_t &dir);
     int setJointDirection(robotJointId_t id, robotJointState_t dir);
-    br_comms_t *_comms;
+    mobot_t *_comms;
     void (*buttonCallback)(CMobot *robot, int button, int buttonDown);
 #else
   public:
