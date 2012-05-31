@@ -29,22 +29,19 @@ typedef struct br_comms_s
 {
   int socket;
   int connected;
-#ifdef _WIN32
-  HANDLE hSerial;
-#endif
 #ifndef __MACH__
-  sockaddr_t addr;
+  sockaddr_t *addr;
 #endif
   double jointSpeeds[4];
   double maxSpeed[4];
-  THREAD_T thread;
+  THREAD_T* thread;
   MUTEX_T* commsLock;
   int motionInProgress;
   int motionArgInt;
   double motionArgDouble;
   int recordingInProgress[4];
 
-  THREAD_T commsThread;
+  THREAD_T* commsThread;
   uint8_t recvBuf[64];
   int recvBuf_ready;
   MUTEX_T* recvBuf_lock;

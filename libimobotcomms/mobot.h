@@ -54,9 +54,45 @@
 #endif
 #else
 #define DLLIMPORT
-struct br_comms_s;
-typedef struct br_comms_s br_comms_t;
 #define THREAD_T void
+#define MUTEX_T void
+#define COND_T void
+#define sockaddr_t void
+#endif
+
+#ifndef BR_COMMS_S
+#define BR_COMMS_S
+typedef struct br_comms_s
+{
+  int socket;
+  int connected;
+#ifndef __MACH__
+  sockaddr_t *addr;
+#endif
+  double jointSpeeds[4];
+  double maxSpeed[4];
+  THREAD_T* thread;
+  MUTEX_T* commsLock;
+  int motionInProgress;
+  int motionArgInt;
+  double motionArgDouble;
+  int recordingInProgress[4];
+
+  THREAD_T* commsThread;
+  uint8_t recvBuf[64];
+  int recvBuf_ready;
+  MUTEX_T* recvBuf_lock;
+  COND_T*  recvBuf_cond;
+  int recvBuf_bytes;
+  int commsBusy;
+  MUTEX_T* commsBusy_lock;
+  COND_T* commsBusy_cond;
+
+  MUTEX_T* callback_lock;
+  int callbackEnabled;
+  void (*buttonCallback)(void* robot, int button, int buttonDown);
+  void* mobot;
+} br_comms_t;
 #endif
 
 extern int g_numConnected;

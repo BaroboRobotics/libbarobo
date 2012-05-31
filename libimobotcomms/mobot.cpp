@@ -163,99 +163,6 @@ int Mobot_connect(br_comms_t* comms)
 #endif /* Fi Linux/Mac */
 #endif
 }
-int Mobot_connect_old(br_comms_t* comms)
-{
-#ifndef _WIN32
-  fprintf(stderr, 
-      "ERROR; Function Mobot_connect() is not yet implemented \n"
-      "on non-Windows systems. Please use Mobot_connectWithAddress() \n"
-      "instead.\n");
-  return -1;
-#else
-  char buf[80];
-
-/* NUM_PORTS indicates the number of Windows COM ports to check for connections
- * to the robot. */
-#define NUM_PORTS 30
-  int i;
-  for(i = 1; i < NUM_PORTS; i++) {
-    sprintf(buf, "\\\\.\\COM%d", i);
-    printf("Trying %s...\n", buf);
-    comms->hSerial = CreateFileA(buf, 
-        GENERIC_READ | GENERIC_WRITE,
-        0,
-        0,
-        OPEN_EXISTING,
-        FILE_ATTRIBUTE_NORMAL,
-        0);
-    if(comms->hSerial == INVALID_HANDLE_VALUE) {
-      printf("Could not open serial handle.\n");
-      continue;
-    }
-    /* Set up the properties */
-    DCB dcbSerialParams = {0};
-    dcbSerialParams.DCBlength=sizeof(dcbSerialParams);
-    if(!GetCommState(comms->hSerial, &dcbSerialParams)) {
-      // error getting state
-      printf("Could not get serial properties.\n");
-      continue;
-    }
-    dcbSerialParams.BaudRate = CBR_57600;
-    dcbSerialParams.ByteSize = 8;
-    dcbSerialParams.StopBits = ONESTOPBIT;
-    dcbSerialParams.Parity = NOPARITY;
-    if(!SetCommState(comms->hSerial, &dcbSerialParams)) {
-      // error setting state
-      printf("Could not set serial properties.\n");
-      continue;
-    }
-
-    /* Set up timeouts */
-    COMMTIMEOUTS timeouts = {0};
-    timeouts.ReadIntervalTimeout = 50;
-    timeouts.ReadTotalTimeoutConstant = 50;
-    timeouts.ReadTotalTimeoutMultiplier = 10;
-    timeouts.WriteTotalTimeoutConstant = 50;
-    timeouts.WriteTotalTimeoutMultiplier = 10;
-    if(!SetCommTimeouts(comms->hSerial, &timeouts)) {
-      // Error setting timeouts
-      printf("Could not set timeouts.\n");
-      continue;
-    }
-
-    /* Send status request message to the robot*/
-    DWORD bytes;
-    if(!WriteFile(comms->hSerial, "GET_IMOBOT_STATUS", strlen("GET_IMOBOT_STATUS")+1, &bytes, NULL)) {
-      printf("Could not send status request message.\n");
-      CloseHandle(comms->hSerial);
-      continue;
-    }
-    printf("Wrote %d bytes.\n", bytes);
-    Sleep(250);
-    /* Check response message */
-    if(!ReadFile(comms->hSerial, buf, 79, &bytes, NULL)) {
-      printf("Could not receive response message.\n");
-      CloseHandle(comms->hSerial);
-      continue;
-    }
-    if(strcmp(buf, "IMOBOT READY")) {
-      printf("Incorrect response message: %s.\n", buf);
-      CloseHandle(comms->hSerial);
-      continue;
-    } else {
-      comms->connected = 2;
-      break;
-    }
-  }
-  /* At this point, we _should_ be connected */
-  if(i != NUM_PORTS) {
-    finishConnect(comms);
-    return 0;
-  } else {
-    return -1;
-  }
-#endif
-}
 
 int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel)
 {
@@ -285,13 +192,13 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
 
   // set the connection parameters (who to connect to)
 #ifndef _WIN32
-  comms->addr.rc_family = AF_BLUETOOTH;
-  comms->addr.rc_channel = (uint8_t) channel;
-  str2ba( address, &comms->addr.rc_bdaddr );
+  comms->addr->rc_family = AF_BLUETOOTH;
+  comms->addr->rc_channel = (uint8_t) channel;
+  str2ba( address, &comms->addr->rc_bdaddr );
 #else
-  comms->addr.addressFamily = AF_BTH;
-  str2ba( address, (bdaddr_t*)&comms->addr.btAddr);
-  comms->addr.port = channel;
+  comms->addr->addressFamily = AF_BTH;
+  str2ba( address, (bdaddr_t*)&comms->addr->btAddr);
+  comms->addr->port = channel;
 #endif
 
   // connect to server
@@ -301,7 +208,7 @@ int Mobot_connectWithAddress(br_comms_t* comms, const char* address, int channel
     if(tries > 2) {
       break;
     }
-    status = connect(comms->socket, (const struct sockaddr *)&comms->addr, sizeof(comms->addr));
+    status = connect(comms->socket, (const struct sockaddr *)comms->addr, sizeof(*comms->addr));
     if(status == 0) {
       comms->connected = 1;
     } 
@@ -409,7 +316,7 @@ int finishConnect(br_comms_t* comms)
   int i;
   uint8_t buf[256];
   /* Start the comms engine */
-  THREAD_CREATE(&comms->commsThread, commsEngine, comms);
+  THREAD_CREATE(comms->commsThread, commsEngine, comms);
   while(1) {
     if(Mobot_getStatus(comms) == 0) {
       break;
@@ -538,7 +445,8 @@ int Mobot_init(br_comms_t* comms)
 {
   int i;
 #ifndef __MACH__
-  memset(&comms->addr, 0, sizeof(sockaddr_t));
+  comms->addr = (sockaddr_t*)malloc(sizeof(sockaddr_t));
+  memset(comms->addr, 0, sizeof(sockaddr_t));
 #endif
   comms->connected = 0;
 #ifdef _WIN32
@@ -553,7 +461,9 @@ int Mobot_init(br_comms_t* comms)
     /* Set the default maximum speed to something reasonable */
     comms->maxSpeed[i] = DEF_MOTOR_MAXSPEED;
   }
-  THREAD_CREATE(&comms->thread, nullThread, NULL);
+  comms->thread = (THREAD_T*)malloc(sizeof(THREAD_T));
+  comms->commsThread = (THREAD_T*)malloc(sizeof(THREAD_T));
+  THREAD_CREATE(comms->thread, nullThread, NULL);
   comms->commsLock = (MUTEX_T*)malloc(sizeof(MUTEX_T));
   MUTEX_INIT(comms->commsLock);
   comms->motionInProgress = 0;
@@ -1936,7 +1846,7 @@ int Mobot_motionArchNB(br_comms_t* comms, double angle)
 {
   comms->motionArgDouble = angle;
   comms->motionInProgress++;
-  THREAD_CREATE(&comms->thread, motionArchThread, comms);
+  THREAD_CREATE(comms->thread, motionArchThread, comms);
   return 0;
 }
 
@@ -1970,7 +1880,7 @@ int Mobot_motionInchwormLeftNB(br_comms_t* comms, int num)
   /* Make sure the old thread has joined */
   comms->motionInProgress++;
   comms->motionArgInt = num;
-  THREAD_CREATE(&comms->thread, motionInchwormLeftThread, comms);
+  THREAD_CREATE(comms->thread, motionInchwormLeftThread, comms);
   return 0;
 }
 
@@ -2003,7 +1913,7 @@ int Mobot_motionInchwormRightNB(br_comms_t* comms, int num)
 {
   comms->motionArgInt = num;
   comms->motionInProgress++;
-  THREAD_CREATE(&comms->thread, motionInchwormRightThread, comms);
+  THREAD_CREATE(comms->thread, motionInchwormRightThread, comms);
   return 0;
 }
 
@@ -2030,7 +1940,7 @@ int Mobot_motionRollBackwardNB(br_comms_t* comms, double angle)
 {
   comms->motionArgDouble = angle;
   comms->motionInProgress++;
-  THREAD_CREATE(&comms->thread, motionRollBackwardThread, comms);
+  THREAD_CREATE(comms->thread, motionRollBackwardThread, comms);
   return 0;
 }
 
@@ -2057,7 +1967,7 @@ int Mobot_motionRollForwardNB(br_comms_t* comms, double angle)
 {
   comms->motionArgDouble = angle;
   comms->motionInProgress++;
-  THREAD_CREATE(&comms->thread, motionRollForwardThread, comms);
+  THREAD_CREATE(comms->thread, motionRollForwardThread, comms);
   return 0;
 }
 
@@ -2107,14 +2017,14 @@ int Mobot_motionSkinnyNB(br_comms_t* comms, double angle)
 {
   comms->motionArgDouble = angle;
   comms->motionInProgress++;
-  THREAD_CREATE(&comms->thread, motionSkinnyThread, comms);
+  THREAD_CREATE(comms->thread, motionSkinnyThread, comms);
   return 0;
 }
 
 int Mobot_motionStandNB(br_comms_t* comms)
 {
   comms->motionInProgress++;
-  THREAD_CREATE(&comms->thread, motionStandThread, comms);
+  THREAD_CREATE(comms->thread, motionStandThread, comms);
   return 0;
 }
 
@@ -2141,7 +2051,7 @@ int Mobot_motionTurnLeftNB(br_comms_t* comms, double angle)
 {
   comms->motionInProgress++;
   comms->motionArgDouble = angle;
-  THREAD_CREATE(&comms->thread, motionTurnLeftThread, comms);
+  THREAD_CREATE(comms->thread, motionTurnLeftThread, comms);
   return 0;
 }
 
@@ -2168,7 +2078,7 @@ int Mobot_motionTurnRightNB(br_comms_t* comms, double angle)
 {
   comms->motionArgDouble = angle;
   comms->motionInProgress++;
-  THREAD_CREATE(&comms->thread, motionTurnRightThread, comms);
+  THREAD_CREATE(comms->thread, motionTurnRightThread, comms);
   return 0;
 }
 
@@ -2216,7 +2126,7 @@ int Mobot_motionTumbleRightNB(br_comms_t* comms, int num)
 {
   comms->motionArgInt = num;
   comms->motionInProgress++;
-  THREAD_CREATE(&comms->thread, motionTumbleRightThread, comms);
+  THREAD_CREATE(comms->thread, motionTumbleRightThread, comms);
   return 0;
 }
 
@@ -2264,7 +2174,7 @@ int Mobot_motionTumbleLeftNB(br_comms_t* comms, int num)
 {
   comms->motionArgInt = num;
   comms->motionInProgress++;
-  THREAD_CREATE(&comms->thread, motionTumbleLeftThread, comms);
+  THREAD_CREATE(comms->thread, motionTumbleLeftThread, comms);
   return 0;
 }
 
@@ -2289,7 +2199,7 @@ void* motionUnstandThread(void* arg)
 int Mobot_motionUnstandNB(br_comms_t* comms)
 {
   comms->motionInProgress++;
-  THREAD_CREATE(&comms->thread, motionUnstandThread, comms);
+  THREAD_CREATE(comms->thread, motionUnstandThread, comms);
   return 0;
 }
 
@@ -2375,14 +2285,7 @@ int SendToIMobot(br_comms_t* comms, uint8_t cmd, const void* data, int datasize)
     err = write(comms->socket, str, len);
 #endif
   } else if (comms->connected == 2) {
-#ifdef _WIN32
-    DWORD bytes;
-    if(!WriteFile(comms->hSerial, str, len, &bytes, NULL)) {
-      err = -1;
-    }
-#else
     err = -1;
-#endif
   } else {
     err = -1;
   }
@@ -2466,14 +2369,7 @@ int RecvFromIMobot2(br_comms_t* comms, char* buf, int size)
       }
 #endif
     } else if (comms->connected == 2) {
-#ifdef _WIN32
-      if(!ReadFile(comms->hSerial, tmp, 256, &bytes, NULL)) {
-        err = -1;
-      }
-      err = bytes;
-#else
       err = -1;
-#endif
     } else {
       err = -1;
       return -1;
