@@ -45,20 +45,27 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+#ifndef _CH_
+#include "thread_macros.h"
+#endif
+
+#ifndef _WIN32
+#ifndef _llvm_
+#include <stdint.h>
+#else
+typedef unsigned char uint8_t;
+#endif // _llvm_
+typedef struct sockaddr_rc sockaddr_t;
+#else
+typedef unsigned char uint8_t;
+typedef unsigned __int32 uint32_t;
+#define AF_BLUETOOTH AF_BTH
+#define BTPROTO_RFCOMM BTHPROTO_RFCOMM
+typedef SOCKADDR_BTH sockaddr_t;
+#endif
+
 #define angle2distance(radius, angle) ((radius) * ((angle) * M_PI / 180.0))
 #define distance2angle(radius, distance) (((distance) / (radius)) * 180 / M_PI)
-
-#ifdef NONRELEASE
-#ifndef _CH_
-#include "mobot_internal.h"
-#endif
-#else
-#define DLLIMPORT
-#define THREAD_T void
-#define MUTEX_T void
-#define COND_T void
-#define sockaddr_t void
-#endif
 
 #ifndef BR_COMMS_S
 #define BR_COMMS_S
@@ -92,7 +99,20 @@ typedef struct mobot_s
   int callbackEnabled;
   void (*buttonCallback)(void* robot, int button, int buttonDown);
   void* mobot;
+  char* configFilePath;
 } mobot_t;
+#endif
+
+#ifdef NONRELEASE
+#ifndef _CH_
+#include "mobot_internal.h"
+#endif
+#else
+#define DLLIMPORT
+#define THREAD_T void
+#define MUTEX_T void
+#define COND_T void
+#define sockaddr_t void
 #endif
 
 extern int g_numConnected;
