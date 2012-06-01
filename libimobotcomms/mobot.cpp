@@ -550,7 +550,7 @@ int Mobot_getEncoderVoltage(mobot_t* comms, int pinNumber, double *voltage)
   float f;
   int status;
   buf[0] = pinNumber;
-  status = SendToIMobot(comms, BTCMD(CMD_GETBUTTONVOLTAGE), buf, 1);
+  status = SendToIMobot(comms, BTCMD(CMD_GETENCODERVOLTAGE), buf, 1);
   if(status < 0) return status;
   if(RecvFromIMobot(comms, buf, sizeof(buf))) {
     return -1;
