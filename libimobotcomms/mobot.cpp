@@ -544,6 +544,29 @@ int Mobot_getButtonVoltage(mobot_t* comms, double *voltage)
   return 0;
 }
 
+const char* Mobot_getConfigFilePath()
+{
+  static char path[512];
+  /* Find the configuration file path */
+#ifdef _WIN32
+  /* Find the user's local appdata directory */
+  if(SHGetFolderPathA(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, path) != S_OK) 
+  {
+    /* Could not get the user's app data directory */
+  } else {
+    //MessageBox((LPCTSTR)path, (LPCTSTR)"Test");
+    //fprintf(fp, "%s", path); 
+  }
+  strcat(path, "\\Barobo.config");
+#else
+  /* Try to open the barobo configuration file. */
+#define MAX_PATH 512
+  strcpy(path, getenv("HOME"));
+  strcat(path, "/.Barobo.config");
+#endif
+  return path;
+}
+
 int Mobot_getEncoderVoltage(mobot_t* comms, int pinNumber, double *voltage)
 {
   uint8_t buf[32];
@@ -2584,6 +2607,11 @@ int CMobot::isConnected()
 int CMobot::isMoving()
 {
   return Mobot_isMoving(_comms);
+}
+
+const char* CMobot::getConfigFilePath()
+{
+  return Mobot_getConfigFilePath();
 }
 
 int CMobot::getJointAngle(robotJointId_t id, double &angle)

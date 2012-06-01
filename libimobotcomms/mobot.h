@@ -45,8 +45,16 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+#ifdef NONRELEASE
 #ifndef _CH_
 #include "thread_macros.h"
+#endif
+#else
+#define DLLIMPORT
+#define THREAD_T void
+#define MUTEX_T void
+#define COND_T void
+#define sockaddr_t void
 #endif
 
 #ifndef _WIN32
@@ -55,7 +63,9 @@
 #else
 typedef unsigned char uint8_t;
 #endif // _llvm_
+#ifdef NONRELEASE
 typedef struct sockaddr_rc sockaddr_t;
+#endif
 #else
 typedef unsigned char uint8_t;
 typedef unsigned __int32 uint32_t;
@@ -107,12 +117,6 @@ typedef struct mobot_s
 #ifndef _CH_
 #include "mobot_internal.h"
 #endif
-#else
-#define DLLIMPORT
-#define THREAD_T void
-#define MUTEX_T void
-#define COND_T void
-#define sockaddr_t void
 #endif
 
 extern int g_numConnected;
@@ -196,6 +200,7 @@ class CMobot {
     %apply double & OUTPUT {double &ratio1, double &ratio2, double &ratio3, double &ratio4};
     %apply double & OUTPUT {robotJointState_t &state};
 #endif
+    static const char* getConfigFilePath();
     int getJointAngle(robotJointId_t id, double &angle);
     int getJointAngleAbs(robotJointId_t id, double &angle);
     int getJointAngles(double &angle1, double &angle2, double &angle3, double &angle4);
@@ -417,6 +422,7 @@ DLLIMPORT int Mobot_init(mobot_t* comms);
 DLLIMPORT int Mobot_isConnected(mobot_t* comms);
 DLLIMPORT int Mobot_isMoving(mobot_t* comms);
 DLLIMPORT int Mobot_getButtonVoltage(mobot_t* comms, double *voltage);
+DLLIMPORT const char* Mobot_getConfigFilePath();
 DLLIMPORT int Mobot_getEncoderVoltage(mobot_t* comms, int pinNumber, double *voltage);
 DLLIMPORT int Mobot_getJointAngle(mobot_t* comms, robotJointId_t id, double *angle);
 DLLIMPORT int Mobot_getJointAngleAbs(mobot_t* comms, robotJointId_t id, double *angle);
