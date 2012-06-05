@@ -2736,6 +2736,11 @@ int CMobot::getJointState(robotJointId_t id, robotJointState_t &state)
   return Mobot_getJointState(_comms, id, &state);
 }
 
+mobot_t* CMobot::getMobotObject()
+{
+  return _comms;
+}
+
 int CMobot::move( double angle1,
                         double angle2,
                         double angle3,
