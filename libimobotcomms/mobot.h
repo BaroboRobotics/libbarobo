@@ -37,7 +37,6 @@
 #else
 //#include <types.h>
 #include <winsock2.h>
-#include <Ws2bth.h>
 #endif
 #endif /* Not if CH */
 
@@ -49,15 +48,21 @@
 #define distance2angle(radius, distance) (((distance) / (radius)) * 180 / M_PI)
 
 #ifdef NONRELEASE
+#ifdef _WIN32
+#include <Ws2bth.h>
+#endif
 #ifndef _CH_
 #include "mobot_internal.h"
 #endif
-#else
+#else // Release
 #define DLLIMPORT
 #define THREAD_T void
 #define MUTEX_T void
 #define COND_T void
 #define sockaddr_t void
+#ifdef _WIN32
+typedef unsigned char uint8_t;
+#endif
 #endif
 
 #ifndef BR_COMMS_S
