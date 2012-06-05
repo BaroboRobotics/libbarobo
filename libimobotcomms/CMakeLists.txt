@@ -24,6 +24,9 @@ else(CMAKE_HOST_WIN32)
 	  mobot.cpp
 	  )
 	target_link_libraries(mobot bluetooth pthread rt)
+  install(TARGETS mobot
+          LIBRARY DESTINATION lib)
+  install(FILES mobot.h DESTINATION include)
 endif(CMAKE_HOST_WIN32)
 
 #install(TARGETS mobot LIBRARY DESTINATION lib)

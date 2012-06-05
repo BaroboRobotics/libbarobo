@@ -5,6 +5,7 @@
 #include "thread_macros.h"
 #endif
 
+/*
 #ifndef _WIN32
 #ifndef _llvm_
 #include <stdint.h>
@@ -19,44 +20,9 @@ typedef unsigned __int32 uint32_t;
 #define BTPROTO_RFCOMM BTHPROTO_RFCOMM
 typedef SOCKADDR_BTH sockaddr_t;
 #endif
-
+*/
 #define DEG2RAD(x) ((x) * M_PI / 180.0)
 #define RAD2DEG(x) ((x) * 180.0 / M_PI)
-
-#ifndef BR_COMMS_S
-#define BR_COMMS_S
-typedef struct mobot_s
-{
-  int socket;
-  int connected;
-#ifndef __MACH__
-  sockaddr_t *addr;
-#endif
-  double jointSpeeds[4];
-  double maxSpeed[4];
-  THREAD_T* thread;
-  MUTEX_T* commsLock;
-  int motionInProgress;
-  int motionArgInt;
-  double motionArgDouble;
-  int recordingInProgress[4];
-
-  THREAD_T* commsThread;
-  uint8_t recvBuf[64];
-  int recvBuf_ready;
-  MUTEX_T* recvBuf_lock;
-  COND_T*  recvBuf_cond;
-  int recvBuf_bytes;
-  int commsBusy;
-  MUTEX_T* commsBusy_lock;
-  COND_T* commsBusy_cond;
-
-  MUTEX_T* callback_lock;
-  int callbackEnabled;
-  void (*buttonCallback)(void* robot, int button, int buttonDown);
-  void* mobot;
-} mobot_t;
-#endif
 
 #ifndef CALLBACK_ARG_S
 #define CALLBACK_ARG_S

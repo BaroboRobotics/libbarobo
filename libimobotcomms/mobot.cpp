@@ -59,15 +59,9 @@ int Mobot_connect(mobot_t* comms)
   /* Find the user's local appdata directory */
   int i;
   FILE *fp;
-  char path[MAX_PATH];
-  if(SHGetFolderPathA(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, path) != S_OK) 
-  {
-    /* Could not get the user's app data directory */
-  } else {
-    //MessageBox((LPCTSTR)path, (LPCTSTR)"Test");
-    //fprintf(fp, "%s", path); 
-  }
-  strcat(path, "\\Barobo.config");
+  char* path;
+  char buf[512];
+  path = comms->configFilePath;
   fp = fopen(path, "r");
   if(fp == NULL) {
     /* The file doesn't exist. Gotta make the file */
@@ -79,38 +73,36 @@ int Mobot_connect(mobot_t* comms)
   }
   /* Read the correct line */
   for(i = 0; i < g_numConnected+1; i++) {
-    if(fgets(path, MAX_PATH, fp) == NULL) {
+    if(fgets(buf, MAX_PATH, fp) == NULL) {
       return -4;
     }
   }
   fclose(fp);
   /* Get rid of trailing newline and/or carriage return */
   while(
-      (path[strlen(path)-1] == '\r' ) ||
-      (path[strlen(path)-1] == '\n' ) 
+      (buf[strlen(buf)-1] == '\r' ) ||
+      (buf[strlen(buf)-1] == '\n' ) 
       )
   {
-    path[strlen(path)-1] = '\0';
+    buf[strlen(buf)-1] = '\0';
   }
   /* Make sure the format is correct */
-  if(strlen(path) != 17) {
+  if(strlen(buf) != 17) {
     return -3;
   }
   /* Pass it on to connectWithAddress() */
-  if(i = Mobot_connectWithAddress(comms, path, 1)) {
+  if(i = Mobot_connectWithAddress(comms, buf, 1)) {
     return i;
   } else {
     g_numConnected++;
     return i;
   }
 #else /* if not Windows */
-  /* Try to open the barobo configuration file. */
 #define MAX_PATH 512
   FILE *fp;
   int i;
-  char path[MAX_PATH];
-  strcpy(path, getenv("HOME"));
-  strcat(path, "/.Barobo.config");
+  const char* path = comms->configFilePath;
+  char buf[512];
   fp = fopen(path, "r");
   if(fp == NULL) {
     fprintf(stderr, 
@@ -121,7 +113,7 @@ int Mobot_connect(mobot_t* comms)
   }
   /* Read the correct line */
   for(i = 0; i < g_numConnected+1; i++) {
-    if(fgets(path, MAX_PATH, fp) == NULL) {
+    if(fgets(buf, MAX_PATH, fp) == NULL) {
       fprintf(stderr, "Error reading configuration file.\n");
       return -1;
     }
@@ -129,15 +121,15 @@ int Mobot_connect(mobot_t* comms)
   fclose(fp);
   /* Get rid of trailing newline and/or carriage return */
   while(
-      (path[strlen(path)-1] == '\r' ) ||
-      (path[strlen(path)-1] == '\n' ) 
+      (buf[strlen(buf)-1] == '\r' ) ||
+      (buf[strlen(buf)-1] == '\n' ) 
       )
   {
-    path[strlen(path)-1] = '\0';
+    buf[strlen(buf)-1] = '\0';
   }
 #ifndef __MACH__ /* If Unix */
   /* Pass it on to connectWithAddress() */
-  if(i = Mobot_connectWithAddress(comms, path, 1)) {
+  if(i = Mobot_connectWithAddress(comms, buf, 1)) {
     return i;
   } else {
     g_numConnected++;
@@ -147,14 +139,14 @@ int Mobot_connect(mobot_t* comms)
   /* The format for the device should be /dev/tty.MOBOT-XXXX-SPP */
   char chunk1[3];
   char chunk2[3];
-  sscanf(path, "%*c%*c:%*c%*c:%*c%*c:%*c%*c:%c%c:%c%c", 
+  sscanf(buf, "%*c%*c:%*c%*c:%*c%*c:%*c%*c:%c%c:%c%c", 
       &chunk1[0], &chunk1[1],
       &chunk2[0], &chunk2[1]);
   chunk1[2] = '\0';
   chunk2[2] = '\0';
-  sprintf(path, "/dev/tty.MOBOT-%s%s-SPP", chunk1, chunk2);
-  //printf("Connecting to %s...\n", path);
-  if(i = Mobot_connectWithTTY(comms, path)) {
+  sprintf(buf, "/dev/tty.MOBOT-%s%s-SPP", chunk1, chunk2);
+  //printf("Connecting to %s...\n", buf);
+  if(i = Mobot_connectWithTTY(comms, buf)) {
     return i;
   } else {
     g_numConnected++;
@@ -480,6 +472,29 @@ int Mobot_init(mobot_t* comms)
   MUTEX_NEW(comms->callback_lock);
   MUTEX_INIT(comms->callback_lock);
   comms->callbackEnabled = 0;
+
+  /* Find the configuration file path */
+#ifdef _WIN32
+  /* Find the user's local appdata directory */
+  char path[MAX_PATH];
+  if(SHGetFolderPathA(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, path) != S_OK) 
+  {
+    /* Could not get the user's app data directory */
+  } else {
+    //MessageBox((LPCTSTR)path, (LPCTSTR)"Test");
+    //fprintf(fp, "%s", path); 
+  }
+  strcat(path, "\\Barobo.config");
+  comms->configFilePath = strdup(path);
+#else
+  /* Try to open the barobo configuration file. */
+#define MAX_PATH 512
+  char path[MAX_PATH];
+  strcpy(path, getenv("HOME"));
+  strcat(path, "/.Barobo.config");
+  comms->configFilePath = strdup(path);
+#endif
+
   return 0;
 }
 
@@ -529,13 +544,36 @@ int Mobot_getButtonVoltage(mobot_t* comms, double *voltage)
   return 0;
 }
 
+const char* Mobot_getConfigFilePath()
+{
+  static char path[512];
+  /* Find the configuration file path */
+#ifdef _WIN32
+  /* Find the user's local appdata directory */
+  if(SHGetFolderPathA(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, path) != S_OK) 
+  {
+    /* Could not get the user's app data directory */
+  } else {
+    //MessageBox((LPCTSTR)path, (LPCTSTR)"Test");
+    //fprintf(fp, "%s", path); 
+  }
+  strcat(path, "\\Barobo.config");
+#else
+  /* Try to open the barobo configuration file. */
+#define MAX_PATH 512
+  strcpy(path, getenv("HOME"));
+  strcat(path, "/.Barobo.config");
+#endif
+  return path;
+}
+
 int Mobot_getEncoderVoltage(mobot_t* comms, int pinNumber, double *voltage)
 {
   uint8_t buf[32];
   float f;
   int status;
   buf[0] = pinNumber;
-  status = SendToIMobot(comms, BTCMD(CMD_GETBUTTONVOLTAGE), buf, 1);
+  status = SendToIMobot(comms, BTCMD(CMD_GETENCODERVOLTAGE), buf, 1);
   if(status < 0) return status;
   if(RecvFromIMobot(comms, buf, sizeof(buf))) {
     return -1;
@@ -2569,6 +2607,11 @@ int CMobot::isConnected()
 int CMobot::isMoving()
 {
   return Mobot_isMoving(_comms);
+}
+
+const char* CMobot::getConfigFilePath()
+{
+  return Mobot_getConfigFilePath();
 }
 
 int CMobot::getJointAngle(robotJointId_t id, double &angle)
