@@ -882,6 +882,7 @@ int Mobot_getJointSpeed(mobot_t* comms, robotJointId_t id, double *speed)
   }
   memcpy(&f, &buf[2], 4);
   *speed = f;
+  comms->jointSpeeds[id-1] = *speed;
   return 0;
 }
 
@@ -1714,7 +1715,6 @@ int Mobot_recordWait(mobot_t* comms)
 int Mobot_setJointDirection(mobot_t* comms, robotJointId_t id, robotJointState_t dir)
 {
   uint8_t buf[32];
-  float f;
   int status;
   buf[0] = (uint8_t)id-1;
   buf[1] = (uint8_t) dir;
@@ -1785,6 +1785,7 @@ int Mobot_setJointSpeed(mobot_t* comms, robotJointId_t id, double speed)
   if(buf[1] != 3) {
     return -1;
   }
+  comms->jointSpeeds[id-1] = speed;
   return 0;
 }
 
