@@ -366,7 +366,9 @@ int Mobot_blinkLED(mobot_t* comms, double delay, int numBlinks)
 
 int Mobot_disconnect(mobot_t* comms)
 {
+  comms->connected = 0;
 #ifndef _WIN32
+  shutdown(comms->socket, SHUT_RDWR);
   if(close(comms->socket)) {
     /* Error closing file descriptor */
     return -1;
@@ -378,11 +380,10 @@ int Mobot_disconnect(mobot_t* comms)
   if(g_numConnected > 0) {
     g_numConnected--;
   }
-  comms->connected = 0;
   return 0;
 }
 
-int Mobot_enableButtonCallback(mobot_t* comms, void* robot, void (*buttonCallback)(void* robot, int button, int buttonDown))
+int Mobot_enableButtonCallback(mobot_t* comms, void* data, void (*buttonCallback)(void* data, int button, int buttonDown))
 {
   uint8_t buf[16];
   int status;
@@ -403,7 +404,7 @@ int Mobot_enableButtonCallback(mobot_t* comms, void* robot, void (*buttonCallbac
 
   comms->buttonCallback = (void(*)(void*,int,int))buttonCallback;
   comms->callbackEnabled = 1;
-  comms->mobot = robot;
+  comms->mobot = data;
   MUTEX_UNLOCK(comms->callback_lock);
   return 0;
 }
@@ -882,6 +883,7 @@ int Mobot_getJointSpeed(mobot_t* comms, robotJointId_t id, double *speed)
   }
   memcpy(&f, &buf[2], 4);
   *speed = f;
+  comms->jointSpeeds[id-1] = *speed;
   return 0;
 }
 
@@ -1714,7 +1716,6 @@ int Mobot_recordWait(mobot_t* comms)
 int Mobot_setJointDirection(mobot_t* comms, robotJointId_t id, robotJointState_t dir)
 {
   uint8_t buf[32];
-  float f;
   int status;
   buf[0] = (uint8_t)id-1;
   buf[1] = (uint8_t) dir;
@@ -1785,6 +1786,7 @@ int Mobot_setJointSpeed(mobot_t* comms, robotJointId_t id, double speed)
   if(buf[1] != 3) {
     return -1;
   }
+  comms->jointSpeeds[id-1] = speed;
   return 0;
 }
 
@@ -2450,6 +2452,10 @@ void* commsEngine(void* arg)
 #else
     err = recvfrom(comms->socket, (char*)&byte, 1, 0, (struct sockaddr*)0, 0);
 #endif
+    /* If we are no longer connected, just return */
+    if(comms->connected == 0) {
+      return NULL;
+    }
     if(err < 0) {
       continue;
     }
@@ -2734,6 +2740,11 @@ int CMobot::getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3, 
 int CMobot::getJointState(robotJointId_t id, robotJointState_t &state)
 {
   return Mobot_getJointState(_comms, id, &state);
+}
+
+mobot_t* CMobot::getMobotObject()
+{
+  return _comms;
 }
 
 int CMobot::move( double angle1,

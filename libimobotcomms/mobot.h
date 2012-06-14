@@ -226,6 +226,7 @@ class CMobot {
     int getJointSpeeds(double &speed1, double &speed2, double &speed3, double &speed4);
     int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3, double &ratio4);
     int getJointState(robotJointId_t id, robotJointState_t &state);
+    mobot_t* getMobotObject();
     int move(double angle1, double angle2, double angle3, double angle4);
     int moveNB(double angle1, double angle2, double angle3, double angle4);
     int moveContinuousNB(robotJointState_t dir1, 
@@ -430,7 +431,8 @@ DLLIMPORT int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename);
 DLLIMPORT int Mobot_connectWithAddress(
     mobot_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_disconnect(mobot_t* comms);
-DLLIMPORT int Mobot_enableButtonCallback(mobot_t* comms, void* mobot, void (*buttonCallback)(void* mobot, int button, int buttonDown));
+DLLIMPORT int Mobot_enableButtonCallback(mobot_t* comms, void* data, void (*buttonCallback)(void* mobot, int button, int buttonDown));
+DLLIMPORT int Mobot_disableButtonCallback(mobot_t* comms);
 DLLIMPORT int Mobot_init(mobot_t* comms);
 DLLIMPORT int Mobot_isConnected(mobot_t* comms);
 DLLIMPORT int Mobot_isMoving(mobot_t* comms);
