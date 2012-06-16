@@ -25,6 +25,7 @@
 
 #include <stdio.h>
 
+#ifdef NONRELEASE
 #ifndef _CH_
 #ifndef _WIN32
 #include <unistd.h>
@@ -44,7 +45,6 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-#ifdef NONRELEASE
 #ifdef _WIN32
 #include <Ws2bth.h>
 #endif
@@ -592,7 +592,7 @@ DLLIMPORT int Mobot_getJointSpeeds(mobot_t* comms,
                                    double *speed3, 
                                    double *speed4);
 DLLIMPORT int Mobot_setMotorPower(mobot_t* comms, robotJointId_t id, int power);
-DLLIMPORT int Mobot_setTwoWheelRobotSpeed(mobot_t* comms, double speed, double radius, char unit[]);
+DLLIMPORT int Mobot_setTwoWheelRobotSpeed(mobot_t* comms, double speed, double radius);
 DLLIMPORT int Mobot_stop(mobot_t* comms);
 DLLIMPORT int Mobot_moveJointToPIDNB(mobot_t* comms, robotJointId_t id, double angle);
 
