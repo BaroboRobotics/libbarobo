@@ -412,6 +412,7 @@ extern "C" {
 #endif
 DLLIMPORT int Mobot_blinkLED(mobot_t* comms, double delay, int numBlinks);
 DLLIMPORT int Mobot_connect(mobot_t* comms);
+DLLIMPORT int Mobot_connectWithTCP(mobot_t* comms);
 #ifndef _WIN32
 DLLIMPORT int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename);
 #endif
@@ -596,6 +597,9 @@ DLLIMPORT int Mobot_motionTumbleLeft(mobot_t* comms, int num);
 DLLIMPORT int Mobot_motionTurnLeft(mobot_t* comms, double angle);
 DLLIMPORT int Mobot_motionTurnRight(mobot_t* comms, double angle);
 DLLIMPORT int Mobot_motionUnstand(mobot_t* comms);
+DLLIMPORT int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize);
+DLLIMPORT int SendToMobotDirect(mobot_t* comms, const void* data, int datasize);
+DLLIMPORT int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size);
 
 /* Non-Blocking compound motion functions */
 DLLIMPORT int Mobot_motionArchNB(mobot_t* comms, double angle);
