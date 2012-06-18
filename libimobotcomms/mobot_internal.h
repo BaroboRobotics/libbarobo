@@ -91,8 +91,8 @@ extern "C" {
 #endif /* _WIN32 */
 
 /* Utility Functions */
-int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize);
-int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size);
+//int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize);
+//int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size);
 void* commsEngine(void* arg);
 void* callbackThread(void* arg);
 

@@ -18,8 +18,6 @@
 #define _WIN32
 #include <stdint.h>
 #define UINT8 uint8_t
-#else
-#pragma package <chbluetooth>
 #endif
 #endif
 
@@ -58,7 +56,9 @@
 #define COND_T void
 #define sockaddr_t void
 #ifdef _WIN32
+#ifndef _CH_
 typedef unsigned char uint8_t;
+#endif
 #endif
 #endif
 
@@ -72,11 +72,15 @@ typedef unsigned char uint8_t;
 typedef struct sockaddr_rc sockaddr_t;
 #endif
 #else
+#ifndef _CH_
 typedef unsigned char uint8_t;
 typedef unsigned __int32 uint32_t;
+#endif
 #define AF_BLUETOOTH AF_BTH
 #define BTPROTO_RFCOMM BTHPROTO_RFCOMM
+#ifndef _CH_
 typedef SOCKADDR_BTH sockaddr_t;
+#endif
 #endif
 
 #define angle2distance(radius, angle) ((radius) * ((angle) * M_PI / 180.0))

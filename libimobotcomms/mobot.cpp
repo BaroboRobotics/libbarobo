@@ -25,12 +25,16 @@
 #include <mach/mach.h>
 #endif
 
+#ifndef _WIN32
 #include <netdb.h>
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 
 #include <arpa/inet.h>
+#else
+#include <ws2tcpip.h>
+#endif
 
 #include "commands.h"
 
@@ -204,7 +208,11 @@ int Mobot_connectWithTCP(mobot_t* comms)
     }
 
     if (connect(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
+#ifndef _WIN32
       close(sockfd);
+#else
+      closesocket(sockfd);
+#endif
       //perror("client: connect");
       continue;
     }
@@ -216,8 +224,10 @@ int Mobot_connectWithTCP(mobot_t* comms)
     return -1;
   }
 
+  /*
   inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr),
       s, sizeof s);
+   */
   //printf("client: connecting to %s\n", s);
 
   freeaddrinfo(servinfo); // all done with this structure
