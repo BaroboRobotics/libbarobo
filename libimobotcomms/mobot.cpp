@@ -25,6 +25,13 @@
 #include <mach/mach.h>
 #endif
 
+#include <netdb.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+
+#include <arpa/inet.h>
+
 #include "commands.h"
 
 int g_numConnected = 0;
@@ -44,6 +51,16 @@ void* nullThread(void* arg)
   return NULL;
 }
 
+// get sockaddr, IPv4 or IPv6:
+void *get_in_addr(struct sockaddr *sa)
+{
+    if (sa->sa_family == AF_INET) {
+        return &(((struct sockaddr_in*)sa)->sin_addr);
+    }
+
+    return &(((struct sockaddr_in6*)sa)->sin6_addr);
+}
+
 /* Return Error Codes:
    -1 : General Error
    -2 : Lockfile Exists
@@ -55,6 +72,10 @@ void* nullThread(void* arg)
 int finishConnect(mobot_t* comms);
 int Mobot_connect(mobot_t* comms)
 {
+  /* Try a TCP connection first */
+  if(Mobot_connectWithTCP(comms) == 0) {
+    return 0;
+  }
 #ifdef _WIN32
   /* Find the user's local appdata directory */
   int i;
@@ -154,6 +175,55 @@ int Mobot_connect(mobot_t* comms)
   }
 #endif /* Fi Linux/Mac */
 #endif
+}
+
+#define PORT "5768"
+#define MAXDATASIZE 128
+int Mobot_connectWithTCP(mobot_t* comms)
+{
+  int sockfd, numbytes;  
+  char buf[MAXDATASIZE];
+  struct addrinfo hints, *servinfo, *p;
+  int rv;
+  char s[INET6_ADDRSTRLEN];
+  memset(&hints, 0, sizeof hints);
+  hints.ai_family = AF_UNSPEC;
+  hints.ai_socktype = SOCK_STREAM;
+
+  if ((rv = getaddrinfo("localhost", PORT, &hints, &servinfo)) != 0) {
+    //fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
+    return -1;
+  }
+
+  // loop through all the results and connect to the first we can
+  for(p = servinfo; p != NULL; p = p->ai_next) {
+    if ((sockfd = socket(p->ai_family, p->ai_socktype,
+            p->ai_protocol)) == -1) {
+      //perror("client: socket");
+      continue;
+    }
+
+    if (connect(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
+      close(sockfd);
+      //perror("client: connect");
+      continue;
+    }
+
+    break;
+  }
+  if (p == NULL) {
+    //fprintf(stderr, "client: failed to connect\n");
+    return -1;
+  }
+
+  inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr),
+      s, sizeof s);
+  //printf("client: connecting to %s\n", s);
+
+  freeaddrinfo(servinfo); // all done with this structure
+  comms->socket = sockfd;
+  comms->connected = 1;
+  return finishConnect(comms);
 }
 
 int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
@@ -2336,6 +2406,32 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
   }
 }
 
+int SendToMobotDirect(mobot_t* comms, const void* data, int datasize)
+{
+  int err;
+  if(comms->connected == 0) {
+    return -1;
+  }
+  MUTEX_LOCK(comms->commsLock);
+  comms->recvBuf_ready = 0;
+  if(comms->connected == 1) {
+#ifdef _WIN32
+    err = send(comms->socket, (const char*)data, datasize, 0);
+#else
+    err = write(comms->socket, data, datasize);
+#endif
+  } else if (comms->connected == 2) {
+    err = -1;
+  } else {
+    err = -1;
+  }
+  if(err < 0) {
+    return err;
+  } else {
+    return 0;
+  }
+}
+
 int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
 {
   /* Wait until transaction is ready */
@@ -2461,6 +2557,8 @@ void* commsEngine(void* arg)
     }
     /* Received a byte. If it is the first one, check to see if it is a
      * response or a triggered event */
+    /* DEBUG */
+    //printf("RECV: 0x%x\n", byte);
     if(bytes == 0) {
       MUTEX_LOCK(comms->commsBusy_lock);
       comms->commsBusy = 1;

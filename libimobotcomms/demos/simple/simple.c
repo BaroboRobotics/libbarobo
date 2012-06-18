@@ -25,12 +25,15 @@ void cb(void* mobot, int button, int buttonEvent)
 
 int main()
 {
+  int err;
   Mobot_init(&comms);
-  Mobot_connect(&comms);
-  Mobot_enableButtonCallback(&comms, NULL, cb);
-  while(1) {
-    sleep(5);
-    Mobot_moveToZero(&comms);
+  //Mobot_connect(&comms);
+  err = Mobot_connectWithTCP(&comms);
+  if(err) {
+    printf("Connect failed with error: %d\n", err);
+    return 0;
   }
+  printf("Connect succeeded. Move to zero.\n");
+  Mobot_moveToZero(&comms);
   return 0;
 }
