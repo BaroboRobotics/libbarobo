@@ -72,7 +72,10 @@ void *get_in_addr(struct sockaddr *sa)
 int finishConnect(mobot_t* comms);
 int Mobot_connect(mobot_t* comms)
 {
-
+  /* Try a TCP connection first */
+  if(Mobot_connectWithTCP(comms) == 0) {
+    return 0;
+  }
 #ifdef _WIN32
   /* Find the user's local appdata directory */
   int i;
@@ -188,7 +191,7 @@ int Mobot_connectWithTCP(mobot_t* comms)
   hints.ai_socktype = SOCK_STREAM;
 
   if ((rv = getaddrinfo("localhost", PORT, &hints, &servinfo)) != 0) {
-    fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
+    //fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
     return -1;
   }
 
@@ -196,20 +199,20 @@ int Mobot_connectWithTCP(mobot_t* comms)
   for(p = servinfo; p != NULL; p = p->ai_next) {
     if ((sockfd = socket(p->ai_family, p->ai_socktype,
             p->ai_protocol)) == -1) {
-      perror("client: socket");
+      //perror("client: socket");
       continue;
     }
 
     if (connect(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
       close(sockfd);
-      perror("client: connect");
+      //perror("client: connect");
       continue;
     }
 
     break;
   }
   if (p == NULL) {
-    fprintf(stderr, "client: failed to connect\n");
+    //fprintf(stderr, "client: failed to connect\n");
     return -1;
   }
 
