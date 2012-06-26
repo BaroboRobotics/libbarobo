@@ -2246,6 +2246,29 @@ int Mobot_stop(mobot_t* comms)
   return 0;
 }
 
+int Mobot_stopOneJoint(mobot_t* comms, robotJointId_t id)
+{
+  return Mobot_moveJointContinuousNB(comms, id, ROBOT_NEUTRAL);
+}
+
+int Mobot_stopTwoJoints(mobot_t* comms, robotJointId_t id1, robotJointId_t id2)
+{
+  Mobot_moveJointContinuousNB(comms, id1, ROBOT_NEUTRAL);
+  return Mobot_moveJointContinuousNB(comms, id2, ROBOT_NEUTRAL);
+}
+
+int Mobot_stopThreeJoints(mobot_t* comms, robotJointId_t id1, robotJointId_t id2, robotJointId_t id3)
+{
+  Mobot_moveJointContinuousNB(comms, id1, ROBOT_NEUTRAL);
+  Mobot_moveJointContinuousNB(comms, id2, ROBOT_NEUTRAL);
+  return Mobot_moveJointContinuousNB(comms, id3, ROBOT_NEUTRAL);
+}
+
+int Mobot_stopAllJoints(mobot_t* comms)
+{
+  return Mobot_stop(comms);
+}
+
 int Mobot_motionArch(mobot_t* comms, double angle)
 {
   Mobot_moveJointToNB(comms, ROBOT_JOINT2, -angle/2.0);
@@ -3471,6 +3494,26 @@ int CMobot::setTwoWheelRobotSpeed(double speed, double radius)
 int CMobot::stop()
 {
   return Mobot_stop(_comms);
+}
+
+int CMobot::stopOneJoint(robotJointId_t id)
+{
+  return Mobot_stopOneJoint(_comms, id);
+}
+
+int CMobot::stopTwoJoints(robotJointId_t id1, robotJointId_t id2)
+{
+  return Mobot_stopTwoJoints(_comms, id1, id2);
+}
+
+int CMobot::stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3)
+{
+  return Mobot_stopThreeJoints(_comms, id1, id2, id3);
+}
+
+int CMobot::stopAllJoints()
+{
+  return Mobot_stopAllJoints(_comms);
 }
 
 int CMobot::motionArch(double angle)

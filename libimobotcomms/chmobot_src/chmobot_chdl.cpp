@@ -1089,6 +1089,57 @@ EXPORTCH int stop_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int stopOneJoint_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    robotJointId_t id;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
+    retval = mobot->stopOneJoint(id);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int stopTwoJoints_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    robotJointId_t id1;
+    robotJointId_t id2;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    id1 = Ch_VaArg(interp, ap, robotJointId_t);
+    id2 = Ch_VaArg(interp, ap, robotJointId_t);
+    retval = mobot->stopTwoJoints(id1, id2);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int stopThreeJoints_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    robotJointId_t id1;
+    robotJointId_t id2;
+    robotJointId_t id3;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    id1 = Ch_VaArg(interp, ap, robotJointId_t);
+    id2 = Ch_VaArg(interp, ap, robotJointId_t);
+    id3 = Ch_VaArg(interp, ap, robotJointId_t);
+    retval = mobot->stopThreeJoints(id1, id2, id3);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int motionArch_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

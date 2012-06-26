@@ -311,6 +311,10 @@ class CMobot {
     int setMotorPower(robotJointId_t id, int power);
     int setTwoWheelRobotSpeed(double speed, double radius);
     int stop();
+    int stopOneJoint(robotJointId_t id);
+    int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
+    int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
+    int stopAllJoints();
 
     int motionArch(double angle);
     int motionInchwormLeft(int num);
@@ -630,6 +634,10 @@ DLLIMPORT int Mobot_getJointSpeeds(mobot_t* comms,
 DLLIMPORT int Mobot_setMotorPower(mobot_t* comms, robotJointId_t id, int power);
 DLLIMPORT int Mobot_setTwoWheelRobotSpeed(mobot_t* comms, double speed, double radius);
 DLLIMPORT int Mobot_stop(mobot_t* comms);
+DLLIMPORT int Mobot_stopOneJoint(mobot_t* comms, robotJointId_t id);
+DLLIMPORT int Mobot_stopTwoJoints(mobot_t* comms, robotJointId_t id1, robotJointId_t id2);
+DLLIMPORT int Mobot_stopThreeJoints(mobot_t* comms, robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
+DLLIMPORT int Mobot_stopAllJoints(mobot_t* comms);
 DLLIMPORT int Mobot_moveJointToPIDNB(mobot_t* comms, robotJointId_t id, double angle);
 
 /* compound motion functions */
