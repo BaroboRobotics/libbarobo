@@ -1,29 +1,29 @@
 /* Discription:
- * In this scene, two oneModule robots push twoWheelDrive.
+ * In this scene, two oneModule mobots push twoWheelDrive.
  */
 #include <mobot.h>
-CMobot robot1;
-CMobot robot2;
-CMobot robot3;
+CMobot mobot1;
+CMobot mobot2;
+CMobot mobot3;
 
-robot1.connect();
-robot2.connect();
-robot3.connect();
+mobot1.connect();
+mobot2.connect();
+mobot3.connect();
 
 // initialization
-robot1.moveToZeroNB();
-robot2.moveToZeroNB();
-robot3.moveToZeroNB();
+mobot1.moveToZeroNB();
+mobot2.moveToZeroNB();
+mobot3.moveToZeroNB();
 
-// set robots' speed
-robot1.setJointSpeedRatios(0.8, 0.8, 0.8, 0.8);
-robot2.setJointSpeedRatios(0.8, 0.8, 0.8, 0.8);
-robot3.setJointSpeedRatios(0.05, 0.05, 0.05, 0.05);
+// set mobots' speed
+mobot1.setJointSpeedRatios(0.8, 0.8, 0.8, 0.8);
+mobot2.setJointSpeedRatios(0.8, 0.8, 0.8, 0.8);
+mobot3.setJointSpeedRatios(0.05, 0.05, 0.05, 0.05);
 
-// robot one and two inch worm right to push, robot three move back
-robot1.motionInchwormRightNB(20);
-robot2.motionInchwormRightNB(20);
-robot3.motionRollBackward(360);
-robot1.motionWait();
-robot2.motionWait();
-robot3.motionWait();
+// mobot one and two inch worm right to push, mobot three move back
+mobot1.motionInchwormRightNB(20);
+mobot2.motionInchwormRightNB(20);
+mobot3.motionRollBackward(360);
+mobot1.motionWait();
+mobot2.motionWait();
+mobot3.motionWait();

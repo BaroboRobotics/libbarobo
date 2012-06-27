@@ -1,5 +1,5 @@
 /* Discription:
- * In this scene, four modules are assembled as an fourLeg robot.
+ * In this scene, four modules are assembled as an fourLeg mobot.
  *          1st                        3rd
  * |---------|--------|   |   |---------|--------|
  *1|    2    |    3   |4 X|X 1|    2    |   3    |4
@@ -8,29 +8,29 @@
  * |---------|--------|   |   |---------|--------|
  *1|    2    |    3   |4 X|X 1|    2    |   3    |4
  * |---------|--------|   |   |---------|--------|
- *Before assembling, please make sure that each robot is in zero position. 
+ *Before assembling, please make sure that each mobot is in zero position. 
  *Note: Push the buttom B to make them go to zero position.
  */
  
 #include <mobot.h>
-CMobot robot1;
-CMobot robot2;
-CMobot robot3;
-CMobot robot4;
+CMobot mobot1;
+CMobot mobot2;
+CMobot mobot3;
+CMobot mobot4;
 CMobotGroup group1;
 CMobotGroup group2;
 
-/* Connect to the robots listed in the configuration file. */
-robot1.connect();
-robot2.connect();
-robot3.connect();
-robot4.connect();
+/* Connect to the mobots listed in the configuration file. */
+mobot1.connect();
+mobot2.connect();
+mobot3.connect();
+mobot4.connect();
 
 /* Add the two modules to be members of our group */
-group1.addMobot(robot1);
-group1.addMobot(robot2);
-group2.addMobot(robot3);
-group2.addMobot(robot4);
+group1.addMobot(mobot1);
+group1.addMobot(mobot2);
+group2.addMobot(mobot3);
+group2.addMobot(mobot4);
 
 // move to zero position
 group1.moveToZeroNB();
@@ -38,11 +38,11 @@ group2.moveToZeroNB();
 group1.moveWait();
 group2.moveWait();
 
-// set robots speed
-robot1.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
-robot2.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
-robot3.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
-robot4.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
+// set mobots speed
+mobot1.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
+mobot2.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
+mobot3.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
+mobot4.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
 
 // get ready to roll
 group1.moveToNB(0, 90, 90, 0);

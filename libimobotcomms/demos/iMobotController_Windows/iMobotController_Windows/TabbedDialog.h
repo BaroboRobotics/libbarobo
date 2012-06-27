@@ -25,13 +25,13 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 private:
-  RobotManager *m_robotManager;
+  RobotManager *m_mobotManager;
 public:
   CTabCtrl m_tabCtrl;
   CDialogConnect *m_connectDlg;
   CDialogProgram *m_programDlg;
   CDialogTeaching *m_teachingDlg;
-  CiMobotController_WindowsDlg  *m_robotControllerDlg;
+  CiMobotController_WindowsDlg  *m_mobotControllerDlg;
   RobotManager* GetRobotManager();
   void RefreshTabContent();
   afx_msg void OnTcnSelchangeTab1(NMHDR *pNMHDR, LRESULT *pResult);

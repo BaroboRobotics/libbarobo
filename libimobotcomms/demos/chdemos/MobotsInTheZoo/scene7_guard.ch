@@ -1,32 +1,32 @@
 /* Discription:
- * In this scene, two one-module robots do turn back and forth when they stand as guarding the zoo.
+ * In this scene, two one-module mobots do turn back and forth when they stand as guarding the zoo.
  */
 #include <mobot.h>
-CMobot robot1;
-CMobot robot2;
+CMobot mobot1;
+CMobot mobot2;
 
-robot1.connect();
-robot2.connect();
+mobot1.connect();
+mobot2.connect();
 
 // initialization
-robot1.moveToZeroNB();
-robot2.moveToZeroNB();
-robot1.moveWait();
-robot1.moveWait();
+mobot1.moveToZeroNB();
+mobot2.moveToZeroNB();
+mobot1.moveWait();
+mobot1.moveWait();
 
 // stand
-robot1.motionStandNB();
-robot2.motionStandNB();
-robot1.motionWait();
-robot2.motionWait();
+mobot1.motionStandNB();
+mobot2.motionStandNB();
+mobot1.motionWait();
+mobot2.motionWait();
 
 // turn back and forth
-robot1.moveJointNB(MOBOT_JOINT1, 180);
-robot2.moveJointNB(MOBOT_JOINT1, 180);
-robot1.moveWait();
-robot1.moveWait();
+mobot1.moveJointNB(MOBOT_JOINT1, 180);
+mobot2.moveJointNB(MOBOT_JOINT1, 180);
+mobot1.moveWait();
+mobot1.moveWait();
 
-robot1.moveJointNB(MOBOT_JOINT1, -180);
-robot2.moveJointNB(MOBOT_JOINT1, -180);
-robot1.moveWait();
-robot1.moveWait();
+mobot1.moveJointNB(MOBOT_JOINT1, -180);
+mobot2.moveJointNB(MOBOT_JOINT1, -180);
+mobot1.moveWait();
+mobot1.moveWait();

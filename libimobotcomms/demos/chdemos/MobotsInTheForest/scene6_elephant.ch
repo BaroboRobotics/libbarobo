@@ -12,34 +12,34 @@
  * |     |    |     |     |   |        |   |
  * -------    -------    -------      ------- 
  *                          4            4
- * For the side view, the third robot is behind the first robot ...
- * and the fourth robot is behind the second robot.                        
+ * For the side view, the third mobot is behind the first mobot ...
+ * and the fourth mobot is behind the second mobot.                        
 */ 
 #include <mobot.h>
-CMobot robot1;
-CMobot robot2;
-CMobot robot3;
-CMobot robot4;
+CMobot mobot1;
+CMobot mobot2;
+CMobot mobot3;
+CMobot mobot4;
 CMobotGroup group1;
 CMobotGroup group2;
 int i;
 
-/* Connect to the robots listed in the configuration file. */
-robot1.connect();
-robot2.connect();
-robot3.connect();
-robot4.connect();
+/* Connect to the mobots listed in the configuration file. */
+mobot1.connect();
+mobot2.connect();
+mobot3.connect();
+mobot4.connect();
 
 /* Add the two modules to be members of our group */
-group1.addMobot(robot1);
-group1.addMobot(robot4);
-group2.addMobot(robot2);
-group2.addMobot(robot3);
+group1.addMobot(mobot1);
+group1.addMobot(mobot4);
+group2.addMobot(mobot2);
+group2.addMobot(mobot3);
 
-robot1.setJointSpeedRatios(0.6, 0.6, 0.6, 0.6);
-robot2.setJointSpeedRatios(0.6, 0.6, 0.6, 0.6);
-robot3.setJointSpeedRatios(0.6, 0.6, 0.6, 0.6);
-robot4.setJointSpeedRatios(0.6, 0.6, 0.6, 0.6);
+mobot1.setJointSpeedRatios(0.6, 0.6, 0.6, 0.6);
+mobot2.setJointSpeedRatios(0.6, 0.6, 0.6, 0.6);
+mobot3.setJointSpeedRatios(0.6, 0.6, 0.6, 0.6);
+mobot4.setJointSpeedRatios(0.6, 0.6, 0.6, 0.6);
 
 // miove to zero position
 group1.moveToZeroNB();

@@ -12,39 +12,39 @@
  * |     |    |     |     |   |        |   |
  * -------    -------    -------      ------- 
  *                          4            4
- * The robot 5 is the head of the elephant and the robot6 is the tail of the elephant.
- * For the side view, the third robot is behind the first robot ...
- * and the fourth robot is behind the second robot.                        
+ * The mobot 5 is the head of the elephant and the mobot6 is the tail of the elephant.
+ * For the side view, the third mobot is behind the first mobot ...
+ * and the fourth mobot is behind the second mobot.                        
 */ 
 #include <mobot.h>
-CMobot robot1;
-CMobot robot2;
-CMobot robot3;
-CMobot robot4;
-CMobot robot5;
-CMobot robot6;
+CMobot mobot1;
+CMobot mobot2;
+CMobot mobot3;
+CMobot mobot4;
+CMobot mobot5;
+CMobot mobot6;
 CMobotGroup group1;
 CMobotGroup group2;
 int i;
 
-/* Connect to the robots listed in the configuration file. */
-robot1.connect();
-robot2.connect();
-robot3.connect();
-robot4.connect();
-robot5.connect();
-robot6.connect();
+/* Connect to the mobots listed in the configuration file. */
+mobot1.connect();
+mobot2.connect();
+mobot3.connect();
+mobot4.connect();
+mobot5.connect();
+mobot6.connect();
 
 /* Add the two modules to be members of our group */
-group1.addMobot(robot1);
-group1.addMobot(robot4);
-group2.addMobot(robot2);
-group2.addMobot(robot3);
+group1.addMobot(mobot1);
+group1.addMobot(mobot4);
+group2.addMobot(mobot2);
+group2.addMobot(mobot3);
 
-robot1.setJointSpeedRatios(0.6, 0.6, 0.6, 0.6);
-robot2.setJointSpeedRatios(0.6, 0.6, 0.6, 0.6);
-robot3.setJointSpeedRatios(0.6, 0.6, 0.6, 0.6);
-robot4.setJointSpeedRatios(0.6, 0.6, 0.6, 0.6);
+mobot1.setJointSpeedRatios(0.6, 0.6, 0.6, 0.6);
+mobot2.setJointSpeedRatios(0.6, 0.6, 0.6, 0.6);
+mobot3.setJointSpeedRatios(0.6, 0.6, 0.6, 0.6);
+mobot4.setJointSpeedRatios(0.6, 0.6, 0.6, 0.6);
 
 // miove to zero position
 group1.moveToZeroNB();
@@ -58,18 +58,18 @@ group2.moveJointToNB(MOBOT_JOINT1, 90);
 group1.moveWait();
 group2.moveWait();
 // initilize the head and the tail
-robot5.moveToNB(0, 45, -45, 90);
-robot6.moveToNB(0, -60, 90, 90);
-robot5.moveWait();
-robot6.moveWait();
+mobot5.moveToNB(0, 45, -45, 90);
+mobot6.moveToNB(0, -60, 90, 90);
+mobot5.moveWait();
+mobot6.moveWait();
 
 // move the head and the tail
-robot5.moveJoint(MOBOT_JOINT4, 90);
-robot5.moveJoint(MOBOT_JOINT2, 90);
-robot5.moveTo(0, 45, -45, 90);
-robot6.moveJoint(MOBOT_JOINT4, 20);
-robot6.moveJoint(MOBOT_JOINT4, -40);
-robot6.moveJoint(MOBOT_JOINT4, 20);
+mobot5.moveJoint(MOBOT_JOINT4, 90);
+mobot5.moveJoint(MOBOT_JOINT2, 90);
+mobot5.moveTo(0, 45, -45, 90);
+mobot6.moveJoint(MOBOT_JOINT4, 20);
+mobot6.moveJoint(MOBOT_JOINT4, -40);
+mobot6.moveJoint(MOBOT_JOINT4, 20);
 
 // walk forward
 for (i = 0; i < 3; i++) {

@@ -12,7 +12,7 @@
 
 #include "stdafx.h"
 #include "comutility.h"
-//#include "robotlib.h"
+//#include "mobotlib.h"
 #include "tchar.h"
 #include <windows.h>
 #include <stdio.h>

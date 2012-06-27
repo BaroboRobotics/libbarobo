@@ -1,43 +1,43 @@
 /* Discription:
- * In this scene, six single robots "discuss" to solve the problem.
+ * In this scene, six single mobots "discuss" to solve the problem.
 */
 #include <mobot.h>
-CMobot robot1;
-CMobot robot2;
-CMobot robot3;
-CMobot robot4;
-CMobot robot5;
-CMobot robot6;
+CMobot mobot1;
+CMobot mobot2;
+CMobot mobot3;
+CMobot mobot4;
+CMobot mobot5;
+CMobot mobot6;
 CMobotGroup group1;
 CMobotGroup group2;
 
-/* Connect to the robots listed in the configuration file. */
-robot1.connect();
-robot2.connect();
-robot3.connect();
-robot4.connect();
-robot5.connect();
-robot6.connect();
+/* Connect to the mobots listed in the configuration file. */
+mobot1.connect();
+mobot2.connect();
+mobot3.connect();
+mobot4.connect();
+mobot5.connect();
+mobot6.connect();
 
 /* Add the two modules to be members of our group */
-group.addMobot(robot1);
-group.addMobot(robot2);
-group.addMobot(robot3);
-group.addMobot(robot4);
-group.addMobot(robot5);
-group.addMobot(robot6);
+group.addMobot(mobot1);
+group.addMobot(mobot2);
+group.addMobot(mobot3);
+group.addMobot(mobot4);
+group.addMobot(mobot5);
+group.addMobot(mobot6);
 
-group1.addMobot(robot1);
-group1.addMobot(robot3);
-group1.addMobot(robot5);
+group1.addMobot(mobot1);
+group1.addMobot(mobot3);
+group1.addMobot(mobot5);
 
-group2.addMobot(robot2);
-group2.addMobot(robot4);
-group2.addMobot(robot6);
+group2.addMobot(mobot2);
+group2.addMobot(mobot4);
+group2.addMobot(mobot6);
 
-/* Now, any commands given to "group" will cause both robot1 and robot2 to
+/* Now, any commands given to "group" will cause both mobot1 and mobot2 to
  * execute the command. */
-group.motionStand(); /* Cause both robots to stand */
+group.motionStand(); /* Cause both mobots to stand */
 
 // discuss
 group1.moveJointToNB(MOBOT_JOINT1, 90+45);

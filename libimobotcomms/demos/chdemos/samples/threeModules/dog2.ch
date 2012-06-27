@@ -24,66 +24,66 @@ All switches are located at the positions with "3" marked.
 Before assembling, please make sure each module is in the home position. 
 */
 #include <mobot.h>
-CMobot robot1;
-CMobot robot2;
-CMobot robot3;
+CMobot mobot1;
+CMobot mobot2;
+CMobot mobot3;
 int i;
 
-/* Connect robot variables to the robot modules. */
-robot1.connect();
-robot2.connect();
-robot3.connect();
+/* Connect mobot variables to the mobot modules. */
+mobot1.connect();
+mobot2.connect();
+mobot3.connect();
 
-robot1.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
-robot2.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
-robot3.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
+mobot1.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
+mobot2.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
+mobot3.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
 
-robot1.moveToNB(0, 0, 63.5, 90);
-robot2.moveToNB(0, 0, -63.5, 90);
-robot1.moveWait();
-robot2.moveWait();
+mobot1.moveToNB(0, 0, 63.5, 90);
+mobot2.moveToNB(0, 0, -63.5, 90);
+mobot1.moveWait();
+mobot2.moveWait();
 
-/* robot 3 on the top, direction: right*/
+/* mobot 3 on the top, direction: right*/
 
-robot3.moveTo(0, -5, 96, 90);
-robot1.moveTo(0, -55, 63.5, 90);
-robot2.moveTo(0, -5, 92.5, 90);
+mobot3.moveTo(0, -5, 96, 90);
+mobot1.moveTo(0, -55, 63.5, 90);
+mobot2.moveTo(0, -5, 92.5, 90);
 
-robot1.moveToNB(0, 0, -63.5, 90);
-robot3.moveToNB(0, 0, 63.5, 90);
-robot1.moveWait();
-robot3.moveWait();
+mobot1.moveToNB(0, 0, -63.5, 90);
+mobot3.moveToNB(0, 0, 63.5, 90);
+mobot1.moveWait();
+mobot3.moveWait();
 
-/* robot 2 on the top, direction: right*/
+/* mobot 2 on the top, direction: right*/
 
-robot2.moveTo(0, -5, 96, 90);
-robot3.moveTo(0, -55, 63.5, 90);
-robot1.moveTo(0, -5, 92.5, 90);
+mobot2.moveTo(0, -5, 96, 90);
+mobot3.moveTo(0, -55, 63.5, 90);
+mobot1.moveTo(0, -5, 92.5, 90);
 
-robot3.moveToNB(0, 0, -63.5, 90);
-robot2.moveToNB(0, 0, 63.5, 90);
-robot3.moveWait();
-robot2.moveWait();
+mobot3.moveToNB(0, 0, -63.5, 90);
+mobot2.moveToNB(0, 0, 63.5, 90);
+mobot3.moveWait();
+mobot2.moveWait();
 
-/* robot 1 on the top, direction: right*/
+/* mobot 1 on the top, direction: right*/
 
-robot1.moveTo(0, 5, -96, 90);
-robot3.moveTo(0, 55, -63.5, 90);
-robot2.moveTo(0, 5, -92.5, 90);
+mobot1.moveTo(0, 5, -96, 90);
+mobot3.moveTo(0, 55, -63.5, 90);
+mobot2.moveTo(0, 5, -92.5, 90);
 
-robot3.moveToNB(0, 0, 63.5, 90);
-robot1.moveToNB(0, 0, -63.5, 90);
-robot3.moveWait();
-robot1.moveWait();
+mobot3.moveToNB(0, 0, 63.5, 90);
+mobot1.moveToNB(0, 0, -63.5, 90);
+mobot3.moveWait();
+mobot1.moveWait();
 
-/* robot 2 on the top, direction: left*/
+/* mobot 2 on the top, direction: left*/
 
-robot2.moveTo(0, 5, -96, 90);
-robot1.moveTo(0, 55, -63.5, 90);
-robot3.moveTo(0, 5, -92.5, 90);
+mobot2.moveTo(0, 5, -96, 90);
+mobot1.moveTo(0, 55, -63.5, 90);
+mobot3.moveTo(0, 5, -92.5, 90);
 
-robot1.moveToNB(0, 0, 63.5, 90);
-robot2.moveToNB(0, 0, -63.5, 90);
-robot1.moveWait();
-robot2.moveWait();
+mobot1.moveToNB(0, 0, 63.5, 90);
+mobot2.moveToNB(0, 0, -63.5, 90);
+mobot1.moveWait();
+mobot2.moveWait();
 

@@ -1,13 +1,13 @@
 /* Filename: dataAcquisition.ch
- * Make a graph of the robot's joint angle versus time */
+ * Make a graph of the mobot's joint angle versus time */
 
 #include <mobot.h>
 #include <chplot.h>
 #include <numeric.h>
-CMobot robot;
+CMobot mobot;
 
-/* Connect to the robot */
-robot.connect();
+/* Connect to the mobot */
+mobot.connect();
 
 double speed = 45; /* Degrees/second */
 double angle = 720; /* Degrees */
@@ -32,20 +32,20 @@ array double angles1Unwrapped[numDataPoints];
 /* Declare time shifted data */
 double tolerance = 1.0; /* Degrees */
 
-/* Start the motion. First, move robot to zero position */
-robot.moveToZero();
+/* Start the motion. First, move mobot to zero position */
+mobot.moveToZero();
 /* Set the joint 1 speed to 45 degrees/second */
-robot.setJointSpeed(MOBOT_JOINT1, speed);
-robot.setJointSpeed(MOBOT_JOINT4, speed);
+mobot.setJointSpeed(MOBOT_JOINT1, speed);
+mobot.setJointSpeed(MOBOT_JOINT4, speed);
 
 /* Start capturing data */
-robot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
+mobot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
 
 /* Move the joint 720 degrees */
-robot.move(angle, 0, 0, angle);
+mobot.move(angle, 0, 0, angle);
 
 /* Wait for recording to finish */
-robot.recordWait();
+mobot.recordWait();
 
 /* Plot the data */
 plot1.title("Original Data for Joint Angle 1 versus Time");

@@ -1,6 +1,6 @@
 /* Filename: fourLegs.ch
  * Control multiple Mobot modules simultaneously using the CMobotGroup class. 
-   You may place the four robots as follows:
+   You may place the four mobots as follows:
            1st                        3rd
   |---------|--------|   |   |---------|--------|
  1|    2    |    3   |4 X|X 1|    2    |   3    |4
@@ -9,28 +9,28 @@
   |---------|--------|   |   |---------|--------|
  1|    2    |    3   |4 X|X 1|    2    |   3    |4
   |---------|--------|   |   |---------|--------|
-Before assembling, please make sure that each robot is in zero position. 
+Before assembling, please make sure that each mobot is in zero position. 
 Note: Push the buttom B to make them go back to zero position.
 */
 #include <mobot.h>
-CMobot robot1;
-CMobot robot2;
-CMobot robot3;
-CMobot robot4;
+CMobot mobot1;
+CMobot mobot2;
+CMobot mobot3;
+CMobot mobot4;
 CMobotGroup group1;
 CMobotGroup group2;
 
-/* Connect to the robots listed in the configuration file. */
-robot1.connect();
-robot2.connect();
-robot3.connect();
-robot4.connect();
+/* Connect to the mobots listed in the configuration file. */
+mobot1.connect();
+mobot2.connect();
+mobot3.connect();
+mobot4.connect();
 
 /* Add the two modules to be members of our group */
-group1.addMobot(robot1);
-group1.addMobot(robot2);
-group2.addMobot(robot3);
-group2.addMobot(robot4);
+group1.addMobot(mobot1);
+group1.addMobot(mobot2);
+group2.addMobot(mobot3);
+group2.addMobot(mobot4);
 
 // move to zero position
 group1.moveToZeroNB();
@@ -38,11 +38,11 @@ group2.moveToZeroNB();
 group1.moveWait();
 group2.moveWait();
 
-// set robots speed
-robot1.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
-robot2.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
-robot3.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
-robot4.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
+// set mobots speed
+mobot1.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
+mobot2.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
+mobot3.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
+mobot4.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
 
 // lift
 group1.moveToNB(0, -90, 0, 0);
@@ -50,14 +50,14 @@ group2.moveToNB(0, 0, 90, 0);
 group1.moveWait();
 group2.moveWait();
 
-robot1.moveToNB(0, -90, 0, 38);
-robot2.moveToNB(0, 0, 90, 38);
-robot3.moveToNB(38, 0, 90, 0);
-robot4.moveToNB(38, -90, 0, 0);
-robot1.moveWait();
-robot3.moveWait();
-robot2.moveWait();
-robot4.moveWait();
+mobot1.moveToNB(0, -90, 0, 38);
+mobot2.moveToNB(0, 0, 90, 38);
+mobot3.moveToNB(38, 0, 90, 0);
+mobot4.moveToNB(38, -90, 0, 0);
+mobot1.moveWait();
+mobot3.moveWait();
+mobot2.moveWait();
+mobot4.moveWait();
 
 group1.moveToNB(0, 0, 90, 0);
 group2.moveToNB(0, -90, 0, 0);
@@ -65,48 +65,48 @@ group1.moveWait();
 group2.moveWait();
 
 // kick
-robot1.moveTo(0, 0, 0, 0);
-robot1.moveTo(0, 0, 90, 0);
+mobot1.moveTo(0, 0, 0, 0);
+mobot1.moveTo(0, 0, 90, 0);
 
-robot2.moveTo(0, 0, 0, 0);
-robot2.moveTo(0, 0, 90, 0);
+mobot2.moveTo(0, 0, 0, 0);
+mobot2.moveTo(0, 0, 90, 0);
 
-robot3.moveTo(0, 0, 0, 0);
-robot3.moveTo(0,-90, 0, 0);
+mobot3.moveTo(0, 0, 0, 0);
+mobot3.moveTo(0,-90, 0, 0);
 
-robot4.moveTo(0, 0, 0, 0);
-robot4.moveTo(0, -90, 0, 0);
+mobot4.moveTo(0, 0, 0, 0);
+mobot4.moveTo(0, -90, 0, 0);
 
 // two legs kick
-robot1.moveToNB(0, 0, 0, 0);
-robot4.moveToNB(0, 0, 0, 0);
-robot1.moveWait();
-robot4.moveWait();
+mobot1.moveToNB(0, 0, 0, 0);
+mobot4.moveToNB(0, 0, 0, 0);
+mobot1.moveWait();
+mobot4.moveWait();
 
-robot1.moveJointNB(MOBOT_JOINT4, -360);
-robot4.moveJointNB(MOBOT_JOINT1, 360);
-robot1.moveWait();
-robot2.moveWait();
+mobot1.moveJointNB(MOBOT_JOINT4, -360);
+mobot4.moveJointNB(MOBOT_JOINT1, 360);
+mobot1.moveWait();
+mobot2.moveWait();
 
-robot1.moveToNB(0, 0, 90, 0);
-robot4.moveToNB(0, -90, 0, 0);
-robot1.moveWait();
-robot4.moveWait();
+mobot1.moveToNB(0, 0, 90, 0);
+mobot4.moveToNB(0, -90, 0, 0);
+mobot1.moveWait();
+mobot4.moveWait();
 
-robot2.moveToNB(0, 0, 0, 0);
-robot3.moveToNB(0, 0, 0, 0);
-robot2.moveWait();
-robot3.moveWait();
+mobot2.moveToNB(0, 0, 0, 0);
+mobot3.moveToNB(0, 0, 0, 0);
+mobot2.moveWait();
+mobot3.moveWait();
 
-robot2.moveJointNB(MOBOT_JOINT4, 360);
-robot3.moveJointNB(MOBOT_JOINT1, -360);
-robot2.moveWait();
-robot3.moveWait();
+mobot2.moveJointNB(MOBOT_JOINT4, 360);
+mobot3.moveJointNB(MOBOT_JOINT1, -360);
+mobot2.moveWait();
+mobot3.moveWait();
 
-robot2.moveToNB(0, 0, 90, 0);
-robot3.moveToNB(0, -90, 0, 0);
-robot2.moveWait();
-robot3.moveWait();
+mobot2.moveToNB(0, 0, 90, 0);
+mobot3.moveToNB(0, -90, 0, 0);
+mobot2.moveWait();
+mobot3.moveWait();
 
 // get ready to roll
 group1.moveToNB(0, 90, 90, 0);

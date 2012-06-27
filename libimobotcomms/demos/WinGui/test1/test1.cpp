@@ -1074,7 +1074,7 @@ int addGait(Gait* gait)
 
 int initGaits()
 {
-	/* Add some pre-programmed gaits into the robot */
+	/* Add some pre-programmed gaits into the mobot */
 
 	/* Rotate Left */
 	Gait* gait;

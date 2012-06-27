@@ -194,14 +194,14 @@ BEGIN_MESSAGE_MAP(CiMobotController_WindowsDlg, CDialog)
 	ON_NOTIFY(TRBN_THUMBPOSCHANGING, IDC_SLIDER_position1, &CiMobotController_WindowsDlg::OnTRBNThumbPosChangingSliderposition1)
 	ON_NOTIFY(TRBN_THUMBPOSCHANGING, IDC_SLIDER_position3, &CiMobotController_WindowsDlg::OnTRBNThumbPosChangingSliderposition3)
 	ON_NOTIFY(TRBN_THUMBPOSCHANGING, IDC_SLIDER_position4, &CiMobotController_WindowsDlg::OnTRBNThumbPosChangingSliderposition4)
-	ON_COMMAND(ID_ROBOT_CONFIGUREROBOTBLUETOOTH, &CiMobotController_WindowsDlg::OnRobotConfigurerobotbluetooth)
+	ON_COMMAND(ID_ROBOT_CONFIGUREROBOTBLUETOOTH, &CiMobotController_WindowsDlg::OnRobotConfiguremobotbluetooth)
 	ON_EN_CHANGE(IDC_EDIT_setpos1, &CiMobotController_WindowsDlg::OnEnChangeEditsetpos1)
 	ON_BN_CLICKED(IDC_BUTTON_GOPOS, &CiMobotController_WindowsDlg::OnBnClickedButtonGopos)
   /*
-	ON_COMMAND(ID_ROBOT_CONNECTTOAROBOT, &CiMobotController_WindowsDlg::OnRobotConnecttoarobot)
-	ON_COMMAND(ID_CONNECT_DISCONNECTFROMROBOT, &CiMobotController_WindowsDlg::OnConnectDisconnectfromrobot)
+	ON_COMMAND(ID_ROBOT_CONNECTTOAROBOT, &CiMobotController_WindowsDlg::OnRobotConnecttoamobot)
+	ON_COMMAND(ID_CONNECT_DISCONNECTFROMROBOT, &CiMobotController_WindowsDlg::OnConnectDisconnectfrommobot)
 	ON_COMMAND(ID_HELP_HELP, &CiMobotController_WindowsDlg::OnHelpHelp)
-	ON_COMMAND(ID_HELP_ABOUTROBOTCONTROLLER, &CiMobotController_WindowsDlg::OnHelpAboutrobotcontroller)
+	ON_COMMAND(ID_HELP_ABOUTROBOTCONTROLLER, &CiMobotController_WindowsDlg::OnHelpAboutmobotcontroller)
 	ON_COMMAND(ID_FILE_EXIT, &CiMobotController_WindowsDlg::OnFileExit)
 	ON_BN_CLICKED(IDC_BUTTON_MOVETOZERO, &CiMobotController_WindowsDlg::OnBnClickedButtonMovetozero)
 	ON_BN_CLICKED(IDC_BUTTON_SETSPD, &CiMobotController_WindowsDlg::OnBnClickedButtonSetspd)
@@ -343,7 +343,7 @@ void CiMobotController_WindowsDlg::InitIcons()
 
 void CiMobotController_WindowsDlg::InitGaits()
 {
-	/* Add some pre-programmed gaits into the robot */
+	/* Add some pre-programmed gaits into the mobot */
 
 	Gait* gait;
 	gait = new Gait(L"Arch");
@@ -436,7 +436,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonconnect()
 		if (i == -3) {
 			MessageBox( TEXT("Address format incorrect."), TEXT("Error"), MB_OK | MB_ICONINFORMATION );
 		} else if (i == -4) {
-			MessageBox( TEXT("No configured robots. Add robots in the \"Configure -> Configure Robot Bluetooth\" dialog."), TEXT("Error"), MB_OK | MB_ICONINFORMATION );
+			MessageBox( TEXT("No configured mobots. Add mobots in the \"Configure -> Configure Robot Bluetooth\" dialog."), TEXT("Error"), MB_OK | MB_ICONINFORMATION );
 		} else if (i == -5) {
 			MessageBox( TEXT("A bluetooth device could not be found on this computer. You may need to attach an external Bluetooth dongle to continue."), TEXT("Error"), MB_OK | MB_ICONINFORMATION );
     } else {
@@ -466,7 +466,7 @@ void CiMobotController_WindowsDlg::OnBnClickedButtonconnect()
 		MessageBox( (LPCTSTR)msgbuf, TEXT("Error"), MB_OK | MB_ICONINFORMATION );
 		// Free the buffer.
 		LocalFree( lpMsgBuf );
-		//MessageBox(L"Error connecting to robot.", L"Error");
+		//MessageBox(L"Error connecting to mobot.", L"Error");
 		}
 	} else {
 		isConnected = true;
@@ -931,7 +931,7 @@ DWORD WINAPI HandlerThread(void* arg)
   }
 }
 
-void CiMobotController_WindowsDlg::OnRobotConfigurerobotbluetooth()
+void CiMobotController_WindowsDlg::OnRobotConfiguremobotbluetooth()
 {
   INT_PTR nRet = -1;
   ConfigFileDialog cfDialog;
@@ -1049,13 +1049,13 @@ void CiMobotController_WindowsDlg::handlerMOVE()
 	}
 }
 
-void CiMobotController_WindowsDlg::OnRobotConnecttoarobot()
+void CiMobotController_WindowsDlg::OnRobotConnecttoamobot()
 { 
   /* Just activate the same handler as the "connect" button */
   OnBnClickedButtonconnect();
 }
 
-void CiMobotController_WindowsDlg::OnConnectDisconnectfromrobot()
+void CiMobotController_WindowsDlg::OnConnectDisconnectfrommobot()
 {
   iMobotComms.disconnect();
 }
@@ -1072,7 +1072,7 @@ void CiMobotController_WindowsDlg::OnHelpHelp()
   //system(command);
 }
 
-void CiMobotController_WindowsDlg::OnHelpAboutrobotcontroller()
+void CiMobotController_WindowsDlg::OnHelpAboutmobotcontroller()
 {
   CAboutDlg dlgAbout;
   dlgAbout.DoModal();

@@ -4,14 +4,14 @@
 #define NUM_BOTS 2
 int main()
 {
-  CMobot robots[NUM_BOTS];
+  CMobot mobots[NUM_BOTS];
   int i;
   for(i = 0; i < NUM_BOTS; i++) {
-    robots[i].connect();
+    mobots[i].connect();
   }
   CMobotGroup group;
   for(i = 0; i < NUM_BOTS; i++) {
-    group.addMobot(robots[i]);
+    group.addMobot(mobots[i]);
   }
   return 0;
 }

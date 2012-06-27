@@ -1,5 +1,5 @@
 /* Dicription:
- * In this scene, two two-connected robots do lift.
+ * In this scene, two two-connected mobots do lift.
  *           1st                         2nd
  *  |---------|--------|        |---------|--------|     
  * 1|    2    |    3   | 4  X  1|    2    |   3    | 4
@@ -12,26 +12,26 @@
  */
 
 #include <mobot.h>
-CMobot robot1;
-CMobot robot2;
-CMobot robot3;
-CMobot robot4;
+CMobot mobot1;
+CMobot mobot2;
+CMobot mobot3;
+CMobot mobot4;
 CMobotGroup group1, group2;
 
-/* Connect robot variables to the robot modules. */
-robot1.connect();
-robot2.connect();
-robot3.connect();
-robot4.connect();
+/* Connect mobot variables to the mobot modules. */
+mobot1.connect();
+mobot2.connect();
+mobot3.connect();
+mobot4.connect();
 
 /* Add 1st and 3rd  modules as members of one group with the identical motions */
 /* Add 2nd and 4th  modules as members of one group with the identical motions */
-group1.addMobot(robot1);
-group1.addMobot(robot3);
-group2.addMobot(robot2);
-group2.addMobot(robot4);
+group1.addMobot(mobot1);
+group1.addMobot(mobot3);
+group2.addMobot(mobot2);
+group2.addMobot(mobot4);
 
-/* Set the robot to "home" position, where all joint angles are 0 degrees. */
+/* Set the mobot to "home" position, where all joint angles are 0 degrees. */
 group1.moveToZeroNB();
 group1.moveToZeroNB();
 

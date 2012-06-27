@@ -1,12 +1,12 @@
 /* Filename: unstand.ch 
- * Drop the robot down from a standing position. */
+ * Drop the mobot down from a standing position. */
 #include <mobot.h>
-CMobot robot;
+CMobot mobot;
 
 /* Connect to the paired Mobot */
-robot.connect();
+mobot.connect();
 
-robot.moveJointToNB(MOBOT_JOINT2, -85);
-robot.moveJointToNB(MOBOT_JOINT3, 45);
-robot.moveWait();
-robot.moveToZero();
+mobot.moveJointToNB(MOBOT_JOINT2, -85);
+mobot.moveJointToNB(MOBOT_JOINT3, 45);
+mobot.moveWait();
+mobot.moveToZero();
