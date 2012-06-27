@@ -2207,7 +2207,7 @@ int Mobot_setMotorPower(mobot_t* comms, mobotJointId_t id, int power)
   return 0;
 }
 
-int Mobot_setTwoWheelRobotSpeed(mobot_t* comms, double speed, double radius)
+int Mobot_setTwoWheelMobotSpeed(mobot_t* comms, double speed, double radius)
 {
   double omega;
   omega = speed/radius;
@@ -3486,9 +3486,9 @@ int CMobot::setMotorPower(mobotJointId_t id, int power)
   return Mobot_setMotorPower(_comms, id, power);
 }
 
-int CMobot::setTwoWheelRobotSpeed(double speed, double radius)
+int CMobot::setTwoWheelMobotSpeed(double speed, double radius)
 {
-  return Mobot_setTwoWheelRobotSpeed(_comms, speed, radius);
+  return Mobot_setTwoWheelMobotSpeed(_comms, speed, radius);
 }
 
 int CMobot::stop()
@@ -3830,10 +3830,10 @@ int CMobotGroup::setJointSpeedRatios(double ratio1, double ratio2, double ratio3
   return 0;
 }
 
-int CMobotGroup::setTwoWheelRobotSpeed(double speed, double radius)
+int CMobotGroup::setTwoWheelMobotSpeed(double speed, double radius)
 {
   for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->setTwoWheelRobotSpeed(speed, radius);
+    _robots[i]->setTwoWheelMobotSpeed(speed, radius);
   }
   return 0;
 }

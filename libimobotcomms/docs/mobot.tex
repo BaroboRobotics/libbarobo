@@ -693,11 +693,11 @@ The next lines,
 \begin{verbatim}
 speed = 1.83; // = (3.5/2) * M_PI * 60/180 (inch/s)
 radius = 3.5/2;             // radius is 1.75 
-robot.setTwoWheelRobotSpeed(speed, radius);
+robot.setTwoWheelMobotSpeed(speed, radius);
 \end{verbatim}
-use the \texttt{setTwoWheelRobotSpeed()} function to set the faceplate joint
+use the \texttt{setTwoWheelMobotSpeed()} function to set the faceplate joint
 speeds for a robot acting as a two wheeled car. The
-\texttt{setTwoWheelRobotSpeed()} function takes a desired speed
+\texttt{setTwoWheelMobotSpeed()} function takes a desired speed
 and the radius of the wheels as arguments and calculates the necessary
 rotational speed of the faceplate wheels to achieve the desired speed. Note
 that the units for the speed must match the units for the radius. For instance,
@@ -2122,7 +2122,7 @@ wheel speeds.
 /* Start the motion. First, move robot to zero position */
 robot.moveToZero();
 /* Set robot wheel speed */
-robot.setTwoWheelRobotSpeed(speed, radius);
+robot.setTwoWheelMobotSpeed(speed, radius);
 \end{verbatim}
 
 Start recording the angle of the first joint.
