@@ -48,13 +48,13 @@ typedef enum mobotJoints_e{
 
 #ifndef MOBOT_JOINT_STATE_E
 #define MOBOT_JOINT_STATE_E
-typedef enum robotJointState_e
+typedef enum mobotJointState_e
 {
-    ROBOT_NEUTRAL = 0,
-    ROBOT_FORWARD,
-    ROBOT_BACKWARD,
-    ROBOT_HOLD,
-} robotJointState_t;
+    MOBOT_NEUTRAL = 0,
+    MOBOT_FORWARD,
+    MOBOT_BACKWARD,
+    MOBOT_HOLD,
+} mobotJointState_t;
 #endif
 
 #ifndef MOBOT_JOINT_DIRECTION_E

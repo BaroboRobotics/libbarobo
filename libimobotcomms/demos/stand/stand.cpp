@@ -29,10 +29,10 @@ int main()
   /* Pan the robot around for 3 seconds at 90 degrees per second*/
   robot.setJointSpeed(MOBOT_JOINT1, deg2rad(90));
   robot.setJointSpeed(MOBOT_JOINT1, 0.30);
-  robot.moveContinuousTime( ROBOT_FORWARD,
-                            ROBOT_NEUTRAL,
-                            ROBOT_NEUTRAL,
-                            ROBOT_NEUTRAL,
+  robot.moveContinuousTime( MOBOT_FORWARD,
+                            MOBOT_NEUTRAL,
+                            MOBOT_NEUTRAL,
+                            MOBOT_NEUTRAL,
                             3000 );
 
   return 0;

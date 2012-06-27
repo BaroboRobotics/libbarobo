@@ -718,16 +718,16 @@ rotate the faceplates forward at the necessary rate to achieve a forward speed o
 Finally, the last two lines,
 \begin{verbatim}
 printf("Move continuously for 3 seconds.\n");
-robot.moveContinuousTime(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_FORWARD, 3);
+robot.moveContinuousTime(MOBOT_FORWARD, MOBOT_HOLD, MOBOT_HOLD, MOBOT_FORWARD, 3);
 \end{verbatim}
 roll the robot forward for three seconds.
-The enumerated values \texttt{ROBOT\_FORWARD} and \texttt{ROBOT\_BACKWARD}
+The enumerated values \texttt{MOBOT\_FORWARD} and \texttt{MOBOT\_BACKWARD}
 indicate the forward and backward directions for each motor to turn, respectively. 
-\texttt{ROBOT\_NEUTRAL} indicates that the motor should not turn, but
-should remain flexible and backdrivable. \texttt{ROBOT\_HOLD}
+\texttt{MOBOT\_NEUTRAL} indicates that the motor should not turn, but
+should remain flexible and backdrivable. \texttt{MOBOT\_HOLD}
 indicates that the joint will not turn, and that the joint will be 
 forcefully held in place at its current position. More information regarding these
-macros may be found in Section \ref{sec:robotJointState_t}. In the previous
+macros may be found in Section \ref{sec:mobotJointState_t}. In the previous
 line of code, joints 1 and 4 
 move forward while joints 2 and 3 hold their current positions. The
 last argument  of the function \texttt{moveContinuousTime()} specifies the
@@ -1052,7 +1052,7 @@ rotation a slow rotation. Next, the \texttt{moveContinuousTime} member function
 is used to continuously rotate a joint for a desired amount of time.
 \begin{verbatim}
 robot.setJointSpeed(MOBOT_JOINT1, 45);
-robot.moveContinuousTime(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_HOLD, 3);
+robot.moveContinuousTime(MOBOT_FORWARD, MOBOT_HOLD, MOBOT_HOLD, MOBOT_HOLD, 3);
 \end{verbatim}
 
 \section{\label{sec:blocking}Blocking and Non-Blocking Functions}
@@ -1648,7 +1648,7 @@ While the group is moving, we unstand robot 4 and inchworm it twice. After robot
 done inchworming, we unstand Group D.
 \begin{verbatim}
 /* Make robot 4 unstand and inchworm while the remaining robots spin. */
-groupD.moveContinuousNB(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_FORWARD);
+groupD.moveContinuousNB(MOBOT_FORWARD, MOBOT_HOLD, MOBOT_HOLD, MOBOT_FORWARD);
 robot4.motionUnstand();
 robot4.motionInchwormLeft(2);
 groupD.motionUnstand();
@@ -2239,7 +2239,7 @@ certain values, such as joint id's and motor directions.
 Data Type& Description \\
 \hline 
 \texttt{mobotJointId\_t} & An enumerated value that indicates a Mobot joint. \\
-\texttt{robotJointState\_t} & The current state of a Mobot joint. \\
+\texttt{mobotJointState\_t} & The current state of a Mobot joint. \\
 \hline
 \end{tabular}
 
@@ -2270,7 +2270,7 @@ Value & Description \\
 \hline
 \end{tabular}
 
-\subsection{\label{sec:robotJointState_t}\texttt{robotJointState\_t}}
+\subsection{\label{sec:mobotJointState_t}\texttt{mobotJointState\_t}}
 This datatype is an enumerated type used to designate the current 
 movement state of a joint. The values may be retrieved from the 
 robot with the \texttt{getJointState()} function and may be set 
@@ -2278,20 +2278,20 @@ with the \texttt{moveContinuous()} family of functions. Valid values are:
 
 \begin{verbatim}
 typedef enum mobot_joint_state_e {
-  ROBOT_NEUTRAL   = 0,
-  ROBOT_FORWARD   = 1,
-  ROBOT_BACKWARD  = 2,
-  ROBOT_HOLD      = 3
-} robotJointState_t;
+  MOBOT_NEUTRAL   = 0,
+  MOBOT_FORWARD   = 1,
+  MOBOT_BACKWARD  = 2,
+  MOBOT_HOLD      = 3
+} mobotJointState_t;
 \end{verbatim}
 
 \begin{tabular}{p{3.3cm}p{11.5cm}} \hline 
 Value & Description \\
 \hline
-\texttt{ROBOT\_NEUTRAL}& This value indicates that the joint is not moving and is not actuated. The joint is freely backdrivable. \\
-\texttt{ROBOT\_FORWARD}& This value indicates that the joint is currently moving forward. \\
-\texttt{ROBOT\_BACKWARD}& This value indicates that the joint is currently moving backward. \\
-\texttt{ROBOT\_HOLD}& This value indicates that the joint is currently not moving and is holding its current position. The joint is not currently backdrivable. \\
+\texttt{MOBOT\_NEUTRAL}& This value indicates that the joint is not moving and is not actuated. The joint is freely backdrivable. \\
+\texttt{MOBOT\_FORWARD}& This value indicates that the joint is currently moving forward. \\
+\texttt{MOBOT\_BACKWARD}& This value indicates that the joint is currently moving backward. \\
+\texttt{MOBOT\_HOLD}& This value indicates that the joint is currently not moving and is holding its current position. The joint is not currently backdrivable. \\
 \hline
 \end{tabular}
 

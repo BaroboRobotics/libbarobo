@@ -58,7 +58,7 @@ groupB.moveWait();
 groupC.moveWait();
 
 /* Make robot 4 unstand and inchworm while the remaining robots spin. */
-groupD.moveContinuousNB(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_FORWARD);
+groupD.moveContinuousNB(MOBOT_FORWARD, MOBOT_HOLD, MOBOT_HOLD, MOBOT_FORWARD);
 robot4.motionUnstand();
 robot4.motionInchwormLeft(2);
 groupD.motionUnstand();

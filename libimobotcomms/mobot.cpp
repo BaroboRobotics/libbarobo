@@ -593,12 +593,12 @@ int Mobot_isConnected(mobot_t* comms)
 int Mobot_isMoving(mobot_t* comms)
 {
   int moving = 0;
-  robotJointState_t state;
+  mobotJointState_t state;
   int i;
   for(i = 1; i <= 4; i++) {
     Mobot_getJointState(comms, (mobotJointId_t)i, &state);
-    if( (state == ROBOT_FORWARD) ||
-        (state == ROBOT_BACKWARD) ) 
+    if( (state == MOBOT_FORWARD) ||
+        (state == MOBOT_BACKWARD) ) 
     {
       moving = 1;
       break;
@@ -870,7 +870,7 @@ int Mobot_getJointAnglesAbsTime(mobot_t* comms,
   return 0;
 }
 
-int Mobot_getJointDirection(mobot_t* comms, mobotJointId_t id, robotJointState_t *dir)
+int Mobot_getJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t *dir)
 {
   uint8_t buf[32];
   int status;
@@ -884,7 +884,7 @@ int Mobot_getJointDirection(mobot_t* comms, mobotJointId_t id, robotJointState_t
   if(buf[1] != 0x04) {
     return -1;
   }
-  *dir = (robotJointState_t)buf[2];
+  *dir = (mobotJointState_t)buf[2];
   return 0;
 }
 
@@ -990,7 +990,7 @@ int Mobot_getJointSpeedRatios(mobot_t* comms, double *ratio1, double *ratio2, do
   return 0;
 }
 
-int Mobot_getJointState(mobot_t* comms, mobotJointId_t id, robotJointState_t *state)
+int Mobot_getJointState(mobot_t* comms, mobotJointId_t id, mobotJointState_t *state)
 {
   uint8_t buf[32];
   int status;
@@ -1004,7 +1004,7 @@ int Mobot_getJointState(mobot_t* comms, mobotJointId_t id, robotJointState_t *st
   if(buf[1] != 0x04) {
     return -1;
   }
-  *state = (robotJointState_t)buf[2];
+  *state = (mobotJointState_t)buf[2];
   return 0;
 }
 
@@ -1116,24 +1116,24 @@ int Mobot_moveNB(mobot_t* comms,
 }
 
 int Mobot_moveContinuousNB(mobot_t* comms,
-                                  robotJointState_t dir1,
-                                  robotJointState_t dir2,
-                                  robotJointState_t dir3,
-                                  robotJointState_t dir4)
+                                  mobotJointState_t dir1,
+                                  mobotJointState_t dir2,
+                                  mobotJointState_t dir3,
+                                  mobotJointState_t dir4)
 {
-  robotJointState_t dirs[4];
+  mobotJointState_t dirs[4];
   int i;
   dirs[0] = dir1;
   dirs[1] = dir2;
   dirs[2] = dir3;
   dirs[3] = dir4;
   for(i = 0; i < 4; i++) {
-    if(dirs[i] == ROBOT_FORWARD) {
+    if(dirs[i] == MOBOT_FORWARD) {
       Mobot_setJointSpeed(comms, (mobotJointId_t)(i+1), comms->jointSpeeds[i]);
-      Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), ROBOT_FORWARD);
-    } else if (dirs[i] == ROBOT_BACKWARD) {
+      Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), MOBOT_FORWARD);
+    } else if (dirs[i] == MOBOT_BACKWARD) {
       Mobot_setJointSpeed(comms, (mobotJointId_t)(i+1), comms->jointSpeeds[i]);
-      Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), ROBOT_BACKWARD);
+      Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), MOBOT_BACKWARD);
     } else {
       Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), dirs[i]);
     }
@@ -1142,10 +1142,10 @@ int Mobot_moveContinuousNB(mobot_t* comms,
 }
 
 int Mobot_moveContinuousTime(mobot_t* comms,
-                                  robotJointState_t dir1,
-                                  robotJointState_t dir2,
-                                  robotJointState_t dir3,
-                                  robotJointState_t dir4,
+                                  mobotJointState_t dir1,
+                                  mobotJointState_t dir2,
+                                  mobotJointState_t dir3,
+                                  mobotJointState_t dir4,
                                   double seconds)
 {
   int i;
@@ -1158,19 +1158,19 @@ int Mobot_moveContinuousTime(mobot_t* comms,
 #endif
   /* Stop the motors */
   for(i = 0; i < 4; i++) {
-    Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), ROBOT_NEUTRAL);
+    Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), MOBOT_NEUTRAL);
   }
   return 0;
 }
 
-int Mobot_moveJointContinuousNB(mobot_t* comms, mobotJointId_t id, robotJointState_t dir)
+int Mobot_moveJointContinuousNB(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir)
 {
   Mobot_setJointSpeed(comms, id, comms->jointSpeeds[(int)id-1]);
   Mobot_setJointDirection(comms, id, dir);
   return 0;
 }
 
-int Mobot_moveJointContinuousTime(mobot_t* comms, mobotJointId_t id, robotJointState_t dir, double seconds)
+int Mobot_moveJointContinuousTime(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir, double seconds)
 {
   int msecs = seconds * 1000;
   Mobot_moveJointContinuousNB(comms, id, dir);
@@ -1333,7 +1333,7 @@ int Mobot_moveJointToDirectNB(mobot_t* comms, mobotJointId_t id, double angle)
 
 int Mobot_moveJointWait(mobot_t* comms, mobotJointId_t id)
 {
-  robotJointState_t state;
+  mobotJointState_t state;
   /* Make sure there is no non-blocking function running */
 //  THREAD_JOIN(comms->thread);
 
@@ -1343,8 +1343,8 @@ int Mobot_moveJointWait(mobot_t* comms, mobotJointId_t id)
       return -1;
     }
     if(
-      (state == ROBOT_NEUTRAL) ||
-      (state == ROBOT_HOLD) )
+      (state == MOBOT_NEUTRAL) ||
+      (state == MOBOT_HOLD) )
     {
       return 0;
     } else {
@@ -2094,7 +2094,7 @@ int Mobot_recordWait(mobot_t* comms)
   return 0;
 }
 
-int Mobot_setJointDirection(mobot_t* comms, mobotJointId_t id, robotJointState_t dir)
+int Mobot_setJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir)
 {
   uint8_t buf[32];
   int status;
@@ -2248,20 +2248,20 @@ int Mobot_stop(mobot_t* comms)
 
 int Mobot_stopOneJoint(mobot_t* comms, mobotJointId_t id)
 {
-  return Mobot_moveJointContinuousNB(comms, id, ROBOT_NEUTRAL);
+  return Mobot_moveJointContinuousNB(comms, id, MOBOT_NEUTRAL);
 }
 
 int Mobot_stopTwoJoints(mobot_t* comms, mobotJointId_t id1, mobotJointId_t id2)
 {
-  Mobot_moveJointContinuousNB(comms, id1, ROBOT_NEUTRAL);
-  return Mobot_moveJointContinuousNB(comms, id2, ROBOT_NEUTRAL);
+  Mobot_moveJointContinuousNB(comms, id1, MOBOT_NEUTRAL);
+  return Mobot_moveJointContinuousNB(comms, id2, MOBOT_NEUTRAL);
 }
 
 int Mobot_stopThreeJoints(mobot_t* comms, mobotJointId_t id1, mobotJointId_t id2, mobotJointId_t id3)
 {
-  Mobot_moveJointContinuousNB(comms, id1, ROBOT_NEUTRAL);
-  Mobot_moveJointContinuousNB(comms, id2, ROBOT_NEUTRAL);
-  return Mobot_moveJointContinuousNB(comms, id3, ROBOT_NEUTRAL);
+  Mobot_moveJointContinuousNB(comms, id1, MOBOT_NEUTRAL);
+  Mobot_moveJointContinuousNB(comms, id2, MOBOT_NEUTRAL);
+  return Mobot_moveJointContinuousNB(comms, id3, MOBOT_NEUTRAL);
 }
 
 int Mobot_stopAllJoints(mobot_t* comms)
@@ -3114,7 +3114,7 @@ int CMobot::getJointAnglesAbs(
   return 0;
 }
 
-int CMobot::getJointDirection(mobotJointId_t id, robotJointState_t &dir)
+int CMobot::getJointDirection(mobotJointId_t id, mobotJointState_t &dir)
 {
   return Mobot_getJointDirection(_comms, id, &dir);
 }
@@ -3169,7 +3169,7 @@ int CMobot::getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3, 
   return Mobot_getJointSpeedRatios(_comms, &ratio1, &ratio2, &ratio3, &ratio4);
 }
 
-int CMobot::getJointState(mobotJointId_t id, robotJointState_t &state)
+int CMobot::getJointState(mobotJointId_t id, mobotJointState_t &state)
 {
   return Mobot_getJointState(_comms, id, &state);
 }
@@ -3205,22 +3205,22 @@ int CMobot::moveNB( double angle1,
       DEG2RAD(angle4));
 }
 
-int CMobot::moveContinuousNB( robotJointState_t dir1, robotJointState_t dir2, robotJointState_t dir3, robotJointState_t dir4)
+int CMobot::moveContinuousNB( mobotJointState_t dir1, mobotJointState_t dir2, mobotJointState_t dir3, mobotJointState_t dir4)
 {
   return Mobot_moveContinuousNB(_comms, dir1, dir2, dir3, dir4);
 }
 
-int CMobot::moveContinuousTime( robotJointState_t dir1, robotJointState_t dir2, robotJointState_t dir3, robotJointState_t dir4, double seconds)
+int CMobot::moveContinuousTime( mobotJointState_t dir1, mobotJointState_t dir2, mobotJointState_t dir3, mobotJointState_t dir4, double seconds)
 {
   return Mobot_moveContinuousTime(_comms, dir1, dir2, dir3, dir4, seconds);
 }
 
-int CMobot::moveJointContinuousNB(mobotJointId_t id, robotJointState_t dir)
+int CMobot::moveJointContinuousNB(mobotJointId_t id, mobotJointState_t dir)
 {
   return Mobot_moveJointContinuousNB(_comms, id, dir);
 }
 
-int CMobot::moveJointContinuousTime(mobotJointId_t id, robotJointState_t dir, double seconds)
+int CMobot::moveJointContinuousTime(mobotJointId_t id, mobotJointState_t dir, double seconds)
 {
   return Mobot_moveJointContinuousTime(_comms, id, dir, seconds);
 }
@@ -3451,7 +3451,7 @@ int CMobot::setJointSafetyAngleTimeout(double seconds)
   return Mobot_setJointSafetyAngleTimeout(_comms, seconds);
 }
 
-int CMobot::setJointDirection(mobotJointId_t id, robotJointState_t dir)
+int CMobot::setJointDirection(mobotJointId_t id, mobotJointState_t dir)
 {
   return Mobot_setJointDirection(_comms, id, dir);
 }
@@ -3683,10 +3683,10 @@ int CMobotGroup::moveNB(double angle1, double angle2, double angle3, double angl
   return 0;
 } 
 
-int CMobotGroup::moveContinuousNB(robotJointState_t dir1, 
-                       robotJointState_t dir2, 
-                       robotJointState_t dir3, 
-                       robotJointState_t dir4)
+int CMobotGroup::moveContinuousNB(mobotJointState_t dir1, 
+                       mobotJointState_t dir2, 
+                       mobotJointState_t dir3, 
+                       mobotJointState_t dir4)
 {
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->moveContinuousNB(dir1, dir2, dir3, dir4);
@@ -3694,10 +3694,10 @@ int CMobotGroup::moveContinuousNB(robotJointState_t dir1,
   return 0;
 }
 
-int CMobotGroup::moveContinuousTime(robotJointState_t dir1, 
-                           robotJointState_t dir2, 
-                           robotJointState_t dir3, 
-                           robotJointState_t dir4, 
+int CMobotGroup::moveContinuousTime(mobotJointState_t dir1, 
+                           mobotJointState_t dir2, 
+                           mobotJointState_t dir3, 
+                           mobotJointState_t dir4, 
                            double seconds)
 {
   int msecs = seconds * 1000.0;
@@ -3715,7 +3715,7 @@ int CMobotGroup::moveContinuousTime(robotJointState_t dir1,
   return 0;
 }
 
-int CMobotGroup::moveJointContinuousNB(mobotJointId_t id, robotJointState_t dir)
+int CMobotGroup::moveJointContinuousNB(mobotJointId_t id, mobotJointState_t dir)
 {
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->moveJointContinuousNB(id, dir);
@@ -3723,7 +3723,7 @@ int CMobotGroup::moveJointContinuousNB(mobotJointId_t id, robotJointState_t dir)
   return 0;
 }
 
-int CMobotGroup::moveJointContinuousTime(mobotJointId_t id, robotJointState_t dir, double seconds)
+int CMobotGroup::moveJointContinuousTime(mobotJointId_t id, mobotJointState_t dir, double seconds)
 {
   int msecs = seconds * 1000.0;
   for(int i = 0; i < _numRobots; i++) {

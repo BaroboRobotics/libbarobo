@@ -24,7 +24,7 @@ robot2.moveWait();
 
 /* rolling with second one passive */
 robot1.motionRollForwardNB(2*360);
-robot2.moveContinuousTime(ROBOT_NEUTRAL, ROBOT_HOLD, 
-                        ROBOT_HOLD, ROBOT_NEUTRAL, 5);
+robot2.moveContinuousTime(MOBOT_NEUTRAL, MOBOT_HOLD, 
+                        MOBOT_HOLD, MOBOT_NEUTRAL, 5);
 robot1.moveWait();
 robot2.moveWait();

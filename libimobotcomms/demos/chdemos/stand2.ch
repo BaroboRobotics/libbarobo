@@ -27,5 +27,5 @@ robot.moveJointTo(MOBOT_JOINT2, 20);
 
 /* Pan the robot around for 3 seconds at 45 degrees per second*/
 robot.setJointSpeed(MOBOT_JOINT1, 45);
-robot.moveContinuousTime(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_HOLD, 3);
+robot.moveContinuousTime(MOBOT_FORWARD, MOBOT_HOLD, MOBOT_HOLD, MOBOT_HOLD, 3);
 

@@ -10,7 +10,7 @@ int main()
   robot.connect();
 
   //robot.setJointSpeed(MOBOT_JOINT1, M_PI);
-  //robot.moveJointContinuousNB(MOBOT_JOINT1, ROBOT_FORWARD);
+  //robot.moveJointContinuousNB(MOBOT_JOINT1, MOBOT_FORWARD);
   double angle1;
   double angle2;
   double angle3;
