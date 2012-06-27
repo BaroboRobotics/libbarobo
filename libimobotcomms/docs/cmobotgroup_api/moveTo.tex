@@ -19,7 +19,7 @@ int CMobotGroup::moveToNB(double angle1, double angle2, double angle3, double an
 
 \noindent
 {\bf Purpose}\\
-Move all of the joints of robots in the group to the specified positions.\\
+Move all of the joints of mobots in the group to the specified positions.\\
 
 \noindent
 {\bf Return Value}\\
@@ -44,16 +44,16 @@ The function returns 0 on success and non-zero otherwise.\\
 \vspace{-12pt}
 \begin{quote}
 {\bf CMobot::moveTo()}\\
-This function moves all of the joints of robots in the group to the specified absolute positions. 
+This function moves all of the joints of mobots in the group to the specified absolute positions. 
 
 {\bf CMobot::moveToNB()}\\
-This function moves all of the joints of robots in the group to the specified absolute positions. 
+This function moves all of the joints of mobots in the group to the specified absolute positions. 
 
 The function \texttt{moveTo()} is a blocking function, which means that 
 the function will not return until the commanded motion is 
 completed. The function \texttt{moveToNB()} is the non-blocking version of
 the \texttt{moveTo()} function, which means that the function will return
-immediately and the physical robot motion will occur asynchronously. For
+immediately and the physical mobot motion will occur asynchronously. For
 more details on blocking and non-blocking functions, please refer to 
 Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\
 \end{quote}

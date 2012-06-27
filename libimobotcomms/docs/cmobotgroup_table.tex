@@ -3,25 +3,25 @@
 \hline
 Function & Description \\
 \hline
-%\texttt{pose()} \dotfill & Pose multiple joints of the robot. \\
+%\texttt{pose()} \dotfill & Pose multiple joints of the mobot. \\
 \texttt{CMobotGroup()} & The CMobotGroup constructor function. This function
 is called automatically and should not be called explicitly. \\
 \texttt{\textasciitilde CMobotGroup()} & The CMobotGroup destructor function. This function
 is called automatically and should not be called explicitly. \\
 & \\
-\texttt{addMobot()} & Add a robot to be a member of the robot group. \\
-\texttt{move()} & Move all four joints of the robots by specified angles. \\
+\texttt{addMobot()} & Add a mobot to be a member of the mobot group. \\
+\texttt{move()} & Move all four joints of the mobots by specified angles. \\
 \texttt{moveNB()} & Identical to \texttt{move()} but non-blocking. \\
 \texttt{moveContinuousNB()} & Move joints continuously. Joints will move untill stopped.\\
 \texttt{moveContinuousTime()} & Move joints continuously for a certain amount of time.\\
-\texttt{moveJointContinuousNB()} & Move a single joint on all robots continuously. \\
-\texttt{moveJointContinuousTime()} & Move a single joint on all robots continuously for a specific amount of time. \\
+\texttt{moveJointContinuousNB()} & Move a single joint on all mobots continuously. \\
+\texttt{moveJointContinuousTime()} & Move a single joint on all mobots continuously for a specific amount of time. \\
 \texttt{moveJoint()} & Move a motor from its current position by an angle. \\
 \texttt{moveJointNB()} & Identical to \texttt{moveJoint()} but non-blocking. \\
 \texttt{moveJointTo()} & Set the desired motor position for a joint. \\
 \texttt{moveJointToNB()} & Identical to \texttt{moveJointTo()} but non-blocking. \\
 \texttt{moveJointWait()} & Wait until the specified motor has stopped moving. \\
-\texttt{moveTo()} & Move all four joints of the robots to specified absolute angles. \\
+\texttt{moveTo()} & Move all four joints of the mobots to specified absolute angles. \\
 \texttt{moveToNB()} & Identical to \texttt{moveTo()} but non-blocking. \\
 \texttt{moveToZero()} & Instructs all motors to go to their zero positions. \\
 \texttt{moveToZeroNB()} & Identical to \texttt{moveToZero()} but non-blocking. \\
@@ -33,8 +33,8 @@ is called automatically and should not be called explicitly. \\
 \texttt{setJointSpeedRatio()} & Set a joints speed setting to a fraction of its maximum speed, a value between 0 and 1. \\
 \texttt{setJointSpeedRatios()} & Set all joint speed settings to a fraction of its
 maximum speed, expressed as a value from 0 to 1. \\
-\texttt{setTwoWheelMobotSpeed()} & Move the robots at a constant forward velocity. \\
-\texttt{stop()} & Stop all currently executing motions of the robot. \\
+\texttt{setTwoWheelMobotSpeed()} & Move the mobots at a constant forward velocity. \\
+\texttt{stop()} & Stop all currently executing motions of the mobot. \\
 \hline
 \end{tabular}
 
@@ -42,44 +42,44 @@ maximum speed, expressed as a value from 0 to 1. \\
 \begin{tabular}{p{1.75in}p{4.5in}} \hline 
 Function Name & Description \\
 \hline
-\texttt{addMobot()} & Add a robot to the group. \\
-\texttt{move()} & Move joints on robots from their current positions for all robots in the group. \\
-\texttt{moveContinuousNB()} & Move joints continuously for all robots in the group. \\
-\texttt{moveContinunousTime()} & Move joints continuously for a specific amount of time for all robots in the group.\\
-\texttt{moveJointContinuousNB()} & Move a single joint continuously for all robots in the group. \\
-\texttt{moveJointContinuousTime()} & Move a single joint continuously for a specific amount of time for all robots in the group.\\
-\texttt{moveJointTo()} & Move a joint to an absolute angle for all robots in the group.\\
-\texttt{moveJointWait()} & Wait for a joint to finish moving for all robots in the group. \\
-\texttt{moveTo()} & Move joints to a set of specific angles for all robots in the group. \\
+\texttt{addMobot()} & Add a mobot to the group. \\
+\texttt{move()} & Move joints on mobots from their current positions for all mobots in the group. \\
+\texttt{moveContinuousNB()} & Move joints continuously for all mobots in the group. \\
+\texttt{moveContinunousTime()} & Move joints continuously for a specific amount of time for all mobots in the group.\\
+\texttt{moveJointContinuousNB()} & Move a single joint continuously for all mobots in the group. \\
+\texttt{moveJointContinuousTime()} & Move a single joint continuously for a specific amount of time for all mobots in the group.\\
+\texttt{moveJointTo()} & Move a joint to an absolute angle for all mobots in the group.\\
+\texttt{moveJointWait()} & Wait for a joint to finish moving for all mobots in the group. \\
+\texttt{moveTo()} & Move joints to a set of specific angles for all mobots in the group. \\
 \texttt{moveWait()} & Wait for all joints to finish moving. \\
 \texttt{moveToZero()} & Move all joints to their zero positions. \\
 \texttt{setJointSpeed()} & Set the speed of a joint, in radians per second. \\
 \texttt{setJointSpeedRatio()} & Set the speed of a joint as a ratio of the maximum speed. \\
-\texttt{setTwoWheelMobotSpeed()} & Move the robot at a linear speed, given the wheel size and desired speed.\\
-\texttt{stop()} & Stop all the joints of all robots in the group. \\
-\texttt{motionArch()} & Cause all robots in the group to arch for higher rolling clearance. \\
-\texttt{motionArchNB()} & Cause all robots in the group to arch for higher rolling clearance. \\
-\texttt{motionInchwormLeft()} & Cause all robots in the group to inchworm. \\
-\texttt{motionInchwormLeftNB()} & Cause all robots in the group to inchworm. \\
-\texttt{motionInchwormRight()} & Cause all robots in the group to inchworm. \\
-\texttt{motionInchwormRightNB()} & Cause all robots in the group to inchworm. \\
-\texttt{motionRollBackward()} & Makes all robots in the group roll backward. \\
-\texttt{motionRollForwardNB()} & Makes all robots in the group roll forward. \\
-\texttt{motionSkinny()} & Make all robots in the group assume a skinny rolling profile. \\
-\texttt{motionSkinnyNB()} & Make all robots in the group assume a skinny rolling profile. \\
-\texttt{motionStand()} & Make all robots in the group stand. \\
-\texttt{motionStandNB()} & Make all robots in the group stand. \\
-\texttt{motionTumbleLeft()} & Make all the robots in the group perform the tumbling motion. \\
-\texttt{motionTumbleLeftNB()} & Make all the robots in the group perform the tumbling motion. \\
-\texttt{motionTumbleRight()} & Make all the robots in the group perform the tumbling motion. \\
-\texttt{motionTumbleRightNB()} & Make all the robots in the group perform the tumbling motion. \\
-\texttt{motionTurnLeft()} & Make all robots in the group turn left. \\
-\texttt{motionTurnLeftNB()} & Make all robots in the group turn left. \\
-\texttt{motionTurnRight()} & Make all robots in the group turn right. \\
-\texttt{motionTurnRightNB()} & Make all robots in the group turn right.\\
-\texttt{motionUnstand()} & Make all robots in the group drop down from a standing position. \\
-\texttt{motionUnstandNB()} & Make all robots in the group drop down from a standing position. \\
-\texttt{motionWait()} & Wait for the robots to complete all currently executing compound motions.\\
+\texttt{setTwoWheelMobotSpeed()} & Move the mobot at a linear speed, given the wheel size and desired speed.\\
+\texttt{stop()} & Stop all the joints of all mobots in the group. \\
+\texttt{motionArch()} & Cause all mobots in the group to arch for higher rolling clearance. \\
+\texttt{motionArchNB()} & Cause all mobots in the group to arch for higher rolling clearance. \\
+\texttt{motionInchwormLeft()} & Cause all mobots in the group to inchworm. \\
+\texttt{motionInchwormLeftNB()} & Cause all mobots in the group to inchworm. \\
+\texttt{motionInchwormRight()} & Cause all mobots in the group to inchworm. \\
+\texttt{motionInchwormRightNB()} & Cause all mobots in the group to inchworm. \\
+\texttt{motionRollBackward()} & Makes all mobots in the group roll backward. \\
+\texttt{motionRollForwardNB()} & Makes all mobots in the group roll forward. \\
+\texttt{motionSkinny()} & Make all mobots in the group assume a skinny rolling profile. \\
+\texttt{motionSkinnyNB()} & Make all mobots in the group assume a skinny rolling profile. \\
+\texttt{motionStand()} & Make all mobots in the group stand. \\
+\texttt{motionStandNB()} & Make all mobots in the group stand. \\
+\texttt{motionTumbleLeft()} & Make all the mobots in the group perform the tumbling motion. \\
+\texttt{motionTumbleLeftNB()} & Make all the mobots in the group perform the tumbling motion. \\
+\texttt{motionTumbleRight()} & Make all the mobots in the group perform the tumbling motion. \\
+\texttt{motionTumbleRightNB()} & Make all the mobots in the group perform the tumbling motion. \\
+\texttt{motionTurnLeft()} & Make all mobots in the group turn left. \\
+\texttt{motionTurnLeftNB()} & Make all mobots in the group turn left. \\
+\texttt{motionTurnRight()} & Make all mobots in the group turn right. \\
+\texttt{motionTurnRightNB()} & Make all mobots in the group turn right.\\
+\texttt{motionUnstand()} & Make all mobots in the group drop down from a standing position. \\
+\texttt{motionUnstandNB()} & Make all mobots in the group drop down from a standing position. \\
+\texttt{motionWait()} & Wait for the mobots to complete all currently executing compound motions.\\
 \hline
 \end{tabular}
 \end{comment}

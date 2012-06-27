@@ -19,7 +19,7 @@ int CMobotGroup::moveJointToNB(mobotJointId_t id, double angle);
 
 \noindent
 {\bf Purpose}\\
-Move a joint on robots to an absolute position.\\
+Move a joint on mobots to an absolute position.\\
 
 \noindent
 {\bf Return Value}\\
@@ -41,14 +41,14 @@ The function returns 0 on success and non-zero otherwise.\\
 \vspace{-12pt}
 \begin{quote}
 {\bf CMobot::moveJointTo()}\\
-This function commands the motor on robots in a group to move to a position specified in degrees at
+This function commands the motor on mobots in a group to move to a position specified in degrees at
 the current motor's speed. The current motor speed may be set with the
 \texttt{setJointSpeed()} member function. Please note that if the motor speed
 is set to zero, the motor will not move after calling the
 \texttt{moveJointTo()} function. 
 
 {\bf CMobot::moveJointToNB()}\\
-This function commands the motor on robots in a group to move to a position specified in degrees at
+This function commands the motor on mobots in a group to move to a position specified in degrees at
 the current motor's speed. The current motor speed may be set with the
 \texttt{setJointSpeed()} member function. Please note that if the motor speed
 is set to zero, the motor will not move after calling the
@@ -58,7 +58,7 @@ The function \texttt{moveJointTo()} is a blocking function, which means that
 the function will not return until the commanded motion is 
 completed. The function \texttt{moveJointToNB()} is the non-blocking version of
 the \texttt{moveJointTo()} function, which means that the function will return
-immediately and the physical robot motion will occur asynchronously. For
+immediately and the physical mobot motion will occur asynchronously. For
 more details on blocking and non-blocking functions, please refer to 
 Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\
 \end{quote}
