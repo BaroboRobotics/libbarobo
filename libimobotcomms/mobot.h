@@ -118,7 +118,7 @@ typedef struct mobot_s
 
   MUTEX_T* callback_lock;
   int callbackEnabled;
-  void (*buttonCallback)(void* robot, int button, int buttonDown);
+  void (*buttonCallback)(void* mobot, int button, int buttonDown);
   void* mobot;
   char* configFilePath;
 } mobot_t;
@@ -348,7 +348,7 @@ class CMobot {
     int getJointDirection(mobotJointId_t id, mobotJointState_t &dir);
     int setJointDirection(mobotJointId_t id, mobotJointState_t dir);
     mobot_t *_comms;
-    void (*buttonCallback)(CMobot *robot, int button, int buttonDown);
+    void (*buttonCallback)(CMobot *mobot, int button, int buttonDown);
 #else
   public:
     static void *g_chmobot_dlhandle;
@@ -361,7 +361,7 @@ class CMobotGroup
   public:
     CMobotGroup();
     ~CMobotGroup();
-    int addMobot(CMobot& robot);
+    int addMobot(CMobot& mobot);
     int isMoving();
     int move(double angle1, double angle2, double angle3, double angle4);
     int moveNB(double angle1, double angle2, double angle3, double angle4);
