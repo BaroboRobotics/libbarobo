@@ -17,11 +17,11 @@ robot4.connect();
 robot5.connect();
 
 /* Add the two modules to be members of our group */
-group.addRobot(robot1);
-group.addRobot(robot2);
-group.addRobot(robot3);
-group.addRobot(robot4);
-group.addRobot(robot5);
+group.addMobot(robot1);
+group.addMobot(robot2);
+group.addMobot(robot3);
+group.addMobot(robot4);
+group.addMobot(robot5);
 
 /* Now, any commands given to "group" will cause both robot1 and robot2 to
  * execute the command. */

@@ -210,7 +210,7 @@ class CMobot {
     int connectWithTTY(const char ttyfilename[]);
 #endif
     int disconnect();
-    int enableButtonCallback(void (*buttonCallback)(CMobot* robot, int button, int buttonDown));
+    int enableButtonCallback(void (*buttonCallback)(CMobot* mobot, int button, int buttonDown));
     int disableButtonCallback();
     int isConnected();
     int isMoving();
@@ -361,7 +361,7 @@ class CMobotGroup
   public:
     CMobotGroup();
     ~CMobotGroup();
-    int addRobot(CMobot& robot);
+    int addMobot(CMobot& robot);
     int isMoving();
     int move(double angle1, double angle2, double angle3, double angle4);
     int moveNB(double angle1, double angle2, double angle3, double angle4);

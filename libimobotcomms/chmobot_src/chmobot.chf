@@ -1145,11 +1145,11 @@ CMobotGroup::~CMobotGroup() {
   }
 }
 
-int CMobotGroup::addRobot(CMobot &robot) {
+int CMobotGroup::addMobot(CMobot &robot) {
     void *fptr;
     int retval;
 
-    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_addRobot_chdl");
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_addMobot_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;

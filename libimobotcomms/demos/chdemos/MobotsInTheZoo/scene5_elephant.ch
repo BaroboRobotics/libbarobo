@@ -36,10 +36,10 @@ robot5.connect();
 robot6.connect();
 
 /* Add the two modules to be members of our group */
-group1.addRobot(robot1);
-group1.addRobot(robot4);
-group2.addRobot(robot2);
-group2.addRobot(robot3);
+group1.addMobot(robot1);
+group1.addMobot(robot4);
+group2.addMobot(robot2);
+group2.addMobot(robot3);
 
 robot1.setJointSpeedRatios(0.6, 0.6, 0.6, 0.6);
 robot2.setJointSpeedRatios(0.6, 0.6, 0.6, 0.6);

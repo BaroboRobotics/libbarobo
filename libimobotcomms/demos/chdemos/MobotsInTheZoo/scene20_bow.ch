@@ -29,13 +29,13 @@ robot6.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
 robot7.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
 
 /* Add the two modules to be members of our group */
-group.addRobot(robot1);
-group.addRobot(robot2);
-group.addRobot(robot3);
-group.addRobot(robot4);
-group.addRobot(robot5);
-group.addRobot(robot6);
-group.addRobot(robot7);
+group.addMobot(robot1);
+group.addMobot(robot2);
+group.addMobot(robot3);
+group.addMobot(robot4);
+group.addMobot(robot5);
+group.addMobot(robot6);
+group.addMobot(robot7);
 
 // bow
 group.moveTo(45, 0, 0, 0);

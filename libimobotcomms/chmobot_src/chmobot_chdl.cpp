@@ -1489,7 +1489,7 @@ EXPORTCH void CMobotGroup_dCMobotGroup_chdl(void *varg) {
   return;
 }
 
-EXPORTCH int CMG_addRobot_chdl(void *varg) {
+EXPORTCH int CMG_addMobot_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CMobotGroup *mobot;
@@ -1499,7 +1499,7 @@ EXPORTCH int CMG_addRobot_chdl(void *varg) {
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
     robot = Ch_VaArg(interp, ap, class CMobot*);
-    retval = mobot->addRobot(*robot);
+    retval = mobot->addMobot(*robot);
     Ch_VaEnd(interp, ap);
     return retval;
 }

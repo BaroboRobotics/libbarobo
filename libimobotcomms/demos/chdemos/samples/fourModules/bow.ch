@@ -20,10 +20,10 @@ robot3.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
 robot4.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
 
 /* Add the four modules as the members of the group */
-group.addRobot(robot1);
-group.addRobot(robot2);
-group.addRobot(robot3);
-group.addRobot(robot4);
+group.addMobot(robot1);
+group.addMobot(robot2);
+group.addMobot(robot3);
+group.addMobot(robot4);
 
 // bow
 group.moveTo(45, 0, 0, 0);

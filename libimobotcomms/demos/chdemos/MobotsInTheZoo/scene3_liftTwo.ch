@@ -26,10 +26,10 @@ robot4.connect();
 
 /* Add 1st and 3rd  modules as members of one group with the identical motions */
 /* Add 2nd and 4th  modules as members of one group with the identical motions */
-group1.addRobot(robot1);
-group1.addRobot(robot3);
-group2.addRobot(robot2);
-group2.addRobot(robot4);
+group1.addMobot(robot1);
+group1.addMobot(robot3);
+group2.addMobot(robot2);
+group2.addMobot(robot4);
 
 /* Set the robot to "home" position, where all joint angles are 0 degrees. */
 group1.moveToZeroNB();

@@ -3024,7 +3024,7 @@ int CMobot::disconnect()
   return Mobot_disconnect(_comms);
 }
 
-int CMobot::enableButtonCallback(void (*buttonCallback)(CMobot* robot, int button, int buttonDown))
+int CMobot::enableButtonCallback(void (*buttonCallback)(CMobot* mobot, int button, int buttonDown))
 {
   return Mobot_enableButtonCallback(
       _comms,
@@ -3652,7 +3652,7 @@ CMobotGroup::~CMobotGroup()
 {
 }
 
-int CMobotGroup::addRobot(CMobot& robot)
+int CMobotGroup::addMobot(CMobot& robot)
 {
   _robots[_numRobots] = &robot;
   _numRobots++;
