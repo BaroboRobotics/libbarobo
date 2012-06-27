@@ -135,7 +135,7 @@ extern int g_numConnected;
 #ifndef MOBOT_JOINTS_E
 #define MOBOT_JOINTS_E
 typedef enum mobotJoints_e {
-  ROBOT_ZERO,
+  MOBOT_ZERO,
   MOBOT_JOINT1,
   MOBOT_JOINT2,
   MOBOT_JOINT3,
