@@ -13,25 +13,25 @@ robot.moveToZero();
 int i, num = 2;
 for(i = 0; i < num; i++) {
     /* First lift and tumble */
-    robot.moveJointTo(ROBOT_JOINT2, -85);
-    robot.moveJointTo(ROBOT_JOINT3, 80);
-    robot.moveJointTo(ROBOT_JOINT2, 0);
-    robot.moveJointTo(ROBOT_JOINT3, 0);
-    robot.moveJointTo(ROBOT_JOINT2, 80);
-    robot.moveJointTo(ROBOT_JOINT2, 45);
+    robot.moveJointTo(MOBOT_JOINT2, -85);
+    robot.moveJointTo(MOBOT_JOINT3, 80);
+    robot.moveJointTo(MOBOT_JOINT2, 0);
+    robot.moveJointTo(MOBOT_JOINT3, 0);
+    robot.moveJointTo(MOBOT_JOINT2, 80);
+    robot.moveJointTo(MOBOT_JOINT2, 45);
     /* Second lift and tumble */
-    robot.moveJointTo(ROBOT_JOINT3, -85);
-    robot.moveJointTo(ROBOT_JOINT2, 80);
-    robot.moveJointTo(ROBOT_JOINT3, 0);
-    robot.moveJointTo(ROBOT_JOINT2, 0);
-    robot.moveJointTo(ROBOT_JOINT3, 80);
+    robot.moveJointTo(MOBOT_JOINT3, -85);
+    robot.moveJointTo(MOBOT_JOINT2, 80);
+    robot.moveJointTo(MOBOT_JOINT3, 0);
+    robot.moveJointTo(MOBOT_JOINT2, 0);
+    robot.moveJointTo(MOBOT_JOINT3, 80);
     if(i != (num-1)) { /* Do not perform this motion on the last tumble */
-        robot.moveJointTo(ROBOT_JOINT3, 45);
+        robot.moveJointTo(MOBOT_JOINT3, 45);
     }
 }
 
 /* Unstand the robot */
-robot.moveJointToNB(ROBOT_JOINT2, 0);
-robot.moveJointToNB(ROBOT_JOINT3, 0);
+robot.moveJointToNB(MOBOT_JOINT2, 0);
+robot.moveJointToNB(MOBOT_JOINT3, 0);
 robot.moveWait();
 robot.moveToZero();

@@ -35,11 +35,11 @@ double tolerance = 1.0; /* Degrees */
 /* Start the motion. First, move robot to zero position */
 robot.moveToZero();
 /* Set the joint 1 speed to 45 degrees/second */
-robot.setJointSpeed(ROBOT_JOINT1, speed);
-robot.setJointSpeed(ROBOT_JOINT4, speed);
+robot.setJointSpeed(MOBOT_JOINT1, speed);
+robot.setJointSpeed(MOBOT_JOINT4, speed);
 
 /* Start capturing data */
-robot.recordAngle(ROBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
+robot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
 
 /* Move the joint 720 degrees */
 robot.move(angle, 0, 0, angle);

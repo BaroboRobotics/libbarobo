@@ -21,12 +21,12 @@ robot1.motionWait();
 robot2.motionWait();
 
 // turn back and forth
-robot1.moveJointNB(ROBOT_JOINT1, 180);
-robot2.moveJointNB(ROBOT_JOINT1, 180);
+robot1.moveJointNB(MOBOT_JOINT1, 180);
+robot2.moveJointNB(MOBOT_JOINT1, 180);
 robot1.moveWait();
 robot1.moveWait();
 
-robot1.moveJointNB(ROBOT_JOINT1, -180);
-robot2.moveJointNB(ROBOT_JOINT1, -180);
+robot1.moveJointNB(MOBOT_JOINT1, -180);
+robot2.moveJointNB(MOBOT_JOINT1, -180);
 robot1.moveWait();
 robot1.moveWait();

@@ -612,11 +612,11 @@ double angle;
 initializes a new variable called \texttt{angle}, which will be used to store
 the current angle of one of the robotic joints. The next line,
 \begin{verbatim}
-robot.getJointAngle(ROBOT_JOINT1, angle);
+robot.getJointAngle(MOBOT_JOINT1, angle);
 \end{verbatim}
 retrieves the current angle of joint 1, which is one of the faceplates of the
 robot. 
-\texttt{ROBOT\_JOINT1} is an enumerated value
+\texttt{MOBOT\_JOINT1} is an enumerated value
 defined in the header file \texttt{mobot.h}. Detailed information
 for all enumerated values defined in \texttt{mobot.h} can be found in 
 Appendix \ref{sec:datatypes}.
@@ -649,7 +649,7 @@ initialize the program, connect to the robot, and move the robot into its zero p
 similar to the previous demos. The next three lines,
 \begin{verbatim}
 double speed, radius;
-robot.getJointMaxSpeed(ROBOT_JOINT1, speed);
+robot.getJointMaxSpeed(MOBOT_JOINT1, speed);
 printf("The maximum speed is %lf degrees/s\n", speed);
 \end{verbatim}
 initializes the variables \texttt{speed} and \texttt{radius},
@@ -660,15 +660,15 @@ function.
 
 The next two lines,
 \begin{verbatim}
-robot.setJointSpeed(ROBOT_JOINT1, 60);
-robot.setJointSpeed(ROBOT_JOINT4, 60);
+robot.setJointSpeed(MOBOT_JOINT1, 60);
+robot.setJointSpeed(MOBOT_JOINT4, 60);
 \end{verbatim}
 set the joint speed settings for the two faceplate joints to 90 degrees per second.
 
 The next lines, 
 \begin{verbatim}
-//robot.setJointSpeedRatio(ROBOT_JOINT1, 0.5);
-//robot.setJointSpeedRatio(ROBOT_JOINT4, 0.5);
+//robot.setJointSpeedRatio(MOBOT_JOINT1, 0.5);
+//robot.setJointSpeedRatio(MOBOT_JOINT4, 0.5);
 
 //robot.setJointSpeeds(60, 0, 0, 60);
 \end{verbatim}
@@ -788,8 +788,8 @@ robot.connect();
 
 Next, we set the motor speeds to 50\% speed with the following lines.
 \begin{verbatim}
-robot.setJointSpeedRatio(ROBOT_JOINT2, 0.50);
-robot.setJointSpeedRatio(ROBOT_JOINT3, 0.50);
+robot.setJointSpeedRatio(MOBOT_JOINT2, 0.50);
+robot.setJointSpeedRatio(MOBOT_JOINT3, 0.50);
 \end{verbatim}
 
 We then move the robot to its zero position in preparation for the 
@@ -956,8 +956,8 @@ slow the motion down in order to minimize slippage.
 
 \begin{verbatim}
 /* Set robot motors to speed of 0.50 */
-robot.setJointSpeedRatio(ROBOT_JOINT2, 0.50);
-robot.setJointSpeedRatio(ROBOT_JOINT3, 0.50);
+robot.setJointSpeedRatio(MOBOT_JOINT2, 0.50);
+robot.setJointSpeedRatio(MOBOT_JOINT3, 0.50);
 \end{verbatim}
 
 Next, we move the robot into a flat ``zero'' position, as shown in Figure \ref{fig:inchworm1}.
@@ -1000,10 +1000,10 @@ int i, num = 4;
 double angle2 = -45;
 double angle3 = 45;
 for(i = 0; i < num; i++) {
-    robot.moveJointTo(ROBOT_JOINT2, angle2); /* Move joint 2 */
-    robot.moveJointTo(ROBOT_JOINT3, angle3); /* Move joint 3 */
-    robot.moveJointTo(ROBOT_JOINT2, 0);      /* Move joint 2 */
-    robot.moveJointTo(ROBOT_JOINT3, 0);      /* Move joint 3 bace to zero position*/
+    robot.moveJointTo(MOBOT_JOINT2, angle2); /* Move joint 2 */
+    robot.moveJointTo(MOBOT_JOINT3, angle3); /* Move joint 3 */
+    robot.moveJointTo(MOBOT_JOINT2, 0);      /* Move joint 2 */
+    robot.moveJointTo(MOBOT_JOINT3, 0);      /* Move joint 3 bace to zero position*/
 }
 \end{verbatim}
 The values of the variables \texttt{angle2} and \texttt{angle3} may also be modified
@@ -1020,8 +1020,8 @@ motor speeds are set to a speed of 90 degrees per second, and the function \text
 called to put the robot into a flat position. Next, the following lines
 are executed:
 \begin{verbatim}
-robot.moveJointTo(ROBOT_JOINT2, -85);
-robot.moveJointTo(ROBOT_JOINT3, 70);
+robot.moveJointTo(MOBOT_JOINT2, -85);
+robot.moveJointTo(MOBOT_JOINT3, 70);
 \end{verbatim}
 These movement commands cause the Mobot to curl up into a fetal position with
 both of its faceplates facing toward the ground. The next line, 
@@ -1035,12 +1035,12 @@ robot to settle down, in case it was still in motion from the last movement.
 Next, the Mobot rotates one 
 of the faceplates by 45 degrees. 
 \begin{verbatim}
-robot.moveJointTo(ROBOT_JOINT1, 45);
+robot.moveJointTo(MOBOT_JOINT1, 45);
 \end{verbatim}
 This endplate will eventually become the ``foot'' of the standing Mobot. Next,
 the Mobot lifts itself into a standing position, balancing on its endplate.
 \begin{verbatim}
-robot.moveJointTo(ROBOT_JOINT2, 20);
+robot.moveJointTo(MOBOT_JOINT2, 20);
 \end{verbatim}
 Note that the previous joint angle for Joint 2, a body joint, was -85 degrees. 
 This motion causes joint 2 to rotate all the way to a 20 degree position, which
@@ -1051,7 +1051,7 @@ entire Mobot to rotate in place. The speed is first set to 45 degrees per second
 rotation a slow rotation. Next, the \texttt{moveContinuousTime} member function
 is used to continuously rotate a joint for a desired amount of time.
 \begin{verbatim}
-robot.setJointSpeed(ROBOT_JOINT1, 45);
+robot.setJointSpeed(MOBOT_JOINT1, 45);
 robot.moveContinuousTime(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_HOLD, 3);
 \end{verbatim}
 
@@ -1167,8 +1167,8 @@ the \texttt{move()} statement, the robot has already stopped moving.
 The first block of the source code initialized and sets up the remote robot 
 similar to previous demos. The last two lines in the program appear like so:
 \begin{verbatim}
-robot.moveJointNB(ROBOT_JOINT1, 360); // Non-Blocking version
-robot.moveJoint(ROBOT_JOINT4, 360);
+robot.moveJointNB(MOBOT_JOINT1, 360); // Non-Blocking version
+robot.moveJoint(MOBOT_JOINT4, 360);
 \end{verbatim}
 The first line turns joint 1 for 360 degrees. However, since it is moved with a non-blocking function,
 the program immediately continues to the next line. The second line turns joint 4 for
@@ -1231,8 +1231,8 @@ robot.connect();
 initialize the program and connect to the remote robot. Next, a series of
 non-blocking movements are performed:
 \begin{verbatim}
-robot.moveJointToNB(ROBOT_JOINT2, -85);
-robot.moveJointToNB(ROBOT_JOINT3, 45);
+robot.moveJointToNB(MOBOT_JOINT2, -85);
+robot.moveJointToNB(MOBOT_JOINT3, 45);
 \end{verbatim}
 Because both of these function calls are non-blocking, this function will
 effectively move joints 2 and 3 simultaneously. Since these are both
@@ -1278,12 +1278,12 @@ Inside the loop, two tumbling motions are performed. The first tumbling
 motion appears as such:
 \begin{verbatim}
     /* First lift and tumble */
-    robot.moveJointTo(ROBOT_JOINT2, -85);
-    robot.moveJointTo(ROBOT_JOINT3, 80);
-    robot.moveJointTo(ROBOT_JOINT2, 0);
-    robot.moveJointTo(ROBOT_JOINT3, 0);
-    robot.moveJointTo(ROBOT_JOINT2, 80);
-    robot.moveJointTo(ROBOT_JOINT2, 45);
+    robot.moveJointTo(MOBOT_JOINT2, -85);
+    robot.moveJointTo(MOBOT_JOINT3, 80);
+    robot.moveJointTo(MOBOT_JOINT2, 0);
+    robot.moveJointTo(MOBOT_JOINT3, 0);
+    robot.moveJointTo(MOBOT_JOINT2, 80);
+    robot.moveJointTo(MOBOT_JOINT2, 45);
 \end{verbatim}
 This movement is similar to the \texttt{motionStand()} motion, except that the
 robot flips all the way over after standing up. After this motion is done,
@@ -1291,13 +1291,13 @@ the robot is balancing on joint 4. Next, we flip again so that the robot
 is balancing on joint 1.
 \begin{verbatim}
     /* Second lift and tumble */
-    robot.moveJointTo(ROBOT_JOINT3, -85);
-    robot.moveJointTo(ROBOT_JOINT2, 80);
-    robot.moveJointTo(ROBOT_JOINT3, 0);
-    robot.moveJointTo(ROBOT_JOINT2, 0);
-    robot.moveJointTo(ROBOT_JOINT3, 80);
+    robot.moveJointTo(MOBOT_JOINT3, -85);
+    robot.moveJointTo(MOBOT_JOINT2, 80);
+    robot.moveJointTo(MOBOT_JOINT3, 0);
+    robot.moveJointTo(MOBOT_JOINT2, 0);
+    robot.moveJointTo(MOBOT_JOINT3, 80);
     if(i != (num-1)) { /* Do not perform this motion on the last tumble */
-        robot.moveJointTo(ROBOT_JOINT3, 45);
+        robot.moveJointTo(MOBOT_JOINT3, 45);
     }
 }
 \end{verbatim}
@@ -1311,8 +1311,8 @@ the loop is completed, the robot is made to fall back down into a prone
 positions with the following lines of code:
 \begin{verbatim}
 /* Unstand the robot */
-robot.moveJointToNB(ROBOT_JOINT2, 0);
-robot.moveJointToNB(ROBOT_JOINT3, 0);
+robot.moveJointToNB(MOBOT_JOINT2, 0);
+robot.moveJointToNB(MOBOT_JOINT3, 0);
 robot.moveWait();
 robot.moveToZero();
 \end{verbatim}
@@ -1778,13 +1778,13 @@ joints to the correct speeds with the following lines of code:
 /* Start the motion. First, move robot to zero position */
 robot.moveToZero();
 /* Set the joint 1 speed to 45 degrees/second */
-robot.setJointSpeed(ROBOT_JOINT1, speed);
-robot.setJointSpeed(ROBOT_JOINT4, speed);
+robot.setJointSpeed(MOBOT_JOINT1, speed);
+robot.setJointSpeed(MOBOT_JOINT4, speed);
 \end{verbatim}
 
 Next, we start capturing the data by using the \texttt{recordAngle()} function:
 \begin{verbatim}
-robot.recordAngle(ROBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
+robot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
 \end{verbatim}
 
 The recording process begins immediately and continues in the background. Now,
@@ -2127,7 +2127,7 @@ robot.setTwoWheelRobotSpeed(speed, radius);
 
 Start recording the angle of the first joint.
 \begin{verbatim}
-robot.recordAngle(ROBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
+robot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
 \end{verbatim}
 
 Move the robot forward by the angle calculated earlier with \texttt{distance2angle()}.
@@ -2248,25 +2248,25 @@ This datatype is an enumerated type used to identify a joint on the Mobot. Valid
 values for this type are:
 \begin{verbatim}
 typedef enum mobot_joints_e {
-  ROBOT_JOINT1 = 1,
-  ROBOT_JOINT2 = 2,
-  ROBOT_JOINT3 = 3,
-  ROBOT_JOINT4 = 4
+  MOBOT_JOINT1 = 1,
+  MOBOT_JOINT2 = 2,
+  MOBOT_JOINT3 = 3,
+  MOBOT_JOINT4 = 4
 } mobotJointId_t;
 \end{verbatim}
 \index{robot\_joints\_t}
 
-\index{ROBOT\_JOINT1}
-\index{ROBOT\_JOINT2}
-\index{ROBOT\_JOINT3}
-\index{ROBOT\_JOINT4}
+\index{MOBOT\_JOINT1}
+\index{MOBOT\_JOINT2}
+\index{MOBOT\_JOINT3}
+\index{MOBOT\_JOINT4}
 \begin{tabular}{p{3cm}p{10cm}} \hline 
 Value & Description \\
 \hline 
-\texttt{ROBOT\_JOINT1} & Joint number 1 on the Mobot, which is a faceplate joint. \\
-\texttt{ROBOT\_JOINT2} & Joint number 2 on the Mobot, which is a body joint. \\
-\texttt{ROBOT\_JOINT3} & Joint number 3 on the Mobot, which is a body joint. \\
-\texttt{ROBOT\_JOINT4} & Joint number 4 on the Mobot, which is a faceplate joint. \\
+\texttt{MOBOT\_JOINT1} & Joint number 1 on the Mobot, which is a faceplate joint. \\
+\texttt{MOBOT\_JOINT2} & Joint number 2 on the Mobot, which is a body joint. \\
+\texttt{MOBOT\_JOINT3} & Joint number 3 on the Mobot, which is a body joint. \\
+\texttt{MOBOT\_JOINT4} & Joint number 4 on the Mobot, which is a faceplate joint. \\
 \hline
 \end{tabular}
 

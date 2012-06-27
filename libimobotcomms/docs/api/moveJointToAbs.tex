@@ -65,8 +65,8 @@ The difference between this function and its sister function, \texttt{moveJointT
 is that this function takes into consideration any full rotations a joint has 
 experienced. For instance, consider the following code segment:
 \begin{verbatim}
-robot.moveJointTo(ROBOT_JOINT1, 375);
-robot.moveJointTo(ROBOT_JOINT1, 0);
+robot.moveJointTo(MOBOT_JOINT1, 375);
+robot.moveJointTo(MOBOT_JOINT1, 0);
 \end{verbatim}
 The first line in the above code segment will cause joint 1 to rotate one full
 rotation in the positive direction, plus an additional 15 degrees. The second
@@ -75,8 +75,8 @@ goal.
 
 This following code segment, however, differs.
 \begin{verbatim}
-robot.moveJointToAbs(ROBOT_JOINT1, 375);
-robot.moveJointToAbs(ROBOT_JOINT1, 0);
+robot.moveJointToAbs(MOBOT_JOINT1, 375);
+robot.moveJointToAbs(MOBOT_JOINT1, 0);
 \end{verbatim}
 The first line will have the same effect as the first code segment, rotating
 joint 1 375 degrees, assuming it is starting at 0. The second line, however,

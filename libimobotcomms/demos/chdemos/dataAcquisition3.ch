@@ -39,7 +39,7 @@ robot.moveToZero();
 robot.setTwoWheelRobotSpeed(speed, radius);
 
 /* Start capturing data */
-robot.recordAngle(ROBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
+robot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
 
 /* Roll the robot the calculated distance */
 robot.motionRollForward(angle);

@@ -53,8 +53,8 @@ group1.moveWait();
 group2.moveWait();
 
 // move joint 1 to 90 degree
-group1.moveJointToNB(ROBOT_JOINT1, 90);
-group2.moveJointToNB(ROBOT_JOINT1, 90);
+group1.moveJointToNB(MOBOT_JOINT1, 90);
+group2.moveJointToNB(MOBOT_JOINT1, 90);
 group1.moveWait();
 group2.moveWait();
 // initilize the head and the tail
@@ -64,12 +64,12 @@ robot5.moveWait();
 robot6.moveWait();
 
 // move the head and the tail
-robot5.moveJoint(ROBOT_JOINT4, 90);
-robot5.moveJoint(ROBOT_JOINT2, 90);
+robot5.moveJoint(MOBOT_JOINT4, 90);
+robot5.moveJoint(MOBOT_JOINT2, 90);
 robot5.moveTo(0, 45, -45, 90);
-robot6.moveJoint(ROBOT_JOINT4, 20);
-robot6.moveJoint(ROBOT_JOINT4, -40);
-robot6.moveJoint(ROBOT_JOINT4, 20);
+robot6.moveJoint(MOBOT_JOINT4, 20);
+robot6.moveJoint(MOBOT_JOINT4, -40);
+robot6.moveJoint(MOBOT_JOINT4, 20);
 
 // walk forward
 for (i = 0; i < 3; i++) {

@@ -132,20 +132,20 @@ typedef struct mobot_s
 
 extern int g_numConnected;
 
-#ifndef ROBOT_JOINTS_E
-#define ROBOT_JOINTS_E
+#ifndef MOBOT_JOINTS_E
+#define MOBOT_JOINTS_E
 typedef enum robotJoints_e {
   ROBOT_ZERO,
-  ROBOT_JOINT1,
-  ROBOT_JOINT2,
-  ROBOT_JOINT3,
-  ROBOT_JOINT4,
+  MOBOT_JOINT1,
+  MOBOT_JOINT2,
+  MOBOT_JOINT3,
+  MOBOT_JOINT4,
   ROBOT_NUM_JOINTS = 4
 } mobotJointId_t;
 #endif
 
-#ifndef ROBOT_JOINT_STATE_E
-#define ROBOT_JOINT_STATE_E
+#ifndef MOBOT_JOINT_STATE_E
+#define MOBOT_JOINT_STATE_E
 typedef enum robotJointState_e
 {
     ROBOT_NEUTRAL = 0,

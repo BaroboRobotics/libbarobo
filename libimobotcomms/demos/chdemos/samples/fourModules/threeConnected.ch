@@ -43,9 +43,9 @@ robot3.setJointSpeedRatios(0.35, 0.35, 0.35, 0.35);
 robot4.setJointSpeedRatios(0.35, 0.35, 0.35, 0.35);
 
 /* tripleLinked one First motion */
-robot1.moveJointNB(ROBOT_JOINT4, 90);
+robot1.moveJointNB(MOBOT_JOINT4, 90);
 robot2.moveToNB(0, 0, 0, 0);
-robot3.moveJointNB(ROBOT_JOINT1, 90);
+robot3.moveJointNB(MOBOT_JOINT1, 90);
 robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();
@@ -68,9 +68,9 @@ robot2.moveWait();
 robot3.moveWait();
 delay(1);
 /* tripleLinked one Fourth motion */
-robot1.moveJointNB(ROBOT_JOINT4, -90);
+robot1.moveJointNB(MOBOT_JOINT4, -90);
 robot2.moveToNB(0, 0, 0, 0);
-robot3.moveJointNB(ROBOT_JOINT1, -90);
+robot3.moveJointNB(MOBOT_JOINT1, -90);
 robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();

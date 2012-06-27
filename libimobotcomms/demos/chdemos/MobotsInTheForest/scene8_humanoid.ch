@@ -50,19 +50,19 @@ robot1.setJointSpeedRatios(0.35, 0.35, 0.35, 0.35);
 robot2.setJointSpeedRatios(0.35, 0.35, 0.35, 0.35);
 robot3.setJointSpeedRatios(0.35, 0.35, 0.35, 0.35);
 /* preparation */
-robot1.moveJointToNB(ROBOT_JOINT4, 45);
-robot2.moveJointToNB(ROBOT_JOINT4, 45);
-robot3.moveJointToNB(ROBOT_JOINT4, -90);
+robot1.moveJointToNB(MOBOT_JOINT4, 45);
+robot2.moveJointToNB(MOBOT_JOINT4, 45);
+robot3.moveJointToNB(MOBOT_JOINT4, -90);
 robot1.moveWait();
 robot2.moveWait();
 robot3.moveWait();
 
 // first step
-robot3.moveJointTo(ROBOT_JOINT3, -90);
+robot3.moveJointTo(MOBOT_JOINT3, -90);
 delay(1);
 robot1.moveTo(0, 45, 45, 45);
 robot2.moveTo(0, -45, -45, 45);
-robot3.moveJointTo(ROBOT_JOINT3, 90);
+robot3.moveJointTo(MOBOT_JOINT3, 90);
 delay(1);
 robot1.moveTo(0, 0, 0, 45);
 robot2.moveTo(0, 45, 45, 45);
@@ -70,12 +70,12 @@ robot2.moveTo(0, 45, 45, 45);
 for (i = 0; i < 1; i++) {
     // left leg 
     robot1.moveTo(0, -45, -45, 45);
-    robot3.moveJointTo(ROBOT_JOINT3, -90);
+    robot3.moveJointTo(MOBOT_JOINT3, -90);
     robot2.moveTo(0, 0, 0, 45);
     robot1.moveTo(0, 45, 45, 45);
     // right leg 
     robot2.moveTo(0, -45, -45, 45);
-    robot3.moveJointTo(ROBOT_JOINT3, 90);
+    robot3.moveJointTo(MOBOT_JOINT3, 90);
     robot1.moveTo(0, 0, 0, 45);
     robot2.moveTo(0, 45, 45, 45);
 }
@@ -83,19 +83,19 @@ for (i = 0; i < 1; i++) {
 robot2.moveTo(0, 0, 0, 45);
 
 /* move Backward */
-robot3.moveJointTo(ROBOT_JOINT3, -90);
+robot3.moveJointTo(MOBOT_JOINT3, -90);
 
 for (i = 0; i < 4; i++) {
     /* right leg */
     robot1.moveTo(0, -45, -45, 45);
     robot2.moveTo(0, 45, 45, 45);
-    robot3.moveJointTo(ROBOT_JOINT3, 90);
+    robot3.moveJointTo(MOBOT_JOINT3, 90);
     robot1.moveTo(0, 0, 0, 45);
 
     /* left leg */
     robot2.moveTo(0, -45, -45, 45);
     robot1.moveTo(0, 45, 45, 45);
-    robot3.moveJointTo(ROBOT_JOINT3, -90);
+    robot3.moveJointTo(MOBOT_JOINT3, -90);
     robot2.moveTo(0, 0, 0, 45);
 }
 
@@ -105,8 +105,8 @@ robot1.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
 robot2.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
 robot3.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
 
-robot3.moveJointTo(ROBOT_JOINT4, 0);
-robot3.moveJointTo(ROBOT_JOINT3, 90);
+robot3.moveJointTo(MOBOT_JOINT4, 0);
+robot3.moveJointTo(MOBOT_JOINT3, 90);
 
 robot1.moveToNB(0, -90, -90, 45);
 robot2.moveToNB(0, -90, -90, 45);

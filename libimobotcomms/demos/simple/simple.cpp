@@ -9,8 +9,8 @@ int main()
   /* Connect to the paired MoBot */
   robot.connect();
 
-  //robot.setJointSpeed(ROBOT_JOINT1, M_PI);
-  //robot.moveJointContinuousNB(ROBOT_JOINT1, ROBOT_FORWARD);
+  //robot.setJointSpeed(MOBOT_JOINT1, M_PI);
+  //robot.moveJointContinuousNB(MOBOT_JOINT1, ROBOT_FORWARD);
   double angle1;
   double angle2;
   double angle3;

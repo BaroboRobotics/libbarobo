@@ -23,17 +23,17 @@ robot1.moveWait();
 robot2.moveWait();
 /* inch warm right with two modules 1*/
 for( i = 0; i < 3; i++){
-    robot2.moveJointTo(ROBOT_JOINT3, 60);
-    robot1.moveJointTo(ROBOT_JOINT2, -60);
-    robot2.moveJointTo(ROBOT_JOINT3, 0);
-    robot1.moveJointTo(ROBOT_JOINT2, 0);
+    robot2.moveJointTo(MOBOT_JOINT3, 60);
+    robot1.moveJointTo(MOBOT_JOINT2, -60);
+    robot2.moveJointTo(MOBOT_JOINT3, 0);
+    robot1.moveJointTo(MOBOT_JOINT2, 0);
 }
 /* inch warm left with two modules 1*/
 for( i = 0; i < 3; i++){
-    robot1.moveJointTo(ROBOT_JOINT2, -60);
-    robot2.moveJointTo(ROBOT_JOINT3, 60);
-    robot1.moveJointTo(ROBOT_JOINT2, 0);
-    robot2.moveJointTo(ROBOT_JOINT3, 0);
+    robot1.moveJointTo(MOBOT_JOINT2, -60);
+    robot2.moveJointTo(MOBOT_JOINT3, 60);
+    robot1.moveJointTo(MOBOT_JOINT2, 0);
+    robot2.moveJointTo(MOBOT_JOINT3, 0);
 }
 /* lifting with two modules */
 /* Set the robot to "home" position, where all joint angles are 0 degrees. */

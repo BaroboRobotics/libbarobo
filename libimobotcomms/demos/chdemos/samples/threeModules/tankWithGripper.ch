@@ -49,10 +49,10 @@ robot2.motionWait();
 
 /* "gun" ready */
 robot3.moveTo(0, 90, 0, 0);
-robot3.moveJoint(ROBOT_JOINT4, 4*360);
+robot3.moveJoint(MOBOT_JOINT4, 4*360);
 robot3.moveTo(0, 90, 90, 0);
 //robot3.moveTo(0, 90, 45, 0);
-robot3.moveJoint(ROBOT_JOINT1, 360);
+robot3.moveJoint(MOBOT_JOINT1, 360);
 
 /* move forward */
 robot1.motionRollForwardNB(180);

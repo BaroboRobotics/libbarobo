@@ -129,7 +129,7 @@ void makeTurn(int degree)
     robot3.moveWait();
     turnAngle += degree;
     // make turn
-    robot1.moveJointTo(ROBOT_JOINT4, turnAngle);
+    robot1.moveJointTo(MOBOT_JOINT4, turnAngle);
 }
 
 
@@ -188,8 +188,8 @@ void show(void)
     robot3.moveWait();
 
     robot1.moveToNB(0, -90, -30, turnAngle);
-    robot2.moveJointNB(ROBOT_JOINT1, -90);
-    robot3.moveJointNB(ROBOT_JOINT1, 90);
+    robot2.moveJointNB(MOBOT_JOINT1, -90);
+    robot3.moveJointNB(MOBOT_JOINT1, 90);
     robot1.moveWait();
     robot2.moveWait();
     robot3.moveWait();
@@ -217,8 +217,8 @@ delay(1);
     robot3.moveWait();
 
     robot1.moveToNB(0, -90, -30, turnAngle);
-    robot2.moveJointNB(ROBOT_JOINT1, -90);
-    robot3.moveJointNB(ROBOT_JOINT1, 90);
+    robot2.moveJointNB(MOBOT_JOINT1, -90);
+    robot3.moveJointNB(MOBOT_JOINT1, 90);
     robot1.moveWait();
     robot2.moveWait();
     robot3.moveWait();
@@ -233,10 +233,10 @@ delay(1);
     robot2.moveWait();
     robot3.moveWait();
 
-    robot1.moveJoint(ROBOT_JOINT4, 360);
+    robot1.moveJoint(MOBOT_JOINT4, 360);
 
-    robot2.moveJointNB(ROBOT_JOINT1, 180);
-    robot3.moveJointNB(ROBOT_JOINT1, -180);
+    robot2.moveJointNB(MOBOT_JOINT1, 180);
+    robot3.moveJointNB(MOBOT_JOINT1, -180);
     robot2.moveWait();
     robot3.moveWait();
 

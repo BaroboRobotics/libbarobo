@@ -48,7 +48,7 @@ group2.moveWait();
 
 // "gun" ready
 group2.moveTo(0, 90, 0, 0);
-group2.moveJointTo(ROBOT_JOINT4, 4*360);
+group2.moveJointTo(MOBOT_JOINT4, 4*360);
 group2.moveTo(0, 90, 60, 0);
 
 // move forward
