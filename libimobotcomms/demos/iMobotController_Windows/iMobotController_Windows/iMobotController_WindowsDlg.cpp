@@ -505,11 +505,11 @@ void CiMobotController_WindowsDlg::UpdateSliders()
 	double speed;
 
 	for(int i = 0; i < 4; i++) {
-		iMobotComms.getJointAngle((robotJointId_t)(i+1), position);
+		iMobotComms.getJointAngle((mobotJointId_t)(i+1), position);
 		m_slider_Positions[i]->SetPos( (int) -position );
 		m_positions[i] = (int) position;
 		speed = 45;
-		iMobotComms.setJointSpeed((robotJointId_t)(i+1), speed);
+		iMobotComms.setJointSpeed((mobotJointId_t)(i+1), speed);
 		m_slider_Speeds[i]->SetPos( MAXSPD - speed );
 		m_speeds[i] = speed;
     wchar_t buf[200];
@@ -536,7 +536,7 @@ int CiMobotController_WindowsDlg::poseJoints(const double *angles, unsigned char
 {
 	for(int i = 0; i < 4; i++) {
 		if(motorMask & (1<<i)) {
-			iMobotComms.moveJointToNB((robotJointId_t)(i+1), angles[i]);
+			iMobotComms.moveJointToNB((mobotJointId_t)(i+1), angles[i]);
 		}
 	}
 	return 0;
@@ -548,9 +548,9 @@ int CiMobotController_WindowsDlg::moveJoints(const double *angles, unsigned char
 	for(int i = 0; i < 4; i++) {
 		if(motorMask & (1<<i)) {
 			/* Get the motor position first */
-			iMobotComms.getJointAngle((robotJointId_t)(i+1), pos);
+			iMobotComms.getJointAngle((mobotJointId_t)(i+1), pos);
 			/* Set the motor to an offset position */
-			iMobotComms.moveJointToNB((robotJointId_t)(i+1), pos + angles[i]);
+			iMobotComms.moveJointToNB((mobotJointId_t)(i+1), pos + angles[i]);
 		}
 	}
 	return 0;
@@ -864,7 +864,7 @@ DWORD WINAPI HandlerThread(void* arg)
     double position;
     int speed;
     for(int i = 0; i < 4; i++) {
-      mobot->getJointAngle((robotJointId_t)(i+1), value);
+      mobot->getJointAngle((mobotJointId_t)(i+1), value);
       swprintf(buf, L"%lf", value);
       EnterCriticalSection(&UpdateGuiCriticalSection);
       dlg->m_edit_MotorPositions[i]->SetWindowTextW(buf);
@@ -872,7 +872,7 @@ DWORD WINAPI HandlerThread(void* arg)
       position = -dlg->m_slider_Positions[i]->GetPos();
       if(lastPosition[i] != position) {
         if(initialized) {
-          mobot->moveJointToNB((robotJointId_t)(i+1), (double) position);
+          mobot->moveJointToNB((mobotJointId_t)(i+1), (double) position);
         }
         g_buttonState[S_M1P + i].clicked = 0;
         lastPosition[i] = position;
@@ -885,7 +885,7 @@ DWORD WINAPI HandlerThread(void* arg)
       /* Check the speed */
       speed = MAXSPD - dlg->m_slider_Speeds[i]->GetPos();
       if(speed != dlg->m_speeds[i]) {
-        mobot->setJointSpeed((robotJointId_t)(i+1), (double)speed);
+        mobot->setJointSpeed((mobotJointId_t)(i+1), (double)speed);
         dlg->m_speeds[i] = speed;
         swprintf(buf, L"%lf", (double)(speed));
         dlg->m_edit_MotorSpeeds[i]->SetWindowTextW(buf);

@@ -12,8 +12,8 @@
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::getJointAngle(robotJointId_t id, double &angle);
-int CMobot::getJointAngleAbs(robotJointId_t id, double &angle);
+int CMobot::getJointAngle(mobotJointId_t id, double &angle);
+int CMobot::getJointAngleAbs(mobotJointId_t id, double &angle);
 \end{verbatim}
 
 \noindent
@@ -31,8 +31,8 @@ The function returns 0 on success and non-zero otherwise.\\
 \item               
 \begin{tabular}{p{15 mm}p{145 mm}}
 \texttt{id} & The joint number. This is an enumerated type 
-discussed in Section \ref{sec:robotJointId_t} on page
-\pageref{sec:robotJointId_t}.\\
+discussed in Section \ref{sec:mobotJointId_t} on page
+\pageref{sec:mobotJointId_t}.\\
 \texttt{angle} & A variable to store the current angle of the robot
 motor. The contents of this variable will be overwritten with a value that
 represents the motor's angle in degrees.  \\
