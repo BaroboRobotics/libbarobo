@@ -21,7 +21,7 @@
 \vspace*{2.5cm}
 {\Huge\sf\bf Mobot User's Guide}\\
 \vspace*{2.5cm}
-{\Large\bf Version 1.6}
+{\Large\bf Version 1.7}
 \vspace{4.5cm}
 
 \includegraphics[width=4in]{images/Mobot_Camera_Stand.JPG}
@@ -35,7 +35,7 @@
 \section{Introduction}
 The Mobot is a breakthrough modular robot. A single Mobot module is a fully 
 functional robot capable of performing many possible motions. The Mobot
-can als obe used as a building block to create robots with different
+can also be used as a building block to create robots with different
 geometric configurations. 
 This documentation introduces the basic computer setup required for controlling 
 the Mobot, as well as several demo programs and a complete reference for all
@@ -68,7 +68,7 @@ is allowed to connect to. The is also necessary for certain
 functions in the \texttt{CMobot} API, such as \texttt{connect()},
 to determine which robots to connect to.
 
-The configuration is performed through the Barobo RobotController
+The configuration is performed through the Barobo RoboMancer
 program. The remainder of the section contains step-by-step instructions
 and screenshots showing how to configure your Mobots.
 
@@ -147,108 +147,62 @@ repeat this step for all Mobots that need to be paired before continuing.
 \end{figure}
 
 
-\subsection{\label{sec:pairing_robotcontroller} Adding Bluetooth Addresses of Robots in RobotController.}
-First, start the provided Barobo RobotController application.
+\subsection{\label{sec:pairing_robotcontroller} Adding Bluetooth Addresses of Robots in RoboMancer.}
+First, start the provided Barobo RoboMancer application.
 In Windows, start the provided Barobo Robot Control Program by clicking on the icon labeled 
-``RobotController'' on your desktop, as shown in \ref{fig:barobo_icon.png}. On Mac OS X systems,
-the RobotController application is located inside the ``Applications'' folder in Finder. The 
+``RoboMancer'' on your desktop, as shown in \ref{fig:barobo_icon.png}. On Mac OS X systems,
+the RoboMancer application is located inside the ``Applications'' folder in Finder. The 
 control dialog as shown in Figure \ref{fig:shot1.png} should pop up.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=1in]{images/barobo_icon.png}
 \end{center}
-\caption{\label{fig:barobo_icon.png} The icon for the Barobo RobotController.}
+\caption{\label{fig:barobo_icon.png} The icon for Barobo RoboMancer.}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=4.5in]{images/shot1.png}
+\includegraphics[width=4.5in]{images/robomancer_screenshot1.png}
 \end{center}
-\caption{\label{fig:shot1.png} The graphical user interface of the RobotController.}
+\caption{\label{fig:shot1.png} The opening screen for RoboMancer.}
 \end{figure}
 
-Click on the menu item ``Configure $\rightarrow$ Configure Robot Bluetooth'', as
-shown in Figure \ref{fig:shot3.png}.
+The RoboMancer application, as seen in Figure \ref{fig:shot1.png}, is organized into
+several different sections, each denoted by a tab. Upon startup, the default tab
+that is selected is the ``Connect'' tab. This section of the application allows
+you to manage, connect, and disconnect from Mobots. 
+
+First, add your Mobot address(es) into robomancer by typing in the address and
+clicking on the ``Add Robot'' button. The dialog should now something like
+the figure shown in Figure \ref{fig:shot3.png}.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=4.5in]{images/shot3.png}
+\includegraphics[width=4.5in]{images/robomancer_screenshot3.png}
 \end{center}
 \caption{\label{fig:shot3.png} Configuring robot bluetooth connection.}
 \end{figure}
 
-This should bring up a second dialog, titled ``Configure Robot Bluetooth'', as
-shown in Figure \ref{fig:shot4.png}.
+Once new addresses are added, RoboMancer will remember the addresses in the future. 
+The red dot next to the added address in the ``Connection Status'' column indicates
+the current connection status of the robot. The red dot indicates that the Mobot
+is not currently connected, and a green dot indicates that the Mobot is 
+properly connected. 
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=4.5in]{images/shot4.png}
+\includegraphics[width=4.5in]{images/robomancer_screenshot4.png}
 \end{center}
-\caption{\label{fig:shot4.png} The dialog window for bluetooth connection.}
+\caption{\label{fig:shot4.png} The Connection dialog showing a connected Mobot.}
 \end{figure}
 
-This dialog allows us to add robot bluetooth addresses to the list of currently
-known robot bluetooth addresses. To add an address, first type in the address
-in the text box on the top of the dialog, as shown in Figure \ref{fig:shot5.png}.
-You can find the bluetooth address of each robot inside the battery compartment
-of the robot on the same side as the power switch. 
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=3in]{images/shot5.png}
-\end{center}
-\caption{\label{fig:shot5.png} Adding the robot bluetooth address in the dialog window.}
-\end{figure}
-
-Next, click the ``Add'' button. The newly added address should appear in the 
-list of known addresses, as shown in Figure \ref{fig:shot6.png}. In our case, we have added the 
-address of one of our robots, which is \texttt{"00:06:66:43:0E:02"}.
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=3in]{images/shot6.png}
-\end{center}
-\caption{\label{fig:shot6.png} Displaying the added bluetooth address.}
-\end{figure}
-
-We use the same process to add our remaining two robots to the list,
-with addresses \texttt{"00:06:66:43:0D:F2"} and 
-\texttt{"00:06:66:47:23:9C"}. The dialog now appears as shown in
-Figure \ref{fig:shot8.png}.
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=3in]{images/shot8.png}
-\end{center}
-\caption{\label{fig:shot8.png} Displaying bluetooth addresses for three robots.}
-\end{figure}
-
-The dialog also allows users to reorder the addresses listed. The
-order the addresses are listed in affects the order in which the robots
-are connected to using the \texttt{connect()} member function. 
-The remote control dialog connects to the primary address located at the
-top of the list by default. To reorder the list of addresses, simply
-select the address to move and click on the ``Move Up'' or ``Move Down''
-button to either move the address higher in the list or lower. For instance,
-the result of clicking on the address \texttt{"00:06:66:43:0D:F2"} and clicking
-the ``Move Up'' button is shown in Figure \ref{fig:shot10.png}.
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=3in]{images/shot10.png}
-\end{center}
-\caption{\label{fig:shot10.png} Modifying the order of bluetooth addresses with the ``Configure Robot Bluetooth'' dialog.}
-\end{figure}
-
-\subsection{Connecting and Disconnecting to Robots from the RobotController}
-Once bluetooth addresses are added to the RobotController, you may connect to the 
-first address by clicking on the ``Connect $\rightarrow$ Connect to Robot''
-menu item. The connected robot may be disconnected by clicking on the 
-``Connect $\rightarrow$ Disconnect from Robot'' menu item. Any connected robots are
-automatically disconnected upon exiting the program. Note that in order to run a Ch
-program that controls a robot, the robot should not currently be connected to any
-other application, including the RobotController, other Ch programs, and other
-programs on other computers.
+To connect to your Mobot(s), select the Mobot you wish to connect to and click on
+the button labelled ``Connect''. If the connection succeeds, the red dot should
+turn green to indicate that a connection has been established, as shown in 
+Figure \ref{fig:shot4.png}. Should the connection
+fail, please check that the address has been entered correctly, the Mobot is on,
+your computer has Bluetooth capability, and that the Mobot is within range of 
+your computer, and try again.
 
 Furthermore, please note that Bluetooth devices have a maximum limit of connected 
 devices. The maximum limit is 7 devices connected simultaneously. This means that 
@@ -258,18 +212,20 @@ connected, such as a bluetooth enabled phone and a bluetooth mouse, then the
 maximum number of connected Mobots decreases to 5, for a total of 7 connected 
 devices.
 
-\section{ The Robot Remote Control Program }
+\section{ The ``Motion Control'' Tab}
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=4.5in]{images/shot1_populated.png}
+\includegraphics[width=4.5in]{images/robomancer_screenshot5.png}
 \end{center}
-\caption{\label{fig:shot1_populated.png} The graphical display of the RobotController
+\caption{\label{fig:shot1_populated.png} The graphical display of RoboMancer
 while connected to a robot.}
 \end{figure}
 
-Once a robot is connected to the RobotController, the joint angles and speeds
+Once a robot is connected to RoboMancer, the joint angles and speeds
 of the robot are displayed as shown in Figure \ref{fig:shot1_populated.png}.
-The RobotController can then be
+This dialog is located under the third tab of RoboMancer, labeled 
+``Motion Control''.
+The ``Motion Control'' tab can be
 used to display
 information about the Mobot's joint positions, and also control the
 speeds and positions of the Mobot's joints. The interface is divided
@@ -394,12 +350,12 @@ d = 4 \times \pi \times 1.75 = 21.99
 Our robot should travel approximately 22 inches during the 16 second motion.
 \end{enumerate}
 
-To verify these results with a real robot the RobotController program may be used.
+To verify these results with a real robot RoboMancer program may be used.
 \begin{enumerate}
 \item Affix two 3.5 inch diameter wheels to the faceplates.
 \item Set the joint speeds for joints 1 and 4 to 45 degrees per second. This may
 be done by typing "45" into the appropriate text boxes for joint 1 and 4 speeds at 
-the bottom left of the RobotController and then clicking the "Set" button.
+the bottom left of RoboMancer and then clicking the "Set" button.
 \item Type ``720'' into the text edit boxes below joints 1 and 4 in the joint
 position section of the GUI.
 \item Click the ``Move'' button. Joints 1 and 4 will turn 720 degrees, rolling
@@ -407,7 +363,7 @@ the robot forward. The motion may be timed with a stopwatch.
 \end{enumerate}
 
 \section{Getting Started with Programming the Mobot}
-The RobotController can be used to control the Mobot for simple tasks and applications.
+RoboMancer can be used to control the Mobot for simple tasks and applications.
 For more complicated applications, computer programs are better suited for controlling
 the Mobot.
 Mobot can be controlled using a C/C++ program through Ch, a C/C++ interpreter.
@@ -416,9 +372,7 @@ demo programs for controlling Mobot. Ch is available from SoftIntegration, Inc. 
 \texttt{http://www.softintegration.com}
 
 Before the Ch program is executed, the Bluetooth addresses of the robots
-need to be added using the RobotController as described in Section \ref{sec:pairing}.
-If a robot is already connected to the RobotController, disconnect
-from the robot before running the Ch program, or close the RobotController application.
+need to be added using RoboMancer as described in Section \ref{sec:pairing}.
 
 To help the user become acquainted with the Mobot control programs, sample
 programs will be presented in this section to illustrate the basics and minimum requirements of
@@ -426,14 +380,14 @@ a Mobot control program. The sample programs are located at
 \texttt{CHHOME/package/chmobot/demos}, where \texttt{CHHOME} is the 
 Ch home directory, such as \texttt{C:$\backslash$Ch} for Windows. For Windows,
 it is located at \texttt{C:$\backslash$Ch$\backslash$package$\backslash$chmobot$\backslash$demos} by default. 
-Alternatively, the demos may be accessed in the RobotController application
+Alternatively, the demos may be accessed in RoboMancer application
 by clicking on the ``Help $\rightarrow$ Demos'' menu item, as shown in Figure
 \ref{fig:help_demos_screenshot}.
 
 \begin{figure}
   \centering
   \includegraphics[width=4in]{images/help_demos_screenshot.png}
-  \caption{The ``Help $\rightarrow$ Demos'' menu item on the RobotController Application.}
+  \caption{The ``Help $\rightarrow$ Demos'' menu item on the RoboMancer Application.}
   \label{fig:help_demos_screenshot}
 \end{figure}
 
@@ -1573,7 +1527,7 @@ CMobotGroup groupD;
 \end{verbatim}
 
 Next, we connect our four robot variables to the first four robots 
-configured in our RobotController.
+configured in RoboMancer.
 \begin{verbatim}
 robot1.connect();
 robot2.connect();
@@ -2229,7 +2183,8 @@ is currently holding any of its joints at a position.
 
 \newpage
 \appendix
-\section{\label{sec:datatypes}Data Types}
+\section{CMobot API}
+\subsection{\label{sec:datatypes}Data Types}
 The data types defined in the header file \texttt{mobot.h} are described in
 this appendix.
 These data types are used by the Mobot library to represent 
@@ -2295,7 +2250,7 @@ Value & Description \\
 \hline
 \end{tabular}
 
-\section{\label{sec:cmobot_api}CMobot API}
+\subsection{\label{sec:cmobot_api}CMobot API Functions}
 \input{api/libimobotcomms.tex}
 
 \section{\label{sec:cmobotgroup_api}CMobotGroup API}
