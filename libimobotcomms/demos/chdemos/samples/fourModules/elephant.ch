@@ -31,10 +31,10 @@ mobot3.connect();
 mobot4.connect();
 
 /* Add the two modules to be members of the group */
-group1.addMobot(mobot1);
-group1.addMobot(mobot4);
-group2.addMobot(mobot2);
-group2.addMobot(mobot3);
+group1.addRobot(mobot1);
+group1.addRobot(mobot4);
+group2.addRobot(mobot2);
+group2.addRobot(mobot3);
 
 mobot1.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
 mobot2.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);

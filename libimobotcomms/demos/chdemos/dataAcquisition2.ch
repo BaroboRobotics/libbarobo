@@ -60,10 +60,10 @@ shiftTime(tolerance, numDataPoints, time,
 plot.title("Unwrapped Data for Joint Angles versus Time");
 plot.label(PLOT_AXIS_X, "Time (seconds)");
 plot.label(PLOT_AXIS_Y, "Angle (degrees)");
-plot.data2D(time, angles1_unwrapped);
-plot.data2D(time, angles2_unwrapped);
-plot.data2D(time, angles3_unwrapped);
-plot.data2D(time, angles4_unwrapped);
+plot.data2DCurve(time, angles1_unwrapped, numDataPoints);
+plot.data2DCurve(time, angles2_unwrapped, numDataPoints);
+plot.data2DCurve(time, angles3_unwrapped, numDataPoints);
+plot.data2DCurve(time, angles4_unwrapped, numDataPoints);
 plot.legend("Joint 1", 0);
 plot.legend("Joint 2", 1);
 plot.legend("Joint 3", 2);

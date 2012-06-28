@@ -45,12 +45,12 @@ mobot5.setJointSpeedRatios(0.8, 0.4, 0.4, 0.8);
 mobot6.setJointSpeedRatios(0.6, 0.6, 0.6, 0.8);
 
 /* Add the two modules to be members of our group */
-group1.addMobot(mobot1);
-group1.addMobot(mobot2);
-group1.addMobot(mobot4);
-group1.addMobot(mobot5);
-group2.addMobot(mobot3);
-group2.addMobot(mobot6);
+group1.addRobot(mobot1);
+group1.addRobot(mobot2);
+group1.addRobot(mobot4);
+group1.addRobot(mobot5);
+group2.addRobot(mobot3);
+group2.addRobot(mobot6);
 
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
 group1.moveToZeroNB();

@@ -36,7 +36,7 @@ double tolerance = 1.0; /* Degrees */
 /* Start the motion. First, move mobot to zero position */
 mobot.moveToZero();
 /* Set mobot wheel speed */
-mobot.setTwoWheelMobotSpeed(speed, radius);
+mobot.setTwoWheelRobotSpeed(speed, radius);
 
 /* Start capturing data */
 mobot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
@@ -58,6 +58,6 @@ distances = angle2distance(radius, angles1Unwrapped);
 plot.title("Displacement versus Time");
 plot.label(PLOT_AXIS_X, "Time (seconds)");
 plot.label(PLOT_AXIS_Y, "Displacement (inches)");
-plot.data2D(time, distances);
+plot.data2DCurve(time, distances, numDataPoints);
 plot.grid(PLOT_ON);
 plot.plotting();

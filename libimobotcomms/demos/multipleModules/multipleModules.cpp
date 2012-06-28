@@ -11,7 +11,7 @@ int main()
   }
   CMobotGroup group;
   for(i = 0; i < NUM_BOTS; i++) {
-    group.addMobot(mobots[i]);
+    group.addRobot(mobots[i]);
   }
   return 0;
 }

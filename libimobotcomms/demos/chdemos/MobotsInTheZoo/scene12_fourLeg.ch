@@ -27,10 +27,10 @@ mobot3.connect();
 mobot4.connect();
 
 /* Add the two modules to be members of our group */
-group1.addMobot(mobot1);
-group1.addMobot(mobot2);
-group2.addMobot(mobot3);
-group2.addMobot(mobot4);
+group1.addRobot(mobot1);
+group1.addRobot(mobot2);
+group2.addRobot(mobot3);
+group2.addRobot(mobot4);
 
 // move to zero position
 group1.moveToZeroNB();

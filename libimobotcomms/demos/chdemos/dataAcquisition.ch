@@ -51,7 +51,7 @@ mobot.recordWait();
 plot1.title("Original Data for Joint Angle 1 versus Time");
 plot1.label(PLOT_AXIS_X, "Time (seconds)");
 plot1.label(PLOT_AXIS_Y, "Angle (degrees)");
-plot1.data2D(time, angles1);
+plot1.data2DCurve(time, angles1, numDataPoints);
 plot1.grid(PLOT_ON);
 plot1.plotting();
 
@@ -60,7 +60,7 @@ unwrapdeg(angles1Unwrapped, angles1);
 plot2.title("Unwrapped Data for Joint Angle 1 versus Time");
 plot2.label(PLOT_AXIS_X, "Time (seconds)");
 plot2.label(PLOT_AXIS_Y, "Angle (degrees)");
-plot2.data2D(time, angles1Unwrapped);
+plot2.data2DCurve(time, angles1Unwrapped, numDataPoints);
 plot2.grid(PLOT_ON);
 plot2.plotting();
 
@@ -72,7 +72,7 @@ shiftTime(tolerance, numDataPoints, time, angles1Unwrapped);
 plot3.title("Unwrapped and shifted Data for Joint Angle 1 versus Time");
 plot3.label(PLOT_AXIS_X, "Time (seconds)");
 plot3.label(PLOT_AXIS_Y, "Angle (degrees)");
-plot3.data2D(time, angles1Unwrapped);
+plot3.data2DCurve(time, angles1Unwrapped, numDataPoints);
 plot3.grid(PLOT_ON);
 plot3.plotting();
 

@@ -27,7 +27,7 @@ mobot.motionRollForward(360);
 
 speed = 1.83; // = (3.5/2) * M_PI * 60/180 (inch/s)
 radius = 3.5/2;             // radius is 1.75 
-mobot.setTwoWheelMobotSpeed(speed, radius);
+mobot.setTwoWheelRobotSpeed(speed, radius);
 
 printf("Move 360 degrees.\n");
 mobot.move(360, 0, 0, 360);

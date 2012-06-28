@@ -309,7 +309,7 @@ class CMobot {
     int setJointSpeedRatio(mobotJointId_t id, double ratio);
     int setJointSpeedRatios(double ratios1, double ratios2, double ratios3, double ratios4);
     int setMotorPower(mobotJointId_t id, int power);
-    int setTwoWheelMobotSpeed(double speed, double radius);
+    int setTwoWheelRobotSpeed(double speed, double radius);
     int stop();
     int stopOneJoint(mobotJointId_t id);
     int stopTwoJoints(mobotJointId_t id1, mobotJointId_t id2);
@@ -361,7 +361,7 @@ class CMobotGroup
   public:
     CMobotGroup();
     ~CMobotGroup();
-    int addMobot(CMobot& mobot);
+    int addRobot(CMobot& mobot);
     int isMoving();
     int move(double angle1, double angle2, double angle3, double angle4);
     int moveNB(double angle1, double angle2, double angle3, double angle4);
@@ -388,7 +388,7 @@ class CMobotGroup
     int setJointSpeeds(double speed1, double speed2, double speed3, double speed4);
     int setJointSpeedRatio(mobotJointId_t id, double ratio);
     int setJointSpeedRatios(double ratio1, double ratio2, double ratio3, double ratio4);
-    int setTwoWheelMobotSpeed(double speed, double radius);
+    int setTwoWheelRobotSpeed(double speed, double radius);
     int stop();
 
     int motionArch(double angle);
@@ -632,7 +632,7 @@ DLLIMPORT int Mobot_getJointSpeeds(mobot_t* comms,
                                    double *speed3, 
                                    double *speed4);
 DLLIMPORT int Mobot_setMotorPower(mobot_t* comms, mobotJointId_t id, int power);
-DLLIMPORT int Mobot_setTwoWheelMobotSpeed(mobot_t* comms, double speed, double radius);
+DLLIMPORT int Mobot_setTwoWheelRobotSpeed(mobot_t* comms, double speed, double radius);
 DLLIMPORT int Mobot_stop(mobot_t* comms);
 DLLIMPORT int Mobot_stopOneJoint(mobot_t* comms, mobotJointId_t id);
 DLLIMPORT int Mobot_stopTwoJoints(mobot_t* comms, mobotJointId_t id1, mobotJointId_t id2);

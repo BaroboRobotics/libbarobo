@@ -9,7 +9,7 @@ is called automatically and should not be called explicitly. \\
 \texttt{\textasciitilde CMobotGroup()} & The CMobotGroup destructor function. This function
 is called automatically and should not be called explicitly. \\
 & \\
-\texttt{addMobot()} & Add a mobot to be a member of the mobot group. \\
+\texttt{addRobot()} & Add a mobot to be a member of the mobot group. \\
 \texttt{move()} & Move all four joints of the mobots by specified angles. \\
 \texttt{moveNB()} & Identical to \texttt{move()} but non-blocking. \\
 \texttt{moveContinuousNB()} & Move joints continuously. Joints will move untill stopped.\\
@@ -33,7 +33,7 @@ is called automatically and should not be called explicitly. \\
 \texttt{setJointSpeedRatio()} & Set a joints speed setting to a fraction of its maximum speed, a value between 0 and 1. \\
 \texttt{setJointSpeedRatios()} & Set all joint speed settings to a fraction of its
 maximum speed, expressed as a value from 0 to 1. \\
-\texttt{setTwoWheelMobotSpeed()} & Move the mobots at a constant forward velocity. \\
+\texttt{setTwoWheelRobotSpeed()} & Move the mobots at a constant forward velocity. \\
 \texttt{stop()} & Stop all currently executing motions of the mobot. \\
 \hline
 \end{tabular}
@@ -42,7 +42,7 @@ maximum speed, expressed as a value from 0 to 1. \\
 \begin{tabular}{p{1.75in}p{4.5in}} \hline 
 Function Name & Description \\
 \hline
-\texttt{addMobot()} & Add a mobot to the group. \\
+\texttt{addRobot()} & Add a mobot to the group. \\
 \texttt{move()} & Move joints on mobots from their current positions for all mobots in the group. \\
 \texttt{moveContinuousNB()} & Move joints continuously for all mobots in the group. \\
 \texttt{moveContinunousTime()} & Move joints continuously for a specific amount of time for all mobots in the group.\\
@@ -55,7 +55,7 @@ Function Name & Description \\
 \texttt{moveToZero()} & Move all joints to their zero positions. \\
 \texttt{setJointSpeed()} & Set the speed of a joint, in radians per second. \\
 \texttt{setJointSpeedRatio()} & Set the speed of a joint as a ratio of the maximum speed. \\
-\texttt{setTwoWheelMobotSpeed()} & Move the mobot at a linear speed, given the wheel size and desired speed.\\
+\texttt{setTwoWheelRobotSpeed()} & Move the mobot at a linear speed, given the wheel size and desired speed.\\
 \texttt{stop()} & Stop all the joints of all mobots in the group. \\
 \texttt{motionArch()} & Cause all mobots in the group to arch for higher rolling clearance. \\
 \texttt{motionArchNB()} & Cause all mobots in the group to arch for higher rolling clearance. \\

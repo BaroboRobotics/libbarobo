@@ -1059,7 +1059,7 @@ EXPORTCH int setMotorPower_chdl(void *varg) {
     return retval;
 }
 
-EXPORTCH int setTwoWheelMobotSpeed_chdl(void *varg) {
+EXPORTCH int setTwoWheelRobotSpeed_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CMobot *mobot;
@@ -1071,7 +1071,7 @@ EXPORTCH int setTwoWheelMobotSpeed_chdl(void *varg) {
     mobot = Ch_VaArg(interp, ap, class CMobot *);
     speed = Ch_VaArg(interp, ap, double);
     radius = Ch_VaArg(interp, ap, double);
-    retval = mobot->setTwoWheelMobotSpeed(speed, radius);
+    retval = mobot->setTwoWheelRobotSpeed(speed, radius);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -1489,7 +1489,7 @@ EXPORTCH void CMobotGroup_dCMobotGroup_chdl(void *varg) {
   return;
 }
 
-EXPORTCH int CMG_addMobot_chdl(void *varg) {
+EXPORTCH int CMG_addRobot_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CMobotGroup *mobot;
@@ -1499,7 +1499,7 @@ EXPORTCH int CMG_addMobot_chdl(void *varg) {
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
     robot = Ch_VaArg(interp, ap, class CMobot*);
-    retval = mobot->addMobot(*robot);
+    retval = mobot->addRobot(*robot);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -1843,7 +1843,7 @@ EXPORTCH int CMG_setJointSpeedRatios_chdl(void *varg) {
     return retval;
 }
 
-EXPORTCH int CMG_setTwoWheelMobotSpeed_chdl(void *varg) {
+EXPORTCH int CMG_setTwoWheelRobotSpeed_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CMobotGroup *mobot;
@@ -1855,7 +1855,7 @@ EXPORTCH int CMG_setTwoWheelMobotSpeed_chdl(void *varg) {
     mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
     speed = Ch_VaArg(interp, ap, double);
     radius = Ch_VaArg(interp, ap, double);
-    retval = mobot->setTwoWheelMobotSpeed(speed, radius);
+    retval = mobot->setTwoWheelRobotSpeed(speed, radius);
     Ch_VaEnd(interp, ap);
     return retval;
 }

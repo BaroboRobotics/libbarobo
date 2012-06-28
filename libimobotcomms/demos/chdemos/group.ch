@@ -10,8 +10,8 @@ mobot1.connect();
 mobot2.connect();
 
 /* Add the two modules to be members of our group */
-group.addMobot(mobot1);
-group.addMobot(mobot2);
+group.addRobot(mobot1);
+group.addRobot(mobot2);
 
 /* Now, any commands given to "group" will cause both mobot1 and mobot2 to
  * execute the command. */

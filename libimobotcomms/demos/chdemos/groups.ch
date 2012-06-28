@@ -23,23 +23,23 @@ mobot4.connect();
  * Group D: 1, 2, 3 */
 
 /* Group A */
-groupA.addMobot(mobot1);
-groupA.addMobot(mobot2);
-groupA.addMobot(mobot3);
-groupA.addMobot(mobot4);
+groupA.addRobot(mobot1);
+groupA.addRobot(mobot2);
+groupA.addRobot(mobot3);
+groupA.addRobot(mobot4);
 
 /* Group B */
-groupB.addMobot(mobot1);
-groupB.addMobot(mobot2);
+groupB.addRobot(mobot1);
+groupB.addRobot(mobot2);
 
 /* Group C */
-groupC.addMobot(mobot3);
-groupC.addMobot(mobot4);
+groupC.addRobot(mobot3);
+groupC.addRobot(mobot4);
 
 /* Group D */
-groupD.addMobot(mobot1);
-groupD.addMobot(mobot2);
-groupD.addMobot(mobot3);
+groupD.addRobot(mobot1);
+groupD.addRobot(mobot2);
+groupD.addRobot(mobot3);
 
 /* Make group B roll forward and group C roll backward at the same time */
 groupB.motionRollForwardNB(360);
