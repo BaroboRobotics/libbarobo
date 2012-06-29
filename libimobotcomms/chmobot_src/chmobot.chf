@@ -859,6 +859,30 @@ int CMobot::recordAngle(int id, double time[:], double angle[:], int num, double
     dlrunfun(fptr, &retval, recordAngle, this, id, time, angle, num, seconds);
     return retval;
 }
+int CMobot::recordAngleBegin(int id, double **time, double **angle, double seconds) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "recordAngleBegin_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, recordAngleBegin, this, id, time, angle, seconds);
+    return retval;
+}
+int CMobot::recordAngleEnd(int id) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "recordAngleEnd_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, recordAngleEnd, this, id);
+    return retval;
+}
 int CMobot::recordAngles(double time[:], double angle1[:], double angle2[:], double angle3[:], double angle4[:], int num, double seconds) {
     void *fptr;
     int retval;
@@ -869,6 +893,43 @@ int CMobot::recordAngles(double time[:], double angle1[:], double angle2[:], dou
         return -1;
     }
     dlrunfun(fptr, &retval, recordAngles, this, time, angle1, angle2, angle3, angle4, num, seconds);
+    return retval;
+}
+int CMobot::recordAnglesBegin(
+    double **time, 
+    double **angle1, 
+    double **angle2, 
+    double **angle3, 
+    double **angle4, 
+    double seconds) 
+{
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "recordAnglesBegin_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, recordAnglesBegin, this, 
+             time, 
+             angle1, 
+             angle2, 
+             angle3, 
+             angle4, 
+             seconds);
+    return retval;
+}
+int CMobot::recordAnglesEnd() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "recordAnglesEnd_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, recordAnglesEnd, this);
     return retval;
 }
 int CMobot::recordWait() {
@@ -989,6 +1050,54 @@ int CMobot::stop() {
         return -1;
     }
     dlrunfun(fptr, &retval, stop, this);
+    return retval;
+}
+int CMobot::stopAllJoints() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "stop_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, stop, this);
+    return retval;
+}
+int CMobot::stopOneJoint(int id) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "stopOneJoint_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, stopOneJoint, this, id);
+    return retval;
+}
+int CMobot::stopTwoJoints(int id1, int id2) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "stopTwoJoints_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, stopTwoJoints, this, id1, id2);
+    return retval;
+}
+int CMobot::stopThreeJoints(int id1, int id2, int id3) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "stopThreeJoints_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, stopThreeJoints, this, id1, id2, id3);
     return retval;
 }
 

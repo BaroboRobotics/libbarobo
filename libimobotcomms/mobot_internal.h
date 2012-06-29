@@ -36,7 +36,7 @@ typedef struct callbackArg_s
 
 #ifndef ROBOT_JOINTS_E
 #define ROBOT_JOINTS_E
-typedef enum mobot_joints_e {
+typedef enum robotJoints_e{
   ROBOT_ZERO,
   ROBOT_JOINT1,
   ROBOT_JOINT2,
