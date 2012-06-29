@@ -8,7 +8,7 @@ project(LIBIMOBOTCOMMS)
 add_definitions(-DNONRELEASE)
 
 if(CMAKE_HOST_WIN32)
-	add_library(mobot SHARED
+	add_library(mobot STATIC
 	  mobot.cpp
 	  )
 	target_link_libraries(mobot Ws2_32)
