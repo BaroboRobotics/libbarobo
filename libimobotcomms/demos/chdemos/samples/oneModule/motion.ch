@@ -1,24 +1,24 @@
 /* Filename: motion.ch 
    pre-programmed motions */
 #include <mobot.h>
-CMobot robot;
+CMobot mobot;
 
-robot.connect();
-robot.moveToZero();
+mobot.connect();
+mobot.moveToZero();
 
 /* set to 50% of the maximum speed */
-robot.setJointSpeedRatios(0.5, 0.5, 0.5, 0.5);
+mobot.setJointSpeedRatios(0.5, 0.5, 0.5, 0.5);
 
 /* pre-programmed motions */
-robot.motionInchwormLeft(2);
-robot.motionInchwormRight(2);
-robot.motionRollForward(360);
-robot.motionRollBackward(360);
-robot.motionTurnRight(360);
-robot.motionTurnLeft(360);
+mobot.motionInchwormLeft(2);
+mobot.motionInchwormRight(2);
+mobot.motionRollForward(360);
+mobot.motionRollBackward(360);
+mobot.motionTurnRight(360);
+mobot.motionTurnLeft(360);
 
-robot.motionStand(); // stand up
-/* Spin the robot around two revolutions while spinning the top */
-robot.move(2*360, 0, 0, 2*360);
-robot.motionUnstand();
-robot.motionTumbleLeft(2);
+mobot.motionStand(); // stand up
+/* Spin the mobot around two revolutions while spinning the top */
+mobot.move(2*360, 0, 0, 2*360);
+mobot.motionUnstand();
+mobot.motionTumbleLeft(2);

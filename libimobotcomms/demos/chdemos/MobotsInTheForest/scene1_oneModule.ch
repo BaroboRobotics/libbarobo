@@ -1,15 +1,15 @@
 /* Discription:
- * In this scene, one robot do different motions.
+ * In this scene, one mobot do different motions.
  */
 #include <mobot.h>
-CMobot robot1;
-robot1.connect();
-robot1.moveToZeroNB();
+CMobot mobot1;
+mobot1.connect();
+mobot1.moveToZeroNB();
 
-// set robots' speed
-robot1.setJointSpeedRatios(0.8, 0.8, 0.8, 0.8);
+// set mobots' speed
+mobot1.setJointSpeedRatios(0.8, 0.8, 0.8, 0.8);
 
-robot1.motionTurnRight();
-robot1.motionRollForward(3*360);
-robot1.motionTurnLeft();
-robot5.motionTumbleLeft(5);
+mobot1.motionTurnRight();
+mobot1.motionRollForward(3*360);
+mobot1.motionTurnLeft();
+mobot5.motionTumbleLeft(5);

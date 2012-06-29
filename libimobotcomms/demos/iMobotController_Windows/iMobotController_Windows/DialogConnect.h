@@ -1,6 +1,6 @@
 #pragma once
 #include "afxcmn.h"
-#include "robotManager.h"
+#include "mobotManager.h"
 #include "afxwin.h"
 
 
@@ -25,7 +25,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 private:
-  RobotManager* m_robotManager;
+  RobotManager* m_mobotManager;
 
 public:
   CListCtrl m_listCtrl_availableBots;

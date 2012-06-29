@@ -12,15 +12,15 @@
 \begin{verbatim}
 #include <mobot.h>
 int CMobotGroup::moveContinuousNB(
-  robotJointState_t dir1, 
-  robotJointState_t dir2, 
-  robotJointState_t dir3, 
-  robotJointState_t dir4);
+  mobotJointState_t dir1, 
+  mobotJointState_t dir2, 
+  mobotJointState_t dir3, 
+  mobotJointState_t dir4);
 \end{verbatim}
 
 \noindent
 {\bf Purpose}\\
-Move the joints of grouped robots continuously in the specified directions.\\
+Move the joints of grouped mobots continuously in the specified directions.\\
 
 \noindent
 {\bf Return Value}\\
@@ -32,12 +32,12 @@ Each integer parameter specifies the direction the joint should move. The types
 are enumerated in \texttt{mobot.h} and have the following values:
 \input{jointStateTable}
 More documentation about these types may be found at Section
-\ref{sec:robotJointState_t} on page
-\pageref{sec:robotJointState_t}.
+\ref{sec:mobotJointState_t} on page
+\pageref{sec:mobotJointState_t}.
 
 \noindent
 {\bf Description}\\
-This function causes joints of robots to begin moving at the previously set
+This function causes joints of mobots to begin moving at the previously set
 speed. The joints will continue moving until the joint hits a joint limit, or
 the joint is stopped by setting the speed to zero. This function is a non-blocking
 function.\\

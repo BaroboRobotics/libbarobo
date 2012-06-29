@@ -1,41 +1,41 @@
 /* Discription:
- * In this scene, seven single robots bow.
+ * In this scene, seven single mobots bow.
 */
 #include <mobot.h>
-CMobot robot1;
-CMobot robot2;
-CMobot robot3;
-CMobot robot4;
-CMobot robot5;
-CMobot robot6;
-CMobot robot7;
+CMobot mobot1;
+CMobot mobot2;
+CMobot mobot3;
+CMobot mobot4;
+CMobot mobot5;
+CMobot mobot6;
+CMobot mobot7;
 CMobotGroup group;
 
-/* Connect to the robots listed in the configuration file. */
-robot1.connect();
-robot2.connect();
-robot3.connect();
-robot4.connect();
-robot5.connect();
-robot6.connect();
-robot7.connect();
+/* Connect to the mobots listed in the configuration file. */
+mobot1.connect();
+mobot2.connect();
+mobot3.connect();
+mobot4.connect();
+mobot5.connect();
+mobot6.connect();
+mobot7.connect();
 
-robot1.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
-robot2.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
-robot3.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
-robot4.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
-robot5.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
-robot6.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
-robot7.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
+mobot1.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
+mobot2.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
+mobot3.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
+mobot4.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
+mobot5.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
+mobot6.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
+mobot7.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
 
 /* Add the two modules to be members of our group */
-group.addRobot(robot1);
-group.addRobot(robot2);
-group.addRobot(robot3);
-group.addRobot(robot4);
-group.addRobot(robot5);
-group.addRobot(robot6);
-group.addRobot(robot7);
+group.addRobot(mobot1);
+group.addRobot(mobot2);
+group.addRobot(mobot3);
+group.addRobot(mobot4);
+group.addRobot(mobot5);
+group.addRobot(mobot6);
+group.addRobot(mobot7);
 
 // bow
 group.moveTo(45, 0, 0, 0);

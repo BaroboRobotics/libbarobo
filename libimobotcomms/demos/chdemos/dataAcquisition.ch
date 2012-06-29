@@ -1,13 +1,13 @@
 /* Filename: dataAcquisition.ch
- * Make a graph of the robot's joint angle versus time */
+ * Make a graph of the mobot's joint angle versus time */
 
 #include <mobot.h>
 #include <chplot.h>
 #include <numeric.h>
-CMobot robot;
+CMobot mobot;
 
-/* Connect to the robot */
-robot.connect();
+/* Connect to the mobot */
+mobot.connect();
 
 double speed = 45; /* Degrees/second */
 double angle = 720; /* Degrees */
@@ -32,26 +32,26 @@ array double angles1Unwrapped[numDataPoints];
 /* Declare time shifted data */
 double tolerance = 1.0; /* Degrees */
 
-/* Start the motion. First, move robot to zero position */
-robot.moveToZero();
+/* Start the motion. First, move mobot to zero position */
+mobot.moveToZero();
 /* Set the joint 1 speed to 45 degrees/second */
-robot.setJointSpeed(ROBOT_JOINT1, speed);
-robot.setJointSpeed(ROBOT_JOINT4, speed);
+mobot.setJointSpeed(MOBOT_JOINT1, speed);
+mobot.setJointSpeed(MOBOT_JOINT4, speed);
 
 /* Start capturing data */
-robot.recordAngle(ROBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
+mobot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
 
 /* Move the joint 720 degrees */
-robot.move(angle, 0, 0, angle);
+mobot.move(angle, 0, 0, angle);
 
 /* Wait for recording to finish */
-robot.recordWait();
+mobot.recordWait();
 
 /* Plot the data */
 plot1.title("Original Data for Joint Angle 1 versus Time");
 plot1.label(PLOT_AXIS_X, "Time (seconds)");
 plot1.label(PLOT_AXIS_Y, "Angle (degrees)");
-plot1.data2D(time, angles1);
+plot1.data2DCurve(time, angles1, numDataPoints);
 plot1.grid(PLOT_ON);
 plot1.plotting();
 
@@ -60,7 +60,7 @@ unwrapdeg(angles1Unwrapped, angles1);
 plot2.title("Unwrapped Data for Joint Angle 1 versus Time");
 plot2.label(PLOT_AXIS_X, "Time (seconds)");
 plot2.label(PLOT_AXIS_Y, "Angle (degrees)");
-plot2.data2D(time, angles1Unwrapped);
+plot2.data2DCurve(time, angles1Unwrapped, numDataPoints);
 plot2.grid(PLOT_ON);
 plot2.plotting();
 
@@ -72,7 +72,7 @@ shiftTime(tolerance, numDataPoints, time, angles1Unwrapped);
 plot3.title("Unwrapped and shifted Data for Joint Angle 1 versus Time");
 plot3.label(PLOT_AXIS_X, "Time (seconds)");
 plot3.label(PLOT_AXIS_Y, "Angle (degrees)");
-plot3.data2D(time, angles1Unwrapped);
+plot3.data2DCurve(time, angles1Unwrapped, numDataPoints);
 plot3.grid(PLOT_ON);
 plot3.plotting();
 

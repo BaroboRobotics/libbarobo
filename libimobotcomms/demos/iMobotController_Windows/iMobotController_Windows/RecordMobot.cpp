@@ -27,7 +27,7 @@ const char* CRecordMobot::getAddress()
 
 int CRecordMobot::record(void)
 {
-	/* Get the robots positions */
+	/* Get the mobots positions */
 	double angles[4];
 	getJointAnglesAbs(angles[0], angles[1], angles[2], angles[3]);
 	struct motion_s* motion;

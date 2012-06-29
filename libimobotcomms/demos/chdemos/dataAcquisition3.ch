@@ -1,13 +1,13 @@
 /* Filename: dataAcquisition3.ch
- * Make a graph of the robot's joint angle versus time */
+ * Make a graph of the mobot's joint angle versus time */
 
 #include <mobot.h>
 #include <chplot.h>
 #include <numeric.h>
-CMobot robot;
+CMobot mobot;
 
-/* Connect to the robot */
-robot.connect();
+/* Connect to the mobot */
+mobot.connect();
 
 double speed = 2.5; /* inches / second */
 double distance = 12; /* inches */
@@ -33,19 +33,19 @@ CPlot plot;
 array double angles1Unwrapped[numDataPoints];
 double tolerance = 1.0; /* Degrees */
 
-/* Start the motion. First, move robot to zero position */
-robot.moveToZero();
-/* Set robot wheel speed */
-robot.setTwoWheelRobotSpeed(speed, radius);
+/* Start the motion. First, move mobot to zero position */
+mobot.moveToZero();
+/* Set mobot wheel speed */
+mobot.setTwoWheelRobotSpeed(speed, radius);
 
 /* Start capturing data */
-robot.recordAngle(ROBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
+mobot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
 
-/* Roll the robot the calculated distance */
-robot.motionRollForward(angle);
+/* Roll the mobot the calculated distance */
+mobot.motionRollForward(angle);
 
 /* Wait for recording to finish */
-robot.recordWait();
+mobot.recordWait();
 
 /* Unwrap the data */
 unwrapdeg(angles1Unwrapped, angles1);
@@ -58,6 +58,6 @@ distances = angle2distance(radius, angles1Unwrapped);
 plot.title("Displacement versus Time");
 plot.label(PLOT_AXIS_X, "Time (seconds)");
 plot.label(PLOT_AXIS_Y, "Displacement (inches)");
-plot.data2D(time, distances);
+plot.data2DCurve(time, distances, numDataPoints);
 plot.grid(PLOT_ON);
 plot.plotting();

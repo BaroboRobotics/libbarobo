@@ -15,7 +15,7 @@ CDialogTeaching::CDialogTeaching(CWnd* pParent /*=NULL*/)
 	: CDialog(CDialogTeaching::IDD, pParent)
 {
   CTabbedDialog *td = (CTabbedDialog*)pParent;
-  _robotManager = td->GetRobotManager();
+  _mobotManager = td->GetRobotManager();
   haltPlayFlag = 0;
   isPlaying = 0;
   listctrl_recordedMotions.setContextMenuCallback(&CDialogTeaching::OnRecordedMotionContextMenu, this);
@@ -82,7 +82,7 @@ void CDialogTeaching::OnBnClickedButtonTeachingConnect()
 	if(index == -1) {
 		return;
 	}
-	_robotManager->connect(index);
+	_mobotManager->connect(index);
 	refresh();
 }
 
@@ -91,7 +91,7 @@ void CDialogTeaching::OnBnClickedButtonTeachingMoveup()
 	int connectIndex = listctrl_connectedBots.GetSelectionMark();
 	if(connectIndex == -1) {return;}
 	if(connectIndex == 0) {return;}
-	_robotManager->moveUp(connectIndex);
+	_mobotManager->moveUp(connectIndex);
 	refresh();
 	listctrl_connectedBots.SetSelectionMark(connectIndex-1);
 }
@@ -100,8 +100,8 @@ void CDialogTeaching::OnBnClickedButtonTeachingMovedown()
 {
 	int connectIndex = listctrl_connectedBots.GetSelectionMark();
 	if(connectIndex == -1) {return;}
-	if(connectIndex >= (_robotManager->numConnected()-1)) {return;}
-	_robotManager->moveDown(connectIndex);
+	if(connectIndex >= (_mobotManager->numConnected()-1)) {return;}
+	_mobotManager->moveDown(connectIndex);
 	refresh();
 	listctrl_connectedBots.SetSelectionMark(connectIndex+1);
 }
@@ -111,15 +111,15 @@ void CDialogTeaching::OnBnClickedButtonTeachingDisconnect()
 	int connectIndex;
 	connectIndex = listctrl_connectedBots.GetSelectionMark();
 	if(connectIndex == -1) { return; }
-	_robotManager->disconnect(connectIndex);
+	_mobotManager->disconnect(connectIndex);
 	refresh();
 }
 
 void CDialogTeaching::OnBnClickedButtonTeachingRecord()
 {
 	int i;
-	for(i = 0; i < _robotManager->numConnected(); i++) {
-		_robotManager->getMobot(i)->record();
+	for(i = 0; i < _mobotManager->numConnected(); i++) {
+		_mobotManager->getMobot(i)->record();
 	}
 	refreshRecordedMotions(-1);
 }
@@ -134,8 +134,8 @@ void CDialogTeaching::OnBnClickedButtonTeachingAdddelay()
 	_stscanf(buf, TEXT("%lf"), &delay);
 	if(delay <= 0) {return;}
 	int i;
-	for(i = 0; i < _robotManager->numConnected(); i++) {
-		_robotManager->getMobot(i)->addDelay(delay);
+	for(i = 0; i < _mobotManager->numConnected(); i++) {
+		_mobotManager->getMobot(i)->addDelay(delay);
 	}
 	refreshRecordedMotions(-1);
 }
@@ -152,8 +152,8 @@ void CDialogTeaching::OnBnClickedButtonTeachingDeletepos()
 void CDialogTeaching::DeleteRecordedMotion(int index)
 {
 	int i;
-	for(i = 0; i < _robotManager->numConnected(); i++) {
-		_robotManager->getMobot(i)->removeMotion(index);
+	for(i = 0; i < _mobotManager->numConnected(); i++) {
+		_mobotManager->getMobot(i)->removeMotion(index);
 	}
 	refreshRecordedMotions(-1);
 }
@@ -183,7 +183,7 @@ void CDialogTeaching::OnBnClickedButtonTeachingSave()
           MB_OK | MB_ICONINFORMATION );
       return;
     }
-    CString *program = _robotManager->generateProgram(looped);
+    CString *program = _mobotManager->generateProgram(looped);
     _ftprintf(fp, (LPCTSTR)*program);
     fclose(fp);
     delete program;
@@ -196,15 +196,15 @@ void CDialogTeaching::refresh()
 
 void CDialogTeaching::refreshRecordedMotions(int highlightedIndex)
 {
-	/* Pick the first connect robot in the list, go through all the motions.. */
+	/* Pick the first connect mobot in the list, go through all the motions.. */
 	TCHAR buf[200];
-	if(_robotManager->numConnected() <= 0) {
+	if(_mobotManager->numConnected() <= 0) {
 		return;
 	}
 	listctrl_recordedMotions.DeleteAllItems();
 	int i;
 	CRecordMobot *mobot;
-	mobot = _robotManager->getMobot(0);
+	mobot = _mobotManager->getMobot(0);
 	for(i = 0; i < mobot->numMotions(); i++) {
 		if(i == highlightedIndex) {
 			swprintf(buf, TEXT("%s <--"), mobot->getMotionName(i)); 
@@ -236,18 +236,18 @@ void* playThread(void* arg)
 	CDialogTeaching *teachingDialog;
 	teachingDialog = (CDialogTeaching*)arg;
   teachingDialog->isPlaying = true;
-	RobotManager* robotManager;
-	robotManager = teachingDialog->getRobotManager();
+	RobotManager* mobotManager;
+	mobotManager = teachingDialog->getRobotManager();
 	int i, j, done;
 	done = 0;
 	for(i = 0; !done ; i++) {
 		teachingDialog->refreshRecordedMotions(i);
-		for(j = 0; j < robotManager->numConnected(); j++) {
-			if(robotManager->getMobot(j)->getMotionType(i) == MOTION_SLEEP) {
-				robotManager->getMobot(j)->play(i);
+		for(j = 0; j < mobotManager->numConnected(); j++) {
+			if(mobotManager->getMobot(j)->getMotionType(i) == MOTION_SLEEP) {
+				mobotManager->getMobot(j)->play(i);
 				break;
 			}
-			if(robotManager->getMobot(j)->play(i)) {
+			if(mobotManager->getMobot(j)->play(i)) {
 				if(teachingDialog->button_teachingLoopCheck.GetCheck() == BST_CHECKED) {
 					i = -1;
 					break;
@@ -257,16 +257,16 @@ void* playThread(void* arg)
 				}
 			}
 		}
-		for(j = 0; j < robotManager->numConnected(); j++) {
-			robotManager->getMobot(j)->moveWait();
+		for(j = 0; j < mobotManager->numConnected(); j++) {
+			mobotManager->getMobot(j)->moveWait();
 		}
 		if(teachingDialog->haltPlayFlag) {
 			teachingDialog->haltPlayFlag = 0;
 			break;
 		}
 	}
-	for(j = 0; j < robotManager->numConnected(); j++) {
-		robotManager->getMobot(j)->stop();
+	for(j = 0; j < mobotManager->numConnected(); j++) {
+		mobotManager->getMobot(j)->stop();
 	}
   teachingDialog->isPlaying = false;
 	teachingDialog->button_play.EnableWindow(true);
@@ -276,7 +276,7 @@ void* playThread(void* arg)
 
 RobotManager* CDialogTeaching::getRobotManager()
 {
-	return _robotManager;
+	return _mobotManager;
 }
 void CDialogTeaching::OnBnClickedButtonstop()
 {
@@ -307,8 +307,8 @@ void CDialogTeaching::OnLvnEndlabeleditListRecordedmotions(NMHDR *pNMHDR, LRESUL
 	// TODO: Add your control notification handler code here
 	int i;
 	int index = pDispInfo->item.iItem;
-	for(i = 0; i < _robotManager->numConnected(); i++) {
-		_robotManager->getMobot(i)->setMotionName(
+	for(i = 0; i < _mobotManager->numConnected(); i++) {
+		_mobotManager->getMobot(i)->setMotionName(
 			index,
 			pDispInfo->item.pszText );
 	}
@@ -363,8 +363,8 @@ void CDialogTeaching::MoveMotionUp(int index)
 void CDialogTeaching::OnRecordPopupMoveup()
 {
   int i;
-  for(i = 0; i < _robotManager->numConnected(); i++) {
-    _robotManager->getMobot(i)->moveMotion(contextMenuIndex, contextMenuIndex-1);
+  for(i = 0; i < _mobotManager->numConnected(); i++) {
+    _mobotManager->getMobot(i)->moveMotion(contextMenuIndex, contextMenuIndex-1);
   }
   refreshRecordedMotions(-1);
 }
@@ -372,8 +372,8 @@ void CDialogTeaching::OnRecordPopupMoveup()
 void CDialogTeaching::OnRecordPopupMovedown()
 {
   int i;
-  for(i = 0; i < _robotManager->numConnected(); i++) {
-    _robotManager->getMobot(i)->moveMotion(contextMenuIndex, contextMenuIndex+1);
+  for(i = 0; i < _mobotManager->numConnected(); i++) {
+    _mobotManager->getMobot(i)->moveMotion(contextMenuIndex, contextMenuIndex+1);
   }
   refreshRecordedMotions(-1);
 }
@@ -382,12 +382,12 @@ void CDialogTeaching::OnRecordedGotopose()
 {
   int i;
   refreshRecordedMotions(contextMenuIndex);
-  for(i = 0; i < _robotManager->numConnected(); i++) {
-    _robotManager->getMobot(i)->play(contextMenuIndex);
+  for(i = 0; i < _mobotManager->numConnected(); i++) {
+    _mobotManager->getMobot(i)->play(contextMenuIndex);
   }
 }
 
-void CDialogTeaching::OnMobotButton(CMobot *robot, int button, int buttonDown)
+void CDialogTeaching::OnMobotButton(CMobot *mobot, int button, int buttonDown)
 {
   /* Button A: Record Motion 
    * Button B: Playback / Stop
@@ -399,7 +399,7 @@ void CDialogTeaching::OnMobotButton(CMobot *robot, int button, int buttonDown)
 
   /* Calculate the new state */
   if(buttonDown) {
-    robot->blinkLED(0.1, 2);
+    mobot->blinkLED(0.1, 2);
     newState = lastState | (1<<button);
   } else {
     newState = lastState & ~(1<<button);
@@ -420,8 +420,8 @@ void CDialogTeaching::OnMobotButton(CMobot *robot, int button, int buttonDown)
   if(buttonDown == 0) {
     if(lastState == 0x01) {
       /* Button A press/release */
-      for(i = 0; i < g_teachingDialog->_robotManager->numConnected(); i++) {
-		    g_teachingDialog->_robotManager->getMobot(i)->record();
+      for(i = 0; i < g_teachingDialog->_mobotManager->numConnected(); i++) {
+		    g_teachingDialog->_mobotManager->getMobot(i)->record();
 	    }
 	    g_teachingDialog->refreshRecordedMotions(-1);
     }
@@ -446,8 +446,8 @@ void CDialogTeaching::OnMobotButton(CMobot *robot, int button, int buttonDown)
 void CDialogTeaching::OnBnClickedButtonclear()
 {
   int i;
-	for(i = 0; i < _robotManager->numConnected(); i++) {
-		_robotManager->getMobot(i)->clearAllMotions();
+	for(i = 0; i < _mobotManager->numConnected(); i++) {
+		_mobotManager->getMobot(i)->clearAllMotions();
 	}
 	refreshRecordedMotions(-1);
 }

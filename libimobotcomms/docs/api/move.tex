@@ -19,7 +19,7 @@ int CMobot::moveNB(double angle1, double angle2, double angle3, double angle4);
 
 \noindent
 {\bf Purpose}\\
-Move all of the joints of a robot by specified angles.\\
+Move all of the joints of a mobot by specified angles.\\
 
 \noindent
 {\bf Return Value}\\
@@ -42,17 +42,17 @@ The function returns 0 on success and non-zero otherwise.\\
 \vspace{-12pt}
 \begin{quote}
 {\bf CMobot::move()}\\
-This function moves all of the joints of a robot by the specified number of degrees
+This function moves all of the joints of a mobot by the specified number of degrees
 from their current positions. 
 
 \noindent
 {\bf CMobot::moveNB()}\\
-This function moves all of the joints of a robot by the specified number of degrees
+This function moves all of the joints of a mobot by the specified number of degrees
 from their current positions. 
 
 The function \texttt{moveNB()} is the non-blocking version of
 the \texttt{move()} function, which means that the function will return
-immediately and the physical robot motion will occur asynchronously. For 
+immediately and the physical mobot motion will occur asynchronously. For 
 more information on blocking and non-blocking functions, please refer to 
 Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\
 \end{quote}

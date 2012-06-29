@@ -34,36 +34,36 @@ typedef struct callbackArg_s
 } callbackArg_t;
 #endif
 
-#ifndef ROBOT_JOINTS_E
-#define ROBOT_JOINTS_E
-typedef enum robotJoints_e{
-  ROBOT_ZERO,
-  ROBOT_JOINT1,
-  ROBOT_JOINT2,
-  ROBOT_JOINT3,
-  ROBOT_JOINT4,
+#ifndef MOBOT_JOINTS_E
+#define MOBOT_JOINTS_E
+typedef enum mobotJoints_e{
+  MOBOT_ZERO,
+  MOBOT_JOINT1,
+  MOBOT_JOINT2,
+  MOBOT_JOINT3,
+  MOBOT_JOINT4,
   ROBOT_NUM_JOINTS = 4
-} robotJointId_t;
+} mobotJointId_t;
 #endif
 
-#ifndef ROBOT_JOINT_STATE_E
-#define ROBOT_JOINT_STATE_E
-typedef enum robotJointState_e
+#ifndef MOBOT_JOINT_STATE_E
+#define MOBOT_JOINT_STATE_E
+typedef enum mobotJointState_e
 {
-    ROBOT_NEUTRAL = 0,
-    ROBOT_FORWARD,
-    ROBOT_BACKWARD,
-    ROBOT_HOLD,
-} robotJointState_t;
+    MOBOT_NEUTRAL = 0,
+    MOBOT_FORWARD,
+    MOBOT_BACKWARD,
+    MOBOT_HOLD,
+} mobotJointState_t;
 #endif
 
-#ifndef ROBOT_JOINT_DIRECTION_E
-#define ROBOT_JOINT_DIRECTION_E
+#ifndef MOBOT_JOINT_DIRECTION_E
+#define MOBOT_JOINT_DIRECTION_E
 typedef enum mobot_motor_direction_e
 {
-  ROBOT_JOINT_DIR_AUTO,
-  ROBOT_JOINT_DIR_FORWARD,
-  ROBOT_JOINT_DIR_BACKWARD
+  MOBOT_JOINT_DIR_AUTO,
+  MOBOT_JOINT_DIR_FORWARD,
+  MOBOT_JOINT_DIR_BACKWARD
 } motorDirection_t;
 #endif
 

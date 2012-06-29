@@ -8,52 +8,52 @@
  
 #include <mobot.h>
 int i;
-CMobot robot1;
-CMobot robot2;
-CMobot robot3;
-CMobot robot4;
+CMobot mobot1;
+CMobot mobot2;
+CMobot mobot3;
+CMobot mobot4;
 
-/* Connect robot variables to the robot modules. */
-robot1.connect();
-robot2.connect();
-robot3.connect();
-robot4.connect();
+/* Connect mobot variables to the mobot modules. */
+mobot1.connect();
+mobot2.connect();
+mobot3.connect();
+mobot4.connect();
 
-/* Set the robot to "home" position, where all joint angles are 0 degrees. */
-robot1.moveToZeroNB();
-robot2.moveToZeroNB();
-robot3.moveToZeroNB();
-robot4.moveToZeroNB();
-robot1.moveWait();
-robot2.moveWait();
-robot3.moveWait();
-robot4.moveWait();
+/* Set the mobot to "home" position, where all joint angles are 0 degrees. */
+mobot1.moveToZeroNB();
+mobot2.moveToZeroNB();
+mobot3.moveToZeroNB();
+mobot4.moveToZeroNB();
+mobot1.moveWait();
+mobot2.moveWait();
+mobot3.moveWait();
+mobot4.moveWait();
 
-robot3.setJointSpeedRatios(0.05, 0.05, 0.05, 0.05);
-robot4.setJointSpeedRatios(0.05, 0.05, 0.05, 0.05);
+mobot3.setJointSpeedRatios(0.05, 0.05, 0.05, 0.05);
+mobot4.setJointSpeedRatios(0.05, 0.05, 0.05, 0.05);
 /* stand up */
-robot1.moveToNB(0, 90, 90,  0);
-robot2.moveToNB(0,  -90,  -90, 0);
-robot1.moveWait();
-robot2.moveWait();
+mobot1.moveToNB(0, 90, 90,  0);
+mobot2.moveToNB(0,  -90,  -90, 0);
+mobot1.moveWait();
+mobot2.moveWait();
 
-robot3.motionRollBackwardNB(360);
-robot4.motionRollBackwardNB(360);
+mobot3.motionRollBackwardNB(360);
+mobot4.motionRollBackwardNB(360);
 /* inworm right */
 for( i = 0; i < 10; i++){
-    robot2.moveTo(0, -90, -30,  0);
-    robot1.moveTo(0,  30,  90, 0);
-    robot2.moveTo(0, -90, -90,  0);
-    robot1.moveTo(0,  90,  90, 0);
+    mobot2.moveTo(0, -90, -30,  0);
+    mobot1.moveTo(0,  30,  90, 0);
+    mobot2.moveTo(0, -90, -90,  0);
+    mobot1.moveTo(0,  90,  90, 0);
 }
-robot3.motionWait();
-robot4.motionWait();
+mobot3.motionWait();
+mobot4.motionWait();
 /* inworm left */
 /*
 for( i = 0; i < 3; i++){
-    robot1.moveTo(0,  30,  90, 0);
-    robot2.moveTo(0, -90, -30,  0);
-    robot1.moveTo(0,  90,  90, 0);
-    robot2.moveTo(0, -90, -90,  0);
+    mobot1.moveTo(0,  30,  90, 0);
+    mobot2.moveTo(0, -90, -30,  0);
+    mobot1.moveTo(0,  90,  90, 0);
+    mobot2.moveTo(0, -90, -90,  0);
 }
 */

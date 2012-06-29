@@ -11,12 +11,12 @@
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::setJointSpeedRatio(robotJointId_t id, double ratio);
+int CMobot::setJointSpeedRatio(mobotJointId_t id, double ratio);
 \end{verbatim}
 
 \noindent
 {\bf Purpose}\\
-Set the speed ratio settings of a joint on the robot.\\
+Set the speed ratio settings of a joint on the mobot.\\
 
 \noindent
 {\bf Return Value}\\
@@ -29,8 +29,8 @@ The function returns 0 on success and non-zero otherwise.\\
 \item               
 \begin{tabular}{p{10 mm}p{145 mm}}
 \texttt{id} & Set the speed ratio setting of this joint. This is an 
-enumerated type discussed in Section \ref{sec:robotJointId_t} on page
-\pageref{sec:robotJointId_t}.\\
+enumerated type discussed in Section \ref{sec:mobotJointId_t} on page
+\pageref{sec:mobotJointId_t}.\\
 \texttt{ratio} & A variable of type double with a value from 0 to 1. 
 \end{tabular}
 \end{description}
