@@ -1725,7 +1725,7 @@ void* Mobot_recordAngleBeginThread(void* arg)
     cur_time = GetTickCount();
     Mobot_getJointAngleTime(rArg->comms, rArg->id, &((*rArg->time_p)[i]), &((*rArg->angle_p)[i]));
     if(i == 0) {
-      start_time = (*rArg->time)[i];
+      start_time = (*rArg->time_p)[i];
     }
     (*rArg->time_p)[i] = (*rArg->time_p)[i] - start_time;
     /* Convert angle to degrees */
@@ -2004,10 +2004,10 @@ void* Mobot_recordAnglesBeginThread(void* arg)
         &((*rArg->angle_p)[i]),
         &((*rArg->angle2_p)[i]),
         &((*rArg->angle3_p)[i]),
-        &((*rArg->angle4_p)[i]),
+        &((*rArg->angle4_p)[i])
         );
     if(i == 0) {
-      start_time = (*rArg->time)[i];
+      start_time = (*rArg->time_p)[i];
     }
     (*rArg->time_p)[i] = (*rArg->time_p)[i] - start_time;
     /* Convert angle to degrees */
