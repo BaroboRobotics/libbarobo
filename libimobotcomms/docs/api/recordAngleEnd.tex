@@ -1,0 +1,42 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobot::recordAngleEnd()}\index{CMobot::recordAngleEnd()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{recordAngleEnd()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobot::recordAngleEnd(mobotJointId_t id);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+End a joint recording process that is currently running.\\
+
+\noindent
+{\bf Return Value}\\
+This function returns the number of datapoints captured during the recording procedure.\\
+
+\noindent
+{\bf Parameters}\\
+The joint to end the recording on. \\
+
+\noindent
+{\bf Description}\\
+This function is used in conjunction with the \texttt{recordAngleBegin()} function. 
+This function stops the recording process and returns the number of valid data points
+allocated for the arrays.\\
+
+\noindent
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+\texttt{recordAngleBegin()} \\
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

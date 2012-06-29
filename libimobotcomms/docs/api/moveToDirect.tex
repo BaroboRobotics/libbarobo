@@ -61,7 +61,20 @@ whichever direction is the shortest to achieve its goal.
 
 \noindent
 {\bf Example}\\
-Please see the demo at Section \ref{sec:democode} on page \pageref{sec:democode}.\\
+The \texttt{moveToDirect()} function moves the joint to the requested position choosing
+the shortest distance. For instance, consider the following function calls:
+\begin{verbatim}
+mobot.moveTo(350, 0, 0, 0);
+\end{verbatim}
+When the preceding line of code is executed, joint 1 on the mobot will rotate 350
+degrees in the forward direction. However, in the following line,
+\begin{verbatim}
+mobot.moveToDirect(350, 0, 0, 0);
+\end{verbatim}
+the first joint of the mobot will actually rotate -10 degrees in the negative direction to achieve the
+desired final position. Instead of rotating the entire 350 degrees, the mobot calculates
+that a movement of -10 degrees will require less traveled distance to achieve the same final
+position.\\
 \noindent
 
 \noindent

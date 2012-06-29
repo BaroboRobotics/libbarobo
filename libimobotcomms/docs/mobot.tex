@@ -74,8 +74,8 @@ and screenshots showing how to configure your Mobots.
 
 \subsection{Bluetooth Pairing far Mac OS X}
 For the Mac OS X operating system, an additional initial step needs to be performed.
-Windows users may skip these steps directly to section \ref{sec:pairing_mobotcontroller}
-on page \pageref{sec:pairing_mobotcontroller}.
+Windows users may skip these steps directly to section \ref{sec:pairing_robotcontroller}
+on page \pageref{sec:pairing_robotcontroller}.
 
 To begin the pairing process, click on the Bluetooth icon on the applet tray,
 typically located on the top right portion of the screen. Figure \ref{fig:mac_pairing1}
@@ -315,60 +315,13 @@ preprogrammed motions for the Mobot. To execute a preprogrammed motion, simply
 click on the name of the motion you wish to execute, and then click the button
 labeled ``Play''.
 
-\subsection{Application Example for Learning Algebra}
-\subsubsection{Problem Statement}
-A mobot has two 3.5 inch diameter wheels. It is moving at a constant velocity
-by turning its wheels 45 degrees per second. 
-\begin{enumerate}
-\item How long will it take for the mobot to rotate its wheels 2 full rotations? (720 degrees)
-\item During that time, how far should the mobot travel? Verify your results by measuring
-the distance the real mobot travels during the calculated time.
-\end{enumerate}
-
-\subsubsection{Problem Solution}
-\begin{enumerate}
-\item We are given that a mobot is turning its wheels at a constant speed of 45 degrees per second, and 
-needs to rotate the wheels 720 degrees. The amount of time this will take is
-\begin{equation*}
-\frac{720 ~\mathrm{degrees}}{45 ~\mathrm{degrees/second}} = 16 ~\mathrm{seconds}
-\end{equation*}
-
-\item The circumference of a circle can be determined with the equation
-\begin{equation*}
-c = 2 \pi r
-\end{equation*} where $r$ is the radius of the circle. Since our mobot will
-turn its wheels two full rotations during the motion, it will travel 2 circumferences
-in distance. Thus, the distance the mobot should travel is
-\begin{equation*}
-d = 2 \times c = 2 \times (2 \pi r) = 4 \pi r
-\end{equation*}
-The radius of a circle is half of its diameter, which is $3.5 / 2 = 1.75$ inches, 
-in our case. Plugging in our numbers, we have
-\begin{equation*}
-d = 4 \times \pi \times 1.75 = 21.99
-\end{equation*}
-Our mobot should travel approximately 22 inches during the 16 second motion.
-\end{enumerate}
-
-To verify these results with a real robot RoboMancer program may be used.
-\begin{enumerate}
-\item Affix two 3.5 inch diameter wheels to the faceplates.
-\item Set the joint speeds for joints 1 and 4 to 45 degrees per second. This may
-be done by typing "45" into the appropriate text boxes for joint 1 and 4 speeds at 
-the bottom left of RoboMancer and then clicking the "Set" button.
-\item Type ``720'' into the text edit boxes below joints 1 and 4 in the joint
-position section of the GUI.
-\item Click the ``Move'' button. Joints 1 and 4 will turn 720 degrees, rolling
-the mobot forward. The motion may be timed with a stopwatch.
-\end{enumerate}
-
 \section{Getting Started with Programming the Mobot}
 RoboMancer can be used to control the Mobot for simple tasks and applications.
 For more complicated applications, computer programs are better suited for controlling
 the Mobot.
 Mobot can be controlled using a C/C++ program through Ch, a C/C++ interpreter.
-Ch Professional Edition or Ch Student Edition software is required to run the 
-demo programs for controlling Mobot. Ch is available from SoftIntegration, Inc. at 
+Ch Professional Edition or Ch Student Edition software is required to run the
+demo programs for controlling Mobot. Ch is available from SoftIntegration, Inc. at
 \texttt{http://www.softintegration.com}
 
 Before the Ch program is executed, the Bluetooth addresses of the robots
@@ -376,10 +329,10 @@ need to be added using RoboMancer as described in Section \ref{sec:pairing}.
 
 To help the user become acquainted with the Mobot control programs, sample
 programs will be presented in this section to illustrate the basics and minimum requirements of
-a Mobot control program. The sample programs are located at 
-\texttt{CHHOME/package/chmobot/demos}, where \texttt{CHHOME} is the 
+a Mobot control program. The sample programs are located at
+\texttt{CHHOME/package/chmobot/demos}, where \texttt{CHHOME} is the
 Ch home directory, such as \texttt{C:$\backslash$Ch} for Windows. For Windows,
-it is located at \texttt{C:$\backslash$Ch$\backslash$package$\backslash$chmobot$\backslash$demos} by default. 
+it is located at \texttt{C:$\backslash$Ch$\backslash$package$\backslash$chmobot$\backslash$demos} by default.
 Alternatively, the demos may be accessed in RoboMancer application
 by clicking on the ``Help $\rightarrow$ Demos'' menu item, as shown in Figure
 \ref{fig:help_demos_screenshot}.
