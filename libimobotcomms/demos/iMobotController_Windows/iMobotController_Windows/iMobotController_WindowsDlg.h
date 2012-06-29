@@ -181,7 +181,7 @@ public:
 	afx_msg void OnTRBNThumbPosChangingSliderposition1(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnTRBNThumbPosChangingSliderposition3(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnTRBNThumbPosChangingSliderposition4(NMHDR *pNMHDR, LRESULT *pResult);
-	afx_msg void OnRobotConfigurerobotbluetooth();
+	afx_msg void OnRobotConfiguremobotbluetooth();
 	CEdit m_edit_MotorSpeed1;
 	CEdit m_edit_MotorSpeed2;
 	CEdit m_edit_MotorSpeed3;
@@ -194,10 +194,10 @@ public:
 	CEdit m_edit_setpos4;
 	afx_msg void OnBnClickedButtonGopos();
 	void handlerSETPOS();
-	afx_msg void OnRobotConnecttoarobot();
-	afx_msg void OnConnectDisconnectfromrobot();
+	afx_msg void OnRobotConnecttoamobot();
+	afx_msg void OnConnectDisconnectfrommobot();
 	afx_msg void OnHelpHelp();
-	afx_msg void OnHelpAboutrobotcontroller();
+	afx_msg void OnHelpAboutmobotcontroller();
 	afx_msg void OnFileExit();
 	afx_msg void OnBnClickedButtonMovetozero();
   void handlerMOVETOZERO();

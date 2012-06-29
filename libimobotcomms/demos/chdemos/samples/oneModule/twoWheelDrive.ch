@@ -10,22 +10,22 @@
 Joint 2 and joint 3 are fixed by a connector with a metal caster.
 Joint 1 and joint 4 have wheels attached. */
 #include <mobot.h>
-CMobot robot;
+CMobot mobot;
 
-/* Connect robot variables to the robot modules. */
-robot.connect();
+/* Connect mobot variables to the mobot modules. */
+mobot.connect();
 
-/* Set the robot to "home" position, where all joint angles are 0 degrees. */
-robot.moveToZero();
+/* Set the mobot to "home" position, where all joint angles are 0 degrees. */
+mobot.moveToZero();
 
-robot.setJointSpeedRatios(0.4, 0.5, 0.5, 0.4);
+mobot.setJointSpeedRatios(0.4, 0.5, 0.5, 0.4);
 
 /* rolling forward*/
-robot.motionRollForward(360);
+mobot.motionRollForward(360);
 
 /* rolling backward*/
-robot.motionRollForward(-360);
+mobot.motionRollForward(-360);
 
 /* turn right and left */
-robot.motionTurnRight(360);
-robot.motionTurnLeft(360);
+mobot.motionTurnRight(360);
+mobot.motionTurnLeft(360);

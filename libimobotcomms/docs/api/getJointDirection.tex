@@ -11,12 +11,12 @@
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::getJointDirection(robotJointId_t id, int &direction);
+int CMobot::getJointDirection(mobotJointId_t id, int &direction);
 \end{verbatim}
 
 \noindent
 {\bf Purpose}\\
-Get the speed of a joint on the robot.\\
+Get the speed of a joint on the mobot.\\
 
 \noindent
 {\bf Return Value}\\
@@ -29,8 +29,8 @@ The function returns 0 on success and non-zero otherwise.\\
 \item               
 \begin{tabular}{p{10 mm}p{145 mm}}
 \texttt{id} & The joint number to pose. This is an enumerated type 
-discussed in Section \ref{sec:robotJointId_t} on page
-\pageref{sec:robotJointId_t}.\\
+discussed in Section \ref{sec:mobotJointId_t} on page
+\pageref{sec:mobotJointId_t}.\\
 \texttt{direction} & An integer variable. This variable will be overwritten
 with the current speed of the joint.
 \end{tabular}

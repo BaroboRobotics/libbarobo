@@ -1,5 +1,5 @@
 #pragma once
-#include "robotManager.h"
+#include "mobotManager.h"
 #include "afxcmn.h"
 #include "afxwin.h"
 #include "ListCtrlCtx.h"
@@ -28,7 +28,7 @@ public:
 
 // Dialog Data
 	enum { IDD = IDD_DIALOG_TEACHING };
-  RobotManager *_robotManager;
+  RobotManager *_mobotManager;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
@@ -73,7 +73,7 @@ public:
   afx_msg void OnRecordPopupMoveup();
   afx_msg void OnRecordPopupMovedown();
   afx_msg void OnRecordedGotopose();
-  static void OnMobotButton(CMobot *robot, int button, int buttonDown);
+  static void OnMobotButton(CMobot *mobot, int button, int buttonDown);
 };
 
 extern CDialogTeaching *g_teachingDialog;

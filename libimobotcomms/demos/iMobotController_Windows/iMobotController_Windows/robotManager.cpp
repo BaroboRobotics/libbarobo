@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "robotManager.h"
+#include "mobotManager.h"
 #include "DialogTeaching.h"
 
 RobotManager::RobotManager()
@@ -34,7 +34,7 @@ int RobotManager::connect(int availableIndex)
   int index;
   int err = 0;
   TCHAR name[80];
-  swprintf(name, TEXT("robot%d"), numConnected()+1);
+  swprintf(name, TEXT("mobot%d"), numConnected()+1);
   CRecordMobot *mobot = new CRecordMobot(name);
   index = availableIndexToIndex(availableIndex);
   if(err = mobot->connectWithAddress( getEntry(index), 1 )) {
@@ -43,7 +43,7 @@ int RobotManager::connect(int availableIndex)
   /* Enable the button callback */
   mobot->enableButtonCallback(CDialogTeaching::OnMobotButton);
   mobot->setJointSpeedRatios(1, 1, 1, 1);
-  /* Insert the newly connected robot to the bottom of the list. */
+  /* Insert the newly connected mobot to the bottom of the list. */
   _mobots[numConnected()] = mobot;
   _connectedAddresses[numConnected()] = 
 	  _addresses[availableIndexToIndex(availableIndex)];
@@ -55,7 +55,7 @@ int RobotManager::disconnect(int connectIndex)
 {
   int i;
   int foundEntry = 0;
-  /* Need to find the ConfigFile index of the connected robot */
+  /* Need to find the ConfigFile index of the connected mobot */
   for(i = 0; i < numEntries(); i++) {
     if(_connectedAddresses[connectIndex] == _addresses[i]) {
       foundEntry = 1;
@@ -78,7 +78,7 @@ int RobotManager::moveUp(int connectIndex) {
   CRecordMobot* tempMobot;
   char* tempAddr;
   if(connectIndex < 1 || connectIndex >= numConnected()) return -1;
-  /* Swap the robot with the one prior */
+  /* Swap the mobot with the one prior */
   tempMobot = _mobots[connectIndex-1];
   tempAddr = _connectedAddresses[connectIndex-1];
   _mobots[connectIndex-1] = _mobots[connectIndex];
@@ -160,13 +160,13 @@ CString* RobotManager::generateProgram(bool looped)
 
   /* Declare the appropiate number of CMobot variables */
   for(i = 0; i < numConnected(); i++) {
-    buf.Format(_T("CMobot robot%d;\n"), i+1);
+    buf.Format(_T("CMobot mobot%d;\n"), i+1);
     *program += buf;
   }
 
   /* Connect to each one */
   for(i = 0; i < numConnected(); i++) {
-    buf.Format(_T("robot%d.connectWithAddress(\"%s\", 1);\n"),
+    buf.Format(_T("mobot%d.connectWithAddress(\"%s\", 1);\n"),
        i+1,
       A2T(getMobot(i)->getAddress()) );
     *program += buf;
@@ -185,7 +185,7 @@ CString* RobotManager::generateProgram(bool looped)
     buf.Format(_T("/* %s */\n"), getMobot(0)->getMotionName(i));
     if(looped) *program += _T("    ");
     *program += buf;
-    /* Now, print each robots motion */
+    /* Now, print each mobots motion */
     for(j = 0; j < numConnected(); j++) {
       getMobot(j)->getMotionString(i, tbuf);
       buf.Format(_T("%s\n"), tbuf);
@@ -195,12 +195,12 @@ CString* RobotManager::generateProgram(bool looped)
         break;
       }
     }
-    /* Make sure all the robots are done moving */
+    /* Make sure all the mobots are done moving */
     for(j = 0; j < numConnected(); j++) {
       if(getMobot(j)->getMotionType(i) == MOTION_SLEEP) {
         break;
       }
-      buf.Format(_T("robot%d.moveWait();\n"), j+1);
+      buf.Format(_T("mobot%d.moveWait();\n"), j+1);
       if(looped) *program += _T("    ");
       *program += buf;
     }

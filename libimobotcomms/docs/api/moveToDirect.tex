@@ -19,7 +19,7 @@ int CMobot::moveToDirectNB(double angle1, double angle2, double angle3, double a
 
 \noindent
 {\bf Purpose}\\
-Move all of the joints of a robot to the specified positions.\\
+Move all of the joints of a mobot to the specified positions.\\
 
 \noindent
 {\bf Return Value}\\
@@ -43,14 +43,14 @@ The function returns 0 on success and non-zero otherwise.\\
 \vspace{-12pt}
 \begin{quote}
 {\bf CMobot::moveToDirect()}\\
-This function moves all of the joints of a robot to the specified absolute positions. 
+This function moves all of the joints of a mobot to the specified absolute positions. 
 
 {\bf CMobot::moveToDirectNB()}\\
-This function moves all of the joints of a robot to the specified absolute positions. 
+This function moves all of the joints of a mobot to the specified absolute positions. 
 
 The function \texttt{moveToDirectNB()} is the non-blocking version of
 the \texttt{moveToDirect()} function, which means that the function will return
-immediately and the physical robot motion will occur asynchronously. For
+immediately and the physical mobot motion will occur asynchronously. For
 more details on blocking and non-blocking functions, please refer to 
 Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\
 \end{quote}
@@ -61,7 +61,20 @@ whichever direction is the shortest to achieve its goal.
 
 \noindent
 {\bf Example}\\
-Please see the demo at Section \ref{sec:democode} on page \pageref{sec:democode}.\\
+The \texttt{moveToDirect()} function moves the joint to the requested position choosing
+the shortest distance. For instance, consider the following function calls:
+\begin{verbatim}
+mobot.moveTo(350, 0, 0, 0);
+\end{verbatim}
+When the preceding line of code is executed, joint 1 on the mobot will rotate 350
+degrees in the forward direction. However, in the following line,
+\begin{verbatim}
+mobot.moveToDirect(350, 0, 0, 0);
+\end{verbatim}
+the first joint of the mobot will actually rotate -10 degrees in the negative direction to achieve the
+desired final position. Instead of rotating the entire 350 degrees, the mobot calculates
+that a movement of -10 degrees will require less traveled distance to achieve the same final
+position.\\
 \noindent
 
 \noindent

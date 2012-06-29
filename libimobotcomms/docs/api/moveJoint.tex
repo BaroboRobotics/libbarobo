@@ -13,13 +13,13 @@
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::moveJoint(robotJointId_t id, double angle);
-int CMobot::moveJointNB(robotJointId_t id, double angle);
+int CMobot::moveJoint(mobotJointId_t id, double angle);
+int CMobot::moveJointNB(mobotJointId_t id, double angle);
 \end{verbatim}
 
 \noindent
 {\bf Purpose}\\
-Move a joint on the robot by a specified angle with respect to the current position.\\
+Move a joint on the mobot by a specified angle with respect to the current position.\\
 
 \noindent
 {\bf Return Value}\\
@@ -58,7 +58,7 @@ is set to zero, the motor will not move after calling the
 
  The function \texttt{moveJointNB()} is the non-blocking version of
 the \texttt{moveJoint()} function, which means that the function will return
-immediately and the physical robot motion will occur asynchronously. For
+immediately and the physical mobot motion will occur asynchronously. For
 more details on blocking and non-blocking functions, please refer to 
 Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\
 \end{quote}

@@ -1,51 +1,51 @@
 /* Discription:
- * In this scene, there are five one-module robots do different motions.
+ * In this scene, there are five one-module mobots do different motions.
  */
 #include <mobot.h>
-CMobot robot1;
-CMobot robot2;
-CMobot robot3;
-CMobot robot4;
-CMobot robot5;
+CMobot mobot1;
+CMobot mobot2;
+CMobot mobot3;
+CMobot mobot4;
+CMobot mobot5;
 
-robot1.connect();
-robot2.connect();
-robot3.connect();
-robot4.connect();
-robot5.connect();
+mobot1.connect();
+mobot2.connect();
+mobot3.connect();
+mobot4.connect();
+mobot5.connect();
 
 // initialization
-robot1.moveToZeroNB();
-robot2.moveToZeroNB();
-robot3.moveToNB(0, 90, 90, 0);
-robot4.moveToZeroNB();
-robot5.moveToZeroNB();
-robot1.moveWait();
-robot2.moveWait();
-robot3.moveWait();
-robot4.moveWait();
-robot5.moveWait();
+mobot1.moveToZeroNB();
+mobot2.moveToZeroNB();
+mobot3.moveToNB(0, 90, 90, 0);
+mobot4.moveToZeroNB();
+mobot5.moveToZeroNB();
+mobot1.moveWait();
+mobot2.moveWait();
+mobot3.moveWait();
+mobot4.moveWait();
+mobot5.moveWait();
 
-// set robots' speed
-robot1.setJointSpeedRatios(0.8, 0.8, 0.8, 0.8);
-robot2.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
-robot3.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
-robot4.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
-robot5.setJointSpeedRatios(0.8, 0.8, 0.8, 0.8);
+// set mobots' speed
+mobot1.setJointSpeedRatios(0.8, 0.8, 0.8, 0.8);
+mobot2.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
+mobot3.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
+mobot4.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
+mobot5.setJointSpeedRatios(0.8, 0.8, 0.8, 0.8);
 
-// robot four do stand up
-robot4.motionStand();
-// robot one do inch worm right
-robot1.motionInchwormRightNB(10);
+// mobot four do stand up
+mobot4.motionStand();
+// mobot one do inch worm right
+mobot1.motionInchwormRightNB(10);
 // roobt two do roll forward
-robot2.motionRollForwardNB(3*360);
-// robot three do roll forward with skinny type
-robot3.motionRollForwardNB(3*360);
-robot4.moveNB(3*360, 0, 0, 3*360);
-// robot five do tumble left
-robot5.motionTumbleLeft(5);
-robot1.motionWait();
-robot2.motionWait();
-robot3.motionWait();
-robot4.moveWait();
-robot5.motionWait();
+mobot2.motionRollForwardNB(3*360);
+// mobot three do roll forward with skinny type
+mobot3.motionRollForwardNB(3*360);
+mobot4.moveNB(3*360, 0, 0, 3*360);
+// mobot five do tumble left
+mobot5.motionTumbleLeft(5);
+mobot1.motionWait();
+mobot2.motionWait();
+mobot3.motionWait();
+mobot4.moveWait();
+mobot5.motionWait();

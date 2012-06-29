@@ -2,28 +2,28 @@
  * make four mobots to bow at the same time.
 */
 #include <mobot.h>
-CMobot robot1;
-CMobot robot2;
-CMobot robot3;
-CMobot robot4;
+CMobot mobot1;
+CMobot mobot2;
+CMobot mobot3;
+CMobot mobot4;
 CMobotGroup group;
 
-/* Connect to the robots listed in the configuration file. */
-robot1.connect();
-robot2.connect();
-robot3.connect();
-robot4.connect();
+/* Connect to the mobots listed in the configuration file. */
+mobot1.connect();
+mobot2.connect();
+mobot3.connect();
+mobot4.connect();
 
-robot1.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
-robot2.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
-robot3.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
-robot4.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
+mobot1.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
+mobot2.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
+mobot3.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
+mobot4.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
 
 /* Add the four modules as the members of the group */
-group.addRobot(robot1);
-group.addRobot(robot2);
-group.addRobot(robot3);
-group.addRobot(robot4);
+group.addRobot(mobot1);
+group.addRobot(mobot2);
+group.addRobot(mobot3);
+group.addRobot(mobot4);
 
 // bow
 group.moveTo(45, 0, 0, 0);

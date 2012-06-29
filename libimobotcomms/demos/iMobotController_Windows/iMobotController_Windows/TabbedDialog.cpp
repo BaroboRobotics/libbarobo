@@ -23,13 +23,13 @@ CTabbedDialog::CTabbedDialog(CWnd* pParent /*=NULL*/)
     //fprintf(fp, "%s", path); 
   }
   strcat(path, "\\Barobo.config");
-  m_robotManager = new RobotManager;
-  m_robotManager->read(path);
+  m_mobotManager = new RobotManager;
+  m_mobotManager->read(path);
 
   m_connectDlg = new CDialogConnect(this);
   m_programDlg = new CDialogProgram(this);
   m_teachingDlg = new CDialogTeaching(this);
-  m_robotControllerDlg = new CiMobotController_WindowsDlg(this);
+  m_mobotControllerDlg = new CiMobotController_WindowsDlg(this);
 }
 
 CTabbedDialog::~CTabbedDialog()
@@ -37,7 +37,7 @@ CTabbedDialog::~CTabbedDialog()
   delete m_connectDlg;
   delete m_programDlg;
   delete m_teachingDlg;
-  delete m_robotControllerDlg;
+  delete m_mobotControllerDlg;
 }
 
 BOOL CTabbedDialog::OnInitDialog()
@@ -72,7 +72,7 @@ BOOL CTabbedDialog::OnInitDialog()
   m_connectDlg->Create(CDialogConnect::IDD, this);
   m_programDlg->Create(CDialogProgram::IDD, this);
   m_teachingDlg->Create(CDialogTeaching::IDD, this);
-  m_robotControllerDlg->Create(CiMobotController_WindowsDlg::IDD, this);
+  m_mobotControllerDlg->Create(CiMobotController_WindowsDlg::IDD, this);
 
   RefreshTabContent();
   return TRUE;
@@ -91,7 +91,7 @@ END_MESSAGE_MAP()
 
 RobotManager* CTabbedDialog::GetRobotManager()
 {
-  return m_robotManager;
+  return m_mobotManager;
 }  
 
 void CTabbedDialog::RefreshTabContent()
@@ -101,7 +101,7 @@ void CTabbedDialog::RefreshTabContent()
   m_connectDlg->ShowWindow(activeTab == 0? SW_SHOW : SW_HIDE);
   m_programDlg->ShowWindow(activeTab == 1? SW_SHOW : SW_HIDE);
   m_teachingDlg->ShowWindow(activeTab == 2? SW_SHOW : SW_HIDE);
-  m_robotControllerDlg->ShowWindow(activeTab == 3? SW_SHOW : SW_HIDE);
+  m_mobotControllerDlg->ShowWindow(activeTab == 3? SW_SHOW : SW_HIDE);
 }
 
 // CTabbedDialog message handlers

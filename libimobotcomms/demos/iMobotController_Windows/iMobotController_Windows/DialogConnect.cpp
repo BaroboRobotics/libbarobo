@@ -16,9 +16,9 @@ CDialogConnect::CDialogConnect(CWnd* pParent /*=NULL*/)
 {
   CTabbedDialog* td = (CTabbedDialog*)pParent;
   if(td != NULL) {
-    m_robotManager = td->GetRobotManager();
+    m_mobotManager = td->GetRobotManager();
   } else {
-    m_robotManager = NULL;
+    m_mobotManager = NULL;
   }
 }
 
@@ -39,20 +39,20 @@ void CDialogConnect::refreshLists()
 	/* Clear the list controls */
 	m_listCtrl_availableBots.DeleteAllItems();
 	/* Populate available bots listctrl */
-	for(i = 0; i < m_robotManager->numEntries(); i++) {
-		if(!m_robotManager->isConnected(i)) {
+	for(i = 0; i < m_mobotManager->numEntries(); i++) {
+		if(!m_mobotManager->isConnected(i)) {
 			m_listCtrl_availableBots.InsertItem(
 				m_listCtrl_availableBots.GetItemCount(),
-				A2T(m_robotManager->getEntry(i))
+				A2T(m_mobotManager->getEntry(i))
 				);
 		}
 	}
 	/* Populate connected bots listctrl */
 	m_listCtrl_connectedBots.DeleteAllItems();
-	for(i = 0; i < m_robotManager->numConnected(); i++) {
+	for(i = 0; i < m_mobotManager->numConnected(); i++) {
 		m_listCtrl_connectedBots.InsertItem(
 			i,
-			A2T(m_robotManager->getConnected(i))
+			A2T(m_mobotManager->getConnected(i))
 			);
 	}
 }
@@ -101,7 +101,7 @@ void CDialogConnect::OnBnClickedButtonTeachingConnect()
 	if(index == -1) {
 		return;
 	}
-	err = m_robotManager->connect(index);
+	err = m_mobotManager->connect(index);
   if(err) {
     switch (err) {
       case -1:
@@ -135,7 +135,7 @@ void CDialogConnect::OnBnClickedButtonTeachingDisconnect()
 	int connectIndex;
 	connectIndex = m_listCtrl_connectedBots.GetSelectionMark();
 	if(connectIndex == -1) { return; }
-	m_robotManager->disconnect(connectIndex);
+	m_mobotManager->disconnect(connectIndex);
 	refreshLists();
 }
 
@@ -165,7 +165,7 @@ void CDialogConnect::OnBnClickedButtonAddnewbot()
   //size_t origsize = wcslen(text)+1;
   //wcstombs_s(&convertedChars, address, origsize, text, _TRUNCATE);
   address = T2CA(text);
-  m_robotManager->addEntry(address);
-  m_robotManager->write();
+  m_mobotManager->addEntry(address);
+  m_mobotManager->write();
   refreshLists();
 }
