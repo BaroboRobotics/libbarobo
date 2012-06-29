@@ -62,6 +62,10 @@ typedef unsigned char uint8_t;
 #endif
 #endif
 
+#ifdef _MSYS
+#undef _WIN32
+#endif
+
 #ifndef _WIN32
 #ifndef _llvm_
 #include <stdint.h>
