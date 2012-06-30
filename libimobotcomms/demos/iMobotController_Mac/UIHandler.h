@@ -51,7 +51,7 @@
 	NSTableView *tableViewMotions;
 	Motions *motions;
 
-	br_comms_t *comms;
+	mobot_t *comms;
 }
 
 @property (retain) IBOutlet UISlider *sliderSpeed1;
@@ -86,10 +86,10 @@
 
 @property (retain) IBOutlet NSTableView *tableViewMotions;
 
-- (br_comms_t*) comms;
+- (mobot_t*) comms;
 
 - (id) init;
-- (id) initWithBRComms:(br_comms_t*)br_comms;
+- (id) initWithBRComms:(mobot_t*)br_comms;
 - (void) initSliders;
 - (void) main;
 
