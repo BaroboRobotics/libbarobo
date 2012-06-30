@@ -1,6 +1,6 @@
 /* Filename: copycat.cpp
- * Connects to the first two mobots in the configuration list. Sets up the
- * mobots so that the second mobot copies the motions of the first mobot. */
+* Connects to the first two mobots in the configuration list. Sets up the
+* mobots so that the second mobot copies the motions of the first mobot. */
 #include <mobot.h>
 
 CMobot mobot1;
@@ -15,8 +15,8 @@ mobot2.connect();
 mobot1.moveToZero();
 mobot2.moveToZero();
 /* Relax both mobots */
-mobot1.stop();
-mobot2.stop();
+mobot1.stopAllJoints();
+mobot2.stopAllJoints();
 
 while(1) {
   /* Get the beginning time of loop */
