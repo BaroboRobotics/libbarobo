@@ -315,52 +315,29 @@ preprogrammed motions for the Mobot. To execute a preprogrammed motion, simply
 click on the name of the motion you wish to execute, and then click the button
 labeled ``Play''.
 
-\subsection{Application Example for Learning Algebra}
-\subsubsection{Problem Statement}
-A robot has two 3.5 inch diameter wheels. It is moving at a constant velocity
-by turning its wheels 45 degrees per second. 
-\begin{enumerate}
-\item How long will it take for the robot to rotate its wheels 2 full rotations? (720 degrees)
-\item During that time, how far should the robot travel? Verify your results by measuring
-the distance the real robot travels during the calculated time.
-\end{enumerate}
+\section{The ``Pose Teaching'' Tab}
+``Pose Teaching'' is the process of training a robot to perform motions by physically
+moving the robot into desired positions. To pose teach a robot or multiple robots,
+begin by connecting to all of the robots that will be trained by pose teaching
+in the ``Connect'' tab. Once all of the desired mobots are connected, switch to
+the ``Pose Teaching'' tab. Once you have switched tabs, the function of the
+mobot's on-board buttons will change to Pose Teaching mode. In Pose Teaching mode,
+the mobot buttons have the following functions:
+\begin{itemize}
+\item Button A: Record the current positions of all connected mobots.
+\item Button B: Play the current recorded motions in order, or stop if motions are currently being played.
+\item Buttons A and B together: Clear all recorded motions
+\end{itemize}
 
-\subsubsection{Problem Solution}
-\begin{enumerate}
-\item We are given that a robot is turning its wheels at a constant speed of 45 degrees per second, and 
-needs to rotate the wheels 720 degrees. The amount of time this will take is
-\begin{equation*}
-\frac{720 ~\mathrm{degrees}}{45 ~\mathrm{degrees/second}} = 16 ~\mathrm{seconds}
-\end{equation*}
+Each time a pose is recorded, an indicator for that pose will appear in the dialog. As the
+poses are played, the pose icon changes for each pose to indicate the current pose being played.
 
-\item The circumference of a circle can be determined with the equation
-\begin{equation*}
-c = 2 \pi r
-\end{equation*} where $r$ is the radius of the circle. Since our robot will
-turn its wheels two full rotations during the motion, it will travel 2 circumferences
-in distance. Thus, the distance the robot should travel is
-\begin{equation*}
-d = 2 \times c = 2 \times (2 \pi r) = 4 \pi r
-\end{equation*}
-The radius of a circle is half of its diameter, which is $3.5 / 2 = 1.75$ inches, 
-in our case. Plugging in our numbers, we have
-\begin{equation*}
-d = 4 \times \pi \times 1.75 = 21.99
-\end{equation*}
-Our robot should travel approximately 22 inches during the 16 second motion.
-\end{enumerate}
+Delays may be added between poses by using the ``Add Delay'' button. The length of the delay (in seconds)
+should be entered in the text box next to the ``Add Delay'' button.
 
-To verify these results with a real robot RoboMancer program may be used.
-\begin{enumerate}
-\item Affix two 3.5 inch diameter wheels to the faceplates.
-\item Set the joint speeds for joints 1 and 4 to 45 degrees per second. This may
-be done by typing "45" into the appropriate text boxes for joint 1 and 4 speeds at 
-the bottom left of RoboMancer and then clicking the "Set" button.
-\item Type ``720'' into the text edit boxes below joints 1 and 4 in the joint
-position section of the GUI.
-\item Click the ``Move'' button. Joints 1 and 4 will turn 720 degrees, rolling
-the robot forward. The motion may be timed with a stopwatch.
-\end{enumerate}
+It is also possible to save the recorded motion as a program by clicking on the ``Save to Program'' 
+button. The generated program is a standard Ch Mobot program which may be executed 
+in ChIDE. 
 
 \section{Getting Started with Programming the Mobot}
 RoboMancer can be used to control the Mobot for simple tasks and applications.
