@@ -1,0 +1,12 @@
+#include <numeric.h>
+int processRecordedAngles(double time[], double angle[], int numElements)
+{
+  int i;
+  double angleUnwrapped[numElements];
+  double tolerance = 1.0;
+  unwrapdeg(angleUnwrapped, angle);
+  for(i = 0; i < numElements; i++) {
+    angle[i] = angleUnwrapped[i];
+  }
+  return shiftTime(tolerance, numElements, time, angle);
+}
