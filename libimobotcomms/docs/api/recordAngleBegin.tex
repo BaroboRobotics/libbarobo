@@ -11,7 +11,7 @@
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::recordAngleBegin(mobotJointId_t id, double **time, double **angle, double seconds);
+int CMobot::recordAngleBegin(mobotJointId_t id, double* &time, double* &angle, double seconds);
 \end{verbatim}
 
 \noindent
@@ -31,8 +31,8 @@ The function returns 0 on success and non-zero otherwise.\\
 \texttt{id} & The joint number. This is an enumerated type 
 discussed in Section \ref{sec:mobotJointId_t} on page
 \pageref{sec:mobotJointId_t}.\\
-\texttt{time} & A pointer to an array which will store time values for each of the angle readings. \\
-\texttt{angle} & A pointer to an array which will store the angle values for each time. \\
+\texttt{time} & A pointer which will store time values for each of the angle readings. \\
+\texttt{angle} & A pointer which will store the angle values for each time. \\
 \texttt{seconds} & The number of seconds between angle readings. The minimum value allowed for
 this variable is 0.05.
 \end{tabular}

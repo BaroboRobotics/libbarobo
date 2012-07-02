@@ -2,16 +2,16 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CMobot::recordAngleEnd()}\index{CMobot::recordAngleEnd()}}\\
+{\LARGE \texttt{CMobot::recordAnglesEnd()}\index{CMobot::recordAnglesEnd()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{recordAngleEnd()}
+\addcontentsline{toc}{section}{recordAnglesEnd()}
 
 \noindent
 {\bf Synopsis}
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::recordAngleEnd(mobotJointId_t id);
+int CMobot::recordAnglesEnd(int &num);
 \end{verbatim}
 
 \noindent
@@ -20,11 +20,17 @@ End a joint recording process that is currently running.\\
 
 \noindent
 {\bf Return Value}\\
-This function returns the number of datapoints captured during the recording procedure.\\
+This function returns 0 on success or -1 on failure.\\
 
 \noindent
 {\bf Parameters}\\
-The joint to end the recording on. \\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{15 mm}p{145 mm}}
+\texttt{num} & An integer variable that will be set to the number of recorded elements. \\
+\end{tabular}
+\end{description}
 
 \noindent
 {\bf Description}\\
