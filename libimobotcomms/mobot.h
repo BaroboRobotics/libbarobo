@@ -125,6 +125,8 @@ typedef struct mobot_s
   void (*buttonCallback)(void* mobot, int button, int buttonDown);
   void* mobot;
   char* configFilePath;
+  void* itemsToFreeOnExit[64];
+  int numItemsToFreeOnExit;
 } mobot_t;
 #endif
 

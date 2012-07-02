@@ -577,6 +577,7 @@ int Mobot_init(mobot_t* comms)
   strcat(path, "/.Barobo.config");
   comms->configFilePath = strdup(path);
 #endif
+  comms->numItemsToFreeOnExit = 0;
 
   return 0;
 }
@@ -1739,6 +1740,11 @@ void* Mobot_recordAngleBeginThread(void* arg)
     MUTEX_UNLOCK(rArg->comms->recordingLock);
   }
 #endif
+  /* Save the pointers to free on destruct */
+  rArg->comms->itemsToFreeOnExit[rArg->comms->numItemsToFreeOnExit] = (*rArg->time_p);
+  rArg->comms->numItemsToFreeOnExit++;
+  rArg->comms->itemsToFreeOnExit[rArg->comms->numItemsToFreeOnExit] = (*rArg->angle_p);
+  rArg->comms->numItemsToFreeOnExit++;
   return NULL;
   free(rArg);
 }
@@ -2022,6 +2028,17 @@ void* Mobot_recordAnglesBeginThread(void* arg)
     MUTEX_UNLOCK(rArg->comms->recordingLock);
   }
 #endif
+  /* Save the pointers to free on destruct */
+  rArg->comms->itemsToFreeOnExit[rArg->comms->numItemsToFreeOnExit] = (*rArg->time_p);
+  rArg->comms->numItemsToFreeOnExit++;
+  rArg->comms->itemsToFreeOnExit[rArg->comms->numItemsToFreeOnExit] = (*rArg->angle_p);
+  rArg->comms->numItemsToFreeOnExit++;
+  rArg->comms->itemsToFreeOnExit[rArg->comms->numItemsToFreeOnExit] = (*rArg->angle2_p);
+  rArg->comms->numItemsToFreeOnExit++;
+  rArg->comms->itemsToFreeOnExit[rArg->comms->numItemsToFreeOnExit] = (*rArg->angle3_p);
+  rArg->comms->numItemsToFreeOnExit++;
+  rArg->comms->itemsToFreeOnExit[rArg->comms->numItemsToFreeOnExit] = (*rArg->angle4_p);
+  rArg->comms->numItemsToFreeOnExit++;
   return NULL;
   free(rArg);
 }
@@ -2992,11 +3009,16 @@ CMobot::CMobot()
   Mobot_init(_comms);
 }
 
-CMobot::~CMobot()
+CMobot::~CMobot() 
 {
   stop();
   if(_comms->connected) {
     disconnect();
+  }
+  /* Free stuff that should be freed */
+  int i;
+  for(i = 0; i < _comms->numItemsToFreeOnExit; i++) {
+    free(_comms->itemsToFreeOnExit[i]);
   }
 }
 
