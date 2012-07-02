@@ -883,7 +883,7 @@ int CMobot::recordAngle(int id, double time[:], double angle[:], int num, double
     dlrunfun(fptr, &retval, recordAngle, this, id, time, angle, num, seconds);
     return retval;
 }
-int CMobot::recordAngleBegin(int id, double **time, double **angle, double seconds) {
+int CMobot::recordAngleBegin(int id, double* &time, double* &angle, double seconds) {
     void *fptr;
     int retval;
 
@@ -892,10 +892,10 @@ int CMobot::recordAngleBegin(int id, double **time, double **angle, double secon
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, recordAngleBegin, this, id, time, angle, seconds);
+    dlrunfun(fptr, &retval, NULL, this, id, &time, &angle, seconds);
     return retval;
 }
-int CMobot::recordAngleEnd(int id) {
+int CMobot::recordAngleEnd(int id, int &num) {
     void *fptr;
     int retval;
 
@@ -904,7 +904,7 @@ int CMobot::recordAngleEnd(int id) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, recordAngleEnd, this, id);
+    dlrunfun(fptr, &retval, NULL, this, id, &num);
     return retval;
 }
 int CMobot::recordAngles(double time[:], double angle1[:], double angle2[:], double angle3[:], double angle4[:], int num, double seconds) {
@@ -920,11 +920,11 @@ int CMobot::recordAngles(double time[:], double angle1[:], double angle2[:], dou
     return retval;
 }
 int CMobot::recordAnglesBegin(
-    double **time, 
-    double **angle1, 
-    double **angle2, 
-    double **angle3, 
-    double **angle4, 
+    double* &time, 
+    double* &angle1, 
+    double* &angle2, 
+    double* &angle3, 
+    double* &angle4, 
     double seconds) 
 {
     void *fptr;
@@ -935,16 +935,16 @@ int CMobot::recordAnglesBegin(
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, recordAnglesBegin, this, 
-             time, 
-             angle1, 
-             angle2, 
-             angle3, 
-             angle4, 
+    dlrunfun(fptr, &retval, NULL, this, 
+             &time, 
+             &angle1, 
+             &angle2, 
+             &angle3, 
+             &angle4, 
              seconds);
     return retval;
 }
-int CMobot::recordAnglesEnd() {
+int CMobot::recordAnglesEnd(int &num) {
     void *fptr;
     int retval;
 
@@ -953,7 +953,7 @@ int CMobot::recordAnglesEnd() {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, recordAnglesEnd, this);
+    dlrunfun(fptr, &retval, NULL, this, &num);
     return retval;
 }
 int CMobot::recordWait() {

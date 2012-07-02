@@ -873,7 +873,7 @@ EXPORTCH int recordAngleBegin_chdl(void *varg) {
     time = Ch_VaArg(interp, ap, double**);
     angle = Ch_VaArg(interp, ap, double**);
     seconds = Ch_VaArg(interp, ap, double);
-    retval = mobot->recordAngleBegin(id, time, angle, seconds);
+    retval = mobot->recordAngleBegin(id, *time, *angle, seconds);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -883,12 +883,14 @@ EXPORTCH int recordAngleEnd_chdl(void *varg) {
     ChVaList_t ap;
     class CMobot *mobot;
     mobotJointId_t id;
+    int *num;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobot *);
     id = Ch_VaArg(interp, ap, mobotJointId_t);
-    retval = mobot->recordAngleEnd(id);
+    num = Ch_VaArg(interp, ap, int* );
+    retval = mobot->recordAngleEnd(id, *num);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -941,11 +943,11 @@ EXPORTCH int recordAnglesBegin_chdl(void *varg) {
     angle4 = Ch_VaArg(interp, ap, double**);
     seconds = Ch_VaArg(interp, ap, double);
     retval = mobot->recordAnglesBegin(
-        time, 
-        angle1, 
-        angle2, 
-        angle3, 
-        angle4, 
+        *time, 
+        *angle1, 
+        *angle2, 
+        *angle3, 
+        *angle4, 
         seconds);
     Ch_VaEnd(interp, ap);
     return retval;
@@ -956,10 +958,12 @@ EXPORTCH int recordAnglesEnd_chdl(void *varg) {
     ChVaList_t ap;
     class CMobot *mobot;
     int retval;
+    int *num;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobot *);
-    retval = mobot->recordAnglesEnd();
+    num = Ch_VaArg(interp, ap, int*);
+    retval = mobot->recordAnglesEnd(*num);
     Ch_VaEnd(interp, ap);
     return retval;
 }

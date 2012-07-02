@@ -18,13 +18,14 @@ mobot.setJointSpeed(MOBOT_JOINT1, 45);
 mobot.setJointSpeed(MOBOT_JOINT4, 45);
 
 /* begin recording data */
-mobot.recordAngleBegin(MOBOT_JOINT1, &time, &angle1, timeInterval);
+mobot.recordAngleBegin(MOBOT_JOINT1, time, angle1, timeInterval);
 
 /* move the joints 1 and 4 720 degrees */
 mobot.move(720, 0, 0, 720);
 
 /* end  recording data  */
-numDataPoints = mobot.recordAngleEnd(MOBOT_JOINT1);
+mobot.recordAngleEnd(MOBOT_JOINT1, numDataPoints);
+printf("Captured %d data points.\n", numDataPoints);
 
 /* process recorded angles */
 processRecordedAngles(time, angle1, numDataPoints);
