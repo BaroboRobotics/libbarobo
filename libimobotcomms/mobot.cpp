@@ -1654,6 +1654,7 @@ void* Mobot_recordAngleThread(void* arg)
 
 }
 
+#define RECORD_ANGLE_ALLOC_SIZE 16
 void* Mobot_recordAngleBeginThread(void* arg)
 {
 #ifndef _WIN32
@@ -1668,7 +1669,7 @@ void* Mobot_recordAngleBeginThread(void* arg)
     rArg->comms->recordingNumValues[rArg->id-1] = i;
     /* Make sure we have enough space left in the buffer */
     if(i >= rArg->num) {
-      rArg->num += 512;
+      rArg->num += RECORD_ANGLE_ALLOC_SIZE;
       double *newBuf;
       newBuf = (double*)malloc(sizeof(double) * rArg->num);
       memcpy(newBuf, *rArg->time_p, sizeof(double)*i);
@@ -1754,21 +1755,21 @@ int Mobot_recordAngleBegin(mobot_t* comms,
   if(comms->recordingInProgress[id-1]) {
     return -1;
   }
-  *time = (double*)malloc(sizeof(double) * 512);
-  *angle = (double*)malloc(sizeof(double) * 512);
+  *time = (double*)malloc(sizeof(double) * RECORD_ANGLE_ALLOC_SIZE);
+  *angle = (double*)malloc(sizeof(double) * RECORD_ANGLE_ALLOC_SIZE);
   rArg = (recordAngleArg_t*)malloc(sizeof(recordAngleArg_t));
   rArg->comms = comms;
   rArg->id = id;
   rArg->time_p = time;
   rArg->angle_p = angle;
-  rArg->num = 512;
+  rArg->num = RECORD_ANGLE_ALLOC_SIZE;
   rArg->msecs = msecs;
   comms->recordingInProgress[id-1] = 1;
   THREAD_CREATE(&thread, Mobot_recordAngleBeginThread, rArg);
   return 0;
 }
 
-int Mobot_recordAngleEnd(mobot_t* comms, mobotJointId_t id)
+int Mobot_recordAngleEnd(mobot_t* comms, mobotJointId_t id, int *num)
 {
   /* Make sure it was recording in the first place */
   if(comms->recordingInProgress[id-1] == 0) {
@@ -1777,7 +1778,8 @@ int Mobot_recordAngleEnd(mobot_t* comms, mobotJointId_t id)
   MUTEX_LOCK(comms->recordingLock);
   comms->recordingInProgress[id-1] = 0;
   MUTEX_UNLOCK(comms->recordingLock);
-  return comms->recordingNumValues[id-1];
+  *num = comms->recordingNumValues[id-1];
+  return 0;
 }
 
 void* recordAnglesThread(void* arg);
@@ -1920,7 +1922,7 @@ void* Mobot_recordAnglesBeginThread(void* arg)
     rArg->comms->recordingNumValues[0] = i;
     /* Make sure we have enough space left in the buffer */
     if(i >= rArg->num) {
-      rArg->num += 512;
+      rArg->num += RECORD_ANGLE_ALLOC_SIZE;
       double *newBuf;
       newBuf = (double*)malloc(sizeof(double) * rArg->num);
       memcpy(newBuf, *rArg->time_p, sizeof(double)*i);
@@ -2041,11 +2043,11 @@ int Mobot_recordAnglesBegin(mobot_t* comms,
       return -1;
     }
   }
-  *time = (double*)malloc(sizeof(double) * 512);
-  *angle1 = (double*)malloc(sizeof(double) * 512);
-  *angle2 = (double*)malloc(sizeof(double) * 512);
-  *angle3 = (double*)malloc(sizeof(double) * 512);
-  *angle4 = (double*)malloc(sizeof(double) * 512);
+  *time = (double*)malloc(sizeof(double) * RECORD_ANGLE_ALLOC_SIZE);
+  *angle1 = (double*)malloc(sizeof(double) * RECORD_ANGLE_ALLOC_SIZE);
+  *angle2 = (double*)malloc(sizeof(double) * RECORD_ANGLE_ALLOC_SIZE);
+  *angle3 = (double*)malloc(sizeof(double) * RECORD_ANGLE_ALLOC_SIZE);
+  *angle4 = (double*)malloc(sizeof(double) * RECORD_ANGLE_ALLOC_SIZE);
   rArg = (recordAngleArg_t*)malloc(sizeof(recordAngleArg_t));
   rArg->comms = comms;
   rArg->time_p = time;
@@ -2053,7 +2055,7 @@ int Mobot_recordAnglesBegin(mobot_t* comms,
   rArg->angle2_p = angle2;
   rArg->angle3_p = angle3;
   rArg->angle4_p = angle4;
-  rArg->num = 512;
+  rArg->num = RECORD_ANGLE_ALLOC_SIZE;
   rArg->msecs = msecs;
   for(i = 0; i < 4; i++) {
     comms->recordingInProgress[i] = 1;
@@ -2062,7 +2064,7 @@ int Mobot_recordAnglesBegin(mobot_t* comms,
   return 0;
 }
 
-int Mobot_recordAnglesEnd(mobot_t* comms)
+int Mobot_recordAnglesEnd(mobot_t* comms, int* num)
 {
   /* Make sure it was recording in the first place */
   int i;
@@ -2076,7 +2078,8 @@ int Mobot_recordAnglesEnd(mobot_t* comms)
     comms->recordingInProgress[i] = 0;
   }
   MUTEX_UNLOCK(comms->recordingLock);
-  return comms->recordingNumValues[0];
+  *num = comms->recordingNumValues[0];
+  return 0;
 }
 
 int Mobot_recordWait(mobot_t* comms)
@@ -3399,14 +3402,14 @@ int CMobot::recordAngle(mobotJointId_t id, double* time, double* angle, int num,
   return Mobot_recordAngle(_comms, id, time, angle, num, seconds);
 }
 
-int CMobot::recordAngleBegin(mobotJointId_t id, double **time, double **angle, double seconds)
+int CMobot::recordAngleBegin(mobotJointId_t id, double* &time, double* &angle, double seconds)
 {
-  return Mobot_recordAngleBegin(_comms, id, time, angle, seconds);
+  return Mobot_recordAngleBegin(_comms, id, &time, &angle, seconds);
 }
 
-int CMobot::recordAngleEnd(mobotJointId_t id)
+int CMobot::recordAngleEnd(mobotJointId_t id, int &num)
 {
-  return Mobot_recordAngleEnd(_comms, id);
+  return Mobot_recordAngleEnd(_comms, id, &num);
 }
 
 int CMobot::recordAngles(double *time, 
@@ -3420,19 +3423,19 @@ int CMobot::recordAngles(double *time,
   return Mobot_recordAngles(_comms, time, angle1, angle2, angle3, angle4, num, seconds);
 }
 
-int CMobot::recordAnglesBegin(double **time, 
-    double **angle1, 
-    double **angle2, 
-    double **angle3, 
-    double **angle4, 
+int CMobot::recordAnglesBegin(double* &time, 
+    double* &angle1, 
+    double* &angle2, 
+    double* &angle3, 
+    double* &angle4, 
     double seconds)
 {
-  return Mobot_recordAnglesBegin(_comms, time, angle1, angle2, angle3, angle4, seconds);
+  return Mobot_recordAnglesBegin(_comms, &time, &angle1, &angle2, &angle3, &angle4, seconds);
 }
 
-int CMobot::recordAnglesEnd()
+int CMobot::recordAnglesEnd(int &num)
 {
-  return Mobot_recordAnglesEnd(_comms);
+  return Mobot_recordAnglesEnd(_comms, &num);
 }
 
 int CMobot::recordWait()
