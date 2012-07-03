@@ -11,11 +11,11 @@
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::recordAnglesBegin(double **time, 
-                              double **angle1, 
-                              double **angle2, 
-                              double **angle3, 
-                              double **angle4, 
+int CMobot::recordAnglesBegin(double* &time, 
+                              double* &angle1, 
+                              double* &angle2, 
+                              double* &angle3, 
+                              double* &angle4, 
                               double seconds);
 \end{verbatim}
 
@@ -33,9 +33,6 @@ The function returns 0 on success and non-zero otherwise.\\
 \begin{description}
 \item               
 \begin{tabular}{p{15 mm}p{145 mm}}
-\texttt{id} & The joint number. This is an enumerated type 
-discussed in Section \ref{sec:mobotJointId_t} on page
-\pageref{sec:mobotJointId_t}.\\
 \texttt{time} & A pointer to an array which will store time values for each of the angle readings. \\
 \texttt{angle1} & A pointer to an array which will store the angle values for each time. \\
 \texttt{angle2} & ... \\

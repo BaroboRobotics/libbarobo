@@ -15,22 +15,25 @@ int main()
   double angle2;
   double angle3;
   double angle4;
+  double *time;
+  double *angles1;
+  double *angles2;
+  double *angles3;
+  double *angles4;
+  int numDataPoints;
+  mobot.recordAnglesBegin(time, 
+      angles1, 
+      angles2, 
+      angles3, 
+      angles4, 
+      0.1);
   mobot.moveToAbs(720, 0, 0, 0);
-  mobot.moveToAbs(700, 0, 0, 0);
-  mobot.moveToAbs(740, 0, 0, 0);
   mobot.moveToAbs(0, 0, 0, 0);
-  while(1) {
-    mobot.getJointAnglesAbs(
-        angle1,
-        angle2,
-        angle3,
-        angle4);
-    printf("%lf %lf %lf %lf\n",
-        angle1,
-        angle2,
-        angle3,
-        angle4);
+  mobot.recordAnglesEnd(numDataPoints);
+  for(int i = 0; i < numDataPoints; i++) {
+    printf("%lf\n", angles1[i]);
   }
+  printf("Recorded %d data points.\n", numDataPoints);
 
   return 0;
 }

@@ -125,6 +125,8 @@ typedef struct mobot_s
   void (*buttonCallback)(void* mobot, int button, int buttonDown);
   void* mobot;
   char* configFilePath;
+  void* itemsToFreeOnExit[64];
+  int numItemsToFreeOnExit;
 } mobot_t;
 #endif
 
@@ -296,15 +298,15 @@ class CMobot {
                      int num, 
                      double seconds);
 #endif
-    int recordAngleBegin(mobotJointId_t id, double **time, double **angle, double seconds);
-    int recordAngleEnd(mobotJointId_t id);
-    int recordAnglesBegin(double **time, 
-                          double **angle1, 
-                          double **angle2, 
-                          double **angle3, 
-                          double **angle4, 
+    int recordAngleBegin(mobotJointId_t id, double* &time, double* &angle, double seconds);
+    int recordAngleEnd(mobotJointId_t id, int &num);
+    int recordAnglesBegin(double* &time, 
+                          double* &angle1, 
+                          double* &angle2, 
+                          double* &angle3, 
+                          double* &angle4, 
                           double seconds);
-    int recordAnglesEnd();
+    int recordAnglesEnd(int &num);
     int recordWait();
     int setJointSafetyAngle(double angle);
     int setJointSafetyAngleTimeout(double seconds);
@@ -597,7 +599,7 @@ DLLIMPORT int Mobot_recordAngleBegin(mobot_t* comms,
                                      double **time,
                                      double **angle,
                                      double timeInterval);
-DLLIMPORT int Mobot_recordAngleEnd(mobot_t* comms, mobotJointId_t id);
+DLLIMPORT int Mobot_recordAngleEnd(mobot_t* comms, mobotJointId_t id, int *num);
 DLLIMPORT int Mobot_recordAngles(mobot_t* comms, 
                                  double *time, 
                                  double* angle1, 
