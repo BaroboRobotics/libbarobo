@@ -54,8 +54,8 @@ and select the menu item ``Mobot $\rightarrow$ Configure Mobot Bluetooth''. \\
 \texttt{moveJointWait()} & Wait until the specified motor has stopped moving. \\
 \texttt{moveTo()} & Move all four joints of the mobot to specified absolute angles. \\
 \texttt{moveToNB()} & Identical to \texttt{moveTo()} but non-blocking. \\
-\texttt{moveToPID()} & Move all four joints of the mobot to specified absolute angles. \\
-\texttt{moveToPIDNB()} & Move all four joints of the mobot to specified absolute angles. \\
+\texttt{driveTo()} & Move all four joints of the mobot to specified absolute angles. \\
+\texttt{driveToNB()} & Move all four joints of the mobot to specified absolute angles. \\
 \texttt{moveToZero()} & Instruct all motors to go to their zero positions. \\
 \texttt{moveToZeroNB()} & Identical to \texttt{moveToZero()} but non-blocking. \\
 \texttt{moveWait()} & Wait until all motors have stopped moving. \\
@@ -182,7 +182,8 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \input{api/moveTo}
 \input{api/moveToAbs}
 \input{api/moveToDirect}
-\input{api/moveToPID}
+\input{api/driveJointTo}
+\input{api/driveTo}
 \input{api/moveToZero}
 \input{api/moveWait}
 \input{api/recordAngle}

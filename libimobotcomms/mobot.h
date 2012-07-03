@@ -216,6 +216,10 @@ class CMobot {
     int connectWithTTY(const char ttyfilename[]);
 #endif
     int disconnect();
+    int driveJointTo(mobotJointId_t id, double angle);
+    int driveJointToNB(mobotJointId_t id, double angle);
+    int driveTo(double angle1, double angle2, double angle3, double angle4);
+    int driveToNB(double angle1, double angle2, double angle3, double angle4);
     int enableButtonCallback(void (*buttonCallback)(CMobot* mobot, int button, int buttonDown));
     int disableButtonCallback();
     int isConnected();
@@ -266,16 +270,13 @@ class CMobot {
     int moveJointToNB(mobotJointId_t id, double angle);
     int moveJointToAbsNB(mobotJointId_t id, double angle);
     int moveJointToDirectNB(mobotJointId_t id, double angle);
-    int moveJointToPIDNB(mobotJointId_t id, double angle);
     int moveJointWait(mobotJointId_t id);
     int moveTo(double angle1, double angle2, double angle3, double angle4);
     int moveToAbs(double angle1, double angle2, double angle3, double angle4);
     int moveToDirect(double angle1, double angle2, double angle3, double angle4);
-    int moveToPID(double angle1, double angle2, double angle3, double angle4);
     int moveToNB(double angle1, double angle2, double angle3, double angle4);
     int moveToAbsNB(double angle1, double angle2, double angle3, double angle4);
     int moveToDirectNB(double angle1, double angle2, double angle3, double angle4);
-    int moveToPIDNB(double angle1, double angle2, double angle3, double angle4);
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
@@ -463,6 +464,18 @@ DLLIMPORT int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename);
 DLLIMPORT int Mobot_connectWithAddress(
     mobot_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_disconnect(mobot_t* comms);
+DLLIMPORT int Mobot_driveJointTo(mobot_t* comms, mobotJointId_t id, double angle);
+DLLIMPORT int Mobot_driveJointToNB(mobot_t* comms, mobotJointId_t id, double angle);
+DLLIMPORT int Mobot_driveTo(mobot_t* comms,
+                               double angle1,
+                               double angle2,
+                               double angle3,
+                               double angle4);
+DLLIMPORT int Mobot_driveToNB(mobot_t* comms,
+                               double angle1,
+                               double angle2,
+                               double angle3,
+                               double angle4);
 DLLIMPORT int Mobot_enableButtonCallback(mobot_t* comms, void* data, void (*buttonCallback)(void* mobot, int button, int buttonDown));
 DLLIMPORT int Mobot_disableButtonCallback(mobot_t* comms);
 DLLIMPORT int Mobot_init(mobot_t* comms);
@@ -560,11 +573,6 @@ DLLIMPORT int Mobot_moveToDirect(mobot_t* comms,
                                double angle2,
                                double angle3,
                                double angle4);
-DLLIMPORT int Mobot_moveToPID(mobot_t* comms,
-                               double angle1,
-                               double angle2,
-                               double angle3,
-                               double angle4);
 DLLIMPORT int Mobot_moveToNB(mobot_t* comms,
                                double angle1,
                                double angle2,
@@ -576,11 +584,6 @@ DLLIMPORT int Mobot_moveToAbsNB(mobot_t* comms,
                                double angle3,
                                double angle4);
 DLLIMPORT int Mobot_moveToDirectNB(mobot_t* comms,
-                               double angle1,
-                               double angle2,
-                               double angle3,
-                               double angle4);
-DLLIMPORT int Mobot_moveToPIDNB(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -644,7 +647,6 @@ DLLIMPORT int Mobot_stopOneJoint(mobot_t* comms, mobotJointId_t id);
 DLLIMPORT int Mobot_stopTwoJoints(mobot_t* comms, mobotJointId_t id1, mobotJointId_t id2);
 DLLIMPORT int Mobot_stopThreeJoints(mobot_t* comms, mobotJointId_t id1, mobotJointId_t id2, mobotJointId_t id3);
 DLLIMPORT int Mobot_stopAllJoints(mobot_t* comms);
-DLLIMPORT int Mobot_moveJointToPIDNB(mobot_t* comms, mobotJointId_t id, double angle);
 
 /* compound motion functions */
 DLLIMPORT int Mobot_motionArch(mobot_t* comms, double angle);
