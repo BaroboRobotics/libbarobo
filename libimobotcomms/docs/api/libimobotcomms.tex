@@ -30,6 +30,7 @@ and select the menu item ``Mobot $\rightarrow$ Configure Mobot Bluetooth''. \\
 \texttt{disableButtonCallback()} & Reverts a Mobot's buttons to their factory-default functions. \\
 \texttt{enableButtonCallback()} & Enables a user-driven callback for handling button-press events on a module. \\
 \texttt{getJointAngle()} & Get a joint's angle. \\
+\texttt{getJointAngles()} & Get joint angles for all joints. \\
 %\texttt{getJointDirection()} & Gets a motor's currently assigned direction. \\
 \texttt{getJointMaxSpeed()} & Get a joint's maximum speed in radians per second. \\
 \texttt{getJointSafetyAngle()} & Get the mobot's safety angle limit. \\
@@ -46,6 +47,7 @@ and select the menu item ``Mobot $\rightarrow$ Configure Mobot Bluetooth''. \\
 \texttt{moveContinuousNB()} & Move joints continuously. Joints will move untill stopped.\\
 \texttt{moveContinuousTime()} & Move joints continuously for a certain amount of time.\\
 \texttt{moveJoint()} & Move a joint. \\
+\texttt{moveJointContinuousNB()} & Move a joint continuously. \\
 \texttt{moveJointNB()} & Move a joint. \\
 \texttt{moveJointTo()} & Set the desired motor position for a joint. \\
 \texttt{moveJointToNB()} & Identical to \texttt{moveJointTo()} but non-blocking. \\
@@ -171,6 +173,8 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \input{api/moveContinuousNB}
 \input{api/moveContinuousTime}
 \input{api/moveJoint}
+\input{api/moveJointContinuousNB}
+\input{api/moveJointContinuousTime}
 \input{api/moveJointTo}
 \input{api/moveJointToAbs}
 \input{api/moveJointToDirect}
