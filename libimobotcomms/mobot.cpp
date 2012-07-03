@@ -1222,7 +1222,13 @@ int Mobot_moveJointToDirect(mobot_t* comms, mobotJointId_t id, double angle)
   return Mobot_moveJointWait(comms, id);
 }
 
-int Mobot_moveJointToPIDNB(mobot_t* comms, mobotJointId_t id, double angle)
+int Mobot_driveJointTo(mobot_t* comms, mobotJointId_t id, double angle)
+{
+  Mobot_driveJointToNB(comms, id, angle);
+  return Mobot_moveWait(comms);
+}
+
+int Mobot_driveJointToNB(mobot_t* comms, mobotJointId_t id, double angle)
 {
   uint8_t buf[32];
   float f;
@@ -1412,13 +1418,13 @@ int Mobot_moveToDirect(mobot_t* comms,
 }
 
 
-int Mobot_moveToPID(mobot_t* comms,
+int Mobot_driveTo(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
                                double angle4)
 {
-  Mobot_moveToPIDNB(comms, 
+  Mobot_driveToNB(comms, 
       angle1, 
       angle2, 
       angle3, 
@@ -1513,7 +1519,7 @@ int Mobot_moveToDirectNB(mobot_t* comms,
   return 0;
 }
 
-int Mobot_moveToPIDNB(mobot_t* comms,
+int Mobot_driveToNB(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -3049,6 +3055,42 @@ int CMobot::disconnect()
   return Mobot_disconnect(_comms);
 }
 
+int CMobot::driveJointTo(mobotJointId_t id, double angle)
+{
+  return Mobot_driveJointTo(_comms, id, DEG2RAD(angle));
+}
+
+int CMobot::driveJointToNB(mobotJointId_t id, double angle)
+{
+  return Mobot_driveJointToNB(_comms, id, DEG2RAD(angle));
+}
+
+int CMobot::driveTo( double angle1,
+                          double angle2,
+                          double angle3,
+                          double angle4)
+{
+  return Mobot_driveTo(
+      _comms, 
+      DEG2RAD(angle1), 
+      DEG2RAD(angle2), 
+      DEG2RAD(angle3), 
+      DEG2RAD(angle4));
+}
+
+int CMobot::driveToNB( double angle1,
+                          double angle2,
+                          double angle3,
+                          double angle4)
+{
+  return Mobot_driveToNB(
+      _comms, 
+      DEG2RAD(angle1), 
+      DEG2RAD(angle2), 
+      DEG2RAD(angle3), 
+      DEG2RAD(angle4));
+}
+
 int CMobot::enableButtonCallback(void (*buttonCallback)(CMobot* mobot, int button, int buttonDown))
 {
   return Mobot_enableButtonCallback(
@@ -3290,11 +3332,6 @@ int CMobot::moveJointToDirectNB(mobotJointId_t id, double angle)
   return Mobot_moveJointToDirectNB(_comms, id, DEG2RAD(angle));
 }
 
-int CMobot::moveJointToPIDNB(mobotJointId_t id, double angle)
-{
-  return Mobot_moveJointToPIDNB(_comms, id, DEG2RAD(angle));
-}
-
 int CMobot::moveJointWait(mobotJointId_t id)
 {
   return Mobot_moveJointWait(_comms, id);
@@ -3339,19 +3376,6 @@ int CMobot::moveToDirect( double angle1,
       DEG2RAD(angle4));
 }
 
-int CMobot::moveToPID( double angle1,
-                          double angle2,
-                          double angle3,
-                          double angle4)
-{
-  return Mobot_moveToPID(
-      _comms, 
-      DEG2RAD(angle1), 
-      DEG2RAD(angle2), 
-      DEG2RAD(angle3), 
-      DEG2RAD(angle4));
-}
-
 int CMobot::moveToNB( double angle1,
                           double angle2,
                           double angle3,
@@ -3384,19 +3408,6 @@ int CMobot::moveToDirectNB( double angle1,
                           double angle4)
 {
   return Mobot_moveToDirectNB(
-      _comms, 
-      DEG2RAD(angle1), 
-      DEG2RAD(angle2), 
-      DEG2RAD(angle3), 
-      DEG2RAD(angle4));
-}
-
-int CMobot::moveToPIDNB( double angle1,
-                          double angle2,
-                          double angle3,
-                          double angle4)
-{
-  return Mobot_moveToPIDNB(
       _comms, 
       DEG2RAD(angle1), 
       DEG2RAD(angle2), 

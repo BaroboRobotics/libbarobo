@@ -690,7 +690,7 @@ EXPORTCH int moveToDirect_chdl(void *varg) {
     return retval;
 }
 
-EXPORTCH int moveToPID_chdl(void *varg) {
+EXPORTCH int driveTo_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CMobot *mobot;
@@ -706,7 +706,7 @@ EXPORTCH int moveToPID_chdl(void *varg) {
     angle2 = Ch_VaArg(interp, ap, double);
     angle3 = Ch_VaArg(interp, ap, double);
     angle4 = Ch_VaArg(interp, ap, double);
-    retval = mobot->moveToPID(angle1, angle2, angle3, angle4);
+    retval = mobot->driveTo(angle1, angle2, angle3, angle4);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -774,7 +774,7 @@ EXPORTCH int moveToDirectNB_chdl(void *varg) {
     return retval;
 }
 
-EXPORTCH int moveToPIDNB_chdl(void *varg) {
+EXPORTCH int driveToNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CMobot *mobot;
@@ -790,7 +790,7 @@ EXPORTCH int moveToPIDNB_chdl(void *varg) {
     angle2 = Ch_VaArg(interp, ap, double);
     angle3 = Ch_VaArg(interp, ap, double);
     angle4 = Ch_VaArg(interp, ap, double);
-    retval = mobot->moveToPIDNB(angle1, angle2, angle3, angle4);
+    retval = mobot->driveToNB(angle1, angle2, angle3, angle4);
     Ch_VaEnd(interp, ap);
     return retval;
 }
