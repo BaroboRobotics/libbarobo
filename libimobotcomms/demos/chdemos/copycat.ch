@@ -27,7 +27,7 @@ while(1) {
       angles[2],
       angles[3]);
   /* Move the second mobot */
-  mobot2.moveToPIDNB(
+  mobot2.driveToNB(
       angles[0],
       angles[1],
       angles[2],
