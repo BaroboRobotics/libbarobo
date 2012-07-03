@@ -2794,10 +2794,42 @@ int SendToMobotDirect(mobot_t* comms, const void* data, int datasize)
 
 int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
 {
+  int rc;
+#ifndef _WIN32
+  struct timespec ts;
+#else
+#endif
   /* Wait until transaction is ready */
   MUTEX_LOCK(comms->recvBuf_lock);
   while(!comms->recvBuf_ready) {
-    COND_WAIT(comms->recvBuf_cond, comms->recvBuf_lock);
+#ifndef _WIN32
+    /* Set up a wait with timeout */
+    /* Get the current time */
+    clock_gettime(CLOCK_REALTIME, &ts);
+    /* Add a 4 second timeout */
+    ts.tv_sec += 4;
+    rc = pthread_cond_timedwait(
+      comms->recvBuf_cond, 
+      comms->recvBuf_lock,
+      &ts);
+    if(rc == ETIMEDOUT) {
+      /* Disconnect and return error */
+      MUTEX_UNLOCK(comms->recvBuf_lock);
+      MUTEX_UNLOCK(comms->commsLock);
+      Mobot_disconnect(comms);
+      return -1;
+    }
+#else
+    ResetEvent(*comms->recvBuf_cond);
+    ReleaseMutex(*comms->recvBuf_lock);
+    rc = WaitForSingleObject(*comms->recvBuf_cond, 4000);
+    if(rc == WAIT_TIMEOUT) {
+      MUTEX_UNLOCK(comms->recvBuf_lock);
+      MUTEX_UNLOCK(comms->commsLock);
+      Mobot_disconnect(comms);
+      return -1;
+    }
+#endif
   }
   memcpy(buf, comms->recvBuf, comms->recvBuf_bytes);
 
