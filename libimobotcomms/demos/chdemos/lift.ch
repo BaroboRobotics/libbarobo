@@ -23,21 +23,19 @@ mobot1.moveWait();
 mobot2.moveWait();
 
 /* First lift */
-mobot1.moveToNB(0, 0, 90,  0);
-mobot2.moveToNB(0,  -90, 0, 0);
-mobot1.moveWait();
-mobot2.moveWait();
-delay(1);
 mobot1.moveToNB(0, -90,  0, 0);
 mobot2.moveToNB(0, 0, 90, 0);
 mobot1.moveWait();
 mobot2.moveWait();
 delay(1);
+
+/* Second lift */
 mobot1.moveToNB(0, 0, 90,  0);
 mobot2.moveToNB(0,  -90, 0, 0);
 mobot1.moveWait();
 mobot2.moveWait();
-/* Second lift */
+delay(1);
+
 /* Move to zero position */
 mobot1.moveToZeroNB(); 
 mobot2.moveToZeroNB();
