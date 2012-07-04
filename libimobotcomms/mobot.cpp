@@ -471,7 +471,10 @@ int Mobot_enableButtonCallback(mobot_t* comms, void* data, void (*buttonCallback
   /* Send a message to the Mobot */
   buf[0] = 1;
   status = SendToIMobot(comms, BTCMD(CMD_ENABLEBUTTONHANDLER), buf, 1);
-  if(status < 0) return status;
+  if(status < 0) {
+    MUTEX_UNLOCK(comms->callback_lock);
+    return status;
+  }
   if(RecvFromIMobot(comms, buf, sizeof(buf))) {
     MUTEX_UNLOCK(comms->callback_lock);
     return -1;
@@ -497,7 +500,10 @@ int Mobot_disableButtonCallback(mobot_t* comms)
   /* Send a message to the Mobot */
   buf[0] = 0;
   status = SendToIMobot(comms, BTCMD(CMD_ENABLEBUTTONHANDLER), buf, 1);
-  if(status < 0) return status;
+  if(status < 0) {
+    MUTEX_UNLOCK(comms->callback_lock);
+    return status;
+  }
   if(RecvFromIMobot(comms, buf, sizeof(buf))) {
     MUTEX_UNLOCK(comms->callback_lock);
     return -1;
