@@ -25,7 +25,7 @@
 	NSString *spath = [path stringByStandardizingPath];
 	configFile = [[ConfigFile alloc] initWithFilename:spath];
 	[addressesTableView setDataSource:configFile];
-	comms = (br_comms_t*)malloc(sizeof(br_comms_t));
+	comms = (mobot_t*)malloc(sizeof(mobot_t));
 	Mobot_init(comms);
 }
 

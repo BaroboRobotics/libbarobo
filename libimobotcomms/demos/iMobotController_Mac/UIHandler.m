@@ -8,6 +8,8 @@
 
 #import "UIHandler.h"
 
+#define RAD2DEG(x) ((x)*180.0/M_PI)
+#define DEG2RAD(x) ((x)*M_PI/180.0)
 
 @implementation UIHandler
 
@@ -54,12 +56,12 @@
 	return self;
 }
 
-- (id) initWithBRComms:(br_comms_t*)br_comms {
+- (id) initWithBRComms:(mobot_t*)br_comms {
 	comms = br_comms;
 	return [self init];
 }
 
-- (br_comms_t*) comms {
+- (mobot_t*) comms {
 	return comms;
 }
 
@@ -128,7 +130,7 @@
 		for(i = 0; i < 4; i++) {
 			[textFieldPositions[i] setDoubleValue:RAD2DEG(positions[i])];
 			if( [sliderPositions[i] isMouseDown] ) {
-				Mobot_moveJointToPIDNB(comms, i+1, DEG2RAD([sliderPositions[i] doubleValue]));
+				Mobot_driveJointToDirectNB(comms, i+1, DEG2RAD([sliderPositions[i] doubleValue]));
 			} else {
 				/* Set the slider positions */
 				[sliderPositions[i] setDoubleValue:RAD2DEG(positions[i])];
@@ -155,51 +157,51 @@
 }
 
 - (IBAction) onButtonJoint1Forward:(id)sender {
-	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT1, ROBOT_FORWARD);
+	Mobot_moveJointContinuousNB(comms, MOBOT_JOINT1, MOBOT_FORWARD);
 }
 
 - (IBAction) onButtonJoint2Forward:(id)sender {
-	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT2, ROBOT_FORWARD);
+	Mobot_moveJointContinuousNB(comms, MOBOT_JOINT2, MOBOT_FORWARD);
 }
 
 - (IBAction) onButtonJoint3Forward:(id)sender {
-	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT3, ROBOT_FORWARD);
+	Mobot_moveJointContinuousNB(comms, MOBOT_JOINT3, MOBOT_FORWARD);
 }
 
 - (IBAction) onButtonJoint4Forward:(id)sender {
-	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT4, ROBOT_FORWARD);
+	Mobot_moveJointContinuousNB(comms, MOBOT_JOINT4, MOBOT_FORWARD);
 }
 
 - (IBAction) onButtonJoint1Stop:(id)sender {
-	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT1, ROBOT_HOLD);
+	Mobot_moveJointContinuousNB(comms, MOBOT_JOINT1, MOBOT_HOLD);
 }
 
 - (IBAction) onButtonJoint2Stop:(id)sender {
-	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT2, ROBOT_HOLD);
+	Mobot_moveJointContinuousNB(comms, MOBOT_JOINT2, MOBOT_HOLD);
 }
 
 - (IBAction) onButtonJoint3Stop:(id)sender {
-	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT3, ROBOT_HOLD);
+	Mobot_moveJointContinuousNB(comms, MOBOT_JOINT3, MOBOT_HOLD);
 }
 
 - (IBAction) onButtonJoint4Stop:(id)sender {
-	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT4, ROBOT_HOLD);
+	Mobot_moveJointContinuousNB(comms, MOBOT_JOINT4, MOBOT_HOLD);
 }
 
 - (IBAction) onButtonJoint1Backward:(id)sender {
-	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT1, ROBOT_BACKWARD);
+	Mobot_moveJointContinuousNB(comms, MOBOT_JOINT1, MOBOT_BACKWARD);
 }
 
 - (IBAction) onButtonJoint2Backward:(id)sender {
-	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT2, ROBOT_BACKWARD);
+	Mobot_moveJointContinuousNB(comms, MOBOT_JOINT2, MOBOT_BACKWARD);
 }
 
 - (IBAction) onButtonJoint3Backward:(id)sender {
-	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT3, ROBOT_BACKWARD);
+	Mobot_moveJointContinuousNB(comms, MOBOT_JOINT3, MOBOT_BACKWARD);
 }
 
 - (IBAction) onButtonJoint4Backward:(id)sender {
-	Mobot_moveJointContinuousNB(comms, ROBOT_JOINT4, ROBOT_BACKWARD);
+	Mobot_moveJointContinuousNB(comms, MOBOT_JOINT4, MOBOT_BACKWARD);
 }
 
 - (IBAction) onButtonRollForward:(id)sender {

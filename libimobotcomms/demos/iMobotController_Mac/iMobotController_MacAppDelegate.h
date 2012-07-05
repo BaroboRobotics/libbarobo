@@ -21,7 +21,7 @@
 	ConfigFile *configFile;
 	UIHandler *uiHandler;
 	
-	br_comms_t *comms;
+	mobot_t *comms;
 }
 
 @property (assign) IBOutlet NSWindow *window;
