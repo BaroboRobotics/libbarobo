@@ -1670,7 +1670,7 @@ int CMobotGroup::stopTwoJoints(int id1, int id2) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, stopTwoJoints, this, id, id2);
+    dlrunfun(fptr, &retval, stopTwoJoints, this, id1, id2);
     return retval;
 }
 int CMobotGroup::stopThreeJoints(int id1, int id2, int id3) {
@@ -1682,6 +1682,6 @@ int CMobotGroup::stopThreeJoints(int id1, int id2, int id3) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, stopThreeJoints, this, id, id2, id3);
+    dlrunfun(fptr, &retval, stopThreeJoints, this, id1, id2, id3);
     return retval;
 }
