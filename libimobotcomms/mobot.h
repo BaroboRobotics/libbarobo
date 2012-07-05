@@ -219,8 +219,8 @@ class CMobot
     int disconnect();
     int driveJointTo(mobotJointId_t id, double angle);
     int driveJointToNB(mobotJointId_t id, double angle);
-    int driveTo(double angle1, double angle2, double angle3, double angle4);
-    int driveToNB(double angle1, double angle2, double angle3, double angle4);
+    int driveToDirect(double angle1, double angle2, double angle3, double angle4);
+    int driveToDirectNB(double angle1, double angle2, double angle3, double angle4);
     int enableButtonCallback(void (*buttonCallback)(CMobot* mobot, int button, int buttonDown));
     int disableButtonCallback();
     int isConnected();
@@ -461,12 +461,12 @@ DLLIMPORT int Mobot_connectWithAddress(
 DLLIMPORT int Mobot_disconnect(mobot_t* comms);
 DLLIMPORT int Mobot_driveJointTo(mobot_t* comms, mobotJointId_t id, double angle);
 DLLIMPORT int Mobot_driveJointToNB(mobot_t* comms, mobotJointId_t id, double angle);
-DLLIMPORT int Mobot_driveTo(mobot_t* comms,
+DLLIMPORT int Mobot_driveToDirect(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
                                double angle4);
-DLLIMPORT int Mobot_driveToNB(mobot_t* comms,
+DLLIMPORT int Mobot_driveToDirectNB(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,

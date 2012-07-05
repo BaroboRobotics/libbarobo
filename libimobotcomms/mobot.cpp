@@ -1210,13 +1210,13 @@ int Mobot_moveTo(mobot_t* comms,
   return Mobot_moveWait(comms);
 }
 
-int Mobot_driveTo(mobot_t* comms,
+int Mobot_driveToDirect(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
                                double angle4)
 {
-  Mobot_driveToNB(comms, 
+  Mobot_driveToDirectNB(comms, 
       angle1, 
       angle2, 
       angle3, 
@@ -1253,7 +1253,7 @@ int Mobot_moveToNB(mobot_t* comms,
   return 0;
 }
 
-int Mobot_driveToNB(mobot_t* comms,
+int Mobot_driveToDirectNB(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -2865,12 +2865,12 @@ int CMobot::driveJointToNB(mobotJointId_t id, double angle)
   return Mobot_driveJointToNB(_comms, id, DEG2RAD(angle));
 }
 
-int CMobot::driveTo( double angle1,
+int CMobot::driveToDirect( double angle1,
                           double angle2,
                           double angle3,
                           double angle4)
 {
-  return Mobot_driveTo(
+  return Mobot_driveToDirect(
       _comms, 
       DEG2RAD(angle1), 
       DEG2RAD(angle2), 
@@ -2878,12 +2878,12 @@ int CMobot::driveTo( double angle1,
       DEG2RAD(angle4));
 }
 
-int CMobot::driveToNB( double angle1,
+int CMobot::driveToDirectNB( double angle1,
                           double angle2,
                           double angle3,
                           double angle4)
 {
-  return Mobot_driveToNB(
+  return Mobot_driveToDirectNB(
       _comms, 
       DEG2RAD(angle1), 
       DEG2RAD(angle2), 

@@ -28,8 +28,8 @@ and select the menu item ``Mobot $\rightarrow$ Configure Mobot Bluetooth''. \\
 \texttt{connectWithAddress()} & Connect to a mobot module by specifying its Bluetooth address. \\
 \texttt{disconnect()} & Disconnect from a mobot module. \\
 \texttt{disableButtonCallback()} & Reverts a Mobot's buttons to their factory-default functions. \\
-\texttt{driveTo()} & Move all four joints of the mobot to specified absolute angles. \\
-\texttt{driveToNB()} & Move all four joints of the mobot to specified absolute angles. \\
+\texttt{driveToDirect()} & Move all four joints of the mobot to specified absolute angles. \\
+\texttt{driveToDirectNB()} & Move all four joints of the mobot to specified absolute angles. \\
 \texttt{enableButtonCallback()} & Enables a user-driven callback for handling button-press events on a module. \\
 \texttt{getJointAngle()} & Get a joint's angle. \\
 \texttt{getJointAngles()} & Get joint angles for all joints. \\
@@ -145,7 +145,7 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \input{api/connectWithAddress}
 \input{api/disconnect}
 \input{api/driveJointTo}
-\input{api/driveTo}
+\input{api/driveToDirect}
 \input{api/getJointAngle}
 %\input{api/getJointDirection}
 \input{api/getJointMaxSpeed}
