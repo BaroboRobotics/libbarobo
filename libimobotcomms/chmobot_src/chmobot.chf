@@ -727,30 +727,6 @@ int CMobot::moveTo(double angle1, double angle2, double angle3, double angle4) {
     dlrunfun(fptr, &retval, moveTo, this, angle1, angle2, angle3, angle4);
     return retval;
 }
-int CMobot::moveToAbs(double angle1, double angle2, double angle3, double angle4) {
-    void *fptr;
-    int retval;
-
-    fptr = dlsym(g_chmobot_dlhandle, "moveToAbs_chdl");
-    if(fptr == NULL) {
-        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
-        return -1;
-    }
-    dlrunfun(fptr, &retval, moveToAbs, this, angle1, angle2, angle3, angle4);
-    return retval;
-}
-int CMobot::moveToDirect(double angle1, double angle2, double angle3, double angle4) {
-    void *fptr;
-    int retval;
-
-    fptr = dlsym(g_chmobot_dlhandle, "moveToDirect_chdl");
-    if(fptr == NULL) {
-        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
-        return -1;
-    }
-    dlrunfun(fptr, &retval, moveToDirect, this, angle1, angle2, angle3, angle4);
-    return retval;
-}
 int CMobot::moveToNB(double angle1, double angle2, double angle3, double angle4) {
     void *fptr;
     int retval;
@@ -761,30 +737,6 @@ int CMobot::moveToNB(double angle1, double angle2, double angle3, double angle4)
         return -1;
     }
     dlrunfun(fptr, &retval, moveToNB, this, angle1, angle2, angle3, angle4);
-    return retval;
-}
-int CMobot::moveToAbsNB(double angle1, double angle2, double angle3, double angle4) {
-    void *fptr;
-    int retval;
-
-    fptr = dlsym(g_chmobot_dlhandle, "moveToAbsNB_chdl");
-    if(fptr == NULL) {
-        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
-        return -1;
-    }
-    dlrunfun(fptr, &retval, moveToAbsNB, this, angle1, angle2, angle3, angle4);
-    return retval;
-}
-int CMobot::moveToDirectNB(double angle1, double angle2, double angle3, double angle4) {
-    void *fptr;
-    int retval;
-
-    fptr = dlsym(g_chmobot_dlhandle, "moveToDirectNB_chdl");
-    if(fptr == NULL) {
-        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
-        return -1;
-    }
-    dlrunfun(fptr, &retval, moveToDirectNB, this, angle1, angle2, angle3, angle4);
     return retval;
 }
 int CMobot::moveToZero() {

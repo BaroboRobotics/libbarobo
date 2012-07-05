@@ -580,48 +580,6 @@ EXPORTCH int moveTo_chdl(void *varg) {
     return retval;
 }
 
-EXPORTCH int moveToAbs_chdl(void *varg) {
-    ChInterp_t interp;
-    ChVaList_t ap;
-    class CMobot *mobot;
-    double angle1;
-    double angle2;
-    double angle3;
-    double angle4;
-    int retval;
-
-    Ch_VaStart(interp, ap, varg);
-    mobot = Ch_VaArg(interp, ap, class CMobot *);
-    angle1 = Ch_VaArg(interp, ap, double);
-    angle2 = Ch_VaArg(interp, ap, double);
-    angle3 = Ch_VaArg(interp, ap, double);
-    angle4 = Ch_VaArg(interp, ap, double);
-    retval = mobot->moveToAbs(angle1, angle2, angle3, angle4);
-    Ch_VaEnd(interp, ap);
-    return retval;
-}
-
-EXPORTCH int moveToDirect_chdl(void *varg) {
-    ChInterp_t interp;
-    ChVaList_t ap;
-    class CMobot *mobot;
-    double angle1;
-    double angle2;
-    double angle3;
-    double angle4;
-    int retval;
-
-    Ch_VaStart(interp, ap, varg);
-    mobot = Ch_VaArg(interp, ap, class CMobot *);
-    angle1 = Ch_VaArg(interp, ap, double);
-    angle2 = Ch_VaArg(interp, ap, double);
-    angle3 = Ch_VaArg(interp, ap, double);
-    angle4 = Ch_VaArg(interp, ap, double);
-    retval = mobot->moveToDirect(angle1, angle2, angle3, angle4);
-    Ch_VaEnd(interp, ap);
-    return retval;
-}
-
 EXPORTCH int driveTo_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -660,48 +618,6 @@ EXPORTCH int moveToNB_chdl(void *varg) {
     angle3 = Ch_VaArg(interp, ap, double);
     angle4 = Ch_VaArg(interp, ap, double);
     retval = mobot->moveToNB(angle1, angle2, angle3, angle4);
-    Ch_VaEnd(interp, ap);
-    return retval;
-}
-
-EXPORTCH int moveToAbsNB_chdl(void *varg) {
-    ChInterp_t interp;
-    ChVaList_t ap;
-    class CMobot *mobot;
-    double angle1;
-    double angle2;
-    double angle3;
-    double angle4;
-    int retval;
-
-    Ch_VaStart(interp, ap, varg);
-    mobot = Ch_VaArg(interp, ap, class CMobot *);
-    angle1 = Ch_VaArg(interp, ap, double);
-    angle2 = Ch_VaArg(interp, ap, double);
-    angle3 = Ch_VaArg(interp, ap, double);
-    angle4 = Ch_VaArg(interp, ap, double);
-    retval = mobot->moveToAbsNB(angle1, angle2, angle3, angle4);
-    Ch_VaEnd(interp, ap);
-    return retval;
-}
-
-EXPORTCH int moveToDirectNB_chdl(void *varg) {
-    ChInterp_t interp;
-    ChVaList_t ap;
-    class CMobot *mobot;
-    double angle1;
-    double angle2;
-    double angle3;
-    double angle4;
-    int retval;
-
-    Ch_VaStart(interp, ap, varg);
-    mobot = Ch_VaArg(interp, ap, class CMobot *);
-    angle1 = Ch_VaArg(interp, ap, double);
-    angle2 = Ch_VaArg(interp, ap, double);
-    angle3 = Ch_VaArg(interp, ap, double);
-    angle4 = Ch_VaArg(interp, ap, double);
-    retval = mobot->moveToDirectNB(angle1, angle2, angle3, angle4);
     Ch_VaEnd(interp, ap);
     return retval;
 }

@@ -1321,35 +1321,6 @@ int Mobot_moveTo(mobot_t* comms,
   return Mobot_moveWait(comms);
 }
 
-int Mobot_moveToAbs(mobot_t* comms,
-                               double angle1,
-                               double angle2,
-                               double angle3,
-                               double angle4)
-{
-  Mobot_moveToAbsNB(comms, 
-      angle1, 
-      angle2, 
-      angle3, 
-      angle4 );
-  return Mobot_moveWait(comms);
-}
-
-int Mobot_moveToDirect(mobot_t* comms,
-                               double angle1,
-                               double angle2,
-                               double angle3,
-                               double angle4)
-{
-  Mobot_moveToDirectNB(comms, 
-      angle1, 
-      angle2, 
-      angle3, 
-      angle4 );
-  return Mobot_moveWait(comms);
-}
-
-
 int Mobot_driveTo(mobot_t* comms,
                                double angle1,
                                double angle2,
@@ -1381,65 +1352,7 @@ int Mobot_moveToNB(mobot_t* comms,
   memcpy(&buf[8], &f, 4);
   f = angle4;
   memcpy(&buf[12], &f, 4);
-  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLES), buf, 16);
-  if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
-  /* Make sure the data size is correct */
-  if(buf[1] != 3) {
-    return -1;
-  }
-  return 0;
-}
-
-int Mobot_moveToAbsNB(mobot_t* comms,
-                               double angle1,
-                               double angle2,
-                               double angle3,
-                               double angle4)
-{
-  uint8_t buf[32];
-  float f;
-  int status;
-  f = angle1;
-  memcpy(&buf[0], &f, 4);
-  f = angle2;
-  memcpy(&buf[4], &f, 4);
-  f = angle3;
-  memcpy(&buf[8], &f, 4);
-  f = angle4;
-  memcpy(&buf[12], &f, 4);
   status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLESABS), buf, 16);
-  if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
-  /* Make sure the data size is correct */
-  if(buf[1] != 3) {
-    return -1;
-  }
-  return 0;
-}
-
-int Mobot_moveToDirectNB(mobot_t* comms,
-                               double angle1,
-                               double angle2,
-                               double angle3,
-                               double angle4)
-{
-  uint8_t buf[32];
-  float f;
-  int status;
-  f = angle1;
-  memcpy(&buf[0], &f, 4);
-  f = angle2;
-  memcpy(&buf[4], &f, 4);
-  f = angle3;
-  memcpy(&buf[8], &f, 4);
-  f = angle4;
-  memcpy(&buf[12], &f, 4);
-  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLESDIRECT), buf, 16);
   if(status < 0) return status;
   if(RecvFromIMobot(comms, buf, sizeof(buf))) {
     return -1;
@@ -3294,64 +3207,12 @@ int CMobot::moveTo( double angle1,
       DEG2RAD(angle4));
 }
 
-int CMobot::moveToAbs( double angle1,
-                          double angle2,
-                          double angle3,
-                          double angle4)
-{
-  return Mobot_moveToAbs(
-      _comms, 
-      DEG2RAD(angle1), 
-      DEG2RAD(angle2), 
-      DEG2RAD(angle3), 
-      DEG2RAD(angle4));
-}
-
-int CMobot::moveToDirect( double angle1,
-                          double angle2,
-                          double angle3,
-                          double angle4)
-{
-  return Mobot_moveToDirect(
-      _comms, 
-      DEG2RAD(angle1), 
-      DEG2RAD(angle2), 
-      DEG2RAD(angle3), 
-      DEG2RAD(angle4));
-}
-
 int CMobot::moveToNB( double angle1,
                           double angle2,
                           double angle3,
                           double angle4)
 {
   return Mobot_moveToNB(
-      _comms, 
-      DEG2RAD(angle1), 
-      DEG2RAD(angle2), 
-      DEG2RAD(angle3), 
-      DEG2RAD(angle4));
-}
-
-int CMobot::moveToAbsNB( double angle1,
-                          double angle2,
-                          double angle3,
-                          double angle4)
-{
-  return Mobot_moveToAbsNB(
-      _comms, 
-      DEG2RAD(angle1), 
-      DEG2RAD(angle2), 
-      DEG2RAD(angle3), 
-      DEG2RAD(angle4));
-}
-
-int CMobot::moveToDirectNB( double angle1,
-                          double angle2,
-                          double angle3,
-                          double angle4)
-{
-  return Mobot_moveToDirectNB(
       _comms, 
       DEG2RAD(angle1), 
       DEG2RAD(angle2), 
