@@ -87,6 +87,7 @@ typedef SOCKADDR_BTH sockaddr_t;
 #endif
 #endif
 
+typedef double* mobotRecordData_t;
 #define angle2distance(radius, angle) ((radius) * ((angle) * M_PI / 180.0))
 #define distance2angle(radius, distance) (((distance) / (radius)) * 180 / M_PI)
 
@@ -294,13 +295,13 @@ class CMobot
                      int num, 
                      double seconds);
 #endif
-    int recordAngleBegin(mobotJointId_t id, double* &time, double* &angle, double seconds);
+    int recordAngleBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double seconds);
     int recordAngleEnd(mobotJointId_t id, int &num);
-    int recordAnglesBegin(double* &time, 
-                          double* &angle1, 
-                          double* &angle2, 
-                          double* &angle3, 
-                          double* &angle4, 
+    int recordAnglesBegin(mobotRecordData_t &time, 
+                          mobotRecordData_t &angle1, 
+                          mobotRecordData_t &angle2, 
+                          mobotRecordData_t &angle3, 
+                          mobotRecordData_t &angle4, 
                           double seconds);
     int recordAnglesEnd(int &num);
     int recordWait();
