@@ -238,9 +238,7 @@ class CMobot
 #endif
     static const char* getConfigFilePath();
     int getJointAngle(mobotJointId_t id, double &angle);
-    int getJointAngleAbs(mobotJointId_t id, double &angle);
     int getJointAngles(double &angle1, double &angle2, double &angle3, double &angle4);
-    int getJointAnglesAbs(double &angle1, double &angle2, double &angle3, double &angle4);
     int getJointMaxSpeed(mobotJointId_t id, double &maxSpeed);
     int getJointSafetyAngle(double &angle);
     int getJointSafetyAngleTimeout(double &seconds);
@@ -482,8 +480,6 @@ DLLIMPORT int Mobot_getButtonVoltage(mobot_t* comms, double *voltage);
 DLLIMPORT const char* Mobot_getConfigFilePath();
 DLLIMPORT int Mobot_getEncoderVoltage(mobot_t* comms, int pinNumber, double *voltage);
 DLLIMPORT int Mobot_getJointAngle(mobot_t* comms, mobotJointId_t id, double *angle);
-DLLIMPORT int Mobot_getJointAngleAbs(mobot_t* comms, mobotJointId_t id, double *angle);
-DLLIMPORT int Mobot_getJointAngleTime(mobot_t* comms, mobotJointId_t id, double *time, double *angle);
 DLLIMPORT int Mobot_getJointAnglesTime(mobot_t* comms, 
                                        double *time, 
                                        double *angle1, 
@@ -491,17 +487,6 @@ DLLIMPORT int Mobot_getJointAnglesTime(mobot_t* comms,
                                        double *angle3, 
                                        double *angle4);
 DLLIMPORT int Mobot_getJointAngles(mobot_t* comms, 
-                                       double *angle1, 
-                                       double *angle2, 
-                                       double *angle3, 
-                                       double *angle4);
-DLLIMPORT int Mobot_getJointAnglesAbsTime(mobot_t* comms, 
-                                       double *time, 
-                                       double *angle1, 
-                                       double *angle2, 
-                                       double *angle3, 
-                                       double *angle4);
-DLLIMPORT int Mobot_getJointAnglesAbs(mobot_t* comms, 
                                        double *angle1, 
                                        double *angle2, 
                                        double *angle3, 

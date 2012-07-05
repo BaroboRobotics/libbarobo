@@ -684,27 +684,6 @@ int Mobot_getJointAngle(mobot_t* comms, mobotJointId_t id, double *angle)
   float f;
   int status;
   buf[0] = (uint8_t)id-1;
-  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORANGLE), buf, 1);
-  if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
-  /* Make sure the data size is correct */
-  if(buf[1] != 7) {
-    return -1;
-  }
-  /* Copy the data */
-  memcpy(&f, &buf[2], 4);
-  *angle = f;
-  return 0;
-}
-
-int Mobot_getJointAngleAbs(mobot_t* comms, mobotJointId_t id, double *angle)
-{
-  uint8_t buf[32];
-  float f;
-  int status;
-  buf[0] = (uint8_t)id-1;
   status = SendToIMobot(comms, BTCMD(CMD_GETMOTORANGLEABS), buf, 1);
   if(status < 0) return status;
   if(RecvFromIMobot(comms, buf, sizeof(buf))) {
@@ -720,97 +699,7 @@ int Mobot_getJointAngleAbs(mobot_t* comms, mobotJointId_t id, double *angle)
   return 0;
 }
 
-int Mobot_getJointAngleTime(mobot_t* comms, mobotJointId_t id, double *time, double *angle)
-{
-  uint8_t buf[32];
-  float f;
-  uint32_t millis;
-  int status;
-  buf[0] = (uint8_t)id-1;
-  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORANGLETIMESTAMP), buf, 1);
-  if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
-  /* Make sure the data size is correct */
-  if(buf[1] != 0x0b) {
-    return -1;
-  }
-  /* Copy the data */
-  memcpy(&millis, &buf[2], 4);
-  memcpy(&f, &buf[6], 4);
-  *angle = f;
-  *time = millis / 1000.0;
-  return 0;
-}
-
 int Mobot_getJointAngles(mobot_t* comms, 
-                             double *angle1,
-                             double *angle2,
-                             double *angle3,
-                             double *angle4)
-{
-  uint8_t buf[32];
-  float f;
-  uint32_t millis;
-  int status;
-  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORANGLESTIMESTAMP), NULL, 0);
-  if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
-  /* Make sure the data size is correct */
-  if(buf[1] != 0x17) {
-    return -1;
-  }
-  /* Copy 4 joint angles */
-  memcpy(&f, &buf[6], 4);
-  *angle1 = f;
-  memcpy(&f, &buf[10], 4);
-  *angle2 = f;
-  memcpy(&f, &buf[14], 4);
-  *angle3 = f;
-  memcpy(&f, &buf[18], 4);
-  *angle4 = f;
-  return 0;
-}
-
-int Mobot_getJointAnglesTime(mobot_t* comms, 
-                             double *time, 
-                             double *angle1,
-                             double *angle2,
-                             double *angle3,
-                             double *angle4)
-{
-  uint8_t buf[32];
-  float f;
-  uint32_t millis;
-  int status;
-  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORANGLESTIMESTAMP), NULL, 0);
-  if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
-  /* Make sure the data size is correct */
-  if(buf[1] != 0x17) {
-    return -1;
-  }
-  /* Copy the data */
-  memcpy(&millis, &buf[2], 4);
-  *time = millis / 1000.0;
-  /* Copy 4 joint angles */
-  memcpy(&f, &buf[6], 4);
-  *angle1 = f;
-  memcpy(&f, &buf[10], 4);
-  *angle2 = f;
-  memcpy(&f, &buf[14], 4);
-  *angle3 = f;
-  memcpy(&f, &buf[18], 4);
-  *angle4 = f;
-  return 0;
-}
-
-int Mobot_getJointAnglesAbs(mobot_t* comms, 
                              double *angle1,
                              double *angle2,
                              double *angle3,
@@ -842,7 +731,7 @@ int Mobot_getJointAnglesAbs(mobot_t* comms,
   return 0;
 }
 
-int Mobot_getJointAnglesAbsTime(mobot_t* comms, 
+int Mobot_getJointAnglesTime(mobot_t* comms, 
                              double *time, 
                              double *angle1,
                              double *angle2,
@@ -1439,6 +1328,7 @@ unsigned int diff_msecs(struct timespec t1, struct timespec t2)
 
 void* Mobot_recordAngleThread(void* arg)
 {
+  double angles[4];
 #ifndef _WIN32
   recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
   int i;
@@ -1457,7 +1347,15 @@ void* Mobot_recordAngleThread(void* arg)
     cur_time.tv_sec = mts.tv_sec;
     cur_time.tv_nsec = mts.tv_nsec;
 #endif
-    Mobot_getJointAngleTime(rArg->comms, rArg->id, &rArg->time[i], &rArg->angle[i]);
+    //Mobot_getJointAngleTime(rArg->comms, rArg->id, &rArg->time[i], &rArg->angle[i]);
+    Mobot_getJointAnglesTime(
+        rArg->comms, 
+        &rArg->time[i],
+        &angles[0],
+        &angles[1],
+        &angles[2],
+        &angles[3]);
+    rArg->angle[i] = angles[rArg->id-1];
     if(i == 0) {
       start_time = rArg->time[i];
     }
@@ -1487,7 +1385,15 @@ void* Mobot_recordAngleThread(void* arg)
   double start_time;
   for(i = 0; i < rArg->num; i++) {
     cur_time = GetTickCount();
-    Mobot_getJointAngleTime(rArg->comms, rArg->id, &rArg->time[i], &rArg->angle[i]);
+    //Mobot_getJointAngleTime(rArg->comms, rArg->id, &rArg->time[i], &rArg->angle[i]);
+    Mobot_getJointAnglesTime(
+        rArg->comms, 
+        &rArg->time[i],
+        &angles[0],
+        &angles[1],
+        &angles[2],
+        &angles[3]);
+    rArg->angle[i] = angles[rArg->id-1];
     if(i == 0) {
       start_time = rArg->time[i];
     }
@@ -1509,6 +1415,7 @@ void* Mobot_recordAngleThread(void* arg)
 #define RECORD_ANGLE_ALLOC_SIZE 16
 void* Mobot_recordAngleBeginThread(void* arg)
 {
+  double angles[4];
 #ifndef _WIN32
   recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
   int i;
@@ -1543,7 +1450,15 @@ void* Mobot_recordAngleBeginThread(void* arg)
     cur_time.tv_sec = mts.tv_sec;
     cur_time.tv_nsec = mts.tv_nsec;
 #endif
-    Mobot_getJointAngleTime(rArg->comms, rArg->id, &((*rArg->time_p)[i]), &((*rArg->angle_p)[i]));
+    //Mobot_getJointAngleTime(rArg->comms, rArg->id, &((*rArg->time_p)[i]), &((*rArg->angle_p)[i]));
+    Mobot_getJointAnglesTime(
+        rArg->comms, 
+        &rArg->time[i],
+        &angles[0],
+        &angles[1],
+        &angles[2],
+        &angles[3]);
+    (*rArg->angle_p)[i] = angles[rArg->id-1];
     if(i == 0) {
       start_time = (*rArg->time_p)[i];
     }
@@ -1576,7 +1491,15 @@ void* Mobot_recordAngleBeginThread(void* arg)
     rArg->i = i;
     rArg->comms->recordingNumValues[rArg->id-1] = i;
     cur_time = GetTickCount();
-    Mobot_getJointAngleTime(rArg->comms, rArg->id, &((*rArg->time_p)[i]), &((*rArg->angle_p)[i]));
+    //Mobot_getJointAngleTime(rArg->comms, rArg->id, &((*rArg->time_p)[i]), &((*rArg->angle_p)[i]));
+    Mobot_getJointAnglesTime(
+        rArg->comms, 
+        &rArg->time[i],
+        &angles[0],
+        &angles[1],
+        &angles[2],
+        &angles[3]);
+    (*rArg->angle_p)[i] = angles[rArg->id-1];
     if(i == 0) {
       start_time = (*rArg->time_p)[i];
     }
@@ -3004,14 +2927,6 @@ int CMobot::getJointAngle(mobotJointId_t id, double &angle)
   return err;
 }
 
-int CMobot::getJointAngleAbs(mobotJointId_t id, double &angle)
-{
-  int err;
-  err = Mobot_getJointAngleAbs(_comms, id, &angle);
-  angle = RAD2DEG(angle);
-  return err;
-}
-
 int CMobot::getJointAngles(
     double &angle1,
     double &angle2,
@@ -3021,29 +2936,6 @@ int CMobot::getJointAngles(
   double time;
   int err;
   err = Mobot_getJointAnglesTime(
-      _comms, 
-      &time,
-      &angle1,
-      &angle2,
-      &angle3,
-      &angle4);
-  if(err) return err;
-  angle1 = RAD2DEG(angle1);
-  angle2 = RAD2DEG(angle2);
-  angle3 = RAD2DEG(angle3);
-  angle4 = RAD2DEG(angle4);
-  return 0;
-}
-
-int CMobot::getJointAnglesAbs(
-    double &angle1,
-    double &angle2,
-    double &angle3,
-    double &angle4)
-{
-  double time;
-  int err;
-  err = Mobot_getJointAnglesAbsTime(
       _comms, 
       &time,
       &angle1,
