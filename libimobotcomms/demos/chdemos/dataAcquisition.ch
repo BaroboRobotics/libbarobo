@@ -3,7 +3,6 @@
 
 #include <mobot.h>
 #include <chplot.h>
-#include <numeric.h>
 CMobot mobot;
 
 /* Connect to the mobot */
@@ -27,7 +26,6 @@ array double angles1[numDataPoints];
 
 /* Declare plotting variables */
 CPlot plot1, plot2, plot3;
-array double angles1Unwrapped[numDataPoints];
 
 /* Declare time shifted data */
 double tolerance = 1.0; /* Degrees */
@@ -55,24 +53,23 @@ plot1.data2DCurve(time, angles1, numDataPoints);
 plot1.grid(PLOT_ON);
 plot1.plotting();
 
-/* Plot the unwrapped data */
-unwrapdeg(angles1Unwrapped, angles1);
-plot2.title("Unwrapped Data for Joint Angle 1 versus Time");
+/* Plot the data */
+plot2.title("Data for Joint Angle 1 versus Time");
 plot2.label(PLOT_AXIS_X, "Time (seconds)");
 plot2.label(PLOT_AXIS_Y, "Angle (degrees)");
-plot2.data2DCurve(time, angles1Unwrapped, numDataPoints);
+plot2.data2DCurve(time, angles1, numDataPoints);
 plot2.grid(PLOT_ON);
 plot2.plotting();
 
 /* Adjust the time delay */
 /* Shift the time so the movement starts at time 0 */
-shiftTime(tolerance, numDataPoints, time, angles1Unwrapped);
+shiftTime(tolerance, numDataPoints, time, angles1);
 
 /* Plot the data */
-plot3.title("Unwrapped and shifted Data for Joint Angle 1 versus Time");
+plot3.title("Shifted Data for Joint Angle 1 versus Time");
 plot3.label(PLOT_AXIS_X, "Time (seconds)");
 plot3.label(PLOT_AXIS_Y, "Angle (degrees)");
-plot3.data2DCurve(time, angles1Unwrapped, numDataPoints);
+plot3.data2DCurve(time, angles1, numDataPoints);
 plot3.grid(PLOT_ON);
 plot3.plotting();
 
