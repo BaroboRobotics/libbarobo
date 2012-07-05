@@ -2,19 +2,19 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CMobot::driveJointTo()}\index{CMobot::driveJointTo()}}\\
-{\LARGE \texttt{CMobot::driveJointToNB()}\index{CMobot::driveJointToNB()}}\\
+{\LARGE \texttt{CMobot::driveJointToDirect()}\index{CMobot::driveJointToDirect()}}\\
+{\LARGE \texttt{CMobot::driveJointToDirectNB()}\index{CMobot::driveJointToDirectNB()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{driveJointTo()}
-\addcontentsline{toc}{section}{driveJointToNB()}
+\addcontentsline{toc}{section}{driveJointToDirect()}
+\addcontentsline{toc}{section}{driveJointToDirectNB()}
 
 \noindent
 {\bf Synopsis}
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::driveJointTo(moboJointId_t id, double angle);
-int CMobot::driveJointToNB(moboJointId_t id, double angle);
+int CMobot::driveJointToDirect(moboJointId_t id, double angle);
+int CMobot::driveJointToDirectNB(moboJointId_t id, double angle);
 \end{verbatim}
 
 \noindent
@@ -45,14 +45,14 @@ that this variant ignores the speed settings of the robot joints. This function 
 the robot to move its joints towards its goal using a Proportional-Integral-Derivitive (PID)
 controller.
 
-{\bf CMobot::driveJointTo()}\\
+{\bf CMobot::driveJointToDirect()}\\
 This function moves all of the joints of a mobot to the specified absolute positions. 
 
-{\bf CMobot::driveJointToNB()}\\
+{\bf CMobot::driveJointToDirectNB()}\\
 This function moves all of the joints of a mobot to the specified absolute positions. 
 
-The function \texttt{driveJointToNB()} is the non-blocking version of
-the \texttt{driveJointTo()} function, which means that the function will return
+The function \texttt{driveJointToDirectNB()} is the non-blocking version of
+the \texttt{driveJointToDirect()} function, which means that the function will return
 immediately and the physical mobot motion will occur asynchronously. For
 more details on blocking and non-blocking functions, please refer to 
 Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\

@@ -218,8 +218,8 @@ class CMobot
     int connectWithTTY(const char ttyfilename[]);
 #endif
     int disconnect();
-    int driveJointTo(mobotJointId_t id, double angle);
-    int driveJointToNB(mobotJointId_t id, double angle);
+    int driveJointToDirect(mobotJointId_t id, double angle);
+    int driveJointToDirectNB(mobotJointId_t id, double angle);
     int driveToDirect(double angle1, double angle2, double angle3, double angle4);
     int driveToDirectNB(double angle1, double angle2, double angle3, double angle4);
     int enableButtonCallback(void (*buttonCallback)(CMobot* mobot, int button, int buttonDown));
@@ -460,8 +460,8 @@ DLLIMPORT int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename);
 DLLIMPORT int Mobot_connectWithAddress(
     mobot_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_disconnect(mobot_t* comms);
-DLLIMPORT int Mobot_driveJointTo(mobot_t* comms, mobotJointId_t id, double angle);
-DLLIMPORT int Mobot_driveJointToNB(mobot_t* comms, mobotJointId_t id, double angle);
+DLLIMPORT int Mobot_driveJointToDirect(mobot_t* comms, mobotJointId_t id, double angle);
+DLLIMPORT int Mobot_driveJointToDirectNB(mobot_t* comms, mobotJointId_t id, double angle);
 DLLIMPORT int Mobot_driveToDirect(mobot_t* comms,
                                double angle1,
                                double angle2,
