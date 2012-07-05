@@ -2,16 +2,28 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CMobotGroup::stop()}\index{CMobotGroup::stop()}}\\
+{\LARGE \texttt{CMobotGroup::stopAllJoints()}\index{CMobotGroup::stopAllJoints()}}\\
+{\LARGE \texttt{CMobotGroup::stopOneJoint()}\index{CMobotGroup::stopOneJoint()}}\\
+{\LARGE \texttt{CMobotGroup::stopTwoJoints()}\index{CMobotGroup::stopTwoJoints()}}\\
+{\LARGE \texttt{CMobotGroup::stopThreeJoints()}\index{CMobotGroup::stopThreeJoints()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{stop()}
+\addcontentsline{toc}{section}{stopAllJoints()}
+\addcontentsline{toc}{section}{stopOneJoint()}
+\addcontentsline{toc}{section}{stopTwoJoints()}
+\addcontentsline{toc}{section}{stopThreeJoints()}
 
 \noindent
 {\bf Synopsis}
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobotGroup::stop();
+int CMobotGroup::stopAllJoints();
+int CMobotGroup::stopOneJoint(mobotJointId_t id);
+int CMobotGroup::stopTwoJoints(mobotJointId_t id1, mobotJointId_t id2);
+int CMobotGroup::stopThreeJoints(
+    mobotJointId_t id1,
+    mobotJointId_t id2,
+    mobotJointId_t id3);
 \end{verbatim}
 
 \noindent
