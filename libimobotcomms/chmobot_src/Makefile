@@ -32,7 +32,6 @@ createpkg: libmobot.dl
 	mkdir $(PKGDIR)/docs
 	cp chmobot.chf $(PKGDIR)/lib
 	cp shiftTime.chf $(PKGDIR)/lib
-	cp processRecordedAngles.chf $(PKGDIR)/lib
 	cp delay.chf $(PKGDIR)/lib
 	cp libmobot.dl $(PKGDIR)/dl
 	cp ../mobot.h $(PKGDIR)/include
