@@ -26,7 +26,6 @@ array double angles1[numDataPoints];
 
 /* Declare plotting variables */
 CPlot plot;
-array double angles1Unwrapped[numDataPoints];
 
 /* Declare time shifted data */
 double tolerance = 1.0; /* Degrees */

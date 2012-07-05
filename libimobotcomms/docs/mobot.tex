@@ -1688,17 +1688,6 @@ the Mobot will place an accurate timestamp on each piece of data as it was recor
 on the Mobot itself. These timestamps are stored in the \texttt{time} array and
 the joint angles will be stored in the \texttt{angles1} array.
 
-The last variables we will declare are related to generating a plot to display
-the captured data. 
-\begin{verbatim}
-CPlot plot1, plot2, plot3;
-array double angles1Unwrapped[numDataPoints];
-\end{verbatim}
-The variables \texttt{plot1} and \texttt{plot2} will hold the two plots we will
-generate, and the computational array \texttt{angles1Unwrapped} will hold
-the ``unwrapped'' data recorded from the mobot. More discussion regarding
-unwrapping data will be presented towards the end of this demo.
-
 Finally, the last variable declared is \texttt{tolerance}. This variable 
 holds a value in degrees. This tolerance declared here is the tolerance used
 later to detect the time where motion first begins. Because the data recording 
@@ -1738,8 +1727,7 @@ mobot.recordWait();
 \end{verbatim}
 
 After data has been recorded, we use our previously declared plotting variables to 
-generate plots of the data. We will generate two separate plots. First, we simply
-plot the original raw data directly from the Mobot.
+generate plots of the data. 
 \begin{verbatim}
 plot1.title("Original Data for Joint Angle 1 versus Time");
 plot1.label(PLOT_AXIS_X, "Time (seconds)");
@@ -1750,46 +1738,16 @@ plot1.plotting();
 \end{verbatim}
 The previous lines of code set the plot title, set the X-axis label, set the Y-axis label,
 insert the plot data, turn the grid on, and plot the data, respectively. The plot
-that is generated is shown in Figure \ref{fig:dataacq1_fig1}. 
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=4in]{images/dataacq1_plot1.png}
-\caption{\label{fig:dataacq1_fig1} The original data recorded by \texttt{dataAcquisition.ch}.}
-\end{figure}
-
-Figure \ref{fig:dataacq1_fig1} appears to show
-a zig-zag pattern for the angle of the joint. This is because the raw angle data obtained
-from a Mobot is only in the range -180 degrees to 180 degrees. When a joint rotates
-past 180 degrees, the angle reading switches over -180 degrees. In order to get rid of the
-zig-zagging of the data, the data must be ``unwrapped''. This is done with the \texttt{unwrapdeg()}
-function, as done in the following line of code:
-\begin{verbatim}
-unwrapdeg(angles1_unwrapped, angles1);
-\end{verbatim}
-The function places the unwrapped version of the \texttt{angles1} array into our array
-\texttt{angles1\_unwrapped}. Next, we plot the unwrapped data in a similar method 
-to plotting our wrapped data:
-\begin{verbatim}
-plot2.title("Unwrapped Data for Joint Angle 1 versus Time");
-plot2.label(PLOT_AXIS_X, "Time (seconds)");
-plot2.label(PLOT_AXIS_Y, "Angle (degrees)");
-plot2.data2DCurve(time, angles1_unwrapped, numDataPoints);
-plot2.grid(PLOT_ON);
-plot2.plotting();
-\end{verbatim}
+that is generated is shown in Figure \ref{fig:dataacq1_fig2}. 
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=4in]{images/dataacq1_plot2.png}
-\caption{\label{fig:dataacq1_fig2} The unwrapped data recorded by \texttt{dataAcquisition.ch}.}
+\caption{\label{fig:dataacq1_fig2} The data recorded by \texttt{dataAcquisition.ch}.}
 \end{figure}
 
-Figure \ref{fig:dataacq1_fig2} displays the unwrapped data. It shows the motion as 
-one fluid motion starting at 0 degrees and ending at 720 degrees. 
-
 Finally, we want to generate a plot where the beginning of the motion correctly starts
-at time 0. Looking at Figure \ref{fig:dataacq1_fig2}, you will notice that there is about
+at time 0. Looking at Figure \ref{fig:dataacq1_fig2}, you will notice that there is 
 a fraction of a second delay before the joints actually start moving. For our final plot, we want
 to display a plot of the same data, but shifted to the left so that the motion starts at
 time zero. This will make it easier to verify the speed of the joint and the time it takes
@@ -1820,11 +1778,11 @@ plot3.plotting();
 \caption{\label{fig:dataacq1_fig3} The unwrapped and shifted data recorded by \texttt{dataAcquisition.ch}.}
 \end{figure}
 
-Figure \ref{fig:dataacq1_fig3}  displays our unwrapped data that has been time shifted. It can be seen
+Figure \ref{fig:dataacq1_fig3}  displays our data that has been time shifted. It can be seen
 that the beginning of the motion now happens at time 0, and it may be verified that the
 line generated is very close to the expected function, $\theta = 45 t$.
 
-In many applications, the user may only be interested in the unwrapped, time shifted data. 
+In many applications, the user may only be interested in the time shifted data. 
 In such a case, a simplified version of the program may be used. The program 
 \texttt{dataAcquisition1.ch} below removes the intermediate plots and can be modified
 to solve other data acquisition problems.
@@ -1854,7 +1812,6 @@ header files, declaring our mobot variable, and connecting to the mobot:
 \begin{verbatim}
 #include <mobot.h>
 #include <chplot.h>
-#include <numeric.h>
 CMobot mobot;
 
 /* Connect to the mobot */
@@ -1888,11 +1845,7 @@ array double angles3[numDataPoints];
 array double angles4[numDataPoints];
 
 /* Declare plotting variables */
-CPlot plot1, plot2;
-array double angles1_unwrapped[numDataPoints];
-array double angles2_unwrapped[numDataPoints];
-array double angles3_unwrapped[numDataPoints];
-array double angles4_unwrapped[numDataPoints];
+CPlot plot2;
 double tolerance = 1.0; /* 1 degree for time shifting */
 \end{verbatim}
 
@@ -1925,31 +1878,27 @@ Finally, we wait for the recording to finish.
 mobot.recordWait();
 \end{verbatim}
 
-Now that all of the data has been acquired, we unwrap, shift, and plot the data.
+Now that all of the data has been acquired, we shift and plot the data.
 \begin{verbatim}
-unwrapdeg(angles1_unwrapped, angles1);
-unwrapdeg(angles2_unwrapped, angles2);
-unwrapdeg(angles3_unwrapped, angles3);
-unwrapdeg(angles4_unwrapped, angles4);
 /* Shift the time so the movement starts at time 0 */
 shiftTime(tolerance, numDataPoints, time, 
-          angles1_unwrapped, 
-          angles2_unwrapped, 
-          angles3_unwrapped, 
-          angles4_unwrapped);
-plot2.title("Unwrapped Data for Joint Angles versus Time");
-plot2.label(PLOT_AXIS_X, "Time (seconds)");
-plot2.label(PLOT_AXIS_Y, "Angle (degrees)");
-plot2.data2DCurve(time, angles1_unwrapped, numDataPoints);
-plot2.data2DCurve(time, angles2_unwrapped, numDataPoints);
-plot2.data2DCurve(time, angles3_unwrapped, numDataPoints);
-plot2.data2DCurve(time, angles4_unwrapped, numDataPoints);
-plot2.legend("Joint 1", 0);
-plot2.legend("Joint 2", 1);
-plot2.legend("Joint 3", 2);
-plot2.legend("Joint 4", 3);
-plot2.grid(PLOT_ON);
-plot2.plotting();
+          angles1, 
+          angles2, 
+          angles3, 
+          angles4);
+plot.title("Unwrapped Data for Joint Angles versus Time");
+plot.label(PLOT_AXIS_X, "Time (seconds)");
+plot.label(PLOT_AXIS_Y, "Angle (degrees)");
+plot.data2DCurve(time, angles1, numDataPoints);
+plot.data2DCurve(time, angles2, numDataPoints);
+plot.data2DCurve(time, angles3, numDataPoints);
+plot.data2DCurve(time, angles4, numDataPoints);
+plot.legend("Joint 1", 0);
+plot.legend("Joint 2", 1);
+plot.legend("Joint 3", 2);
+plot.legend("Joint 4", 3);
+plot.grid(PLOT_ON);
+plot.plotting();
 \end{verbatim}
 Note that the previous call to \texttt{shiftTime()} appears different than the previous
 example. The \texttt{shiftTime()} function is able to accept any number of data
@@ -1961,7 +1910,7 @@ the plot.
 \begin{figure}[H]
 \centering
 \includegraphics[width=4in]{images/dataacq2_plot1.png}
-\caption{\label{fig:dataacq2_fig1} The unwrapped and shifted data recorded by \texttt{dataAcquisition2.ch}.}
+\caption{\label{fig:dataacq2_fig1} The shifted data recorded by \texttt{dataAcquisition2.ch}.}
 \end{figure}
 
 Figure \ref{fig:dataacq2_fig1} shows the captured data from the Mobot. During the first
@@ -1984,7 +1933,6 @@ demos:
 \begin{verbatim}
 #include <mobot.h>
 #include <chplot.h>
-#include <numeric.h>
 CMobot mobot;
 
 /* Connect to the mobot */
@@ -2047,7 +1995,6 @@ array double distances[numDataPoints];
 
 /* Declare plotting variables */
 CPlot plot;
-array double angles1Unwrapped[numDataPoints];
 double tolerance = 1.0; /* Degrees */
 \end{verbatim}
 
@@ -2091,12 +2038,10 @@ radius of the wheel. The units of distance for $d$ will be the same units as tho
 chosen for $r$. For instance, if $r$ is expressed in inches, the result 
 
 \begin{verbatim}
-/* Unwrap the data */
-unwrapdeg(angles1_unwrapped, angles1);
 /* Shift the data */
-shiftTime(tolerance, numDataPoints, time, angles1Unwrapped);
+shiftTime(tolerance, numDataPoints, time, angles1);
 /* Convert angles to displacement */
-distances = angle2distance(radius, angles1Unwrapped);
+distances = angle2distance(radius, angles1);
 \end{verbatim}
 
 Finally, we create a plot of the data.

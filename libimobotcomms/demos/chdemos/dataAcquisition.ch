@@ -3,6 +3,7 @@
 
 #include <mobot.h>
 #include <chplot.h>
+#include <numeric.h>
 CMobot mobot;
 
 /* Connect to the mobot */
@@ -52,14 +53,6 @@ plot1.label(PLOT_AXIS_Y, "Angle (degrees)");
 plot1.data2DCurve(time, angles1, numDataPoints);
 plot1.grid(PLOT_ON);
 plot1.plotting();
-
-/* Plot the data */
-plot2.title("Data for Joint Angle 1 versus Time");
-plot2.label(PLOT_AXIS_X, "Time (seconds)");
-plot2.label(PLOT_AXIS_Y, "Angle (degrees)");
-plot2.data2DCurve(time, angles1, numDataPoints);
-plot2.grid(PLOT_ON);
-plot2.plotting();
 
 /* Adjust the time delay */
 /* Shift the time so the movement starts at time 0 */
