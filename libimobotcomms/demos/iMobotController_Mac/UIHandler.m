@@ -130,7 +130,7 @@
 		for(i = 0; i < 4; i++) {
 			[textFieldPositions[i] setDoubleValue:RAD2DEG(positions[i])];
 			if( [sliderPositions[i] isMouseDown] ) {
-				Mobot_moveJointToPIDNB(comms, i+1, DEG2RAD([sliderPositions[i] doubleValue]));
+				Mobot_driveJointToDirectNB(comms, i+1, DEG2RAD([sliderPositions[i] doubleValue]));
 			} else {
 				/* Set the slider positions */
 				[sliderPositions[i] setDoubleValue:RAD2DEG(positions[i])];
