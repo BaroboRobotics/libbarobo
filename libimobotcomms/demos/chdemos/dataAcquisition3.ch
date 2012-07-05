@@ -3,7 +3,6 @@
 
 #include <mobot.h>
 #include <chplot.h>
-#include <numeric.h>
 CMobot mobot;
 
 /* Connect to the mobot */
@@ -30,7 +29,6 @@ array double distances[numDataPoints];
 
 /* Declare plotting variables */
 CPlot plot;
-array double angles1Unwrapped[numDataPoints];
 double tolerance = 1.0; /* Degrees */
 
 /* Start the motion. First, move mobot to zero position */
@@ -47,14 +45,12 @@ mobot.motionRollForward(angle);
 /* Wait for recording to finish */
 mobot.recordWait();
 
-/* Unwrap the data */
-unwrapdeg(angles1Unwrapped, angles1);
 /* Shift the data */
-shiftTime(tolerance, numDataPoints, time, angles1Unwrapped);
+shiftTime(tolerance, numDataPoints, time, angles1);
 /* Convert angles to displacement */
-distances = angle2distance(radius, angles1Unwrapped);
+distances = angle2distance(radius, angles1);
 
-/* Plot the unwrapped data */
+/* Plot the data */
 plot.title("Displacement versus Time");
 plot.label(PLOT_AXIS_X, "Time (seconds)");
 plot.label(PLOT_AXIS_Y, "Displacement (inches)");

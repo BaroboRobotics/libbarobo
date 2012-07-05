@@ -3,7 +3,6 @@
 
 #include <mobot.h>
 #include <chplot.h>
-#include <numeric.h>
 CMobot mobot;
 
 /* Connect to the mobot */
@@ -47,18 +46,15 @@ mobot.move(angle, 0, 0, angle);
 /* Wait for recording to finish */
 mobot.recordWait();
 
-/* Plot the unwrapped data */
-unwrapdeg(angles1Unwrapped, angles1);
-
 /* Adjust the time delay */
 /* Shift the time so the movement starts at time 0 */
-shiftTime(tolerance, numDataPoints, time, angles1Unwrapped);
+shiftTime(tolerance, numDataPoints, time, angles1);
 
 /* Plot the data */
 plot.title("Unwrapped and shifted Data for Joint Angle 1 versus Time");
 plot.label(PLOT_AXIS_X, "Time (seconds)");
 plot.label(PLOT_AXIS_Y, "Angle (degrees)");
-plot.data2DCurve(time, angles1Unwrapped, numDataPoints);
+plot.data2DCurve(time, angles1, numDataPoints);
 plot.grid(PLOT_ON);
 plot.plotting();
 

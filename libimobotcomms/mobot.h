@@ -87,6 +87,7 @@ typedef SOCKADDR_BTH sockaddr_t;
 #endif
 #endif
 
+typedef double* mobotRecordData_t;
 #define angle2distance(radius, angle) ((radius) * ((angle) * M_PI / 180.0))
 #define distance2angle(radius, distance) (((distance) / (radius)) * 180 / M_PI)
 
@@ -197,7 +198,8 @@ typedef struct recordAngleArg_s
 
 #ifndef C_ONLY
 #if defined (__cplusplus) || defined (_CH_) || defined (SWIG)
-class CMobot {
+class CMobot 
+{
   public:
     CMobot();
     ~CMobot();
@@ -216,10 +218,10 @@ class CMobot {
     int connectWithTTY(const char ttyfilename[]);
 #endif
     int disconnect();
-    int driveJointTo(mobotJointId_t id, double angle);
-    int driveJointToNB(mobotJointId_t id, double angle);
-    int driveTo(double angle1, double angle2, double angle3, double angle4);
-    int driveToNB(double angle1, double angle2, double angle3, double angle4);
+    int driveJointToDirect(mobotJointId_t id, double angle);
+    int driveJointToDirectNB(mobotJointId_t id, double angle);
+    int driveToDirect(double angle1, double angle2, double angle3, double angle4);
+    int driveToDirectNB(double angle1, double angle2, double angle3, double angle4);
     int enableButtonCallback(void (*buttonCallback)(CMobot* mobot, int button, int buttonDown));
     int disableButtonCallback();
     int isConnected();
@@ -237,9 +239,7 @@ class CMobot {
 #endif
     static const char* getConfigFilePath();
     int getJointAngle(mobotJointId_t id, double &angle);
-    int getJointAngleAbs(mobotJointId_t id, double &angle);
     int getJointAngles(double &angle1, double &angle2, double &angle3, double &angle4);
-    int getJointAnglesAbs(double &angle1, double &angle2, double &angle3, double &angle4);
     int getJointMaxSpeed(mobotJointId_t id, double &maxSpeed);
     int getJointSafetyAngle(double &angle);
     int getJointSafetyAngleTimeout(double &seconds);
@@ -272,11 +272,7 @@ class CMobot {
     int moveJointToDirectNB(mobotJointId_t id, double angle);
     int moveJointWait(mobotJointId_t id);
     int moveTo(double angle1, double angle2, double angle3, double angle4);
-    int moveToAbs(double angle1, double angle2, double angle3, double angle4);
-    int moveToDirect(double angle1, double angle2, double angle3, double angle4);
     int moveToNB(double angle1, double angle2, double angle3, double angle4);
-    int moveToAbsNB(double angle1, double angle2, double angle3, double angle4);
-    int moveToDirectNB(double angle1, double angle2, double angle3, double angle4);
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
@@ -299,13 +295,13 @@ class CMobot {
                      int num, 
                      double seconds);
 #endif
-    int recordAngleBegin(mobotJointId_t id, double* &time, double* &angle, double seconds);
+    int recordAngleBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double seconds);
     int recordAngleEnd(mobotJointId_t id, int &num);
-    int recordAnglesBegin(double* &time, 
-                          double* &angle1, 
-                          double* &angle2, 
-                          double* &angle3, 
-                          double* &angle4, 
+    int recordAnglesBegin(mobotRecordData_t &time, 
+                          mobotRecordData_t &angle1, 
+                          mobotRecordData_t &angle2, 
+                          mobotRecordData_t &angle3, 
+                          mobotRecordData_t &angle4, 
                           double seconds);
     int recordAnglesEnd(int &num);
     int recordWait();
@@ -369,6 +365,10 @@ class CMobotGroup
     CMobotGroup();
     ~CMobotGroup();
     int addRobot(CMobot& mobot);
+    int driveJointToDirect(mobotJointId_t id, double angle);
+    int driveJointToDirectNB(mobotJointId_t id, double angle);
+    int driveToDirect(double angle1, double angle2, double angle3, double angle4);
+    int driveToDirectNB(double angle1, double angle2, double angle3, double angle4);
     int isMoving();
     int move(double angle1, double angle2, double angle3, double angle4);
     int moveNB(double angle1, double angle2, double angle3, double angle4);
@@ -464,14 +464,14 @@ DLLIMPORT int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename);
 DLLIMPORT int Mobot_connectWithAddress(
     mobot_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_disconnect(mobot_t* comms);
-DLLIMPORT int Mobot_driveJointTo(mobot_t* comms, mobotJointId_t id, double angle);
-DLLIMPORT int Mobot_driveJointToNB(mobot_t* comms, mobotJointId_t id, double angle);
-DLLIMPORT int Mobot_driveTo(mobot_t* comms,
+DLLIMPORT int Mobot_driveJointToDirect(mobot_t* comms, mobotJointId_t id, double angle);
+DLLIMPORT int Mobot_driveJointToDirectNB(mobot_t* comms, mobotJointId_t id, double angle);
+DLLIMPORT int Mobot_driveToDirect(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
                                double angle4);
-DLLIMPORT int Mobot_driveToNB(mobot_t* comms,
+DLLIMPORT int Mobot_driveToDirectNB(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -485,8 +485,6 @@ DLLIMPORT int Mobot_getButtonVoltage(mobot_t* comms, double *voltage);
 DLLIMPORT const char* Mobot_getConfigFilePath();
 DLLIMPORT int Mobot_getEncoderVoltage(mobot_t* comms, int pinNumber, double *voltage);
 DLLIMPORT int Mobot_getJointAngle(mobot_t* comms, mobotJointId_t id, double *angle);
-DLLIMPORT int Mobot_getJointAngleAbs(mobot_t* comms, mobotJointId_t id, double *angle);
-DLLIMPORT int Mobot_getJointAngleTime(mobot_t* comms, mobotJointId_t id, double *time, double *angle);
 DLLIMPORT int Mobot_getJointAnglesTime(mobot_t* comms, 
                                        double *time, 
                                        double *angle1, 
@@ -494,17 +492,6 @@ DLLIMPORT int Mobot_getJointAnglesTime(mobot_t* comms,
                                        double *angle3, 
                                        double *angle4);
 DLLIMPORT int Mobot_getJointAngles(mobot_t* comms, 
-                                       double *angle1, 
-                                       double *angle2, 
-                                       double *angle3, 
-                                       double *angle4);
-DLLIMPORT int Mobot_getJointAnglesAbsTime(mobot_t* comms, 
-                                       double *time, 
-                                       double *angle1, 
-                                       double *angle2, 
-                                       double *angle3, 
-                                       double *angle4);
-DLLIMPORT int Mobot_getJointAnglesAbs(mobot_t* comms, 
                                        double *angle1, 
                                        double *angle2, 
                                        double *angle3, 
@@ -563,27 +550,7 @@ DLLIMPORT int Mobot_moveTo(mobot_t* comms,
                                double angle2,
                                double angle3,
                                double angle4);
-DLLIMPORT int Mobot_moveToAbs(mobot_t* comms,
-                               double angle1,
-                               double angle2,
-                               double angle3,
-                               double angle4);
-DLLIMPORT int Mobot_moveToDirect(mobot_t* comms,
-                               double angle1,
-                               double angle2,
-                               double angle3,
-                               double angle4);
 DLLIMPORT int Mobot_moveToNB(mobot_t* comms,
-                               double angle1,
-                               double angle2,
-                               double angle3,
-                               double angle4);
-DLLIMPORT int Mobot_moveToAbsNB(mobot_t* comms,
-                               double angle1,
-                               double angle2,
-                               double angle3,
-                               double angle4);
-DLLIMPORT int Mobot_moveToDirectNB(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,

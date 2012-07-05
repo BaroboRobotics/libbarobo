@@ -471,7 +471,10 @@ int Mobot_enableButtonCallback(mobot_t* comms, void* data, void (*buttonCallback
   /* Send a message to the Mobot */
   buf[0] = 1;
   status = SendToIMobot(comms, BTCMD(CMD_ENABLEBUTTONHANDLER), buf, 1);
-  if(status < 0) return status;
+  if(status < 0) {
+    MUTEX_UNLOCK(comms->callback_lock);
+    return status;
+  }
   if(RecvFromIMobot(comms, buf, sizeof(buf))) {
     MUTEX_UNLOCK(comms->callback_lock);
     return -1;
@@ -497,7 +500,10 @@ int Mobot_disableButtonCallback(mobot_t* comms)
   /* Send a message to the Mobot */
   buf[0] = 0;
   status = SendToIMobot(comms, BTCMD(CMD_ENABLEBUTTONHANDLER), buf, 1);
-  if(status < 0) return status;
+  if(status < 0) {
+    MUTEX_UNLOCK(comms->callback_lock);
+    return status;
+  }
   if(RecvFromIMobot(comms, buf, sizeof(buf))) {
     MUTEX_UNLOCK(comms->callback_lock);
     return -1;
@@ -678,27 +684,6 @@ int Mobot_getJointAngle(mobot_t* comms, mobotJointId_t id, double *angle)
   float f;
   int status;
   buf[0] = (uint8_t)id-1;
-  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORANGLE), buf, 1);
-  if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
-  /* Make sure the data size is correct */
-  if(buf[1] != 7) {
-    return -1;
-  }
-  /* Copy the data */
-  memcpy(&f, &buf[2], 4);
-  *angle = f;
-  return 0;
-}
-
-int Mobot_getJointAngleAbs(mobot_t* comms, mobotJointId_t id, double *angle)
-{
-  uint8_t buf[32];
-  float f;
-  int status;
-  buf[0] = (uint8_t)id-1;
   status = SendToIMobot(comms, BTCMD(CMD_GETMOTORANGLEABS), buf, 1);
   if(status < 0) return status;
   if(RecvFromIMobot(comms, buf, sizeof(buf))) {
@@ -714,97 +699,7 @@ int Mobot_getJointAngleAbs(mobot_t* comms, mobotJointId_t id, double *angle)
   return 0;
 }
 
-int Mobot_getJointAngleTime(mobot_t* comms, mobotJointId_t id, double *time, double *angle)
-{
-  uint8_t buf[32];
-  float f;
-  uint32_t millis;
-  int status;
-  buf[0] = (uint8_t)id-1;
-  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORANGLETIMESTAMP), buf, 1);
-  if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
-  /* Make sure the data size is correct */
-  if(buf[1] != 0x0b) {
-    return -1;
-  }
-  /* Copy the data */
-  memcpy(&millis, &buf[2], 4);
-  memcpy(&f, &buf[6], 4);
-  *angle = f;
-  *time = millis / 1000.0;
-  return 0;
-}
-
 int Mobot_getJointAngles(mobot_t* comms, 
-                             double *angle1,
-                             double *angle2,
-                             double *angle3,
-                             double *angle4)
-{
-  uint8_t buf[32];
-  float f;
-  uint32_t millis;
-  int status;
-  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORANGLESTIMESTAMP), NULL, 0);
-  if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
-  /* Make sure the data size is correct */
-  if(buf[1] != 0x17) {
-    return -1;
-  }
-  /* Copy 4 joint angles */
-  memcpy(&f, &buf[6], 4);
-  *angle1 = f;
-  memcpy(&f, &buf[10], 4);
-  *angle2 = f;
-  memcpy(&f, &buf[14], 4);
-  *angle3 = f;
-  memcpy(&f, &buf[18], 4);
-  *angle4 = f;
-  return 0;
-}
-
-int Mobot_getJointAnglesTime(mobot_t* comms, 
-                             double *time, 
-                             double *angle1,
-                             double *angle2,
-                             double *angle3,
-                             double *angle4)
-{
-  uint8_t buf[32];
-  float f;
-  uint32_t millis;
-  int status;
-  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORANGLESTIMESTAMP), NULL, 0);
-  if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
-  /* Make sure the data size is correct */
-  if(buf[1] != 0x17) {
-    return -1;
-  }
-  /* Copy the data */
-  memcpy(&millis, &buf[2], 4);
-  *time = millis / 1000.0;
-  /* Copy 4 joint angles */
-  memcpy(&f, &buf[6], 4);
-  *angle1 = f;
-  memcpy(&f, &buf[10], 4);
-  *angle2 = f;
-  memcpy(&f, &buf[14], 4);
-  *angle3 = f;
-  memcpy(&f, &buf[18], 4);
-  *angle4 = f;
-  return 0;
-}
-
-int Mobot_getJointAnglesAbs(mobot_t* comms, 
                              double *angle1,
                              double *angle2,
                              double *angle3,
@@ -836,7 +731,7 @@ int Mobot_getJointAnglesAbs(mobot_t* comms,
   return 0;
 }
 
-int Mobot_getJointAnglesAbsTime(mobot_t* comms, 
+int Mobot_getJointAnglesTime(mobot_t* comms, 
                              double *time, 
                              double *angle1,
                              double *angle2,
@@ -1208,27 +1103,13 @@ int Mobot_moveJointTo(mobot_t* comms, mobotJointId_t id, double angle)
   return Mobot_moveJointWait(comms, id);
 }
 
-int Mobot_moveJointToAbs(mobot_t* comms, mobotJointId_t id, double angle)
+int Mobot_driveJointToDirect(mobot_t* comms, mobotJointId_t id, double angle)
 {
-  Mobot_moveJointToAbsNB(comms, id, angle);
-  /* Wait for the motion to finish */
-  return Mobot_moveJointWait(comms, id);
-}
-
-int Mobot_moveJointToDirect(mobot_t* comms, mobotJointId_t id, double angle)
-{
-  Mobot_moveJointToDirectNB(comms, id, angle);
-  /* Wait for the motion to finish */
-  return Mobot_moveJointWait(comms, id);
-}
-
-int Mobot_driveJointTo(mobot_t* comms, mobotJointId_t id, double angle)
-{
-  Mobot_driveJointToNB(comms, id, angle);
+  Mobot_driveJointToDirectNB(comms, id, angle);
   return Mobot_moveWait(comms);
 }
 
-int Mobot_driveJointToNB(mobot_t* comms, mobotJointId_t id, double angle)
+int Mobot_driveJointToDirectNB(mobot_t* comms, mobotJointId_t id, double angle)
 {
   uint8_t buf[32];
   float f;
@@ -1266,67 +1147,7 @@ int Mobot_moveJointToNB(mobot_t* comms, mobotJointId_t id, double angle)
   buf[0] = (uint8_t)id-1;
   f = angle;
   memcpy(&buf[1], &f, 4);
-  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLE), buf, 5);
-  if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
-  /* Make sure the data size is correct */
-  if(buf[1] != 3) {
-    return -1;
-  }
-  return 0;
-}
-
-int Mobot_moveJointToAbsNB(mobot_t* comms, mobotJointId_t id, double angle)
-{
-  uint8_t buf[32];
-  float f;
-  int status;
-  if((id == MOBOT_JOINT2) || (id == MOBOT_JOINT3)) {
-    if(angle > 90) {
-      fprintf(stderr, "Warning: Angle for joint %d set beyond limits.\n", (int)(id + 1));
-      angle = 90;
-    }
-    if(angle < -90) {
-      fprintf(stderr, "Warning: Angle for joint %d set beyond limits.\n", (int)(id + 1));
-      angle = -90;
-    }
-  }
-  buf[0] = (uint8_t)id-1;
-  f = angle;
-  memcpy(&buf[1], &f, 4);
   status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLEABS), buf, 5);
-  if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
-  /* Make sure the data size is correct */
-  if(buf[1] != 3) {
-    return -1;
-  }
-  return 0;
-}
-
-int Mobot_moveJointToDirectNB(mobot_t* comms, mobotJointId_t id, double angle)
-{
-  uint8_t buf[32];
-  float f;
-  int status;
-  if((id == MOBOT_JOINT2) || (id == MOBOT_JOINT3)) {
-    if(angle > 90) {
-      fprintf(stderr, "Warning: Angle for joint %d set beyond limits.\n", (int)(id + 1));
-      angle = 90;
-    }
-    if(angle < -90) {
-      fprintf(stderr, "Warning: Angle for joint %d set beyond limits.\n", (int)(id + 1));
-      angle = -90;
-    }
-  }
-  buf[0] = (uint8_t)id-1;
-  f = angle;
-  memcpy(&buf[1], &f, 4);
-  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLEDIRECT), buf, 5);
   if(status < 0) return status;
   if(RecvFromIMobot(comms, buf, sizeof(buf))) {
     return -1;
@@ -1389,42 +1210,13 @@ int Mobot_moveTo(mobot_t* comms,
   return Mobot_moveWait(comms);
 }
 
-int Mobot_moveToAbs(mobot_t* comms,
+int Mobot_driveToDirect(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
                                double angle4)
 {
-  Mobot_moveToAbsNB(comms, 
-      angle1, 
-      angle2, 
-      angle3, 
-      angle4 );
-  return Mobot_moveWait(comms);
-}
-
-int Mobot_moveToDirect(mobot_t* comms,
-                               double angle1,
-                               double angle2,
-                               double angle3,
-                               double angle4)
-{
-  Mobot_moveToDirectNB(comms, 
-      angle1, 
-      angle2, 
-      angle3, 
-      angle4 );
-  return Mobot_moveWait(comms);
-}
-
-
-int Mobot_driveTo(mobot_t* comms,
-                               double angle1,
-                               double angle2,
-                               double angle3,
-                               double angle4)
-{
-  Mobot_driveToNB(comms, 
+  Mobot_driveToDirectNB(comms, 
       angle1, 
       angle2, 
       angle3, 
@@ -1433,35 +1225,6 @@ int Mobot_driveTo(mobot_t* comms,
 }
 
 int Mobot_moveToNB(mobot_t* comms,
-                               double angle1,
-                               double angle2,
-                               double angle3,
-                               double angle4)
-{
-  uint8_t buf[32];
-  float f;
-  int status;
-  f = angle1;
-  memcpy(&buf[0], &f, 4);
-  f = angle2;
-  memcpy(&buf[4], &f, 4);
-  f = angle3;
-  memcpy(&buf[8], &f, 4);
-  f = angle4;
-  memcpy(&buf[12], &f, 4);
-  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLES), buf, 16);
-  if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
-  /* Make sure the data size is correct */
-  if(buf[1] != 3) {
-    return -1;
-  }
-  return 0;
-}
-
-int Mobot_moveToAbsNB(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -1490,36 +1253,7 @@ int Mobot_moveToAbsNB(mobot_t* comms,
   return 0;
 }
 
-int Mobot_moveToDirectNB(mobot_t* comms,
-                               double angle1,
-                               double angle2,
-                               double angle3,
-                               double angle4)
-{
-  uint8_t buf[32];
-  float f;
-  int status;
-  f = angle1;
-  memcpy(&buf[0], &f, 4);
-  f = angle2;
-  memcpy(&buf[4], &f, 4);
-  f = angle3;
-  memcpy(&buf[8], &f, 4);
-  f = angle4;
-  memcpy(&buf[12], &f, 4);
-  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLESDIRECT), buf, 16);
-  if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
-  /* Make sure the data size is correct */
-  if(buf[1] != 3) {
-    return -1;
-  }
-  return 0;
-}
-
-int Mobot_driveToNB(mobot_t* comms,
+int Mobot_driveToDirectNB(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
@@ -1594,6 +1328,7 @@ unsigned int diff_msecs(struct timespec t1, struct timespec t2)
 
 void* Mobot_recordAngleThread(void* arg)
 {
+  double angles[4];
 #ifndef _WIN32
   recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
   int i;
@@ -1612,7 +1347,15 @@ void* Mobot_recordAngleThread(void* arg)
     cur_time.tv_sec = mts.tv_sec;
     cur_time.tv_nsec = mts.tv_nsec;
 #endif
-    Mobot_getJointAngleTime(rArg->comms, rArg->id, &rArg->time[i], &rArg->angle[i]);
+    //Mobot_getJointAngleTime(rArg->comms, rArg->id, &rArg->time[i], &rArg->angle[i]);
+    Mobot_getJointAnglesTime(
+        rArg->comms, 
+        &rArg->time[i],
+        &angles[0],
+        &angles[1],
+        &angles[2],
+        &angles[3]);
+    rArg->angle[i] = angles[rArg->id-1];
     if(i == 0) {
       start_time = rArg->time[i];
     }
@@ -1642,7 +1385,15 @@ void* Mobot_recordAngleThread(void* arg)
   double start_time;
   for(i = 0; i < rArg->num; i++) {
     cur_time = GetTickCount();
-    Mobot_getJointAngleTime(rArg->comms, rArg->id, &rArg->time[i], &rArg->angle[i]);
+    //Mobot_getJointAngleTime(rArg->comms, rArg->id, &rArg->time[i], &rArg->angle[i]);
+    Mobot_getJointAnglesTime(
+        rArg->comms, 
+        &rArg->time[i],
+        &angles[0],
+        &angles[1],
+        &angles[2],
+        &angles[3]);
+    rArg->angle[i] = angles[rArg->id-1];
     if(i == 0) {
       start_time = rArg->time[i];
     }
@@ -1664,6 +1415,7 @@ void* Mobot_recordAngleThread(void* arg)
 #define RECORD_ANGLE_ALLOC_SIZE 16
 void* Mobot_recordAngleBeginThread(void* arg)
 {
+  double angles[4];
 #ifndef _WIN32
   recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
   int i;
@@ -1698,7 +1450,15 @@ void* Mobot_recordAngleBeginThread(void* arg)
     cur_time.tv_sec = mts.tv_sec;
     cur_time.tv_nsec = mts.tv_nsec;
 #endif
-    Mobot_getJointAngleTime(rArg->comms, rArg->id, &((*rArg->time_p)[i]), &((*rArg->angle_p)[i]));
+    //Mobot_getJointAngleTime(rArg->comms, rArg->id, &((*rArg->time_p)[i]), &((*rArg->angle_p)[i]));
+    Mobot_getJointAnglesTime(
+        rArg->comms, 
+        &((*rArg->time_p)[i]),
+        &angles[0],
+        &angles[1],
+        &angles[2],
+        &angles[3]);
+    (*rArg->angle_p)[i] = angles[rArg->id-1];
     if(i == 0) {
       start_time = (*rArg->time_p)[i];
     }
@@ -1731,7 +1491,15 @@ void* Mobot_recordAngleBeginThread(void* arg)
     rArg->i = i;
     rArg->comms->recordingNumValues[rArg->id-1] = i;
     cur_time = GetTickCount();
-    Mobot_getJointAngleTime(rArg->comms, rArg->id, &((*rArg->time_p)[i]), &((*rArg->angle_p)[i]));
+    //Mobot_getJointAngleTime(rArg->comms, rArg->id, &((*rArg->time_p)[i]), &((*rArg->angle_p)[i]));
+    Mobot_getJointAnglesTime(
+        rArg->comms, 
+        &((*rArg->time_p)[i]),
+        &angles[0],
+        &angles[1],
+        &angles[2],
+        &angles[3]);
+    (*rArg->angle_p)[i] = angles[rArg->id-1];
     if(i == 0) {
       start_time = (*rArg->time_p)[i];
     }
@@ -2794,10 +2562,42 @@ int SendToMobotDirect(mobot_t* comms, const void* data, int datasize)
 
 int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
 {
+  int rc;
+#ifndef _WIN32
+  struct timespec ts;
+#else
+#endif
   /* Wait until transaction is ready */
   MUTEX_LOCK(comms->recvBuf_lock);
   while(!comms->recvBuf_ready) {
-    COND_WAIT(comms->recvBuf_cond, comms->recvBuf_lock);
+#ifndef _WIN32
+    /* Set up a wait with timeout */
+    /* Get the current time */
+    clock_gettime(CLOCK_REALTIME, &ts);
+    /* Add a 4 second timeout */
+    ts.tv_sec += 4;
+    rc = pthread_cond_timedwait(
+      comms->recvBuf_cond, 
+      comms->recvBuf_lock,
+      &ts);
+    if(rc == ETIMEDOUT) {
+      /* Disconnect and return error */
+      MUTEX_UNLOCK(comms->recvBuf_lock);
+      MUTEX_UNLOCK(comms->commsLock);
+      Mobot_disconnect(comms);
+      return -1;
+    }
+#else
+    ResetEvent(*comms->recvBuf_cond);
+    ReleaseMutex(*comms->recvBuf_lock);
+    rc = WaitForSingleObject(*comms->recvBuf_cond, 4000);
+    if(rc == WAIT_TIMEOUT) {
+      MUTEX_UNLOCK(comms->recvBuf_lock);
+      MUTEX_UNLOCK(comms->commsLock);
+      Mobot_disconnect(comms);
+      return -1;
+    }
+#endif
   }
   memcpy(buf, comms->recvBuf, comms->recvBuf_bytes);
 
@@ -3055,22 +2855,22 @@ int CMobot::disconnect()
   return Mobot_disconnect(_comms);
 }
 
-int CMobot::driveJointTo(mobotJointId_t id, double angle)
+int CMobot::driveJointToDirect(mobotJointId_t id, double angle)
 {
-  return Mobot_driveJointTo(_comms, id, DEG2RAD(angle));
+  return Mobot_driveJointToDirect(_comms, id, DEG2RAD(angle));
 }
 
-int CMobot::driveJointToNB(mobotJointId_t id, double angle)
+int CMobot::driveJointToDirectNB(mobotJointId_t id, double angle)
 {
-  return Mobot_driveJointToNB(_comms, id, DEG2RAD(angle));
+  return Mobot_driveJointToDirectNB(_comms, id, DEG2RAD(angle));
 }
 
-int CMobot::driveTo( double angle1,
+int CMobot::driveToDirect( double angle1,
                           double angle2,
                           double angle3,
                           double angle4)
 {
-  return Mobot_driveTo(
+  return Mobot_driveToDirect(
       _comms, 
       DEG2RAD(angle1), 
       DEG2RAD(angle2), 
@@ -3078,12 +2878,12 @@ int CMobot::driveTo( double angle1,
       DEG2RAD(angle4));
 }
 
-int CMobot::driveToNB( double angle1,
+int CMobot::driveToDirectNB( double angle1,
                           double angle2,
                           double angle3,
                           double angle4)
 {
-  return Mobot_driveToNB(
+  return Mobot_driveToDirectNB(
       _comms, 
       DEG2RAD(angle1), 
       DEG2RAD(angle2), 
@@ -3127,14 +2927,6 @@ int CMobot::getJointAngle(mobotJointId_t id, double &angle)
   return err;
 }
 
-int CMobot::getJointAngleAbs(mobotJointId_t id, double &angle)
-{
-  int err;
-  err = Mobot_getJointAngleAbs(_comms, id, &angle);
-  angle = RAD2DEG(angle);
-  return err;
-}
-
 int CMobot::getJointAngles(
     double &angle1,
     double &angle2,
@@ -3144,29 +2936,6 @@ int CMobot::getJointAngles(
   double time;
   int err;
   err = Mobot_getJointAnglesTime(
-      _comms, 
-      &time,
-      &angle1,
-      &angle2,
-      &angle3,
-      &angle4);
-  if(err) return err;
-  angle1 = RAD2DEG(angle1);
-  angle2 = RAD2DEG(angle2);
-  angle3 = RAD2DEG(angle3);
-  angle4 = RAD2DEG(angle4);
-  return 0;
-}
-
-int CMobot::getJointAnglesAbs(
-    double &angle1,
-    double &angle2,
-    double &angle3,
-    double &angle4)
-{
-  double time;
-  int err;
-  err = Mobot_getJointAnglesAbsTime(
       _comms, 
       &time,
       &angle1,
@@ -3307,29 +3076,9 @@ int CMobot::moveJointTo(mobotJointId_t id, double angle)
   return Mobot_moveJointTo(_comms, id, DEG2RAD(angle));
 }
 
-int CMobot::moveJointToAbs(mobotJointId_t id, double angle)
-{
-  return Mobot_moveJointToAbs(_comms, id, DEG2RAD(angle));
-}
-
-int CMobot::moveJointToDirect(mobotJointId_t id, double angle)
-{
-  return Mobot_moveJointToDirect(_comms, id, DEG2RAD(angle));
-}
-
 int CMobot::moveJointToNB(mobotJointId_t id, double angle)
 {
   return Mobot_moveJointToNB(_comms, id, DEG2RAD(angle));
-}
-
-int CMobot::moveJointToAbsNB(mobotJointId_t id, double angle)
-{
-  return Mobot_moveJointToAbsNB(_comms, id, DEG2RAD(angle));
-}
-
-int CMobot::moveJointToDirectNB(mobotJointId_t id, double angle)
-{
-  return Mobot_moveJointToDirectNB(_comms, id, DEG2RAD(angle));
 }
 
 int CMobot::moveJointWait(mobotJointId_t id)
@@ -3350,64 +3099,12 @@ int CMobot::moveTo( double angle1,
       DEG2RAD(angle4));
 }
 
-int CMobot::moveToAbs( double angle1,
-                          double angle2,
-                          double angle3,
-                          double angle4)
-{
-  return Mobot_moveToAbs(
-      _comms, 
-      DEG2RAD(angle1), 
-      DEG2RAD(angle2), 
-      DEG2RAD(angle3), 
-      DEG2RAD(angle4));
-}
-
-int CMobot::moveToDirect( double angle1,
-                          double angle2,
-                          double angle3,
-                          double angle4)
-{
-  return Mobot_moveToDirect(
-      _comms, 
-      DEG2RAD(angle1), 
-      DEG2RAD(angle2), 
-      DEG2RAD(angle3), 
-      DEG2RAD(angle4));
-}
-
 int CMobot::moveToNB( double angle1,
                           double angle2,
                           double angle3,
                           double angle4)
 {
   return Mobot_moveToNB(
-      _comms, 
-      DEG2RAD(angle1), 
-      DEG2RAD(angle2), 
-      DEG2RAD(angle3), 
-      DEG2RAD(angle4));
-}
-
-int CMobot::moveToAbsNB( double angle1,
-                          double angle2,
-                          double angle3,
-                          double angle4)
-{
-  return Mobot_moveToAbsNB(
-      _comms, 
-      DEG2RAD(angle1), 
-      DEG2RAD(angle2), 
-      DEG2RAD(angle3), 
-      DEG2RAD(angle4));
-}
-
-int CMobot::moveToDirectNB( double angle1,
-                          double angle2,
-                          double angle3,
-                          double angle4)
-{
-  return Mobot_moveToDirectNB(
       _comms, 
       DEG2RAD(angle1), 
       DEG2RAD(angle2), 
@@ -3692,6 +3389,34 @@ int CMobotGroup::addRobot(CMobot& robot)
 {
   _robots[_numRobots] = &robot;
   _numRobots++;
+  return 0;
+}
+
+int CMobotGroup::driveJointToDirect(mobotJointId_t id, double angle)
+{
+  driveJointToDirectNB(id, angle);
+  return moveWait();
+}
+
+int CMobotGroup::driveJointToDirectNB(mobotJointId_t id, double angle)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->driveJointToDirectNB(id, angle);
+  }
+  return 0;
+}
+
+int CMobotGroup::driveToDirect(double angle1, double angle2, double angle3, double angle4)
+{
+  driveToDirectNB(angle1, angle2, angle3, angle4);
+  return moveWait();
+}
+
+int CMobotGroup::driveToDirectNB(double angle1, double angle2, double angle3, double angle4)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->driveToDirectNB(angle1, angle2, angle3, angle4);
+  }
   return 0;
 }
 

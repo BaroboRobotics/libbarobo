@@ -6,7 +6,7 @@
 CMobot mobot;
 double timeInterval = 0.1; // time interval in 0.1 second 
 int numDataPoints;         // number of data points recorded
-double *time, *angle1;     // location for recorded time and angles for joint 1
+mobotRecordData_t time, angle1;     // location for recorded time and angles for joint 1
 CPlot plot;                        // plotting class
 
 /* connect to the paired Mobot and move to the zero position */
@@ -26,9 +26,6 @@ mobot.move(720, 0, 0, 720);
 /* end  recording data  */
 mobot.recordAngleEnd(MOBOT_JOINT1, numDataPoints);
 printf("Captured %d data points.\n", numDataPoints);
-
-/* process recorded angles */
-processRecordedAngles(time, angle1, numDataPoints);
 
 /* plot the data */
 plot.title("Angles for joint 1 versus time");

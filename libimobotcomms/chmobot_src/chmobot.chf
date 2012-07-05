@@ -103,6 +103,30 @@ int CMobot::disableButtonCallback() {
     dlrunfun(fptr, &retval, NULL, this);
     return retval;
 }
+int CMobot::driveToDirect(double angle1, double angle2, double angle3, double angle4) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "driveToDirect_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, driveToDirect, this, angle1, angle2, angle3, angle4);
+    return retval;
+}
+int CMobot::driveToDirectNB(double angle1, double angle2, double angle3, double angle4) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "driveToDirectNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, driveToDirectNB, this, angle1, angle2, angle3, angle4);
+    return retval;
+}
 int CMobot::enableButtonCallback(void (*buttonCallback)(CMobot* robot, int button, int buttonDown)) {
     void *fptr;
     int retval;
@@ -127,35 +151,11 @@ int CMobot::getJointAngle(int id, double & angle) {
     dlrunfun(fptr, &retval, NULL, this, id, &angle);
     return retval;
 }
-int CMobot::getJointAngleAbs(int id, double & angle) {
-    void *fptr;
-    int retval;
-
-    fptr = dlsym(g_chmobot_dlhandle, "getJointAngleAbs_chdl");
-    if(fptr == NULL) {
-        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
-        return -1;
-    }
-    dlrunfun(fptr, &retval, NULL, this, id, &angle);
-    return retval;
-}
 int CMobot::getJointAngles(double &angle1, double &angle2, double &angle3, double &angle4) {
     void *fptr;
     int retval;
 
     fptr = dlsym(g_chmobot_dlhandle, "getJointAngles_chdl");
-    if(fptr == NULL) {
-        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
-        return -1;
-    }
-    dlrunfun(fptr, &retval, NULL, this, &angle1, &angle2, &angle3, &angle4);
-    return retval;
-}
-int CMobot::getJointAnglesAbs(double &angle1, double &angle2, double &angle3, double &angle4) {
-    void *fptr;
-    int retval;
-
-    fptr = dlsym(g_chmobot_dlhandle, "getJointAnglesAbs_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
@@ -667,30 +667,6 @@ int CMobot::moveJointTo(int id, double angle) {
     dlrunfun(fptr, &retval, moveJointTo, this, id, angle);
     return retval;
 }
-int CMobot::moveJointToAbs(int id, double angle) {
-    void *fptr;
-    int retval;
-
-    fptr = dlsym(g_chmobot_dlhandle, "moveJointToAbs_chdl");
-    if(fptr == NULL) {
-        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
-        return -1;
-    }
-    dlrunfun(fptr, &retval, moveJointToAbs, this, id, angle);
-    return retval;
-}
-int CMobot::moveJointToDirect(int id, double angle) {
-    void *fptr;
-    int retval;
-
-    fptr = dlsym(g_chmobot_dlhandle, "moveJointToDirect_chdl");
-    if(fptr == NULL) {
-        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
-        return -1;
-    }
-    dlrunfun(fptr, &retval, moveJointToDirect, this, id, angle);
-    return retval;
-}
 int CMobot::moveJointToNB(int id, double angle) {
     void *fptr;
     int retval;
@@ -701,30 +677,6 @@ int CMobot::moveJointToNB(int id, double angle) {
         return -1;
     }
     dlrunfun(fptr, &retval, moveJointToNB, this, id, angle);
-    return retval;
-}
-int CMobot::moveJointToAbsNB(int id, double angle) {
-    void *fptr;
-    int retval;
-
-    fptr = dlsym(g_chmobot_dlhandle, "moveJointToAbsNB_chdl");
-    if(fptr == NULL) {
-        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
-        return -1;
-    }
-    dlrunfun(fptr, &retval, moveJointToAbsNB, this, id, angle);
-    return retval;
-}
-int CMobot::moveJointToDirectNB(int id, double angle) {
-    void *fptr;
-    int retval;
-
-    fptr = dlsym(g_chmobot_dlhandle, "moveJointToDirectNB_chdl");
-    if(fptr == NULL) {
-        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
-        return -1;
-    }
-    dlrunfun(fptr, &retval, moveJointToDirectNB, this, id, angle);
     return retval;
 }
 int CMobot::moveJointWait(int id) {
@@ -751,42 +703,6 @@ int CMobot::moveTo(double angle1, double angle2, double angle3, double angle4) {
     dlrunfun(fptr, &retval, moveTo, this, angle1, angle2, angle3, angle4);
     return retval;
 }
-int CMobot::moveToAbs(double angle1, double angle2, double angle3, double angle4) {
-    void *fptr;
-    int retval;
-
-    fptr = dlsym(g_chmobot_dlhandle, "moveToAbs_chdl");
-    if(fptr == NULL) {
-        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
-        return -1;
-    }
-    dlrunfun(fptr, &retval, moveToAbs, this, angle1, angle2, angle3, angle4);
-    return retval;
-}
-int CMobot::moveToDirect(double angle1, double angle2, double angle3, double angle4) {
-    void *fptr;
-    int retval;
-
-    fptr = dlsym(g_chmobot_dlhandle, "moveToDirect_chdl");
-    if(fptr == NULL) {
-        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
-        return -1;
-    }
-    dlrunfun(fptr, &retval, moveToDirect, this, angle1, angle2, angle3, angle4);
-    return retval;
-}
-int CMobot::driveTo(double angle1, double angle2, double angle3, double angle4) {
-    void *fptr;
-    int retval;
-
-    fptr = dlsym(g_chmobot_dlhandle, "driveTo_chdl");
-    if(fptr == NULL) {
-        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
-        return -1;
-    }
-    dlrunfun(fptr, &retval, driveTo, this, angle1, angle2, angle3, angle4);
-    return retval;
-}
 int CMobot::moveToNB(double angle1, double angle2, double angle3, double angle4) {
     void *fptr;
     int retval;
@@ -797,42 +713,6 @@ int CMobot::moveToNB(double angle1, double angle2, double angle3, double angle4)
         return -1;
     }
     dlrunfun(fptr, &retval, moveToNB, this, angle1, angle2, angle3, angle4);
-    return retval;
-}
-int CMobot::moveToAbsNB(double angle1, double angle2, double angle3, double angle4) {
-    void *fptr;
-    int retval;
-
-    fptr = dlsym(g_chmobot_dlhandle, "moveToAbsNB_chdl");
-    if(fptr == NULL) {
-        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
-        return -1;
-    }
-    dlrunfun(fptr, &retval, moveToAbsNB, this, angle1, angle2, angle3, angle4);
-    return retval;
-}
-int CMobot::moveToDirectNB(double angle1, double angle2, double angle3, double angle4) {
-    void *fptr;
-    int retval;
-
-    fptr = dlsym(g_chmobot_dlhandle, "moveToDirectNB_chdl");
-    if(fptr == NULL) {
-        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
-        return -1;
-    }
-    dlrunfun(fptr, &retval, moveToDirectNB, this, angle1, angle2, angle3, angle4);
-    return retval;
-}
-int CMobot::driveToNB(double angle1, double angle2, double angle3, double angle4) {
-    void *fptr;
-    int retval;
-
-    fptr = dlsym(g_chmobot_dlhandle, "driveToNB_chdl");
-    if(fptr == NULL) {
-        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
-        return -1;
-    }
-    dlrunfun(fptr, &retval, driveToNB, this, angle1, angle2, angle3, angle4);
     return retval;
 }
 int CMobot::moveToZero() {
@@ -1179,6 +1059,54 @@ int CMobotGroup::addRobot(CMobot &robot) {
         return -1;
     }
     dlrunfun(fptr, &retval, NULL, this, &robot);
+    return retval;
+}
+int CMobotGroup::driveJointToDirect(int id, double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_driveJointToDirect_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, driveJointToDirect, this, id, angle);
+    return retval;
+}
+int CMobotGroup::driveJointToDirectNB(int id, double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_driveJointToDirectNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, driveJointToDirectNB, this, id, angle);
+    return retval;
+}
+int CMobotGroup::driveToDirect(double angle1, double angle2, double angle3, double angle4) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_driveToDirect_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, driveToDirect, this, angle1, angle2, angle3, angle4);
+    return retval;
+}
+int CMobotGroup::driveToDirectNB(double angle1, double angle2, double angle3, double angle4) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_driveToDirectNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, driveToDirectNB, this, angle1, angle2, angle3, angle4);
     return retval;
 }
 int CMobotGroup::isMoving() {

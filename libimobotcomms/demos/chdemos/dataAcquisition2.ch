@@ -3,7 +3,6 @@
 
 #include <mobot.h>
 #include <chplot.h>
-#include <numeric.h>
 CMobot mobot;
 
 /* Connect to the mobot */
@@ -24,10 +23,6 @@ array double angles4[numDataPoints];
 
 /* Declare plotting variables */
 CPlot plot;
-array double angles1_unwrapped[numDataPoints];
-array double angles2_unwrapped[numDataPoints];
-array double angles3_unwrapped[numDataPoints];
-array double angles4_unwrapped[numDataPoints];
 double tolerance = 1.0; /* 1 degree for time shifting */
 
 /* Set all joint speeds to 45 degrees/second */
@@ -46,24 +41,19 @@ mobot.motionInchwormLeft(2);
 /* Wait for recording to finish */
 mobot.recordWait();
 
-/* Plot the unwrapped data */
-unwrapdeg(angles1_unwrapped, angles1);
-unwrapdeg(angles2_unwrapped, angles2);
-unwrapdeg(angles3_unwrapped, angles3);
-unwrapdeg(angles4_unwrapped, angles4);
 /* Shift the time so the movement starts at time 0 */
 shiftTime(tolerance, numDataPoints, time, 
-          angles1_unwrapped, 
-          angles2_unwrapped, 
-          angles3_unwrapped, 
-          angles4_unwrapped);
+          angles1, 
+          angles2, 
+          angles3, 
+          angles4);
 plot.title("Unwrapped Data for Joint Angles versus Time");
 plot.label(PLOT_AXIS_X, "Time (seconds)");
 plot.label(PLOT_AXIS_Y, "Angle (degrees)");
-plot.data2DCurve(time, angles1_unwrapped, numDataPoints);
-plot.data2DCurve(time, angles2_unwrapped, numDataPoints);
-plot.data2DCurve(time, angles3_unwrapped, numDataPoints);
-plot.data2DCurve(time, angles4_unwrapped, numDataPoints);
+plot.data2DCurve(time, angles1, numDataPoints);
+plot.data2DCurve(time, angles2, numDataPoints);
+plot.data2DCurve(time, angles3, numDataPoints);
+plot.data2DCurve(time, angles4, numDataPoints);
 plot.legend("Joint 1", 0);
 plot.legend("Joint 2", 1);
 plot.legend("Joint 3", 2);

@@ -21,13 +21,13 @@ mobot2.stopAllJoints();
 while(1) {
   /* Get the beginning time of loop */
   /* Get the first mobots joint angles */
-  mobot1.getJointAnglesAbs(
+  mobot1.getJointAngles(
       angles[0],
       angles[1],
       angles[2],
       angles[3]);
   /* Move the second mobot */
-  mobot2.driveToNB(
+  mobot2.driveToDirectNB(
       angles[0],
       angles[1],
       angles[2],
