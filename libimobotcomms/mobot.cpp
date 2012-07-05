@@ -2573,7 +2573,17 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
 #ifndef _WIN32
     /* Set up a wait with timeout */
     /* Get the current time */
+#ifndef __MACH__
     clock_gettime(CLOCK_REALTIME, &ts);
+#else
+    clock_serv_t cclock;
+    mach_timespec_t mts;
+    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    clock_get_time(cclock, &mts);
+    mach_port_deallocate(mach_task_self(), cclock);
+    ts.tv_sec = mts.tv_sec;
+    ts.tv_nsec = mts.tv_nsec;
+#endif
     /* Add a 4 second timeout */
     ts.tv_sec += 4;
     rc = pthread_cond_timedwait(
