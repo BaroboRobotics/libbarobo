@@ -691,30 +691,6 @@ int CMobot::moveJointTo(int id, double angle) {
     dlrunfun(fptr, &retval, moveJointTo, this, id, angle);
     return retval;
 }
-int CMobot::moveJointToAbs(int id, double angle) {
-    void *fptr;
-    int retval;
-
-    fptr = dlsym(g_chmobot_dlhandle, "moveJointToAbs_chdl");
-    if(fptr == NULL) {
-        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
-        return -1;
-    }
-    dlrunfun(fptr, &retval, moveJointToAbs, this, id, angle);
-    return retval;
-}
-int CMobot::moveJointToDirect(int id, double angle) {
-    void *fptr;
-    int retval;
-
-    fptr = dlsym(g_chmobot_dlhandle, "moveJointToDirect_chdl");
-    if(fptr == NULL) {
-        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
-        return -1;
-    }
-    dlrunfun(fptr, &retval, moveJointToDirect, this, id, angle);
-    return retval;
-}
 int CMobot::moveJointToNB(int id, double angle) {
     void *fptr;
     int retval;
@@ -725,30 +701,6 @@ int CMobot::moveJointToNB(int id, double angle) {
         return -1;
     }
     dlrunfun(fptr, &retval, moveJointToNB, this, id, angle);
-    return retval;
-}
-int CMobot::moveJointToAbsNB(int id, double angle) {
-    void *fptr;
-    int retval;
-
-    fptr = dlsym(g_chmobot_dlhandle, "moveJointToAbsNB_chdl");
-    if(fptr == NULL) {
-        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
-        return -1;
-    }
-    dlrunfun(fptr, &retval, moveJointToAbsNB, this, id, angle);
-    return retval;
-}
-int CMobot::moveJointToDirectNB(int id, double angle) {
-    void *fptr;
-    int retval;
-
-    fptr = dlsym(g_chmobot_dlhandle, "moveJointToDirectNB_chdl");
-    if(fptr == NULL) {
-        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
-        return -1;
-    }
-    dlrunfun(fptr, &retval, moveJointToDirectNB, this, id, angle);
     return retval;
 }
 int CMobot::moveJointWait(int id) {

@@ -527,40 +527,6 @@ EXPORTCH int moveJointTo_chdl(void *varg) {
     return retval;
 }
 
-EXPORTCH int moveJointToAbs_chdl(void *varg) {
-    ChInterp_t interp;
-    ChVaList_t ap;
-    class CMobot *mobot;
-    mobotJointId_t id;
-    double angle;
-    int retval;
-
-    Ch_VaStart(interp, ap, varg);
-    mobot = Ch_VaArg(interp, ap, class CMobot *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
-    angle = Ch_VaArg(interp, ap, double);
-    retval = mobot->moveJointToAbs(id, angle);
-    Ch_VaEnd(interp, ap);
-    return retval;
-}
-
-EXPORTCH int moveJointToDirect_chdl(void *varg) {
-    ChInterp_t interp;
-    ChVaList_t ap;
-    class CMobot *mobot;
-    mobotJointId_t id;
-    double angle;
-    int retval;
-
-    Ch_VaStart(interp, ap, varg);
-    mobot = Ch_VaArg(interp, ap, class CMobot *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
-    angle = Ch_VaArg(interp, ap, double);
-    retval = mobot->moveJointToDirect(id, angle);
-    Ch_VaEnd(interp, ap);
-    return retval;
-}
-
 EXPORTCH int moveJointToNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -574,40 +540,6 @@ EXPORTCH int moveJointToNB_chdl(void *varg) {
     id = Ch_VaArg(interp, ap, mobotJointId_t);
     angle = Ch_VaArg(interp, ap, double);
     retval = mobot->moveJointToNB(id, angle);
-    Ch_VaEnd(interp, ap);
-    return retval;
-}
-
-EXPORTCH int moveJointToAbsNB_chdl(void *varg) {
-    ChInterp_t interp;
-    ChVaList_t ap;
-    class CMobot *mobot;
-    mobotJointId_t id;
-    double angle;
-    int retval;
-
-    Ch_VaStart(interp, ap, varg);
-    mobot = Ch_VaArg(interp, ap, class CMobot *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
-    angle = Ch_VaArg(interp, ap, double);
-    retval = mobot->moveJointToAbsNB(id, angle);
-    Ch_VaEnd(interp, ap);
-    return retval;
-}
-
-EXPORTCH int moveJointToDirectNB_chdl(void *varg) {
-    ChInterp_t interp;
-    ChVaList_t ap;
-    class CMobot *mobot;
-    mobotJointId_t id;
-    double angle;
-    int retval;
-
-    Ch_VaStart(interp, ap, varg);
-    mobot = Ch_VaArg(interp, ap, class CMobot *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
-    angle = Ch_VaArg(interp, ap, double);
-    retval = mobot->moveJointToDirectNB(id, angle);
     Ch_VaEnd(interp, ap);
     return retval;
 }

@@ -1214,20 +1214,6 @@ int Mobot_moveJointTo(mobot_t* comms, mobotJointId_t id, double angle)
   return Mobot_moveJointWait(comms, id);
 }
 
-int Mobot_moveJointToAbs(mobot_t* comms, mobotJointId_t id, double angle)
-{
-  Mobot_moveJointToAbsNB(comms, id, angle);
-  /* Wait for the motion to finish */
-  return Mobot_moveJointWait(comms, id);
-}
-
-int Mobot_moveJointToDirect(mobot_t* comms, mobotJointId_t id, double angle)
-{
-  Mobot_moveJointToDirectNB(comms, id, angle);
-  /* Wait for the motion to finish */
-  return Mobot_moveJointWait(comms, id);
-}
-
 int Mobot_driveJointTo(mobot_t* comms, mobotJointId_t id, double angle)
 {
   Mobot_driveJointToNB(comms, id, angle);
@@ -1272,67 +1258,7 @@ int Mobot_moveJointToNB(mobot_t* comms, mobotJointId_t id, double angle)
   buf[0] = (uint8_t)id-1;
   f = angle;
   memcpy(&buf[1], &f, 4);
-  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLE), buf, 5);
-  if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
-  /* Make sure the data size is correct */
-  if(buf[1] != 3) {
-    return -1;
-  }
-  return 0;
-}
-
-int Mobot_moveJointToAbsNB(mobot_t* comms, mobotJointId_t id, double angle)
-{
-  uint8_t buf[32];
-  float f;
-  int status;
-  if((id == MOBOT_JOINT2) || (id == MOBOT_JOINT3)) {
-    if(angle > 90) {
-      fprintf(stderr, "Warning: Angle for joint %d set beyond limits.\n", (int)(id + 1));
-      angle = 90;
-    }
-    if(angle < -90) {
-      fprintf(stderr, "Warning: Angle for joint %d set beyond limits.\n", (int)(id + 1));
-      angle = -90;
-    }
-  }
-  buf[0] = (uint8_t)id-1;
-  f = angle;
-  memcpy(&buf[1], &f, 4);
   status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLEABS), buf, 5);
-  if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
-  /* Make sure the data size is correct */
-  if(buf[1] != 3) {
-    return -1;
-  }
-  return 0;
-}
-
-int Mobot_moveJointToDirectNB(mobot_t* comms, mobotJointId_t id, double angle)
-{
-  uint8_t buf[32];
-  float f;
-  int status;
-  if((id == MOBOT_JOINT2) || (id == MOBOT_JOINT3)) {
-    if(angle > 90) {
-      fprintf(stderr, "Warning: Angle for joint %d set beyond limits.\n", (int)(id + 1));
-      angle = 90;
-    }
-    if(angle < -90) {
-      fprintf(stderr, "Warning: Angle for joint %d set beyond limits.\n", (int)(id + 1));
-      angle = -90;
-    }
-  }
-  buf[0] = (uint8_t)id-1;
-  f = angle;
-  memcpy(&buf[1], &f, 4);
-  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLEDIRECT), buf, 5);
   if(status < 0) return status;
   if(RecvFromIMobot(comms, buf, sizeof(buf))) {
     return -1;
@@ -3345,29 +3271,9 @@ int CMobot::moveJointTo(mobotJointId_t id, double angle)
   return Mobot_moveJointTo(_comms, id, DEG2RAD(angle));
 }
 
-int CMobot::moveJointToAbs(mobotJointId_t id, double angle)
-{
-  return Mobot_moveJointToAbs(_comms, id, DEG2RAD(angle));
-}
-
-int CMobot::moveJointToDirect(mobotJointId_t id, double angle)
-{
-  return Mobot_moveJointToDirect(_comms, id, DEG2RAD(angle));
-}
-
 int CMobot::moveJointToNB(mobotJointId_t id, double angle)
 {
   return Mobot_moveJointToNB(_comms, id, DEG2RAD(angle));
-}
-
-int CMobot::moveJointToAbsNB(mobotJointId_t id, double angle)
-{
-  return Mobot_moveJointToAbsNB(_comms, id, DEG2RAD(angle));
-}
-
-int CMobot::moveJointToDirectNB(mobotJointId_t id, double angle)
-{
-  return Mobot_moveJointToDirectNB(_comms, id, DEG2RAD(angle));
 }
 
 int CMobot::moveJointWait(mobotJointId_t id)
