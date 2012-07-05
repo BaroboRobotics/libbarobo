@@ -2072,19 +2072,26 @@ int Mobot_motionArch(mobot_t* comms, double angle)
   return 0;
 }
 
+#define INIT_MARG \
+  motionArg_t* marg; \
+  marg = (motionArg_t*)malloc(sizeof(motionArg_t)); \
+  marg->mobot = comms;
+
 void* motionArchThread(void* arg)
 {
-  mobot_t* comms = (mobot_t*)arg;
-  Mobot_motionArch(comms, comms->motionArgDouble);
-  comms->motionInProgress--;
+  motionArg_t* marg = (motionArg_t*)arg;
+  Mobot_motionArch(marg->mobot, marg->d);
+  marg->mobot->motionInProgress--;
+  free(marg);
   return NULL;
 }
 
 int Mobot_motionArchNB(mobot_t* comms, double angle)
 {
-  comms->motionArgDouble = angle;
+  INIT_MARG
+  marg->d = angle;
   comms->motionInProgress++;
-  THREAD_CREATE(comms->thread, motionArchThread, comms);
+  THREAD_CREATE(comms->thread, motionArchThread, marg);
   return 0;
 }
 
@@ -2107,18 +2114,19 @@ int Mobot_motionInchwormLeft(mobot_t* comms, int num)
 
 void* motionInchwormLeftThread(void* arg)
 {
-  mobot_t* comms = (mobot_t*)arg;
-  Mobot_motionInchwormLeft(comms, comms->motionArgInt);
-  comms->motionInProgress--;
+  motionArg_t* marg = (motionArg_t*)arg;
+  Mobot_motionInchwormLeft(marg->mobot, marg->i);
+  marg->mobot->motionInProgress--;
+  free(marg);
   return NULL;
 }
 
 int Mobot_motionInchwormLeftNB(mobot_t* comms, int num)
 {
-  /* Make sure the old thread has joined */
+  INIT_MARG
+  marg->i = num;
   comms->motionInProgress++;
-  comms->motionArgInt = num;
-  THREAD_CREATE(comms->thread, motionInchwormLeftThread, comms);
+  THREAD_CREATE(comms->thread, motionInchwormLeftThread, marg);
   return 0;
 }
 
@@ -2141,17 +2149,19 @@ int Mobot_motionInchwormRight(mobot_t* comms, int num)
 
 void* motionInchwormRightThread(void* arg)
 {
-  mobot_t* comms = (mobot_t*)arg;
-  Mobot_motionInchwormRight((mobot_t*)arg, comms->motionArgInt);
-  ((mobot_t*)arg)->motionInProgress--;
+  motionArg_t *marg = (motionArg_t*)arg;
+  Mobot_motionInchwormRight(marg->mobot, marg->i);
+  marg->mobot->motionInProgress--;
+  free(marg);
   return NULL;
 }
 
 int Mobot_motionInchwormRightNB(mobot_t* comms, int num)
 {
-  comms->motionArgInt = num;
+  INIT_MARG
+  marg->i = num;
   comms->motionInProgress++;
-  THREAD_CREATE(comms->thread, motionInchwormRightThread, comms);
+  THREAD_CREATE(comms->thread, motionInchwormRightThread, marg);
   return 0;
 }
 
@@ -2168,17 +2178,19 @@ int Mobot_motionRollBackward(mobot_t* comms, double angle)
 
 void* motionRollBackwardThread(void* arg)
 {
-  mobot_t* comms = (mobot_t*)arg;
-  Mobot_motionRollBackward((mobot_t*)arg, comms->motionArgDouble);
-  ((mobot_t*)arg)->motionInProgress--;
+  motionArg_t* marg = (motionArg_t*)arg;
+  Mobot_motionRollBackward(marg->mobot, marg->d);
+  marg->mobot->motionInProgress--;
+  free(marg);
   return NULL;
 }
 
 int Mobot_motionRollBackwardNB(mobot_t* comms, double angle)
 {
-  comms->motionArgDouble = angle;
+  INIT_MARG
+  marg->d = angle;
   comms->motionInProgress++;
-  THREAD_CREATE(comms->thread, motionRollBackwardThread, comms);
+  THREAD_CREATE(comms->thread, motionRollBackwardThread, marg);
   return 0;
 }
 
@@ -2195,17 +2207,19 @@ int Mobot_motionRollForward(mobot_t* comms, double angle)
 
 void* motionRollForwardThread(void* arg)
 {
-  mobot_t* comms = (mobot_t*)arg;
-  Mobot_motionRollForward((mobot_t*)arg, comms->motionArgDouble);
-  ((mobot_t*)arg)->motionInProgress--;
+  motionArg_t* marg = (motionArg_t*)arg;
+  Mobot_motionRollForward(marg->mobot, marg->d);
+  marg->mobot->motionInProgress--;
+  free(marg);
   return NULL;
 }
 
 int Mobot_motionRollForwardNB(mobot_t* comms, double angle)
 {
-  comms->motionArgDouble = angle;
+  INIT_MARG
+  marg->d = angle;
   comms->motionInProgress++;
-  THREAD_CREATE(comms->thread, motionRollForwardThread, comms);
+  THREAD_CREATE(comms->thread, motionRollForwardThread, marg);
   return 0;
 }
 
@@ -2230,9 +2244,19 @@ int Mobot_motionStand(mobot_t* comms)
 
 void* motionStandThread(void* arg)
 {
-  Mobot_motionStand((mobot_t*)arg);
-  ((mobot_t*)arg)->motionInProgress--;
+  motionArg_t* marg = (motionArg_t*)arg;
+  Mobot_motionStand(marg->mobot);
+  marg->mobot->motionInProgress--;
+  free(marg);
   return NULL;
+}
+
+int Mobot_motionStandNB(mobot_t* comms)
+{
+  INIT_MARG
+  comms->motionInProgress++;
+  THREAD_CREATE(comms->thread, motionStandThread, marg);
+  return 0;
 }
 
 int Mobot_motionSkinny(mobot_t* comms, double angle)
@@ -2245,24 +2269,19 @@ int Mobot_motionSkinny(mobot_t* comms, double angle)
 
 void* motionSkinnyThread(void* arg)
 {
-  mobot_t* comms = (mobot_t*)arg;
-  Mobot_motionSkinny((mobot_t*)arg, comms->motionArgDouble);
-  ((mobot_t*)arg)->motionInProgress--;
+  motionArg_t* marg = (motionArg_t*)arg;
+  Mobot_motionSkinny(marg->mobot, marg->d);
+  marg->mobot->motionInProgress--;
+  free(marg);
   return NULL;
 }
 
 int Mobot_motionSkinnyNB(mobot_t* comms, double angle)
 {
-  comms->motionArgDouble = angle;
+  INIT_MARG
+  marg->d = angle;
   comms->motionInProgress++;
-  THREAD_CREATE(comms->thread, motionSkinnyThread, comms);
-  return 0;
-}
-
-int Mobot_motionStandNB(mobot_t* comms)
-{
-  comms->motionInProgress++;
-  THREAD_CREATE(comms->thread, motionStandThread, comms);
+  THREAD_CREATE(comms->thread, motionSkinnyThread, marg);
   return 0;
 }
 
@@ -2279,17 +2298,19 @@ int Mobot_motionTurnLeft(mobot_t* comms, double angle)
 
 void* motionTurnLeftThread(void* arg)
 {
-  mobot_t* comms = (mobot_t*)arg;
-  Mobot_motionTurnLeft((mobot_t*)arg, comms->motionArgDouble);
-  ((mobot_t*)arg)->motionInProgress--;
+  motionArg_t* marg = (motionArg_t*)arg;
+  Mobot_motionTurnLeft(marg->mobot, marg->d);
+  marg->mobot->motionInProgress--;
+  free(marg);
   return NULL;
 }
 
 int Mobot_motionTurnLeftNB(mobot_t* comms, double angle)
 {
+  INIT_MARG
+  marg->d = angle;
   comms->motionInProgress++;
-  comms->motionArgDouble = angle;
-  THREAD_CREATE(comms->thread, motionTurnLeftThread, comms);
+  THREAD_CREATE(comms->thread, motionTurnLeftThread, marg);
   return 0;
 }
 
@@ -2306,17 +2327,19 @@ int Mobot_motionTurnRight(mobot_t* comms, double angle)
 
 void* motionTurnRightThread(void* arg)
 {
-  mobot_t* comms = (mobot_t*)arg;
-  Mobot_motionTurnRight((mobot_t*)arg, comms->motionArgDouble);
-  ((mobot_t*)arg)->motionInProgress--;
+  motionArg_t* marg = (motionArg_t*)arg;
+  Mobot_motionTurnRight(marg->mobot, marg->d);
+  marg->mobot->motionInProgress--;
+  free(marg);
   return NULL;
 }
 
 int Mobot_motionTurnRightNB(mobot_t* comms, double angle)
 {
-  comms->motionArgDouble = angle;
+  INIT_MARG
+  marg->d = angle;
   comms->motionInProgress++;
-  THREAD_CREATE(comms->thread, motionTurnRightThread, comms);
+  THREAD_CREATE(comms->thread, motionTurnRightThread, marg);
   return 0;
 }
 
@@ -2354,17 +2377,19 @@ int Mobot_motionTumbleRight(mobot_t* comms, int num)
 
 void* motionTumbleRightThread(void* arg)
 {
-  mobot_t* comms = (mobot_t*)arg;
-  Mobot_motionTumbleRight(comms, comms->motionArgInt);
-  comms->motionInProgress--;
+  motionArg_t* marg = (motionArg_t*)arg;
+  Mobot_motionTumbleRight(marg->mobot, marg->i);
+  marg->mobot->motionInProgress--;
+  free(marg);
   return NULL;
 }
 
 int Mobot_motionTumbleRightNB(mobot_t* comms, int num)
 {
-  comms->motionArgInt = num;
+  INIT_MARG
+  marg->i = num;
   comms->motionInProgress++;
-  THREAD_CREATE(comms->thread, motionTumbleRightThread, comms);
+  THREAD_CREATE(comms->thread, motionTumbleRightThread, marg);
   return 0;
 }
 
@@ -2402,17 +2427,19 @@ int Mobot_motionTumbleLeft(mobot_t* comms, int num)
 
 void* motionTumbleLeftThread(void* arg)
 {
-  mobot_t* comms = (mobot_t*)arg;
-  Mobot_motionTumbleLeft(comms, comms->motionArgInt);
-  comms->motionInProgress--;
+  motionArg_t* marg = (motionArg_t*)arg;
+  Mobot_motionTumbleLeft(marg->mobot, marg->i);
+  marg->mobot->motionInProgress--;
+  free(marg);
   return NULL;
 }
 
 int Mobot_motionTumbleLeftNB(mobot_t* comms, int num)
 {
-  comms->motionArgInt = num;
+  INIT_MARG
+  marg->i = num;
   comms->motionInProgress++;
-  THREAD_CREATE(comms->thread, motionTumbleLeftThread, comms);
+  THREAD_CREATE(comms->thread, motionTumbleLeftThread, marg);
   return 0;
 }
 
@@ -2429,15 +2456,18 @@ int Mobot_motionUnstand(mobot_t* comms)
 
 void* motionUnstandThread(void* arg)
 {
-  Mobot_motionUnstand((mobot_t*)arg);
-  ((mobot_t*)arg)->motionInProgress--;
+  motionArg_t* marg = (motionArg_t*)arg;
+  Mobot_motionUnstand(marg->mobot);
+  marg->mobot->motionInProgress--;
+  free(marg);
   return NULL;
 }
 
 int Mobot_motionUnstandNB(mobot_t* comms)
 {
+  INIT_MARG
   comms->motionInProgress++;
-  THREAD_CREATE(comms->thread, motionUnstandThread, comms);
+  THREAD_CREATE(comms->thread, motionUnstandThread, marg);
   return 0;
 }
 

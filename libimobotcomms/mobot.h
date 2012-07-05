@@ -105,8 +105,6 @@ typedef struct mobot_s
   THREAD_T* thread;
   MUTEX_T* commsLock;
   int motionInProgress;
-  int motionArgInt;
-  double motionArgDouble;
   MUTEX_T* recordingLock;
   int recordingInProgress[4];
   int recordingNumValues[4];
@@ -129,6 +127,16 @@ typedef struct mobot_s
   void* itemsToFreeOnExit[64];
   int numItemsToFreeOnExit;
 } mobot_t;
+#endif
+
+#ifndef MOTION_ARG_S
+#define MOTION_ARG_S
+typedef struct motionArg_s
+{
+  int i;
+  double d;
+  mobot_t* mobot;
+}motionArg_t;
 #endif
 
 #ifdef NONRELEASE
