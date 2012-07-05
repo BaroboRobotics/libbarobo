@@ -396,7 +396,10 @@ class CMobotGroup
     int setJointSpeedRatio(mobotJointId_t id, double ratio);
     int setJointSpeedRatios(double ratio1, double ratio2, double ratio3, double ratio4);
     int setTwoWheelRobotSpeed(double speed, double radius);
-    int stop();
+    int stopAllJoints();
+    int stopOneJoint(mobotJointId_t id);
+    int stopTwoJoints(mobotJointId_t id1, mobotJointId_t id2);
+    int stopThreeJoints(mobotJointId_t id1, mobotJointId_t id2, mobotJointId_t id3);
 
     int motionArch(double angle);
     int motionArchNB(double angle);

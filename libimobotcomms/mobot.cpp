@@ -3599,10 +3599,34 @@ int CMobotGroup::setTwoWheelRobotSpeed(double speed, double radius)
   return 0;
 }
 
-int CMobotGroup::stop()
+int CMobotGroup::stopAllJoints()
 {
   for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->stop();
+    _robots[i]->stopAllJoints();
+  }
+  return 0;
+}
+
+int CMobotGroup::stopOneJoint(mobotJointId_t id)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->stopOneJoint(id);
+  }
+  return 0;
+}
+
+int CMobotGroup::stopTwoJoints(mobotJointId_t id1, mobotJointId_t id2)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->stopTwoJoints(id1, id2);
+  }
+  return 0;
+}
+
+int CMobotGroup::stopThreeJoints(mobotJointId_t id1, mobotJointId_t id2, mobotJointId_t id3)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->stopThreeJoints(id1, id2, id3);
   }
   return 0;
 }
