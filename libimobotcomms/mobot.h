@@ -365,6 +365,10 @@ class CMobotGroup
     CMobotGroup();
     ~CMobotGroup();
     int addRobot(CMobot& mobot);
+    int driveJointToDirect(mobotJointId_t id, double angle);
+    int driveJointToDirectNB(mobotJointId_t id, double angle);
+    int driveToDirect(double angle1, double angle2, double angle3, double angle4);
+    int driveToDirectNB(double angle1, double angle2, double angle3, double angle4);
     int isMoving();
     int move(double angle1, double angle2, double angle3, double angle4);
     int moveNB(double angle1, double angle2, double angle3, double angle4);

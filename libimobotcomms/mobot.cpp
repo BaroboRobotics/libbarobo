@@ -3392,6 +3392,34 @@ int CMobotGroup::addRobot(CMobot& robot)
   return 0;
 }
 
+int CMobotGroup::driveJointToDirect(mobotJointId_t id, double angle)
+{
+  driveJointToDirectNB(id, angle);
+  return moveWait();
+}
+
+int CMobotGroup::driveJointToDirectNB(mobotJointId_t id, double angle)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->driveJointToDirectNB(id, angle);
+  }
+  return 0;
+}
+
+int CMobotGroup::driveToDirect(double angle1, double angle2, double angle3, double angle4)
+{
+  driveToDirectNB(angle1, angle2, angle3, angle4);
+  return moveWait();
+}
+
+int CMobotGroup::driveToDirectNB(double angle1, double angle2, double angle3, double angle4)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->driveToDirectNB(angle1, angle2, angle3, angle4);
+  }
+  return 0;
+}
+
 int CMobotGroup::isMoving()
 {
   for(int i = 0; i < _numRobots; i++) {
