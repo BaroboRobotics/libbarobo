@@ -1453,7 +1453,7 @@ void* Mobot_recordAngleBeginThread(void* arg)
     //Mobot_getJointAngleTime(rArg->comms, rArg->id, &((*rArg->time_p)[i]), &((*rArg->angle_p)[i]));
     Mobot_getJointAnglesTime(
         rArg->comms, 
-        &rArg->time[i],
+        &((*rArg->time_p)[i]),
         &angles[0],
         &angles[1],
         &angles[2],
@@ -1494,7 +1494,7 @@ void* Mobot_recordAngleBeginThread(void* arg)
     //Mobot_getJointAngleTime(rArg->comms, rArg->id, &((*rArg->time_p)[i]), &((*rArg->angle_p)[i]));
     Mobot_getJointAnglesTime(
         rArg->comms, 
-        &rArg->time[i],
+        &rArg->time_p[i],
         &angles[0],
         &angles[1],
         &angles[2],

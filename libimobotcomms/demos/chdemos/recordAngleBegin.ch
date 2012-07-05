@@ -27,9 +27,6 @@ mobot.move(720, 0, 0, 720);
 mobot.recordAngleEnd(MOBOT_JOINT1, numDataPoints);
 printf("Captured %d data points.\n", numDataPoints);
 
-/* process recorded angles */
-processRecordedAngles(time, angle1, numDataPoints);
-
 /* plot the data */
 plot.title("Angles for joint 1 versus time");
 plot.label(PLOT_AXIS_X, "time (seconds)");
