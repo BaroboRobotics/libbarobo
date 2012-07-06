@@ -8,15 +8,9 @@ int main()
 
   /* Connect to the paired MoBot */
   mobot.connect();
-  mobot.setJointSpeedRatio(MOBOT_JOINT2, 1);
-  for(int i = 0; ; i++) {
-    if(i % 2) {
-      mobot.moveJointContinuousNB(MOBOT_JOINT2, MOBOT_FORWARD);
-    } else {
-      mobot.moveJointContinuousNB(MOBOT_JOINT2, MOBOT_BACKWARD);
-    }
-    getchar();
-  }
+  mobot.moveJointContinuousNB(MOBOT_JOINT1, MOBOT_FORWARD);
+  sleep(1);
+  mobot.stopAllJoints();
 
   return 0;
 }
