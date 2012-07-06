@@ -1002,7 +1002,7 @@ int Mobot_moveNB(mobot_t* comms,
     f = angles[i];
     memcpy(&buf[i*4], &f, 4);
   }
-  SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLES), buf, 4*4);
+  SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLESABS), buf, 4*4);
   if(RecvFromIMobot(comms, buf, sizeof(buf))) {
     return -1;
   }
