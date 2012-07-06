@@ -1492,6 +1492,19 @@ void* Mobot_recordAngleBeginThread(void* arg)
     MUTEX_LOCK(rArg->comms->recordingLock);
     rArg->i = i;
     rArg->comms->recordingNumValues[rArg->id-1] = i;
+    /* Make sure we have enough space left in the buffer */
+    if(i >= rArg->num) {
+      rArg->num += RECORD_ANGLE_ALLOC_SIZE;
+      double *newBuf;
+      newBuf = (double*)malloc(sizeof(double) * rArg->num);
+      memcpy(newBuf, *rArg->time_p, sizeof(double)*i);
+      free(*rArg->time_p);
+      *rArg->time_p = newBuf;
+      newBuf = (double*)malloc(sizeof(double) * rArg->num);
+      memcpy(newBuf, *rArg->angle_p, sizeof(double)*i);
+      free(*rArg->angle_p);
+      *rArg->angle_p = newBuf;
+    }
     cur_time = GetTickCount();
     //Mobot_getJointAngleTime(rArg->comms, rArg->id, &((*rArg->time_p)[i]), &((*rArg->angle_p)[i]));
     Mobot_getJointAnglesTime(
@@ -1781,6 +1794,35 @@ void* Mobot_recordAnglesBeginThread(void* arg)
     MUTEX_LOCK(rArg->comms->recordingLock);
     rArg->i = i;
     rArg->comms->recordingNumValues[0] = i;
+    /* Make sure we have enough space left in the buffer */
+    if(i >= rArg->num) {
+      rArg->num += RECORD_ANGLE_ALLOC_SIZE;
+      double *newBuf;
+      newBuf = (double*)malloc(sizeof(double) * rArg->num);
+      memcpy(newBuf, *rArg->time_p, sizeof(double)*i);
+      free(*rArg->time_p);
+      *rArg->time_p = newBuf;
+
+      newBuf = (double*)malloc(sizeof(double) * rArg->num);
+      memcpy(newBuf, *rArg->angle_p, sizeof(double)*i);
+      free(*rArg->angle_p);
+      *rArg->angle_p = newBuf;
+
+      newBuf = (double*)malloc(sizeof(double) * rArg->num);
+      memcpy(newBuf, *rArg->angle2_p, sizeof(double)*i);
+      free(*rArg->angle2_p);
+      *rArg->angle2_p = newBuf;
+
+      newBuf = (double*)malloc(sizeof(double) * rArg->num);
+      memcpy(newBuf, *rArg->angle3_p, sizeof(double)*i);
+      free(*rArg->angle3_p);
+      *rArg->angle3_p = newBuf;
+
+      newBuf = (double*)malloc(sizeof(double) * rArg->num);
+      memcpy(newBuf, *rArg->angle4_p, sizeof(double)*i);
+      free(*rArg->angle4_p);
+      *rArg->angle4_p = newBuf;
+    }
     cur_time = GetTickCount();
     Mobot_getJointAnglesTime(
         rArg->comms, 
