@@ -38,6 +38,8 @@
 
 #include "commands.h"
 
+#define ABS(x) ((x)<0?-(x):(x))
+
 int g_numConnected = 0;
 
 double deg2rad(double deg)
@@ -860,7 +862,7 @@ int Mobot_getJointSpeed(mobot_t* comms, mobotJointId_t id, double *speed)
     return -1;
   }
   memcpy(&f, &buf[2], 4);
-  *speed = f;
+  *speed = ABS(f);
   comms->jointSpeeds[id-1] = *speed;
   return 0;
 }
