@@ -273,11 +273,7 @@ class CMobot
     int moveJoint(mobotJointId_t id, double angle);
     int moveJointNB(mobotJointId_t id, double angle);
     int moveJointTo(mobotJointId_t id, double angle);
-    int moveJointToAbs(mobotJointId_t id, double angle);
-    int moveJointToDirect(mobotJointId_t id, double angle);
     int moveJointToNB(mobotJointId_t id, double angle);
-    int moveJointToAbsNB(mobotJointId_t id, double angle);
-    int moveJointToDirectNB(mobotJointId_t id, double angle);
     int moveJointWait(mobotJointId_t id);
     int moveTo(double angle1, double angle2, double angle3, double angle4);
     int moveToNB(double angle1, double angle2, double angle3, double angle4);
@@ -556,11 +552,7 @@ DLLIMPORT int Mobot_moveJointContinuousTime(mobot_t* comms,
                                             mobotJointState_t dir, 
                                             double seconds);
 DLLIMPORT int Mobot_moveJointTo(mobot_t* comms, mobotJointId_t id, double angle);
-DLLIMPORT int Mobot_moveJointToAbs(mobot_t* comms, mobotJointId_t id, double angle);
-DLLIMPORT int Mobot_moveJointToDirect(mobot_t* comms, mobotJointId_t id, double angle);
 DLLIMPORT int Mobot_moveJointToNB(mobot_t* comms, mobotJointId_t id, double angle);
-DLLIMPORT int Mobot_moveJointToAbsNB(mobot_t* comms, mobotJointId_t id, double angle);
-DLLIMPORT int Mobot_moveJointToDirectNB(mobot_t* comms, mobotJointId_t id, double angle);
 DLLIMPORT int Mobot_moveJointWait(mobot_t* comms, mobotJointId_t id);
 DLLIMPORT int Mobot_moveTo(mobot_t* comms,
                                double angle1,
@@ -602,7 +594,7 @@ DLLIMPORT int Mobot_recordAnglesBegin(mobot_t* comms,
                                      double **angle3,
                                      double **angle4,
                                      double timeInterval);
-DLLIMPORT int Mobot_recordAnglesEnd(mobot_t* comms);
+DLLIMPORT int Mobot_recordAnglesEnd(mobot_t* comms, int* num);
 DLLIMPORT int Mobot_recordWait(mobot_t* comms);
 DLLIMPORT int Mobot_reset(mobot_t* comms);
 DLLIMPORT int Mobot_resetToZero(mobot_t* comms);

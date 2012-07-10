@@ -10,7 +10,7 @@ mobot_wrap.o:mobot_wrap.c ../mobot.h
 	g++ -c mobot_wrap.c $(CFLAGS) -o mobot_wrap.o
 
 mobot.o:../mobot.cpp ../mobot.h
-	g++ -c ../mobot.cpp -o mobot.o
+	g++ -c -DNONRELEASE ../mobot.cpp -o mobot.o
 
 _mobot.so:mobot.o mobot_wrap.o
 	g++ -shared mobot.o mobot_wrap.o $(LIBS) -o _mobot.so
