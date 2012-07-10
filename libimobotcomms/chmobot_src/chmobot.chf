@@ -848,6 +848,42 @@ int CMobot::recordWait() {
     dlrunfun(fptr, &retval, recordWait, this);
     return retval;
 }
+int CMobot::reset() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "reset_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, reset, this);
+    return retval;
+}
+int CMobot::resetToZero() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "resetToZero_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, resetToZero, this);
+    return retval;
+}
+int CMobot::resetToZeroNB() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "resetToZeroNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, resetToZeroNB, this);
+    return retval;
+}
 int CMobot::setJointSafetyAngle(double angle) {
     void *fptr;
     int retval;
@@ -1575,6 +1611,42 @@ int CMobotGroup::moveWait() {
         return -1;
     }
     dlrunfun(fptr, &retval, moveWait, this);
+    return retval;
+}
+int CMobotGroup::reset() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_reset_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, reset, this);
+    return retval;
+}
+int CMobotGroup::resetToZero() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_resetToZero_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, resetToZero, this);
+    return retval;
+}
+int CMobotGroup::resetToZeroNB() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_resetToZeroNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, resetToZeroNB, this);
     return retval;
 }
 int CMobotGroup::setJointSpeed(int id, double speed) {

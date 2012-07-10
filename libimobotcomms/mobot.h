@@ -313,6 +313,9 @@ class CMobot
                           double seconds);
     int recordAnglesEnd(int &num);
     int recordWait();
+    int reset();
+    int resetToZero();
+    int resetToZeroNB();
     int setJointSafetyAngle(double angle);
     int setJointSafetyAngleTimeout(double seconds);
     int setJointSpeed(mobotJointId_t id, double speed);
@@ -399,6 +402,9 @@ class CMobotGroup
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
+    int reset();
+    int resetToZero();
+    int resetToZeroNB();
     int setJointSpeed(mobotJointId_t id, double speed);
     int setJointSpeeds(double speed1, double speed2, double speed3, double speed4);
     int setJointSpeedRatio(mobotJointId_t id, double ratio);
@@ -598,6 +604,9 @@ DLLIMPORT int Mobot_recordAnglesBegin(mobot_t* comms,
                                      double timeInterval);
 DLLIMPORT int Mobot_recordAnglesEnd(mobot_t* comms);
 DLLIMPORT int Mobot_recordWait(mobot_t* comms);
+DLLIMPORT int Mobot_reset(mobot_t* comms);
+DLLIMPORT int Mobot_resetToZero(mobot_t* comms);
+DLLIMPORT int Mobot_resetToZeroNB(mobot_t* comms);
 DLLIMPORT int Mobot_setJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir);
 DLLIMPORT int Mobot_setJointSafetyAngle(mobot_t* comms, double angle);
 DLLIMPORT int Mobot_setJointSafetyAngleTimeout(mobot_t* comms, double seconds);

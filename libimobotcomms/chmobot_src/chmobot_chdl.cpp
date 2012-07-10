@@ -791,6 +791,45 @@ EXPORTCH int recordWait_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int reset_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    retval = mobot->reset();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int resetToZero_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    retval = mobot->resetToZero();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int resetToZeroNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    retval = mobot->resetToZeroNB();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int setJointSafetyAngle_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -1697,6 +1736,45 @@ EXPORTCH int CMG_moveToZeroNB_chdl(void *varg) {
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
     retval = mobot->moveToZeroNB();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMG_reset_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotGroup *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
+    retval = mobot->reset();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMG_resetToZero_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotGroup *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
+    retval = mobot->resetToZero();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMG_resetToZeroNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotGroup *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
+    retval = mobot->resetToZeroNB();
     Ch_VaEnd(interp, ap);
     return retval;
 }

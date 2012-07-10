@@ -1932,6 +1932,32 @@ int Mobot_recordWait(mobot_t* comms)
   return 0;
 }
 
+int Mobot_reset(mobot_t* comms)
+{
+  uint8_t buf[64];
+  int status;
+  status = SendToIMobot(comms, BTCMD(CMD_RESETABSCOUNTER), NULL, 0);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
+  return 0;
+}
+
+int Mobot_resetToZero(mobot_t* comms) {
+  Mobot_reset(comms);
+  return Mobot_moveToZero(comms);
+}
+
+int Mobot_resetToZeroNB(mobot_t* comms) {
+  Mobot_reset(comms);
+  return Mobot_moveToZeroNB(comms);
+}
+
 int Mobot_setJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir)
 {
   uint8_t buf[32];
@@ -3257,6 +3283,21 @@ int CMobot::recordWait()
   return Mobot_recordWait(_comms);
 }
 
+int CMobot::reset()
+{
+  return Mobot_reset(_comms);
+}
+
+int CMobot::resetToZero()
+{
+  return Mobot_resetToZero(_comms);
+}
+
+int CMobot::resetToZeroNB()
+{
+  return Mobot_resetToZeroNB(_comms);
+}
+
 int CMobot::setJointSafetyAngle(double angle)
 {
   angle = DEG2RAD(angle);
@@ -3641,6 +3682,27 @@ int CMobotGroup::moveToZero()
 {
   moveToZeroNB();
   return moveWait();
+}
+
+int CMobotGroup::reset()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->reset();
+  }
+  return 0;
+}
+
+int CMobotGroup::resetToZero()
+{
+  resetToZeroNB();
+  return moveWait();
+}
+int CMobotGroup::resetToZeroNB()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->resetToZeroNB();
+  }
+  return 0;
 }
 
 int CMobotGroup::setJointSpeed(mobotJointId_t id, double speed)

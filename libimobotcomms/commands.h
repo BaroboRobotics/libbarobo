@@ -203,6 +203,12 @@ enum protocol_commands_e {
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_ENABLEBUTTONHANDLER,
 
+/* CMD_RESETABSCOUNTER: Reset the counter which keeps track of
+ * multiple-rotation angles. 
+ * Command Format: [CMD] [0x03] [0x00]
+ * Expected Response: [0x10] [0x03] [0x11] */
+  CMD_RESETABSCOUNTER,
+
   CMD_NUMCOMMANDS
 };
 
