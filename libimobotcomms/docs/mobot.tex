@@ -438,10 +438,10 @@ Appendix \ref{sec:cmobot_api}.
 
 The next line,
 \begin{verbatim}
-mobot.moveToZero();
+mobot.resetToZero();
 \end{verbatim}
-uses the \texttt{moveToZero()} member function. The
-\texttt{moveToZero} function causes the Mobot to move all of its motors to the
+uses the \texttt{resetToZero()} member function. The
+\texttt{resetToZero} function causes the Mobot to move all of its motors to the
 zero position, as shown in Figure \ref{fig:zeroposition}.
 
 The next line of code command joints 1 and 4 to rotate 360 degrees.
@@ -506,7 +506,7 @@ The demos up to this point have ignored the return values of the
 Next following lines,
 \begin{verbatim}
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot.moveToZero();
+mobot.resetToZero();
 
 /* Rotate each of the faceplates by 360 degrees */
 angle1 = 360;
@@ -574,7 +574,7 @@ CMobot mobot;
 mobot.connect();
 
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot.moveToZero();
+mobot.resetToZero();
 \end{verbatim}
 initialize the program, connect to the mobot, and move the mobot into its zero position,
 similar to the previous demos. The next three lines,
@@ -726,7 +726,7 @@ mobot.setJointSpeedRatio(MOBOT_JOINT3, 0.50);
 We then move the mobot to its zero position in preparation for the 
 inchworm gait.
 \begin{verbatim}
-mobot.moveToZero();
+mobot.resetToZero();
 \end{verbatim}
 
 Finally, we perform the inchworm gait four times. The argument for the
@@ -783,7 +783,7 @@ CMobot mobot;
 /* Connect to the paired Mobot */
 mobot.connect()
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot.moveToZero();
+mobot.resetToZero();
 \end{verbatim}
 initialize the proper variables, connect to the remote mobot, and make it move
 to a flat zero position, similar to previous demos.
@@ -895,7 +895,7 @@ Next, we move the mobot into a flat ``zero'' position, as shown in Figure \ref{f
 
 \begin{verbatim}
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot.moveToZero();
+mobot.resetToZero();
 \end{verbatim}
 
 \begin{figure}
@@ -947,7 +947,7 @@ textures and ground surfaces.
 \subsubsection{\texttt{stand2.ch} Explained}
 The first portion of the program performs the necessary setup and connecting,
 similar to the previous demos. Similar to the previous inchworm demo, the
-motor speeds are set to a speed of 90 degrees per second, and the function \texttt{moveToZero()} is
+motor speeds are set to a speed of 90 degrees per second, and the function \texttt{resetToZero()} is
 called to put the mobot into a flat position. Next, the following lines
 are executed:
 \begin{verbatim}
@@ -1037,6 +1037,7 @@ this document.
 \item \texttt{motionTurnLeft()}
 \item \texttt{motionTurnRight()}
 \item \texttt{motionUnstand()}
+\item \texttt{resetToZero()}
 \end{itemize}
 
 \subsection{List of Non-Blocking Movement Functions}
@@ -1061,6 +1062,7 @@ this document.
 \item \texttt{motionTurnLeftNB()}
 \item \texttt{motionTurnRightNB()}
 \item \texttt{motionUnstandNB()}
+\item \texttt{resetToZeroNB()}
 \end{itemize}
 
 \subsection{Blocking and Non-Blocking Demo Programs}
@@ -1179,7 +1181,7 @@ mobot.moveWait();
 
 Finally, we move the mobot into a flat zero position with the following line:
 \begin{verbatim}
-mobot.moveToZero();
+mobot.resetToZero();
 \end{verbatim}
 
 \subsubsection{\texttt{tumble2.ch} Source Code}
@@ -1194,7 +1196,7 @@ CMobot mobot;
 mobot.connect();
 
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot.moveToZero();
+mobot.resetToZero();
 \end{verbatim}
 initialize the proper variables and connections as seen in previous demos.
 
@@ -1249,7 +1251,7 @@ positions with the following lines of code:
 mobot.moveJointToNB(MOBOT_JOINT2, 0);
 mobot.moveJointToNB(MOBOT_JOINT3, 0);
 mobot.moveWait();
-mobot.moveToZero();
+mobot.resetToZero();
 \end{verbatim}
 
 
@@ -1289,12 +1291,12 @@ The order in which they are connected may be modified using the
 \ref{sec:pairing}.
 
 \begin{verbatim}
-  mobot1.moveToZeroNB();
-  mobot2.moveToZeroNB();
+  mobot1.resetToZeroNB();
+  mobot2.resetToZeroNB();
 \end{verbatim}
 These two lines command the two mobots to move to their zero positions.
 Note that these functions are non-blocking. This means that the
-\texttt{moveToZeroNB()} function will return immediately, and will not
+\texttt{resetToZeroNB()} function will return immediately, and will not
 wait for the first mobot to finish completing the motion before 
 commanding the second mobot to begin. In a normal program, this effectively
 causes both mobots to move to their zero positions simultaneously.
@@ -1303,7 +1305,7 @@ causes both mobots to move to their zero positions simultaneously.
   mobot1.moveWait();
   mobot2.moveWait();
 \end{verbatim}
-Since the \texttt{moveToZeroNB()} functions are non-blocking, we would like
+Since the \texttt{resetToZeroNB()} functions are non-blocking, we would like
 the program to wait until the motions are complete before continuing. By
 calling \texttt{moveWait()} on both of the mobots, we can be assured that
 the mobots have finished moving before the program continues.
@@ -1312,7 +1314,7 @@ the mobots have finished moving before the program continues.
   mobot1.motionStandNB();
   mobot2.motionInchwormLeftNB(4);
 \end{verbatim}
-Similar to the calls to \texttt{moveToZeroNB()}, this block of code instructs 
+Similar to the calls to \texttt{resetToZeroNB()}, this block of code instructs 
 the first Mobot to stand and the second Mobot to perform the inchworm motion four times.
 Note that we call the non-blocking versions of the
 functions, \texttt{motionStandNB()} and \texttt{motionInchwormLeftNB()}. Since these functions are
@@ -1404,8 +1406,8 @@ Again, these lines perform two calls to the non-blocking function
 Finally, we move both mobots back to their zero positions, which drops 
 the compound mobot back onto the ground.
 \begin{verbatim}
-mobot1.moveToZeroNB();
-mobot2.moveToZeroNB();
+mobot1.resetToZeroNB();
+mobot2.resetToZeroNB();
 mobot1.moveWait();
 mobot2.moveWait();
 \end{verbatim}
@@ -1700,7 +1702,7 @@ Before we begin the mobot's motion, we first move it to zero position and set th
 joints to the correct speeds with the following lines of code:
 \begin{verbatim}
 /* Start the motion. First, move mobot to zero position */
-mobot.moveToZero();
+mobot.resetToZero();
 /* Set the joint 1 speed to 45 degrees/second */
 mobot.setJointSpeed(MOBOT_JOINT1, speed);
 mobot.setJointSpeed(MOBOT_JOINT4, speed);
@@ -1856,7 +1858,7 @@ and move the mobot into its zero postition.
 mobot.setJointSpeeds(45, 45, 45, 45);
 
 /* Start the motion. First, move mobot to zero position */
-mobot.moveToZero();
+mobot.resetToZero();
 \end{verbatim}
 
 Next, we begin recording the data.
@@ -2002,7 +2004,7 @@ Before beginning the motion, we move the mobot to zero position and set the
 wheel speeds.
 \begin{verbatim}
 /* Start the motion. First, move mobot to zero position */
-mobot.moveToZero();
+mobot.resetToZero();
 /* Set mobot wheel speed */
 mobot.setTwoWheelRobotSpeed(speed, radius);
 \end{verbatim}
