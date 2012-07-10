@@ -33,8 +33,8 @@ group2.addRobot(mobot3);
 group2.addRobot(mobot4);
 
 // move to zero position
-group1.moveToZeroNB();
-group2.moveToZeroNB();
+group1.resetToZeroNB();
+group2.resetToZeroNB();
 group1.moveWait();
 group2.moveWait();
 

@@ -11,7 +11,7 @@ CPlot plot;                        // plotting class
 
 /* connect to the paired Mobot and move to the zero position */
 mobot.connect();
-mobot.moveToZero();
+mobot.resetToZero();
 
 /* set the joints 1 and 4 speed to 45 degrees/second */
 mobot.setJointSpeed(MOBOT_JOINT1, 45);

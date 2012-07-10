@@ -12,8 +12,8 @@ int i;
 mobot1.connect();
 mobot2.connect();
 /* Move both mobots to zero position */
-mobot1.moveToZero();
-mobot2.moveToZero();
+mobot1.resetToZero();
+mobot2.resetToZero();
 /* Relax both mobots */
 mobot1.stopAllJoints();
 mobot2.stopAllJoints();

@@ -6,7 +6,7 @@ CMobot mobot;
 /* Connect to the paired Mobot */
 mobot.connect();
 
-mobot.moveToZero();
+mobot.resetToZero();
 
 /* Rotate each of the faceplates by 720 degrees */
 //mobot.move(720, 0, 0, 720); // Blocking version

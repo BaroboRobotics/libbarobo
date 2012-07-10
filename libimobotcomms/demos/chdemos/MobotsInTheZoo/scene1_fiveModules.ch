@@ -15,11 +15,11 @@ mobot4.connect();
 mobot5.connect();
 
 // initialization
-mobot1.moveToZeroNB();
-mobot2.moveToZeroNB();
+mobot1.resetToZeroNB();
+mobot2.resetToZeroNB();
 mobot3.moveToNB(0, 90, 90, 0);
-mobot4.moveToZeroNB();
-mobot5.moveToZeroNB();
+mobot4.resetToZeroNB();
+mobot5.resetToZeroNB();
 mobot1.moveWait();
 mobot2.moveWait();
 mobot3.moveWait();

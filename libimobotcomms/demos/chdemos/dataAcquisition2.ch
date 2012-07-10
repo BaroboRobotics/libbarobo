@@ -29,7 +29,7 @@ double tolerance = 1.0; /* 1 degree for time shifting */
 mobot.setJointSpeeds(45, 45, 45, 45);
 
 /* Start the motion. First, move mobot to zero position */
-mobot.moveToZero();
+mobot.resetToZero();
 
 /* Start capturing data */
 mobot.recordAngles(time, angles1, angles2, angles3, angles4, numDataPoints, timeInterval);

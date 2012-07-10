@@ -4,7 +4,7 @@
 CMobot mobot;
 
 mobot.connect();
-mobot.moveToZero();
+mobot.resetToZero();
 
 /* set to 50% of the maximum speed */
 mobot.setJointSpeedRatios(0.5, 0.5, 0.5, 0.5);

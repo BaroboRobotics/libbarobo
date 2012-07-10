@@ -32,7 +32,7 @@ CPlot plot1, plot2, plot3;
 double tolerance = 1.0; /* Degrees */
 
 /* Start the motion. First, move mobot to zero position */
-mobot.moveToZero();
+mobot.resetToZero();
 /* Set the joint 1 speed to 45 degrees/second */
 mobot.setJointSpeed(MOBOT_JOINT1, speed);
 mobot.setJointSpeed(MOBOT_JOINT4, speed);

@@ -11,8 +11,8 @@ mobot1.connect();
 mobot2.connect();
 
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot1.moveToZero();
-mobot2.moveToZero();
+mobot1.resetToZero();
+mobot2.resetToZero();
 
 mobot1.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
 mobot2.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);

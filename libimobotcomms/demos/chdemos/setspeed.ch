@@ -8,7 +8,7 @@ CMobot mobot;
 mobot.connect();
 
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot.moveToZero();
+mobot.resetToZero();
 
 double speed, radius;
 mobot.getJointMaxSpeed(MOBOT_JOINT1, speed);

@@ -4,7 +4,7 @@
 #include <mobot.h>
 CMobot mobot1;
 mobot1.connect();
-mobot1.moveToZeroNB();
+mobot1.resetToZeroNB();
 
 // set mobots' speed
 mobot1.setJointSpeedRatios(0.8, 0.8, 0.8, 0.8);

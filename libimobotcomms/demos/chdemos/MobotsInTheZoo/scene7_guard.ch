@@ -9,8 +9,8 @@ mobot1.connect();
 mobot2.connect();
 
 // initialization
-mobot1.moveToZeroNB();
-mobot2.moveToZeroNB();
+mobot1.resetToZeroNB();
+mobot2.resetToZeroNB();
 mobot1.moveWait();
 mobot1.moveWait();
 

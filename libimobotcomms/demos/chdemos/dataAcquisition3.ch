@@ -32,7 +32,7 @@ CPlot plot;
 double tolerance = 1.0; /* Degrees */
 
 /* Start the motion. First, move mobot to zero position */
-mobot.moveToZero();
+mobot.resetToZero();
 /* Set mobot wheel speed */
 mobot.setTwoWheelRobotSpeed(speed, radius);
 

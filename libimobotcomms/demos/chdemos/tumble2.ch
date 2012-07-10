@@ -7,7 +7,7 @@ CMobot mobot;
 mobot.connect();
 
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot.moveToZero();
+mobot.resetToZero();
 
 /* Begin tumbling for "num" times */
 int i, num = 2;
@@ -34,4 +34,4 @@ for(i = 0; i < num; i++) {
 mobot.moveJointToNB(MOBOT_JOINT2, 0);
 mobot.moveJointToNB(MOBOT_JOINT3, 0);
 mobot.moveWait();
-mobot.moveToZero();
+mobot.resetToZero();

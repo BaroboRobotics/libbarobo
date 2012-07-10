@@ -17,8 +17,8 @@ mobot1.connect();
 mobot2.connect();
 
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot1.moveToZeroNB();
-mobot2.moveToZeroNB();
+mobot1.resetToZeroNB();
+mobot2.resetToZeroNB();
 mobot1.moveWait();
 mobot2.moveWait();
 /* inch warm right with two modules 1*/

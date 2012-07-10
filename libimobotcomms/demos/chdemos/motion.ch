@@ -7,7 +7,7 @@ CMobot mobot;
 mobot.connect();
 
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot.moveToZero();
+mobot.resetToZero();
 
 /* test all pre-programmed motions */
 mobot.motionArch(90);

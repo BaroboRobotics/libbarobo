@@ -38,9 +38,9 @@ mobot2.connect();
 mobot3.connect();
 
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot1.moveToZeroNB();
-mobot2.moveToZeroNB();
-mobot3.moveToZeroNB();
+mobot1.resetToZeroNB();
+mobot2.resetToZeroNB();
+mobot3.resetToZeroNB();
 mobot1.moveWait();
 mobot2.moveWait();
 mobot3.moveWait();
@@ -129,9 +129,9 @@ mobot1.moveWait();
 mobot2.moveWait();
 mobot3.moveWait();
 
-mobot1.moveToZeroNB();
-mobot2.moveToZeroNB();
-mobot3.moveToZeroNB();
+mobot1.resetToZeroNB();
+mobot2.resetToZeroNB();
+mobot3.resetToZeroNB();
 mobot1.moveWait();
 mobot2.moveWait();
 mobot3.moveWait();

@@ -11,7 +11,7 @@ mobot.setJointSpeedRatio(MOBOT_JOINT2, 0.50);
 mobot.setJointSpeedRatio(MOBOT_JOINT3, 0.50);
 
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot.moveToZero();
+mobot.resetToZero();
 
 /* Do the inchworm motion four times */
 mobot.motionInchwormLeft(4);

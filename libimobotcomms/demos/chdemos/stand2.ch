@@ -10,7 +10,7 @@ mobot.connect();
 mobot.setJointSpeed(MOBOT_JOINT2, 90);
 mobot.setJointSpeed(MOBOT_JOINT3, 90);
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot.moveToZero();
+mobot.resetToZero();
 
 /* Move the mobot into a fetal position */
 mobot.moveJointTo(MOBOT_JOINT2, -85);

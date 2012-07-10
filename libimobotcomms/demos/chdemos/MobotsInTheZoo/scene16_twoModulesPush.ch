@@ -11,9 +11,9 @@ mobot2.connect();
 mobot3.connect();
 
 // initialization
-mobot1.moveToZeroNB();
-mobot2.moveToZeroNB();
-mobot3.moveToZeroNB();
+mobot1.resetToZeroNB();
+mobot2.resetToZeroNB();
+mobot3.resetToZeroNB();
 
 // set mobots' speed
 mobot1.setJointSpeedRatios(0.8, 0.8, 0.8, 0.8);

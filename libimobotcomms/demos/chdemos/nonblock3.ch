@@ -6,7 +6,7 @@ CMobot mobot;
 /* Connect to the paired Mobot */
 mobot.connect();
 
-mobot.moveToZero();
+mobot.resetToZero();
 
 printf("Rolling 360 degrees.\n");
 mobot.motionRollForward(360);

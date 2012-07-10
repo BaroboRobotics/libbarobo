@@ -11,7 +11,7 @@ if(mobot.connect())
     exit(-1);
 }
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot.moveToZero();
+mobot.resetToZero();
 
 /* Rotate each of the faceplates by 360 degrees */
 angle1 = 360;

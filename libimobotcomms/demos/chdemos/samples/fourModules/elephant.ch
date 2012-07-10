@@ -42,8 +42,8 @@ mobot3.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
 mobot4.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
 /*
 // miove to zero position
-group1.moveToZeroNB();
-group2.moveToZeroNB();
+group1.resetToZeroNB();
+group2.resetToZeroNB();
 group1.moveWait();
 group2.moveWait();
 */

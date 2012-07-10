@@ -49,10 +49,10 @@ mobot3.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
 mobot4.setJointSpeedRatios(0.25, 0.25, 0.25, 0.25);
 /*
 // Set the mobot to "home" position, where all joint angles are 0 degrees.
-mobot1.moveToZeroNB();
-mobot2.moveToZeroNB();
-mobot3.moveToZeroNB();
-mobot4.moveToZeroNB();
+mobot1.resetToZeroNB();
+mobot2.resetToZeroNB();
+mobot3.resetToZeroNB();
+mobot4.resetToZeroNB();
 mobot1.moveWait();
 mobot2.moveWait();
 mobot3.moveWait();

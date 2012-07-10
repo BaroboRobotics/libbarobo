@@ -5,9 +5,9 @@ CMobot mobot;
 
 /* Connect to the paired Mobot */
 mobot.connect();
-mobot.moveToZero();
+mobot.resetToZero();
 
 mobot.moveJointToNB(MOBOT_JOINT2, -85);
 mobot.moveJointToNB(MOBOT_JOINT3, 45);
 mobot.moveWait();
-mobot.moveToZero();
+mobot.resetToZero();

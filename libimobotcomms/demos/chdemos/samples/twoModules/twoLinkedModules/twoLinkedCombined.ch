@@ -17,8 +17,8 @@ mobot1.connect();
 mobot2.connect();
 
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot1.moveToZeroNB();
-mobot2.moveToZeroNB();
+mobot1.resetToZeroNB();
+mobot2.resetToZeroNB();
 mobot1.moveWait();
 mobot2.moveWait();
 /* inch warm right with two modules 1*/
@@ -37,8 +37,8 @@ for( i = 0; i < 3; i++){
 }
 /* lifting with two modules */
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot1.moveToZeroNB();
-mobot2.moveToZeroNB();
+mobot1.resetToZeroNB();
+mobot2.resetToZeroNB();
 mobot1.moveWait();
 mobot2.moveWait();
 
@@ -123,8 +123,8 @@ mobot2.moveWait();
 
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
 
-mobot1.moveToZeroNB();
-mobot2.moveToZeroNB();
+mobot1.resetToZeroNB();
+mobot2.resetToZeroNB();
 mobot1.moveWait();
 mobot2.moveWait();
 

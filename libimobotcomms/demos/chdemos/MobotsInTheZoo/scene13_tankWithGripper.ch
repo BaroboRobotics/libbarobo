@@ -53,8 +53,8 @@ group2.addRobot(mobot3);
 group2.addRobot(mobot6);
 
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-group1.moveToZeroNB();
-group2.moveToZeroNB();
+group1.resetToZeroNB();
+group2.resetToZeroNB();
 group1.moveWait();
 group2.moveWait();
 

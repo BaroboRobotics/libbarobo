@@ -48,8 +48,8 @@ mobot4.connect();
 mobot5.connect();
 
 // let mobot 4 and 5 move to zero
-mobot4.moveToZeroNB();
-mobot5.moveToZeroNB();
+mobot4.resetToZeroNB();
+mobot5.resetToZeroNB();
 mobot4.moveWait();
 mobot5.moveWait();
 
