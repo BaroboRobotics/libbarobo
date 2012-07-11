@@ -11,6 +11,8 @@
 #include <errno.h>
 #include <libgen.h>
 #include <signal.h>
+#include <time.h>
+#include <sys/time.h>
 #else
 #include <windows.h>
 #include <shlobj.h>
@@ -387,11 +389,15 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
  * Perform final connecting tasks common to all connection methods */
 int finishConnect(mobot_t* comms)
 {
-  int i;
+  int i = 0;
   uint8_t buf[256];
   /* Start the comms engine */
   THREAD_CREATE(comms->commsThread, commsEngine, comms);
   while(1) {
+    if(i > 2) {
+      Mobot_disconnect(comms);
+      return -1;
+    }
     if(Mobot_getStatus(comms) == 0) {
       break;
     }
@@ -400,6 +406,7 @@ int finishConnect(mobot_t* comms)
 #else
     Sleep(200);
 #endif
+    i++;
   }
   /* Get the protocol version; make sure it matches ours */
   int version;
@@ -2684,13 +2691,13 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
     ts.tv_sec = mts.tv_sec;
     ts.tv_nsec = mts.tv_nsec;
 #endif
-    /* Add a 4 second timeout */
-    ts.tv_sec += 4;
+    /* Add a timeout */
+    ts.tv_sec += 3;
     rc = pthread_cond_timedwait(
       comms->recvBuf_cond, 
       comms->recvBuf_lock,
       &ts);
-    if(rc == ETIMEDOUT) {
+    if(rc) {
       /* Disconnect and return error */
       MUTEX_UNLOCK(comms->recvBuf_lock);
       MUTEX_UNLOCK(comms->commsLock);
@@ -2700,7 +2707,7 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
 #else
     ResetEvent(*comms->recvBuf_cond);
     ReleaseMutex(*comms->recvBuf_lock);
-    rc = WaitForSingleObject(*comms->recvBuf_cond, 4000);
+    rc = WaitForSingleObject(*comms->recvBuf_cond, 3000);
     if(rc == WAIT_TIMEOUT) {
       MUTEX_UNLOCK(comms->recvBuf_lock);
       MUTEX_UNLOCK(comms->commsLock);
@@ -2820,9 +2827,13 @@ void* commsEngine(void* arg)
 #endif
     /* If we are no longer connected, just return */
     if(comms->connected == 0) {
+      MUTEX_LOCK(comms->commsBusy_lock);
+      comms->commsBusy = 1;
+      COND_SIGNAL(comms->commsBusy_cond);
+      MUTEX_UNLOCK(comms->commsBusy_lock);
       return NULL;
     }
-    if(err < 0) {
+    if(err <= 0) {
       continue;
     }
     /* Received a byte. If it is the first one, check to see if it is a
