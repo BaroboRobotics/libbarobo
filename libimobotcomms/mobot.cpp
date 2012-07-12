@@ -193,6 +193,7 @@ int Mobot_connectWithTCP(mobot_t* comms)
   char buf[MAXDATASIZE];
   struct addrinfo hints, *servinfo, *p;
   int rv;
+  int rc;
   char s[INET6_ADDRSTRLEN];
   memset(&hints, 0, sizeof hints);
   hints.ai_family = AF_UNSPEC;
@@ -237,7 +238,10 @@ int Mobot_connectWithTCP(mobot_t* comms)
   freeaddrinfo(servinfo); // all done with this structure
   comms->socket = sockfd;
   comms->connected = 1;
-  return finishConnect(comms);
+  rc = finishConnect(comms);
+  if(rc) return rc;
+  comms->connectionMode = MOBOTCONNECT_TCP;
+  return 0;
 }
 
 int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
@@ -329,6 +333,9 @@ int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
   /* Wait for the MoBot to get ready */
   //sleep(1);
   status = finishConnect(comms);
+  if(!status) {
+    comms->connectionMode = MOBOTCONNECT_BLUETOOTH;
+  }
   return status;
 #else
   fprintf(stderr, "ERROR: connectWithAddress() is currently unavailable on the Mac platform.\n");
@@ -373,6 +380,7 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   comms->connected = 1;
   status = finishConnect(comms);
   if(status) return status;
+  comms->connectionMode = MOBOTCONNECT_TTY;
   /* Finished connecting. Create the lockfile. */
   lockfile = fopen(lockfileName, "w");
   if(lockfile == NULL) {
@@ -455,13 +463,22 @@ int Mobot_blinkLED(mobot_t* comms, double delay, int numBlinks)
 
 int Mobot_disconnect(mobot_t* comms)
 {
+  int rc = 0;
   comms->connected = 0;
 #ifndef _WIN32
-  shutdown(comms->socket, SHUT_RDWR);
-  if(close(comms->socket)) {
-    /* Error closing file descriptor */
-    return -1;
-  } 
+  switch(comms->connectionMode) {
+    case MOBOTCONNECT_BLUETOOTH:
+    case MOBOTCONNECT_TCP:
+      shutdown(comms->socket, SHUT_RDWR);
+      if(close(comms->socket)) {
+        /* Error closing file descriptor */
+        rc = -1;
+      } 
+      break;
+    case MOBOTCONNECT_TTY:
+    default:
+      rc = 0;
+  }
 #else
   closesocket(comms->socket);
   //CloseHandle((LPVOID)comms->socket);
@@ -469,7 +486,7 @@ int Mobot_disconnect(mobot_t* comms)
   if(g_numConnected > 0) {
     g_numConnected--;
   }
-  return 0;
+  return rc;
 }
 
 int Mobot_enableButtonCallback(mobot_t* comms, void* data, void (*buttonCallback)(void* data, int button, int buttonDown))
@@ -537,6 +554,7 @@ int Mobot_init(mobot_t* comms)
   memset(comms->addr, 0, sizeof(sockaddr_t));
 #endif
   comms->connected = 0;
+  comms->connectionMode = 0;
 #ifdef _WIN32
   WSADATA wsd;
   if(WSAStartup (MAKEWORD(2,2), &wsd) != 0) {
