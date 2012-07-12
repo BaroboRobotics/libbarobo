@@ -91,12 +91,23 @@ typedef double* mobotRecordData_t;
 #define angle2distance(radius, angle) ((radius) * ((angle) * M_PI / 180.0))
 #define distance2angle(radius, distance) (((distance) / (radius)) * 180 / M_PI)
 
+typedef enum mobotConnectionMode_e
+{
+  MOBOTCONNECT_NONE,
+  MOBOTCONNECT_BLUETOOTH,
+  MOBOTCONNECT_TCP,
+  MOBOTCONNECT_TTY,
+  MOBOTCONNECT_NUMMODES
+} mobotConnectionMode_t;
+
+
 #ifndef BR_COMMS_S
 #define BR_COMMS_S
 typedef struct mobot_s
 {
   int socket;
   int connected;
+  int connectionMode;
 #ifndef __MACH__
   sockaddr_t *addr;
 #endif
