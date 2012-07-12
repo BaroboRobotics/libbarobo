@@ -91,12 +91,23 @@ typedef double* mobotRecordData_t;
 #define angle2distance(radius, angle) ((radius) * ((angle) * M_PI / 180.0))
 #define distance2angle(radius, distance) (((distance) / (radius)) * 180 / M_PI)
 
+typedef enum mobotConnectionMode_e
+{
+  MOBOTCONNECT_NONE,
+  MOBOTCONNECT_BLUETOOTH,
+  MOBOTCONNECT_TCP,
+  MOBOTCONNECT_TTY,
+  MOBOTCONNECT_NUMMODES
+} mobotConnectionMode_t;
+
+
 #ifndef BR_COMMS_S
 #define BR_COMMS_S
 typedef struct mobot_s
 {
   int socket;
   int connected;
+  int connectionMode;
 #ifndef __MACH__
   sockaddr_t *addr;
 #endif
@@ -273,10 +284,14 @@ class CMobot
     int moveJoint(mobotJointId_t id, double angle);
     int moveJointNB(mobotJointId_t id, double angle);
     int moveJointTo(mobotJointId_t id, double angle);
+    int moveJointToDirect(mobotJointId_t id, double angle);
     int moveJointToNB(mobotJointId_t id, double angle);
+    int moveJointToDirectNB(mobotJointId_t id, double angle);
     int moveJointWait(mobotJointId_t id);
     int moveTo(double angle1, double angle2, double angle3, double angle4);
+    int moveToDirect(double angle1, double angle2, double angle3, double angle4);
     int moveToNB(double angle1, double angle2, double angle3, double angle4);
+    int moveToDirectNB(double angle1, double angle2, double angle3, double angle4);
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
@@ -391,10 +406,14 @@ class CMobotGroup
     int moveJointContinuousNB(mobotJointId_t id, mobotJointState_t dir);
     int moveJointContinuousTime(mobotJointId_t id, mobotJointState_t dir, double seconds);
     int moveJointTo(mobotJointId_t id, double angle);
+    int moveJointToDirect(mobotJointId_t id, double angle);
     int moveJointToNB(mobotJointId_t id, double angle);
+    int moveJointToDirectNB(mobotJointId_t id, double angle);
     int moveJointWait(mobotJointId_t id);
     int moveTo(double angle1, double angle2, double angle3, double angle4);
+    int moveToDirect(double angle1, double angle2, double angle3, double angle4);
     int moveToNB(double angle1, double angle2, double angle3, double angle4);
+    int moveToDirectNB(double angle1, double angle2, double angle3, double angle4);
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
@@ -552,14 +571,26 @@ DLLIMPORT int Mobot_moveJointContinuousTime(mobot_t* comms,
                                             mobotJointState_t dir, 
                                             double seconds);
 DLLIMPORT int Mobot_moveJointTo(mobot_t* comms, mobotJointId_t id, double angle);
+DLLIMPORT int Mobot_moveJointToDirect(mobot_t* comms, mobotJointId_t id, double angle);
 DLLIMPORT int Mobot_moveJointToNB(mobot_t* comms, mobotJointId_t id, double angle);
+DLLIMPORT int Mobot_moveJointToDirectNB(mobot_t* comms, mobotJointId_t id, double angle);
 DLLIMPORT int Mobot_moveJointWait(mobot_t* comms, mobotJointId_t id);
 DLLIMPORT int Mobot_moveTo(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
                                double angle4);
+DLLIMPORT int Mobot_moveToDirect(mobot_t* comms,
+                               double angle1,
+                               double angle2,
+                               double angle3,
+                               double angle4);
 DLLIMPORT int Mobot_moveToNB(mobot_t* comms,
+                               double angle1,
+                               double angle2,
+                               double angle3,
+                               double angle4);
+DLLIMPORT int Mobot_moveToDirectNB(mobot_t* comms,
                                double angle1,
                                double angle2,
                                double angle3,
