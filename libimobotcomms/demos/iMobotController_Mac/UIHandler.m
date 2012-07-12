@@ -153,7 +153,7 @@
 /* Button Handlers */
 
 - (IBAction) onButtonMoveToZero:(id)sender {
-	Mobot_moveToZeroNB([self comms]);
+	Mobot_resetToZeroNB([self comms]);
 }
 
 - (IBAction) onButtonJoint1Forward:(id)sender {

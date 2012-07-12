@@ -19,6 +19,9 @@ elseif(CMAKE_HOST_APPLE)
 	  mobot.cpp
 	  )
 	target_link_libraries(mobot pthread)
+  install(TARGETS mobot
+          LIBRARY DESTINATION lib)
+  install(FILES mobot.h DESTINATION include)
 else(CMAKE_HOST_WIN32)
 	add_library(mobot SHARED
 	  mobot.cpp
