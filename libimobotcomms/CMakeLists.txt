@@ -19,6 +19,8 @@ elseif(CMAKE_HOST_APPLE)
 	  mobot.cpp
 	  )
 	target_link_libraries(mobot pthread)
+  set_target_properties(mobot PROPERTIES
+    INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
   install(TARGETS mobot
           LIBRARY DESTINATION lib)
   install(FILES mobot.h DESTINATION include)
