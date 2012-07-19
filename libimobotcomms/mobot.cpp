@@ -344,6 +344,20 @@ int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
 }
 
 #ifndef _WIN32
+int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address)
+{
+  char buf[80];
+  char chunk1[3];
+  char chunk2[3];
+  sscanf(address, "%*c%*c:%*c%*c:%*c%*c:%*c%*c:%c%c:%c%c", 
+      &chunk1[0], &chunk1[1],
+      &chunk2[0], &chunk2[1]);
+  chunk1[2] = '\0';
+  chunk2[2] = '\0';
+  sprintf(buf, "/dev/tty.MOBOT-%s%s-SPP", chunk1, chunk2);
+  return Mobot_connectWithTTY(comms, buf);
+}
+
 int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
 {
   FILE *lockfile;
@@ -617,11 +631,14 @@ int Mobot_init(mobot_t* comms)
 
 int Mobot_isConnected(mobot_t* comms)
 {
-  if(comms->connected > 0) {
-    return 1;
-  } else {
+  int status;
+  int rc;
+  if(comms->connected == 0) {
     return 0;
   }
+  rc = Mobot_getStatus(comms);
+  if(rc) {return 0;}
+  return 1;
 }
 
 int Mobot_isMoving(mobot_t* comms)
