@@ -631,11 +631,14 @@ int Mobot_init(mobot_t* comms)
 
 int Mobot_isConnected(mobot_t* comms)
 {
-  if(comms->connected > 0) {
-    return 1;
-  } else {
+  int status;
+  int rc;
+  if(comms->connected == 0) {
     return 0;
   }
+  rc = Mobot_getStatus(comms);
+  if(rc) {return 0;}
+  return 1;
 }
 
 int Mobot_isMoving(mobot_t* comms)
