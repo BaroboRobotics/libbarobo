@@ -137,6 +137,7 @@ typedef struct mobot_s
   char* configFilePath;
   void* itemsToFreeOnExit[64];
   int numItemsToFreeOnExit;
+  char* lockfileName;
 } mobot_t;
 #endif
 
