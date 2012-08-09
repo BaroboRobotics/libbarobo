@@ -117,8 +117,11 @@ typedef struct mobot_s
   MUTEX_T* commsLock;
   int motionInProgress;
   MUTEX_T* recordingLock;
-  int recordingInProgress[4];
+  int recordingEnabled[4];
   int recordingNumValues[4];
+  MUTEX_T* recordingActive_lock;
+  COND_T* recordingActive_cond;
+  int recordingActive[4];
 
   THREAD_T* commsThread;
   uint8_t recvBuf[64];

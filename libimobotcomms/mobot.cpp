@@ -435,11 +435,9 @@ int finishConnect(mobot_t* comms)
   int version;
   version = Mobot_getVersion(comms); 
   if(version != CMD_NUMCOMMANDS) {
-    Mobot_disconnect(comms);
-    fprintf(stderr, "Error. Bluetooth protocol version mismatch.\n");
+    fprintf(stderr, "Warning. Bluetooth protocol version mismatch.\n");
     fprintf(stderr, "Mobot Firmware Protocol Version: %d\n", version);
     fprintf(stderr, "CMobot Library Protocol Version: %d\n", CMD_NUMCOMMANDS);
-    return -6;
   }
   /* Get the joint max speeds */
   for(i = 4; i >= 1; i--) {
@@ -588,7 +586,8 @@ int Mobot_init(mobot_t* comms)
 #endif
   for(i = 0; i < 4; i++) {
     comms->jointSpeeds[i] = DEF_MOTOR_SPEED;
-    comms->recordingInProgress[i] = 0;
+    comms->recordingEnabled[i] = 0;
+    comms->recordingActive[i] = 0;
     /* Set the default maximum speed to something reasonable */
     comms->maxSpeed[i] = DEF_MOTOR_MAXSPEED;
   }
@@ -599,6 +598,10 @@ int Mobot_init(mobot_t* comms)
   MUTEX_INIT(comms->commsLock);
   comms->recordingLock = (MUTEX_T*)malloc(sizeof(MUTEX_T));
   MUTEX_INIT(comms->recordingLock);
+  comms->recordingActive_lock = (MUTEX_T*)malloc(sizeof(MUTEX_T));
+  MUTEX_INIT(comms->recordingActive_lock);
+  comms->recordingActive_cond = (COND_T*)malloc(sizeof(COND_T));
+  COND_INIT(comms->recordingActive_cond);
   comms->motionInProgress = 0;
   MUTEX_NEW(comms->recvBuf_lock);
   MUTEX_INIT(comms->recvBuf_lock);
@@ -1437,7 +1440,7 @@ int Mobot_recordAngle(mobot_t* comms, mobotJointId_t id, double* time, double* a
   THREAD_T thread;
   recordAngleArg_t *rArg;
   int msecs = timeInterval * 1000;
-  if(comms->recordingInProgress[id-1]) {
+  if(comms->recordingEnabled[id-1]) {
     return -1;
   }
   rArg = (recordAngleArg_t*)malloc(sizeof(recordAngleArg_t));
@@ -1447,7 +1450,7 @@ int Mobot_recordAngle(mobot_t* comms, mobotJointId_t id, double* time, double* a
   rArg->angle = angle;
   rArg->num = num;
   rArg->msecs = msecs;
-  comms->recordingInProgress[id-1] = 1;
+  comms->recordingEnabled[id-1] = 1;
   THREAD_CREATE(&thread, Mobot_recordAngleThread, rArg);
   return 0;
 }
@@ -1512,7 +1515,7 @@ void* Mobot_recordAngleThread(void* arg)
       usleep(rArg->msecs*1000 - dt*1000);
     }
   }
-  rArg->comms->recordingInProgress[rArg->id-1] = 0;
+  rArg->comms->recordingEnabled[rArg->id-1] = 0;
 #else
   recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
   int i;
@@ -1542,7 +1545,7 @@ void* Mobot_recordAngleThread(void* arg)
       Sleep(rArg->msecs - dt);
     }
   }
-  rArg->comms->recordingInProgress[rArg->id-1] = 0;
+  rArg->comms->recordingEnabled[rArg->id-1] = 0;
 #endif
   return NULL;
 
@@ -1552,13 +1555,17 @@ void* Mobot_recordAngleThread(void* arg)
 void* Mobot_recordAngleBeginThread(void* arg)
 {
   double angles[4];
-#ifndef _WIN32
   recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
   int i;
+  MUTEX_LOCK(rArg->comms->recordingActive_lock);
+  rArg->comms->recordingActive[rArg->id-1] = 1;
+  COND_SIGNAL(rArg->comms->recordingActive_cond);
+  MUTEX_UNLOCK(rArg->comms->recordingActive_lock);
+#ifndef _WIN32
   struct timespec cur_time, itime;
   unsigned int dt;
   double start_time;
-  for(i = 0; rArg->comms->recordingInProgress[rArg->id-1] ; i++) {
+  for(i = 0; rArg->comms->recordingEnabled[rArg->id-1] ; i++) {
     MUTEX_LOCK(rArg->comms->recordingLock);
     rArg->i = i;
     rArg->comms->recordingNumValues[rArg->id-1] = i;
@@ -1617,12 +1624,10 @@ void* Mobot_recordAngleBeginThread(void* arg)
     MUTEX_UNLOCK(rArg->comms->recordingLock);
   }
 #else
-  recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
-  int i;
   DWORD cur_time, itime;
   unsigned int dt;
   double start_time;
-  for(i = 0; rArg->comms->recordingInProgress[rArg->id-1] ; i++) {
+  for(i = 0; rArg->comms->recordingEnabled[rArg->id-1] ; i++) {
     MUTEX_LOCK(rArg->comms->recordingLock);
     rArg->i = i;
     rArg->comms->recordingNumValues[rArg->id-1] = i;
@@ -1668,6 +1673,10 @@ void* Mobot_recordAngleBeginThread(void* arg)
   rArg->comms->numItemsToFreeOnExit++;
   rArg->comms->itemsToFreeOnExit[rArg->comms->numItemsToFreeOnExit] = (*rArg->angle_p);
   rArg->comms->numItemsToFreeOnExit++;
+  MUTEX_LOCK(rArg->comms->recordingActive_lock);
+  rArg->comms->recordingActive[rArg->id-1] = 0;
+  COND_SIGNAL(rArg->comms->recordingActive_cond);
+  MUTEX_UNLOCK(rArg->comms->recordingActive_lock);
   return NULL;
   free(rArg);
 }
@@ -1681,7 +1690,7 @@ int Mobot_recordAngleBegin(mobot_t* comms,
   THREAD_T thread;
   recordAngleArg_t *rArg;
   int msecs = timeInterval * 1000;
-  if(comms->recordingInProgress[id-1]) {
+  if(comms->recordingEnabled[id-1]) {
     return -1;
   }
   *time = (double*)malloc(sizeof(double) * RECORD_ANGLE_ALLOC_SIZE);
@@ -1693,7 +1702,7 @@ int Mobot_recordAngleBegin(mobot_t* comms,
   rArg->angle_p = angle;
   rArg->num = RECORD_ANGLE_ALLOC_SIZE;
   rArg->msecs = msecs;
-  comms->recordingInProgress[id-1] = 1;
+  comms->recordingEnabled[id-1] = 1;
   THREAD_CREATE(&thread, Mobot_recordAngleBeginThread, rArg);
   return 0;
 }
@@ -1701,12 +1710,18 @@ int Mobot_recordAngleBegin(mobot_t* comms,
 int Mobot_recordAngleEnd(mobot_t* comms, mobotJointId_t id, int *num)
 {
   /* Make sure it was recording in the first place */
-  if(comms->recordingInProgress[id-1] == 0) {
+  if(comms->recordingEnabled[id-1] == 0) {
     return -1;
   }
   MUTEX_LOCK(comms->recordingLock);
-  comms->recordingInProgress[id-1] = 0;
+  comms->recordingEnabled[id-1] = 0;
   MUTEX_UNLOCK(comms->recordingLock);
+  /* Wait for recording to finish */
+  MUTEX_LOCK(comms->recordingActive_lock);
+  while(comms->recordingActive != 0) {
+    COND_WAIT(comms->recordingActive_cond, comms->recordingActive_lock);
+  }
+  MUTEX_UNLOCK(comms->recordingActive_lock);
   *num = comms->recordingNumValues[id-1];
   return 0;
 }
@@ -1726,7 +1741,7 @@ int Mobot_recordAngles(mobot_t* comms,
   recordAngleArg_t *rArg;
   int msecs = timeInterval * 1000;
   for(i = 0; i < 4; i++) {
-    if(comms->recordingInProgress[i]) {
+    if(comms->recordingEnabled[i]) {
       return -1;
     }
   }
@@ -1740,7 +1755,7 @@ int Mobot_recordAngles(mobot_t* comms,
   rArg->num = num;
   rArg->msecs = msecs;
   for(i = 0; i < 4; i++) {
-    comms->recordingInProgress[i] = 1;
+    comms->recordingEnabled[i] = 1;
   }
   THREAD_CREATE(&thread, recordAnglesThread, rArg);
   return 0;
@@ -1797,7 +1812,7 @@ void* recordAnglesThread(void* arg)
     }
   }
   for(i = 0; i < 4; i++) {
-    rArg->comms->recordingInProgress[i] = 0;
+    rArg->comms->recordingEnabled[i] = 0;
   }
 #else
   recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
@@ -1830,7 +1845,7 @@ void* recordAnglesThread(void* arg)
     }
   }
   for(i = 0; i < 4; i++) {
-    rArg->comms->recordingInProgress[i] = 0;
+    rArg->comms->recordingEnabled[i] = 0;
   }
 #endif
   return NULL;
@@ -1839,14 +1854,20 @@ void* recordAnglesThread(void* arg)
 
 void* Mobot_recordAnglesBeginThread(void* arg)
 {
-#ifndef _WIN32
-  recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
   int i;
+  recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
+  MUTEX_LOCK(rArg->comms->recordingActive_lock);
+  for(i = 0; i < 4; i++) {
+    rArg->comms->recordingActive[i] = 1;
+  }
+  COND_SIGNAL(rArg->comms->recordingActive_cond);
+  MUTEX_UNLOCK(rArg->comms->recordingActive_lock);
+#ifndef _WIN32
   struct timespec cur_time, itime;
   unsigned int dt;
   double start_time;
   MUTEX_LOCK(rArg->comms->recordingLock);
-  for(i = 0; rArg->comms->recordingInProgress[0] ; i++) {
+  for(i = 0; rArg->comms->recordingEnabled[0] ; i++) {
     MUTEX_UNLOCK(rArg->comms->recordingLock);
     rArg->i = i;
     rArg->comms->recordingNumValues[0] = i;
@@ -1920,12 +1941,10 @@ void* Mobot_recordAnglesBeginThread(void* arg)
     MUTEX_LOCK(rArg->comms->recordingLock);
   }
 #else
-  recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
-  int i;
   DWORD cur_time, itime;
   unsigned int dt;
   double start_time;
-  for(i = 0; rArg->comms->recordingInProgress[0] ; i++) {
+  for(i = 0; rArg->comms->recordingEnabled[0] ; i++) {
     MUTEX_LOCK(rArg->comms->recordingLock);
     rArg->i = i;
     rArg->comms->recordingNumValues[0] = i;
@@ -1992,6 +2011,12 @@ void* Mobot_recordAnglesBeginThread(void* arg)
   rArg->comms->numItemsToFreeOnExit++;
   rArg->comms->itemsToFreeOnExit[rArg->comms->numItemsToFreeOnExit] = (*rArg->angle4_p);
   rArg->comms->numItemsToFreeOnExit++;
+  MUTEX_LOCK(rArg->comms->recordingActive_lock);
+  for(i = 0; i < 4; i++) {
+    rArg->comms->recordingActive[i] = 0;
+  }
+  COND_SIGNAL(rArg->comms->recordingActive_cond);
+  MUTEX_UNLOCK(rArg->comms->recordingActive_lock);
   return NULL;
   free(rArg);
 }
@@ -2009,7 +2034,7 @@ int Mobot_recordAnglesBegin(mobot_t* comms,
   int msecs = timeInterval * 1000;
   int i;
   for(i = 0; i < 4; i++) {
-    if(comms->recordingInProgress[i]) {
+    if(comms->recordingEnabled[i]) {
       return -1;
     }
   }
@@ -2028,7 +2053,7 @@ int Mobot_recordAnglesBegin(mobot_t* comms,
   rArg->num = RECORD_ANGLE_ALLOC_SIZE;
   rArg->msecs = msecs;
   for(i = 0; i < 4; i++) {
-    comms->recordingInProgress[i] = 1;
+    comms->recordingEnabled[i] = 1;
   }
   THREAD_CREATE(&thread, Mobot_recordAnglesBeginThread, rArg);
   return 0;
@@ -2039,15 +2064,33 @@ int Mobot_recordAnglesEnd(mobot_t* comms, int* num)
   /* Make sure it was recording in the first place */
   int i;
   for(i = 0; i < 4; i++) {
-    if(comms->recordingInProgress[i] == 0) {
+    if(comms->recordingEnabled[i] == 0) {
       return -1;
     }
   }
   MUTEX_LOCK(comms->recordingLock);
   for(i = 0; i < 4; i++) {
-    comms->recordingInProgress[i] = 0;
+    comms->recordingEnabled[i] = 0;
   }
   MUTEX_UNLOCK(comms->recordingLock);
+  /* Wait for recording to finish */
+  MUTEX_LOCK(comms->recordingActive_lock);
+  int flag = 0;
+  for(i = 0; i < 4; i++) {
+    if(comms->recordingActive[i]) {
+      flag = 1;
+    }
+  }
+  while(flag) {
+    COND_WAIT(comms->recordingActive_cond, comms->recordingActive_lock);
+    flag = 0;
+    for(i = 0; i < 4; i++) {
+      if(comms->recordingActive[i]) {
+        flag = 1;
+      }
+    }
+  }
+  MUTEX_UNLOCK(comms->recordingActive_lock);
   *num = comms->recordingNumValues[0];
   return 0;
 }
@@ -2056,7 +2099,7 @@ int Mobot_recordWait(mobot_t* comms)
 {
   int i;
   for(i = 0; i < 4; i++) {
-    while(comms->recordingInProgress[i]) {
+    while(comms->recordingEnabled[i]) {
 #ifndef _WIN32
       usleep(100000);
 #else
