@@ -1845,8 +1845,9 @@ void* Mobot_recordAnglesBeginThread(void* arg)
   struct timespec cur_time, itime;
   unsigned int dt;
   double start_time;
+  MUTEX_LOCK(rArg->comms->recordingLock);
   for(i = 0; rArg->comms->recordingInProgress[0] ; i++) {
-    MUTEX_LOCK(rArg->comms->recordingLock);
+    MUTEX_UNLOCK(rArg->comms->recordingLock);
     rArg->i = i;
     rArg->comms->recordingNumValues[0] = i;
     /* Make sure we have enough space left in the buffer */
@@ -1916,7 +1917,7 @@ void* Mobot_recordAnglesBeginThread(void* arg)
     if(dt < (rArg->msecs)) {
       usleep(rArg->msecs*1000 - dt*1000);
     }
-    MUTEX_UNLOCK(rArg->comms->recordingLock);
+    MUTEX_LOCK(rArg->comms->recordingLock);
   }
 #else
   recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
