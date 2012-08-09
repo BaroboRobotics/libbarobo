@@ -28,58 +28,58 @@
 #define BTCMD(cmd) ((cmd) + CMD_START)
 
 enum protocol_commands_e {
-/* CMD_STATUS: Get the Mobot's Status 
+/* CMD_STATUS: Get the Mobot's Status 0
  * Command format: [CMD] [0x03] [0x00]
  * Expected response: [0x10] [0x03] [0x11]*/
   CMD_STATUS,
 
-/* CMD_DEMO: Begin the built-in demo routine.
+/* CMD_DEMO: Begin the built-in demo routine. 1
  * Command format: [CMD] [0x03] [0x00]
  * Expected response: [0x10] [0x03] [0x11]*/
   CMD_DEMO,
 
-/* CMD_SETMOTORDIR: Set the motor's direction.
+/* CMD_SETMOTORDIR: Set the motor's direction. 2
  * Command format: [CMD] [0x05] [motor_id: 1 byte] [direction: 1 byte] [0x00]
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_SETMOTORDIR,
 
-/* CMD_GETMOTORDIR: Get the motor's direction.
+/* CMD_GETMOTORDIR: Get the motor's direction. 3
  * Command format: [CMD] [0x04] [motor_id: 1 byte] [0x00]
  * Expected Response: [0x10] [0x04] [motor_dir: 1 byte] [0x11] */
   CMD_GETMOTORDIR,
 
-/* CMD_SETMOTORSPEED: Set the motor's speed.
+/* CMD_SETMOTORSPEED: Set the motor's speed. 4
  * Command format: [CMD] [0x08] [motor_id: 1 byte] [motor_speed: 4 byte float] [0x00]
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_SETMOTORSPEED,
 
-/* CMD_GETMOTORSPEED: Get the motor's speed.
+/* CMD_GETMOTORSPEED: Get the motor's speed. 5
  * Command format: [CMD] [0x04] [motor_id: 1 byte] [0x00]
  * Expected Response: [0x10] [0x07] [motor speed: 4 byte float] [0x11] */
   CMD_GETMOTORSPEED,
 
-/* CMD_SETMOTORANGLES: Set the motor joint angles.
+/* CMD_SETMOTORANGLES: Set the motor joint angles. 6
  * Command format: [CMD] [0x13] [0x????????] [0x????????] [0x????????] [0x????????]  [0x00]
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_SETMOTORANGLES,
 
-/* CMD_SETMOTORANGLES: Set the motor joint angles.
+/* CMD_SETMOTORANGLES: Set the motor joint angles. 7
  * Command format: [CMD] [0x13] [0x????????] [0x????????] [0x????????] [0x????????]  [0x00]
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_SETMOTORANGLESABS,
 
-/* CMD_SETMOTORANGLESDIRECT: Set the motor joint angles. Motors explicitely
+/* CMD_SETMOTORANGLESDIRECT: Set the motor joint angles. Motors explicitely 8
  * move in whatever direction is closest to the motor goal position. 
  * Command format: [CMD] [0x13] [0x????????] [0x????????] [0x????????] [0x????????]  [0x00]
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_SETMOTORANGLESDIRECT,
 
-/* CMD_SETMOTORANGLESPID: Set the motor joint angles.
+/* CMD_SETMOTORANGLESPID: Set the motor joint angles. 9
  * Command format: [CMD] [0x13] [0x????????] [0x????????] [0x????????] [0x????????]  [0x00]
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_SETMOTORANGLESPID,
 
-/* CMD_GETMOTORANGLES: Get the motor joint angles.
+/* CMD_GETMOTORANGLES: Get the motor joint angles. 10
  * Command format: [CMD] [0x03] [0x00]
  * Expected Response: [0x10] [0x13] [16 bytes of 4 float values] [0x11] */
   CMD_GETMOTORANGLES,
