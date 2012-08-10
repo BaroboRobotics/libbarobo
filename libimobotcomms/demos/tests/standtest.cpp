@@ -2,12 +2,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define ANGLE_TOLERANCE 2.0
+#define ANGLE_TOLERANCE 3.0
 #define ABS(x) ((x) < 0? -1*(x) : (x))
 
 int checkAngle(double measuredAngle, double expectedAngle)
 {
   if(ABS(measuredAngle-expectedAngle) > ANGLE_TOLERANCE) {
+    fprintf(stderr, "Angle Mismatch: %lf , expected %lf\n", measuredAngle, expectedAngle);
     return -1;
   } else {
     return 0;
