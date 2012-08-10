@@ -7,18 +7,20 @@
 
 int checkAngle(double measuredAngle, double expectedAngle)
 {
-  if(ABS(measuredAngle-expectedAngle) > 2.0) {
+  if(ABS(measuredAngle-expectedAngle) > ANGLE_TOLERANCE) {
     return -1;
   } else {
     return 0;
   }
 }
 
-void errMsg(const char* msg)
+#define ERRMSG(msg) errMsg(msg, __FILE__, __LINE__)
+
+void errMsg(const char* msg, const char* file, int line)
 {
   char* buf;
   buf = (char*)malloc(sizeof(char)*(strlen(msg)+100));
-  sprintf(buf, "Error: %s %s:%d\n", msg, __FILE__, __LINE__);
+  sprintf(buf, "Error: %s %s:%d\n", msg, file, line);
   fprintf(stderr, "%s", buf);
   free(buf);
 }
@@ -29,13 +31,13 @@ int main()
   CMobot mobot;
   mobot.connect();
   if(!mobot.isConnected()) {
-    errMsg("Connect failed");
+    ERRMSG("Connect failed");
     return -1;
   }
   mobot.disconnect();
   mobot.connect();
   if(!mobot.isConnected()) {
-    errMsg("Reconnect failed");
+    ERRMSG("Reconnect failed");
     return -1;
   }
 
@@ -43,21 +45,21 @@ int main()
   mobot.resetToZero();
 
   /* Begin testing. First, rotate joint 2 */
-  mobot.moveJointToNB(MOBOT_JOINT2, DEG2RAD(-85));
+  mobot.moveJointToNB(MOBOT_JOINT2, -85);
   /* This should take about 2 seconds */
   usleep(1000000);
   if (!mobot.isMoving()) {
-    errMsg("Error: Robot should still be moving.");
+    ERRMSG("Error: Robot should still be moving.");
     return -1;
   }
   usleep(1000000);
   if (mobot.isMoving()) {
-    errMsg("Error: Robot did not reach joint angle in time.");
+    ERRMSG("Error: Robot did not reach joint angle in time.");
     return -1;
   }
   mobot.getJointAngle(MOBOT_JOINT2, angles[0]);
   if(checkAngle(angles[0], -85)) {
-    errMsg("Angle mismatch");
+    ERRMSG("Angle mismatch");
     return -1;
   } 
 
@@ -69,20 +71,22 @@ int main()
   /* Check the joint angles */
   mobot.getJointAngles(angles[0], angles[1], angles[2], angles[3]);
   if(checkAngle(angles[0], 45)) {
-    errMsg("Angle Mismatch");
+    ERRMSG("Angle Mismatch");
     return -1;
   }
   if(checkAngle(angles[1], 20)) {
-    errMsg("Angle Mismatch");
+    ERRMSG("Angle Mismatch");
     return -1;
   }
   if(checkAngle(angles[2], 70)) {
-    errMsg("Angle Mismatch");
+    ERRMSG("Angle Mismatch");
     return -1;
   }
   if(checkAngle(angles[3], 0)) {
-    errMsg("Angle Mismatch");
+    ERRMSG("Angle Mismatch");
     return -1;
   }
+
+  mobot.disconnect();
   return 0;
 }
