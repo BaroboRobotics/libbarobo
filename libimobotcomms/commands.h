@@ -209,6 +209,16 @@ enum protocol_commands_e {
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_RESETABSCOUNTER,
 
+/* CMD_GETHWREV: Get the hardware revision number
+ * Command Format: [CMD] [0x03] [0x00]
+ * Expected Response: [0x10] [0x04] [1 byte version] [0x11] */
+  CMD_GETHWREV,
+
+/* CMD_SETHWREV: Set the hardware revision number
+ * Command Format: [CMD] [0x04] [1 byte Rev number] [0x00]
+ * Expected Response: [0x10] [0x03] [0x11] */
+  CMD_SETHWREV,
+
   CMD_NUMCOMMANDS
 };
 
