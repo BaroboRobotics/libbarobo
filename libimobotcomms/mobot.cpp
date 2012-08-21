@@ -370,6 +370,7 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   lockfile = fopen(lockfileName, "r");
   if(lockfile == NULL) {
     /* Lock file does not exist. Proceed. */
+    comms->lockfileName = strdup(lockfileName);
   } else {
     /* Lockfile exists. Need to check PID in the lock file and see if that
      * process is still running. */
@@ -490,6 +491,16 @@ int Mobot_disconnect(mobot_t* comms)
       } 
       break;
     case MOBOTCONNECT_TTY:
+      if(comms->lockfileName != NULL) {
+        unlink(comms->lockfileName);
+        free(comms->lockfileName);
+        comms->lockfileName = NULL;
+      }
+      pthread_kill(*comms->commsThread, SIGINT);
+      if(close(comms->socket)) {
+        rc = -1;
+      }
+      break;
     default:
       rc = 0;
   }
@@ -2923,6 +2934,10 @@ int RecvFromIMobot2(mobot_t* comms, char* buf, int size)
   }
 }
 
+void sigint_handler(int sig)
+{
+}
+
 /* The comms engine will watch the incoming comm channel for any message. If a
  * message is expected, it will get the data to RecvFromIMobot(). If it was
  * triggered by an event, then the appropriate callback will be called. */
@@ -2933,11 +2948,22 @@ void* commsEngine(void* arg)
   int bytes = 0;
   int err;
   int isResponse;
+  struct sigaction int_handler;
+  int_handler.sa_handler = sigint_handler;
+  sigaction(SIGINT, &int_handler, 0);
 
   while(1) {
     /* Try and receive a byte */
 #ifndef _WIN32
     err = read(comms->socket, &byte, 1);
+    /* Check to see if we were interrupted */
+    if(err) {
+      if(errno == EINTR) {
+        if(comms->connected == 0) {
+          break;
+        }
+      }
+    }
 #else
     err = recvfrom(comms->socket, (char*)&byte, 1, 0, (struct sockaddr*)0, 0);
 #endif
