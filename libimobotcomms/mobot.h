@@ -515,9 +515,11 @@ DLLIMPORT int Mobot_disableButtonCallback(mobot_t* comms);
 DLLIMPORT int Mobot_init(mobot_t* comms);
 DLLIMPORT int Mobot_isConnected(mobot_t* comms);
 DLLIMPORT int Mobot_isMoving(mobot_t* comms);
+DLLIMPORT int Mobot_protocolVersion();
 DLLIMPORT int Mobot_getButtonVoltage(mobot_t* comms, double *voltage);
 DLLIMPORT const char* Mobot_getConfigFilePath();
 DLLIMPORT int Mobot_getEncoderVoltage(mobot_t* comms, int pinNumber, double *voltage);
+DLLIMPORT int Mobot_getHWRev(mobot_t* comms, int* rev);
 DLLIMPORT int Mobot_getJointAngle(mobot_t* comms, mobotJointId_t id, double *angle);
 DLLIMPORT int Mobot_getJointAnglesTime(mobot_t* comms, 
                                        double *time, 
@@ -632,6 +634,7 @@ DLLIMPORT int Mobot_recordWait(mobot_t* comms);
 DLLIMPORT int Mobot_reset(mobot_t* comms);
 DLLIMPORT int Mobot_resetToZero(mobot_t* comms);
 DLLIMPORT int Mobot_resetToZeroNB(mobot_t* comms);
+DLLIMPORT int Mobot_setHWRev(mobot_t* comms, uint8_t rev);
 DLLIMPORT int Mobot_setJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir);
 DLLIMPORT int Mobot_setJointSafetyAngle(mobot_t* comms, double angle);
 DLLIMPORT int Mobot_setJointSafetyAngleTimeout(mobot_t* comms, double seconds);

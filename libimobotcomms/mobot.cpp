@@ -672,6 +672,11 @@ int Mobot_isMoving(mobot_t* comms)
   return moving;
 }
 
+int Mobot_protocolVersion()
+{
+  return CMD_NUMCOMMANDS;
+}
+
 int Mobot_getButtonVoltage(mobot_t* comms, double *voltage)
 {
   uint8_t buf[32];
@@ -733,6 +738,23 @@ int Mobot_getEncoderVoltage(mobot_t* comms, int pinNumber, double *voltage)
   /* Copy the data */
   memcpy(&f, &buf[2], 4);
   *voltage = f;
+  return 0;
+}
+
+int Mobot_getHWRev(mobot_t* comms, int* rev)
+{
+  uint8_t buf[20];
+  int status;
+  if(status = SendToIMobot(comms, BTCMD(CMD_GETHWREV), NULL, 0)) {
+    return status;
+  }
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  if(buf[0] != RESP_OK) {
+    return -1;
+  }
+  *rev = buf[2];
   return 0;
 }
 
@@ -2093,6 +2115,23 @@ int Mobot_resetToZero(mobot_t* comms) {
 int Mobot_resetToZeroNB(mobot_t* comms) {
   Mobot_reset(comms);
   return Mobot_moveToZeroNB(comms);
+}
+
+int Mobot_setHWRev(mobot_t* comms, uint8_t rev)
+{
+  uint8_t buf[20];
+  int status;
+  buf[0] = rev;
+  if(status = SendToIMobot(comms, BTCMD(CMD_GETHWREV), buf, 1)) {
+    return status;
+  }
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  if(buf[0] != RESP_OK) {
+    return -1;
+  }
+  return 0;
 }
 
 int Mobot_setJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir)
