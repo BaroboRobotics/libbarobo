@@ -43,6 +43,7 @@
 #define ABS(x) ((x)<0?-(x):(x))
 
 int g_numConnected = 0;
+int g_disconnectSignal = 0;
 
 double deg2rad(double deg)
 {
@@ -496,6 +497,8 @@ int Mobot_disconnect(mobot_t* comms)
         free(comms->lockfileName);
         comms->lockfileName = NULL;
       }
+      while(g_disconnectSignal);
+      g_disconnectSignal = 1;
       pthread_kill(*comms->commsThread, SIGINT);
       if(close(comms->socket)) {
         rc = -1;
@@ -2936,6 +2939,10 @@ int RecvFromIMobot2(mobot_t* comms, char* buf, int size)
 
 void sigint_handler(int sig)
 {
+  if(!g_disconnectSignal) {
+    exit(0);
+  }
+  g_disconnectSignal = 0;
 }
 
 /* The comms engine will watch the incoming comm channel for any message. If a
