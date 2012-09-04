@@ -71,6 +71,23 @@ EXPORTCH int connectWithAddress_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int connectWithBluetoothAddress_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    char *address;
+    int channel;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    address = Ch_VaArg(interp, ap, char *);
+    channel = Ch_VaArg(interp, ap, int);
+    retval = mobot->connectWithBluetoothAddress(address, channel);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int disconnect_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

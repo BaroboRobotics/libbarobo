@@ -247,6 +247,11 @@ int Mobot_connectWithTCP(mobot_t* comms)
 
 int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
 {
+  return Mobot_connectWithBluetoothAddress(comms, address, channel);
+}
+
+int Mobot_connectWithBluetoothAddress(mobot_t* comms, const char* address, int channel)
+{
   int err = -1;
 #ifndef __MACH__
   int status;
@@ -3150,6 +3155,11 @@ int CMobot::connect()
 int CMobot::connectWithAddress(const char* address, int channel)
 {
   return Mobot_connectWithAddress(_comms, address, channel);
+}
+
+int CMobot::connectWithBluetoothAddress(const char* address, int channel)
+{
+  return Mobot_connectWithBluetoothAddress(_comms, address, channel);
 }
 
 #ifndef _WIN32
