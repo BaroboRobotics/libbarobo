@@ -190,6 +190,11 @@ int Mobot_connect(mobot_t* comms)
 #define MAXDATASIZE 128
 int Mobot_connectWithTCP(mobot_t* comms)
 {
+  return Mobot_connectWithIPAddress(comms, "localhost", PORT);
+}
+
+int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], const char port[])
+{
   int sockfd, numbytes;  
   char buf[MAXDATASIZE];
   struct addrinfo hints, *servinfo, *p;
@@ -200,7 +205,7 @@ int Mobot_connectWithTCP(mobot_t* comms)
   hints.ai_family = AF_UNSPEC;
   hints.ai_socktype = SOCK_STREAM;
 
-  if ((rv = getaddrinfo("localhost", PORT, &hints, &servinfo)) != 0) {
+  if ((rv = getaddrinfo(address, port, &hints, &servinfo)) != 0) {
     //fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
     return -1;
   }
@@ -3160,6 +3165,11 @@ int CMobot::connectWithAddress(const char* address, int channel)
 int CMobot::connectWithBluetoothAddress(const char* address, int channel)
 {
   return Mobot_connectWithBluetoothAddress(_comms, address, channel);
+}
+
+int CMobot::connectWithIPAddress(const char* address, const char port[])
+{
+  return Mobot_connectWithIPAddress(_comms, address, port);
 }
 
 #ifndef _WIN32

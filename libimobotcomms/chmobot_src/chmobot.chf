@@ -91,6 +91,18 @@ int CMobot::connectWithBluetoothAddress(char *address, int channel) {
     dlrunfun(fptr, &retval, connectWithBluetoothAddress, this, address, channel);
     return retval;
 }
+int CMobot::connectWithIPAddress(char *address, char* port) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "connectWithIPAddress_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, connectWithIPAddress, this, address, port);
+    return retval;
+}
 int CMobot::disconnect() {
     void *fptr;
     int retval;
