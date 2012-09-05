@@ -2,22 +2,21 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in} \\
 \noindent
-{\LARGE \texttt{CMobot::connectWithAddress()}\index{CMobot::connectWithAddress()}}\\
+{\LARGE \texttt{CMobot::connectWithIPAddress()}\index{CMobot::connectWithIPAddress()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{connectWithAddress()}
+\addcontentsline{toc}{section}{connectWithIPAddress()}
 
 \noindent
 {\bf Synopsis}
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::connectWithAddress(char address[], int channel);
+int CMobot::connectWithIPAddress(char address[], char port[]);
 \end{verbatim}
 
 \noindent
 {\bf Purpose}\\
-Connect to a remote mobot via Bluetooth by specifying the specific Bluetooth
-address of the device.\\
+Connect to a remote mobot connected to a remote computer over the internet.\\
 
 \noindent
 {\bf Return Value}\\
@@ -29,9 +28,8 @@ The function returns 0 on success and non-zero otherwise.\\
 \begin{description}
 \item               
 \begin{tabular}{p{10 mm}p{145 mm}}
-\texttt{address} & The Bluetooth address of the mobot. \\
-\texttt{channel} & The Bluetooth channel that the listening program is
-listening on. The default channel is channel 1. \\
+\texttt{address} & The IP address of the remote computer. \\
+\texttt{port} & . \\
 \end{tabular}
 \end{description}
 
