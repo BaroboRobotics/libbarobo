@@ -3034,9 +3034,11 @@ void* commsEngine(void* arg)
   int bytes = 0;
   int err;
   int isResponse;
+#ifndef _WIN32
   struct sigaction int_handler;
   int_handler.sa_handler = sigint_handler;
   sigaction(SIGINT, &int_handler, 0);
+#endif
 
   while(1) {
     /* Try and receive a byte */
