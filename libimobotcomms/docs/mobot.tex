@@ -324,10 +324,16 @@ the ``Pose Teaching'' tab. Once you have switched tabs, the function of the
 mobot's on-board buttons will change to Pose Teaching mode. In Pose Teaching mode,
 the mobot buttons have the following functions:
 \begin{itemize}
-\item Button A: Record the current positions of all connected mobots.
+\item Button A: Record pose. This takes the position readings of all of the
+connected Mobots and saves them as a single recorded pose.
 \item Button B: Play the current recorded motions in order, or stop if motions are currently being played.
-\item Buttons A and B together: Clear all recorded motions
+\item Buttons A and B together: Clear all of the recorded poses.
 \end{itemize}
+
+Note that when the Mobots are being used in this mode, all of the Mobot buttons are
+connected together and do the same functions. In other words, if both Mobot1 and Mobot2 are connected, pressing the "A" button
+on Mobot1 is identical to pressing the "A" button on Mobot2; They will both result
+in a new recorded pose of both mobots being created in RoboMancer.
 
 Each time a pose is recorded, an indicator for that pose will appear in the dialog. As the
 poses are played, the pose icon changes for each pose to indicate the current pose being played.
