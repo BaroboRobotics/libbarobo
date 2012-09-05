@@ -420,11 +420,11 @@ is also possible to connect to Mobots which are not paired with the
 computer. This method is necessary for connecting to multiple
 Mobots simultaneously, as only a single Mobot may be paired with the
 computer at a time. The second method uses the function
-\texttt{connectWithAddress()}, and its default usage is as such:
+\texttt{connectWithBluetoothAddress()}, and its default usage is as such:
 \begin{verbatim}
 string_t address = "11:22:33:44:55:66";
 int defaultChannel = 1;
-mobot.connectWithAddress(address, defaultChannel);
+mobot.connectWithBluetoothAddress(address, defaultChannel);
 \end{verbatim}
 The string \texttt{"11:22:33:44:55:66"} represents the Bluetooth address
 of the Mobot, which must be known in advance. The channel number \texttt{1} 

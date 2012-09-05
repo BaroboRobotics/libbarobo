@@ -237,6 +237,8 @@ class CMobot
    */
     int connect();
     int connectWithAddress(const char address[], int channel);
+    int connectWithBluetoothAddress(const char address[], int channel);
+    int connectWithIPAddress(const char address[], const char port[]);
 #ifndef _WIN32
     int connectWithTTY(const char ttyfilename[]);
 #endif
@@ -494,11 +496,14 @@ extern "C" {
 DLLIMPORT int Mobot_blinkLED(mobot_t* comms, double delay, int numBlinks);
 DLLIMPORT int Mobot_connect(mobot_t* comms);
 DLLIMPORT int Mobot_connectWithTCP(mobot_t* comms);
+DLLIMPORT int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], const char port[]);
 #ifndef _WIN32
 DLLIMPORT int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address);
 DLLIMPORT int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename);
 #endif
 DLLIMPORT int Mobot_connectWithAddress(
+    mobot_t* comms, const char* address, int channel);
+DLLIMPORT int Mobot_connectWithBluetoothAddress(
     mobot_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_disconnect(mobot_t* comms);
 DLLIMPORT int Mobot_driveJointToDirect(mobot_t* comms, mobotJointId_t id, double angle);

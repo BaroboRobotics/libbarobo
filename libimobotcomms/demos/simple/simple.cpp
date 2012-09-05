@@ -8,8 +8,7 @@ int main()
 
   /* Connect to the paired MoBot */
   mobot.connect();
-  mobot.moveJointContinuousNB(MOBOT_JOINT1, MOBOT_FORWARD);
-  sleep(1);
+  mobot.move(720, 0, 0, 720);
   mobot.stopAllJoints();
 
   return 0;
