@@ -1755,7 +1755,7 @@ int Mobot_recordAngleEnd(mobot_t* comms, mobotJointId_t id, int *num)
   MUTEX_UNLOCK(comms->recordingLock);
   /* Wait for recording to finish */
   MUTEX_LOCK(comms->recordingActive_lock);
-  while(comms->recordingActive != 0) {
+  while(comms->recordingActive[id-1] != 0) {
     COND_WAIT(comms->recordingActive_cond, comms->recordingActive_lock);
   }
   MUTEX_UNLOCK(comms->recordingActive_lock);
