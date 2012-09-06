@@ -280,9 +280,8 @@ units of degrees.
 %There are two methods to control the joints using this interface.
 
 The method of controlling the joints is by using the vertical sliders.
-Each vertical slider's position represents a joint's angle. The sliders for the
-two end joints vary from -180 degrees to 180 degrees, representing one complete
-rotation. The angles for the two body joints vary from -90 to 90 degrees. When
+Each vertical slider's position represents a joint's angle. 
+ The angles for the two body joints vary from -90 to 90 degrees. When
 the position of the slider is moved, the Mobot will move its joints to match the 
 sliders. 
 
@@ -292,10 +291,6 @@ the ``MoveTo'' button is clicked, each joint will move to their respective
 desired absolute positions. If any text entry is left blank, the corresponding joint will
 not move. 
 
-If the ``Move'' button is clicked, the program treats the angles entered by the
-user as a relative amount to move. For instance, if the value ``360'' is entered
-into the box for joint 1 and ``Move'' is clicked, the joint will rotate one full
-rotation, no matter where the joint was when the motion began.
 \begin{comment}
 The second method for moving the joints is by entering the exact angles for the
 joints. Below each of the four sliders lies a text entry box. Values in degrees
@@ -316,11 +311,19 @@ click on the name of the motion you wish to execute, and then click the button
 labeled ``Play''.
 
 \section{The ``Pose Teaching'' Tab}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=4.5in]{images/posetrain.png}
+\end{center}
+\caption{\label{fig:posetrain.png} The pose training dialog.}
+\end{figure}
+
 ``Pose Teaching'' is the process of training a robot to perform motions by physically
 moving the robot into desired positions. To pose teach a robot or multiple robots,
 begin by connecting to all of the robots that will be trained by pose teaching
 in the ``Connect'' tab. Once all of the desired mobots are connected, switch to
-the ``Pose Teaching'' tab. Once you have switched tabs, the function of the
+the ``Pose Teaching'' tab. This will enable the pose training dialog, as shown
+in Figure \ref{fig:posetrain.png}.  Once you have switched tabs, the function of the
 mobot's on-board buttons will change to Pose Teaching mode. In Pose Teaching mode,
 the mobot buttons have the following functions:
 \begin{itemize}
