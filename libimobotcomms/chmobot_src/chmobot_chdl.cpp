@@ -65,8 +65,12 @@ EXPORTCH int connectWithAddress_chdl(void *varg) {
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobot *);
     address = Ch_VaArg(interp, ap, char *);
-    channel = Ch_VaArg(interp, ap, int);
-    retval = mobot->connectWithAddress(address, channel);
+    if(Ch_VaCount(interp, ap) == 1) {
+      channel = Ch_VaArg(interp, ap, int);
+      retval = mobot->connectWithAddress(address, channel);
+    } else {
+      retval = mobot->connectWithAddress(address);
+    }
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -82,8 +86,12 @@ EXPORTCH int connectWithBluetoothAddress_chdl(void *varg) {
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobot *);
     address = Ch_VaArg(interp, ap, char *);
-    channel = Ch_VaArg(interp, ap, int);
-    retval = mobot->connectWithBluetoothAddress(address, channel);
+    if(Ch_VaCount(interp, ap) == 1) {
+      channel = Ch_VaArg(interp, ap, int);
+      retval = mobot->connectWithBluetoothAddress(address, channel);
+    } else {
+      retval = mobot->connectWithBluetoothAddress(address);
+    }
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -99,8 +107,12 @@ EXPORTCH int connectWithIPAddress_chdl(void *varg) {
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobot *);
     address = Ch_VaArg(interp, ap, char *);
-    port = Ch_VaArg(interp, ap, char *);
-    retval = mobot->connectWithIPAddress(address, port);
+    if(Ch_VaCount(interp, ap) == 1) {
+      port = Ch_VaArg(interp, ap, char *);
+      retval = mobot->connectWithIPAddress(address, port);
+    } else {
+      retval = mobot->connectWithIPAddress(address);
+    }
     Ch_VaEnd(interp, ap);
     return retval;
 }

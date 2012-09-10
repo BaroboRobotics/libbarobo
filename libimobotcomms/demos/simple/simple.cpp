@@ -7,7 +7,7 @@ int main()
   CMobot mobot;
 
   /* Connect to the paired MoBot */
-  mobot.connect();
+  mobot.connectWithBluetoothAddress("00:06:66:46:41:FB", 1);
   mobot.move(720, 0, 0, 720);
   mobot.stopAllJoints();
 

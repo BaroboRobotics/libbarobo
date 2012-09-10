@@ -3245,7 +3245,7 @@ int CMobot::connectWithBluetoothAddress(const char* address, int channel)
   return Mobot_connectWithBluetoothAddress(_comms, address, channel);
 }
 
-int CMobot::connectWithIPAddress(const char* address, const char port[] = PORT)
+int CMobot::connectWithIPAddress(const char* address, const char port[])
 {
   return Mobot_connectWithIPAddress(_comms, address, port);
 }

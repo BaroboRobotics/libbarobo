@@ -236,9 +236,15 @@ class CMobot
    -6 : Protocol version mismatch
    */
     int connect();
-    int connectWithAddress(const char address[], int channel);
-    int connectWithBluetoothAddress(const char address[], int channel);
-    int connectWithIPAddress(const char address[], const char port[]);
+#ifndef _CH_
+    int connectWithAddress(const char address[], int channel = 1);
+    int connectWithBluetoothAddress(const char address[], int channel = 1);
+    int connectWithIPAddress(const char address[], const char port[] = "5768");
+#else
+    int connectWithAddress(const char address[], ...);
+    int connectWithBluetoothAddress(const char address[], ...);
+    int connectWithIPAddress(const char address[], ...);
+#endif
 #ifndef _WIN32
     int connectWithTTY(const char ttyfilename[]);
 #endif

@@ -1,5 +1,6 @@
 #include <mobot.h>
 #include <dlfcn.h>
+#include <stdarg.h>
 
 CMobot::CMobot() {
   void *fptr;
@@ -67,40 +68,67 @@ int CMobot::connect() {
     dlrunfun(fptr, &retval, NULL, this, connect);
     return retval;
 }
-int CMobot::connectWithAddress(char *address, int channel) {
+int CMobot::connectWithAddress(char *address, ...) {
     void *fptr;
     int retval;
-
+    va_list ap;
+    int channel = -1;
+    va_start(ap, address);
+  
     fptr = dlsym(g_chmobot_dlhandle, "connectWithAddress_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, connectWithAddress, this, address, channel);
+    if(va_count(ap) == 1) {
+      channel = va_arg(ap, int);
+      dlrunfun(fptr, &retval, connectWithAddress, this, address, channel);
+    } else {
+      dlrunfun(fptr, &retval, connectWithAddress, this, address);
+    }
+    va_end(ap);
     return retval;
 }
-int CMobot::connectWithBluetoothAddress(char *address, int channel) {
+int CMobot::connectWithBluetoothAddress(char *address, ...) {
     void *fptr;
     int retval;
+    va_list ap;
+    int channel = -1;
+    va_start(ap, address);
 
     fptr = dlsym(g_chmobot_dlhandle, "connectWithBluetoothAddress_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, connectWithBluetoothAddress, this, address, channel);
+    if(va_count(ap) == 1) {
+      channel = va_arg(ap, int);
+      dlrunfun(fptr, &retval, connectWithBluetoothAddress, this, address, channel);
+    } else {
+      dlrunfun(fptr, &retval, connectWithBluetoothAddress, this, address);
+    }
+    va_end(ap);
     return retval;
 }
-int CMobot::connectWithIPAddress(char *address, char* port) {
+int CMobot::connectWithIPAddress(char *address, ...) {
     void *fptr;
     int retval;
+    va_list ap;
+    char* port = NULL;
+    va_start(ap, address);
 
     fptr = dlsym(g_chmobot_dlhandle, "connectWithIPAddress_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, connectWithIPAddress, this, address, port);
+    if(va_count(ap) == 1) {
+      port = va_arg(ap, char*);
+      dlrunfun(fptr, &retval, connectWithIPAddress, this, address, port);
+    } else {
+      dlrunfun(fptr, &retval, connectWithIPAddress, this, address);
+    }
+    va_end(ap);
     return retval;
 }
 int CMobot::disconnect() {
