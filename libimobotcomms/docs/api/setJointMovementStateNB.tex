@@ -1,0 +1,59 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobot::setJointMovementStateNB()}\index{CMobot::setJointMovementStateNB()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{setJointMovementStateNB()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobot::setJointMovementStateNB(mobotJointId_t id, mobotJointState_t dir1);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Move a joint of a mobot continuously in the specified directions.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{10 mm}p{145 mm}}
+\texttt{id} & The joint number to move. \\
+\texttt{dir} &  
+This parameter specifies the direction the joint should move. \\
+\end{tabular}
+\end{description}
+
+\noindent
+{\bf Description}\\
+The \texttt{dir} parameter specifies the direction the joint should move.
+The types
+are enumerated in \texttt{mobot.h} and have the following values:
+\input{jointStateTable}
+More documentation about these types may be found at Section
+\ref{sec:mobotJointState_t} on page
+\pageref{sec:mobotJointState_t}.  
+
+This function causes joints of a mobot to begin moving at the previously set
+speed. The joints will continue moving until the joint hits a joint limit, or
+the joint is stopped by setting the speed to zero. This function is a non-blocking
+function.\\
+
+\noindent
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\
