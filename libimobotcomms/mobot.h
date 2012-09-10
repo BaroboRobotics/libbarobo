@@ -333,6 +333,8 @@ class CMobot
     int reset();
     int resetToZero();
     int resetToZeroNB();
+    int setJointMovementStateNB(mobotJointId_t id, mobotJointState_t dir);
+    int setJointMovementStateTime(mobotJointId_t id, mobotJointState_t dir, double seconds);
     int setJointSafetyAngle(double angle);
     int setJointSafetyAngleTimeout(double seconds);
     int setJointSpeed(mobotJointId_t id, double speed);
@@ -340,6 +342,15 @@ class CMobot
     int setJointSpeedRatio(mobotJointId_t id, double ratio);
     int setJointSpeedRatios(double ratios1, double ratios2, double ratios3, double ratios4);
     int setMotorPower(mobotJointId_t id, int power);
+    int setMovementStateNB( mobotJointState_t dir1,
+        mobotJointState_t dir2,
+        mobotJointState_t dir3,
+        mobotJointState_t dir4);
+    int setMovementStateTime( mobotJointState_t dir1,
+        mobotJointState_t dir2,
+        mobotJointState_t dir3,
+        mobotJointState_t dir4,
+        double seconds);
     int setTwoWheelRobotSpeed(double speed, double radius);
     int stop();
     int stopOneJoint(mobotJointId_t id);
@@ -426,10 +437,21 @@ class CMobotGroup
     int reset();
     int resetToZero();
     int resetToZeroNB();
+    int setJointMovementStateNB(mobotJointId_t id, mobotJointState_t dir);
+    int setJointMovementStateTime(mobotJointId_t id, mobotJointState_t dir, double seconds);
     int setJointSpeed(mobotJointId_t id, double speed);
     int setJointSpeeds(double speed1, double speed2, double speed3, double speed4);
     int setJointSpeedRatio(mobotJointId_t id, double ratio);
     int setJointSpeedRatios(double ratio1, double ratio2, double ratio3, double ratio4);
+    int setMovementStateNB(mobotJointState_t dir1, 
+        mobotJointState_t dir2, 
+        mobotJointState_t dir3, 
+        mobotJointState_t dir4);
+    int setMovementStateTime(mobotJointState_t dir1, 
+        mobotJointState_t dir2, 
+        mobotJointState_t dir3, 
+        mobotJointState_t dir4, 
+        double seconds);
     int setTwoWheelRobotSpeed(double speed, double radius);
     int stopAllJoints();
     int stopOneJoint(mobotJointId_t id);
@@ -644,6 +666,8 @@ DLLIMPORT int Mobot_resetToZero(mobot_t* comms);
 DLLIMPORT int Mobot_resetToZeroNB(mobot_t* comms);
 DLLIMPORT int Mobot_setHWRev(mobot_t* comms, uint8_t rev);
 DLLIMPORT int Mobot_setJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir);
+DLLIMPORT int Mobot_setJointMovementStateNB(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir);
+DLLIMPORT int Mobot_setJointMovementStateTime(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir, double seconds);
 DLLIMPORT int Mobot_setJointSafetyAngle(mobot_t* comms, double angle);
 DLLIMPORT int Mobot_setJointSafetyAngleTimeout(mobot_t* comms, double seconds);
 DLLIMPORT int Mobot_setJointSpeed(mobot_t* comms, mobotJointId_t id, double speed);
@@ -664,6 +688,17 @@ DLLIMPORT int Mobot_getJointSpeeds(mobot_t* comms,
                                    double *speed3, 
                                    double *speed4);
 DLLIMPORT int Mobot_setMotorPower(mobot_t* comms, mobotJointId_t id, int power);
+DLLIMPORT int Mobot_setMovementStateNB(mobot_t* comms,
+                                  mobotJointState_t dir1,
+                                  mobotJointState_t dir2,
+                                  mobotJointState_t dir3,
+                                  mobotJointState_t dir4);
+DLLIMPORT int Mobot_setMovementStateTime(mobot_t* comms,
+                                  mobotJointState_t dir1,
+                                  mobotJointState_t dir2,
+                                  mobotJointState_t dir3,
+                                  mobotJointState_t dir4,
+                                  double seconds);
 DLLIMPORT int Mobot_setTwoWheelRobotSpeed(mobot_t* comms, double speed, double radius);
 DLLIMPORT int Mobot_stop(mobot_t* comms);
 DLLIMPORT int Mobot_stopOneJoint(mobot_t* comms, mobotJointId_t id);

@@ -1110,24 +1110,7 @@ int Mobot_moveContinuousNB(mobot_t* comms,
                                   mobotJointState_t dir3,
                                   mobotJointState_t dir4)
 {
-  mobotJointState_t dirs[4];
-  int i;
-  dirs[0] = dir1;
-  dirs[1] = dir2;
-  dirs[2] = dir3;
-  dirs[3] = dir4;
-  for(i = 0; i < 4; i++) {
-    if(dirs[i] == MOBOT_FORWARD) {
-      Mobot_setJointSpeed(comms, (mobotJointId_t)(i+1), comms->jointSpeeds[i]);
-      Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), MOBOT_FORWARD);
-    } else if (dirs[i] == MOBOT_BACKWARD) {
-      Mobot_setJointSpeed(comms, (mobotJointId_t)(i+1), comms->jointSpeeds[i]);
-      Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), MOBOT_BACKWARD);
-    } else {
-      Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), dirs[i]);
-    }
-  }
-  return 0;
+  return Mobot_setMovementStateNB(comms, dir1, dir2, dir3, dir4);
 }
 
 int Mobot_moveContinuousTime(mobot_t* comms,
@@ -1137,38 +1120,17 @@ int Mobot_moveContinuousTime(mobot_t* comms,
                                   mobotJointState_t dir4,
                                   double seconds)
 {
-  int i;
-  int msecs = seconds * 1000;
-  Mobot_moveContinuousNB(comms, dir1, dir2, dir3, dir4);
-#ifdef _WIN32
-  Sleep(msecs);
-#else
-  usleep(msecs * 1000);
-#endif
-  /* Stop the motors */
-  for(i = 0; i < 4; i++) {
-    Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), MOBOT_NEUTRAL);
-  }
-  return 0;
+  return Mobot_setMovementStateTime(comms, dir1, dir2, dir3, dir4, seconds);
 }
 
 int Mobot_moveJointContinuousNB(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir)
 {
-  Mobot_setJointSpeed(comms, id, comms->jointSpeeds[(int)id-1]);
-  Mobot_setJointDirection(comms, id, dir);
-  return 0;
+  return Mobot_setJointMovementStateNB(comms, id, dir);
 }
 
 int Mobot_moveJointContinuousTime(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir, double seconds)
 {
-  int msecs = seconds * 1000;
-  Mobot_moveJointContinuousNB(comms, id, dir);
-#ifdef _WIN32
-  Sleep(msecs);
-#else
-  usleep(msecs * 1000);
-#endif
-  return 0;
+  return Mobot_setJointMovementStateTime(comms, id, dir, seconds);
 }
 
 int Mobot_moveJoint(mobot_t* comms, mobotJointId_t id, double angle)
@@ -2209,6 +2171,25 @@ int Mobot_setJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t
   return 0;
 }
 
+int Mobot_setJointMovementStateNB(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir)
+{
+  Mobot_setJointSpeed(comms, id, comms->jointSpeeds[(int)id-1]);
+  Mobot_setJointDirection(comms, id, dir);
+  return 0;
+}
+
+int Mobot_setJointMovementStateTime(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir, double seconds)
+{
+  int msecs = seconds * 1000;
+  Mobot_moveJointContinuousNB(comms, id, dir);
+#ifdef _WIN32
+  Sleep(msecs);
+#else
+  usleep(msecs * 1000);
+#endif
+  return 0;
+}
+
 int Mobot_setJointSafetyAngle(mobot_t* comms, double angle)
 {
   uint8_t buf[32];
@@ -2301,6 +2282,54 @@ int Mobot_setMotorPower(mobot_t* comms, mobotJointId_t id, int power)
   bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
   if(strcmp(buf, "OK")) return -1;
   */
+  return 0;
+}
+
+int Mobot_setMovementStateNB(mobot_t* comms,
+                                  mobotJointState_t dir1,
+                                  mobotJointState_t dir2,
+                                  mobotJointState_t dir3,
+                                  mobotJointState_t dir4)
+{
+  mobotJointState_t dirs[4];
+  int i;
+  dirs[0] = dir1;
+  dirs[1] = dir2;
+  dirs[2] = dir3;
+  dirs[3] = dir4;
+  for(i = 0; i < 4; i++) {
+    if(dirs[i] == MOBOT_FORWARD) {
+      Mobot_setJointSpeed(comms, (mobotJointId_t)(i+1), comms->jointSpeeds[i]);
+      Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), MOBOT_FORWARD);
+    } else if (dirs[i] == MOBOT_BACKWARD) {
+      Mobot_setJointSpeed(comms, (mobotJointId_t)(i+1), comms->jointSpeeds[i]);
+      Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), MOBOT_BACKWARD);
+    } else {
+      Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), dirs[i]);
+    }
+  }
+  return 0;
+}
+
+int Mobot_setMovementStateTime(mobot_t* comms,
+                                  mobotJointState_t dir1,
+                                  mobotJointState_t dir2,
+                                  mobotJointState_t dir3,
+                                  mobotJointState_t dir4,
+                                  double seconds)
+{
+  int i;
+  int msecs = seconds * 1000;
+  Mobot_moveContinuousNB(comms, dir1, dir2, dir3, dir4);
+#ifdef _WIN32
+  Sleep(msecs);
+#else
+  usleep(msecs * 1000);
+#endif
+  /* Stop the motors */
+  for(i = 0; i < 4; i++) {
+    Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), MOBOT_HOLD);
+  }
   return 0;
 }
 
@@ -3618,6 +3647,16 @@ int CMobot::setJointDirection(mobotJointId_t id, mobotJointState_t dir)
   return Mobot_setJointDirection(_comms, id, dir);
 }
 
+int CMobot::setJointMovementStateNB(mobotJointId_t id, mobotJointState_t dir)
+{
+  return Mobot_setJointMovementStateNB(_comms, id, dir);
+}
+
+int CMobot::setJointMovementStateTime(mobotJointId_t id, mobotJointState_t dir, double seconds)
+{
+  return Mobot_setJointMovementStateTime(_comms, id, dir, seconds);
+}
+
 int CMobot::setJointSpeed(mobotJointId_t id, double speed)
 {
   return Mobot_setJointSpeed(_comms, id, DEG2RAD(speed));
@@ -3646,6 +3685,23 @@ int CMobot::setJointSpeedRatios(double ratio1, double ratio2, double ratio3, dou
 int CMobot::setMotorPower(mobotJointId_t id, int power)
 {
   return Mobot_setMotorPower(_comms, id, power);
+}
+
+int CMobot::setMovementStateNB( mobotJointState_t dir1,
+                                mobotJointState_t dir2,
+                                mobotJointState_t dir3,
+                                mobotJointState_t dir4)
+{
+  return Mobot_setMovementStateNB(_comms, dir1, dir2, dir3, dir4);
+}
+
+int CMobot::setMovementStateTime( mobotJointState_t dir1,
+                                  mobotJointState_t dir2,
+                                  mobotJointState_t dir3,
+                                  mobotJointState_t dir4,
+                                  double seconds)
+{
+  return Mobot_setMovementStateTime(_comms, dir1, dir2, dir3, dir4, seconds);
 }
 
 int CMobot::setTwoWheelRobotSpeed(double speed, double radius)
@@ -3878,10 +3934,7 @@ int CMobotGroup::moveContinuousNB(mobotJointState_t dir1,
                        mobotJointState_t dir3, 
                        mobotJointState_t dir4)
 {
-  for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->moveContinuousNB(dir1, dir2, dir3, dir4);
-  }
-  return 0;
+  return setMovementStateNB(dir1, dir2, dir3, dir4);
 }
 
 int CMobotGroup::moveContinuousTime(mobotJointState_t dir1, 
@@ -3890,19 +3943,7 @@ int CMobotGroup::moveContinuousTime(mobotJointState_t dir1,
                            mobotJointState_t dir4, 
                            double seconds)
 {
-  int msecs = seconds * 1000.0;
-  for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->moveContinuousNB(dir1, dir2, dir3, dir4);
-  }
-#ifdef _WIN32
-  Sleep(msecs);
-#else
-  usleep(msecs*1000);
-#endif
-  for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->stop();
-  }
-  return 0;
+  return setMovementStateTime(dir1, dir2, dir3, dir4, seconds);
 }
 
 int CMobotGroup::moveJointContinuousNB(mobotJointId_t id, mobotJointState_t dir)
@@ -3915,19 +3956,7 @@ int CMobotGroup::moveJointContinuousNB(mobotJointId_t id, mobotJointState_t dir)
 
 int CMobotGroup::moveJointContinuousTime(mobotJointId_t id, mobotJointState_t dir, double seconds)
 {
-  int msecs = seconds * 1000.0;
-  for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->moveJointContinuousNB(id, dir);
-  }
-#ifdef _WIN32
-  Sleep(msecs);
-#else
-  usleep(msecs * 1000);
-#endif
-  for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->stop();
-  }
-  return 0;
+  return setJointMovementStateTime(id, dir, seconds);
 }
 
 int CMobotGroup::moveJointTo(mobotJointId_t id, double angle)
@@ -4029,10 +4058,37 @@ int CMobotGroup::resetToZero()
   resetToZeroNB();
   return moveWait();
 }
+
 int CMobotGroup::resetToZeroNB()
 {
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->resetToZeroNB();
+  }
+  return 0;
+}
+
+int CMobotGroup::setJointMovementStateNB(mobotJointId_t id, mobotJointState_t dir)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->setJointMovementStateNB(id, dir);
+  }
+  return 0;
+}
+
+int CMobotGroup::setJointMovementStateTime(mobotJointId_t id, mobotJointState_t dir, double seconds)
+{
+  int msecs = seconds * 1000.0;
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->setJointMovementStateNB(id, dir);
+  }
+#ifdef _WIN32
+  Sleep(msecs);
+#else
+  usleep(msecs * 1000);
+#endif
+  for(int i = 0; i < _numRobots; i++) {
+    //_robots[i]->stop();
+    _robots[i]->setJointMovementStateNB(id, MOBOT_HOLD);
   }
   return 0;
 }
@@ -4065,6 +4121,39 @@ int CMobotGroup::setJointSpeedRatios(double ratio1, double ratio2, double ratio3
 {
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->setJointSpeedRatios(ratio1, ratio2, ratio3, ratio4);
+  }
+  return 0;
+}
+
+int CMobotGroup::setMovementStateNB(mobotJointState_t dir1, 
+                       mobotJointState_t dir2, 
+                       mobotJointState_t dir3, 
+                       mobotJointState_t dir4)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->setMovementStateNB(dir1, dir2, dir3, dir4);
+  }
+  return 0;
+}
+
+int CMobotGroup::setMovementStateTime(mobotJointState_t dir1, 
+                           mobotJointState_t dir2, 
+                           mobotJointState_t dir3, 
+                           mobotJointState_t dir4, 
+                           double seconds)
+{
+  int msecs = seconds * 1000.0;
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->setMovementStateNB(dir1, dir2, dir3, dir4);
+  }
+#ifdef _WIN32
+  Sleep(msecs);
+#else
+  usleep(msecs*1000);
+#endif
+  for(int i = 0; i < _numRobots; i++) {
+    //_robots[i]->stop();
+    _robots[i]->setMovementStateNB(MOBOT_HOLD, MOBOT_HOLD, MOBOT_HOLD, MOBOT_HOLD);
   }
   return 0;
 }

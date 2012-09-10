@@ -956,6 +956,30 @@ int CMobot::resetToZeroNB() {
     dlrunfun(fptr, &retval, resetToZeroNB, this);
     return retval;
 }
+int CMobot::setJointMovementStateNB(int id, int dir) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "setJointMovementStateNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setJointMovementStateNB, this, id, dir);
+    return retval;
+}
+int CMobot::setJointMovementStateTime(int id, int dir, double seconds) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "setJointMovementStateTime_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setJointMovementStateTime, this, id, dir, seconds);
+    return retval;
+}
 int CMobot::setJointSafetyAngle(double angle) {
     void *fptr;
     int retval;
@@ -1038,6 +1062,30 @@ int CMobot::setMotorPower(int id, int power) {
         return -1;
     }
     dlrunfun(fptr, &retval, setMotorPower, this, id, power);
+    return retval;
+}
+int CMobot::setMovementStateNB(int dir1, int dir2, int dir3, int dir4) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "setMovementStateNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setMovementStateNB, this, dir1, dir2, dir3, dir4);
+    return retval;
+}
+int CMobot::setMovementStateTime(int dir1, int dir2, int dir3, int dir4, double seconds) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "setMovementStateTime_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setMovementStateTime, this, dir1, dir2, dir3, dir4, seconds);
     return retval;
 }
 int CMobot::setTwoWheelRobotSpeed(double speed, double radius) {
@@ -1769,6 +1817,30 @@ int CMobotGroup::resetToZeroNB() {
     dlrunfun(fptr, &retval, resetToZeroNB, this);
     return retval;
 }
+int CMobotGroup::setJointMovementStateNB(int id, int dir) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_setJointMovementStateNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setJointMovementStateNB, this, id, dir);
+    return retval;
+}
+int CMobotGroup::setJointMovementStateTime(int id, int dir, double seconds) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_setJointMovementStateTime_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setJointMovementStateTime, this, id, dir, seconds);
+    return retval;
+}
 int CMobotGroup::setJointSpeed(int id, double speed) {
     void *fptr;
     int retval;
@@ -1815,6 +1887,30 @@ int CMobotGroup::setJointSpeedRatios(double ratio1, double ratio2, double ratio3
         return -1;
     }
     dlrunfun(fptr, &retval, setJointSpeedRatios, this, ratio1, ratio2, ratio3, ratio4);
+    return retval;
+}
+int CMobotGroup::setMovementStateNB(int dir1, int dir2, int dir3, int dir4) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_setMovementStateNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setMovementStateNB, this, dir1, dir2, dir3, dir4);
+    return retval;
+}
+int CMobotGroup::setMovementStateTime(int dir1, int dir2, int dir3, int dir4, double seconds) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_setMovementStateTime_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setMovementStateTime, this, dir1, dir2, dir3, dir4, seconds);
     return retval;
 }
 int CMobotGroup::setTwoWheelRobotSpeed(double speed, double radius) {
