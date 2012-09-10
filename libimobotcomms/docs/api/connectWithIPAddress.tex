@@ -11,7 +11,7 @@
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::connectWithIPAddress(char address[], char port[]);
+int CMobot::connectWithIPAddress(char address[], char port[] = "5768");
 \end{verbatim}
 
 \noindent
@@ -29,7 +29,7 @@ The function returns 0 on success and non-zero otherwise.\\
 \item               
 \begin{tabular}{p{10 mm}p{145 mm}}
 \texttt{address} & The IP address of the remote computer. \\
-\texttt{port} & . \\
+\texttt{port} & (optional) The port to connect to. \\
 \end{tabular}
 \end{description}
 
@@ -39,6 +39,9 @@ This function is used to connect to a mobot.
 
 \noindent
 {\bf Example}\\
+mobot.connectWithIPAddress("192.168.0.132", "8734");
+mobot.connectWithIPAddress("mobots.example.com", "5768");
+mobot.connectWithIPAddress("192.168.100.221");
 \noindent
 
 \noindent
