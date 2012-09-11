@@ -815,6 +815,7 @@ EXPORTCH int recordAngle_chdl(void *varg) {
     double* angle;
     int num;
     double seconds;
+    double threshhold;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
@@ -824,7 +825,12 @@ EXPORTCH int recordAngle_chdl(void *varg) {
     angle = Ch_VaArg(interp, ap, double*);
     num = Ch_VaArg(interp, ap, int);
     seconds = Ch_VaArg(interp, ap, double);
-    retval = mobot->recordAngle(id, time, angle, num, seconds);
+    if(Ch_VaCount(interp, ap) == 1) {
+      threshhold = Ch_VaArg(interp, ap, double);
+      retval = mobot->recordAngle(id, time, angle, num, seconds, threshhold);
+    } else {
+      retval = mobot->recordAngle(id, time, angle, num, seconds);
+    }
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -837,6 +843,7 @@ EXPORTCH int recordAngleBegin_chdl(void *varg) {
     double** time;
     double** angle;
     double seconds;
+    double threshhold;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
@@ -845,7 +852,12 @@ EXPORTCH int recordAngleBegin_chdl(void *varg) {
     time = Ch_VaArg(interp, ap, double**);
     angle = Ch_VaArg(interp, ap, double**);
     seconds = Ch_VaArg(interp, ap, double);
-    retval = mobot->recordAngleBegin(id, *time, *angle, seconds);
+    if(Ch_VaCount(interp, ap) == 1) {
+      threshhold = Ch_VaArg(interp, ap, double);
+      retval = mobot->recordAngleBegin(id, *time, *angle, seconds, threshhold);
+    } else {
+      retval = mobot->recordAngleBegin(id, *time, *angle, seconds);
+    }
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -878,6 +890,7 @@ EXPORTCH int recordAngles_chdl(void *varg) {
     double* angle4;
     int num;
     double seconds;
+    double threshhold;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
@@ -889,7 +902,12 @@ EXPORTCH int recordAngles_chdl(void *varg) {
     angle4 = Ch_VaArg(interp, ap, double*);
     num = Ch_VaArg(interp, ap, int);
     seconds = Ch_VaArg(interp, ap, double);
-    retval = mobot->recordAngles(time, angle1, angle2, angle3, angle4, num, seconds);
+    if(Ch_VaCount(interp, ap) == 1) {
+      threshhold = Ch_VaArg(interp, ap, double);
+      retval = mobot->recordAngles(time, angle1, angle2, angle3, angle4, num, seconds, threshhold);
+    } else {
+      retval = mobot->recordAngles(time, angle1, angle2, angle3, angle4, num, seconds);
+    }
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -904,6 +922,7 @@ EXPORTCH int recordAnglesBegin_chdl(void *varg) {
     double** angle3;
     double** angle4;
     double seconds;
+    double threshhold;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
@@ -914,13 +933,25 @@ EXPORTCH int recordAnglesBegin_chdl(void *varg) {
     angle3 = Ch_VaArg(interp, ap, double**);
     angle4 = Ch_VaArg(interp, ap, double**);
     seconds = Ch_VaArg(interp, ap, double);
-    retval = mobot->recordAnglesBegin(
-        *time, 
-        *angle1, 
-        *angle2, 
-        *angle3, 
-        *angle4, 
-        seconds);
+    if(Ch_VaCount(interp, ap) == 1) {
+      threshhold = Ch_VaArg(interp, ap, int);
+      retval = mobot->recordAnglesBegin(
+          *time, 
+          *angle1, 
+          *angle2, 
+          *angle3, 
+          *angle4, 
+          seconds,
+          threshhold);
+    } else {
+      retval = mobot->recordAnglesBegin(
+          *time, 
+          *angle1, 
+          *angle2, 
+          *angle3, 
+          *angle4, 
+          seconds);
+    }
     Ch_VaEnd(interp, ap);
     return retval;
 }
