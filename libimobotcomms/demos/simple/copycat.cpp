@@ -11,11 +11,11 @@ int main()
   int i;
 
   /* Connect to the paired MoBots */
-  mobot1.connect();
-  mobot2.connect();
+  mobot1.connectWithBluetoothAddress("00:06:66:46:41:FB");
+  mobot2.connectWithBluetoothAddress("00:06:66:46:41:FA");
   /* Move both mobots to zero position */
-  mobot1.moveToZero();
-  mobot2.moveToZero();
+  mobot1.resetToZero();
+  mobot2.resetToZero();
   /* Relax both mobots */
   mobot1.stop();
   mobot2.stop();
