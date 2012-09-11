@@ -32,7 +32,7 @@ mobot.setJointSpeeds(45, 45, 45, 45);
 mobot.resetToZero();
 
 /* Start capturing data */
-mobot.recordAngles(time, angles1, angles2, angles3, angles4, numDataPoints, timeInterval);
+mobot.recordAngles(time, angles1, angles2, angles3, angles4, numDataPoints, timeInterval, tolerance);
 
 /* Perform the standing and unstanding motions */
 mobot.motionTurnRight(360);
@@ -41,12 +41,6 @@ mobot.motionInchwormLeft(2);
 /* Wait for recording to finish */
 mobot.recordWait();
 
-/* Shift the time so the movement starts at time 0 */
-shiftTime(tolerance, numDataPoints, time, 
-          angles1, 
-          angles2, 
-          angles3, 
-          angles4);
 plot.title("Unwrapped Data for Joint Angles versus Time");
 plot.label(PLOT_AXIS_X, "Time (seconds)");
 plot.label(PLOT_AXIS_Y, "Angle (degrees)");
