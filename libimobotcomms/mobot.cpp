@@ -2868,7 +2868,7 @@ int Mobot_motionTurnRightNB(mobot_t* comms, double angle)
 int Mobot_motionTumbleRight(mobot_t* comms, int num)
 {
   int i;
-  Mobot_moveToZero(comms);
+  Mobot_resetToZero(comms);
 #ifndef _WIN32
   sleep(1);
 #else
@@ -2918,7 +2918,7 @@ int Mobot_motionTumbleRightNB(mobot_t* comms, int num)
 int Mobot_motionTumbleLeft(mobot_t* comms, int num)
 {
   int i;
-  Mobot_moveToZero(comms);
+  Mobot_resetToZero(comms);
 #ifndef _WIN32
   sleep(1);
 #else
@@ -4636,7 +4636,7 @@ int CMobotGroup::motionStandNB()
 void* CMobotGroup::motionStandThread(void* arg)
 {
   CMobotGroup* cmg = (CMobotGroup*)arg;
-  cmg->moveToZero();
+  cmg->resetToZero();
   cmg->moveJointTo(MOBOT_JOINT2, -85);
   cmg->moveJointTo(MOBOT_JOINT3, 70);
   cmg->moveWait();
@@ -4716,7 +4716,7 @@ void* CMobotGroup::motionTumbleRightThread(void* arg)
   CMobotGroup* cmg = (CMobotGroup*)arg;
   int num = cmg->argInt;
 
-  cmg->moveToZero();
+  cmg->resetToZero();
 #ifndef _WIN32
   sleep(1);
 #else
@@ -4769,7 +4769,7 @@ void* CMobotGroup::motionTumbleLeftThread(void* arg)
   CMobotGroup* cmg = (CMobotGroup*)arg;
   int num = cmg->argInt;
 
-  cmg->moveToZero();
+  cmg->resetToZero();
 #ifndef _WIN32
   sleep(1);
 #else
