@@ -28,58 +28,58 @@
 #define BTCMD(cmd) ((cmd) + CMD_START)
 
 enum protocol_commands_e {
-/* CMD_STATUS: Get the Mobot's Status 0
+/* CMD_STATUS: Get the Mobot's Status 
  * Command format: [CMD] [0x03] [0x00]
  * Expected response: [0x10] [0x03] [0x11]*/
   CMD_STATUS,
 
-/* CMD_DEMO: Begin the built-in demo routine. 1
+/* CMD_DEMO: Begin the built-in demo routine.
  * Command format: [CMD] [0x03] [0x00]
  * Expected response: [0x10] [0x03] [0x11]*/
   CMD_DEMO,
 
-/* CMD_SETMOTORDIR: Set the motor's direction. 2
+/* CMD_SETMOTORDIR: Set the motor's direction.
  * Command format: [CMD] [0x05] [motor_id: 1 byte] [direction: 1 byte] [0x00]
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_SETMOTORDIR,
 
-/* CMD_GETMOTORDIR: Get the motor's direction. 3
+/* CMD_GETMOTORDIR: Get the motor's direction.
  * Command format: [CMD] [0x04] [motor_id: 1 byte] [0x00]
  * Expected Response: [0x10] [0x04] [motor_dir: 1 byte] [0x11] */
   CMD_GETMOTORDIR,
 
-/* CMD_SETMOTORSPEED: Set the motor's speed. 4
+/* CMD_SETMOTORSPEED: Set the motor's speed.
  * Command format: [CMD] [0x08] [motor_id: 1 byte] [motor_speed: 4 byte float] [0x00]
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_SETMOTORSPEED,
 
-/* CMD_GETMOTORSPEED: Get the motor's speed. 5
+/* CMD_GETMOTORSPEED: Get the motor's speed.
  * Command format: [CMD] [0x04] [motor_id: 1 byte] [0x00]
  * Expected Response: [0x10] [0x07] [motor speed: 4 byte float] [0x11] */
   CMD_GETMOTORSPEED,
 
-/* CMD_SETMOTORANGLES: Set the motor joint angles. 6
+/* CMD_SETMOTORANGLES: Set the motor joint angles.
  * Command format: [CMD] [0x13] [0x????????] [0x????????] [0x????????] [0x????????]  [0x00]
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_SETMOTORANGLES,
 
-/* CMD_SETMOTORANGLES: Set the motor joint angles. 7
+/* CMD_SETMOTORANGLES: Set the motor joint angles.
  * Command format: [CMD] [0x13] [0x????????] [0x????????] [0x????????] [0x????????]  [0x00]
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_SETMOTORANGLESABS,
 
-/* CMD_SETMOTORANGLESDIRECT: Set the motor joint angles. Motors explicitely 8
+/* CMD_SETMOTORANGLESDIRECT: Set the motor joint angles. Motors explicitely
  * move in whatever direction is closest to the motor goal position. 
  * Command format: [CMD] [0x13] [0x????????] [0x????????] [0x????????] [0x????????]  [0x00]
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_SETMOTORANGLESDIRECT,
 
-/* CMD_SETMOTORANGLESPID: Set the motor joint angles. 9
+/* CMD_SETMOTORANGLESPID: Set the motor joint angles.
  * Command format: [CMD] [0x13] [0x????????] [0x????????] [0x????????] [0x????????]  [0x00]
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_SETMOTORANGLESPID,
 
-/* CMD_GETMOTORANGLES: Get the motor joint angles. 10
+/* CMD_GETMOTORANGLES: Get the motor joint angles.
  * Command format: [CMD] [0x03] [0x00]
  * Expected Response: [0x10] [0x13] [16 bytes of 4 float values] [0x11] */
   CMD_GETMOTORANGLES,
@@ -218,6 +218,17 @@ enum protocol_commands_e {
  * Command Format: [CMD] [0x04] [1 byte Rev number] [0x00]
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_SETHWREV,
+
+/* CMD_TIMEDACTION: Sets up a timed action on a number of motors. Each timed
+ * action comes as a pair: The action to begin immediately, and the motor state
+ * to enable once the action is finished. 
+ * Command Format: [CMD] [1byte size] [1byte bitmask] [6 bytes per enabled bitmask] [0x00]
+ * Expected Response: [0x10] [0x03] [0x11] 
+ * The bitmask represents which motors to set up the new timeout. 1<<0
+ * represents the first motor, 1<<1 the second, etc. For each motor, we expect
+ * six bytes; the beginning and ending motor modes (1 byte each), and a timeout
+ * in milliseconds (4 byte unsigned int)  */
+  CMD_TIMEDACTION,
 
   CMD_NUMCOMMANDS
 };

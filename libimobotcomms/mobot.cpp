@@ -2509,17 +2509,31 @@ int Mobot_setMovementStateTime(mobot_t* comms,
                                   double seconds)
 {
   int i;
-  int msecs = seconds * 1000;
-  Mobot_moveContinuousNB(comms, dir1, dir2, dir3, dir4);
+  int32_t msecs = seconds * 1000;
+  uint8_t buf[64];
+  int status;
+  mobotJointState_t dirs[4];
+  dirs[0] = dir1; dirs[1] = dir2; dirs[2] = dir3; dirs[3] = dir4;
+  buf[0] = 0x0F;
+  for(i = 0; i < 4; i++) {
+    buf[i*6 + 1] = dirs[i];
+    buf[i*6 + 2] = MOBOT_HOLD;
+    memcpy(&buf[i*6 + 3], &msecs, 4);
+  }
+  status = SendToIMobot(comms, BTCMD(CMD_TIMEDACTION), buf, 6*4 + 1);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
 #ifdef _WIN32
   Sleep(msecs);
 #else
   usleep(msecs * 1000);
 #endif
-  /* Stop the motors */
-  for(i = 0; i < 4; i++) {
-    Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), MOBOT_HOLD);
-  }
   return 0;
 }
 
