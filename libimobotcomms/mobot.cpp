@@ -794,6 +794,17 @@ int Mobot_getJointAngle(mobot_t* comms, mobotJointId_t id, double *angle)
 
 int Mobot_getJointAngleAverage(mobot_t* comms, mobotJointId_t id, double *angle, int numReadings)
 {
+  int i;
+  double d;
+  *angle = 0;
+  for(i = 0; i < numReadings; i++) {
+    if(Mobot_getJointAngle(comms, id, &d)) {
+      return -1;
+    }
+    *angle += d;
+  }
+  *angle = *angle / numReadings;
+  return 0;
 }
 
 int Mobot_getJointAngles(mobot_t* comms, 
@@ -826,6 +837,36 @@ int Mobot_getJointAngles(mobot_t* comms,
   memcpy(&f, &buf[18], 4);
   *angle4 = f;
   return 0;
+}
+
+int Mobot_getJointAnglesAverage(mobot_t* comms, 
+                             double *angle1,
+                             double *angle2,
+                             double *angle3,
+                             double *angle4,
+                             int numReadings)
+{
+  double d[4] = {0, 0, 0, 0};
+  int i;
+  *angle1 = 0;
+  *angle2 = 0;
+  *angle3 = 0;
+  *angle4 = 0;
+  for(i = 0; i < numReadings; i++) {
+    Mobot_getJointAngles(comms, 
+        &d[0],
+        &d[1],
+        &d[2],
+        &d[3]);
+    *angle1 += d[0];
+    *angle2 += d[1];
+    *angle3 += d[2];
+    *angle4 += d[3];
+  }
+  *angle1 = *angle1 / numReadings;
+  *angle2 = *angle2 / numReadings;
+  *angle3 = *angle3 / numReadings;
+  *angle4 = *angle4 / numReadings;
 }
 
 int Mobot_getJointAnglesTime(mobot_t* comms, 
@@ -2516,6 +2557,29 @@ int Mobot_setMovementStateTime(mobot_t* comms,
                                   mobotJointState_t dir4,
                                   double seconds)
 {
+  int32_t msecs = seconds * 1000;
+  int rc = Mobot_setMovementStateTime(comms,
+      dir1,
+      dir2,
+      dir3,
+      dir4,
+      seconds);
+  if(rc) return rc;
+#ifdef _WIN32
+  Sleep(msecs);
+#else
+  usleep(msecs * 1000);
+#endif
+  return 0;
+}
+
+int Mobot_setMovementStateTimeNB(mobot_t* comms,
+                                  mobotJointState_t dir1,
+                                  mobotJointState_t dir2,
+                                  mobotJointState_t dir3,
+                                  mobotJointState_t dir4,
+                                  double seconds)
+{
   int i;
   int32_t msecs = seconds * 1000;
   uint8_t buf[64];
@@ -2537,11 +2601,6 @@ int Mobot_setMovementStateTime(mobot_t* comms,
   if(buf[1] != 3) {
     return -1;
   }
-#ifdef _WIN32
-  Sleep(msecs);
-#else
-  usleep(msecs * 1000);
-#endif
   return 0;
 }
 
@@ -3582,6 +3641,14 @@ int CMobot::getJointAngle(mobotJointId_t id, double &angle)
   return err;
 }
 
+int CMobot::getJointAngleAverage(mobotJointId_t id, double &angle, int numReadings)
+{
+  int err;
+  err = Mobot_getJointAngleAverage(_comms, id, &angle, numReadings);
+  angle = RAD2DEG(angle);
+  return err;
+}
+
 int CMobot::getJointAngles(
     double &angle1,
     double &angle2,
@@ -3597,6 +3664,29 @@ int CMobot::getJointAngles(
       &angle2,
       &angle3,
       &angle4);
+  if(err) return err;
+  angle1 = RAD2DEG(angle1);
+  angle2 = RAD2DEG(angle2);
+  angle3 = RAD2DEG(angle3);
+  angle4 = RAD2DEG(angle4);
+  return 0;
+}
+
+int CMobot::getJointAnglesAverage(
+    double &angle1,
+    double &angle2,
+    double &angle3,
+    double &angle4,
+    int numReadings)
+{
+  int err;
+  err = Mobot_getJointAnglesAverage(
+      _comms, 
+      &angle1,
+      &angle2,
+      &angle3,
+      &angle4,
+      numReadings);
   if(err) return err;
   angle1 = RAD2DEG(angle1);
   angle2 = RAD2DEG(angle2);

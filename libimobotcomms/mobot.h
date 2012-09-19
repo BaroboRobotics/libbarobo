@@ -277,7 +277,9 @@ class CMobot
 #endif
     static const char* getConfigFilePath();
     int getJointAngle(mobotJointId_t id, double &angle);
+    int getJointAngleAverage(mobotJointId_t id, double &angle, int numReadings=10);
     int getJointAngles(double &angle1, double &angle2, double &angle3, double &angle4);
+    int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, double &angle4, int numReadings=10);
     int getJointMaxSpeed(mobotJointId_t id, double &maxSpeed);
     int getJointSafetyAngle(double &angle);
     int getJointSafetyAngleTimeout(double &seconds);
@@ -377,6 +379,11 @@ class CMobot
         mobotJointState_t dir3,
         mobotJointState_t dir4);
     int setMovementStateTime( mobotJointState_t dir1,
+        mobotJointState_t dir2,
+        mobotJointState_t dir3,
+        mobotJointState_t dir4,
+        double seconds);
+    int setMovementStateTimeNB( mobotJointState_t dir1,
         mobotJointState_t dir2,
         mobotJointState_t dir3,
         mobotJointState_t dir4,
@@ -597,6 +604,7 @@ DLLIMPORT const char* Mobot_getConfigFilePath();
 DLLIMPORT int Mobot_getEncoderVoltage(mobot_t* comms, int pinNumber, double *voltage);
 DLLIMPORT int Mobot_getHWRev(mobot_t* comms, int* rev);
 DLLIMPORT int Mobot_getJointAngle(mobot_t* comms, mobotJointId_t id, double *angle);
+DLLIMPORT int Mobot_getJointAngleAverage(mobot_t* comms, mobotJointId_t id, double *angle, int numReadings);
 DLLIMPORT int Mobot_getJointAnglesTime(mobot_t* comms, 
                                        double *time, 
                                        double *angle1, 
@@ -608,6 +616,12 @@ DLLIMPORT int Mobot_getJointAngles(mobot_t* comms,
                                        double *angle2, 
                                        double *angle3, 
                                        double *angle4);
+DLLIMPORT int Mobot_getJointAnglesAverage(mobot_t* comms, 
+                                       double *angle1, 
+                                       double *angle2, 
+                                       double *angle3, 
+                                       double *angle4,
+                                       int numReadings);
 DLLIMPORT int Mobot_getJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t *dir);
 DLLIMPORT int Mobot_getJointMaxSpeed(mobot_t* comms, mobotJointId_t, double *maxSpeed);
 DLLIMPORT int Mobot_getJointSafetyAngle(mobot_t* comms, double *angle);
