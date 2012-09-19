@@ -792,6 +792,10 @@ int Mobot_getJointAngle(mobot_t* comms, mobotJointId_t id, double *angle)
   return 0;
 }
 
+int Mobot_getJointAngleAverage(mobot_t* comms, mobotJointId_t id, double *angle, int numReadings)
+{
+}
+
 int Mobot_getJointAngles(mobot_t* comms, 
                              double *angle1,
                              double *angle2,
@@ -2481,22 +2485,26 @@ int Mobot_setMovementStateNB(mobot_t* comms,
                                   mobotJointState_t dir3,
                                   mobotJointState_t dir4)
 {
-  mobotJointState_t dirs[4];
   int i;
-  dirs[0] = dir1;
-  dirs[1] = dir2;
-  dirs[2] = dir3;
-  dirs[3] = dir4;
+  int32_t msecs = -1;
+  uint8_t buf[64];
+  int status;
+  mobotJointState_t dirs[4];
+  dirs[0] = dir1; dirs[1] = dir2; dirs[2] = dir3; dirs[3] = dir4;
+  buf[0] = 0x0F;
   for(i = 0; i < 4; i++) {
-    if(dirs[i] == MOBOT_FORWARD) {
-      Mobot_setJointSpeed(comms, (mobotJointId_t)(i+1), comms->jointSpeeds[i]);
-      Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), MOBOT_FORWARD);
-    } else if (dirs[i] == MOBOT_BACKWARD) {
-      Mobot_setJointSpeed(comms, (mobotJointId_t)(i+1), comms->jointSpeeds[i]);
-      Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), MOBOT_BACKWARD);
-    } else {
-      Mobot_setJointDirection(comms, (mobotJointId_t)(i+1), dirs[i]);
-    }
+    buf[i*6 + 1] = dirs[i];
+    buf[i*6 + 2] = MOBOT_HOLD;
+    memcpy(&buf[i*6 + 3], &msecs, 4);
+  }
+  status = SendToIMobot(comms, BTCMD(CMD_TIMEDACTION), buf, 6*4 + 1);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
   }
   return 0;
 }
