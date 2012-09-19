@@ -1,4 +1,4 @@
-void angle2distance(double radius, double *angles, double *distances, int num) {
+void angles2distances(double radius, double *angles, double *distances, int num) {
     int i, num`; 
     for(i=0; i<num; i++) {
         distances[i] = radius * angles[i] * M_PI / 180;
