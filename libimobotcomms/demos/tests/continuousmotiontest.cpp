@@ -7,6 +7,7 @@
 #include <mobot.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define ANGLE_TOLERANCE 2
 #define ABS(x) ((x) < 0? -1*(x) : (x))
