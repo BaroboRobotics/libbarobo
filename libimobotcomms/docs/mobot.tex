@@ -212,7 +212,7 @@ connected, such as a bluetooth enabled phone and a bluetooth mouse, then the
 maximum number of connected Mobots decreases to 5, for a total of 7 connected 
 devices.
 
-\section{ The ``Motion Control'' Tab}
+\section{ The ``Motion Control'' Panel}
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=4.5in]{images/robomancer_screenshot5.png}
@@ -310,7 +310,7 @@ preprogrammed motions for the Mobot. To execute a preprogrammed motion, simply
 click on the name of the motion you wish to execute, and then click the button
 labeled ``Play''.
 
-\section{The ``Pose Teaching'' Tab}
+\section{The ``Pose Teaching'' Panel}
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=4.5in]{images/posetrain.png}
@@ -988,11 +988,11 @@ lift up the body of the Mobot such that the Mobot is balancing on faceplate join
 
 Finally, we rotate joint 1, the foot joint, for three seconds which causes the
 entire Mobot to rotate in place. The speed is first set to 45 degrees per second to make the
-rotation a slow rotation. Next, the \texttt{moveContinuousTime} member function
+rotation a slow rotation. Next, the \texttt{setMovementStateTime} member function
 is used to continuously rotate a joint for a desired amount of time.
 \begin{verbatim}
 mobot.setJointSpeed(MOBOT_JOINT1, 45);
-mobot.moveContinuousTime(MOBOT_FORWARD, MOBOT_HOLD, MOBOT_HOLD, MOBOT_HOLD, 3);
+mobot.setMovementStateTime(MOBOT_FORWARD, MOBOT_HOLD, MOBOT_HOLD, MOBOT_HOLD, 3);
 \end{verbatim}
 
 \section{\label{sec:blocking}Blocking and Non-Blocking Functions}
@@ -1027,7 +1027,6 @@ this document.
 \item \texttt{driveJointTo()}
 \item \texttt{driveTo()}
 \item \texttt{move()}
-\item \texttt{moveContinuousTime()}
 \item \texttt{moveJoint()}
 \item \texttt{moveJointTo()}
 \item \texttt{moveJointWait()}
@@ -1047,6 +1046,8 @@ this document.
 \item \texttt{motionTurnRight()}
 \item \texttt{motionUnstand()}
 \item \texttt{resetToZero()}
+\item \texttt{setJointMovementStateTime()}
+\item \texttt{setMovementStateTime()}
 \end{itemize}
 
 \subsection{List of Non-Blocking Movement Functions}
@@ -1054,7 +1055,6 @@ this document.
 \item \texttt{driveJointToNB()}
 \item \texttt{driveToNB()}
 \item \texttt{moveNB()}
-\item \texttt{moveContinuousNB()}
 \item \texttt{moveJointNB()}
 \item \texttt{moveJointToNB()}
 \item \texttt{moveToNB()}
@@ -1072,6 +1072,10 @@ this document.
 \item \texttt{motionTurnRightNB()}
 \item \texttt{motionUnstandNB()}
 \item \texttt{resetToZeroNB()}
+\item \texttt{setJointMovementStateNB()}
+\item \texttt{setJointMovementStateTimeNB()}
+\item \texttt{setMovementStateNB()}
+\item \texttt{setMovementStateTimeNB()}
 \end{itemize}
 
 \subsection{Blocking and Non-Blocking Demo Programs}
@@ -1719,7 +1723,7 @@ mobot.setJointSpeed(MOBOT_JOINT4, speed);
 
 Next, we start capturing the data by using the \texttt{recordAngle()} function:
 \begin{verbatim}
-mobot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
+mobot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval, tolerance);
 \end{verbatim}
 
 The recording process begins immediately and continues in the background. Now,
@@ -1740,7 +1744,7 @@ mobot.recordWait();
 After data has been recorded, we use our previously declared plotting variables to 
 generate plots of the data. 
 \begin{verbatim}
-plot1.title("Original Data for Joint Angle 1 versus Time");
+plot1.title("Data for Joint Angle 1 versus Time");
 plot1.label(PLOT_AXIS_X, "Time (seconds)");
 plot1.label(PLOT_AXIS_Y, "Angle (degrees)");
 plot1.data2DCurve(time, angles1, numDataPoints);
@@ -1756,47 +1760,6 @@ that is generated is shown in Figure \ref{fig:dataacq1_fig2}.
 \includegraphics[width=4in]{images/dataacq1_plot2.png}
 \caption{\label{fig:dataacq1_fig2} The data recorded by \texttt{dataAcquisition.ch}.}
 \end{figure}
-
-Finally, we want to generate a plot where the beginning of the motion correctly starts
-at time 0. Looking at Figure \ref{fig:dataacq1_fig2}, you will notice that there is 
-a fraction of a second delay before the joints actually start moving. For our final plot, we want
-to display a plot of the same data, but shifted to the left so that the motion starts at
-time zero. This will make it easier to verify the speed of the joint and the time it takes
-to get to 720 degrees. 
-
-To do this, we use the \texttt{shiftTime()} function. The \texttt{shiftTime()} function
-is used to shift graphs of data to the left by detecting the first moment a joint begins
-moving. The following code shifts the data to the left so that it appears that the motion begins
-right at time 0.
-\begin{verbatim}
-shiftTime(tolerance, numDataPoints, time, angles1Unwrapped);
-\end{verbatim}
-
-Finally, we plot the shifted data.
-
-\begin{verbatim}
-plot3.title("Unwrapped and shifted Data for Joint Angle 1 versus Time");
-plot3.label(PLOT_AXIS_X, "Time (seconds)");
-plot3.label(PLOT_AXIS_Y, "Angle (degrees)");
-plot3.data2DCurve(time, angles1_unwrapped, numDataPoints);
-plot3.grid(PLOT_ON);
-plot3.plotting();
-\end{verbatim}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=4in]{images/dataacq1_plot3.png}
-\caption{\label{fig:dataacq1_fig3} The unwrapped and shifted data recorded by \texttt{dataAcquisition.ch}.}
-\end{figure}
-
-Figure \ref{fig:dataacq1_fig3}  displays our data that has been time shifted. It can be seen
-that the beginning of the motion now happens at time 0, and it may be verified that the
-line generated is very close to the expected function, $\theta = 45 t$.
-
-In many applications, the user may only be interested in the time shifted data. 
-In such a case, a simplified version of the program may be used. The program 
-\texttt{dataAcquisition1.ch} below removes the intermediate plots and can be modified
-to solve other data acquisition problems.
 
 \subsubsection{\texttt{dataAcquisition1.ch} Source Code}
 \verbatiminput{../demos/chdemos/dataAcquisition1.ch}
@@ -1872,7 +1835,14 @@ mobot.resetToZero();
 
 Next, we begin recording the data.
 \begin{verbatim}
-mobot.recordAngles(time, angles1, angles2, angles3, angles4, numDataPoints, timeInterval);
+mobot.recordAngles( time, 
+                    angles1, 
+                    angles2, 
+                    angles3, 
+                    angles4, 
+                    numDataPoints, 
+                    timeInterval, 
+                    tolerance);
 \end{verbatim}
 
 Similar to \texttt{recordAngle()}, the recording process occurs in the background as
@@ -1889,14 +1859,8 @@ Finally, we wait for the recording to finish.
 mobot.recordWait();
 \end{verbatim}
 
-Now that all of the data has been acquired, we shift and plot the data.
+Now that all of the data has been acquired, we plot the data.
 \begin{verbatim}
-/* Shift the time so the movement starts at time 0 */
-shiftTime(tolerance, numDataPoints, time, 
-          angles1, 
-          angles2, 
-          angles3, 
-          angles4);
 plot.title("Unwrapped Data for Joint Angles versus Time");
 plot.label(PLOT_AXIS_X, "Time (seconds)");
 plot.label(PLOT_AXIS_Y, "Angle (degrees)");
@@ -2020,7 +1984,7 @@ mobot.setTwoWheelRobotSpeed(speed, radius);
 
 Start recording the angle of the first joint.
 \begin{verbatim}
-mobot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
+mobot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval, tolerance);
 \end{verbatim}
 
 Move the mobot forward by the angle calculated earlier with \texttt{distance2angle()}.
@@ -2033,8 +1997,6 @@ Wait for the recording to finish.
 mobot.recordWait();
 \end{verbatim}
 
-Finally, we want to unwrap and shift the data and convert the angle readings to a distance.
-The unwrap and shifting process is identical to Example 1 of this section. 
 We convert the angles back to a distance using the \texttt{angle2distance()} function,
 which takes the radius of a wheel and the angle moved in degrees as arguments and
 return the distance traveled. The arguments can be single variables or computational
@@ -2049,8 +2011,6 @@ radius of the wheel. The units of distance for $d$ will be the same units as tho
 chosen for $r$. For instance, if $r$ is expressed in inches, the result 
 
 \begin{verbatim}
-/* Shift the data */
-shiftTime(tolerance, numDataPoints, time, angles1);
 /* Convert angles to displacement */
 distances = angle2distance(radius, angles1);
 \end{verbatim}

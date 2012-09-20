@@ -28,8 +28,7 @@ array double angles1[numDataPoints];
 /* Declare plotting variables */
 CPlot plot1, plot2, plot3;
 
-/* Declare time shifted data */
-double tolerance = 1.0; /* Degrees */
+double tolerance = 2.0; /* Degrees */
 
 /* Start the motion. First, move mobot to zero position */
 mobot.resetToZero();
@@ -38,7 +37,7 @@ mobot.setJointSpeed(MOBOT_JOINT1, speed);
 mobot.setJointSpeed(MOBOT_JOINT4, speed);
 
 /* Start capturing data */
-mobot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
+mobot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval, tolerance);
 
 /* Move the joint 720 degrees */
 mobot.move(angle, 0, 0, angle);
@@ -47,22 +46,10 @@ mobot.move(angle, 0, 0, angle);
 mobot.recordWait();
 
 /* Plot the data */
-plot1.title("Original Data for Joint Angle 1 versus Time");
+plot1.title("Data for Joint Angle 1 versus Time");
 plot1.label(PLOT_AXIS_X, "Time (seconds)");
 plot1.label(PLOT_AXIS_Y, "Angle (degrees)");
 plot1.data2DCurve(time, angles1, numDataPoints);
 plot1.grid(PLOT_ON);
 plot1.plotting();
-
-/* Adjust the time delay */
-/* Shift the time so the movement starts at time 0 */
-shiftTime(tolerance, numDataPoints, time, angles1);
-
-/* Plot the data */
-plot3.title("Shifted Data for Joint Angle 1 versus Time");
-plot3.label(PLOT_AXIS_X, "Time (seconds)");
-plot3.label(PLOT_AXIS_Y, "Angle (degrees)");
-plot3.data2DCurve(time, angles1, numDataPoints);
-plot3.grid(PLOT_ON);
-plot3.plotting();
 
