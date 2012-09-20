@@ -2559,7 +2559,7 @@ int Mobot_setMovementStateTime(mobot_t* comms,
                                   double seconds)
 {
   int32_t msecs = seconds * 1000;
-  int rc = Mobot_setMovementStateTime(comms,
+  int rc = Mobot_setMovementStateTimeNB(comms,
       dir1,
       dir2,
       dir3,
@@ -4043,6 +4043,15 @@ int CMobot::setMovementStateTime( mobotJointState_t dir1,
                                   double seconds)
 {
   return Mobot_setMovementStateTime(_comms, dir1, dir2, dir3, dir4, seconds);
+}
+
+int CMobot::setMovementStateTimeNB( mobotJointState_t dir1,
+                                  mobotJointState_t dir2,
+                                  mobotJointState_t dir3,
+                                  mobotJointState_t dir4,
+                                  double seconds)
+{
+  return Mobot_setMovementStateTimeNB(_comms, dir1, dir2, dir3, dir4, seconds);
 }
 
 int CMobot::setTwoWheelRobotSpeed(double speed, double radius)
