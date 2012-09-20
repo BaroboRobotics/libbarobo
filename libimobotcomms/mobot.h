@@ -764,6 +764,12 @@ DLLIMPORT int Mobot_setMovementStateTime(mobot_t* comms,
                                   mobotJointState_t dir3,
                                   mobotJointState_t dir4,
                                   double seconds);
+DLLIMPORT int Mobot_setMovementStateTimeNB(mobot_t* comms,
+                                  mobotJointState_t dir1,
+                                  mobotJointState_t dir2,
+                                  mobotJointState_t dir3,
+                                  mobotJointState_t dir4,
+                                  double seconds);
 DLLIMPORT int Mobot_setTwoWheelRobotSpeed(mobot_t* comms, double speed, double radius);
 DLLIMPORT int Mobot_stop(mobot_t* comms);
 DLLIMPORT int Mobot_stopOneJoint(mobot_t* comms, mobotJointId_t id);
