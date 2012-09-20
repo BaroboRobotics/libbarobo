@@ -2834,7 +2834,7 @@ int Mobot_motionRollForwardNB(mobot_t* comms, double angle)
 int Mobot_motionStand(mobot_t* comms)
 {
   double speed;
-  Mobot_moveToZero(comms);
+  Mobot_resetToZero(comms);
   Mobot_moveJointTo(comms, MOBOT_JOINT2, DEG2RAD(-85));
   Mobot_moveJointTo(comms, MOBOT_JOINT3, DEG2RAD(70));
   Mobot_moveWait(comms);
