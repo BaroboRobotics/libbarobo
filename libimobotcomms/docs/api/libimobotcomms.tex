@@ -29,8 +29,8 @@ and select the menu item ``Mobot $\rightarrow$ Configure Mobot Bluetooth''. \\
 \texttt{connectWithIPAddress()} & Connect to a mobot module by specifying a remote computer's IP address. \\
 \texttt{disconnect()} & Disconnect from a mobot module. \\
 \texttt{disableButtonCallback()} & Reverts a Mobot's buttons to their factory-default functions. \\
-\texttt{driveToDirect()} & Move all four joints of the mobot to specified absolute angles. \\
-\texttt{driveToDirectNB()} & Move all four joints of the mobot to specified absolute angles. \\
+\texttt{driveTo()} & Move all four joints of the mobot to specified absolute angles. \\
+\texttt{driveToNB()} & Move all four joints of the mobot to specified absolute angles. \\
 \texttt{enableButtonCallback()} & Enables a user-driven callback for handling button-press events on a module. \\
 \texttt{getJointAngle()} & Get a joint's angle. \\
 \texttt{getJointAngles()} & Get joint angles for all joints. \\
@@ -51,6 +51,7 @@ and select the menu item ``Mobot $\rightarrow$ Configure Mobot Bluetooth''. \\
 \texttt{moveContinuousTime()} & Move joints continuously for a certain amount of time.\\
 \texttt{moveJoint()} & Move a joint. \\
 \texttt{moveJointContinuousNB()} & Move a joint continuously. \\
+\texttt{moveJointContinuousTime()} & Move a joint continuously for a certain amount of time. \\
 \texttt{moveJointNB()} & Move a joint. \\
 \texttt{moveJointTo()} & Set the desired motor position for a joint. \\
 \texttt{moveJointToNB()} & Identical to \texttt{moveJointTo()} but non-blocking. \\
@@ -87,6 +88,8 @@ and select the menu item ``Mobot $\rightarrow$ Configure Mobot Bluetooth''. \\
 Function & Description \\
 \hline
 \texttt{resetToZero()} & Instruct all motors to go to their zero positions. \\
+\texttt{setJointMovementStateNB()} & Set the movement state of a joint. \\
+\texttt{setJointMovementStateTime()} & Set the movement state of a joint for a period of time.\\
 \texttt{setJointSafetyAngle()} & Set the mobot's safety angle limit. The default value is 10 degrees.\\
 \texttt{setJointSafetyAngleTimeout()} & Set the mobot's safety angle limit timeout. The default value is 0.5 seconds.\\
 \texttt{setJointSpeed()} & Set a motor's speed setting in radians per second. \\
@@ -94,6 +97,8 @@ Function & Description \\
 \texttt{setJointSpeedRatio()} & Set a joints speed setting to a fraction of its maximum speed, a value between 0 and 1. \\
 \texttt{setJointSpeedRatios()} & Set all joint speed settings to a fraction of its
 maximum speed, expressed as a value from 0 to 1. \\
+\texttt{setMovementStateNB()} & Change the movement states of the joints. Movement states include moving forward, backward, neutral, or holding their current position.\\
+\texttt{setMovementStateTime()} & Change the movement states of the joints for a certain amount of time.\\
 \texttt{stopAllJoints()} & Stop all currently executing motions of the mobot. \\
 \texttt{stopOneJoint()} & Stop a joint on the mobot. \\
 \texttt{stopTwoJoints()} & Stop two joints on the mobot. \\
@@ -147,8 +152,8 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \input{api/connectWithBluetoothAddress}
 \input{api/connectWithIPAddress}
 \input{api/disconnect}
-\input{api/driveJointToDirect}
-\input{api/driveToDirect}
+\input{api/driveJointTo}
+\input{api/driveTo}
 \input{api/getJointAngle}
 %\input{api/getJointDirection}
 \input{api/getJointMaxSpeed}
@@ -194,11 +199,15 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \input{api/recordWait}
 \input{api/resetToZero}
 %\input{api/setJointDirection}
+\input{api/setJointMovementStateNB}
+\input{api/setJointMovementStateTime}
 \input{api/setJointSafetyAngle}
 \input{api/setJointSafetyAngleTimeout}
 \input{api/setJointSpeed}
 \input{api/setJointSpeedRatio}
 \input{api/setJointSpeedRatios}
 \input{api/setJointSpeeds}
+\input{api/setMovementStateNB}
+\input{api/setMovementStateTime}
 \input{api/setTwoWheelRobotSpeed}
 \input{api/stop}

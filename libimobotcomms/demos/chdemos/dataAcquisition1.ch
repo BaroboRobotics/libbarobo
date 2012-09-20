@@ -37,7 +37,7 @@ mobot.setJointSpeed(MOBOT_JOINT1, speed);
 mobot.setJointSpeed(MOBOT_JOINT4, speed);
 
 /* Start capturing data */
-mobot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
+mobot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval, tolerance);
 
 /* Move the joint 720 degrees */
 mobot.move(angle, 0, 0, angle);
@@ -45,9 +45,6 @@ mobot.move(angle, 0, 0, angle);
 /* Wait for recording to finish */
 mobot.recordWait();
 
-/* Adjust the time delay */
-/* Shift the time so the movement starts at time 0 */
-shiftTime(tolerance, numDataPoints, time, angles1);
 
 /* Plot the data */
 plot.title("Unwrapped and shifted Data for Joint Angle 1 versus Time");

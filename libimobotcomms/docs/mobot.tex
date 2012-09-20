@@ -232,11 +232,11 @@ speeds and positions of the Mobot's joints. The interface is divided
 up into six sections; three on the top half of the interface, and three on 
 the bottom half. 
 
-\subsection{The Mobot Diagram and ``Move To Zero'' Button}
+\subsection{The Mobot Diagram and ``Reset To Zero'' Button}
 The first section of the GUI located on the top left of the interface
 displays a schematic diagram of the Mobot, displaying motor positions.
 Underneath the diagram, there is a large button with the text 
-``Move To Zero''. When clicked, this button will command the connected
+``Reset To Zero''. When clicked, this button will command the connected
 Mobot to rotate all of its joints to a flat ``Zero'' position.
 
 It is also possible to move the Mobot into zero position using the
@@ -1024,8 +1024,8 @@ this document.
 
 \subsection{List of Blocking Movement Functions}
 \begin{itemize}
-\item \texttt{driveJointToDirect()}
-\item \texttt{driveToDirect()}
+\item \texttt{driveJointTo()}
+\item \texttt{driveTo()}
 \item \texttt{move()}
 \item \texttt{moveContinuousTime()}
 \item \texttt{moveJoint()}
@@ -1051,8 +1051,8 @@ this document.
 
 \subsection{List of Non-Blocking Movement Functions}
 \begin{itemize}
-\item \texttt{driveJointToDirectNB()}
-\item \texttt{driveToDirectNB()}
+\item \texttt{driveJointToNB()}
+\item \texttt{driveToNB()}
 \item \texttt{moveNB()}
 \item \texttt{moveContinuousNB()}
 \item \texttt{moveJointNB()}
