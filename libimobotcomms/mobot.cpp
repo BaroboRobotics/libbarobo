@@ -42,6 +42,10 @@
 
 #define ABS(x) ((x)<0?-(x):(x))
 
+#define DEPRECATED() \
+  fprintf(stderr, "Warning: The function \"%s\" is deprecated and will be removed in a future\n" \
+      "release.\n", __func__)
+
 int g_numConnected = 0;
 int g_disconnectSignal = 0;
 
@@ -3789,21 +3793,25 @@ int CMobot::moveNB( double angle1,
 
 int CMobot::moveContinuousNB( mobotJointState_t dir1, mobotJointState_t dir2, mobotJointState_t dir3, mobotJointState_t dir4)
 {
+  DEPRECATED();
   return Mobot_moveContinuousNB(_comms, dir1, dir2, dir3, dir4);
 }
 
 int CMobot::moveContinuousTime( mobotJointState_t dir1, mobotJointState_t dir2, mobotJointState_t dir3, mobotJointState_t dir4, double seconds)
 {
+  DEPRECATED();
   return Mobot_moveContinuousTime(_comms, dir1, dir2, dir3, dir4, seconds);
 }
 
 int CMobot::moveJointContinuousNB(mobotJointId_t id, mobotJointState_t dir)
 {
+  DEPRECATED();
   return Mobot_moveJointContinuousNB(_comms, id, dir);
 }
 
 int CMobot::moveJointContinuousTime(mobotJointId_t id, mobotJointState_t dir, double seconds)
 {
+  DEPRECATED();
   return Mobot_moveJointContinuousTime(_comms, id, dir, seconds);
 }
 
@@ -4312,6 +4320,7 @@ int CMobotGroup::moveContinuousNB(mobotJointState_t dir1,
                        mobotJointState_t dir3, 
                        mobotJointState_t dir4)
 {
+  DEPRECATED();
   return setMovementStateNB(dir1, dir2, dir3, dir4);
 }
 
@@ -4321,11 +4330,13 @@ int CMobotGroup::moveContinuousTime(mobotJointState_t dir1,
                            mobotJointState_t dir4, 
                            double seconds)
 {
+  DEPRECATED();
   return setMovementStateTime(dir1, dir2, dir3, dir4, seconds);
 }
 
 int CMobotGroup::moveJointContinuousNB(mobotJointId_t id, mobotJointState_t dir)
 {
+  DEPRECATED();
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->moveJointContinuousNB(id, dir);
   }
@@ -4334,6 +4345,7 @@ int CMobotGroup::moveJointContinuousNB(mobotJointId_t id, mobotJointState_t dir)
 
 int CMobotGroup::moveJointContinuousTime(mobotJointId_t id, mobotJointState_t dir, double seconds)
 {
+  DEPRECATED();
   return setJointMovementStateTime(id, dir, seconds);
 }
 
