@@ -66,7 +66,7 @@ Mobot modules should be configured the first time they are used with
 a new computer. The process informs the computer which Mobots it
 is allowed to connect to. The is also necessary for certain 
 functions in the \texttt{CMobot} API, such as \texttt{connect()},
-to determine which mobots to connect to.
+to determine which Mobots to connect to.
 
 The configuration is performed through the Barobo RoboMancer
 program. The remainder of the section contains step-by-step instructions
@@ -174,7 +174,7 @@ you to manage, connect, and disconnect from Mobots.
 
 First, add your Mobot address(es) into robomancer by typing in the address and
 clicking on the ``Add Robot'' button. The dialog should now something like
-the figure shown in Figure \ref{fig:shot3.png}.
+the figure shown in Figure \ref{fig:shot3.png}. 
 
 \begin{figure}[H]
 \begin{center}
@@ -183,26 +183,45 @@ the figure shown in Figure \ref{fig:shot3.png}.
 \caption{\label{fig:shot3.png} Configuring robot bluetooth connection.}
 \end{figure}
 
-Once new addresses are added, RoboMancer will remember the addresses in the future. 
-The red dot next to the added address in the ``Connection Status'' column indicates
-the current connection status of the robot. The red dot indicates that the Mobot
-is not currently connected, and a green dot indicates that the Mobot is 
-properly connected. 
+Each additional mobot added occupies its own row in the dialog. After the addition
+of another robot, the dialog appears as shown in Figure \ref{fig:shot4_a.png}.
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=4.5in]{images/robomancer_screenshot4.png}
 \end{center}
+\caption{\label{fig:shot4_a.png} The Connection dialog two Mobot entries.}
+\end{figure}
+
+Once new addresses are added, RoboMancer will remember the addresses in the future. 
+The red dot next to the added addresses indicate
+the current connection status of the robot. A red dot indicates that the Mobot
+is not currently connected, and a green dot indicates that the Mobot is 
+properly connected. To connect to a robot, make sure the robot is on by moving the 
+power switch to the ``RUN'' position, and click on the button labeled ``connect'' 
+inside RoboMancer.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=4.5in]{images/robomancer_screenshot4_connected.png}
+\end{center}
 \caption{\label{fig:shot4.png} The Connection dialog showing a connected Mobot.}
 \end{figure}
 
-To connect to your Mobot(s), select the Mobot you wish to connect to and click on
-the button labelled ``Connect''. If the connection succeeds, the red dot should
+If the connection succeeds, the red dot should
 turn green to indicate that a connection has been established, as shown in 
-Figure \ref{fig:shot4.png}. Should the connection
+Figure \ref{fig:shot4.png}.  Should the connection
 fail, please check that the address has been entered correctly, the Mobot is on,
 your computer has Bluetooth capability, and that the Mobot is within range of 
 your computer, and try again.
+Note that in Figure \ref{fig:shot4.png}, an additional
+Mobot had been added to the list of known Mobots to illustrate how the dialog
+behaves as more Mobots are added. Each additional mobot appears as its own
+row in the dialog.
+
+Once the connection succeeds, the ``Connect'' button for that mobot turns into
+a ``Disconnect'' button. Clicking on the ``Disconnect'' button disconnects
+the mobot.
 
 Furthermore, please note that Bluetooth devices have a maximum limit of connected 
 devices. The maximum limit is 7 devices connected simultaneously. This means that 
@@ -211,6 +230,90 @@ other devices are connected. If, for instance, two other devices are currently
 connected, such as a bluetooth enabled phone and a bluetooth mouse, then the 
 maximum number of connected Mobots decreases to 5, for a total of 7 connected 
 devices.
+
+\subsection{Upgrading the Mobot's Firmware}
+Upon connecting to Mobots, RoboMancer is able to determine if the firmware 
+currently residing on the Mobot is up to date. If the firmware is not up to 
+date, RoboMancer will draw an ``Upgrade Firmware'' button, as shown in 
+Figure \ref{fig:update1}. 
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=4.5in]{images/update1.png}
+\end{center}
+\caption{\label{fig:update1} The RoboMancer connect dialog showing a connected
+Mobot with out-of-date firmware.}
+\end{figure}
+
+Upgrading the firmware of a Mobot is optional, but Mobots with out-of-date firmware
+may have missing functionality. It is recommended to update the firmware of
+out-of-date Mobots as soon as possible. The update process is started by
+clicking on the button labeled ``Upgrade Firmware''. 
+
+After clicking the ``Upgrade Firmware'' button, the dialog shown in Figure
+\ref{fig:update2} is shown. This dialog instructs the user to press the ``A''
+button on the Mobot and waits until the button-press is detected. The 
+entire upgrade process can be cancelled by clicking on the ``Cancel'' button.
+Once the ``A'' button is pressed, the upgrade process proceeds to the next screen.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=4.5in]{images/update2.png}
+\end{center}
+\caption{\label{fig:update2} The first step in the upgrade firmware process.}
+\end{figure}
+
+The next dialog in the process, shown in Figure \ref{fig:update3}, instructs
+the user move the switch to the middle position, marked ``PROG''. After moving the
+switch into this position, click on the ``Continue'' button to continue.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=4.5in]{images/reset3.png}
+\end{center}
+\caption{\label{fig:update3} The second step in the upgrade firmware process.}
+\end{figure}
+
+The final upgrade dialog as shown in Figure \ref{fig:update4}  is shown after
+clicking on ``Continue''. At this point, the
+robot should be turned on by moving the switch to the ``RUN'' position. Once the
+robot is on, the update process begins immediately. The progress bar shown in 
+Figure \ref{fig:update4} should begin moving until completion. The entire process 
+may take several minutes, and the Mobot should not be turned off or moved away from
+the computer during this time, or the firmware may become corrupted.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=4.5in]{images/reset4.png}
+\end{center}
+\caption{\label{fig:update4} The third step in the upgrade firmware process.}
+\end{figure}
+
+\subsection{Forcing a Mobot's Firmware to Reset}
+In the rare event that a Mobot's firmware gets corrupted, it is possible to 
+reset the firmware to a ``safe'' version. Symptoms of a Mobot whose firmware
+may have been corrupted include the following:
+\begin{itemize}
+\item The blue light on the Mobot does not turn on.
+\item The Mobot resets randomly.
+\item The default button actions do not work.
+\end{itemize}
+To begin the reset process, click on
+``File $\rightarrow$ Reset Mobot Firmware'' in the application menu. This will bring up the dialog shown
+in \ref{fig:reset1}. To begin the process, type in the address of the Mobot to be reflashed
+and click on the button labeled ``begin''. 
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=4.5in]{images/reset1.png}
+\end{center}
+\caption{\label{fig:reset1} The opening dialog for force-reflashing a Mobot.}
+\end{figure}
+
+The rest of the process is similar to the normal upgrading process of the Mobot. Once
+the ``safe'' version of the firmware has been flashed onto the Mobot, it is recommended to
+connect to the Mobot using RoboMancer and upgrade the firmware back to the most up-to-date
+version.
 
 \section{ The ``Motion Control'' Panel}
 \begin{figure}[H]
