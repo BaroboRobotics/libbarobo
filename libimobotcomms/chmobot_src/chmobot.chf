@@ -260,7 +260,7 @@ int CMobot::getJointAngles(double &angle1, double &angle2, double &angle3, doubl
     dlrunfun(fptr, &retval, NULL, this, &angle1, &angle2, &angle3, &angle4);
     return retval;
 }
-int CMobot::getJointAnglesAverage(double &angle1, double &angle2, double &angle3, double &angle4) {
+int CMobot::getJointAnglesAverage(double &angle1, double &angle2, double &angle3, double &angle4, ...) {
     void *fptr;
     int retval;
     va_list ap;

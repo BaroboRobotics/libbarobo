@@ -278,9 +278,17 @@ class CMobot
 #endif
     static const char* getConfigFilePath();
     int getJointAngle(mobotJointId_t id, double &angle);
+#ifdef _CH_
+    int getJointAngleAverage(mobotJointId_t id, double &angle, ... );
+#else
     int getJointAngleAverage(mobotJointId_t id, double &angle, int numReadings=10);
+#endif
     int getJointAngles(double &angle1, double &angle2, double &angle3, double &angle4);
+#ifdef _CH_
+    int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, double &angle4, ...);
+#else
     int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, double &angle4, int numReadings=10);
+#endif
     int getJointMaxSpeed(mobotJointId_t id, double &maxSpeed);
     int getJointSafetyAngle(double &angle);
     int getJointSafetyAngleTimeout(double &seconds);
