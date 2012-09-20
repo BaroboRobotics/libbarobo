@@ -867,6 +867,7 @@ int Mobot_getJointAnglesAverage(mobot_t* comms,
   *angle2 = *angle2 / numReadings;
   *angle3 = *angle3 / numReadings;
   *angle4 = *angle4 / numReadings;
+  return 0;
 }
 
 int Mobot_getJointAnglesTime(mobot_t* comms, 

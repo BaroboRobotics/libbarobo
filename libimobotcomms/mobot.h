@@ -79,6 +79,7 @@ typedef struct sockaddr_rc sockaddr_t;
 #ifndef _CH_
 typedef unsigned char uint8_t;
 typedef unsigned __int32 uint32_t;
+typedef __int32 int32_t;
 #endif
 #define AF_BLUETOOTH AF_BTH
 #define BTPROTO_RFCOMM BTHPROTO_RFCOMM
