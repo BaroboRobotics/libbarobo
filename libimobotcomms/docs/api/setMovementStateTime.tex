@@ -3,8 +3,10 @@
 \rule{4.5in}{0.015in}\\
 \noindent
 {\LARGE \texttt{CMobot::setMovementStateTime()}\index{CMobot::setMovementStateTime()}}\\
+{\LARGE \texttt{CMobot::setMovementStateTimeNB()}\index{CMobot::setMovementStateTimeNB()}}\\
 %\phantomsection
 \addcontentsline{toc}{section}{setMovementStateTime()}
+\addcontentsline{toc}{section}{setMovementStateTimeNB()}
 
 \noindent
 {\bf Synopsis}
@@ -12,6 +14,11 @@
 \begin{verbatim}
 #include <mobot.h>
 int CMobot::setMovementStateTime( mobotJointState_t dir1, 
+                                mobotJointState_t dir2, 
+                                mobotJointState_t dir3, 
+                                mobotJointState_t dir4, 
+                                double seconds);
+int CMobot::setMovementStateTimeNB( mobotJointState_t dir1, 
                                 mobotJointState_t dir2, 
                                 mobotJointState_t dir3, 
                                 mobotJointState_t dir4, 
@@ -38,7 +45,8 @@ The \texttt{seconds} parameter is the time to perform the movement, in seconds.
 {\bf Description}\\
 This function causes joints of a mobot to begin moving. The joints will continue moving
 until the joint hits a joint limit, or the time specified in the \texttt{seconds} parameter
-is reached. This function will block until the motion is completed.\\
+is reached. The \texttt{setMovementStateTime()} function will block until the motion is completed, 
+whereas the \texttt{setMovementStateTimeNB()} function will not block. 
 
 \noindent
 {\bf Example}\\
