@@ -489,6 +489,7 @@ class CMobotGroup
     int resetToZeroNB();
     int setJointMovementStateNB(mobotJointId_t id, mobotJointState_t dir);
     int setJointMovementStateTime(mobotJointId_t id, mobotJointState_t dir, double seconds);
+    int setJointMovementStateTimeNB(mobotJointId_t id, mobotJointState_t dir, double seconds);
     int setJointSpeed(mobotJointId_t id, double speed);
     int setJointSpeeds(double speed1, double speed2, double speed3, double speed4);
     int setJointSpeedRatio(mobotJointId_t id, double ratio);
@@ -498,6 +499,11 @@ class CMobotGroup
         mobotJointState_t dir3, 
         mobotJointState_t dir4);
     int setMovementStateTime(mobotJointState_t dir1, 
+        mobotJointState_t dir2, 
+        mobotJointState_t dir3, 
+        mobotJointState_t dir4, 
+        double seconds);
+    int setMovementStateTimeNB(mobotJointState_t dir1, 
         mobotJointState_t dir2, 
         mobotJointState_t dir3, 
         mobotJointState_t dir4, 
