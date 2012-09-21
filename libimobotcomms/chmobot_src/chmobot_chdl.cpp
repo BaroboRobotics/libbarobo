@@ -245,7 +245,7 @@ EXPORTCH int getJointAngles_chdl(void *varg) {
     return retval;
 }
 
-EXPORTCH int getJointAnglesAverageAverage_chdl(void *varg) {
+EXPORTCH int getJointAnglesAverage_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CMobot *mobot;
