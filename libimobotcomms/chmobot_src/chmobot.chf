@@ -234,7 +234,7 @@ int CMobot::getJointAngleAverage(int id, double & angle, ...) {
     va_list ap;
     va_start(ap, angle);
 
-    fptr = dlsym(g_chmobot_dlhandle, "getJointAngle_chdl");
+    fptr = dlsym(g_chmobot_dlhandle, "getJointAngleAverage_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
@@ -267,7 +267,7 @@ int CMobot::getJointAnglesAverage(double &angle1, double &angle2, double &angle3
     int numReadings;
     va_start(ap, angle4);
 
-    fptr = dlsym(g_chmobot_dlhandle, "getJointAngles_chdl");
+    fptr = dlsym(g_chmobot_dlhandle, "getJointAnglesAverage_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
