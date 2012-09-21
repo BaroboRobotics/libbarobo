@@ -4476,9 +4476,14 @@ int CMobotGroup::setJointMovementStateTime(mobotJointId_t id, mobotJointState_t 
 #else
   usleep(msecs * 1000);
 #endif
+  return 0;
+}
+
+int CMobotGroup::setJointMovementStateTimeNB(mobotJointId_t id, mobotJointState_t dir, double seconds)
+{
+  int msecs = seconds * 1000.0;
   for(int i = 0; i < _numRobots; i++) {
-    //_robots[i]->stop();
-    _robots[i]->setJointMovementStateNB(id, MOBOT_HOLD);
+    _robots[i]->setJointMovementStateNB(id, dir);
   }
   return 0;
 }
@@ -4544,6 +4549,19 @@ int CMobotGroup::setMovementStateTime(mobotJointState_t dir1,
   for(int i = 0; i < _numRobots; i++) {
     //_robots[i]->stop();
     _robots[i]->setMovementStateNB(MOBOT_HOLD, MOBOT_HOLD, MOBOT_HOLD, MOBOT_HOLD);
+  }
+  return 0;
+}
+
+int CMobotGroup::setMovementStateTimeNB(mobotJointState_t dir1, 
+                           mobotJointState_t dir2, 
+                           mobotJointState_t dir3, 
+                           mobotJointState_t dir4, 
+                           double seconds)
+{
+  int msecs = seconds * 1000.0;
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->setMovementStateNB(dir1, dir2, dir3, dir4);
   }
   return 0;
 }
