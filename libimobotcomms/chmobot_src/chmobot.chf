@@ -65,7 +65,7 @@ int CMobot::connect() {
         fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, NULL, this, connect);
+    dlrunfun(fptr, &retval, NULL, this);
     return retval;
 }
 int CMobot::connectWithAddress(char *address, ...) {
