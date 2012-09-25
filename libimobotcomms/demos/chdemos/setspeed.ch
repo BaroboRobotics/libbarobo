@@ -34,4 +34,4 @@ mobot.move(360, 0, 0, 360);
 
 /* move at 1.83inch/sec with the radius 3.5 inches for 3 seconds */
 printf("Move continuously for 3 seconds.\n");
-mobot.moveContinuousTime(MOBOT_FORWARD, MOBOT_HOLD, MOBOT_HOLD, MOBOT_FORWARD, 3);
+mobot.setMovementStateTime(MOBOT_FORWARD, MOBOT_HOLD, MOBOT_HOLD, MOBOT_FORWARD, 3);
