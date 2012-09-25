@@ -519,6 +519,8 @@ int Mobot_disconnect(mobot_t* comms)
   }
 #else
   closesocket(comms->socket);
+  THREAD_JOIN(*comms->commsThread);
+  CloseHandle(*comms->commsThread);
   //CloseHandle((LPVOID)comms->socket);
 #endif
   if(g_numConnected > 0) {
