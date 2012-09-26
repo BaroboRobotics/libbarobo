@@ -3,8 +3,10 @@
 \rule{4.5in}{0.015in}\\
 \noindent
 {\LARGE \texttt{CMobotGroup::setJointMovementStateTime()}\index{CMobotGroup::setJointMovementStateTime()}}\\
+{\LARGE \texttt{CMobotGroup::setJointMovementStateTimeNB()}\index{CMobotGroup::setJointMovementStateTimeNB()}}\\
 %\phantomsection
 \addcontentsline{toc}{section}{setJointMovementStateTime()}
+\addcontentsline{toc}{section}{setJointMovementStateTimeNB()}
 
 \noindent
 {\bf Synopsis}
@@ -12,6 +14,7 @@
 \begin{verbatim}
 #include <mobot.h>
 int CMobotGroup::setJointMovementStateTime(mobotJointId_t id, mobotJointState_t dir1, double seconds);
+int CMobotGroup::setJointMovementStateTimeNB(mobotJointId_t id, mobotJointState_t dir1, double seconds);
 \end{verbatim}
 
 \noindent
