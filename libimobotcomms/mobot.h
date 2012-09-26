@@ -336,7 +336,7 @@ class CMobot
                      double seconds,
                      ...);
 #else
-    int recordAngle(mobotJointId_t id, double time[], double angle[], int num, double seconds, double threshhold = 0);
+    int recordAngle(mobotJointId_t id, double time[], double angle[], int num, double seconds, double threshold = 0);
     int recordAngles(double time[], 
                      double angle1[], 
                      double angle2[], 
@@ -344,10 +344,10 @@ class CMobot
                      double angle4[], 
                      int num, 
                      double seconds,
-                     double threshhold = 0);
+                     double threshold = 0);
 #endif
 #ifndef _CH_
-    int recordAngleBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double seconds, double threshhold = 0);
+    int recordAngleBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double seconds, double threshold = 0);
 #else
     int recordAngleBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double seconds, ...);
 #endif
@@ -359,7 +359,7 @@ class CMobot
                           mobotRecordData_t &angle3, 
                           mobotRecordData_t &angle4, 
                           double seconds,
-                          double threshhold = 0);
+                          double threshold = 0);
 #else
     int recordAnglesBegin(mobotRecordData_t &time, 
                           mobotRecordData_t &angle1, 
@@ -713,13 +713,13 @@ DLLIMPORT int Mobot_recordAngle(mobot_t* comms,
                                 double* angle, 
                                 int num, 
                                 double timeInterval,
-                                double threshhold);
+                                double threshold);
 DLLIMPORT int Mobot_recordAngleBegin(mobot_t* comms,
                                      mobotJointId_t id,
                                      double **time,
                                      double **angle,
                                      double timeInterval, 
-                                     double threshhold);
+                                     double threshold);
 DLLIMPORT int Mobot_recordAngleEnd(mobot_t* comms, mobotJointId_t id, int *num);
 DLLIMPORT int Mobot_recordAngles(mobot_t* comms, 
                                  double *time, 
@@ -729,7 +729,7 @@ DLLIMPORT int Mobot_recordAngles(mobot_t* comms,
                                  double* angle4,
                                  int num,
                                  double timeInterval,
-                                 double threshhold);
+                                 double threshold);
 DLLIMPORT int Mobot_recordAnglesBegin(mobot_t* comms,
                                      double **time,
                                      double **angle1,
@@ -737,7 +737,7 @@ DLLIMPORT int Mobot_recordAnglesBegin(mobot_t* comms,
                                      double **angle3,
                                      double **angle4,
                                      double timeInterval,
-                                     double threshhold);
+                                     double threshold);
 DLLIMPORT int Mobot_recordAnglesEnd(mobot_t* comms, int* num);
 DLLIMPORT int Mobot_recordWait(mobot_t* comms);
 DLLIMPORT int Mobot_reset(mobot_t* comms);
