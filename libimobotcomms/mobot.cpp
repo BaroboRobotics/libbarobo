@@ -2474,6 +2474,12 @@ int Mobot_setJointSpeed(mobot_t* comms, mobotJointId_t id, double speed)
   uint8_t buf[32];
   float f;
   int status;
+  if(speed > comms->maxSpeed[id-1]) {
+    fprintf(stderr, 
+        "Warning: Cannot set speed for joint %d to %.2lf degrees/second, which is\n"
+        "beyond the maximum limit, %.2lf degrees/second.\n",
+        id, RAD2DEG(speed), RAD2DEG(comms->maxSpeed[id-1]));
+  }
   f = speed;
   buf[0] = (uint8_t)id-1;
   memcpy(&buf[1], &f, 4);
