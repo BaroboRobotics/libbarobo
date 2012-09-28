@@ -26,7 +26,7 @@ int CMobot::getJointAnglesAbs(
 
 \noindent
 {\bf Purpose}\\
-Retrieve a mobot's current joint angles.\\
+Retrieve a Mobot's current joint angles.\\
 
 \noindent
 {\bf Return Value}\\
@@ -49,14 +49,14 @@ represents the motor's angle in degrees.  \\
 
 \noindent
 {\bf Description}\\
-This function gets the current motor angles of a mobot's motors. The
+This function gets the current motor angles of a Mobot's motors. The
 angle returned is in units of degrees and is accurate to roughly $\pm0.17$
 degrees. 
 
 The function \texttt{getJointAngles()} always returns an angle between -180 and
 +180 degrees. The \texttt{getJointAnglesAbs()} function, however, gets the total
 angle the joint has turned since the mobot has been powered on. For instance, 
-if the faceplate joint 1 has been rotated two full rotations after initial powerup,
+if the faceplate joint 1 has been rotated two full rotations after initial power up,
   the function \texttt{getJointAngles()} will report that the joint is at angle 0,
   whereas the function \texttt{getJointAnglesAbs()} will report that the joint
   angle is 720 degrees.

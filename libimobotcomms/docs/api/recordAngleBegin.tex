@@ -16,7 +16,7 @@ int CMobot::recordAngleBegin(
     mobotRecordData_t &time, 
     mobotRecordData_t &angle, 
     double seconds, 
-    double threshhold = 0.0);
+    double threshold = 0.0);
 \end{verbatim}
 
 \noindent
@@ -40,9 +40,9 @@ discussed in Section \ref{sec:mobotJointId_t} on page
 \texttt{angle} & A variable which will store the angle values for each time. \\
 \texttt{seconds} & The number of seconds between angle readings. The minimum value allowed for
 this variable is 0.05. \\
-\texttt{threshhold} & (optional) This argument is used to align the first
+\texttt{threshold} & (optional) This argument is used to align the first
 detected motion to the y-axis. When the angle of any joint moves by
-\texttt{threshhold} degrees, that point is aligned with the y-axis.
+\texttt{threshold} degrees, that point is aligned with the y-axis.
 \end{tabular}
 \end{description}
 

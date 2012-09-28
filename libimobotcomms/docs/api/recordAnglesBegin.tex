@@ -17,7 +17,7 @@ int CMobot::recordAnglesBegin(double* &time,
                               double* &angle3, 
                               double* &angle4, 
                               double seconds,
-                              double threshhold = 0.0);
+                              double threshold = 0.0);
 \end{verbatim}
 
 \noindent
@@ -41,9 +41,9 @@ The function returns 0 on success and non-zero otherwise.\\
 \texttt{angle4} & ... \\
 \texttt{seconds} & The number of seconds between angle readings. The minimum value allowed for
 this variable is 0.05. \\
-\texttt{threshhold} & (optional) This argument is used to align the first
+\texttt{threshold} & (optional) This argument is used to align the first
 detected motion to the y-axis. When the angle of any joint moves by
-\texttt{threshhold} degrees, that point is aligned with the y-axis.
+\texttt{threshold} degrees, that point is aligned with the y-axis.
 \end{tabular}
 \end{description}
 
