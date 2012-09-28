@@ -13,7 +13,7 @@
 #include <mobot.h>
 int CMobot::recordAngles(double time[], double angle1[], double angle2[], 
                          double angle3[], double angle4[], int num, 
-                         double seconds, double threshhold = 0.0);
+                         double seconds, double threshold = 0.0);
 \end{verbatim}
 
 \noindent
@@ -37,9 +37,9 @@ The function returns 0 on success and non-zero otherwise.\\
 \texttt{angle4} & An array which will store the angle values for joint 4. \\
 \texttt{num} & The number of elements of the arrays. \\
 \texttt{seconds} & The number of seconds between angle readings. \\
-\texttt{threshhold} & (optional) This argument is used to align the first
+\texttt{threshold} & (optional) This argument is used to align the first
 detected motion to the y-axis. When the angle of any joint moves by
-\texttt{threshhold} degrees, that point is aligned with the y-axis.
+\texttt{threshold} degrees, that point is aligned with the y-axis.
 \end{tabular}
 \end{description}
 

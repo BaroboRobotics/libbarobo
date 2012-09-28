@@ -12,10 +12,6 @@ is called automatically and should not be called explicitly. \\
 \texttt{addRobot()} & Add a mobot to be a member of the mobot group. \\
 \texttt{move()} & Move all four joints of the mobots by specified angles. \\
 \texttt{moveNB()} & Identical to \texttt{move()} but non-blocking. \\
-\texttt{moveContinuousNB()} & Move joints continuously. Joints will move untill stopped.\\
-\texttt{moveContinuousTime()} & Move joints continuously for a certain amount of time.\\
-\texttt{moveJointContinuousNB()} & Move a single joint on all mobots continuously. \\
-\texttt{moveJointContinuousTime()} & Move a single joint on all mobots continuously for a specific amount of time. \\
 \texttt{moveJoint()} & Move a motor from its current position by an angle. \\
 \texttt{moveJointNB()} & Identical to \texttt{moveJoint()} but non-blocking. \\
 \texttt{moveJointTo()} & Set the desired motor position for a joint. \\
@@ -28,11 +24,17 @@ is called automatically and should not be called explicitly. \\
 \texttt{moveWait()} & Wait until all motors have stopped moving. \\
 %\texttt{setJointDirection()} & Set the motor direction of a motor. Set
 %to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
+\texttt{setJointMovementStateNB()} & Move a single joint on all mobots continuously. \\
+\texttt{setJointMovementStateTime()} & Move a single joint on all mobots continuously for a specific amount of time. \\
+\texttt{setJointMovementStateTimeNB()} & Move a single joint on all mobots continuously for a specific amount of time. \\
 \texttt{setJointSpeed()} & Set a motor's speed setting in radians per second. \\
 \texttt{setJointSpeeds()} & Set all motor speeds in radians per second. \\
 \texttt{setJointSpeedRatio()} & Set a joints speed setting to a fraction of its maximum speed, a value between 0 and 1. \\
 \texttt{setJointSpeedRatios()} & Set all joint speed settings to a fraction of its
 maximum speed, expressed as a value from 0 to 1. \\
+\texttt{setMovementStateNB()} & Move joints continuously. Joints will move untill stopped.\\
+\texttt{setMovementStateTime()} & Move joints continuously for a certain amount of time.\\
+\texttt{setMovementStateTimeNB()} & Move joints continuously for a certain amount of time.\\
 \texttt{setTwoWheelRobotSpeed()} & Move the mobots at a constant forward velocity. \\
 \texttt{stop()} & Stop all currently executing motions of the mobot. \\
 \hline
@@ -44,15 +46,13 @@ Function Name & Description \\
 \hline
 \texttt{addRobot()} & Add a mobot to the group. \\
 \texttt{move()} & Move joints on mobots from their current positions for all mobots in the group. \\
-\texttt{moveContinuousNB()} & Move joints continuously for all mobots in the group. \\
-\texttt{moveContinunousTime()} & Move joints continuously for a specific amount of time for all mobots in the group.\\
-\texttt{moveJointContinuousNB()} & Move a single joint continuously for all mobots in the group. \\
-\texttt{moveJointContinuousTime()} & Move a single joint continuously for a specific amount of time for all mobots in the group.\\
 \texttt{moveJointTo()} & Move a joint to an absolute angle for all mobots in the group.\\
 \texttt{moveJointWait()} & Wait for a joint to finish moving for all mobots in the group. \\
 \texttt{moveTo()} & Move joints to a set of specific angles for all mobots in the group. \\
 \texttt{moveWait()} & Wait for all joints to finish moving. \\
 \texttt{moveToZero()} & Move all joints to their zero positions. \\
+\texttt{setJointMovementStateNB()} & Move a single joint continuously for all mobots in the group. \\
+\texttt{setJointMovementStateTime()} & Move a single joint continuously for a specific amount of time for all mobots in the group.\\
 \texttt{setJointSpeed()} & Set the speed of a joint, in radians per second. \\
 \texttt{setJointSpeedRatio()} & Set the speed of a joint as a ratio of the maximum speed. \\
 \texttt{setTwoWheelRobotSpeed()} & Move the mobot at a linear speed, given the wheel size and desired speed.\\
@@ -80,6 +80,9 @@ Function Name & Description \\
 \texttt{motionUnstand()} & Make all mobots in the group drop down from a standing position. \\
 \texttt{motionUnstandNB()} & Make all mobots in the group drop down from a standing position. \\
 \texttt{motionWait()} & Wait for the mobots to complete all currently executing compound motions.\\
+\texttt{setMovementStateNB()} & Move joints continuously for all mobots in the group. \\
+\texttt{setMovementStateTime()} & Move joints continuously for a specific amount of time for all mobots in the group.\\
+\texttt{setMovementStateTimeNB()} & Move joints continuously for a specific amount of time for all mobots in the group.\\
 \hline
 \end{tabular}
 \end{comment}

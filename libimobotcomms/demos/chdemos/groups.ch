@@ -61,4 +61,6 @@ groupC.moveWait();
 groupD.setMovementStateNB(MOBOT_FORWARD, MOBOT_HOLD, MOBOT_HOLD, MOBOT_FORWARD);
 mobot4.motionUnstand();
 mobot4.motionInchwormLeft(2);
+
+/* Make the other 3 robots in groupD unstand */
 groupD.motionUnstand();

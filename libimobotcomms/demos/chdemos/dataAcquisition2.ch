@@ -32,14 +32,8 @@ mobot.setJointSpeeds(45, 45, 45, 45);
 mobot.resetToZero();
 
 /* Start capturing data */
-mobot.recordAngles( time, 
-                    angles1, 
-                    angles2, 
-                    angles3, 
-                    angles4, 
-                    numDataPoints, 
-                    timeInterval, 
-                    tolerance);
+mobot.recordAngles( time, angles1, angles2, angles3, angles4, 
+                    numDataPoints, timeInterval, tolerance);
 
 /* Perform the standing and unstanding motions */
 mobot.motionTurnRight(360);

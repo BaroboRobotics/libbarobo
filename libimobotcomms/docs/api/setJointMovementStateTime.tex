@@ -3,8 +3,10 @@
 \rule{4.5in}{0.015in}\\
 \noindent
 {\LARGE \texttt{CMobot::setJointMovementStateTime()}\index{CMobot::setJointMovementStateTime()}}\\
+{\LARGE \texttt{CMobot::setJointMovementStateTimeNB()}\index{CMobot::setJointMovementStateTimeNB()}}\\
 %\phantomsection
 \addcontentsline{toc}{section}{setJointMovementStateTime()}
+\addcontentsline{toc}{section}{setJointMovementStateTimeNB()}
 
 \noindent
 {\bf Synopsis}
@@ -12,6 +14,7 @@
 \begin{verbatim}
 #include <mobot.h>
 int CMobot::setJointMovementStateTime(mobotJointId_t id, mobotJointState_t dir1, double seconds);
+int CMobot::setJointMovementStateTimeNB(mobotJointId_t id, mobotJointState_t dir1, double seconds);
 \end{verbatim}
 
 \noindent
@@ -48,6 +51,9 @@ This function causes joints of a mobot to begin moving at the previously set
 speed. The joints will continue moving until the joint hits a joint limit, 
 the joint is stopped by setting the speed to zero, or the specified amount of
 time has expired. \\
+
+The function \texttt{setJointMovementStateTimeNB()} is the non-blocking version, and
+the timing of the timed motion will occur in the background while the main program continues.
 
 \noindent
 {\bf Example}\\
