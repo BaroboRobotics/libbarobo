@@ -352,7 +352,7 @@ int Mobot_connectWithBluetoothAddress(mobot_t* comms, const char* address, int c
   }
   return status;
 #else
-  fprintf(stderr, "ERROR: connectWithAddress() is currently unavailable on the Mac platform.\n");
+  return Mobot_connectWithAddressTTY(comms, address);
   return -1;
 #endif
 }
