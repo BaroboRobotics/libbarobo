@@ -2130,6 +2130,9 @@ void* Mobot_recordAnglesBeginThread(void* arg)
     (*rArg->time_p)[i] = (*rArg->time_p)[i] - start_time;
     /* Convert angle to degrees */
     (*rArg->angle_p)[i] = RAD2DEG((*rArg->angle_p)[i]);
+    (*rArg->angle2_p)[i] = RAD2DEG((*rArg->angle2_p)[i]);
+    (*rArg->angle3_p)[i] = RAD2DEG((*rArg->angle3_p)[i]);
+    (*rArg->angle4_p)[i] = RAD2DEG((*rArg->angle4_p)[i]);
 #ifndef __MACH__
     clock_gettime(CLOCK_REALTIME, &itime);
 #else
@@ -2198,6 +2201,9 @@ void* Mobot_recordAnglesBeginThread(void* arg)
     (*rArg->time_p)[i] = (*rArg->time_p)[i] - start_time;
     /* Convert angle to degrees */
     (*rArg->angle_p)[i] = RAD2DEG((*rArg->angle_p)[i]);
+    (*rArg->angle2_p)[i] = RAD2DEG((*rArg->angle2_p)[i]);
+    (*rArg->angle3_p)[i] = RAD2DEG((*rArg->angle3_p)[i]);
+    (*rArg->angle4_p)[i] = RAD2DEG((*rArg->angle4_p)[i]);
     itime = GetTickCount();
     dt = itime - cur_time;
     if(dt < (rArg->msecs)) {
