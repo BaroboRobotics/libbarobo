@@ -5,18 +5,22 @@
 
 CMobot mobot1;
 CMobot mobot2;
+CMobot mobot3;
+CMobot mobot4;
+CMobotGroup group1;
 double angles[4];
 int i;
 
 /* Connect to the paired MoBots */
 mobot1.connect();
 mobot2.connect();
-/* Move both mobots to zero position */
-mobot1.resetToZero();
-mobot2.resetToZero();
-/* Relax both mobots */
-mobot1.stopAllJoints();
-mobot2.stopAllJoints();
+mobot3.connect();
+mobot4.connect();
+
+/* Add mobots to the group */
+group1.addRobot(mobot2);
+group1.addRobot(mobot3);
+group1.addRobot(mobot4);
 
 while(1) {
   /* Get the beginning time of loop */
@@ -27,7 +31,7 @@ while(1) {
       angles[2],
       angles[3]);
   /* Move the second mobot */
-  mobot2.driveToDirectNB(
+  group1.driveToDirectNB(
       angles[0],
       angles[1],
       angles[2],

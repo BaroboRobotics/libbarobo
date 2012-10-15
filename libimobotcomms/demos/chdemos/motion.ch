@@ -9,6 +9,12 @@ mobot.connect();
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
 mobot.resetToZero();
 
+mobot.moveTo(90, 0, 0, 90);
+
+mobot.moveTo(180, 0, 0, 180);
+
+mobot.moveTo(0, 0, 0, 0);
+
 /* test all pre-programmed motions */
 mobot.motionArch(90);
 mobot.motionInchwormLeft(4);
