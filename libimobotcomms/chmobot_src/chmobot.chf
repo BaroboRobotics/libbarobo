@@ -1069,6 +1069,96 @@ int CMobot::recordAnglesEnd(int &num) {
     dlrunfun(fptr, &retval, NULL, this, &num);
     return retval;
 }
+int CMobot::recordDistanceBegin(int id, double* &time, double* &angle, double seconds, double radius, ...) {
+    void *fptr;
+    int retval;
+    va_list ap;
+    double threshhold = 0.0;
+    va_start(ap, seconds);
+
+    fptr = dlsym(g_chmobot_dlhandle, "recordDistanceBegin_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    if(va_count(ap) == 1) {
+      threshhold = va_arg(ap, double);
+      dlrunfun(fptr, &retval, NULL, this, id, &time, &angle, radius, seconds, threshhold);
+    } else {
+      dlrunfun(fptr, &retval, NULL, this, id, &time, &angle, radius, seconds);
+    }
+    va_end(ap);
+    return retval;
+}
+int CMobot::recordDistanceEnd(int id, int &num) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "recordDistanceEnd_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, &num);
+    return retval;
+}
+int CMobot::recordDistancesBegin(
+    double* &time, 
+    double* &angle1, 
+    double* &angle2, 
+    double* &angle3, 
+    double* &angle4, 
+    double radius,
+    double seconds,
+    ...) 
+{
+    void *fptr;
+    int retval;
+    double threshhold;
+    va_list ap;
+    va_start(ap, seconds);
+
+    fptr = dlsym(g_chmobot_dlhandle, "recordDistancesBegin_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    if(va_count(ap) == 1) {
+      threshhold = va_arg(ap, double);
+      dlrunfun(fptr, &retval, NULL, this, 
+          &time, 
+          &angle1, 
+          &angle2, 
+          &angle3, 
+          &angle4, 
+          radius,
+          seconds, 
+          threshhold);
+    } else {
+      dlrunfun(fptr, &retval, NULL, this, 
+          &time, 
+          &angle1, 
+          &angle2, 
+          &angle3, 
+          &angle4, 
+          radius,
+          seconds);
+    }
+    va_end(ap);
+    return retval;
+}
+int CMobot::recordDistancesEnd(int &num) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "recordDistancesEnd_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, &num);
+    return retval;
+}
 int CMobot::recordWait() {
     void *fptr;
     int retval;

@@ -125,6 +125,7 @@ typedef struct mobot_s
   double jointSpeeds[4];
   double maxSpeed[4];
   mobotJointState_t exitState;
+  double wheelRadius;
   THREAD_T* thread;
   MUTEX_T* commsLock;
   int motionInProgress;
@@ -350,16 +351,27 @@ class CMobot
 #endif
 #ifndef _CH_
     int recordAngleBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double seconds, double threshold = 0);
+    int recordDistanceBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double radius, double seconds, double threshold = 0);
 #else
     int recordAngleBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double seconds, ...);
+    int recordDistanceBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double seconds, double radius, ...);
 #endif
     int recordAngleEnd(mobotJointId_t id, int &num);
+    int recordDistanceEnd(mobotJointId_t id, int &num);
 #ifndef _CH_
     int recordAnglesBegin(mobotRecordData_t &time, 
                           mobotRecordData_t &angle1, 
                           mobotRecordData_t &angle2, 
                           mobotRecordData_t &angle3, 
                           mobotRecordData_t &angle4, 
+                          double seconds,
+                          double threshold = 0);
+    int recordDistancesBegin(mobotRecordData_t &time, 
+                          mobotRecordData_t &angle1, 
+                          mobotRecordData_t &angle2, 
+                          mobotRecordData_t &angle3, 
+                          mobotRecordData_t &angle4, 
+                          double radius,
                           double seconds,
                           double threshold = 0);
 #else
@@ -370,8 +382,17 @@ class CMobot
                           mobotRecordData_t &angle4, 
                           double seconds,
                           ...);
+    int recordDistancesBegin(mobotRecordData_t &time, 
+                          mobotRecordData_t &angle1, 
+                          mobotRecordData_t &angle2, 
+                          mobotRecordData_t &angle3, 
+                          mobotRecordData_t &angle4, 
+                          double seconds,
+                          double radius,
+                          ...);
 #endif
     int recordAnglesEnd(int &num);
+    int recordDistancesEnd(int &num);
     int recordWait();
     int reset();
     int resetToZero();
@@ -744,6 +765,24 @@ DLLIMPORT int Mobot_recordAnglesBegin(mobot_t* comms,
                                      double timeInterval,
                                      double threshold);
 DLLIMPORT int Mobot_recordAnglesEnd(mobot_t* comms, int* num);
+DLLIMPORT int Mobot_recordDistanceBegin(mobot_t* comms,
+                                     mobotJointId_t id,
+                                     double **time,
+                                     double **distance,
+                                     double radius,
+                                     double timeInterval, 
+                                     double threshold);
+DLLIMPORT int Mobot_recordDistanceEnd(mobot_t* comms, mobotJointId_t id, int *num);
+DLLIMPORT int Mobot_recordDistancesBegin(mobot_t* comms,
+                               double **time,
+                               double **angle1,
+                               double **angle2,
+                               double **angle3,
+                               double **angle4,
+                               double radius, 
+                               double timeInterval,
+                               double threshold);
+DLLIMPORT int Mobot_recordDistancesEnd(mobot_t* comms, int *num);
 DLLIMPORT int Mobot_recordWait(mobot_t* comms);
 DLLIMPORT int Mobot_reset(mobot_t* comms);
 DLLIMPORT int Mobot_resetToZero(mobot_t* comms);

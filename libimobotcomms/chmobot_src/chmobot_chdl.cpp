@@ -1021,6 +1021,115 @@ EXPORTCH int recordAnglesEnd_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int recordDistanceBegin_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    mobotJointId_t id;
+    double** time;
+    double** angle;
+    double radius;
+    double seconds;
+    double threshhold;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    time = Ch_VaArg(interp, ap, double**);
+    angle = Ch_VaArg(interp, ap, double**);
+    radius = Ch_VaArg(interp, ap, double);
+    seconds = Ch_VaArg(interp, ap, double);
+    if(Ch_VaCount(interp, ap) == 1) {
+      threshhold = Ch_VaArg(interp, ap, double);
+      retval = mobot->recordDistanceBegin(id, *time, *angle, radius, seconds, threshhold);
+    } else {
+      retval = mobot->recordDistanceBegin(id, *time, *angle, radius, seconds);
+    }
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int recordDistanceEnd_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    mobotJointId_t id;
+    int *num;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    num = Ch_VaArg(interp, ap, int* );
+    retval = mobot->recordDistanceEnd(id, *num);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int recordDistancesBegin_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double** time;
+    double** angle1;
+    double** angle2;
+    double** angle3;
+    double** angle4;
+    double radius;
+    double seconds;
+    double threshhold;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    time = Ch_VaArg(interp, ap, double**);
+    angle1 = Ch_VaArg(interp, ap, double**);
+    angle2 = Ch_VaArg(interp, ap, double**);
+    angle3 = Ch_VaArg(interp, ap, double**);
+    angle4 = Ch_VaArg(interp, ap, double**);
+    radius = Ch_VaArg(interp, ap, double);
+    seconds = Ch_VaArg(interp, ap, double);
+    if(Ch_VaCount(interp, ap) == 1) {
+      threshhold = Ch_VaArg(interp, ap, int);
+      retval = mobot->recordDistancesBegin(
+          *time, 
+          *angle1, 
+          *angle2, 
+          *angle3, 
+          *angle4, 
+          radius,
+          seconds,
+          threshhold);
+    } else {
+      retval = mobot->recordDistancesBegin(
+          *time, 
+          *angle1, 
+          *angle2, 
+          *angle3, 
+          *angle4, 
+          radius,
+          seconds);
+    }
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int recordDistancesEnd_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    int retval;
+    int *num;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    num = Ch_VaArg(interp, ap, int*);
+    retval = mobot->recordDistancesEnd(*num);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int recordWait_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

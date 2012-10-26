@@ -1908,6 +1908,28 @@ int Mobot_recordAngleEnd(mobot_t* comms, mobotJointId_t id, int *num)
   return 0;
 }
 
+int Mobot_recordDistanceBegin(mobot_t* comms,
+                                     mobotJointId_t id,
+                                     double **time,
+                                     double **distance,
+                                     double radius,
+                                     double timeInterval,
+                                     double threshold)
+{
+  comms->wheelRadius = radius;
+  return Mobot_recordAngleBegin(comms, id, time, distance, timeInterval, threshold);
+}
+
+int Mobot_recordDistanceEnd(mobot_t* comms, mobotJointId_t id, int *num)
+{
+  int i;
+  Mobot_recordAngleEnd(comms, id, num);
+  for(i = 0; i < *num; i++){ 
+    (*comms->recordedAngles[0])[i] = DEG2RAD((*comms->recordedAngles[0])[i]) * comms->wheelRadius;
+  }
+  return 0;
+}
+
 void* recordAnglesThread(void* arg);
 int Mobot_recordAngles(mobot_t* comms, 
                       double *time, 
@@ -2350,6 +2372,39 @@ int Mobot_recordAnglesEnd(mobot_t* comms, int* num)
     }
   }
   *num = comms->recordingNumValues[0];
+  return 0;
+}
+
+int Mobot_recordDistancesBegin(mobot_t* comms,
+                               double **time,
+                               double **angle1,
+                               double **angle2,
+                               double **angle3,
+                               double **angle4,
+                               double radius, 
+                               double timeInterval,
+                               double threshold)
+{
+  comms->wheelRadius = radius;
+  return Mobot_recordAnglesBegin(comms, 
+      time,
+      angle1,
+      angle1,
+      angle1,
+      angle1,
+      timeInterval,
+      threshold);
+}
+
+int Mobot_recordDistancesEnd(mobot_t* comms, int *num)
+{ 
+  int i, j;
+  Mobot_recordAnglesEnd(comms, num);
+  for(i = 0; i < *num; i++) {
+    for(j = 0; j < 4; j++) {
+      (*comms->recordedAngles[j])[i] = DEG2RAD((*comms->recordedAngles[j])[i]) * comms->wheelRadius;
+    }
+  }
   return 0;
 }
 
@@ -4016,6 +4071,53 @@ int CMobot::recordAnglesBegin(double* &time,
 int CMobot::recordAnglesEnd(int &num)
 {
   return Mobot_recordAnglesEnd(_comms, &num);
+}
+
+int CMobot::recordDistanceBegin( mobotJointId_t id,
+                                     double* &time,
+                                     double* &distance,
+                                     double radius,
+                                     double timeInterval,
+                                     double threshold)
+{
+  return Mobot_recordDistanceBegin(_comms, 
+      id,
+      &time,
+      &distance,
+      radius,
+      timeInterval,
+      threshold);
+}
+
+int CMobot::recordDistanceEnd( mobotJointId_t id, int &num)
+{
+  return Mobot_recordDistanceEnd(_comms, id, &num);
+}
+
+int CMobot::recordDistancesBegin(
+    double* &time,
+    double* &angle1,
+    double* &angle2,
+    double* &angle3,
+    double* &angle4,
+    double radius, 
+    double timeInterval,
+    double threshold)
+{
+  return Mobot_recordDistancesBegin(_comms,
+    &time,
+    &angle1,
+    &angle2,
+    &angle3,
+    &angle4,
+    radius, 
+    timeInterval,
+    threshold);
+}
+
+int CMobot::recordDistancesEnd(int &num)
+{
+  return Mobot_recordDistancesEnd(_comms, &num);
 }
 
 int CMobot::recordWait()
