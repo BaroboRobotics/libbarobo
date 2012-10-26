@@ -2726,6 +2726,30 @@ int Mobot_motionArchNB(mobot_t* comms, double angle)
   return 0;
 }
 
+int Mobot_motionDistance(mobot_t* comms, double radius, double distance)
+{
+  double theta = distance/radius;
+  return Mobot_motionRollForward(comms, theta);
+}
+
+void* motionDistanceThread(void* arg)
+{
+  motionArg_t* marg = (motionArg_t*)arg;
+  Mobot_motionRollForward(marg->mobot, marg->d);
+  marg->mobot->motionInProgress--;
+  free(marg);
+  return NULL;
+}
+
+int Mobot_motionDistanceNB(mobot_t* comms, double radius, double distance)
+{
+  INIT_MARG
+  marg->d = distance / radius;
+  comms->motionInProgress++;
+  THREAD_CREATE(comms->thread, motionDistanceThread, marg);
+  return 0;
+}
+
 int Mobot_motionInchwormLeft(mobot_t* comms, int num)
 {
   int i;
@@ -4118,6 +4142,16 @@ int CMobot::stopAllJoints()
 int CMobot::motionArch(double angle)
 {
   return Mobot_motionArch(_comms, DEG2RAD(angle));
+}
+
+int CMobot::motionDistance(double radius, double distance)
+{
+  return Mobot_motionDistance(_comms, radius, distance);
+}
+
+int CMobot::motionDistanceNB(double radius, double distance)
+{
+  return Mobot_motionDistanceNB(_comms, radius, distance);
 }
 
 int CMobot::motionArchNB(double angle)

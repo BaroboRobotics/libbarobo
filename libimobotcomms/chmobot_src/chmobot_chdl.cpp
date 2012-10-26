@@ -1423,6 +1423,39 @@ EXPORTCH int motionArchNB_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int motionDistance_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double radius;
+    double distance;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    radius = Ch_VaArg(interp, ap, double);
+    distance = Ch_VaArg(interp, ap, double);
+    retval = mobot->motionDistance(radius, distance);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int motionDistanceNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double radius;
+    double distance;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    radius = Ch_VaArg(interp, ap, double);
+    distance = Ch_VaArg(interp, ap, double);
+    retval = mobot->motionDistanceNB(radius, distance);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int motionInchwormLeft_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
