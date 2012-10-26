@@ -2466,6 +2466,36 @@ EXPORTCH int CMG_setJointMovementStateTimeNB_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int CMG_setJointSafetyAngle_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotGroup *mobot;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->setJointSafetyAngle(angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMG_setJointSafetyAngleTimeout_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotGroup *mobot;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->setJointSafetyAngleTimeout(angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int CMG_setJointSpeed_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

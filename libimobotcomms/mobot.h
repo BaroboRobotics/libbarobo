@@ -516,6 +516,8 @@ class CMobotGroup
     int setJointMovementStateNB(mobotJointId_t id, mobotJointState_t dir);
     int setJointMovementStateTime(mobotJointId_t id, mobotJointState_t dir, double seconds);
     int setJointMovementStateTimeNB(mobotJointId_t id, mobotJointState_t dir, double seconds);
+    int setJointSafetyAngle(double angle);
+    int setJointSafetyAngleTimeout(double angle);
     int setJointSpeed(mobotJointId_t id, double speed);
     int setJointSpeeds(double speed1, double speed2, double speed3, double speed4);
     int setJointSpeedRatio(mobotJointId_t id, double ratio);

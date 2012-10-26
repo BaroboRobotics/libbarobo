@@ -2164,6 +2164,30 @@ int CMobotGroup::setJointMovementStateTimeNB(int id, int dir, double seconds) {
     dlrunfun(fptr, &retval, setJointMovementStateTimeNB, this, id, dir, seconds);
     return retval;
 }
+int CMobotGroup::setJointSafetyAngle(double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_setJointSafetyAngle_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setJointSafetyAngle, this, angle);
+    return retval;
+}
+int CMobotGroup::setJointSafetyAngleTimeout(double seconds) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_setJointSafetyAngleTimeout_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setJointSafetyAngleTimeout, this, seconds);
+    return retval;
+}
 int CMobotGroup::setJointSpeed(int id, double speed) {
     void *fptr;
     int retval;

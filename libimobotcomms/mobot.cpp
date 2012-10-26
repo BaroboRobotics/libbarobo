@@ -4663,6 +4663,22 @@ int CMobotGroup::setJointMovementStateTimeNB(mobotJointId_t id, mobotJointState_
   return 0;
 }
 
+int CMobotGroup::setJointSafetyAngle(double angle)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->setJointSafetyAngle(angle);
+  }
+  return 0;
+}
+
+int CMobotGroup::setJointSafetyAngleTimeout(double seconds)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->setJointSafetyAngleTimeout(seconds);
+  }
+  return 0;
+}
+
 int CMobotGroup::setJointSpeed(mobotJointId_t id, double speed)
 {
   for(int i = 0; i < _numRobots; i++) {
