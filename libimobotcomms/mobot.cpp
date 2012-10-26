@@ -619,6 +619,7 @@ int Mobot_init(mobot_t* comms)
     /* Set the default maximum speed to something reasonable */
     comms->maxSpeed[i] = DEF_MOTOR_MAXSPEED;
   }
+  comms->exitState = MOBOT_NEUTRAL;
   comms->thread = (THREAD_T*)malloc(sizeof(THREAD_T));
   comms->commsThread = (THREAD_T*)malloc(sizeof(THREAD_T));
   THREAD_CREATE(comms->thread, nullThread, NULL);
@@ -2393,6 +2394,12 @@ int Mobot_resetToZeroNB(mobot_t* comms) {
   return Mobot_moveToZeroNB(comms);
 }
 
+int Mobot_setExitState(mobot_t* comms, mobotJointState_t exitState)
+{
+  comms->exitState = exitState;
+  return 0;
+}
+
 int Mobot_setHWRev(mobot_t* comms, uint8_t rev)
 {
   uint8_t buf[20];
@@ -3537,7 +3544,11 @@ CMobot::CMobot()
 
 CMobot::~CMobot() 
 {
-  stop();
+  if(_comms->exitState = MOBOT_HOLD) {
+    setMovementStateNB(MOBOT_HOLD, MOBOT_HOLD, MOBOT_HOLD, MOBOT_HOLD);
+  } else {
+    stop();
+  }
   if(_comms->connected) {
     disconnect();
   }
@@ -4025,6 +4036,11 @@ int CMobot::resetToZero()
 int CMobot::resetToZeroNB()
 {
   return Mobot_resetToZeroNB(_comms);
+}
+
+int CMobot::setExitState(mobotJointState_t exitState)
+{
+  return Mobot_setExitState(_comms, exitState);
 }
 
 int CMobot::setJointSafetyAngle(double angle)

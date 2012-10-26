@@ -1117,6 +1117,18 @@ int CMobot::resetToZeroNB() {
     dlrunfun(fptr, &retval, resetToZeroNB, this);
     return retval;
 }
+int CMobot::setExitState(int exitState) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "setExitState_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setExitState, this, exitState);
+    return retval;
+}
 int CMobot::setJointMovementStateNB(int id, int dir) {
     void *fptr;
     int retval;

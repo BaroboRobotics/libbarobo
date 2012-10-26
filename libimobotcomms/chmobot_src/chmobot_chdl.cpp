@@ -1073,6 +1073,21 @@ EXPORTCH int resetToZeroNB_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int setExitState_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    mobotJointState_t dir;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    dir = Ch_VaArg(interp, ap, mobotJointState_t);
+    retval = mobot->setExitState(dir);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int setJointMovementStateNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

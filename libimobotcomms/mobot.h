@@ -101,6 +101,16 @@ typedef enum mobotConnectionMode_e
   MOBOTCONNECT_NUMMODES
 } mobotConnectionMode_t;
 
+#ifndef MOBOT_JOINT_STATE_E
+#define MOBOT_JOINT_STATE_E
+typedef enum mobotJointState_e
+{
+    MOBOT_NEUTRAL = 0,
+    MOBOT_FORWARD,
+    MOBOT_BACKWARD,
+    MOBOT_HOLD,
+} mobotJointState_t;
+#endif
 
 #ifndef BR_COMMS_S
 #define BR_COMMS_S
@@ -114,6 +124,7 @@ typedef struct mobot_s
 #endif
   double jointSpeeds[4];
   double maxSpeed[4];
+  mobotJointState_t exitState;
   THREAD_T* thread;
   MUTEX_T* commsLock;
   int motionInProgress;
@@ -176,17 +187,6 @@ typedef enum mobotJoints_e {
   MOBOT_JOINT4,
   ROBOT_NUM_JOINTS = 4
 } mobotJointId_t;
-#endif
-
-#ifndef MOBOT_JOINT_STATE_E
-#define MOBOT_JOINT_STATE_E
-typedef enum mobotJointState_e
-{
-    MOBOT_NEUTRAL = 0,
-    MOBOT_FORWARD,
-    MOBOT_BACKWARD,
-    MOBOT_HOLD,
-} mobotJointState_t;
 #endif
 
 #ifndef _CH_
@@ -376,6 +376,7 @@ class CMobot
     int reset();
     int resetToZero();
     int resetToZeroNB();
+    int setExitState(mobotJointState_t exitState);
     int setJointMovementStateNB(mobotJointId_t id, mobotJointState_t dir);
     int setJointMovementStateTime(mobotJointId_t id, mobotJointState_t dir, double seconds);
     int setJointSafetyAngle(double angle);
@@ -747,6 +748,7 @@ DLLIMPORT int Mobot_recordWait(mobot_t* comms);
 DLLIMPORT int Mobot_reset(mobot_t* comms);
 DLLIMPORT int Mobot_resetToZero(mobot_t* comms);
 DLLIMPORT int Mobot_resetToZeroNB(mobot_t* comms);
+DLLIMPORT int Mobot_setExitState(mobot_t* comms, mobotJointState_t exitState);
 DLLIMPORT int Mobot_setHWRev(mobot_t* comms, uint8_t rev);
 DLLIMPORT int Mobot_setJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir);
 DLLIMPORT int Mobot_setJointMovementStateNB(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir);
