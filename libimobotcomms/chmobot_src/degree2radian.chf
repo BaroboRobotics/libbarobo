@@ -1,0 +1,4 @@
+#include <math.h>
+double degree2radian(double degree)  {
+   return degree*M_PI/180;
+}

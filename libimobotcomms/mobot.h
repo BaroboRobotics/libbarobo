@@ -196,6 +196,8 @@ extern "C" {
 #endif
   DLLIMPORT double deg2rad(double deg);
   DLLIMPORT double rad2deg(double rad);
+  DLLIMPORT double degree2radian(double deg);
+  DLLIMPORT double radian2degree(double rad);
 #ifndef SWIG
   DLLIMPORT void delay(double seconds);
 #endif
