@@ -1,0 +1,77 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobot::recordDistancesBegin()}\index{CMobot::recordDistancesBegin()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{recordDistancesBegin()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobot::recordDistancesBegin(double* &time, 
+                              double* &distance1, 
+                              double* &distance2, 
+                              double* &distance3, 
+                              double* &distance4, 
+                              double seconds,
+                              double threshold = 0.0);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Record joint distance data for all joints for a set amount of time at a specified time interval.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{15 mm}p{145 mm}}
+\texttt{time} & A pointer to an array which will store time values for each of the distance readings. \\
+\texttt{distance1} & A pointer to an array which will store the distance values for each time. \\
+\texttt{distance2} & ... \\
+\texttt{distance3} & ... \\
+\texttt{distance4} & ... \\
+\texttt{seconds} & The number of seconds between distance readings. The minimum value allowed for
+this variable is 0.05. \\
+\texttt{threshold} & (optional) This argument is used to align the first
+detected motion to the y-axis. When the distance of any joint moves by
+\texttt{threshold} degrees, that point is aligned with the y-axis.
+\end{tabular}
+\end{description}
+
+\noindent
+{\bf Description}\\
+This function is used in conjunction with the \texttt{recordDistancesEnd()}
+function to accurately record the motion of a Mobot joint at a relatively fast
+rate. 
+
+The function will allocate memory and fill the \texttt{time} and \texttt{distance} arrays with data
+at the rate specified by \texttt{seconds}. The \texttt{time} and \texttt{distance} arrays should
+be freed by the user to prevent memory leaks.
+
+If the communication speed cannot maintain 
+the requested rate, (if \texttt{seconds} is too low, in other words), the function will
+collect data as fast as possible. The minimum value for \texttt{seconds} is 0.05, but
+the actual minimum time will depend on other factors, such as communication noise and
+distance to the mobot.
+
+When the \texttt{recordDistancesBegin()} function is called, the Mobot library will 
+immediately begin recording distance data. The \texttt{recordAngleEnd()} function
+must be called to halt the recording process. 
+
+\noindent
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+\texttt{recordAngleEnd()} \\
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

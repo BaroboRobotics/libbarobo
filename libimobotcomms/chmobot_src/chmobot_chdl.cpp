@@ -1021,6 +1021,115 @@ EXPORTCH int recordAnglesEnd_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int recordDistanceBegin_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    mobotJointId_t id;
+    double** time;
+    double** angle;
+    double radius;
+    double seconds;
+    double threshhold;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    time = Ch_VaArg(interp, ap, double**);
+    angle = Ch_VaArg(interp, ap, double**);
+    radius = Ch_VaArg(interp, ap, double);
+    seconds = Ch_VaArg(interp, ap, double);
+    if(Ch_VaCount(interp, ap) == 1) {
+      threshhold = Ch_VaArg(interp, ap, double);
+      retval = mobot->recordDistanceBegin(id, *time, *angle, radius, seconds, threshhold);
+    } else {
+      retval = mobot->recordDistanceBegin(id, *time, *angle, radius, seconds);
+    }
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int recordDistanceEnd_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    mobotJointId_t id;
+    int *num;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    num = Ch_VaArg(interp, ap, int* );
+    retval = mobot->recordDistanceEnd(id, *num);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int recordDistancesBegin_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double** time;
+    double** angle1;
+    double** angle2;
+    double** angle3;
+    double** angle4;
+    double radius;
+    double seconds;
+    double threshhold;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    time = Ch_VaArg(interp, ap, double**);
+    angle1 = Ch_VaArg(interp, ap, double**);
+    angle2 = Ch_VaArg(interp, ap, double**);
+    angle3 = Ch_VaArg(interp, ap, double**);
+    angle4 = Ch_VaArg(interp, ap, double**);
+    radius = Ch_VaArg(interp, ap, double);
+    seconds = Ch_VaArg(interp, ap, double);
+    if(Ch_VaCount(interp, ap) == 1) {
+      threshhold = Ch_VaArg(interp, ap, int);
+      retval = mobot->recordDistancesBegin(
+          *time, 
+          *angle1, 
+          *angle2, 
+          *angle3, 
+          *angle4, 
+          radius,
+          seconds,
+          threshhold);
+    } else {
+      retval = mobot->recordDistancesBegin(
+          *time, 
+          *angle1, 
+          *angle2, 
+          *angle3, 
+          *angle4, 
+          radius,
+          seconds);
+    }
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int recordDistancesEnd_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    int retval;
+    int *num;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    num = Ch_VaArg(interp, ap, int*);
+    retval = mobot->recordDistancesEnd(*num);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int recordWait_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -1069,6 +1178,21 @@ EXPORTCH int resetToZeroNB_chdl(void *varg) {
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobot *);
     retval = mobot->resetToZeroNB();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int setExitState_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    mobotJointState_t dir;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    dir = Ch_VaArg(interp, ap, mobotJointState_t);
+    retval = mobot->setExitState(dir);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -1419,6 +1543,39 @@ EXPORTCH int motionArchNB_chdl(void *varg) {
     mobot = Ch_VaArg(interp, ap, class CMobot *);
     angle = Ch_VaArg(interp, ap, double);
     retval = mobot->motionArchNB(angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int motionDistance_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double radius;
+    double distance;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    radius = Ch_VaArg(interp, ap, double);
+    distance = Ch_VaArg(interp, ap, double);
+    retval = mobot->motionDistance(radius, distance);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int motionDistanceNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double radius;
+    double distance;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    radius = Ch_VaArg(interp, ap, double);
+    distance = Ch_VaArg(interp, ap, double);
+    retval = mobot->motionDistanceNB(radius, distance);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -2305,6 +2462,36 @@ EXPORTCH int CMG_setJointMovementStateTimeNB_chdl(void *varg) {
     dir = Ch_VaArg(interp, ap, mobotJointState_t);
     seconds = Ch_VaArg(interp, ap, double);
     retval = mobot->setJointMovementStateTimeNB(id, dir, seconds);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMG_setJointSafetyAngle_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotGroup *mobot;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->setJointSafetyAngle(angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMG_setJointSafetyAngleTimeout_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotGroup *mobot;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->setJointSafetyAngleTimeout(angle);
     Ch_VaEnd(interp, ap);
     return retval;
 }

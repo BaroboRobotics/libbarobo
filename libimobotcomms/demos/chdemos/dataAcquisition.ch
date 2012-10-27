@@ -28,7 +28,7 @@ array double angles1[numDataPoints];
 /* Declare plotting variables */
 CPlot plot1, plot2, plot3;
 
-double threshhold = 2.0; /* Degrees */
+double threshold = 2.0; /* Degrees */
 
 /* Start the motion. First, move mobot to zero position */
 mobot.resetToZero();
@@ -37,7 +37,7 @@ mobot.setJointSpeed(MOBOT_JOINT1, speed);
 mobot.setJointSpeed(MOBOT_JOINT4, speed);
 
 /* Start capturing data */
-mobot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval, threshhold);
+mobot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval, threshold);
 
 /* Move the joint 720 degrees */
 mobot.move(angle, 0, 0, angle);

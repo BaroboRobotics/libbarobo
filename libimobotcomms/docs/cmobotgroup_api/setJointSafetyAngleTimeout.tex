@@ -1,0 +1,49 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::setJointSafetyAngleTimeout()}\index{CMobotGroup::setJointSafetyAngleTimeout()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{setJointSafetyAngleTimeout()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::setJointSafetyAngleTimeout(double seconds);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Set the current angle safety limit timeout of the Mobot.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and -1 on failure.\\
+
+\noindent
+{\bf Parameters}\\
+A variable which will be overwritten with the safety angle limit timeout in seconds.\\
+
+\noindent
+{\bf Description}\\
+The Mobot is equipped with a safety feature to protect itself and its surrounding
+environment. When a motor deviates by a certain amount from its expected value, 
+the Mobot will shut off all power to the motor after a certain period of time,
+in case it has hit an obstacle, or for any other reason. The period of time that the
+mobot waits before shutting the motor off is the joint safety angle timeout, which
+can be set with this function. The default value for the timeout is 500 milliseconds,
+or 0.5 seconds.
+ 
+\noindent
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+\texttt{setJointSafetyAngle()}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\
+
+

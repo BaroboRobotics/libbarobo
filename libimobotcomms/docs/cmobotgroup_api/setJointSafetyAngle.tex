@@ -1,0 +1,50 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::setJointSafetyAngle()}\index{CMobotGroup::setJointSafetyAngle()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{setJointSafetyAngle()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::setJointSafetyAngle(double degrees);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Set the current angle safety limit of the Mobot.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and -1 on failure.\\
+
+\noindent
+{\bf Parameters}\\
+The requested joint safety angle limit for the Mobot.\\
+
+\noindent
+{\bf Description}\\
+The Mobot is equipped with a safety feature to protect itself and its surrounding
+environment. When a motor deviates by a certain amount from its expected value, 
+the Mobot will shut off all power to the motor, in case it has hit an obstacle,
+or for any other reason. The amount of deviation required to trigger the safety
+protocol is the joint safety angle which can be set using this function.
+The default setting is 10 degrees. Higher values indicate ``less safe'' behavior
+of the Mobot because the Mobot will not engage safety protocols until the joint has
+deviated by a greater amount. Values greater than 90 degrees effectively disengage
+the Mobot's safety protocols altogether, and this function should be used with care.
+
+\noindent
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+\texttt{setJointSafetyAngleTimeout()}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\
+

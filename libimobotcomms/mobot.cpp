@@ -53,7 +53,17 @@ double deg2rad(double deg)
   return deg * M_PI / 180.0;
 }
 
+double degree2radian(double deg)
+{
+  return deg * M_PI / 180.0;
+}
+
 double rad2deg(double rad)
+{
+  return rad * 180.0 / M_PI;
+}
+
+double radian2degree(double rad)
 {
   return rad * 180.0 / M_PI;
 }
@@ -608,6 +618,7 @@ int Mobot_init(mobot_t* comms)
     /* Set the default maximum speed to something reasonable */
     comms->maxSpeed[i] = DEF_MOTOR_MAXSPEED;
   }
+  comms->exitState = MOBOT_NEUTRAL;
   comms->thread = (THREAD_T*)malloc(sizeof(THREAD_T));
   comms->commsThread = (THREAD_T*)malloc(sizeof(THREAD_T));
   THREAD_CREATE(comms->thread, nullThread, NULL);
@@ -1896,6 +1907,28 @@ int Mobot_recordAngleEnd(mobot_t* comms, mobotJointId_t id, int *num)
   return 0;
 }
 
+int Mobot_recordDistanceBegin(mobot_t* comms,
+                                     mobotJointId_t id,
+                                     double **time,
+                                     double **distance,
+                                     double radius,
+                                     double timeInterval,
+                                     double threshold)
+{
+  comms->wheelRadius = radius;
+  return Mobot_recordAngleBegin(comms, id, time, distance, timeInterval, threshold);
+}
+
+int Mobot_recordDistanceEnd(mobot_t* comms, mobotJointId_t id, int *num)
+{
+  int i;
+  Mobot_recordAngleEnd(comms, id, num);
+  for(i = 0; i < *num; i++){ 
+    (*comms->recordedAngles[0])[i] = DEG2RAD((*comms->recordedAngles[0])[i]) * comms->wheelRadius;
+  }
+  return 0;
+}
+
 void* recordAnglesThread(void* arg);
 int Mobot_recordAngles(mobot_t* comms, 
                       double *time, 
@@ -2129,6 +2162,9 @@ void* Mobot_recordAnglesBeginThread(void* arg)
     (*rArg->time_p)[i] = (*rArg->time_p)[i] - start_time;
     /* Convert angle to degrees */
     (*rArg->angle_p)[i] = RAD2DEG((*rArg->angle_p)[i]);
+    (*rArg->angle2_p)[i] = RAD2DEG((*rArg->angle2_p)[i]);
+    (*rArg->angle3_p)[i] = RAD2DEG((*rArg->angle3_p)[i]);
+    (*rArg->angle4_p)[i] = RAD2DEG((*rArg->angle4_p)[i]);
 #ifndef __MACH__
     clock_gettime(CLOCK_REALTIME, &itime);
 #else
@@ -2197,6 +2233,9 @@ void* Mobot_recordAnglesBeginThread(void* arg)
     (*rArg->time_p)[i] = (*rArg->time_p)[i] - start_time;
     /* Convert angle to degrees */
     (*rArg->angle_p)[i] = RAD2DEG((*rArg->angle_p)[i]);
+    (*rArg->angle2_p)[i] = RAD2DEG((*rArg->angle2_p)[i]);
+    (*rArg->angle3_p)[i] = RAD2DEG((*rArg->angle3_p)[i]);
+    (*rArg->angle4_p)[i] = RAD2DEG((*rArg->angle4_p)[i]);
     itime = GetTickCount();
     dt = itime - cur_time;
     if(dt < (rArg->msecs)) {
@@ -2335,6 +2374,39 @@ int Mobot_recordAnglesEnd(mobot_t* comms, int* num)
   return 0;
 }
 
+int Mobot_recordDistancesBegin(mobot_t* comms,
+                               double **time,
+                               double **angle1,
+                               double **angle2,
+                               double **angle3,
+                               double **angle4,
+                               double radius, 
+                               double timeInterval,
+                               double threshold)
+{
+  comms->wheelRadius = radius;
+  return Mobot_recordAnglesBegin(comms, 
+      time,
+      angle1,
+      angle1,
+      angle1,
+      angle1,
+      timeInterval,
+      threshold);
+}
+
+int Mobot_recordDistancesEnd(mobot_t* comms, int *num)
+{ 
+  int i, j;
+  Mobot_recordAnglesEnd(comms, num);
+  for(i = 0; i < *num; i++) {
+    for(j = 0; j < 4; j++) {
+      (*comms->recordedAngles[j])[i] = DEG2RAD((*comms->recordedAngles[j])[i]) * comms->wheelRadius;
+    }
+  }
+  return 0;
+}
+
 int Mobot_recordWait(mobot_t* comms)
 {
   int i;
@@ -2374,6 +2446,12 @@ int Mobot_resetToZero(mobot_t* comms) {
 int Mobot_resetToZeroNB(mobot_t* comms) {
   Mobot_reset(comms);
   return Mobot_moveToZeroNB(comms);
+}
+
+int Mobot_setExitState(mobot_t* comms, mobotJointState_t exitState)
+{
+  comms->exitState = exitState;
+  return 0;
 }
 
 int Mobot_setHWRev(mobot_t* comms, uint8_t rev)
@@ -2706,6 +2784,30 @@ int Mobot_motionArchNB(mobot_t* comms, double angle)
   marg->d = angle;
   comms->motionInProgress++;
   THREAD_CREATE(comms->thread, motionArchThread, marg);
+  return 0;
+}
+
+int Mobot_motionDistance(mobot_t* comms, double radius, double distance)
+{
+  double theta = distance/radius;
+  return Mobot_motionRollForward(comms, theta);
+}
+
+void* motionDistanceThread(void* arg)
+{
+  motionArg_t* marg = (motionArg_t*)arg;
+  Mobot_motionRollForward(marg->mobot, marg->d);
+  marg->mobot->motionInProgress--;
+  free(marg);
+  return NULL;
+}
+
+int Mobot_motionDistanceNB(mobot_t* comms, double radius, double distance)
+{
+  INIT_MARG
+  marg->d = distance / radius;
+  comms->motionInProgress++;
+  THREAD_CREATE(comms->thread, motionDistanceThread, marg);
   return 0;
 }
 
@@ -3496,7 +3598,11 @@ CMobot::CMobot()
 
 CMobot::~CMobot() 
 {
-  stop();
+  if(_comms->exitState = MOBOT_HOLD) {
+    setMovementStateNB(MOBOT_HOLD, MOBOT_HOLD, MOBOT_HOLD, MOBOT_HOLD);
+  } else {
+    stop();
+  }
   if(_comms->connected) {
     disconnect();
   }
@@ -3966,6 +4072,53 @@ int CMobot::recordAnglesEnd(int &num)
   return Mobot_recordAnglesEnd(_comms, &num);
 }
 
+int CMobot::recordDistanceBegin( mobotJointId_t id,
+                                     double* &time,
+                                     double* &distance,
+                                     double radius,
+                                     double timeInterval,
+                                     double threshold)
+{
+  return Mobot_recordDistanceBegin(_comms, 
+      id,
+      &time,
+      &distance,
+      radius,
+      timeInterval,
+      threshold);
+}
+
+int CMobot::recordDistanceEnd( mobotJointId_t id, int &num)
+{
+  return Mobot_recordDistanceEnd(_comms, id, &num);
+}
+
+int CMobot::recordDistancesBegin(
+    double* &time,
+    double* &angle1,
+    double* &angle2,
+    double* &angle3,
+    double* &angle4,
+    double radius, 
+    double timeInterval,
+    double threshold)
+{
+  return Mobot_recordDistancesBegin(_comms,
+    &time,
+    &angle1,
+    &angle2,
+    &angle3,
+    &angle4,
+    radius, 
+    timeInterval,
+    threshold);
+}
+
+int CMobot::recordDistancesEnd(int &num)
+{
+  return Mobot_recordDistancesEnd(_comms, &num);
+}
+
 int CMobot::recordWait()
 {
   return Mobot_recordWait(_comms);
@@ -3984,6 +4137,11 @@ int CMobot::resetToZero()
 int CMobot::resetToZeroNB()
 {
   return Mobot_resetToZeroNB(_comms);
+}
+
+int CMobot::setExitState(mobotJointState_t exitState)
+{
+  return Mobot_setExitState(_comms, exitState);
 }
 
 int CMobot::setJointSafetyAngle(double angle)
@@ -4101,6 +4259,16 @@ int CMobot::stopAllJoints()
 int CMobot::motionArch(double angle)
 {
   return Mobot_motionArch(_comms, DEG2RAD(angle));
+}
+
+int CMobot::motionDistance(double radius, double distance)
+{
+  return Mobot_motionDistance(_comms, radius, distance);
+}
+
+int CMobot::motionDistanceNB(double radius, double distance)
+{
+  return Mobot_motionDistanceNB(_comms, radius, distance);
 }
 
 int CMobot::motionArchNB(double angle)
@@ -4490,6 +4658,22 @@ int CMobotGroup::setJointMovementStateTimeNB(mobotJointId_t id, mobotJointState_
   int msecs = seconds * 1000.0;
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->setJointMovementStateNB(id, dir);
+  }
+  return 0;
+}
+
+int CMobotGroup::setJointSafetyAngle(double angle)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->setJointSafetyAngle(angle);
+  }
+  return 0;
+}
+
+int CMobotGroup::setJointSafetyAngleTimeout(double seconds)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->setJointSafetyAngleTimeout(seconds);
   }
   return 0;
 }

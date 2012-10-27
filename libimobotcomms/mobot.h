@@ -101,6 +101,16 @@ typedef enum mobotConnectionMode_e
   MOBOTCONNECT_NUMMODES
 } mobotConnectionMode_t;
 
+#ifndef MOBOT_JOINT_STATE_E
+#define MOBOT_JOINT_STATE_E
+typedef enum mobotJointState_e
+{
+    MOBOT_NEUTRAL = 0,
+    MOBOT_FORWARD,
+    MOBOT_BACKWARD,
+    MOBOT_HOLD,
+} mobotJointState_t;
+#endif
 
 #ifndef BR_COMMS_S
 #define BR_COMMS_S
@@ -114,6 +124,8 @@ typedef struct mobot_s
 #endif
   double jointSpeeds[4];
   double maxSpeed[4];
+  mobotJointState_t exitState;
+  double wheelRadius;
   THREAD_T* thread;
   MUTEX_T* commsLock;
   int motionInProgress;
@@ -178,17 +190,6 @@ typedef enum mobotJoints_e {
 } mobotJointId_t;
 #endif
 
-#ifndef MOBOT_JOINT_STATE_E
-#define MOBOT_JOINT_STATE_E
-typedef enum mobotJointState_e
-{
-    MOBOT_NEUTRAL = 0,
-    MOBOT_FORWARD,
-    MOBOT_BACKWARD,
-    MOBOT_HOLD,
-} mobotJointState_t;
-#endif
-
 #ifndef _CH_
 
 #ifdef __cplusplus
@@ -196,6 +197,8 @@ extern "C" {
 #endif
   DLLIMPORT double deg2rad(double deg);
   DLLIMPORT double rad2deg(double rad);
+  DLLIMPORT double degree2radian(double deg);
+  DLLIMPORT double radian2degree(double rad);
 #ifndef SWIG
   DLLIMPORT void delay(double seconds);
 #endif
@@ -348,16 +351,27 @@ class CMobot
 #endif
 #ifndef _CH_
     int recordAngleBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double seconds, double threshold = 0);
+    int recordDistanceBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double radius, double seconds, double threshold = 0);
 #else
     int recordAngleBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double seconds, ...);
+    int recordDistanceBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double seconds, double radius, ...);
 #endif
     int recordAngleEnd(mobotJointId_t id, int &num);
+    int recordDistanceEnd(mobotJointId_t id, int &num);
 #ifndef _CH_
     int recordAnglesBegin(mobotRecordData_t &time, 
                           mobotRecordData_t &angle1, 
                           mobotRecordData_t &angle2, 
                           mobotRecordData_t &angle3, 
                           mobotRecordData_t &angle4, 
+                          double seconds,
+                          double threshold = 0);
+    int recordDistancesBegin(mobotRecordData_t &time, 
+                          mobotRecordData_t &angle1, 
+                          mobotRecordData_t &angle2, 
+                          mobotRecordData_t &angle3, 
+                          mobotRecordData_t &angle4, 
+                          double radius,
                           double seconds,
                           double threshold = 0);
 #else
@@ -368,12 +382,22 @@ class CMobot
                           mobotRecordData_t &angle4, 
                           double seconds,
                           ...);
+    int recordDistancesBegin(mobotRecordData_t &time, 
+                          mobotRecordData_t &angle1, 
+                          mobotRecordData_t &angle2, 
+                          mobotRecordData_t &angle3, 
+                          mobotRecordData_t &angle4, 
+                          double seconds,
+                          double radius,
+                          ...);
 #endif
     int recordAnglesEnd(int &num);
+    int recordDistancesEnd(int &num);
     int recordWait();
     int reset();
     int resetToZero();
     int resetToZeroNB();
+    int setExitState(mobotJointState_t exitState);
     int setJointMovementStateNB(mobotJointId_t id, mobotJointState_t dir);
     int setJointMovementStateTime(mobotJointId_t id, mobotJointState_t dir, double seconds);
     int setJointSafetyAngle(double angle);
@@ -405,6 +429,7 @@ class CMobot
     int stopAllJoints();
 
     int motionArch(double angle);
+    int motionDistance(double radius, double distance);
     int motionInchwormLeft(int num);
     int motionInchwormRight(int num);
     int motionRollBackward(double angle);
@@ -419,6 +444,7 @@ class CMobot
 
     /* Non-Blocking motion functions */
     int motionArchNB(double angle);
+    int motionDistanceNB(double radius, double distance);
     int motionInchwormLeftNB(int num);
     int motionInchwormRightNB(int num);
     int motionRollBackwardNB(double angle);
@@ -490,6 +516,8 @@ class CMobotGroup
     int setJointMovementStateNB(mobotJointId_t id, mobotJointState_t dir);
     int setJointMovementStateTime(mobotJointId_t id, mobotJointState_t dir, double seconds);
     int setJointMovementStateTimeNB(mobotJointId_t id, mobotJointState_t dir, double seconds);
+    int setJointSafetyAngle(double angle);
+    int setJointSafetyAngleTimeout(double angle);
     int setJointSpeed(mobotJointId_t id, double speed);
     int setJointSpeeds(double speed1, double speed2, double speed3, double speed4);
     int setJointSpeedRatio(mobotJointId_t id, double ratio);
@@ -739,10 +767,29 @@ DLLIMPORT int Mobot_recordAnglesBegin(mobot_t* comms,
                                      double timeInterval,
                                      double threshold);
 DLLIMPORT int Mobot_recordAnglesEnd(mobot_t* comms, int* num);
+DLLIMPORT int Mobot_recordDistanceBegin(mobot_t* comms,
+                                     mobotJointId_t id,
+                                     double **time,
+                                     double **distance,
+                                     double radius,
+                                     double timeInterval, 
+                                     double threshold);
+DLLIMPORT int Mobot_recordDistanceEnd(mobot_t* comms, mobotJointId_t id, int *num);
+DLLIMPORT int Mobot_recordDistancesBegin(mobot_t* comms,
+                               double **time,
+                               double **angle1,
+                               double **angle2,
+                               double **angle3,
+                               double **angle4,
+                               double radius, 
+                               double timeInterval,
+                               double threshold);
+DLLIMPORT int Mobot_recordDistancesEnd(mobot_t* comms, int *num);
 DLLIMPORT int Mobot_recordWait(mobot_t* comms);
 DLLIMPORT int Mobot_reset(mobot_t* comms);
 DLLIMPORT int Mobot_resetToZero(mobot_t* comms);
 DLLIMPORT int Mobot_resetToZeroNB(mobot_t* comms);
+DLLIMPORT int Mobot_setExitState(mobot_t* comms, mobotJointState_t exitState);
 DLLIMPORT int Mobot_setHWRev(mobot_t* comms, uint8_t rev);
 DLLIMPORT int Mobot_setJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir);
 DLLIMPORT int Mobot_setJointMovementStateNB(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir);
@@ -793,6 +840,8 @@ DLLIMPORT int Mobot_stopAllJoints(mobot_t* comms);
 
 /* compound motion functions */
 DLLIMPORT int Mobot_motionArch(mobot_t* comms, double angle);
+DLLIMPORT int Mobot_motionDistance(mobot_t* comms, double radius, double distance);
+DLLIMPORT int Mobot_motionDistanceNB(mobot_t* comms, double radius, double distance);
 DLLIMPORT int Mobot_motionInchwormLeft(mobot_t* comms, int num);
 DLLIMPORT int Mobot_motionInchwormRight(mobot_t* comms, int num);
 DLLIMPORT int Mobot_motionRollBackward(mobot_t* comms, double angle);
