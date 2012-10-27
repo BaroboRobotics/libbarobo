@@ -565,12 +565,12 @@ mobot.move(360, 0, 0, 360);
 \end{verbatim}
 Note that the member function \texttt{move()} expects input angles
 in degrees, so the angles in radians must be first be converted to degrees 
-using the \texttt{rad2deg()} function. The \texttt{rad2deg()} function
+using the \texttt{radian2degree()} function. The \texttt{radian2degree()} function
 takes an angle in radians as its argument and returns the angle in
 degrees. The function is implemented in Ch with the code
 \begin{verbatim}
 #include <math.h> /* For M_PI */
-double rad2deg(double radians)
+double radian2degree(double radians)
 {
     double degrees;
     degrees = radians * 180.0 / M_PI;
@@ -580,7 +580,7 @@ double rad2deg(double radians)
 
 If desired, values in radians
 may also be converted to degrees using the counterpart function,
-\texttt{deg2rad()}.
+\texttt{degree2radian()}.
 Joints 1 and 4 are the faceplates
 of the Mobot which are sometimes used to act as "wheels".
 
