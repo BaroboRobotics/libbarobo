@@ -513,6 +513,7 @@ class CMobotGroup
     int reset();
     int resetToZero();
     int resetToZeroNB();
+    int setExitState(mobotJointState_t exitState);
     int setJointMovementStateNB(mobotJointId_t id, mobotJointState_t dir);
     int setJointMovementStateTime(mobotJointId_t id, mobotJointState_t dir, double seconds);
     int setJointMovementStateTimeNB(mobotJointId_t id, mobotJointState_t dir, double seconds);

@@ -4631,6 +4631,14 @@ int CMobotGroup::resetToZeroNB()
   return 0;
 }
 
+int CMobotGroup::setExitState(mobotJointState_t exitState)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->setExitState(exitState);
+  }
+  return 0;
+}
+
 int CMobotGroup::setJointMovementStateNB(mobotJointId_t id, mobotJointState_t dir)
 {
   for(int i = 0; i < _numRobots; i++) {
