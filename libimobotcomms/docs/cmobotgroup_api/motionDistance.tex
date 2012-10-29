@@ -1,0 +1,57 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::motionDistance()}\index{CMobotGroup::motionDistance()}}\\
+{\LARGE \texttt{CMobotGroup::motionDistanceNB()}\index{CMobotGroup::motionDistanceNB()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{motionDistance()}
+\addcontentsline{toc}{section}{motionDistanceNB()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::motionDistance(double radius, double distance);
+int CMobotGroup::motionDistanceNB(double radius, double distance);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Use the faceplates as wheels to roll mobots forward a certain distance.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{15 mm}p{145 mm}}
+\texttt{radius} & The radius of the wheels.\\
+\texttt{distance} & The distance to roll the Mobot.\\
+\end{tabular}
+\end{description}
+
+\noindent
+{\bf Description}\\
+\vspace{-12pt}
+\begin{quote}
+{\bf CMobot::motionDistance()}\\
+This function is used to roll a group of wheeled Mobots forward a certain distance. 
+Note that the unit of measurement for the radius of the wheels much match the units 
+used for distance.
+
+This function has both a blocking and non-blocking version.
+The blocking version, \texttt{motionDistance()}, will block until the
+mobot motion has completed. The non-blocking version, \texttt{motionDistanceNB()},
+will return immediately, and the motion will be performed asynchronously.\\
+\end{quote}
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

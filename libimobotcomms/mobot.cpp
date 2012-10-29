@@ -4821,6 +4821,30 @@ void* CMobotGroup::motionArchThread(void* arg)
   return NULL;
 }
 
+int CMobotGroup::motionDistance(double radius, double distance)
+{
+  argDouble = distance / radius;
+  _motionInProgress++;
+  motionDistanceThread(this);
+  return 0;
+}
+
+int CMobotGroup::motionDistanceNB(double radius, double distance)
+{
+  argDouble = distance / radius;
+  _motionInProgress++;
+  THREAD_CREATE(_thread, motionDistanceThread, this);
+  return 0;
+}
+
+void* CMobotGroup::motionDistanceThread(void* arg)
+{
+  CMobotGroup *cmg = (CMobotGroup*)arg;
+  cmg->move(RAD2DEG(cmg->argDouble), 0, 0, RAD2DEG(cmg->argDouble));
+  cmg->_motionInProgress--;
+  return NULL;
+}
+
 int CMobotGroup::motionInchwormLeft(int num)
 {
   argInt = num;

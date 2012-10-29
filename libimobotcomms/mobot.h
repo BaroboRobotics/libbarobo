@@ -545,6 +545,9 @@ class CMobotGroup
     int motionArch(double angle);
     int motionArchNB(double angle);
     static void* motionArchThread(void*);
+    int motionDistance(double radius, double distance);
+    int motionDistanceNB(double radius, double distance);
+    static void* motionDistanceThread(void*);
     int motionInchwormLeft(int num);
     int motionInchwormLeftNB(int num);
     static void* motionInchwormLeftThread(void*);
