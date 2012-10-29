@@ -387,8 +387,8 @@ class CMobot
                           mobotRecordData_t &angle2, 
                           mobotRecordData_t &angle3, 
                           mobotRecordData_t &angle4, 
-                          double seconds,
                           double radius,
+                          double seconds,
                           ...);
 #endif
     int recordAnglesEnd(int &num);
