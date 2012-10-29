@@ -1069,7 +1069,7 @@ int CMobot::recordAnglesEnd(int &num) {
     dlrunfun(fptr, &retval, NULL, this, &num);
     return retval;
 }
-int CMobot::recordDistanceBegin(int id, double* &time, double* &angle, double seconds, double radius, ...) {
+int CMobot::recordDistanceBegin(int id, double* &time, double* &angle, double radius, double seconds, ...) {
     void *fptr;
     int retval;
     va_list ap;

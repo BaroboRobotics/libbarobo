@@ -354,7 +354,7 @@ class CMobot
     int recordDistanceBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double radius, double seconds, double threshold = 0);
 #else
     int recordAngleBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double seconds, ...);
-    int recordDistanceBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double seconds, double radius, ...);
+    int recordDistanceBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double radius, double seconds, ...);
 #endif
     int recordAngleEnd(mobotJointId_t id, int &num);
     int recordDistanceEnd(mobotJointId_t id, int &num);
