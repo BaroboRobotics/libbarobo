@@ -4263,7 +4263,7 @@ int CMobot::motionArch(double angle)
 
 int CMobot::motionDistance(double distance, double radius)
 {
-  return Mobot_motionDistance(_comms, radius, distance);
+  return Mobot_motionDistance(_comms, distance, radius);
 }
 
 int CMobot::motionDistanceNB(double distance, double radius)
