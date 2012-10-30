@@ -2787,7 +2787,7 @@ int Mobot_motionArchNB(mobot_t* comms, double angle)
   return 0;
 }
 
-int Mobot_motionDistance(mobot_t* comms, double radius, double distance)
+int Mobot_motionDistance(mobot_t* comms, double distance, double radius)
 {
   double theta = distance/radius;
   return Mobot_motionRollForward(comms, theta);
@@ -2802,7 +2802,7 @@ void* motionDistanceThread(void* arg)
   return NULL;
 }
 
-int Mobot_motionDistanceNB(mobot_t* comms, double radius, double distance)
+int Mobot_motionDistanceNB(mobot_t* comms, double distance, double radius)
 {
   INIT_MARG
   marg->d = distance / radius;
@@ -4261,14 +4261,14 @@ int CMobot::motionArch(double angle)
   return Mobot_motionArch(_comms, DEG2RAD(angle));
 }
 
-int CMobot::motionDistance(double radius, double distance)
+int CMobot::motionDistance(double distance, double radius)
 {
   return Mobot_motionDistance(_comms, radius, distance);
 }
 
-int CMobot::motionDistanceNB(double radius, double distance)
+int CMobot::motionDistanceNB(double distance, double radius)
 {
-  return Mobot_motionDistanceNB(_comms, radius, distance);
+  return Mobot_motionDistanceNB(_comms, distance, radius);
 }
 
 int CMobot::motionArchNB(double angle)
@@ -4829,7 +4829,7 @@ void* CMobotGroup::motionArchThread(void* arg)
   return NULL;
 }
 
-int CMobotGroup::motionDistance(double radius, double distance)
+int CMobotGroup::motionDistance(double distance, double radius)
 {
   argDouble = distance / radius;
   _motionInProgress++;
@@ -4837,7 +4837,7 @@ int CMobotGroup::motionDistance(double radius, double distance)
   return 0;
 }
 
-int CMobotGroup::motionDistanceNB(double radius, double distance)
+int CMobotGroup::motionDistanceNB(double distance, double radius)
 {
   argDouble = distance / radius;
   _motionInProgress++;

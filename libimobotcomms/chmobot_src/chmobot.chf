@@ -425,7 +425,7 @@ int CMobot::motionArchNB(double angle) {
     dlrunfun(fptr, &retval, motionArchNB, this, angle);
     return retval;
 }
-int CMobot::motionDistance(double radius, double distance) {
+int CMobot::motionDistance(double distance, double radius) {
     void *fptr;
     int retval;
 
@@ -434,10 +434,10 @@ int CMobot::motionDistance(double radius, double distance) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionDistance, this, radius, distance);
+    dlrunfun(fptr, &retval, motionDistance, this, distance, radius);
     return retval;
 }
-int CMobot::motionDistanceNB(double radius, double distance) {
+int CMobot::motionDistanceNB(double distance, double radius) {
     void *fptr;
     int retval;
 
@@ -446,7 +446,7 @@ int CMobot::motionDistanceNB(double radius, double distance) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, motionDistanceNB, this, radius, distance);
+    dlrunfun(fptr, &retval, motionDistanceNB, this, distance, radius);
     return retval;
 }
 int CMobot::motionInchwormLeft(int num) {
@@ -2126,6 +2126,18 @@ int CMobotGroup::resetToZeroNB() {
         return -1;
     }
     dlrunfun(fptr, &retval, resetToZeroNB, this);
+    return retval;
+}
+int CMobotGroup::setExitState(int exitState) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_setExitState_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setExitState, this, exitState);
     return retval;
 }
 int CMobotGroup::setJointMovementStateNB(int id, int dir) {

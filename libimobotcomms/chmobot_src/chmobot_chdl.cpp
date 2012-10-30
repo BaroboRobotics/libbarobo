@@ -1557,9 +1557,9 @@ EXPORTCH int motionDistance_chdl(void *varg) {
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobot *);
-    radius = Ch_VaArg(interp, ap, double);
     distance = Ch_VaArg(interp, ap, double);
-    retval = mobot->motionDistance(radius, distance);
+    radius = Ch_VaArg(interp, ap, double);
+    retval = mobot->motionDistance(distance, radius);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -1573,9 +1573,9 @@ EXPORTCH int motionDistanceNB_chdl(void *varg) {
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobot *);
-    radius = Ch_VaArg(interp, ap, double);
     distance = Ch_VaArg(interp, ap, double);
-    retval = mobot->motionDistanceNB(radius, distance);
+    radius = Ch_VaArg(interp, ap, double);
+    retval = mobot->motionDistanceNB(distance, radius);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -2407,6 +2407,21 @@ EXPORTCH int CMG_resetToZeroNB_chdl(void *varg) {
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
     retval = mobot->resetToZeroNB();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMG_setExitState_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotGroup *mobot;
+    mobotJointState_t exitState;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
+    exitState = Ch_VaArg(interp, ap, mobotJointState_t);
+    retval = mobot->setExitState(exitState);
     Ch_VaEnd(interp, ap);
     return retval;
 }

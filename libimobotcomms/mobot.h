@@ -429,7 +429,7 @@ class CMobot
     int stopAllJoints();
 
     int motionArch(double angle);
-    int motionDistance(double radius, double distance);
+    int motionDistance(double distance, double radius);
     int motionInchwormLeft(int num);
     int motionInchwormRight(int num);
     int motionRollBackward(double angle);
@@ -444,7 +444,7 @@ class CMobot
 
     /* Non-Blocking motion functions */
     int motionArchNB(double angle);
-    int motionDistanceNB(double radius, double distance);
+    int motionDistanceNB(double distance, double radius);
     int motionInchwormLeftNB(int num);
     int motionInchwormRightNB(int num);
     int motionRollBackwardNB(double angle);
@@ -546,8 +546,8 @@ class CMobotGroup
     int motionArch(double angle);
     int motionArchNB(double angle);
     static void* motionArchThread(void*);
-    int motionDistance(double radius, double distance);
-    int motionDistanceNB(double radius, double distance);
+    int motionDistance(double distance, double radius);
+    int motionDistanceNB(double distance, double radius);
     static void* motionDistanceThread(void*);
     int motionInchwormLeft(int num);
     int motionInchwormLeftNB(int num);
@@ -844,8 +844,8 @@ DLLIMPORT int Mobot_stopAllJoints(mobot_t* comms);
 
 /* compound motion functions */
 DLLIMPORT int Mobot_motionArch(mobot_t* comms, double angle);
-DLLIMPORT int Mobot_motionDistance(mobot_t* comms, double radius, double distance);
-DLLIMPORT int Mobot_motionDistanceNB(mobot_t* comms, double radius, double distance);
+DLLIMPORT int Mobot_motionDistance(mobot_t* comms, double distance, double radius);
+DLLIMPORT int Mobot_motionDistanceNB(mobot_t* comms, double distance, double radius);
 DLLIMPORT int Mobot_motionInchwormLeft(mobot_t* comms, int num);
 DLLIMPORT int Mobot_motionInchwormRight(mobot_t* comms, int num);
 DLLIMPORT int Mobot_motionRollBackward(mobot_t* comms, double angle);
