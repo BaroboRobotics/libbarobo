@@ -1069,7 +1069,7 @@ int CMobot::recordAnglesEnd(int &num) {
     dlrunfun(fptr, &retval, NULL, this, &num);
     return retval;
 }
-int CMobot::recordDistanceBegin(int id, double* &time, double* &angle, double radius, double seconds, ...) {
+int CMobot::recordDistanceBegin(int id, double* &time, double* &distance, double radius, double seconds, ...) {
     void *fptr;
     int retval;
     va_list ap;
@@ -1083,9 +1083,9 @@ int CMobot::recordDistanceBegin(int id, double* &time, double* &angle, double ra
     }
     if(va_count(ap) == 1) {
       threshhold = va_arg(ap, double);
-      dlrunfun(fptr, &retval, NULL, this, id, &time, &angle, radius, seconds, threshhold);
+      dlrunfun(fptr, &retval, NULL, this, id, &time, &distance, radius, seconds, threshhold);
     } else {
-      dlrunfun(fptr, &retval, NULL, this, id, &time, &angle, radius, seconds);
+      dlrunfun(fptr, &retval, NULL, this, id, &time, &distance, radius, seconds);
     }
     va_end(ap);
     return retval;
@@ -1104,10 +1104,10 @@ int CMobot::recordDistanceEnd(int id, int &num) {
 }
 int CMobot::recordDistancesBegin(
     double* &time, 
-    double* &angle1, 
-    double* &angle2, 
-    double* &angle3, 
-    double* &angle4, 
+    double* &distance1, 
+    double* &distance2, 
+    double* &distance3, 
+    double* &distance4, 
     double radius,
     double seconds,
     ...) 
@@ -1127,20 +1127,20 @@ int CMobot::recordDistancesBegin(
       threshhold = va_arg(ap, double);
       dlrunfun(fptr, &retval, NULL, this, 
           &time, 
-          &angle1, 
-          &angle2, 
-          &angle3, 
-          &angle4, 
+          &distance1, 
+          &distance2, 
+          &distance3, 
+          &distance4, 
           radius,
           seconds, 
           threshhold);
     } else {
       dlrunfun(fptr, &retval, NULL, this, 
           &time, 
-          &angle1, 
-          &angle2, 
-          &angle3, 
-          &angle4, 
+          &distance1, 
+          &distance2, 
+          &distance3, 
+          &distance4, 
           radius,
           seconds);
     }

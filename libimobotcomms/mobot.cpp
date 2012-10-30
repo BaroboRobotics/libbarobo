@@ -2376,10 +2376,10 @@ int Mobot_recordAnglesEnd(mobot_t* comms, int* num)
 
 int Mobot_recordDistancesBegin(mobot_t* comms,
                                double **time,
-                               double **angle1,
-                               double **angle2,
-                               double **angle3,
-                               double **angle4,
+                               double **distance1,
+                               double **distance2,
+                               double **distance3,
+                               double **distance4,
                                double radius, 
                                double timeInterval,
                                double threshold)
@@ -2387,10 +2387,10 @@ int Mobot_recordDistancesBegin(mobot_t* comms,
   comms->wheelRadius = radius;
   return Mobot_recordAnglesBegin(comms, 
       time,
-      angle1,
-      angle1,
-      angle1,
-      angle1,
+      distance1,
+      distance1,
+      distance1,
+      distance1,
       timeInterval,
       threshold);
 }
@@ -4095,20 +4095,20 @@ int CMobot::recordDistanceEnd( mobotJointId_t id, int &num)
 
 int CMobot::recordDistancesBegin(
     double* &time,
-    double* &angle1,
-    double* &angle2,
-    double* &angle3,
-    double* &angle4,
+    double* &distance1,
+    double* &distance2,
+    double* &distance3,
+    double* &distance4,
     double radius, 
     double timeInterval,
     double threshold)
 {
   return Mobot_recordDistancesBegin(_comms,
     &time,
-    &angle1,
-    &angle2,
-    &angle3,
-    &angle4,
+    &distance1,
+    &distance2,
+    &distance3,
+    &distance4,
     radius, 
     timeInterval,
     threshold);
