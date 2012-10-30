@@ -1600,6 +1600,30 @@ int CMobotGroup::motionArchNB(double angle) {
     dlrunfun(fptr, &retval, motionArchNB, this, angle);
     return retval;
 }
+int CMobotGroup::motionDistance(double distance, double radius) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_motionDistance_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, distance, radius);
+    return retval;
+}
+int CMobotGroup::motionDistanceNB(double distance, double radius) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMG_motionDistanceNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, motionDistanceNB, this, distance, radius);
+    return retval;
+}
 int CMobotGroup::motionInchwormLeft(int num) {
     void *fptr;
     int retval;

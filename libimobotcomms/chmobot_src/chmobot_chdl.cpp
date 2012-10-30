@@ -2756,6 +2756,37 @@ EXPORTCH int CMG_motionArchNB_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int CMG_motionDistance_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotGroup *mobot;
+    double distance, radius;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
+    distance = Ch_VaArg(interp, ap, double);
+    radius = Ch_VaArg(interp, ap, double);
+    retval = mobot->motionDistance(distance, radius);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int CMG_motionDistanceNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotGroup *mobot;
+    double distance, radius;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
+    distance = Ch_VaArg(interp, ap, double);
+    radius = Ch_VaArg(interp, ap, double);
+    retval = mobot->motionDistanceNB(distance, radius);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int CMG_motionInchwormLeft_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
