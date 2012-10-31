@@ -920,6 +920,52 @@ int Mobot_getJointAnglesTime(mobot_t* comms,
   return 0;
 }
 
+int Mobot_getJointAnglesTimeState(mobot_t* comms,
+                             double *time, 
+                             double *angle1,
+                             double *angle2,
+                             double *angle3,
+                             double *angle4,
+                             mobotJointState_t* state1,
+                             mobotJointState_t* state2,
+                             mobotJointState_t* state3,
+                             mobotJointState_t* state4)
+{
+  uint32_t millis;
+  uint8_t buf[64];
+  int status;
+  int i;
+  float angles[4];
+  mobotJointState_t* states[4];
+  states[0] = state1;
+  states[1] = state2;
+  states[2] = state3;
+  states[3] = state4;
+  status = SendToIMobot(comms, BTCMD(CMD_GETBIGSTATE), NULL, 0);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 27) {
+    return -1;
+  }
+  /* Copy the timestamp */
+  memcpy(&millis, &buf[2], 4);
+  *time = millis/1000.0;
+  for(i = 0; i < 4; i++) {
+    /* Copy the motor angles */
+    memcpy(&angles[i], &buf[6 + i*4], 4);
+    /* Copy the motor states */
+    *states[i] = (mobotJointState_t)buf[22+i];
+  }
+  *angle1 = angles[0];
+  *angle2 = angles[1];
+  *angle3 = angles[2];
+  *angle4 = angles[3];
+  return 0;
+}
+
 int Mobot_getJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t *dir)
 {
   uint8_t buf[32];

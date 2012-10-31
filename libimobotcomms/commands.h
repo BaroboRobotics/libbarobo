@@ -230,6 +230,13 @@ enum protocol_commands_e {
  * in milliseconds (4 byte unsigned int)  */
   CMD_TIMEDACTION,
 
+/* CMD_GETBIGSTATE: Gets a wide variety of encoder and motor data. The data
+ * retrieved includes a time stamp, 4 motor angles, and 4 motor states 
+ * Command Format: [CMD] [1byte size] [0x00]
+ * Expected Response: [0x10] [27] [4 byte timestamp] [4x4 bytes motor angles] [1x4 bytes motor states] [0x11]
+ * */
+  CMD_GETBIGSTATE,
+
   CMD_NUMCOMMANDS
 };
 
