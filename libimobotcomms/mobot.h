@@ -658,6 +658,13 @@ DLLIMPORT int Mobot_getJointAnglesTime(mobot_t* comms,
                                        double *angle2, 
                                        double *angle3, 
                                        double *angle4);
+DLLIMPORT int Mobot_getJointAnglesTimeIsMoving(mobot_t* comms,
+                             double *time, 
+                             double *angle1,
+                             double *angle2,
+                             double *angle3,
+                             double *angle4,
+                             int *isMoving);
 DLLIMPORT int Mobot_getJointAnglesTimeState(mobot_t* comms,
                              double *time, 
                              double *angle1,

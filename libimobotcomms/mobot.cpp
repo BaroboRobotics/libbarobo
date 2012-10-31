@@ -966,6 +966,40 @@ int Mobot_getJointAnglesTimeState(mobot_t* comms,
   return 0;
 }
 
+int Mobot_getJointAnglesTimeIsMoving(mobot_t* comms,
+                             double *time, 
+                             double *angle1,
+                             double *angle2,
+                             double *angle3,
+                             double *angle4,
+                             int *isMoving)
+{
+  int i, rc;
+  mobotJointState_t states[4];
+  rc = Mobot_getJointAnglesTimeState( comms,
+     time, 
+     angle1,
+     angle2,
+     angle3,
+     angle4,
+     &states[0],
+     &states[1],
+     &states[2],
+     &states[3]); 
+  if(rc) {
+    return rc;
+  }
+  *isMoving = 0;
+  for(i = 0; i < 4; i++) {
+    if(states[i] == MOBOT_FORWARD ||
+        states[i] == MOBOT_BACKWARD)
+    {
+      *isMoving = 1;
+    }
+  }
+  return 0;
+}
+
 int Mobot_getJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t *dir)
 {
   uint8_t buf[32];
