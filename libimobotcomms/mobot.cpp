@@ -1729,7 +1729,6 @@ void* Mobot_recordAngleThread(void* arg)
     }
   }
 #else
-  recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
   int i;
   DWORD cur_time, itime;
   unsigned int dt;
@@ -1905,7 +1904,7 @@ void* Mobot_recordAngleBeginThread(void* arg)
     if(dt < (rArg->msecs)) {
       Sleep(rArg->msecs - dt);
     }
-    if(!isMoving && rArg->shiftData) {
+    if(!isMoving && rArg->comms->shiftData) {
       i--;
     }
     MUTEX_UNLOCK(rArg->comms->recordingLock);
