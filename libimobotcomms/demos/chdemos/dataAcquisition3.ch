@@ -29,7 +29,6 @@ array double distances[numDataPoints];
 
 /* Declare plotting variables */
 CPlot plot;
-double tolerance = 2.0; /* Degrees */
 
 /* Start the motion. First, move mobot to zero position */
 mobot.resetToZero();
@@ -37,7 +36,7 @@ mobot.resetToZero();
 mobot.setTwoWheelRobotSpeed(speed, radius);
 
 /* Start capturing data */
-mobot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval, tolerance);
+mobot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
 
 /* Roll the mobot the calculated distance */
 mobot.motionRollForward(angle);

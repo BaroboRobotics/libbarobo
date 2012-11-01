@@ -23,7 +23,6 @@ array double angles4[numDataPoints];
 
 /* Declare plotting variables */
 CPlot plot;
-double tolerance = 2.0; /* 1 degree for time shifting */
 
 /* Set all joint speeds to 45 degrees/second */
 mobot.setJointSpeeds(45, 45, 45, 45);
@@ -33,7 +32,7 @@ mobot.resetToZero();
 
 /* Start capturing data */
 mobot.recordAngles( time, angles1, angles2, angles3, angles4, 
-                    numDataPoints, timeInterval, tolerance);
+                    numDataPoints, timeInterval, 1);
 
 /* Perform the standing and unstanding motions */
 mobot.motionTurnRight(360);
