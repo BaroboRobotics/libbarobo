@@ -945,7 +945,7 @@ int CMobot::recordAngle(int id, double time[:], double angle[:], int num, double
     void *fptr;
     int retval;
     va_list ap;
-    double threshhold;
+    int shiftData;
     va_start(ap, seconds);
 
     fptr = dlsym(g_chmobot_dlhandle, "recordAngle_chdl");
@@ -954,8 +954,8 @@ int CMobot::recordAngle(int id, double time[:], double angle[:], int num, double
         return -1;
     }
     if(va_count(ap) == 1) {
-      threshhold = va_arg(ap, double);
-      dlrunfun(fptr, &retval, recordAngle, this, id, time, angle, num, seconds, threshhold);
+      shiftData = va_arg(ap, int);
+      dlrunfun(fptr, &retval, recordAngle, this, id, time, angle, num, seconds, shiftData);
     } else {
       dlrunfun(fptr, &retval, recordAngle, this, id, time, angle, num, seconds);
     }
@@ -966,7 +966,7 @@ int CMobot::recordAngleBegin(int id, double* &time, double* &angle, double secon
     void *fptr;
     int retval;
     va_list ap;
-    double threshhold = 0.0;
+    int shiftData = 1;
     va_start(ap, seconds);
 
     fptr = dlsym(g_chmobot_dlhandle, "recordAngleBegin_chdl");
@@ -975,8 +975,8 @@ int CMobot::recordAngleBegin(int id, double* &time, double* &angle, double secon
         return -1;
     }
     if(va_count(ap) == 1) {
-      threshhold = va_arg(ap, double);
-      dlrunfun(fptr, &retval, NULL, this, id, &time, &angle, seconds, threshhold);
+      shiftData = va_arg(ap, int);
+      dlrunfun(fptr, &retval, NULL, this, id, &time, &angle, seconds, shiftData);
     } else {
       dlrunfun(fptr, &retval, NULL, this, id, &time, &angle, seconds);
     }
@@ -999,7 +999,7 @@ int CMobot::recordAngles(double time[:], double angle1[:], double angle2[:], dou
     void *fptr;
     int retval;
     va_list ap;
-    double threshhold;
+    int shiftData;
     va_start(ap, seconds);
 
     fptr = dlsym(g_chmobot_dlhandle, "recordAngles_chdl");
@@ -1008,8 +1008,8 @@ int CMobot::recordAngles(double time[:], double angle1[:], double angle2[:], dou
         return -1;
     }
     if(va_count(ap) == 1) {
-      threshhold = va_arg(ap, double);
-      dlrunfun(fptr, &retval, recordAngles, this, time, angle1, angle2, angle3, angle4, num, seconds, threshhold);
+      shiftData = va_arg(ap, int);
+      dlrunfun(fptr, &retval, recordAngles, this, time, angle1, angle2, angle3, angle4, num, seconds, shiftData);
     } else {
       dlrunfun(fptr, &retval, recordAngles, this, time, angle1, angle2, angle3, angle4, num, seconds);
     }
@@ -1026,7 +1026,7 @@ int CMobot::recordAnglesBegin(
 {
     void *fptr;
     int retval;
-    double threshhold;
+    int shiftData;
     va_list ap;
     va_start(ap, seconds);
 
@@ -1036,7 +1036,7 @@ int CMobot::recordAnglesBegin(
         return -1;
     }
     if(va_count(ap) == 1) {
-      threshhold = va_arg(ap, double);
+      shiftData = va_arg(ap, int);
       dlrunfun(fptr, &retval, NULL, this, 
           &time, 
           &angle1, 
@@ -1044,7 +1044,7 @@ int CMobot::recordAnglesBegin(
           &angle3, 
           &angle4, 
           seconds, 
-          threshhold);
+          shiftData);
     } else {
       dlrunfun(fptr, &retval, NULL, this, 
           &time, 
@@ -1073,7 +1073,7 @@ int CMobot::recordDistanceBegin(int id, double* &time, double* &distance, double
     void *fptr;
     int retval;
     va_list ap;
-    double threshhold = 0.0;
+    int shiftData = 1;
     va_start(ap, seconds);
 
     fptr = dlsym(g_chmobot_dlhandle, "recordDistanceBegin_chdl");
@@ -1082,8 +1082,8 @@ int CMobot::recordDistanceBegin(int id, double* &time, double* &distance, double
         return -1;
     }
     if(va_count(ap) == 1) {
-      threshhold = va_arg(ap, double);
-      dlrunfun(fptr, &retval, NULL, this, id, &time, &distance, radius, seconds, threshhold);
+      shiftData = va_arg(ap, int);
+      dlrunfun(fptr, &retval, NULL, this, id, &time, &distance, radius, seconds, shiftData);
     } else {
       dlrunfun(fptr, &retval, NULL, this, id, &time, &distance, radius, seconds);
     }
@@ -1114,7 +1114,7 @@ int CMobot::recordDistancesBegin(
 {
     void *fptr;
     int retval;
-    double threshhold;
+    int shiftData;
     va_list ap;
     va_start(ap, seconds);
 
@@ -1124,7 +1124,7 @@ int CMobot::recordDistancesBegin(
         return -1;
     }
     if(va_count(ap) == 1) {
-      threshhold = va_arg(ap, double);
+      shiftData = va_arg(ap, int);
       dlrunfun(fptr, &retval, NULL, this, 
           &time, 
           &distance1, 
@@ -1133,7 +1133,7 @@ int CMobot::recordDistancesBegin(
           &distance4, 
           radius,
           seconds, 
-          threshhold);
+          shiftData);
     } else {
       dlrunfun(fptr, &retval, NULL, this, 
           &time, 

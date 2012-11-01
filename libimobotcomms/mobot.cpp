@@ -1642,7 +1642,7 @@ int Mobot_moveWait(mobot_t* comms)
 }
 
 void* Mobot_recordAngleThread(void* arg);
-int Mobot_recordAngle(mobot_t* comms, mobotJointId_t id, double* time, double* angle, int num, double timeInterval, double threshold)
+int Mobot_recordAngle(mobot_t* comms, mobotJointId_t id, double* time, double* angle, int num, double timeInterval, int shiftData)
 {
   THREAD_T thread;
   recordAngleArg_t *rArg;
@@ -1660,7 +1660,7 @@ int Mobot_recordAngle(mobot_t* comms, mobotJointId_t id, double* time, double* a
   comms->recordingEnabled[id-1] = 1;
   comms->recordedAngles[0] = &angle;
   comms->recordedTimes = &time;
-  comms->recordingThreshhold = threshold;
+  comms->shiftData = shiftData;
   THREAD_CREATE(&thread, Mobot_recordAngleThread, rArg);
   return 0;
 }
@@ -1678,8 +1678,10 @@ unsigned int diff_msecs(struct timespec t1, struct timespec t2)
 void* Mobot_recordAngleThread(void* arg)
 {
   double angles[4];
-#ifndef _WIN32
+  int *isMoving;
   recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
+  isMoving = (int*)malloc(sizeof(int) * rArg->num);
+#ifndef _WIN32
   int i;
   struct timespec cur_time, itime;
   unsigned int dt;
@@ -1697,13 +1699,14 @@ void* Mobot_recordAngleThread(void* arg)
     cur_time.tv_nsec = mts.tv_nsec;
 #endif
     //Mobot_getJointAngleTime(rArg->comms, rArg->id, &rArg->time[i], &rArg->angle[i]);
-    Mobot_getJointAnglesTime(
+    Mobot_getJointAnglesTimeIsMoving(
         rArg->comms, 
         &rArg->time[i],
         &angles[0],
         &angles[1],
         &angles[2],
-        &angles[3]);
+        &angles[3],
+        &isMoving[i]);
     rArg->angle[i] = angles[rArg->id-1];
     if(i == 0) {
       start_time = rArg->time[i];
@@ -1733,14 +1736,14 @@ void* Mobot_recordAngleThread(void* arg)
   double start_time;
   for(i = 0; i < rArg->num; i++) {
     cur_time = GetTickCount();
-    //Mobot_getJointAngleTime(rArg->comms, rArg->id, &rArg->time[i], &rArg->angle[i]);
-    Mobot_getJointAnglesTime(
+    Mobot_getJointAnglesTimeIsMoving(
         rArg->comms, 
         &rArg->time[i],
         &angles[0],
         &angles[1],
         &angles[2],
-        &angles[3]);
+        &angles[3],
+        &isMoving[i]);
     rArg->angle[i] = angles[rArg->id-1];
     if(i == 0) {
       start_time = rArg->time[i];
@@ -1757,12 +1760,9 @@ void* Mobot_recordAngleThread(void* arg)
 #endif
   double shiftTime;
   int shiftTimeIndex;
-  if(rArg->comms->recordingThreshhold > 0) {
+  if(rArg->comms->shiftData) {
     for(i = 0; i < rArg->num; i++) {
-      if(
-          abs( rArg->angle[0] -rArg->angle[i] ) >
-          rArg->comms->recordingThreshhold
-        )
+      if( isMoving[i] )
       {
         shiftTime = rArg->time[i];
         shiftTimeIndex = i;
@@ -1779,6 +1779,7 @@ void* Mobot_recordAngleThread(void* arg)
     }
   }
   rArg->comms->recordingEnabled[rArg->id-1] = 0;
+  free(isMoving);
   return NULL;
 }
 
@@ -1788,6 +1789,7 @@ void* Mobot_recordAngleBeginThread(void* arg)
   double angles[4];
   recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
   int i;
+  int isMoving;
   MUTEX_LOCK(rArg->comms->recordingActive_lock);
   rArg->comms->recordingActive[rArg->id-1] = 1;
   COND_SIGNAL(rArg->comms->recordingActive_cond);
@@ -1826,13 +1828,14 @@ void* Mobot_recordAngleBeginThread(void* arg)
     cur_time.tv_nsec = mts.tv_nsec;
 #endif
     //Mobot_getJointAngleTime(rArg->comms, rArg->id, &((*rArg->time_p)[i]), &((*rArg->angle_p)[i]));
-    Mobot_getJointAnglesTime(
+    Mobot_getJointAnglesTimeIsMoving(
         rArg->comms, 
         &((*rArg->time_p)[i]),
         &angles[0],
         &angles[1],
         &angles[2],
-        &angles[3]);
+        &angles[3],
+        &isMoving);
     (*rArg->angle_p)[i] = angles[rArg->id-1];
     if(i == 0) {
       start_time = (*rArg->time_p)[i];
@@ -1852,6 +1855,9 @@ void* Mobot_recordAngleBeginThread(void* arg)
     dt = diff_msecs(cur_time, itime);
     if(dt < (rArg->msecs)) {
       usleep(rArg->msecs*1000 - dt*1000);
+    }
+    if(!isMoving && rArg->comms->shiftData) {
+      i--;
     }
     MUTEX_LOCK(rArg->comms->recordingLock);
   }
@@ -1879,13 +1885,14 @@ void* Mobot_recordAngleBeginThread(void* arg)
     }
     cur_time = GetTickCount();
     //Mobot_getJointAngleTime(rArg->comms, rArg->id, &((*rArg->time_p)[i]), &((*rArg->angle_p)[i]));
-    Mobot_getJointAnglesTime(
+    Mobot_getJointAnglesTimeIsMoving(
         rArg->comms, 
         &((*rArg->time_p)[i]),
         &angles[0],
         &angles[1],
         &angles[2],
-        &angles[3]);
+        &angles[3],
+        &isMoving);
     (*rArg->angle_p)[i] = angles[rArg->id-1];
     if(i == 0) {
       start_time = (*rArg->time_p)[i];
@@ -1897,6 +1904,9 @@ void* Mobot_recordAngleBeginThread(void* arg)
     dt = itime - cur_time;
     if(dt < (rArg->msecs)) {
       Sleep(rArg->msecs - dt);
+    }
+    if(!isMoving && rArg->shiftData) {
+      i--;
     }
     MUTEX_UNLOCK(rArg->comms->recordingLock);
   }
@@ -1919,7 +1929,7 @@ int Mobot_recordAngleBegin(mobot_t* comms,
                                      double **time,
                                      double **angle,
                                      double timeInterval,
-                                     double threshold)
+                                     int shiftData)
 {
   THREAD_T thread;
   recordAngleArg_t *rArg;
@@ -1939,7 +1949,7 @@ int Mobot_recordAngleBegin(mobot_t* comms,
   comms->recordingEnabled[id-1] = 1;
   comms->recordedAngles[0] = angle;
   comms->recordedTimes = time;
-  comms->recordingThreshhold = threshold;
+  comms->shiftData = shiftData;
   THREAD_CREATE(&thread, Mobot_recordAngleBeginThread, rArg);
   return 0;
 }
@@ -1963,27 +1973,6 @@ int Mobot_recordAngleEnd(mobot_t* comms, mobotJointId_t id, int *num)
   }
   MUTEX_UNLOCK(comms->recordingActive_lock);
   *num = comms->recordingNumValues[id-1];
-  /* Check the threshold */
-  if(comms->recordingThreshhold > 0) {
-    for(i = 0; i < *num; i++) {
-      if(
-          abs((*comms->recordedAngles[0])[0] - (*comms->recordedAngles[0])[i]) > 
-          comms->recordingThreshhold)
-      {
-        timeShift = (*comms->recordedTimes)[i];
-        timeShiftIndex = i;
-        break;
-      }
-    }
-    for(i = 0; i < *num; i++) { 
-      if(i < timeShiftIndex) {
-        (*comms->recordedAngles[0])[i] = (*comms->recordedAngles[0])[timeShiftIndex];
-        (*comms->recordedTimes)[i] = 0;
-      } else {
-        (*comms->recordedTimes)[i] = (*comms->recordedTimes)[i] - timeShift;
-      }
-    }
-  }
   return 0;
 }
 
@@ -1993,10 +1982,10 @@ int Mobot_recordDistanceBegin(mobot_t* comms,
                                      double **distance,
                                      double radius,
                                      double timeInterval,
-                                     double threshold)
+                                     int shiftTime)
 {
   comms->wheelRadius = radius;
-  return Mobot_recordAngleBegin(comms, id, time, distance, timeInterval, threshold);
+  return Mobot_recordAngleBegin(comms, id, time, distance, timeInterval, shiftTime);
 }
 
 int Mobot_recordDistanceEnd(mobot_t* comms, mobotJointId_t id, int *num)
@@ -2018,7 +2007,7 @@ int Mobot_recordAngles(mobot_t* comms,
                       double* angle4,
                       int num,
                       double timeInterval,
-                      double threshold)
+                      int shiftData)
 {
   int i;
   THREAD_T thread;
@@ -2038,7 +2027,7 @@ int Mobot_recordAngles(mobot_t* comms,
   rArg->angle4 = angle4;
   rArg->num = num;
   rArg->msecs = msecs;
-  comms->recordingThreshhold = threshold;
+  comms->shiftData = shiftData;
   for(i = 0; i < 4; i++) {
     comms->recordingEnabled[i] = 1;
   }
@@ -2048,8 +2037,10 @@ int Mobot_recordAngles(mobot_t* comms,
 
 void* recordAnglesThread(void* arg)
 {
-#ifndef _WIN32
+  int *isMoving;
   recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
+  isMoving = (int*)malloc(sizeof(int)*rArg->num);
+#ifndef _WIN32
   int i;
   struct timespec cur_time, itime;
   unsigned int dt;
@@ -2066,13 +2057,14 @@ void* recordAnglesThread(void* arg)
     cur_time.tv_sec = mts.tv_sec;
     cur_time.tv_nsec = mts.tv_nsec;
 #endif
-    Mobot_getJointAnglesTime(
+    Mobot_getJointAnglesTimeIsMoving(
         rArg->comms, 
         &rArg->time[i], 
         &rArg->angle[i], 
         &rArg->angle2[i], 
         &rArg->angle3[i], 
-        &rArg->angle4[i]);
+        &rArg->angle4[i],
+        &isMoving[i]);
     if(i == 0) {
       start_time = rArg->time[i];
     }
@@ -2097,20 +2089,20 @@ void* recordAnglesThread(void* arg)
     }
   }
 #else
-  recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
   int i;
   DWORD cur_time, itime;
   unsigned int dt;
   double start_time;
   for(i = 0; i < rArg->num; i++) {
     cur_time = GetTickCount();
-    Mobot_getJointAnglesTime(
+    Mobot_getJointAnglesTimeIsMoving(
         rArg->comms, 
         &rArg->time[i], 
         &rArg->angle[i], 
         &rArg->angle2[i], 
         &rArg->angle3[i], 
-        &rArg->angle4[i]);
+        &rArg->angle4[i],
+        &isMoving[i]);
     if(i == 0) {
       start_time = rArg->time[i];
     }
@@ -2131,24 +2123,17 @@ void* recordAnglesThread(void* arg)
   int shiftTimeIndex;
   int j;
   int done = 0;
-  if(rArg->comms->recordingThreshhold > 0) {
+  if(rArg->comms->shiftData) {
     rArg->comms->recordedAngles[0] = &rArg->angle;
     rArg->comms->recordedAngles[1] = &rArg->angle2;
     rArg->comms->recordedAngles[2] = &rArg->angle3;
     rArg->comms->recordedAngles[3] = &rArg->angle4;
     rArg->comms->recordedTimes = &rArg->time;
-    for(i = 0; i < rArg->num && !done; i++) {
-      for(j = 0; j < 4; j++) {
-        if( abs(
-              (*rArg->comms->recordedAngles[j])[i] - (*rArg->comms->recordedAngles[j])[0] 
-              ) > rArg->comms->recordingThreshhold
-          )
-        {
-          done = 1;
+    for(i = 0; i < rArg->num; i++) {
+      if(isMoving[i]) {
           shiftTime = (*rArg->comms->recordedTimes)[i];
           shiftTimeIndex = i;
           break;
-        }
       }
     }
     for(i = 0; i < rArg->num; i++) {
@@ -2165,8 +2150,8 @@ void* recordAnglesThread(void* arg)
   for(i = 0; i < 4; i++) {
     rArg->comms->recordingEnabled[i] = 0;
   }
+  free(isMoving);
   return NULL;
-
 }
 
 void* Mobot_recordAnglesBeginThread(void* arg)
@@ -2352,7 +2337,7 @@ int Mobot_recordAnglesBegin(mobot_t* comms,
                                      double **angle3,
                                      double **angle4,
                                      double timeInterval,
-                                     double threshold)
+                                     int shiftData)
 {
   THREAD_T thread;
   recordAngleArg_t *rArg;
@@ -2379,8 +2364,8 @@ int Mobot_recordAnglesBegin(mobot_t* comms,
   rArg->msecs = msecs;
   for(i = 0; i < 4; i++) {
     comms->recordingEnabled[i] = 1;
-    comms->recordingThreshhold = threshold;
   }
+  comms->shiftData = shiftData;
   comms->recordedAngles[0] = angle1;
   comms->recordedAngles[1] = angle2;
   comms->recordedAngles[2] = angle3;
@@ -2424,32 +2409,6 @@ int Mobot_recordAnglesEnd(mobot_t* comms, int* num)
     }
   }
   MUTEX_UNLOCK(comms->recordingActive_lock);
-  if(comms->recordingThreshhold > 0) {
-    /* We need to shift the time of the data so that the first moment a joint
-     * exceeds the threshold limit becomes the zero time */
-    for(i = 0; i < comms->recordingNumValues[0] && !done; i++) {
-      for(j = 0; j < 4; j++) {
-        if(
-            abs((*comms->recordedAngles[j])[0] - (*comms->recordedAngles[j])[i]) > 
-            comms->recordingThreshhold) {
-          timeShift = (*comms->recordedTimes)[i];
-          timeShiftIndex = i;
-          done = 1;
-          break;
-        }
-      }
-    }
-    for(i = 0; i < comms->recordingNumValues[0]; i++) {
-      if(i < timeShiftIndex) {
-        for(j = 0; j < 4; j++) {
-          (*comms->recordedAngles[j])[i] = (*comms->recordedAngles[j])[timeShiftIndex];
-        }
-        (*comms->recordedTimes)[i] = 0;
-      } else {
-        (*comms->recordedTimes)[i] = (*comms->recordedTimes)[i] - timeShift;
-      }
-    }
-  }
   *num = comms->recordingNumValues[0];
   return 0;
 }
@@ -2462,7 +2421,7 @@ int Mobot_recordDistancesBegin(mobot_t* comms,
                                double **distance4,
                                double radius, 
                                double timeInterval,
-                               double threshold)
+                               int shiftTime)
 {
   comms->wheelRadius = radius;
   return Mobot_recordAnglesBegin(comms, 
@@ -2472,7 +2431,7 @@ int Mobot_recordDistancesBegin(mobot_t* comms,
       distance1,
       distance1,
       timeInterval,
-      threshold);
+      shiftTime);
 }
 
 int Mobot_recordDistancesEnd(mobot_t* comms, int *num)
@@ -3579,7 +3538,7 @@ void* commsEngine(void* arg)
     /* Received a byte. If it is the first one, check to see if it is a
      * response or a triggered event */
     /* DEBUG */
-    //printf("RECV: 0x%x\n", byte);
+    //printf("%d RECV: 0x%0x\n", bytes, byte);
     if(bytes == 0) {
       MUTEX_LOCK(comms->commsBusy_lock);
       comms->commsBusy = 1;
@@ -4109,14 +4068,14 @@ int CMobot::moveToZeroNB()
   return Mobot_moveToZeroNB(_comms);
 }
 
-int CMobot::recordAngle(mobotJointId_t id, double* time, double* angle, int num, double seconds, double threshold)
+int CMobot::recordAngle(mobotJointId_t id, double* time, double* angle, int num, double seconds, int shiftTime)
 {
-  return Mobot_recordAngle(_comms, id, time, angle, num, seconds, threshold);
+  return Mobot_recordAngle(_comms, id, time, angle, num, seconds, shiftTime);
 }
 
-int CMobot::recordAngleBegin(mobotJointId_t id, double* &time, double* &angle, double seconds, double threshold)
+int CMobot::recordAngleBegin(mobotJointId_t id, double* &time, double* &angle, double seconds, int shiftData)
 {
-  return Mobot_recordAngleBegin(_comms, id, &time, &angle, seconds, threshold);
+return Mobot_recordAngleBegin(_comms, id, &time, &angle, seconds, shiftData);
 }
 
 int CMobot::recordAngleEnd(mobotJointId_t id, int &num)
@@ -4131,9 +4090,9 @@ int CMobot::recordAngles(double *time,
     double *angle4, 
     int num, 
     double seconds,
-    double threshold)
+    int shiftData)
 {
-  return Mobot_recordAngles(_comms, time, angle1, angle2, angle3, angle4, num, seconds, threshold);
+  return Mobot_recordAngles(_comms, time, angle1, angle2, angle3, angle4, num, seconds, shiftData);
 }
 
 int CMobot::recordAnglesBegin(double* &time, 
@@ -4142,9 +4101,9 @@ int CMobot::recordAnglesBegin(double* &time,
     double* &angle3, 
     double* &angle4, 
     double seconds,
-    double threshold)
+    int shiftData)
 {
-  return Mobot_recordAnglesBegin(_comms, &time, &angle1, &angle2, &angle3, &angle4, seconds, threshold);
+  return Mobot_recordAnglesBegin(_comms, &time, &angle1, &angle2, &angle3, &angle4, seconds, shiftData);
 }
 
 int CMobot::recordAnglesEnd(int &num)
@@ -4157,7 +4116,7 @@ int CMobot::recordDistanceBegin( mobotJointId_t id,
                                      double* &distance,
                                      double radius,
                                      double timeInterval,
-                                     double threshold)
+                                     int shiftData)
 {
   return Mobot_recordDistanceBegin(_comms, 
       id,
@@ -4165,7 +4124,7 @@ int CMobot::recordDistanceBegin( mobotJointId_t id,
       &distance,
       radius,
       timeInterval,
-      threshold);
+      shiftData);
 }
 
 int CMobot::recordDistanceEnd( mobotJointId_t id, int &num)
@@ -4181,7 +4140,7 @@ int CMobot::recordDistancesBegin(
     double* &distance4,
     double radius, 
     double timeInterval,
-    double threshold)
+    int shiftData)
 {
   return Mobot_recordDistancesBegin(_comms,
     &time,
@@ -4191,7 +4150,7 @@ int CMobot::recordDistancesBegin(
     &distance4,
     radius, 
     timeInterval,
-    threshold);
+    shiftData);
 }
 
 int CMobot::recordDistancesEnd(int &num)
