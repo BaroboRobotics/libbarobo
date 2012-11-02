@@ -18,7 +18,7 @@ int CMobot::recordDistancesBegin(double* &time,
                               double* &distance4, 
                               double radius,
                               double seconds,
-                              double threshold = 0.0);
+                              int shiftData = 1);
 \end{verbatim}
 
 \noindent
@@ -43,9 +43,8 @@ The function returns 0 on success and non-zero otherwise.\\
 \texttt{radius} & The radius of the wheels on the mobot. \\
 \texttt{seconds} & The number of seconds between distance readings. The minimum value allowed for
 this variable is 0.05. \\
-\texttt{threshold} & (optional) This argument is used to align the first
-detected motion to the y-axis. When the distance of any joint moves by
-\texttt{threshold} degrees, that point is aligned with the y-axis.
+\texttt{threshold} & (optional) This argument indicates whether or not to align the first
+detected motion to the y-axis. 
 \end{tabular}
 \end{description}
 
