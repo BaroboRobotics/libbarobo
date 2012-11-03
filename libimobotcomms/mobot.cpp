@@ -2921,12 +2921,7 @@ int Mobot_motionInchwormRightNB(mobot_t* comms, int num)
 
 int Mobot_motionRollBackward(mobot_t* comms, double angle)
 {
-  double motorPosition[2];
-  Mobot_getJointAngle(comms, MOBOT_JOINT1, &motorPosition[0]);
-  Mobot_getJointAngle(comms, MOBOT_JOINT4, &motorPosition[1]);
-  Mobot_moveJointToNB(comms, MOBOT_JOINT1, motorPosition[0] - angle);
-  Mobot_moveJointToNB(comms, MOBOT_JOINT4, motorPosition[1] - angle);
-  Mobot_moveWait(comms);
+  Mobot_move(comms, -angle, 0, 0, -angle);
   return 0;
 }
 
@@ -2950,12 +2945,15 @@ int Mobot_motionRollBackwardNB(mobot_t* comms, double angle)
 
 int Mobot_motionRollForward(mobot_t* comms, double angle)
 {
+  /*
   double motorPosition[2];
   Mobot_getJointAngle(comms, MOBOT_JOINT1, &motorPosition[0]);
   Mobot_getJointAngle(comms, MOBOT_JOINT4, &motorPosition[1]);
   Mobot_moveJointToNB(comms, MOBOT_JOINT1, motorPosition[0] + angle);
   Mobot_moveJointToNB(comms, MOBOT_JOINT4, motorPosition[1] + angle);
   Mobot_moveWait(comms);
+  */
+  Mobot_move(comms, angle, 0, 0, angle);
   return 0;
 }
 
@@ -3041,12 +3039,7 @@ int Mobot_motionSkinnyNB(mobot_t* comms, double angle)
 
 int Mobot_motionTurnLeft(mobot_t* comms, double angle)
 {
-  double motorPosition[2];
-  Mobot_getJointAngle(comms, MOBOT_JOINT1, &motorPosition[0]);
-  Mobot_getJointAngle(comms, MOBOT_JOINT4, &motorPosition[1]);
-  Mobot_moveJointToNB(comms, MOBOT_JOINT1, motorPosition[0] - angle);
-  Mobot_moveJointToNB(comms, MOBOT_JOINT4, motorPosition[1] + angle);
-  Mobot_moveWait(comms);
+  Mobot_move(comms, -angle, 0, 0, angle);
   return 0;
 }
 
@@ -3070,12 +3063,7 @@ int Mobot_motionTurnLeftNB(mobot_t* comms, double angle)
 
 int Mobot_motionTurnRight(mobot_t* comms, double angle)
 {
-  double motorPosition[2];
-  Mobot_getJointAngle(comms, MOBOT_JOINT1, &motorPosition[0]);
-  Mobot_getJointAngle(comms, MOBOT_JOINT4, &motorPosition[1]);
-  Mobot_moveJointToNB(comms, MOBOT_JOINT1, motorPosition[0] + angle);
-  Mobot_moveJointToNB(comms, MOBOT_JOINT4, motorPosition[1] - angle);
-  Mobot_moveWait(comms);
+  Mobot_move(comms, angle, 0, 0, -angle);
   return 0;
 }
 
