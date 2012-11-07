@@ -3624,7 +3624,7 @@ CMobot::CMobot()
 
 CMobot::~CMobot() 
 {
-  if(_comms->exitState = MOBOT_HOLD) {
+  if(_comms->exitState == MOBOT_HOLD) {
     setMovementStateNB(MOBOT_HOLD, MOBOT_HOLD, MOBOT_HOLD, MOBOT_HOLD);
   } else {
     stop();
