@@ -237,6 +237,18 @@ enum protocol_commands_e {
  * */
   CMD_GETBIGSTATE,
 
+/* CMD_SETFOURIERCOEFS: Set the coefficients for the fourier series.
+ * Command Format: [CMD] [1byte size] [1byte motor id] [5 x 1-byte a-coefficients] [5 x 1-byte b-coefficients] [0x00]
+ * Expected Response: [0x10] [0x03] [0x11]
+ * */
+  CMD_SETFOURIERCOEFS,
+
+/* CMD_STARTFOURIER: Start the fourier based control of the Mobot.
+ * Command Format: [CMD] [0x04] [1 byte motor mask] [0x00]
+ * Expected Response: [0x10] [0x03] [0x11]
+ * */
+  CMD_STARTFOURIER,
+
   CMD_NUMCOMMANDS
 };
 

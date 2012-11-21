@@ -2492,6 +2492,46 @@ int Mobot_setExitState(mobot_t* comms, mobotJointState_t exitState)
   return 0;
 }
 
+int Mobot_setFourierCoefficients(mobot_t* comms, mobotJointId_t id, double* a, double* b)
+{
+  uint8_t buf[32];
+  int8_t coefs[10];
+  int i, status;
+  buf[0] = (uint8_t)id-1;
+  for(i = 0; i < 5; i++) {
+    coefs[i] = (a[i]/5.0) * 128;
+    coefs[i+5] = (b[i]/5.0) * 128;
+  }
+  memcpy(&buf[1], &coefs[0], 10);
+  status = SendToIMobot(comms, BTCMD(CMD_SETFOURIERCOEFS), buf, 10);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
+  return 0;
+}
+
+int Mobot_beginFourierControl(mobot_t* comms, uint8_t motorMask)
+{
+  uint8_t buf[32];
+  int status;
+  buf[0] = motorMask;
+  status = SendToIMobot(comms, BTCMD(CMD_STARTFOURIER), buf, 1);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
+  return 0;
+}
+
 int Mobot_setHWRev(mobot_t* comms, uint8_t rev)
 {
   uint8_t buf[20];
