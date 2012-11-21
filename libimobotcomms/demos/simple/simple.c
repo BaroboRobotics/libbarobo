@@ -38,9 +38,11 @@ int main()
     for(joint = 0; joint < 4; joint++) { // For each Joint
       for(j = 0; j < 5; j++) {
         fscanf(fp, "%lf", &a[j]);
+        printf("a: %lf\n", a[j]);
       }
       for(j = 0; j < 5; j++) {
         fscanf(fp, "%lf", &b[j]);
+        printf("b: %lf\n", b[j]);
       }
       if(Mobot_setFourierCoefficients(&comms[i], joint+1, a, b)) {
         printf("Error setting coefficients for Mobot %d\n", i);
