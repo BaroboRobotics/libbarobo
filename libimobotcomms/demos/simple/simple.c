@@ -2,9 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define NUMBOTS 1
+
 int main()
 {
-  mobot_t comms[3];
+  mobot_t comms[NUMBOTS];
   int err;
   int num;
   double a[5], b[5];
@@ -19,10 +21,10 @@ int main()
     a[i] = 0;
     b[i] = 0;
   }
-  for(i = 0; i < 3; i++) {
+  for(i = 0; i < NUMBOTS; i++) {
     Mobot_init(&comms[i]);
   }
-  for(i = 0; i < 3; i++) {
+  for(i = 0; i < NUMBOTS; i++) {
     err = Mobot_connect(&comms[i]);
     if(err) {
       printf("Connect %d failed with error: %d\n", i, err);
@@ -30,7 +32,7 @@ int main()
     }
   }
   printf("Connect succeeded. Move to zero.\n");
-  for(i = 0; i < 3; i++) {
+  for(i = 0; i < NUMBOTS; i++) {
     Mobot_setJointSafetyAngle(&comms[i], M_PI);
     Mobot_resetToZero(&comms[i]);
   }
@@ -40,8 +42,7 @@ int main()
     printf("Error opening datafile.\n");
     exit(-1);
   }
-#if 0 // debug
-  for(i = 0; i < 3; i++) { // For each Mobot
+  for(i = 0; i < NUMBOTS; i++) { // For each Mobot
     for(joint = 0; joint < 4; joint++) { // For each Joint
       for(j = 0; j < 5; j++) {
         fscanf(fp, "%lf", &a[j]);
@@ -57,12 +58,8 @@ int main()
       }
     }
   }
-#endif
-  b[1] = 1;
-  b[3] = 0.5;
-  Mobot_setFourierCoefficients(&comms[0], 1, a, b);
   fclose(fp);
-  for(i = 0; i < 3; i++) {
+  for(i = 0; i < NUMBOTS; i++) {
     Mobot_beginFourierControl(&comms[i], 0xff);
   }
   Mobot_recordAnglesBegin(&comms[0],
@@ -86,7 +83,7 @@ int main()
         a4[i]);
   }
   fclose(fp);
-  for(i = 0; i < 3; i++) {
+  for(i = 0; i < NUMBOTS; i++) {
     Mobot_stop(&comms[i]);
     Mobot_disconnect(&comms[i]);
   }
