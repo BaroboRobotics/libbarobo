@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
+#include <ctype.h>
 #include "mobot.h"
 #include "mobot_internal.h"
 #ifndef _WIN32
@@ -13,6 +14,7 @@
 #include <signal.h>
 #include <time.h>
 #include <sys/time.h>
+#include <termios.h>
 #else
 #include <windows.h>
 #include <shlobj.h>
@@ -409,12 +411,18 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
       return -2;
     }
   }
-  fclose(lockfile);
+  if(lockfile != NULL) {
+    fclose(lockfile);
+  }
   comms->socket = open(ttyfilename, O_RDWR | O_NOCTTY );
   if(comms->socket < 0) {
     perror("Unable to open tty port.");
     return -1;
   }
+  /* Change the baud rate to 57600 */
+  struct termios term;
+  tcgetattr(comms->socket, &term);
+  cfsetspeed(&term, B57600);
   comms->connected = 1;
   status = finishConnect(comms);
   if(status) return status;
@@ -491,6 +499,131 @@ int Mobot_blinkLED(mobot_t* comms, double delay, int numBlinks)
     return -1;
   }
   /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
+  return 0;
+}
+
+mobotMelodyNote_t* Mobot_createMelody(int tempo)
+{
+  mobotMelodyNote_t* tmp;
+  tmp = (mobotMelodyNote_t*)malloc(sizeof(mobotMelodyNote_t));
+  tmp->tempo = tempo;
+  tmp->next = NULL;
+  return tmp;
+}
+
+int Mobot_melodyAddNote(mobotMelodyNote_t* melody, const char* note, int divider)
+{
+  int i;
+  int index;
+  uint8_t byte;
+  uint8_t octave;
+  char mynote;
+  mobotMelodyNote_t* iter;
+  iter = melody;
+  for(i = 0; iter->next != NULL; iter = iter->next, i++);
+  if(i > 255) {
+    return -1;
+  }
+  /* First, lowercase the first character */
+  mynote = tolower(note[0]);
+  if(mynote < 'a' || mynote > 'g') {
+    return -1;
+  }
+  /* Allocate new note */ 
+  iter->next = (mobotMelodyNote_t*)malloc(sizeof(mobotMelodyNote_t));
+  iter->next->next = NULL;
+  /* Parse the note */
+  switch(mynote) {
+    case 'c':
+      index = 0;
+      break;
+    case 'd':
+      index = 2;
+      break;
+    case 'e':
+      index = 4;
+      break;
+    case 'f':
+      index = 5;
+      break;
+    case 'g':
+      index = 7;
+      break;
+    case 'a':
+      index = 9;
+      break;
+    case 'b':
+      index = 11;
+      break;
+    default:
+      return -1;
+  }
+  i = 1;
+  if(note[i] == '#') {
+    index++;
+    i++;
+  } else if (note[i] == 'b') {
+    index--;
+    i++;
+  }
+  index = (index + 12)%12;
+
+  if(note[i] > '0' && note[i] < '9') {
+    octave = note[i] - '0';
+  } else {
+    octave = 4;
+  }
+
+  iter->next->notedata[0] = (uint8_t)divider;
+  byte = octave;
+  byte = byte << 4;
+  iter->next->notedata[1] = byte;
+  byte = index;
+  iter->next->notedata[1] |= byte;
+  return 0;
+}
+
+int Mobot_loadMelody(mobot_t* comms, int id, mobotMelodyNote_t* melody)
+{
+  uint8_t data[256];
+  uint8_t length;
+  int status;
+  mobotMelodyNote_t* iter;
+  iter = melody->next;
+  for(length = 0; iter != NULL; length++, iter = iter->next);
+  data[0] = (uint8_t)id;
+  data[1] = melody->tempo;
+  data[2] = length;
+  iter = melody->next;
+  for(length = 1; iter != NULL; length++, iter = iter->next) {
+    memcpy(&data[length*2+1], &iter->notedata[0], 2);
+  }
+  status = SendToIMobot(comms, BTCMD(CMD_LOADMELODY), data, length*2+1);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, data, sizeof(data))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(data[1] != 3) {
+    return -1;
+  }
+  return 0;
+}
+
+int Mobot_playMelody(mobot_t* comms, int id)
+{
+  int status;
+  uint8_t buf[8];
+  buf[0] = (uint8_t)id;
+  status = SendToIMobot(comms, BTCMD(CMD_PLAYMELODY), buf, 1);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the buf size is correct */
   if(buf[1] != 3) {
     return -1;
   }
@@ -3320,13 +3453,11 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
   len++;
 #endif
   //printf("SEND %d: <<%s>>\n", comms->socket, str);
-  /*
   printf("SEND: ");
   for(i = 0; i < len; i++) {
     printf("0x%x ", str[i]);
   }
   printf("\n");
-  */
   /* To send to the iMobot, we need to append the terminating character, '$' */
   if(comms->connected == 1) {
 #ifdef _WIN32
@@ -3424,13 +3555,11 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
   memcpy(buf, comms->recvBuf, comms->recvBuf_bytes);
 
   /* Print out results */
-  /*
   int i;
   for(i = 0; i < buf[1]; i++) {
     printf("0x%2x ", buf[i]);
   }
   printf("\n");
-  */
 
   MUTEX_UNLOCK(comms->recvBuf_lock);
   MUTEX_UNLOCK(comms->commsLock);

@@ -170,6 +170,19 @@ typedef struct motionArg_s
 }motionArg_t;
 #endif
 
+#ifndef MOBOT_MELODY_NOTE
+#define MOBOT_MELODY_NOTE
+typedef struct mobotMelodyNote_s
+{
+  int tempo;
+  /* Bits 15-8 -- note value divider */
+  /* Bits 7-3 -- octave */
+  /* Bits 2-0 -- note index */
+  uint8_t notedata[2]; 
+  struct mobotMelodyNote_s *next;
+} mobotMelodyNote_t;
+#endif
+
 #ifdef NONRELEASE
 #ifndef _CH_
 #include "mobot_internal.h"
@@ -615,6 +628,10 @@ DLLIMPORT int Mobot_connectWithAddress(
     mobot_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_connectWithBluetoothAddress(
     mobot_t* comms, const char* address, int channel);
+DLLIMPORT mobotMelodyNote_t* Mobot_createMelody(int tempo);
+DLLIMPORT int Mobot_melodyAddNote(mobotMelodyNote_t* melody, const char* note, int divider);
+DLLIMPORT int Mobot_loadMelody(mobot_t* comms, int id, mobotMelodyNote_t* melody);
+DLLIMPORT int Mobot_playMelody(mobot_t* comms, int id);
 DLLIMPORT int Mobot_disconnect(mobot_t* comms);
 DLLIMPORT int Mobot_driveJointToDirect(mobot_t* comms, mobotJointId_t id, double angle);
 DLLIMPORT int Mobot_driveJointTo(mobot_t* comms, mobotJointId_t id, double angle);
