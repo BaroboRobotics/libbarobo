@@ -423,6 +423,7 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   struct termios term;
   tcgetattr(comms->socket, &term);
   cfsetspeed(&term, B57600);
+  tcsetattr(comms->socket, 0, &term);
   comms->connected = 1;
   status = finishConnect(comms);
   if(status) return status;
@@ -3453,11 +3454,13 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
   len++;
 #endif
   //printf("SEND %d: <<%s>>\n", comms->socket, str);
+  /*
   printf("SEND: ");
   for(i = 0; i < len; i++) {
     printf("0x%x ", str[i]);
   }
   printf("\n");
+  */
   /* To send to the iMobot, we need to append the terminating character, '$' */
   if(comms->connected == 1) {
 #ifdef _WIN32
@@ -3555,12 +3558,13 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
   memcpy(buf, comms->recvBuf, comms->recvBuf_bytes);
 
   /* Print out results */
+  /* 
   int i;
   for(i = 0; i < buf[1]; i++) {
     printf("0x%2x ", buf[i]);
   }
   printf("\n");
-
+  */
   MUTEX_UNLOCK(comms->recvBuf_lock);
   MUTEX_UNLOCK(comms->commsLock);
   return 0;
