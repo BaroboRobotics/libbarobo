@@ -423,7 +423,9 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   struct termios term;
   tcgetattr(comms->socket, &term);
   cfsetspeed(&term, B57600);
-  tcsetattr(comms->socket, 0, &term);
+  if(status = tcsetattr(comms->socket, TCSANOW, &term)) {
+    fprintf(stderr, "Error setting tty settings. %d\n", errno);
+  }
   comms->connected = 1;
   status = finishConnect(comms);
   if(status) return status;
@@ -472,6 +474,8 @@ int finishConnect(mobot_t* comms)
     fprintf(stderr, "CMobot Library Protocol Version: %d\n", CMD_NUMCOMMANDS);
   }
   /* Get the joint max speeds */
+  /* DEBUG */
+#if 0
   for(i = 4; i >= 1; i--) {
     if(Mobot_getJointMaxSpeed(comms, (mobotJointId_t)i, &(comms->maxSpeed[i-1])) < 0) {
       i++;
@@ -482,6 +486,7 @@ int finishConnect(mobot_t* comms)
       DEG2RAD(45), 
       DEG2RAD(45), 
       DEG2RAD(45) );
+#endif
   return 0;
 }
 
@@ -628,6 +633,73 @@ int Mobot_playMelody(mobot_t* comms, int id)
   if(buf[1] != 3) {
     return -1;
   }
+  return 0;
+}
+
+int Mobot_getAddress(mobot_t* comms)
+{
+  int status;
+  uint8_t buf[8];
+  int addr;
+  status = SendToIMobot(comms, BTCMD(CMD_GETADDRESS), NULL, 0);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the buf size is correct */
+  if(buf[1] != 5) {
+    return -1;
+  }
+  addr = (buf[2]<<8) | buf[3];
+  return addr;
+}
+
+int Mobot_queryAddresses(mobot_t* comms)
+{
+  int status;
+  uint8_t buf[8];
+  status = SendToIMobot(comms, BTCMD(CMD_QUERYADDRESSES), NULL, 0);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the buf size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
+  return 0;
+}
+
+int Mobot_getQueriedAddresses(mobot_t* comms)
+{
+  int status;
+  uint8_t buf[256];
+  uint16_t addr;
+  int i;
+  status = SendToIMobot(comms, BTCMD(CMD_GETQUERIEDADDRESSES), NULL, 0);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the buf size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
+
+  for(i = 0; i < (buf[1]-3)/2; i++) {
+    memcpy(&addr, &buf[2+i*2], 2);
+    printf("Got address: 0x%4X\n", addr);
+  }
+  return 0;
+}
+
+int Mobot_reboot(mobot_t* comms)
+{
+  int status;
+  uint16_t addr;
+  int i;
+  status = SendToIMobot(comms, BTCMD(CMD_REBOOT), NULL, 0);
+  if(status < 0) return status;
   return 0;
 }
 
@@ -3442,10 +3514,20 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
   MUTEX_LOCK(comms->commsLock);
   comms->recvBuf_ready = 0;
   str[0] = cmd;
-  str[1] = datasize + 3;
-  if(datasize > 0) memcpy(&str[2], data, datasize);
-  str[datasize+2] = MSG_SENDEND;
-  len = datasize + 3;
+  str[1] = datasize + 8;
+  //str[2] = 0xA5;
+  //str[3] = 0x3F;
+  //str[2] = 0x00;
+  //str[3] = 0x00;
+  str[2] = 0xFF;
+  str[3] = 0xFF;
+  str[4] = 1;
+  str[5] = cmd;
+  str[6] = datasize + 3;
+
+  if(datasize > 0) memcpy(&str[7], data, datasize);
+  str[datasize+7] = MSG_SENDEND;
+  len = datasize + 8;
 #if 0
   char* str;
   str = (char*)malloc(strlen(buf)+2);
@@ -3454,13 +3536,11 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
   len++;
 #endif
   //printf("SEND %d: <<%s>>\n", comms->socket, str);
-  /*
   printf("SEND: ");
   for(i = 0; i < len; i++) {
     printf("0x%x ", str[i]);
   }
   printf("\n");
-  */
   /* To send to the iMobot, we need to append the terminating character, '$' */
   if(comms->connected == 1) {
 #ifdef _WIN32
@@ -3698,7 +3778,7 @@ void* commsEngine(void* arg)
     /* Received a byte. If it is the first one, check to see if it is a
      * response or a triggered event */
     /* DEBUG */
-    //printf("%d RECV: 0x%0x\n", bytes, byte);
+    printf("%d RECV: 0x%0x\n", bytes, byte);
     if(bytes == 0) {
       MUTEX_LOCK(comms->commsBusy_lock);
       comms->commsBusy = 1;

@@ -261,6 +261,48 @@ enum protocol_commands_e {
  */
   CMD_PLAYMELODY,
 
+/* CMD_GETADDRESS: Request the zigbee address of this robot
+   Command Format: [CMD] [0x03] [0x00]
+   Expected Response: [0x10] [0x05] [2 bytes address] [0x11]
+ */
+  CMD_GETADDRESS,
+
+/* CMD_QUERYADDRESSES: Send a broadcast message out asking all devices within
+ * range for their zigbee addresses.
+ * Command Format: [CMD] [0x03] [0x00]
+ * Expected Response: [0x10] [0x03] [0x11]
+ */
+  CMD_QUERYADDRESSES,
+
+/* CMD_GETQUERIEDADDRESSES: Get a list of all addresses that have been reported so far.
+ * Command Format: [CMD] [0x03] [0x00]
+ * Expected Response: [0x10] [message size] [List of 2-byte addresses, high bytes first] [0x11]
+ */
+  CMD_GETQUERIEDADDRESSES,
+
+/* CMD_CLEARQUERIEDADDRESSES: Clear the list of queried addresses.
+ * Command Format: [CMD] [0x03] [0x00]
+ * Expected Response: [0x10] [0x03] [0x11] */
+  CMD_CLEARQUERIEDADDRESSES,
+
+/* CMD_REQUESTADDRESS: Request another Mobot to send a CMD_REPORTADDRESS to you
+ * as a separate command ASAP
+ * Command Format: [CMD] [0x03] [0x00]
+ * Expected Response: None */
+  CMD_REQUESTADDRESS,
+
+/* CMD_REPORTADDRESS: Send your address info to another Mobot. Typically,
+ * this message is sent after receiving a CMD_REQUESTADDRESS command from another Mobot.
+ * Command Format: [CMD] [0x05] [Address high byte] [Address low byte] [0x00]
+ * Expected Response: [0x10] [0x03] [0x11] */
+  CMD_REPORTADDRESS,
+
+/* CMD_REBOOT: Make the robot reboot 
+   Command Format: [CMD] [0x03] [0x00]
+   Expected Response: None
+   */
+  CMD_REBOOT,
+
   CMD_NUMCOMMANDS
 };
 
