@@ -427,6 +427,7 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
     fprintf(stderr, "Error setting tty settings. %d\n", errno);
   }
   comms->connected = 1;
+  tcflush(comms->socket, TCIOFLUSH);
   status = finishConnect(comms);
   if(status) return status;
   comms->connectionMode = MOBOTCONNECT_TTY;
@@ -670,6 +671,22 @@ int Mobot_queryAddresses(mobot_t* comms)
   return 0;
 }
 
+int Mobot_clearQueriedAddresses(mobot_t* comms)
+{
+  int status;
+  uint8_t buf[8];
+  status = SendToIMobot(comms, BTCMD(CMD_CLEARQUERIEDADDRESSES), NULL, 0);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the buf size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
+  return 0;
+}
+
 int Mobot_getQueriedAddresses(mobot_t* comms)
 {
   int status;
@@ -681,15 +698,49 @@ int Mobot_getQueriedAddresses(mobot_t* comms)
   if(RecvFromIMobot(comms, buf, sizeof(buf))) {
     return -1;
   }
+
+  for(i = 0; i < (buf[1]-3)/2; i++) {
+    addr = buf[2+i*2] << 8;
+    addr |= buf[3+i*2] & 0xff;
+    //memcpy(&addr, &buf[2+i*2], 2);
+    printf("Got address: 0x%4X\n", addr);
+  }
+  return 0;
+}
+
+int Mobot_setRFChannel(mobot_t* comms, uint8_t channel)
+{
+  int status;
+  uint8_t buf[8];
+  int addr;
+  buf[0] = channel;
+  status = SendToIMobot(comms, BTCMD(CMD_SETRFCHANNEL), buf, 1);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
   /* Make sure the buf size is correct */
   if(buf[1] != 3) {
     return -1;
   }
+  return 0;
+}
 
-  for(i = 0; i < (buf[1]-3)/2; i++) {
-    memcpy(&addr, &buf[2+i*2], 2);
-    printf("Got address: 0x%4X\n", addr);
+int Mobot_getID(mobot_t* comms)
+{
+  int status;
+  uint8_t buf[8];
+  int addr;
+  status = SendToIMobot(comms, BTCMD(CMD_GETSERIALID), NULL, 0);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
   }
+  /* Make sure the buf size is correct */
+  if(buf[1] != 7) {
+    return -1;
+  }
+  memcpy(comms->serialID, &buf[2], 4);
   return 0;
 }
 
@@ -873,6 +924,7 @@ int Mobot_init(mobot_t* comms)
   comms->configFilePath = strdup(path);
 #endif
   comms->numItemsToFreeOnExit = 0;
+  memset(comms->serialID, 5, sizeof(char));
 
   return 0;
 }
@@ -3517,10 +3569,10 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
   str[1] = datasize + 8;
   //str[2] = 0xA5;
   //str[3] = 0x3F;
-  //str[2] = 0x00;
-  //str[3] = 0x00;
-  str[2] = 0xFF;
-  str[3] = 0xFF;
+  str[2] = 0x00;
+  str[3] = 0x00;
+  //str[2] = 0xFF;
+  //str[3] = 0xFF;
   str[4] = 1;
   str[5] = cmd;
   str[6] = datasize + 3;

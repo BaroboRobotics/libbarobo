@@ -98,6 +98,7 @@ typedef enum mobotConnectionMode_e
   MOBOTCONNECT_BLUETOOTH,
   MOBOTCONNECT_TCP,
   MOBOTCONNECT_TTY,
+  MOBOTCONNECT_ZIGBEE,
   MOBOTCONNECT_NUMMODES
 } mobotConnectionMode_t;
 
@@ -157,6 +158,11 @@ typedef struct mobot_s
   void* itemsToFreeOnExit[64];
   int numItemsToFreeOnExit;
   char* lockfileName;
+  /* If the connection mode is zigbee, we must have a parent mobot directly
+   * connected. We must talk through the parent mobot to reach this mobot. */
+  uint8_t zigbeeAddr[2];
+  char serialID[5];
+  struct mobot_s* parent;
 } mobot_t;
 #endif
 
@@ -634,7 +640,9 @@ DLLIMPORT int Mobot_loadMelody(mobot_t* comms, int id, mobotMelodyNote_t* melody
 DLLIMPORT int Mobot_playMelody(mobot_t* comms, int id);
 DLLIMPORT int Mobot_getAddress(mobot_t* comms);
 DLLIMPORT int Mobot_queryAddresses(mobot_t* comms);
+DLLIMPORT int Mobot_clearQueriedAddresses(mobot_t* comms);
 DLLIMPORT int Mobot_getQueriedAddresses(mobot_t* comms);
+DLLIMPORT int Mobot_setRFChannel(mobot_t* comms, uint8_t channel);
 DLLIMPORT int Mobot_reboot(mobot_t* comms);
 DLLIMPORT int Mobot_disconnect(mobot_t* comms);
 DLLIMPORT int Mobot_driveJointToDirect(mobot_t* comms, mobotJointId_t id, double angle);

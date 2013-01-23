@@ -249,59 +249,76 @@ enum protocol_commands_e {
  * */
   CMD_STARTFOURIER,
 
-/* CMD_LOADMELODY: Transfer a melody into EEPROM 
+/* CMD_LOADMELODY: Transfer a melody into EEPROM  [40]
  * Command Format: [CMD] [1byte size] [1 byte Melody slot (0-3)] [data] [0x00]
  * Expected Response: [0x10] [0x03] [0x11]
  */
   CMD_LOADMELODY,
 
-/* CMD_PLAYMELODY: Play a preloaded melody 
+/* CMD_PLAYMELODY: Play a preloaded melody  [41]
  * Command Format: [CMD] [0x04] [1 byte melody slot] [0x00]
  * Expected Response: [0x10] [0x03] [0x11]
  */
   CMD_PLAYMELODY,
 
-/* CMD_GETADDRESS: Request the zigbee address of this robot
+/* CMD_GETADDRESS: Request the zigbee address of this robot [42]
    Command Format: [CMD] [0x03] [0x00]
    Expected Response: [0x10] [0x05] [2 bytes address] [0x11]
  */
   CMD_GETADDRESS,
 
-/* CMD_QUERYADDRESSES: Send a broadcast message out asking all devices within
+/* CMD_QUERYADDRESSES: Send a broadcast message out asking all devices within [43]
  * range for their zigbee addresses.
  * Command Format: [CMD] [0x03] [0x00]
  * Expected Response: [0x10] [0x03] [0x11]
  */
   CMD_QUERYADDRESSES,
 
-/* CMD_GETQUERIEDADDRESSES: Get a list of all addresses that have been reported so far.
+/* CMD_GETQUERIEDADDRESSES: Get a list of all addresses that have been reported so far. [44]
  * Command Format: [CMD] [0x03] [0x00]
- * Expected Response: [0x10] [message size] [List of 2-byte addresses, high bytes first] [0x11]
+ * Expected Response: [0x10] [message size] [list of 6 byte identifiers: 2-byte addresses, high bytes first, 4 byte serial number] [0x11]
  */
   CMD_GETQUERIEDADDRESSES,
 
-/* CMD_CLEARQUERIEDADDRESSES: Clear the list of queried addresses.
+/* CMD_CLEARQUERIEDADDRESSES: Clear the list of queried addresses. [45]
  * Command Format: [CMD] [0x03] [0x00]
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_CLEARQUERIEDADDRESSES,
 
-/* CMD_REQUESTADDRESS: Request another Mobot to send a CMD_REPORTADDRESS to you
+/* CMD_REQUESTADDRESS: Request another Mobot to send a CMD_REPORTADDRESS to you [46]
  * as a separate command ASAP
  * Command Format: [CMD] [0x03] [0x00]
  * Expected Response: None */
   CMD_REQUESTADDRESS,
 
-/* CMD_REPORTADDRESS: Send your address info to another Mobot. Typically,
+/* CMD_REPORTADDRESS: Send your address info to another Mobot. Typically, [47]
  * this message is sent after receiving a CMD_REQUESTADDRESS command from another Mobot.
- * Command Format: [CMD] [0x05] [Address high byte] [Address low byte] [0x00]
+ * Command Format: [CMD] [0x09] [Address high byte] [Address low byte] [4 bytes id] [0x00]
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_REPORTADDRESS,
 
-/* CMD_REBOOT: Make the robot reboot 
+/* CMD_REBOOT: Make the robot reboot  [48]
    Command Format: [CMD] [0x03] [0x00]
    Expected Response: None
    */
-  CMD_REBOOT,
+  CMD_REBOOT, 
+
+/* CMD_REQUESTSERIALID: Request the serial number of a remote robot 
+   Command Format: [CMD] [0x03] [0x11] 
+   Expected Response: [0x10] [0x07] [4 bytes serial number] [0x00]
+   */
+  CMD_GETSERIALID,
+
+/* CMD_SETSERIALID: Set the serial number for a Mobot
+   Command Format: [CMD] [0x07] [4 byte id] [0x00]
+   Expected Response: [0x10] [0x03] [0x11] */
+  CMD_SETSERIALID,
+
+/* CMD_SETRFCHANNEL: Set the Zigbee RF Channel. Valid values are between 0x0b and 0x1a 
+   Command Format: [CMD] [0x04] [1 byte channel] [0x00]
+   Expected Response: [0x10] [0x03] [0x11] 
+   Note: The response is sent _after_ the channel change */
+  CMD_SETRFCHANNEL,
 
   CMD_NUMCOMMANDS
 };
