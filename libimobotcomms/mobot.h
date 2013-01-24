@@ -643,6 +643,8 @@ DLLIMPORT int Mobot_queryAddresses(mobot_t* comms);
 DLLIMPORT int Mobot_clearQueriedAddresses(mobot_t* comms);
 DLLIMPORT int Mobot_getQueriedAddresses(mobot_t* comms);
 DLLIMPORT int Mobot_setRFChannel(mobot_t* comms, uint8_t channel);
+DLLIMPORT int Mobot_getID(mobot_t* comms);
+DLLIMPORT int Mobot_setID(mobot_t* comms, const char* id);
 DLLIMPORT int Mobot_reboot(mobot_t* comms);
 DLLIMPORT int Mobot_disconnect(mobot_t* comms);
 DLLIMPORT int Mobot_driveJointToDirect(mobot_t* comms, mobotJointId_t id, double angle);

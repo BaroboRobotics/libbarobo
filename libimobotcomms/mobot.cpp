@@ -744,6 +744,28 @@ int Mobot_getID(mobot_t* comms)
   return 0;
 }
 
+int Mobot_setID(mobot_t* comms, const char* id)
+{
+  int status;
+  uint8_t buf[8];
+  int addr;
+  int i = 0;
+  while(id[i] != '\0') {
+    buf[i] = id[i];
+    i++;
+  }
+  status = SendToIMobot(comms, BTCMD(CMD_SETSERIALID), buf, i);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the buf size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
+  return 0;
+}
+
 int Mobot_reboot(mobot_t* comms)
 {
   int status;
