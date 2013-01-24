@@ -162,7 +162,11 @@ typedef struct mobot_s
    * connected. We must talk through the parent mobot to reach this mobot. */
   uint8_t zigbeeAddr[2];
   char serialID[5];
-  struct mobot_s* parent;
+
+  struct mobot_s* parent; // The head of the list is always the parent
+  struct mobot_s* next;
+  struct mobot_s* prev;
+
 } mobot_t;
 #endif
 

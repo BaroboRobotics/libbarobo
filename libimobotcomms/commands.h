@@ -23,6 +23,9 @@
  * No Response Expected */
 #define EVENT_BUTTON 0x20
 
+/* Callback message for a remote Mobot reporting its address and serial number */
+#define EVENT_REPORTADDRESS 0x21
+
 #define CMD_START 0x30
 
 #define BTCMD(cmd) ((cmd) + CMD_START)

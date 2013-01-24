@@ -443,6 +443,11 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
 }
 #endif
 
+int Mobot_connectChild(mobot_t* parent, mobot_t* child, const char* childSerialID)
+{
+  
+}
+
 /* finishConnect():
  * Perform final connecting tasks common to all connection methods */
 int finishConnect(mobot_t* comms)
@@ -699,11 +704,12 @@ int Mobot_getQueriedAddresses(mobot_t* comms)
     return -1;
   }
 
-  for(i = 0; i < (buf[1]-3)/2; i++) {
-    addr = buf[2+i*2] << 8;
-    addr |= buf[3+i*2] & 0xff;
+  for(i = 0; i < (buf[1]-3)/6; i++) {
+    addr = buf[2+i*6] << 8;
+    addr |= buf[3+i*6] & 0xff;
     //memcpy(&addr, &buf[2+i*2], 2);
     printf("Got address: 0x%4X\n", addr);
+    
   }
   return 0;
 }
@@ -878,6 +884,7 @@ int Mobot_disableButtonCallback(mobot_t* comms)
 int Mobot_init(mobot_t* comms)
 {
   int i;
+  memset(comms, 0, sizeof(mobot_t));
 #ifndef __MACH__
   comms->addr = (sockaddr_t*)malloc(sizeof(sockaddr_t));
   memset(comms->addr, 0, sizeof(sockaddr_t));
@@ -947,7 +954,9 @@ int Mobot_init(mobot_t* comms)
 #endif
   comms->numItemsToFreeOnExit = 0;
   memset(comms->serialID, 5, sizeof(char));
-
+  comms->parent = NULL;
+  comms->next = NULL;
+  comms->prev = NULL;
   return 0;
 }
 
@@ -3896,33 +3905,70 @@ void* commsEngine(void* arg)
       if( (bytes >= 2) &&
           (comms->recvBuf[1] == bytes) )
       {
-        /* We got the entire message */
-        MUTEX_LOCK(comms->callback_lock);
-        if(comms->callbackEnabled) {
-          /* Call the callback multiple times depending on the events */
-          int bit;
-          uint8_t events = comms->recvBuf[6];
-          uint8_t buttonDown = comms->recvBuf[7];
-          THREAD_T callbackThreadHandle;
-          callbackArg_t* callbackArg;
-          for(bit = 0; bit < 2; bit++) {
-            if(events & (1<<bit)) {
-              callbackArg = (callbackArg_t*)malloc(sizeof(callbackArg_t));
-              callbackArg->comms = comms;
-              callbackArg->button = bit;
-              callbackArg->buttonDown = (buttonDown & (1<<bit)) ? 1 : 0;
-              //comms->buttonCallback(bit, (buttonDown & (1<<bit)) ? 1 : 0 );
-              THREAD_CREATE(&callbackThreadHandle, callbackThread, callbackArg);
+        if(comms->recvBuf[0] == EVENT_BUTTON) {
+          /* We got the entire message */
+          MUTEX_LOCK(comms->callback_lock);
+          if(comms->callbackEnabled) {
+            /* Call the callback multiple times depending on the events */
+            int bit;
+            uint8_t events = comms->recvBuf[6];
+            uint8_t buttonDown = comms->recvBuf[7];
+            THREAD_T callbackThreadHandle;
+            callbackArg_t* callbackArg;
+            for(bit = 0; bit < 2; bit++) {
+              if(events & (1<<bit)) {
+                callbackArg = (callbackArg_t*)malloc(sizeof(callbackArg_t));
+                callbackArg->comms = comms;
+                callbackArg->button = bit;
+                callbackArg->buttonDown = (buttonDown & (1<<bit)) ? 1 : 0;
+                //comms->buttonCallback(bit, (buttonDown & (1<<bit)) ? 1 : 0 );
+                THREAD_CREATE(&callbackThreadHandle, callbackThread, callbackArg);
+              }
             }
           }
+          /* Reset state vars */
+          bytes = 0;
+          MUTEX_LOCK(comms->commsBusy_lock);
+          comms->commsBusy = 0;
+          COND_SIGNAL(comms->commsBusy_cond);
+          MUTEX_UNLOCK(comms->commsBusy_lock);
+          MUTEX_UNLOCK(comms->callback_lock);
+        } else if (comms->recvBuf[0] == EVENT_REPORTADDRESS) {
+          /* Check the list to see if the reported address aready exists */
+          bool addressFound = false;
+          mobot_t* iter;
+          for(iter = comms->next; iter != NULL; iter = iter->next) {
+            if(!strncmp(iter->serialID, (const char*)&comms->recvBuf[4], 4)) {
+              addressFound = true;
+              break;
+            }
+          }
+          /* If the address is not found, add a new Mobot with that address to
+           * the head of the list */
+          if(!addressFound) {
+            mobot_t* tmp = (mobot_t*)malloc(sizeof(mobot_t));
+            Mobot_init(tmp);
+            /* Copy the zigbee address */
+            memcpy(tmp->zigbeeAddr, &comms->recvBuf[2], 2);
+            /* Copy the serial number */
+            memcpy(tmp->serialID, &comms->recvBuf[4], 4);
+            /* Stick it on the head of the list */
+            if(comms->next != NULL) {
+              comms->next->prev = tmp;
+            }
+            tmp->next = comms->next;
+            comms->next = tmp;
+            tmp->prev = NULL;
+            tmp->parent = comms;
+          }
+
+          /* Reset state vars */
+          bytes = 0;
+          MUTEX_LOCK(comms->commsBusy_lock);
+          comms->commsBusy = 0;
+          COND_SIGNAL(comms->commsBusy_cond);
+          MUTEX_UNLOCK(comms->commsBusy_lock);
         }
-        /* Reset state vars */
-        bytes = 0;
-        MUTEX_LOCK(comms->commsBusy_lock);
-        comms->commsBusy = 0;
-        COND_SIGNAL(comms->commsBusy_cond);
-        MUTEX_UNLOCK(comms->commsBusy_lock);
-        MUTEX_UNLOCK(comms->callback_lock);
       }
     }
   }
