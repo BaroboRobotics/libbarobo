@@ -141,7 +141,7 @@ typedef struct mobot_s
   int shiftData;
 
   THREAD_T* commsThread;
-  uint8_t recvBuf[64];
+  uint8_t recvBuf[256];
   int recvBuf_ready;
   MUTEX_T* recvBuf_lock;
   COND_T*  recvBuf_cond;
@@ -149,6 +149,7 @@ typedef struct mobot_s
   int commsBusy;
   MUTEX_T* commsBusy_lock;
   COND_T* commsBusy_cond;
+  MUTEX_T* socket_lock;
 
   MUTEX_T* callback_lock;
   int callbackEnabled;
@@ -160,9 +161,11 @@ typedef struct mobot_s
   char* lockfileName;
   /* If the connection mode is zigbee, we must have a parent mobot directly
    * connected. We must talk through the parent mobot to reach this mobot. */
-  uint8_t zigbeeAddr[2];
+  uint16_t zigbeeAddr;
   char serialID[5];
 
+  MUTEX_T* mobotTree_lock;
+  COND_T* mobotTree_cond;
   struct mobot_s* parent; // The head of the list is always the parent
   struct mobot_s* next;
   struct mobot_s* prev;
