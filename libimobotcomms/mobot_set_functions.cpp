@@ -292,6 +292,30 @@ int Mobot_setMovementStateTimeNB(mobot_t* comms,
   return 0;
 }
 
+int Mobot_setRGB(mobot_t* comms, double r, double g, double b)
+{
+  uint8_t buf[32];
+  float f;
+  int status;
+  buf[0] = 0xff;
+  buf[1] = 0xff;
+  buf[2] = 0xff;
+  buf[3] = (r/100.0)*255;
+  buf[4] = (g/100.0)*255;
+  buf[5] = (b/100.0)*255;
+
+  status = SendToIMobot(comms, BTCMD(CMD_RGBLED), buf, 6);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
+  return 0;
+}
+
 int Mobot_setTwoWheelRobotSpeed(mobot_t* comms, double speed, double radius)
 {
   double omega;

@@ -637,6 +637,7 @@ DLLIMPORT int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], c
 DLLIMPORT int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address);
 DLLIMPORT int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename);
 #endif
+DLLIMPORT int Mobot_connectChild(mobot_t* parent, mobot_t** child, const char* childSerialID);
 DLLIMPORT int Mobot_connectWithAddress(
     mobot_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_connectWithBluetoothAddress(
@@ -892,6 +893,7 @@ DLLIMPORT int Mobot_setMovementStateTimeNB(mobot_t* comms,
                                   mobotJointState_t dir3,
                                   mobotJointState_t dir4,
                                   double seconds);
+DLLIMPORT int Mobot_setRGB(mobot_t* comms, double r, double g, double b);
 DLLIMPORT int Mobot_setTwoWheelRobotSpeed(mobot_t* comms, double speed, double radius);
 DLLIMPORT int Mobot_stop(mobot_t* comms);
 DLLIMPORT int Mobot_stopOneJoint(mobot_t* comms, mobotJointId_t id);

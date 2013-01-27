@@ -27,6 +27,7 @@
 #define EVENT_REPORTADDRESS 0x21
 
 #define CMD_START 0x30
+#define CMD_IDLE  0x01
 
 #define BTCMD(cmd) ((cmd) + CMD_START)
 
@@ -306,22 +307,49 @@ enum protocol_commands_e {
    */
   CMD_REBOOT, 
 
-/* CMD_REQUESTSERIALID: Request the serial number of a remote robot 
+/* CMD_REQUESTSERIALID: Request the serial number of a remote robot [49]
    Command Format: [CMD] [0x03] [0x11] 
    Expected Response: [0x10] [0x07] [4 bytes serial number] [0x00]
    */
   CMD_GETSERIALID,
 
-/* CMD_SETSERIALID: Set the serial number for a Mobot
+/* CMD_SETSERIALID: Set the serial number for a Mobot [50]
    Command Format: [CMD] [0x07] [4 byte id] [0x00]
    Expected Response: [0x10] [0x03] [0x11] */
   CMD_SETSERIALID,
 
-/* CMD_SETRFCHANNEL: Set the Zigbee RF Channel. Valid values are between 0x0b and 0x1a 
+/* CMD_SETRFCHANNEL: Set the Zigbee RF Channel. Valid values are between 0x0b and 0x1a  [51]
    Command Format: [CMD] [0x04] [1 byte channel] [0x00]
    Expected Response: [0x10] [0x03] [0x11] 
    Note: The response is sent _after_ the channel change */
   CMD_SETRFCHANNEL,
+
+/* CMD_FINDMOBOT: This is a broadcasted command searching for a specific Mobot
+ * of a certain serial address. If a Mobot receives this message and finds a
+ * match on its serial address, it will respond with a REPORTADDRESS command in
+ * an appropriate amount of time. 
+ * Command Format: [CMD] [0x07] [4 byte serial id] [0x00]
+ * Expected Response: None */
+  CMD_FINDMOBOT,
+
+/* CMD_PAIRPARENT: After receiving this message, the receiving Mobot should
+ * consider itself paired to the requesting parent. All button events, etc.
+ * should be sent to the parent, and further pairing requests should be
+ * ignored.
+ * Command Format: [CMD] [0x05] [parent address high byte] [parent address low byte] [0x00]
+ * Expected Response: [0x10] [0x03] [0x11] */
+  CMD_PAIRPARENT,
+
+/* CMD_UNPAIRPARENT: After receiving this message, the Mobot should consider
+ * itself unpaired.
+ * Command Format: [CMD] [0x03] [0x00]
+ * Expected Response: [0x10] [0x03] 0x11] */
+  CMD_UNPAIRPARENT,
+
+/* CMD_RGBLED: Modify the RGBLED colors, flashing, etc.
+ * Command Format: [CMD] [0x08] [3 bytes mask 0xrrggbb] [3 bytes values] [0x11]
+ * Expected Response: [0x10] [0x03] [0x11] */
+  CMD_RGBLED,
 
   CMD_NUMCOMMANDS
 };
