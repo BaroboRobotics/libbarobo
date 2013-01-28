@@ -195,16 +195,23 @@ int Mobot_setJointSpeedRatios(mobot_t* comms, double ratio1, double ratio2, doub
 
 int Mobot_setMotorPower(mobot_t* comms, mobotJointId_t id, int power)
 {
-  char buf[160];
+  uint8_t buf[32];
+  float f;
   int status;
-  int bytes_read;
-  /*
-  sprintf(buf, "SET_MOTOR_POWER %d %d", id, power);
-  status = SendToIMobot(comms, buf, strlen(buf)+1);
+  int16_t _power;
+  memset(buf, 0, sizeof(uint8_t)*32);
+  buf[0] = (1<<(id-1));
+  _power = power;
+  memcpy(&buf[1+(id-1)*2], &_power, 2);
+  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORPOWER), buf, 10);
   if(status < 0) return status;
-  bytes_read = RecvFromIMobot(comms, buf, sizeof(buf));
-  if(strcmp(buf, "OK")) return -1;
-  */
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
   return 0;
 }
 

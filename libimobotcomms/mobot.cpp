@@ -1090,12 +1090,13 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
   len++;
 #endif
   //printf("SEND %d: <<%s>>\n", comms->socket, str);
+  /*
   printf("SEND: ");
   for(i = 0; i < len; i++) {
     printf("0x%x ", str[i]);
   }
   printf("\n");
-
+  */
   if(comms->connectionMode == MOBOTCONNECT_ZIGBEE) {
     MUTEX_LOCK(comms->parent->socket_lock);
 #ifdef _WIN32
@@ -1342,7 +1343,7 @@ void* commsEngine(void* arg)
     /* Received a byte. If it is the first one, check to see if it is a
      * response or a triggered event */
     /* DEBUG */
-    printf("%d RECV: 0x%0x\n", bytes, byte);
+    //printf("%d RECV: 0x%0x\n", bytes, byte);
     if(bytes == 0) {
       MUTEX_LOCK(comms->commsBusy_lock);
       comms->commsBusy = 1;

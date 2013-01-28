@@ -351,6 +351,11 @@ enum protocol_commands_e {
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_RGBLED,
 
+/* CMD_SETMOTORPOWER: Set the motor at a certain power
+   Command Format: [CMD] [0x07] [1 byte mask] [3x2 byte int16_t PWM values] [0x11]
+   Expected Response: [0x10] [0x03] [0x11] */
+  CMD_SETMOTORPOWER,
+
   CMD_NUMCOMMANDS
 };
 
