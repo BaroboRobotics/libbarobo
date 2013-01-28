@@ -202,7 +202,9 @@ int Mobot_setMotorPower(mobot_t* comms, mobotJointId_t id, int power)
   memset(buf, 0, sizeof(uint8_t)*32);
   buf[0] = (1<<(id-1));
   _power = power;
-  memcpy(&buf[1+(id-1)*2], &_power, 2);
+  //memcpy(&buf[1+(id-1)*2], &_power, 2);
+  buf[1+(id-1)*2] = _power>>8;
+  buf[2+(id-1)*2] = (_power&0x00ff);
   status = SendToIMobot(comms, BTCMD(CMD_SETMOTORPOWER), buf, 10);
   if(status < 0) return status;
   if(RecvFromIMobot(comms, buf, sizeof(buf))) {

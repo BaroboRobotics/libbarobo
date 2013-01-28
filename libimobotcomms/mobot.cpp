@@ -1182,7 +1182,7 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
       /* Disconnect and return error */
       MUTEX_UNLOCK(comms->recvBuf_lock);
       MUTEX_UNLOCK(comms->commsLock);
-      Mobot_disconnect(comms);
+      //Mobot_disconnect(comms);
       return -1;
     }
 #else
@@ -1192,7 +1192,7 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
     if(rc == WAIT_TIMEOUT) {
       MUTEX_UNLOCK(comms->recvBuf_lock);
       MUTEX_UNLOCK(comms->commsLock);
-      Mobot_disconnect(comms);
+      //Mobot_disconnect(comms);
       return -1;
     }
 #endif
