@@ -685,6 +685,7 @@ DLLIMPORT int Mobot_init(mobot_t* comms);
 DLLIMPORT int Mobot_isConnected(mobot_t* comms);
 DLLIMPORT int Mobot_isMoving(mobot_t* comms);
 DLLIMPORT int Mobot_protocolVersion();
+DLLIMPORT int Mobot_getBatteryVoltage(mobot_t* comms, double *voltage);
 DLLIMPORT int Mobot_getButtonVoltage(mobot_t* comms, double *voltage);
 DLLIMPORT const char* Mobot_getConfigFilePath();
 DLLIMPORT int Mobot_getEncoderVoltage(mobot_t* comms, int pinNumber, double *voltage);

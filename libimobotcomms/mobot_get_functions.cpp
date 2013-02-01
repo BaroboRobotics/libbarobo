@@ -86,6 +86,26 @@ int Mobot_getID(mobot_t* comms)
   return 0;
 }
 
+int Mobot_getBatteryVoltage(mobot_t* comms, double *voltage)
+{
+  uint8_t buf[32];
+  float f;
+  int status;
+  status = SendToIMobot(comms, BTCMD(CMD_GETBATTERYVOLTAGE), NULL, 0);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 7) {
+    return -1;
+  }
+  /* Copy the data */
+  memcpy(&f, &buf[2], 4);
+  *voltage = f;
+  return 0;
+}
+
 int Mobot_getButtonVoltage(mobot_t* comms, double *voltage)
 {
   uint8_t buf[32];

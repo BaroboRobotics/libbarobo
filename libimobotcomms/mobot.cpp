@@ -414,7 +414,7 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   if(lockfile != NULL) {
     fclose(lockfile);
   }
-  comms->socket = open(ttyfilename, O_RDWR | O_NOCTTY );
+  comms->socket = open(ttyfilename, O_RDWR | O_NOCTTY | O_ASYNC);
   if(comms->socket < 0) {
     perror("Unable to open tty port.");
     return -1;
@@ -423,8 +423,19 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   struct termios term;
   tcgetattr(comms->socket, &term);
   cfsetspeed(&term, B57600);
+  cfsetispeed(&term, B57600);
+  cfsetospeed(&term, B57600);
   if(status = tcsetattr(comms->socket, TCSANOW, &term)) {
     fprintf(stderr, "Error setting tty settings. %d\n", errno);
+  }
+  tcgetattr(comms->socket, &term);
+  if(cfgetispeed(&term) != B57600) {
+    fprintf(stderr, "Error setting input speed.\n");
+    exit(0);
+  }
+  if(cfgetospeed(&term) != B57600) {
+    fprintf(stderr, "Error setting output speed.\n");
+    exit(0);
   }
   comms->connected = 1;
   tcflush(comms->socket, TCIOFLUSH);
