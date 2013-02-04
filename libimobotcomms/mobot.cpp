@@ -422,6 +422,49 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   /* Change the baud rate to 57600 */
   struct termios term;
   tcgetattr(comms->socket, &term);
+
+  // Input flags - Turn off input processing
+  // convert break to null byte, no CR to NL translation,
+  // no NL to CR translation, don't mark parity errors or breaks
+  // no input parity check, don't strip high bit off,
+  // no XON/XOFF software flow control
+  //
+  term.c_iflag &= ~(IGNBRK | BRKINT | ICRNL |
+      INLCR | PARMRK | INPCK | ISTRIP | IXON);
+  //
+  // Output flags - Turn off output processing
+  // no CR to NL translation, no NL to CR-NL translation,
+  // no NL to CR translation, no column 0 CR suppression,
+  // no Ctrl-D suppression, no fill characters, no case mapping,
+  // no local output processing
+  //
+  // term.c_oflag &= ~(OCRNL | ONLCR | ONLRET |
+  //                     ONOCR | ONOEOT| OFILL | OLCUC | OPOST);
+  term.c_oflag = 0;
+  //
+  // No line processing:
+  // echo off, echo newline off, canonical mode off, 
+  // extended input processing off, signal chars off
+  //
+  term.c_lflag &= ~(ECHO | ECHONL | ICANON | IEXTEN | ISIG);
+  //
+  // Turn off character processing
+  // clear current char size mask, no parity checking,
+  // no output processing, force 8 bit input
+  //
+  term.c_cflag &= ~(CSIZE | PARENB);
+  term.c_cflag |= CS8;
+  //
+  // One input byte is enough to return from read()
+  // Inter-character timer off
+  //
+  term.c_cc[VMIN]  = 1;
+  term.c_cc[VTIME] = 0;
+  //
+  // Communication speed (simple version, using the predefined
+  // constants)
+  //
+
   cfsetspeed(&term, B57600);
   cfsetispeed(&term, B57600);
   cfsetospeed(&term, B57600);
@@ -454,7 +497,45 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
 }
 #endif
 
-int Mobot_connectChild(mobot_t* parent, mobot_t** child, const char* childSerialID)
+int Mobot_connectChild(mobot_t* parent, mobot_t** child)
+{
+  /* First check to see if the requested child is already in the list of knows
+   * Serial ID's */  
+  bool idFound = false;
+  mobot_t* iter;
+  int i;
+  for(i = 0; i < 2; i++) {
+    MUTEX_LOCK(parent->mobotTree_lock);
+    for(iter = parent->next; iter != NULL; iter = iter->next)
+    {
+      if(iter->connected == 0) {
+        idFound = true;
+        break;
+      }
+    }
+    if(idFound) {
+      *child = iter;
+      (*child)->connected = 1;
+      (*child)->connectionMode = MOBOTCONNECT_ZIGBEE;
+      MUTEX_UNLOCK(parent->mobotTree_lock);
+      return 0;
+    } else if (i == 0){
+      MUTEX_UNLOCK(parent->mobotTree_lock);
+      Mobot_queryAddresses(parent);
+#ifdef _WIN32
+      Sleep(3000);
+#else
+      sleep(3);
+#endif
+    }
+  }
+  /* Did not find the child */
+  MUTEX_UNLOCK(parent->mobotTree_lock);
+  *child = NULL;
+  return -1;
+}
+
+int Mobot_connectChildID(mobot_t* parent, mobot_t** child, const char* childSerialID)
 {
   /* First check to see if the requested child is already in the list of knows
    * Serial ID's */  

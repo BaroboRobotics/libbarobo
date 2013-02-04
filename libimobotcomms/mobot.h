@@ -637,7 +637,8 @@ DLLIMPORT int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], c
 DLLIMPORT int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address);
 DLLIMPORT int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename);
 #endif
-DLLIMPORT int Mobot_connectChild(mobot_t* parent, mobot_t** child, const char* childSerialID);
+DLLIMPORT int Mobot_connectChild(mobot_t* parent, mobot_t** child);
+DLLIMPORT int Mobot_connectChildID(mobot_t* parent, mobot_t** child, const char* childSerialID);
 DLLIMPORT int Mobot_connectWithAddress(
     mobot_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_connectWithBluetoothAddress(
@@ -685,6 +686,7 @@ DLLIMPORT int Mobot_init(mobot_t* comms);
 DLLIMPORT int Mobot_isConnected(mobot_t* comms);
 DLLIMPORT int Mobot_isMoving(mobot_t* comms);
 DLLIMPORT int Mobot_protocolVersion();
+DLLIMPORT int Mobot_getAccelData(mobot_t* comms, int *accel_x, int *accel_y, int *accel_z);
 DLLIMPORT int Mobot_getBatteryVoltage(mobot_t* comms, double *voltage);
 DLLIMPORT int Mobot_getButtonVoltage(mobot_t* comms, double *voltage);
 DLLIMPORT const char* Mobot_getConfigFilePath();
@@ -854,6 +856,7 @@ DLLIMPORT int Mobot_setExitState(mobot_t* comms, mobotJointState_t exitState);
 DLLIMPORT int Mobot_setFourierCoefficients(mobot_t* comms, mobotJointId_t id, double* a, double* b);
 DLLIMPORT int Mobot_beginFourierControl(mobot_t* comms, uint8_t motorMask);
 DLLIMPORT int Mobot_setHWRev(mobot_t* comms, uint8_t rev);
+DLLIMPORT int Mobot_setBuzzerFrequency(mobot_t* comms, unsigned int frequency);
 DLLIMPORT int Mobot_setJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir);
 DLLIMPORT int Mobot_setJointMovementStateNB(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir);
 DLLIMPORT int Mobot_setJointMovementStateTime(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir, double seconds);

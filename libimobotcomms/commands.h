@@ -361,6 +361,17 @@ enum protocol_commands_e {
    Expected Response: [0x10] [0x07] [4 byte float] [0x11] */
   CMD_GETBATTERYVOLTAGE,
 
+/* CMD_BUZZERFREQ: Play a frequency on the buzzer. If the frequency given is 0,
+ * stop the buzzer.
+ * Command Format: [CMD] [0x05] [2 bytes uint16 frequency, msb first] [0x00]
+ * Expected Response: [0x10] [0x03] [0x11] */
+  CMD_BUZZERFREQ,
+
+/* CMD_GETACCEL: Get the accelerometer data.
+ * Command Format: [CMD] [0x03] [0x00]
+ * Expected Response: [0x10] [0x09] [3*2 bytes float data, x,y,z] [0x11] */
+  CMD_GETACCEL,
+
   CMD_NUMCOMMANDS
 };
 

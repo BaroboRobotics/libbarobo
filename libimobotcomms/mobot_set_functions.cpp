@@ -47,6 +47,26 @@
 #define DEPRECATED(from, to) \
   fprintf(stderr, "Warning: The function \"%s()\" is deprecated. Please use \"%s()\"\n" , from, to)
 
+int Mobot_setBuzzerFrequency(mobot_t* comms, unsigned int frequency)
+{
+  uint8_t buf[32];
+  uint16_t f;
+  f = frequency;
+  int status;
+  buf[0] = (f>>8) & 0x00ff;
+  buf[1] = f & 0x00ff;
+  status = SendToIMobot(comms, BTCMD(CMD_BUZZERFREQ), buf, 2);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
+  return 0;
+}
+
 int Mobot_setExitState(mobot_t* comms, mobotJointState_t exitState)
 {
   comms->exitState = exitState;

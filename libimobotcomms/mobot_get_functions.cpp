@@ -86,6 +86,31 @@ int Mobot_getID(mobot_t* comms)
   return 0;
 }
 
+int Mobot_getAccelData(mobot_t* comms, int *accel_x, int *accel_y, int *accel_z)
+{
+  uint8_t buf[32];
+  float f;
+  int status;
+  int16_t i;
+  status = SendToIMobot(comms, BTCMD(CMD_GETACCEL), NULL, 0);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 0x09) {
+    return -1;
+  }
+  /* Copy the data */
+  memcpy(&i, &buf[2], 2);
+  *accel_x = i;
+  memcpy(&i, &buf[4], 2);
+  *accel_y = i;
+  memcpy(&i, &buf[6], 2);
+  *accel_z = i;
+  return 0;
+}
+
 int Mobot_getBatteryVoltage(mobot_t* comms, double *voltage)
 {
   uint8_t buf[32];
