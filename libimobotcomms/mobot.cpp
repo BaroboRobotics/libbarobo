@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -265,6 +264,7 @@ int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], const char 
   return 0;
 }
 
+#ifdef ENABLE_BLUETOOTH
 int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
 {
   return Mobot_connectWithBluetoothAddress(comms, address, channel);
@@ -367,6 +367,7 @@ int Mobot_connectWithBluetoothAddress(mobot_t* comms, const char* address, int c
   return Mobot_connectWithAddressTTY(comms, address);
 #endif
 }
+#endif
 
 #ifndef _WIN32
 int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address)
@@ -971,8 +972,10 @@ int Mobot_init(mobot_t* comms)
   int i;
   memset(comms, 0, sizeof(mobot_t));
 #ifndef __MACH__
+#ifdef ENABLE_BLUETOOTH
   comms->addr = (sockaddr_t*)malloc(sizeof(sockaddr_t));
   memset(comms->addr, 0, sizeof(sockaddr_t));
+#endif
 #endif
   comms->connected = 0;
   comms->connectionMode = 0;
@@ -1625,6 +1628,7 @@ int CMobot::connect()
   return Mobot_connect(_comms);
 }
 
+#ifdef ENABLE_BLUETOOTH
 int CMobot::connectWithAddress(const char* address, int channel)
 {
   return Mobot_connectWithAddress(_comms, address, channel);
@@ -1634,6 +1638,7 @@ int CMobot::connectWithBluetoothAddress(const char* address, int channel)
 {
   return Mobot_connectWithBluetoothAddress(_comms, address, channel);
 }
+#endif
 
 int CMobot::connectWithIPAddress(const char* address, const char port[])
 {

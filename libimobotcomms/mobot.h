@@ -44,7 +44,11 @@
 #endif
 
 #ifdef _WIN32
+#include <stdint.h>
+#include <ws2tcpip.h>
+#ifdef ENABLE_BLUETOOTH
 #include <Ws2bth.h>
+#endif
 #endif
 #ifndef _CH_
 #include "thread_macros.h"
@@ -58,6 +62,7 @@
 #ifdef _WIN32
 #ifndef _CH_
 typedef unsigned char uint8_t;
+typedef WORD uint16_t;
 #endif
 #endif
 #endif
@@ -78,13 +83,15 @@ typedef struct sockaddr_rc sockaddr_t;
 #else
 #ifndef _CH_
 typedef unsigned char uint8_t;
-typedef unsigned __int32 uint32_t;
-typedef __int32 int32_t;
+//typedef unsigned __int32 uint32_t;
+//typedef __int32 int32_t;
 #endif
 #define AF_BLUETOOTH AF_BTH
 #define BTPROTO_RFCOMM BTHPROTO_RFCOMM
 #ifndef _CH_
+#ifdef ENABLE_BLUETOOTH
 typedef SOCKADDR_BTH sockaddr_t;
+#endif
 #endif
 #endif
 
@@ -121,7 +128,9 @@ typedef struct mobot_s
   int connected;
   int connectionMode;
 #ifndef __MACH__
+#ifdef ENABLE_BLUETOOTH
   sockaddr_t *addr;
+#endif
 #endif
   double jointSpeeds[4];
   double maxSpeed[4];
@@ -270,8 +279,10 @@ class CMobot
    */
     int connect();
 #ifndef _CH_
+#ifdef ENABLE_BLUETOOTH
     int connectWithAddress(const char address[], int channel = 1);
     int connectWithBluetoothAddress(const char address[], int channel = 1);
+#endif
     int connectWithIPAddress(const char address[], const char port[] = "5768");
 #else
     int connectWithAddress(const char address[], ...);

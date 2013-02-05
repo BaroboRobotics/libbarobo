@@ -8,6 +8,7 @@ project(LIBIMOBOTCOMMS)
 add_definitions(-DNONRELEASE)
 
 if(CMAKE_HOST_WIN32)
+  add_definitions(-D_WIN32_WINNT=0x501)
 	add_library(mobot STATIC
 	  mobot.cpp
     mobot_get_functions.cpp
@@ -17,7 +18,7 @@ if(CMAKE_HOST_WIN32)
     mobot_set_functions.cpp
 	  )
 	target_link_libraries(mobot Ws2_32)
-  set_target_properties(mobot PROPERTIES COMPILE_FLAGS "/GS-")
+  #set_target_properties(mobot PROPERTIES COMPILE_FLAGS "/GS-")
 elseif(CMAKE_HOST_APPLE)
   set(CMAKE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 	add_library(mobot SHARED
