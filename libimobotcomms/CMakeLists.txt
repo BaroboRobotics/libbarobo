@@ -36,6 +36,7 @@ elseif(CMAKE_HOST_APPLE)
           LIBRARY DESTINATION lib)
   install(FILES mobot.h DESTINATION include)
 else(CMAKE_HOST_WIN32)
+  add_definitions(-DENABLE_BLUETOOTH)
 	add_library(mobot SHARED
 	  mobot.cpp
     mobot_get_functions.cpp
