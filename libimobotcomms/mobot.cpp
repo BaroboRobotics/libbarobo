@@ -466,18 +466,18 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   // constants)
   //
 
-  cfsetspeed(&term, B57600);
-  cfsetispeed(&term, B57600);
-  cfsetospeed(&term, B57600);
+  cfsetspeed(&term, B500000);
+  cfsetispeed(&term, B500000);
+  cfsetospeed(&term, B500000);
   if(status = tcsetattr(comms->socket, TCSANOW, &term)) {
     fprintf(stderr, "Error setting tty settings. %d\n", errno);
   }
   tcgetattr(comms->socket, &term);
-  if(cfgetispeed(&term) != B57600) {
+  if(cfgetispeed(&term) != B500000) {
     fprintf(stderr, "Error setting input speed.\n");
     exit(0);
   }
-  if(cfgetospeed(&term) != B57600) {
+  if(cfgetospeed(&term) != B500000) {
     fprintf(stderr, "Error setting output speed.\n");
     exit(0);
   }
@@ -1268,7 +1268,7 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
     ts.tv_nsec = mts.tv_nsec;
 #endif
     /* Add a timeout */
-    ts.tv_sec += 3;
+    ts.tv_nsec += 100000000; // 100 ms
     rc = pthread_cond_timedwait(
       comms->recvBuf_cond, 
       comms->recvBuf_lock,
