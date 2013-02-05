@@ -134,6 +134,7 @@ int Mobot_connect(mobot_t* comms)
   if(strlen(buf) != 17) {
     return -3;
   }
+#ifdef ENABLE_BLUETOOTH
   /* Pass it on to connectWithAddress() */
   if(i = Mobot_connectWithAddress(comms, buf, 1)) {
     return i;
@@ -141,6 +142,10 @@ int Mobot_connect(mobot_t* comms)
     g_numConnected++;
     return i;
   }
+#else
+  return -1;
+#endif
+
 #else /* if not Windows */
 #define MAX_PATH 512
   FILE *fp;
@@ -496,6 +501,38 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   fclose(lockfile);
   return 0;
 }
+
+#else
+
+int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
+{
+  /* For windows, we should connect to a com port */
+  comms->commHandle = CreateFile(
+      ttyfilename, 
+      GENERIC_READ | GENERIC_WRITE,
+      0,
+      0,
+      OPEN_EXISTING,
+      0,
+      0 );
+  if(comms->commHandle == INVALID_HANDLE_VALUE) {
+    fprintf(stderr, "Error connecting to COM port: %s\n", ttyfilename);
+    return -1;
+  }
+  /* Adjust settings */
+  DCB dcb;
+  FillMemory(&dcb, sizeof(dcb), 0);
+  dcb.DCBlength = sizeof(dcb);
+  if (!BuildCommDCB("500000,n,8,1", &dcb)) {
+    fprintf(stderr, "Could not build DCB.\n");
+    return -1;
+  }
+  if (!SetCommState(comms->commHandle, &dcb)) {
+    fprintf(stderr, "Could not set Comm State to new DCB settings.\n");
+    return -1;
+  }
+}
+
 #endif
 
 int Mobot_connectChild(mobot_t* parent, mobot_t** child)
