@@ -517,7 +517,7 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
       0,
       0,
       OPEN_EXISTING,
-      0,
+      FILE_FLAG_OVERLAPPED,
       0 );
   if(comms->commHandle == INVALID_HANDLE_VALUE) {
     fprintf(stderr, "Error connecting to COM port: %s\n", ttyfilename);
@@ -537,8 +537,10 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
     fprintf(stderr, "Could not set Comm State to new DCB settings.\n");
     return -1;
   }
+  
   comms->connected = 1;
   comms->connectionMode = MOBOTCONNECT_TTY;
+
   rc = finishConnect(comms);
   if(rc) {
     comms->connected = 0;
@@ -957,11 +959,9 @@ int Mobot_disconnect(mobot_t* comms)
   closesocket(comms->socket);
   if(comms->connectionMode == MOBOTCONNECT_TTY) {
     CancelIo(comms->commHandle);
-    DWORD byteswritten;
-    WriteFile(comms->commHandle, "\0", 1, &byteswritten, NULL);
   }
-  THREAD_JOIN(*comms->commsThread);
-  CloseHandle(*comms->commsThread);
+  //THREAD_JOIN(*comms->commsThread);
+  //CloseHandle(*comms->commsThread);
   //CloseHandle((LPVOID)comms->socket);
 #endif
   if(g_numConnected > 0) {
@@ -1485,6 +1485,12 @@ void* commsEngine(void* arg)
   struct sigaction int_handler;
   int_handler.sa_handler = sigint_handler;
   sigaction(SIGINT, &int_handler, 0);
+#else
+  DWORD readbytes = 0;
+  DWORD mask;
+  OVERLAPPED ov;
+  memset(&ov, 0, sizeof(ov));
+  ov.hEvent = CreateEvent(0, true, 0, 0);
 #endif
 
   while(1) {
@@ -1501,18 +1507,41 @@ void* commsEngine(void* arg)
     }
 #else
     if(comms->connectionMode == MOBOTCONNECT_TTY) {
+#if 0
+      /* DEBUG */
+        if(!SetCommMask(comms->commHandle, EV_RXFLAG)) {
+          fprintf(stderr, "Could not set Comm flags to detect RX.\n");
+        }
+        if(WaitCommEvent(comms->commHandle, &mask, &ov) == FALSE) {
+          WaitForSingleObject(ov.hEvent, INFINITE);
+        }
+        printf("Byte received\n");
+        exit(0);
+#endif
       /* Use CancelIOEx() to cancel this blocking read */
-      DWORD readbytes;
-      if(!ReadFile(
+       /* 
+      if(readbytes == 0) {
+        if(!SetCommMask(comms->commHandle, EV_RXFLAG)) {
+          fprintf(stderr, "Could not set Comm flags to detect RX.\n");
+        }
+        if(WaitCommEvent(comms->commHandle, &mask, &ov) == FALSE) {
+          printf("Watiing...\n");
+          WaitForSingleObject(ov.hEvent, INFINITE);
+        }
+      }
+      */
+      printf("read...\n");
+      ReadFile(
           comms->commHandle,
           &byte,
           1,
-          &readbytes,
-          NULL)) {
-        err = -1;
-      } else {
-        err = readbytes;
+          NULL,
+          &ov);
+      GetOverlappedResult(comms->commHandle, &ov, &readbytes, TRUE);
+      if(readbytes != 0) {
+        printf("Got byte 0x%2x\n", byte);
       }
+      err = readbytes;
     } else {
       err = recvfrom(comms->socket, (char*)&byte, 1, 0, (struct sockaddr*)0, 0);
     }
@@ -1691,11 +1720,16 @@ void* commsOutEngine(void* arg)
   mobot_t* comms = (mobot_t*)arg;
   int index;
   uint8_t* byte;
+  uint8_t b;
   int err;
 #ifdef _WIN32
-  DWORD byteswritten;
+  DWORD bytesWritten;
+  OVERLAPPED ov;
+  memset(&ov, 0, sizeof(ov));
+  //ov.hEvent = CreateEvent(0, true, 0, 0);
 #endif
- 
+
+  printf("Comms engine started.\n"); 
   MUTEX_LOCK(comms->sendBuf_lock);
   while(1) {
     while(comms->sendBuf_N == 0) {
@@ -1706,12 +1740,16 @@ void* commsOutEngine(void* arg)
       index = comms->sendBuf_index % SENDBUF_SIZE;
       byte = &comms->sendBuf[index];
 #ifdef _WIN32
-      WriteFile(
+      if(!WriteFile(
           comms->commHandle, 
           byte, 
           1,
-          &bytesWritten,
-          NULL);
+          NULL,
+          &ov)) {
+        //printf("Error writing. %d \n", GetLastError());
+      }
+      GetOverlappedResult(comms->commHandle, &ov, &bytesWritten, TRUE);
+      printf("Out: 0x%2x %d\n", *byte, bytesWritten);
 #else
       MUTEX_LOCK(comms->socket_lock);
       err = write(comms->socket, byte, 1);
