@@ -506,6 +506,7 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
 
 int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
 {
+  int rc;
   /* For windows, we should connect to a com port */
   comms->commHandle = CreateFile(
       ttyfilename, 
@@ -527,10 +528,21 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
     fprintf(stderr, "Could not build DCB.\n");
     return -1;
   }
+  dcb.BaudRate = 500000;
+
   if (!SetCommState(comms->commHandle, &dcb)) {
     fprintf(stderr, "Could not set Comm State to new DCB settings.\n");
     return -1;
   }
+  comms->connected = 1;
+  comms->connectionMode = MOBOTCONNECT_TTY;
+  rc = finishConnect(comms);
+  if(rc) {
+    comms->connected = 0;
+    comms->connectionMode = 0;
+    return rc;
+  }
+  return 0;
 }
 
 #endif
@@ -937,6 +949,11 @@ int Mobot_disconnect(mobot_t* comms)
   }
 #else
   closesocket(comms->socket);
+  if(comms->connectionMode == MOBOTCONNECT_TTY) {
+    CancelIo(comms->commHandle);
+    DWORD byteswritten;
+    WriteFile(comms->commHandle, "\0", 1, &byteswritten, NULL);
+  }
   THREAD_JOIN(*comms->commsThread);
   CloseHandle(*comms->commsThread);
   //CloseHandle((LPVOID)comms->socket);
@@ -1229,23 +1246,61 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
   }
   printf("\n");
   */
+
+#ifndef _WIN32
   if(comms->connectionMode == MOBOTCONNECT_ZIGBEE) {
     MUTEX_LOCK(comms->parent->socket_lock);
-#ifdef _WIN32
-    err = send(comms->parent->socket, (const char*)str, len, 0);
-#else
     err = write(comms->parent->socket, str, len);
-#endif
     MUTEX_UNLOCK(comms->parent->socket_lock);
   } else {
     MUTEX_LOCK(comms->socket_lock);
-#ifdef _WIN32
-    err = send(comms->socket, (const char*)str, len, 0);
-#else
     err = write(comms->socket, str, len);
-#endif
     MUTEX_UNLOCK(comms->socket_lock);
   }
+#else
+  if(comms->connectionMode == MOBOTCONNECT_ZIGBEE) {
+    if(comms->parent->connectionMode == MOBOTCONNECT_TTY) {
+      MUTEX_LOCK(comms->parent->socket_lock);
+      DWORD bytesWritten;
+      if(!WriteFile(
+            comms->parent->commHandle, 
+            (const char*)str, 
+            len,
+            &bytesWritten,
+            NULL)) 
+      {
+        err = -1;
+      } else {
+        err = 0;
+      }
+      MUTEX_UNLOCK(comms->parent->socket_lock);
+    } else {
+      MUTEX_LOCK(comms->parent->socket_lock);
+      err = send(comms->parent->socket, (const char*)str, len, 0);
+      MUTEX_UNLOCK(comms->parent->socket_lock);
+    }
+  } else if (comms->connectionMode == MOBOTCONNECT_TTY) {
+    MUTEX_LOCK(comms->socket_lock);
+    //err = send(comms->socket, (const char*)str, len, 0);
+    DWORD bytesWritten;
+    if(!WriteFile(
+        comms->commHandle, 
+        (const char*)str, 
+        len,
+        &bytesWritten,
+        NULL)) 
+    {
+      err = -1;
+    } else {
+      err = 0;
+    }
+    MUTEX_UNLOCK(comms->socket_lock);
+  } else {
+    MUTEX_LOCK(comms->socket_lock);
+    err = send(comms->socket, (const char*)str, len, 0);
+    MUTEX_UNLOCK(comms->socket_lock);
+  }
+#endif
 
   if(err < 0) {
     return err;
@@ -1322,6 +1377,7 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
     ReleaseMutex(*comms->recvBuf_lock);
     rc = WaitForSingleObject(*comms->recvBuf_cond, 3000);
     if(rc == WAIT_TIMEOUT) {
+      printf("timeout\n");
       MUTEX_UNLOCK(comms->recvBuf_lock);
       MUTEX_UNLOCK(comms->commsLock);
       //Mobot_disconnect(comms);
@@ -1459,7 +1515,22 @@ void* commsEngine(void* arg)
       }
     }
 #else
-    err = recvfrom(comms->socket, (char*)&byte, 1, 0, (struct sockaddr*)0, 0);
+    if(comms->connectionMode == MOBOTCONNECT_TTY) {
+      /* Use CancelIOEx() to cancel this blocking read */
+      DWORD readbytes;
+      if(!ReadFile(
+          comms->commHandle,
+          &byte,
+          1,
+          &readbytes,
+          NULL)) {
+        err = -1;
+      } else {
+        err = readbytes;
+      }
+    } else {
+      err = recvfrom(comms->socket, (char*)&byte, 1, 0, (struct sockaddr*)0, 0);
+    }
 #endif
     /* If we are no longer connected, just return */
     if(comms->connected == 0) {
