@@ -125,6 +125,9 @@ typedef enum mobotJointState_e
 typedef struct mobot_s
 {
   int socket;
+#ifdef _WIN32
+  HANDLE commHandle;
+#endif
   int connected;
   int connectionMode;
 #ifndef __MACH__
@@ -646,8 +649,8 @@ DLLIMPORT int Mobot_connectWithTCP(mobot_t* comms);
 DLLIMPORT int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], const char port[]);
 #ifndef _WIN32
 DLLIMPORT int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address);
-DLLIMPORT int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename);
 #endif
+DLLIMPORT int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename);
 DLLIMPORT int Mobot_connectChild(mobot_t* parent, mobot_t** child);
 DLLIMPORT int Mobot_connectChildID(mobot_t* parent, mobot_t** child, const char* childSerialID);
 DLLIMPORT int Mobot_connectWithAddress(

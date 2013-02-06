@@ -581,7 +581,9 @@ int Mobot_getStatus(mobot_t* comms)
 {
   uint8_t buf[64];
   SendToIMobot(comms, BTCMD(CMD_STATUS), NULL, 0);
-  RecvFromIMobot(comms, buf, 64);
+  if(RecvFromIMobot(comms, buf, 64)) {
+    return -1;
+  }
   if(buf[0] != RESP_OK) {
     return -1;
   }
