@@ -1362,7 +1362,6 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
     ReleaseMutex(*comms->recvBuf_lock);
     rc = WaitForSingleObject(*comms->recvBuf_cond, 3000);
     if(rc == WAIT_TIMEOUT) {
-      printf("timeout\n");
       MUTEX_UNLOCK(comms->recvBuf_lock);
       MUTEX_UNLOCK(comms->commsLock);
       //Mobot_disconnect(comms);
@@ -1530,7 +1529,6 @@ void* commsEngine(void* arg)
         }
       }
       */
-      printf("read...\n");
       ReadFile(
           comms->commHandle,
           &byte,
@@ -1538,9 +1536,6 @@ void* commsEngine(void* arg)
           NULL,
           &ov);
       GetOverlappedResult(comms->commHandle, &ov, &readbytes, TRUE);
-      if(readbytes != 0) {
-        printf("Got byte 0x%2x\n", byte);
-      }
       err = readbytes;
     } else {
       err = recvfrom(comms->socket, (char*)&byte, 1, 0, (struct sockaddr*)0, 0);
@@ -1729,7 +1724,6 @@ void* commsOutEngine(void* arg)
   //ov.hEvent = CreateEvent(0, true, 0, 0);
 #endif
 
-  printf("Comms engine started.\n"); 
   MUTEX_LOCK(comms->sendBuf_lock);
   while(1) {
     while(comms->sendBuf_N == 0) {
@@ -1749,7 +1743,6 @@ void* commsOutEngine(void* arg)
         //printf("Error writing. %d \n", GetLastError());
       }
       GetOverlappedResult(comms->commHandle, &ov, &bytesWritten, TRUE);
-      printf("Out: 0x%2x %d\n", *byte, bytesWritten);
 #else
       MUTEX_LOCK(comms->socket_lock);
       err = write(comms->socket, byte, 1);
