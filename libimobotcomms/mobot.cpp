@@ -49,6 +49,9 @@
 int g_numConnected = 0;
 int g_disconnectSignal = 0;
 
+void sendBufAppend(mobot_t* comms, uint8_t* data, int len);
+void* commsOutEngine(void* arg);
+
 double deg2rad(double deg)
 {
   return deg * M_PI / 180.0;
@@ -487,10 +490,10 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
     exit(0);
   }
   comms->connected = 1;
+  comms->connectionMode = MOBOTCONNECT_TTY;
   tcflush(comms->socket, TCIOFLUSH);
   status = finishConnect(comms);
   if(status) return status;
-  comms->connectionMode = MOBOTCONNECT_TTY;
   /* Finished connecting. Create the lockfile. */
   lockfile = fopen(lockfileName, "w");
   if(lockfile == NULL) {
@@ -631,6 +634,9 @@ int finishConnect(mobot_t* comms)
   uint8_t buf[256];
   /* Start the comms engine */
   THREAD_CREATE(comms->commsThread, commsEngine, comms);
+  if(comms->connectionMode == MOBOTCONNECT_TTY) {
+    THREAD_CREATE(comms->commsOutThread, commsOutEngine, comms);
+  }
   while(1) {
     if(i > 2) {
       Mobot_disconnect(comms);
@@ -1075,6 +1081,16 @@ int Mobot_init(mobot_t* comms)
   MUTEX_INIT(comms->callback_lock);
   comms->callbackEnabled = 0;
 
+  comms->commsOutThread = (THREAD_T*)malloc(sizeof(THREAD_T));
+  THREAD_CREATE(comms->commsOutThread, nullThread, NULL);
+  comms->sendBuf = (uint8_t*)malloc(SENDBUF_SIZE);
+  comms->sendBuf_index = 0;
+  comms->sendBuf_N = 0;
+  MUTEX_NEW(comms->sendBuf_lock);
+  MUTEX_INIT(comms->sendBuf_lock);
+  COND_NEW(comms->sendBuf_cond);
+  COND_INIT(comms->sendBuf_cond);
+
   /* Find the configuration file path */
 #ifdef _WIN32
   /* Find the user's local appdata directory */
@@ -1249,9 +1265,11 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
 
 #ifndef _WIN32
   if(comms->connectionMode == MOBOTCONNECT_ZIGBEE) {
-    MUTEX_LOCK(comms->parent->socket_lock);
-    err = write(comms->parent->socket, str, len);
-    MUTEX_UNLOCK(comms->parent->socket_lock);
+    /* Put the message on the parent's message queue */
+    sendBufAppend(comms->parent, str, len);
+  } else if (comms->connectionMode == MOBOTCONNECT_TTY) {
+    /* Put the message on our message queue */
+    sendBufAppend(comms, str, len);
   } else {
     MUTEX_LOCK(comms->socket_lock);
     err = write(comms->socket, str, len);
@@ -1259,56 +1277,19 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
   }
 #else
   if(comms->connectionMode == MOBOTCONNECT_ZIGBEE) {
-    if(comms->parent->connectionMode == MOBOTCONNECT_TTY) {
-      MUTEX_LOCK(comms->parent->socket_lock);
-      DWORD bytesWritten;
-      if(!WriteFile(
-            comms->parent->commHandle, 
-            (const char*)str, 
-            len,
-            &bytesWritten,
-            NULL)) 
-      {
-        err = -1;
-      } else {
-        err = 0;
-      }
-      MUTEX_UNLOCK(comms->parent->socket_lock);
-    } else {
-      MUTEX_LOCK(comms->parent->socket_lock);
-      err = send(comms->parent->socket, (const char*)str, len, 0);
-      MUTEX_UNLOCK(comms->parent->socket_lock);
-    }
+    /* Put the message on the parent's message queue */
+    sendBufAppend(comms->parent, str, len);
   } else if (comms->connectionMode == MOBOTCONNECT_TTY) {
-    MUTEX_LOCK(comms->socket_lock);
-    //err = send(comms->socket, (const char*)str, len, 0);
-    DWORD bytesWritten;
-    if(!WriteFile(
-        comms->commHandle, 
-        (const char*)str, 
-        len,
-        &bytesWritten,
-        NULL)) 
-    {
-      err = -1;
-    } else {
-      err = 0;
-    }
-    MUTEX_UNLOCK(comms->socket_lock);
+    /* Put the message on our message queue */
+    sendBufAppend(comms, str, len);
   } else {
     MUTEX_LOCK(comms->socket_lock);
-    err = send(comms->socket, (const char*)str, len, 0);
+    err = send(comms->parent->socket, (const char*)str, len, 0);
     MUTEX_UNLOCK(comms->socket_lock);
   }
 #endif
-
-  if(err < 0) {
-    return err;
-  } else {
-    return 0;
-  }
+  return 0;
 }
-
 int SendToMobotDirect(mobot_t* comms, const void* data, int datasize)
 {
   int err;
@@ -1691,6 +1672,55 @@ void* commsEngine(void* arg)
     }
   }
   return NULL;
+}
+
+void sendBufAppend(mobot_t* comms, uint8_t* data, int len)
+{
+  int i;
+  MUTEX_LOCK(comms->sendBuf_lock);
+  for(i = 0; i < len; i++) {
+    comms->sendBuf[(comms->sendBuf_index + comms->sendBuf_N) % SENDBUF_SIZE] = data[i];
+    comms->sendBuf_N++;
+  }
+  COND_SIGNAL(comms->sendBuf_cond);
+  MUTEX_UNLOCK(comms->sendBuf_lock);
+}
+
+void* commsOutEngine(void* arg)
+{
+  mobot_t* comms = (mobot_t*)arg;
+  int index;
+  uint8_t* byte;
+  int err;
+#ifdef _WIN32
+  DWORD byteswritten;
+#endif
+ 
+  MUTEX_LOCK(comms->sendBuf_lock);
+  while(1) {
+    while(comms->sendBuf_N == 0) {
+      COND_WAIT(comms->sendBuf_cond, comms->sendBuf_lock);
+    }
+    /* Write one byte at a time */
+    while(comms->sendBuf_N > 0) {
+      index = comms->sendBuf_index % SENDBUF_SIZE;
+      byte = &comms->sendBuf[index];
+#ifdef _WIN32
+      WriteFile(
+          comms->commHandle, 
+          byte, 
+          1,
+          &bytesWritten,
+          NULL);
+#else
+      MUTEX_LOCK(comms->socket_lock);
+      err = write(comms->socket, byte, 1);
+      MUTEX_UNLOCK(comms->socket_lock);
+#endif
+      comms->sendBuf_N--;
+      comms->sendBuf_index++;
+    }
+  }
 }
 
 void* callbackThread(void* arg)

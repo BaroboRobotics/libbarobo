@@ -120,6 +120,8 @@ typedef enum mobotJointState_e
 } mobotJointState_t;
 #endif
 
+#define SENDBUF_SIZE 512
+
 #ifndef BR_COMMS_S
 #define BR_COMMS_S
 typedef struct mobot_s
@@ -162,6 +164,13 @@ typedef struct mobot_s
   MUTEX_T* commsBusy_lock;
   COND_T* commsBusy_cond;
   MUTEX_T* socket_lock;
+
+  THREAD_T* commsOutThread;
+  uint8_t *sendBuf;
+  int sendBuf_index;
+  int sendBuf_N;
+  MUTEX_T* sendBuf_lock;
+  COND_T* sendBuf_cond;
 
   MUTEX_T* callback_lock;
   int callbackEnabled;
