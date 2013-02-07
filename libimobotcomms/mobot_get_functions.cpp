@@ -151,6 +151,31 @@ int Mobot_getButtonVoltage(mobot_t* comms, double *voltage)
   return 0;
 }
 
+int Mobot_getChildrenInfo(mobot_t* comms, mobotInfo_t **mobotInfo, int *numChildren )
+{
+  /* Make sure we are the parent */
+  if(comms->parent != NULL) {
+    return 0;
+  }
+  /* Count the number of children */
+  int n=0, i=0;;
+  mobot_t* iter;
+  MUTEX_LOCK(comms->mobotTree_lock);
+  for(iter = comms->next; iter != NULL; iter = iter->next) {
+    n++;
+  }
+  /* Allocate */
+  *mobotInfo = (mobotInfo_t*)malloc(sizeof(mobotInfo_t)*n);
+  /* Copy IDs */
+  for(iter = comms->next, i=0; iter != NULL; iter = iter->next, i++) {
+    strcpy((*mobotInfo)[i].serialID, iter->serialID);
+    (*mobotInfo)[i].zigbeeAddr = iter->zigbeeAddr;
+  }
+  *numChildren = n;
+  MUTEX_UNLOCK(comms->mobotTree_lock);
+  return 0;
+}
+
 const char* Mobot_getConfigFilePath()
 {
   static char path[512];

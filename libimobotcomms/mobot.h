@@ -124,6 +124,13 @@ typedef enum mobotJointState_e
 
 #ifndef BR_COMMS_S
 #define BR_COMMS_S
+
+typedef struct mobotInfo_s
+{
+  uint16_t zigbeeAddr;
+  char serialID[5];
+} mobotInfo_t;
+
 typedef struct mobot_s
 {
   int socket;
@@ -710,6 +717,7 @@ DLLIMPORT int Mobot_protocolVersion();
 DLLIMPORT int Mobot_getAccelData(mobot_t* comms, int *accel_x, int *accel_y, int *accel_z);
 DLLIMPORT int Mobot_getBatteryVoltage(mobot_t* comms, double *voltage);
 DLLIMPORT int Mobot_getButtonVoltage(mobot_t* comms, double *voltage);
+DLLIMPORT int Mobot_getChildrenInfo(mobot_t* comms, mobotInfo_t **mobotInfo, int *numChildren );
 DLLIMPORT const char* Mobot_getConfigFilePath();
 DLLIMPORT int Mobot_getEncoderVoltage(mobot_t* comms, int pinNumber, double *voltage);
 DLLIMPORT int Mobot_getHWRev(mobot_t* comms, int* rev);
