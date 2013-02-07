@@ -291,10 +291,8 @@ class CMobot
    */
     int connect();
 #ifndef _CH_
-#ifdef ENABLE_BLUETOOTH
     int connectWithAddress(const char address[], int channel = 1);
     int connectWithBluetoothAddress(const char address[], int channel = 1);
-#endif
     int connectWithIPAddress(const char address[], const char port[] = "5768");
 #else
     int connectWithAddress(const char address[], ...);

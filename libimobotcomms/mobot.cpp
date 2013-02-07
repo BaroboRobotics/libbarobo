@@ -272,14 +272,19 @@ int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], const char 
   return 0;
 }
 
-#ifdef ENABLE_BLUETOOTH
 int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
 {
+#ifdef ENABLE_BLUETOOTH
   return Mobot_connectWithBluetoothAddress(comms, address, channel);
+#else
+  fprintf(stderr, "Warning: Bluetooth not enabled.\n");
+  return -1;
+#endif
 }
 
 int Mobot_connectWithBluetoothAddress(mobot_t* comms, const char* address, int channel)
 {
+#ifdef ENABLE_BLUETOOTH
   int err = -1;
 #ifndef __MACH__
   int status;
@@ -374,8 +379,11 @@ int Mobot_connectWithBluetoothAddress(mobot_t* comms, const char* address, int c
 #else
   return Mobot_connectWithAddressTTY(comms, address);
 #endif
-}
+#else
+  fprintf(stderr, "Warning: Bluetooth support not included.\n");
+  return 0;
 #endif
+}
 
 #ifndef _WIN32
 int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address)
@@ -1801,7 +1809,6 @@ int CMobot::connect()
   return Mobot_connect(_comms);
 }
 
-#ifdef ENABLE_BLUETOOTH
 int CMobot::connectWithAddress(const char* address, int channel)
 {
   return Mobot_connectWithAddress(_comms, address, channel);
@@ -1811,7 +1818,6 @@ int CMobot::connectWithBluetoothAddress(const char* address, int channel)
 {
   return Mobot_connectWithBluetoothAddress(_comms, address, channel);
 }
-#endif
 
 int CMobot::connectWithIPAddress(const char* address, const char port[])
 {

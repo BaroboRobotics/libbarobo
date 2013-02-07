@@ -49,12 +49,20 @@ int main()
   /* Begin testing. First, rotate joint 2 */
   mobot.moveJointToNB(MOBOT_JOINT2, -85);
   /* This should take about 2 seconds */
+#ifndef _WIN32
   usleep(1000000);
+#else
+  Sleep(1000);
+#endif
   if (!mobot.isMoving()) {
     ERRMSG("Error: Robot should still be moving.");
     return -1;
   }
+#ifndef _WIN32
   usleep(1000000);
+#else
+  Sleep(1000);
+#endif
   if (mobot.isMoving()) {
     ERRMSG("Error: Robot did not reach joint angle in time.");
     return -1;

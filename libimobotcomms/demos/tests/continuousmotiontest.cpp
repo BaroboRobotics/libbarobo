@@ -53,7 +53,11 @@ int main()
                           angles[2], 
                           angles[3], 
                           0.1);
+#ifndef _WIN32
   sleep(12);
+#else
+  Sleep(12000);
+#endif
   printf("Sleep done.\n");
   mobot.recordAnglesEnd(n);
   printf("Ended Recording.\n");
@@ -116,7 +120,11 @@ int main()
                           angles[2], 
                           angles[3], 
                           0.1);
+#ifndef _WIN32
   sleep(12);
+#else
+  Sleep(12);
+#endif
   printf("Sleep done.\n");
   mobot.recordAnglesEnd(n);
   printf("Ended Recording.\n");
