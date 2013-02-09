@@ -220,6 +220,24 @@ int Mobot_getEncoderVoltage(mobot_t* comms, int pinNumber, double *voltage)
   return 0;
 }
 
+int Mobot_getFormFactor(mobot_t* comms, int* form)
+{
+  uint8_t buf[32];
+  int status;
+  status = SendToIMobot(comms, BTCMD(CMD_GETFORMFACTOR), NULL, 0);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 4) {
+    return -1;
+  }
+  /* Copy the data */
+  *form = buf[2];
+  return 0;
+}
+
 int Mobot_getHWRev(mobot_t* comms, int* rev)
 {
   uint8_t buf[20];

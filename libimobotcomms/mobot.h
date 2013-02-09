@@ -120,6 +120,17 @@ typedef enum mobotJointState_e
 } mobotJointState_t;
 #endif
 
+#ifndef MOBOT_FORMFACTOR_E
+typedef enum mobotFormFactor_e
+{
+  MOBOTFORM_NULL,
+  MOBOTFORM_ORIGINAL,
+  MOBOTFORM_I,
+  MOBOTFORM_L,
+  MOBOTFORM_T,
+}mobotFormFactor_t;
+#endif
+
 #define SENDBUF_SIZE 512
 
 #ifndef BR_COMMS_S
@@ -720,6 +731,7 @@ DLLIMPORT int Mobot_getButtonVoltage(mobot_t* comms, double *voltage);
 DLLIMPORT int Mobot_getChildrenInfo(mobot_t* comms, mobotInfo_t **mobotInfo, int *numChildren );
 DLLIMPORT const char* Mobot_getConfigFilePath();
 DLLIMPORT int Mobot_getEncoderVoltage(mobot_t* comms, int pinNumber, double *voltage);
+DLLIMPORT int Mobot_getFormFactor(mobot_t* comms, int* form);
 DLLIMPORT int Mobot_getHWRev(mobot_t* comms, int* rev);
 DLLIMPORT int Mobot_getJointAngle(mobot_t* comms, mobotJointId_t id, double *angle);
 DLLIMPORT int Mobot_getJointAngleAverage(mobot_t* comms, mobotJointId_t id, double *angle, int numReadings);

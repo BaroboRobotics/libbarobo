@@ -372,6 +372,11 @@ enum protocol_commands_e {
  * Expected Response: [0x10] [0x09] [3*2 bytes float data, x,y,z] [0x11] */
   CMD_GETACCEL,
 
+/* CMD_GETFORMFACTOR: Get the mobot's form factor.
+ * Command Format: [CMD] [0x03] [0x00]
+ * Expected Response: [0x10] [0x04] [1 byte identifier] [0x00] */
+  CMD_GETFORMFACTOR,
+
   CMD_NUMCOMMANDS
 };
 
