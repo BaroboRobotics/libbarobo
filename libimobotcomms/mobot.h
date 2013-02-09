@@ -62,7 +62,9 @@
 #ifdef _WIN32
 #ifndef _CH_
 typedef unsigned char uint8_t;
+#ifndef _MSYS
 typedef WORD uint16_t;
+#endif
 #endif
 #endif
 #endif
