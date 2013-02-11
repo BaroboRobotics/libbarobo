@@ -40,6 +40,7 @@
 #endif
 
 #include "commands.h"
+#include <BaroboConfigFile.h>
 
 #define ABS(x) ((x)<0?-(x):(x))
 
@@ -155,22 +156,26 @@ int Mobot_connect(mobot_t* comms)
   int i;
   const char* path = comms->configFilePath;
   char buf[512];
-  fp = fopen(path, "r");
-  if(fp == NULL) {
-    fprintf(stderr, 
-        "ERROR: Your Barobo configuration file does not exist.\n"
-        "Please create one by opening the MoBot remote control, clicking on\n"
-        "the 'Robot' menu entry, and selecting 'Configure Robot Bluetooth'.\n");
-    return -1;
-  }
-  /* Read the correct line */
-  for(i = 0; i < g_numConnected+1; i++) {
-    if(fgets(buf, MAX_PATH, fp) == NULL) {
-      fprintf(stderr, "Error reading configuration file.\n");
+  const char *str;
+  static bcf_t* bcf = NULL;
+  if(bcf == NULL) {
+    bcf = BCF_New();
+    if(BCF_Read(bcf, path)) {
+      fprintf(stderr, 
+          "ERROR: Your Barobo configuration file does not exist.\n"
+          "Please create one by opening the MoBot remote control, clicking on\n"
+          "the 'Robot' menu entry, and selecting 'Configure Robot Bluetooth'.\n");
+      BCF_Destroy(bcf);
+      bcf = NULL;
       return -1;
     }
   }
-  fclose(fp);
+
+  /* Read the correct line */
+  str = BCF_GetIndex(bcf, g_numConnected);
+  if(str) {
+   strcpy(buf, str);
+  } 
   /* Get rid of trailing newline and/or carriage return */
   while(
       (buf[strlen(buf)-1] == '\r' ) ||
