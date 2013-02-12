@@ -8,6 +8,9 @@ project(LIBIMOBOTCOMMS)
 #include_directories("C:\\Program Files\\Microsoft SDKs\\Windows\\v7.0A\\Include")
 add_definitions(-DNONRELEASE)
 
+include_directories(${CMAKE_SOURCE_DIR}/../../BaroboConfigFile)
+link_directories(${CMAKE_SOURCE_DIR}/../../BaroboConfigFile)
+
 if(CMAKE_HOST_WIN32)
   add_definitions(-D_WIN32_WINNT=0x501 -DENABLE_BLUETOOTH)
 	add_library(mobot STATIC
@@ -18,7 +21,7 @@ if(CMAKE_HOST_WIN32)
     mobot_record_functions.cpp
     mobot_set_functions.cpp
 	  )
-	target_link_libraries(mobot Ws2_32)
+	target_link_libraries(mobot Ws2_32 baroboconfigfile)
   #set_target_properties(mobot PROPERTIES COMPILE_FLAGS "/GS-")
   install(TARGETS mobot
           ARCHIVE DESTINATION lib)
@@ -33,7 +36,7 @@ elseif(CMAKE_HOST_APPLE)
     mobot_record_functions.cpp
     mobot_set_functions.cpp
 	  )
-	target_link_libraries(mobot pthread)
+	target_link_libraries(mobot pthread baroboconfigfile)
   set_target_properties(mobot PROPERTIES
     INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
   install(TARGETS mobot
@@ -49,7 +52,7 @@ else(CMAKE_HOST_WIN32)
     mobot_record_functions.cpp
     mobot_set_functions.cpp
 	  )
-	target_link_libraries(mobot bluetooth pthread rt)
+	target_link_libraries(mobot bluetooth pthread rt baroboconfigfile mxml)
   install(TARGETS mobot
           LIBRARY DESTINATION lib)
   install(FILES mobot.h DESTINATION include)
