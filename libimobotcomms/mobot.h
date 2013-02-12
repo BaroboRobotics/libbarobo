@@ -47,7 +47,7 @@
 #include <stdint.h>
 #include <ws2tcpip.h>
 #ifdef ENABLE_BLUETOOTH
-#include <Ws2bth.h>
+#include <ws2bth.h>
 #endif
 #endif
 #ifndef _CH_
