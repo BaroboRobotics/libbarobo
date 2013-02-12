@@ -5,13 +5,15 @@ cmake_minimum_required(VERSION 2.6)
 
 project(LIBIMOBOTCOMMS)
 
-#include_directories("C:\\Program Files\\Microsoft SDKs\\Windows\\v7.0A\\Include")
 add_definitions(-DNONRELEASE)
 
 include_directories(${CMAKE_SOURCE_DIR}/../../BaroboConfigFile)
 link_directories(${CMAKE_SOURCE_DIR}/../../BaroboConfigFile)
 
 if(CMAKE_HOST_WIN32)
+  include(FindPkgConfig)
+  pkg_check_modules(MXML REQUIRED mxml)
+  include_directories(${MXML_INCLUDE_DIRS})
   add_definitions(-D_WIN32_WINNT=0x501 -DENABLE_BLUETOOTH)
 	add_library(mobot STATIC
 	  mobot.cpp
