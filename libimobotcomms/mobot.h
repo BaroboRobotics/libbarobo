@@ -145,6 +145,8 @@ typedef struct mobot_s
   int socket;
 #ifdef _WIN32
   HANDLE commHandle;
+#else
+  void* commHandle;
 #endif
   int connected;
   int connectionMode;
