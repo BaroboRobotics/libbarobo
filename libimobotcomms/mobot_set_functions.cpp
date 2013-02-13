@@ -338,7 +338,6 @@ int Mobot_setRGB(mobot_t* comms, double r, double g, double b)
   buf[3] = (r)*255.0;
   buf[4] = (g)*255.0;
   buf[5] = (b)*255.0;
-  printf("%d %d %d\n", buf[3], buf[4], buf[5]);
 
   status = SendToIMobot(comms, BTCMD(CMD_RGBLED), buf, 6);
   if(status < 0) return status;
