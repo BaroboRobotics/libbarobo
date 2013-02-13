@@ -46,9 +46,7 @@
 #ifdef _WIN32
 #include <stdint.h>
 #include <ws2tcpip.h>
-#ifdef ENABLE_BLUETOOTH
 #include <ws2bth.h>
-#endif
 #endif
 #ifndef _CH_
 #include "thread_macros.h"
@@ -91,9 +89,7 @@ typedef unsigned char uint8_t;
 #define AF_BLUETOOTH AF_BTH
 #define BTPROTO_RFCOMM BTHPROTO_RFCOMM
 #ifndef _CH_
-#ifdef ENABLE_BLUETOOTH
 typedef SOCKADDR_BTH sockaddr_t;
-#endif
 #endif
 #endif
 
@@ -153,9 +149,7 @@ typedef struct mobot_s
   int connected;
   int connectionMode;
 #ifndef __MACH__
-#ifdef ENABLE_BLUETOOTH
   sockaddr_t *addr;
-#endif
 #endif
   double jointSpeeds[4];
   double maxSpeed[4];
@@ -783,6 +777,7 @@ DLLIMPORT int Mobot_getJointSpeedRatios(mobot_t* comms,
                                         double *ratio3, 
                                         double *ratio4);
 DLLIMPORT int Mobot_getJointState(mobot_t* comms, mobotJointId_t id, mobotJointState_t *state);
+DLLIMPORT int Mobot_getRGB(mobot_t* comms, double *r, double *g, double *b);
 DLLIMPORT int Mobot_getStatus(mobot_t* comms);
 DLLIMPORT int Mobot_getVersion(mobot_t* comms);
 DLLIMPORT int Mobot_move(mobot_t* comms,

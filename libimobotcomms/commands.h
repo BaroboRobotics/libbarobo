@@ -374,8 +374,14 @@ enum protocol_commands_e {
 
 /* CMD_GETFORMFACTOR: Get the mobot's form factor.
  * Command Format: [CMD] [0x03] [0x00]
- * Expected Response: [0x10] [0x04] [1 byte identifier] [0x00] */
+ * Expected Response: [0x10] [0x04] [1 byte identifier] [0x11] */
   CMD_GETFORMFACTOR,
+
+/* CMD_GETRGB: Get the current RGB values for the LED
+   Command Format: [CMD] [0x03] [0x00]
+   Expected Response: [0x10] [0x06] [1 byte r] [1 byte g] [1 byte b] [0x11]
+   */
+  CMD_GETRGB,
 
   CMD_NUMCOMMANDS
 };

@@ -620,6 +620,27 @@ int Mobot_getJointSpeeds(mobot_t* comms, double *speed1, double *speed2, double 
   return 0;
 }
 
+int Mobot_getRGB(mobot_t* comms, double *r, double *g, double *b)
+{
+  uint8_t buf[32];
+  float f;
+  int status;
+
+  status = SendToIMobot(comms, BTCMD(CMD_GETRGB), NULL, 0);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 6) {
+    return -1;
+  }
+  *r = ((double)buf[2])/((double)0xff);
+  *g = ((double)buf[3])/((double)0xff);
+  *b = ((double)buf[4])/((double)0xff);
+  return 0;
+}
+
 int Mobot_getStatus(mobot_t* comms)
 {
   uint8_t buf[64];

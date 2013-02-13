@@ -138,7 +138,6 @@ int Mobot_connect(mobot_t* comms)
   if(strlen(buf) != 17) {
     return -3;
   }
-#ifdef ENABLE_BLUETOOTH
   /* Pass it on to connectWithAddress() */
   if(i = Mobot_connectWithAddress(comms, buf, 1)) {
     return i;
@@ -146,9 +145,7 @@ int Mobot_connect(mobot_t* comms)
     g_numConnected++;
     return i;
   }
-#else
   return -1;
-#endif
 
 #else /* if not Windows */
 #define MAX_PATH 512
@@ -279,17 +276,11 @@ int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], const char 
 
 int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
 {
-#ifdef ENABLE_BLUETOOTH
   return Mobot_connectWithBluetoothAddress(comms, address, channel);
-#else
-  fprintf(stderr, "Warning: Bluetooth not enabled.\n");
-  return -1;
-#endif
 }
 
 int Mobot_connectWithBluetoothAddress(mobot_t* comms, const char* address, int channel)
 {
-#ifdef ENABLE_BLUETOOTH
   int err = -1;
 #ifndef __MACH__
   int status;
@@ -383,10 +374,6 @@ int Mobot_connectWithBluetoothAddress(mobot_t* comms, const char* address, int c
   return status;
 #else
   return Mobot_connectWithAddressTTY(comms, address);
-#endif
-#else
-  fprintf(stderr, "Warning: Bluetooth support not included.\n");
-  return 0;
 #endif
 }
 
@@ -507,6 +494,8 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   tcflush(comms->socket, TCIOFLUSH);
   status = finishConnect(comms);
   if(status) return status;
+  /* See if we can get the serial id */
+  Mobot_getID(comms);
   /* Finished connecting. Create the lockfile. */
   lockfile = fopen(lockfileName, "w");
   if(lockfile == NULL) {
@@ -605,7 +594,12 @@ int Mobot_connectChild(mobot_t* parent, mobot_t** child)
 
 int Mobot_connectChildID(mobot_t* parent, mobot_t** child, const char* childSerialID)
 {
-  /* First check to see if the requested child is already in the list of knows
+  /* First, check to see if it is our ID */
+  if(!strcmp(parent->serialID, childSerialID)) {
+    *child = parent;
+    return 0;
+  }
+  /* Now check to see if the requested child is already in the list of knows
    * Serial ID's */  
   bool idFound = false;
   mobot_t* iter;
@@ -1045,10 +1039,8 @@ int Mobot_init(mobot_t* comms)
   int i;
   memset(comms, 0, sizeof(mobot_t));
 #ifndef __MACH__
-#ifdef ENABLE_BLUETOOTH
   comms->addr = (sockaddr_t*)malloc(sizeof(sockaddr_t));
   memset(comms->addr, 0, sizeof(sockaddr_t));
-#endif
 #endif
   comms->connected = 0;
   comms->connectionMode = 0;
