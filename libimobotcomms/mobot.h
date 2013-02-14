@@ -342,7 +342,11 @@ class CMobot
     %apply double & OUTPUT {double &ratio1, double &ratio2, double &ratio3, double &ratio4};
     %apply double & OUTPUT {mobotJointState_t &state};
 #endif
+    int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
+    int getBatteryVoltage(double &voltage);
+    int getFormFactor(int &formFactor);
     static const char* getConfigFilePath();
+    int getID();
     int getJointAngle(mobotJointId_t id, double &angle);
 #ifdef _CH_
     int getJointAngleAverage(mobotJointId_t id, double &angle, ... );
@@ -364,6 +368,7 @@ class CMobot
     int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3, double &ratio4);
     int getJointState(mobotJointId_t id, mobotJointState_t &state);
     mobot_t* getMobotObject();
+    int getColorRGB(double &r, double &g, double &b);
     int move(double angle1, double angle2, double angle3, double angle4);
     int moveNB(double angle1, double angle2, double angle3, double angle4);
     int moveContinuousNB(mobotJointState_t dir1, 
@@ -460,6 +465,7 @@ class CMobot
     int reset();
     int resetToZero();
     int resetToZeroNB();
+    int setColorRGB(double r, double g, double b);
     int setExitState(mobotJointState_t exitState);
     int setJointMovementStateNB(mobotJointId_t id, mobotJointState_t dir);
     int setJointMovementStateTime(mobotJointId_t id, mobotJointState_t dir, double seconds);
@@ -660,6 +666,17 @@ class CMobotGroup
     int _motionInProgress;
 };
 
+class CMelody
+{
+  public:
+    CMelody();
+    ~CMelody();
+    void setTempo(int bpm);
+    void addNote(const char* note, int divider);
+  private:
+    mobotMelodyNote_t* _head;
+};
+
 #endif /* If C++ or CH */
 #endif /* C_ONLY */
 
@@ -723,7 +740,7 @@ DLLIMPORT int Mobot_init(mobot_t* comms);
 DLLIMPORT int Mobot_isConnected(mobot_t* comms);
 DLLIMPORT int Mobot_isMoving(mobot_t* comms);
 DLLIMPORT int Mobot_protocolVersion();
-DLLIMPORT int Mobot_getAccelData(mobot_t* comms, int *accel_x, int *accel_y, int *accel_z);
+DLLIMPORT int Mobot_getAccelerometerData(mobot_t* comms, int *accel_x, int *accel_y, int *accel_z);
 DLLIMPORT int Mobot_getBatteryVoltage(mobot_t* comms, double *voltage);
 DLLIMPORT int Mobot_getButtonVoltage(mobot_t* comms, double *voltage);
 DLLIMPORT int Mobot_getChildrenInfo(mobot_t* comms, mobotInfo_t **mobotInfo, int *numChildren );
@@ -779,7 +796,7 @@ DLLIMPORT int Mobot_getJointSpeedRatios(mobot_t* comms,
                                         double *ratio3, 
                                         double *ratio4);
 DLLIMPORT int Mobot_getJointState(mobot_t* comms, mobotJointId_t id, mobotJointState_t *state);
-DLLIMPORT int Mobot_getRGB(mobot_t* comms, double *r, double *g, double *b);
+DLLIMPORT int Mobot_getColorRGB(mobot_t* comms, double *r, double *g, double *b);
 DLLIMPORT int Mobot_getStatus(mobot_t* comms);
 DLLIMPORT int Mobot_getVersion(mobot_t* comms);
 DLLIMPORT int Mobot_move(mobot_t* comms,
@@ -896,7 +913,9 @@ DLLIMPORT int Mobot_setExitState(mobot_t* comms, mobotJointState_t exitState);
 DLLIMPORT int Mobot_setFourierCoefficients(mobot_t* comms, mobotJointId_t id, double* a, double* b);
 DLLIMPORT int Mobot_beginFourierControl(mobot_t* comms, uint8_t motorMask);
 DLLIMPORT int Mobot_setHWRev(mobot_t* comms, uint8_t rev);
-DLLIMPORT int Mobot_setBuzzerFrequency(mobot_t* comms, unsigned int frequency);
+DLLIMPORT int Mobot_setBuzzerFrequency(mobot_t* comms, unsigned int frequency, double time);
+DLLIMPORT int Mobot_setBuzzerFrequencyOn(mobot_t* comms, unsigned int frequency);
+DLLIMPORT int Mobot_setBuzzerFrequencyOff(mobot_t* comms);
 DLLIMPORT int Mobot_setJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir);
 DLLIMPORT int Mobot_setJointMovementStateNB(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir);
 DLLIMPORT int Mobot_setJointMovementStateTime(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir, double seconds);
@@ -937,7 +956,7 @@ DLLIMPORT int Mobot_setMovementStateTimeNB(mobot_t* comms,
                                   mobotJointState_t dir3,
                                   mobotJointState_t dir4,
                                   double seconds);
-DLLIMPORT int Mobot_setRGB(mobot_t* comms, double r, double g, double b);
+DLLIMPORT int Mobot_setColorRGB(mobot_t* comms, double r, double g, double b);
 DLLIMPORT int Mobot_setTwoWheelRobotSpeed(mobot_t* comms, double speed, double radius);
 DLLIMPORT int Mobot_stop(mobot_t* comms);
 DLLIMPORT int Mobot_stopOneJoint(mobot_t* comms, mobotJointId_t id);

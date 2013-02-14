@@ -47,7 +47,24 @@
 #define DEPRECATED(from, to) \
   fprintf(stderr, "Warning: The function \"%s()\" is deprecated. Please use \"%s()\"\n" , from, to)
 
-int Mobot_setBuzzerFrequency(mobot_t* comms, unsigned int frequency)
+int Mobot_setBuzzerFrequency(mobot_t* comms, unsigned int frequency, double time)
+{
+  int rc;
+  if(rc = Mobot_setBuzzerFrequencyOn(comms, frequency)) {
+    return rc;
+  }
+#ifndef _WIN32
+  usleep(time*1000000);
+#else
+  Sleep(time*1000);
+#endif
+  if(rc = Mobot_setBuzzerFrequencyOff(comms)) {
+    return rc;
+  }
+  return 0;
+}
+
+int Mobot_setBuzzerFrequencyOn(mobot_t* comms, unsigned int frequency)
 {
   uint8_t buf[32];
   uint16_t f;
@@ -65,6 +82,11 @@ int Mobot_setBuzzerFrequency(mobot_t* comms, unsigned int frequency)
     return -1;
   }
   return 0;
+}
+
+int Mobot_setBuzzerFrequencyOff(mobot_t* comms)
+{
+  return Mobot_setBuzzerFrequencyOn(comms, 0);
 }
 
 int Mobot_setExitState(mobot_t* comms, mobotJointState_t exitState)
@@ -321,7 +343,7 @@ int Mobot_setMovementStateTimeNB(mobot_t* comms,
   return 0;
 }
 
-int Mobot_setRGB(mobot_t* comms, double r, double g, double b)
+int Mobot_setColorRGB(mobot_t* comms, double r, double g, double b)
 {
   uint8_t buf[32];
   float f;
@@ -371,6 +393,11 @@ int Mobot_setJointSpeeds(mobot_t* comms, double speed1, double speed2, double sp
     Mobot_setJointSpeed(comms, (mobotJointId_t)(i+1), speeds[i]);
   }
   return 0;
+}
+
+int CMobot::setColorRGB(double r, double g, double b)
+{
+  return Mobot_setColorRGB(_comms, r, g, b);
 }
 
 int CMobot::setExitState(mobotJointState_t exitState)

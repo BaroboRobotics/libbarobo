@@ -1867,6 +1867,7 @@ int CMobot::resetToZeroNB()
   return Mobot_resetToZeroNB(_comms);
 }
 
+/* CMobotGroup */
 CMobotGroup::CMobotGroup()
 {
   _numRobots = 0;
@@ -1907,5 +1908,32 @@ int CMobotGroup::resetToZeroNB()
   return 0;
 }
 
+/* CMelody */
+CMelody::CMelody()
+{
+  _head = (mobotMelodyNote_t*)malloc(sizeof(mobotMelodyNote_t));
+  _head->tempo = 120;
+}
+
+CMelody::~CMelody()
+{
+  /* Free everything... */
+  mobotMelodyNote_t *iter, *next;
+  for(iter = _head; iter != NULL; iter = next)
+  {
+    next = iter->next;
+    free(iter);
+  }
+}
+
+void CMelody::setTempo(int bpm)
+{
+  _head->tempo = bpm;
+}
+
+void CMelody::addNote(const char* note, int divider)
+{
+  Mobot_melodyAddNote(_head, note, divider);
+}
 #endif
 

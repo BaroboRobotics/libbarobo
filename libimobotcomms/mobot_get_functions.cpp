@@ -86,7 +86,7 @@ int Mobot_getID(mobot_t* comms)
   return 0;
 }
 
-int Mobot_getAccelData(mobot_t* comms, int *accel_x, int *accel_y, int *accel_z)
+int Mobot_getAccelerometerData(mobot_t* comms, int *accel_x, int *accel_y, int *accel_z)
 {
   uint8_t buf[32];
   float f;
@@ -620,7 +620,7 @@ int Mobot_getJointSpeeds(mobot_t* comms, double *speed1, double *speed2, double 
   return 0;
 }
 
-int Mobot_getRGB(mobot_t* comms, double *r, double *g, double *b)
+int Mobot_getColorRGB(mobot_t* comms, double *r, double *g, double *b)
 {
   uint8_t buf[32];
   float f;
@@ -682,6 +682,34 @@ int Mobot_getVersion(mobot_t* comms)
 const char* CMobot::getConfigFilePath()
 {
   return Mobot_getConfigFilePath();
+}
+
+int CMobot::getID()
+{
+  return Mobot_getID(_comms);
+}
+
+int CMobot::getAccelerometerData(double &accel_x, double &accel_y, double &accel_z)
+{
+  int _x, _y, _z, rc;
+  rc = Mobot_getAccelerometerData(_comms, &_x, &_y, &_z);
+  if(rc) {
+    return rc;
+  }
+  accel_x = _x/16384.0;
+  accel_y = _y/16384.0;
+  accel_z = _z/16384.0;
+  return 0;
+}
+
+int CMobot::getBatteryVoltage(double &voltage)
+{
+  return Mobot_getBatteryVoltage(_comms, &voltage);
+}
+
+int CMobot::getFormFactor(int &formFactor)
+{
+  return Mobot_getFormFactor(_comms, &formFactor);
 }
 
 int CMobot::getJointAngle(mobotJointId_t id, double &angle)
@@ -811,3 +839,7 @@ mobot_t* CMobot::getMobotObject()
   return _comms;
 }
 
+int CMobot::getColorRGB(double &r, double &g, double &b)
+{
+  return Mobot_getColorRGB(_comms, &r, &g, &b);
+}
