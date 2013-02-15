@@ -6,7 +6,7 @@ PKGDIR=$(PACKAGE)-$(VERSION)/$(PACKAGE)
 target: libmobot.dl
 
 libmobot.dl: mobot.o chmobot_chdl.o mobot_get_functions.o mobot_motion_functions.o mobot_movement_functions.o mobot_record_functions.o mobot_set_functions.o
-	ch dllink libmobot.dl cplusplus mobot.o chmobot_chdl.o -L../../../BaroboConfigFile -lbaroboconfigfile -lbluetooth -lpthread -lrt -lmxml
+	ch dllink libmobot.dl cplusplus mobot.o chmobot_chdl.o mobot_get_functions.o mobot_motion_functions.o mobot_movement_functions.o mobot_record_functions.o mobot_set_functions.o -L../../../BaroboConfigFile -lbaroboconfigfile -lbluetooth -lpthread -lrt -lmxml
 
 mobot.o: ../mobot.cpp $(HEADERS)
 	ch dlcomp libmobot.dl cplusplus -DNONRELEASE -I../../../BaroboConfigFile ../mobot.cpp
