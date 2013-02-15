@@ -134,10 +134,14 @@ typedef enum mobotFormFactor_e
 #ifndef BR_COMMS_S
 #define BR_COMMS_S
 
+struct mobot_s;
 typedef struct mobotInfo_s
 {
   uint16_t zigbeeAddr;
   char serialID[5];
+  struct mobot_s* parent;
+  struct mobot_s* mobot; 
+  struct mobotInfo_s* next;
 } mobotInfo_t;
 
 typedef struct mobot_s
@@ -203,9 +207,11 @@ typedef struct mobot_s
 
   MUTEX_T* mobotTree_lock;
   COND_T* mobotTree_cond;
-  struct mobot_s* parent; // The head of the list is always the parent
-  struct mobot_s* next;
-  struct mobot_s* prev;
+  struct mobot_s* parent;
+  /* If a Mobot is a dedicated dongle, there still must be a child mobot
+   * instance associated with the dongle in order to control it as a robot. */
+  struct mobot_s* child; 
+  struct mobotInfo_s* children;
 
 } mobot_t;
 #endif
@@ -692,7 +698,7 @@ DLLIMPORT int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address);
 #endif
 DLLIMPORT int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename);
 DLLIMPORT int Mobot_connectChild(mobot_t* parent, mobot_t** child);
-DLLIMPORT int Mobot_connectChildID(mobot_t* parent, mobot_t** child, const char* childSerialID);
+DLLIMPORT int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSerialID);
 DLLIMPORT int Mobot_connectWithAddress(
     mobot_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_connectWithBluetoothAddress(

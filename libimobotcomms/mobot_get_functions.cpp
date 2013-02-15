@@ -159,15 +159,15 @@ int Mobot_getChildrenInfo(mobot_t* comms, mobotInfo_t **mobotInfo, int *numChild
   }
   /* Count the number of children */
   int n=0, i=0;;
-  mobot_t* iter;
+  mobotInfo_t* iter;
   MUTEX_LOCK(comms->mobotTree_lock);
-  for(iter = comms->next; iter != NULL; iter = iter->next) {
+  for(iter = comms->children; iter != NULL; iter = iter->next) {
     n++;
   }
   /* Allocate */
   *mobotInfo = (mobotInfo_t*)malloc(sizeof(mobotInfo_t)*n);
   /* Copy IDs */
-  for(iter = comms->next, i=0; iter != NULL; iter = iter->next, i++) {
+  for(iter = comms->children, i=0; iter != NULL; iter = iter->next, i++) {
     strcpy((*mobotInfo)[i].serialID, iter->serialID);
     (*mobotInfo)[i].zigbeeAddr = iter->zigbeeAddr;
   }

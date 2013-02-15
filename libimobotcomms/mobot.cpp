@@ -314,7 +314,8 @@ int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
   if(rc == 0) {
     return Mobot_connectWithBluetoothAddress(comms, address, channel);
   } else {
-    return Mobot_connectChildID(g_dongleMobot, &comms, address);
+    rc = Mobot_connectChildID(g_dongleMobot, comms, address);
+    return rc;
   }
 }
 
@@ -600,46 +601,47 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
 
 #endif
 
-int Mobot_connectChild(mobot_t* parent, mobot_t** child)
+int Mobot_connectChild(mobot_t* parent, mobot_t* child)
 {
   /* First check to see if the requested child is already in the list of knows
    * Serial ID's */  
   bool idFound = false;
-  mobot_t* iter;
+  mobotInfo_t* iter;
   int i;
+  int rc;
   Mobot_initDongle();
   for(i = 0; i < 2; i++) {
     MUTEX_LOCK(parent->mobotTree_lock);
-    for(iter = parent->next; iter != NULL; iter = iter->next)
-    {
-      if(iter->connected == 0) {
-        idFound = true;
-        break;
+    if(parent->children != NULL) {
+      child->connected = 1;
+      child->connectionMode = MOBOTCONNECT_ZIGBEE;
+      strcpy(child->serialID, parent->children->serialID);
+      child->zigbeeAddr = parent->children->zigbeeAddr;
+
+      rc = finishConnect(child);
+      if(rc) {
+        child->connected = 0;
+        child->connectionMode = MOBOTCONNECT_NONE;
+      } else {
+        parent->children->mobot = child;
       }
+      MUTEX_UNLOCK(parent->mobotTree_lock);
+      return rc;
     }
-    if(idFound) {
-      *child = iter;
-      (*child)->connected = 1;
-      (*child)->connectionMode = MOBOTCONNECT_ZIGBEE;
-      MUTEX_UNLOCK(parent->mobotTree_lock);
-      return 0;
-    } else if (i == 0){
-      MUTEX_UNLOCK(parent->mobotTree_lock);
-      Mobot_queryAddresses(parent);
+    MUTEX_UNLOCK(parent->mobotTree_lock);
+    Mobot_queryAddresses(parent);
 #ifdef _WIN32
-      Sleep(3000);
+    Sleep(3000);
 #else
-      sleep(3);
+    sleep(3);
 #endif
-    }
   }
   /* Did not find the child */
   MUTEX_UNLOCK(parent->mobotTree_lock);
-  *child = NULL;
   return -1;
 }
 
-int Mobot_connectChildID(mobot_t* parent, mobot_t** child, const char* childSerialID)
+int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSerialID)
 {
   Mobot_initDongle();
   printf("Connecting to %s\n", childSerialID);
@@ -649,17 +651,20 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t** child, const char* childSeri
   /* First, check to see if it is our ID */
   printf("Parent ID: %s\n", parent->serialID);
   if(!strcmp(parent->serialID, childSerialID)) {
-    *child = parent;
+    child->parent = parent;
+    child->connected = 1;
+    child->connectionMode = MOBOTCONNECT_ZIGBEE;
+    parent->child = child;
     return 0;
   }
-  /* Now check to see if the requested child is already in the list of knows
+  /* Now check to see if the requested child is already in the list of known
    * Serial ID's */  
   bool idFound = false;
-  mobot_t* iter;
+  mobotInfo_t* iter;
   int i;
   for(i = 0; i < 2; i++) {
     MUTEX_LOCK(parent->mobotTree_lock);
-    for(iter = parent->next; iter != NULL; iter = iter->next)
+    for(iter = parent->children; iter != NULL; iter = iter->next)
     {
       if(!strncmp(iter->serialID, childSerialID, 4)) {
         idFound = true;
@@ -667,9 +672,11 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t** child, const char* childSeri
       }
     }
     if(idFound) {
-      *child = iter;
-      (*child)->connected = 1;
-      (*child)->connectionMode = MOBOTCONNECT_ZIGBEE;
+      child->connected = 1;
+      child->connectionMode = MOBOTCONNECT_ZIGBEE;
+      child->parent = iter->parent;
+      child->zigbeeAddr = iter->zigbeeAddr;
+      iter->mobot = child;
       MUTEX_UNLOCK(parent->mobotTree_lock);
       return 0;
     } else if (i == 0){
@@ -684,7 +691,6 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t** child, const char* childSeri
   }
   /* Did not find the child */
   MUTEX_UNLOCK(parent->mobotTree_lock);
-  *child = NULL;
   return -1;
 }
 
@@ -1177,8 +1183,7 @@ int Mobot_init(mobot_t* comms)
   COND_NEW(comms->mobotTree_cond);
   COND_INIT(comms->mobotTree_cond);
   comms->parent = NULL;
-  comms->next = NULL;
-  comms->prev = NULL;
+  comms->children = NULL;
 
   if(g_bcf == NULL) {
     g_bcf = BCF_New();
@@ -1421,15 +1426,20 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
     ts.tv_nsec = mts.tv_nsec;
 #endif
     /* Add a timeout */
-    ts.tv_nsec += 200000000; // 100 ms
+    ts.tv_nsec += 900000000; // 100 ms
     if(ts.tv_nsec > 1000000000) {
       ts.tv_nsec -= 1000000000;
       ts.tv_sec += 1;
     }
+    /*
     rc = pthread_cond_timedwait(
       comms->recvBuf_cond, 
       comms->recvBuf_lock,
       &ts);
+      */
+    rc = pthread_cond_wait(
+      comms->recvBuf_cond, 
+      comms->recvBuf_lock);
     if(rc) {
       /* Disconnect and return error */
       MUTEX_UNLOCK(comms->recvBuf_lock);
@@ -1552,7 +1562,7 @@ void sigint_handler(int sig)
 void* commsEngine(void* arg)
 {
   mobot_t* comms = (mobot_t*)arg;
-  mobot_t* iter;
+  mobotInfo_t* iter;
   uint8_t byte;
   uint16_t uint16;
   int bytes = 0;
@@ -1673,25 +1683,39 @@ void* commsEngine(void* arg)
           uint16 |= comms->recvBuf[3] & 0x00ff;
           if(uint16 == 0) {
             /* Address of 0 means the connected TTY mobot */
-            MUTEX_LOCK(comms->recvBuf_lock);
-            tmpbuf = (uint8_t*)malloc(comms->recvBuf[6]);
-            memcpy(tmpbuf, &comms->recvBuf[5], comms->recvBuf[6]);
-            memcpy(comms->recvBuf, tmpbuf, tmpbuf[1]);
-            free(tmpbuf);
-            comms->recvBuf_ready = 1;
-            comms->recvBuf_bytes = comms->recvBuf[1];
-            COND_BROADCAST(comms->recvBuf_cond);
-            MUTEX_UNLOCK(comms->recvBuf_lock);
+            if(comms->child == NULL) { 
+              MUTEX_LOCK(comms->recvBuf_lock);
+              tmpbuf = (uint8_t*)malloc(comms->recvBuf[6]);
+              memcpy(tmpbuf, &comms->recvBuf[5], comms->recvBuf[6]);
+              memcpy(comms->recvBuf, tmpbuf, tmpbuf[1]);
+              free(tmpbuf);
+              comms->recvBuf_ready = 1;
+              comms->recvBuf_bytes = comms->recvBuf[1];
+              COND_BROADCAST(comms->recvBuf_cond);
+              MUTEX_UNLOCK(comms->recvBuf_lock);
+            } else {
+              MUTEX_LOCK(comms->child->recvBuf_lock);
+              MUTEX_LOCK(comms->recvBuf_lock);
+              tmpbuf = (uint8_t*)malloc(comms->recvBuf[6]);
+              memcpy(tmpbuf, &comms->recvBuf[5], comms->recvBuf[6]);
+              memcpy(comms->child->recvBuf, tmpbuf, tmpbuf[1]);
+              free(tmpbuf);
+              comms->child->recvBuf_ready = 1;
+              comms->child->recvBuf_bytes = comms->recvBuf[1];
+              COND_BROADCAST(comms->child->recvBuf_cond);
+              MUTEX_UNLOCK(comms->child->recvBuf_lock);
+              MUTEX_UNLOCK(comms->recvBuf_lock);
+            }
           } else { 
             /* See if it matches any of our children */
-            for(iter = comms->next; iter != NULL; iter = iter->next) {
+            for(iter = comms->children; iter != NULL; iter = iter->next) {
               if(uint16 == iter->zigbeeAddr) {
-                MUTEX_LOCK(iter->recvBuf_lock);
-                memcpy(iter->recvBuf, &comms->recvBuf[5], comms->recvBuf[6]);
-                iter->recvBuf_ready = 1;
-                iter->recvBuf_bytes = iter->recvBuf[1];
-                COND_BROADCAST(iter->recvBuf_cond);
-                MUTEX_UNLOCK(iter->recvBuf_lock);
+                MUTEX_LOCK(iter->mobot->recvBuf_lock);
+                memcpy(((mobot_t*)iter->mobot)->recvBuf, &((mobot_t*)comms->mobot)->recvBuf[5], ((mobot_t*)comms->mobot)->recvBuf[6]);
+                iter->mobot->recvBuf_ready = 1;
+                iter->mobot->recvBuf_bytes = iter->mobot->recvBuf[1];
+                COND_BROADCAST(iter->mobot->recvBuf_cond);
+                MUTEX_UNLOCK(iter->mobot->recvBuf_lock);
                 break;
               }
             }
@@ -1745,8 +1769,8 @@ void* commsEngine(void* arg)
           /* Check the list to see if the reported address aready exists */
           MUTEX_LOCK(comms->mobotTree_lock);
           bool addressFound = false;
-          mobot_t* iter;
-          for(iter = comms->next; iter != NULL; iter = iter->next) {
+          mobotInfo_t* iter;
+          for(iter = comms->children; iter != NULL; iter = iter->next) {
             if(!strncmp(iter->serialID, (const char*)&comms->recvBuf[4], 4)) {
               addressFound = true;
               break;
@@ -1755,21 +1779,18 @@ void* commsEngine(void* arg)
           /* If the address is not found, add a new Mobot with that address to
            * the head of the list */
           if(!addressFound) {
-            mobot_t* tmp = (mobot_t*)malloc(sizeof(mobot_t));
-            Mobot_init(tmp);
+            mobotInfo_t* tmp = (mobotInfo_t*)malloc(sizeof(mobotInfo_t));
+            memset(tmp, 0, sizeof(mobotInfo_t));
             /* Copy the zigbee address */
             tmp->zigbeeAddr = comms->recvBuf[2] << 8;
             tmp->zigbeeAddr |= comms->recvBuf[3] & 0x00ff;
             /* Copy the serial number */
             memcpy(tmp->serialID, &comms->recvBuf[4], 4);
-            /* Stick it on the head of the list */
-            if(comms->next != NULL) {
-              comms->next->prev = tmp;
-            }
-            tmp->next = comms->next;
-            comms->next = tmp;
-            tmp->prev = NULL;
+            /* Set the parent */
             tmp->parent = comms;
+            /* Stick it on the head of the list */
+            tmp->next = comms->children;
+            comms->children = tmp;
           }
           COND_SIGNAL(comms->mobotTree_cond);
           MUTEX_UNLOCK(comms->mobotTree_lock);
