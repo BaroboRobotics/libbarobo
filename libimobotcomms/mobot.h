@@ -149,7 +149,7 @@ typedef struct mobot_s
   void* commHandle;
 #endif
   int connected;
-  int connectionMode;
+  mobotConnectionMode_t connectionMode;
 #ifndef __MACH__
   sockaddr_t *addr;
 #endif

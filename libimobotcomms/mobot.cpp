@@ -1096,7 +1096,7 @@ int Mobot_init(mobot_t* comms)
   memset(comms->addr, 0, sizeof(sockaddr_t));
 #endif
   comms->connected = 0;
-  comms->connectionMode = 0;
+  comms->connectionMode = MOBOTCONNECT_NONE;
 #ifdef _WIN32
   WSADATA wsd;
   if(WSAStartup (MAKEWORD(2,2), &wsd) != 0) {
