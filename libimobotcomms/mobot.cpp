@@ -1711,7 +1711,7 @@ void* commsEngine(void* arg)
             for(iter = comms->children; iter != NULL; iter = iter->next) {
               if(uint16 == iter->zigbeeAddr) {
                 MUTEX_LOCK(iter->mobot->recvBuf_lock);
-                memcpy(((mobot_t*)iter->mobot)->recvBuf, &((mobot_t*)comms->mobot)->recvBuf[5], ((mobot_t*)comms->mobot)->recvBuf[6]);
+                memcpy(((mobot_t*)iter->mobot)->recvBuf, &comms->recvBuf[5], comms->recvBuf[6]);
                 iter->mobot->recvBuf_ready = 1;
                 iter->mobot->recvBuf_bytes = iter->mobot->recvBuf[1];
                 COND_BROADCAST(iter->mobot->recvBuf_cond);
