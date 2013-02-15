@@ -215,6 +215,42 @@ int CMobot::enableButtonCallback(void (*buttonCallback)(CMobot* robot, int butto
     dlrunfun(fptr, &retval, NULL, this, buttonCallback);
     return retval;
 }
+int CMobot::getAccelerometerData(double &x, double &y, double &z ) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "getAccelerometerData_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, &x, &y, &z);
+    return retval;
+}
+int CMobot::getBatteryVoltage(double &voltage) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "getBatteryVoltage_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, &voltage);
+    return retval;
+}
+int CMobot::getColorRGB(double &r, double &g, double &b ) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "getColorRGB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, &r, &g, &b);
+    return retval;
+}
 int CMobot::getJointAngle(int id, double & angle) {
     void *fptr;
     int retval;
@@ -1205,6 +1241,18 @@ int CMobot::resetToZeroNB() {
         return -1;
     }
     dlrunfun(fptr, &retval, resetToZeroNB, this);
+    return retval;
+}
+int CMobot::setColorRGB(double r, double g, double b) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "setColorRGB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setColorRGB, this, r, g, b);
     return retval;
 }
 int CMobot::setExitState(int exitState) {

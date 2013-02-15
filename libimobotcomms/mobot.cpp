@@ -1170,7 +1170,6 @@ int Mobot_init(mobot_t* comms)
   strcat(path, "/.Barobo.config");
   comms->configFilePath = strdup(path);
 #endif
-  g_bcf = NULL;
   comms->numItemsToFreeOnExit = 0;
   memset(comms->serialID, 5, sizeof(char));
   MUTEX_NEW(comms->mobotTree_lock);
