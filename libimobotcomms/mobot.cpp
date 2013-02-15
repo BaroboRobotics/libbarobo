@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <ctype.h>
+#include <regex.h>
 #include "mobot.h"
 #include "mobot_internal.h"
 #ifndef _WIN32
@@ -50,8 +51,12 @@
 int g_numConnected = 0;
 int g_disconnectSignal = 0;
 
+mobot_t* g_dongleMobot = NULL;
+
 void sendBufAppend(mobot_t* comms, uint8_t* data, int len);
 void* commsOutEngine(void* arg);
+
+bcf_t* g_bcf;
 
 double deg2rad(double deg)
 {
@@ -154,22 +159,21 @@ int Mobot_connect(mobot_t* comms)
   const char* path = comms->configFilePath;
   char buf[512];
   const char *str;
-  static bcf_t* bcf = NULL;
-  if(bcf == NULL) {
-    bcf = BCF_New();
-    if(BCF_Read(bcf, path)) {
+  if(g_bcf == NULL) {
+    g_bcf = BCF_New();
+    if(BCF_Read(g_bcf, path)) {
       fprintf(stderr, 
           "ERROR: Your Barobo configuration file does not exist.\n"
           "Please create one by opening the MoBot remote control, clicking on\n"
           "the 'Robot' menu entry, and selecting 'Configure Robot Bluetooth'.\n");
-      BCF_Destroy(bcf);
-      bcf = NULL;
+      BCF_Destroy(g_bcf);
+      g_bcf = NULL;
       return -1;
     }
   }
 
   /* Read the correct line */
-  str = BCF_GetIndex(bcf, g_numConnected);
+  str = BCF_GetIndex(g_bcf, g_numConnected);
   if(str) {
    strcpy(buf, str);
   } 
@@ -274,9 +278,44 @@ int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], const char 
   return 0;
 }
 
+void Mobot_initDongle()
+{
+  int rc;
+  if(g_dongleMobot == NULL) {
+    g_dongleMobot = (mobot_t*)malloc(sizeof(mobot_t));
+    Mobot_init(g_dongleMobot);
+  }
+  if(g_dongleMobot->connected == 0) {
+    int i;
+    for(i = 0; i < BCF_GetNumDongles(g_bcf); i++) {
+      printf("%s\n", BCF_GetDongle(g_bcf, i));
+      rc = Mobot_connectWithTTY(g_dongleMobot, BCF_GetDongle(g_bcf, i));
+      if(rc == 0) {
+        break;
+      }
+    }
+  }
+}
+
 int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
 {
-  return Mobot_connectWithBluetoothAddress(comms, address, channel);
+  /* Depending on the format of the address, we should either try bluetooth
+   * connection or zigbee connection */
+  int rc;
+  regex_t regex;
+  /* Try to match a Bluetooth mac address similar to 00:06:66:45:AE:3F */
+  rc = regcomp(&regex, "\\<\\([0-9a-fA-F]\\{2\\}:\\)\\{5\\}[0-9a-fA-F]\\{2\\}\\>", REG_ICASE);
+  if(rc) {
+    fprintf(stderr, "FATAL: Error compiling regex %s:%d\n", __FILE__, __LINE__);
+    exit(0);
+  }
+  rc = regexec(&regex, address, 0, NULL, 0);
+  regfree(&regex);
+  if(rc == 0) {
+    return Mobot_connectWithBluetoothAddress(comms, address, channel);
+  } else {
+    return Mobot_connectChildID(g_dongleMobot, &comms, address);
+  }
 }
 
 int Mobot_connectWithBluetoothAddress(mobot_t* comms, const char* address, int channel)
@@ -367,13 +406,19 @@ int Mobot_connectWithBluetoothAddress(mobot_t* comms, const char* address, int c
   //fcntl(comms->socket, F_SETFL, flags | O_NONBLOCK);
   /* Wait for the MoBot to get ready */
   //sleep(1);
+  comms->connectionMode = MOBOTCONNECT_BLUETOOTH;
+  comms->connected = 1;
   status = finishConnect(comms);
-  if(!status) {
-    comms->connectionMode = MOBOTCONNECT_BLUETOOTH;
-  }
+  if(status) {
+    comms->connectionMode = MOBOTCONNECT_NONE;
+    comms->connected = 0;
+  } 
   return status;
 #else
-  return Mobot_connectWithAddressTTY(comms, address);
+  err = Mobot_connectWithAddressTTY(comms, address);
+  if(err) return err;
+  comms->connectionMode = MOBOTCONNECT_BLUETOOTH;
+  return 0;
 #endif
 }
 
@@ -562,6 +607,7 @@ int Mobot_connectChild(mobot_t* parent, mobot_t** child)
   bool idFound = false;
   mobot_t* iter;
   int i;
+  Mobot_initDongle();
   for(i = 0; i < 2; i++) {
     MUTEX_LOCK(parent->mobotTree_lock);
     for(iter = parent->next; iter != NULL; iter = iter->next)
@@ -595,7 +641,13 @@ int Mobot_connectChild(mobot_t* parent, mobot_t** child)
 
 int Mobot_connectChildID(mobot_t* parent, mobot_t** child, const char* childSerialID)
 {
+  Mobot_initDongle();
+  printf("Connecting to %s\n", childSerialID);
+  if(parent == NULL) {
+    parent = g_dongleMobot;
+  }
   /* First, check to see if it is our ID */
+  printf("Parent ID: %s\n", parent->serialID);
   if(!strcmp(parent->serialID, childSerialID)) {
     *child = parent;
     return 0;
@@ -1118,6 +1170,7 @@ int Mobot_init(mobot_t* comms)
   strcat(path, "/.Barobo.config");
   comms->configFilePath = strdup(path);
 #endif
+  g_bcf = NULL;
   comms->numItemsToFreeOnExit = 0;
   memset(comms->serialID, 5, sizeof(char));
   MUTEX_NEW(comms->mobotTree_lock);
@@ -1127,6 +1180,19 @@ int Mobot_init(mobot_t* comms)
   comms->parent = NULL;
   comms->next = NULL;
   comms->prev = NULL;
+
+  if(g_bcf == NULL) {
+    g_bcf = BCF_New();
+    if(BCF_Read(g_bcf, path)) {
+      fprintf(stderr, 
+          "ERROR: Your Barobo configuration file does not exist.\n"
+          "Please create one by opening the MoBot remote control, clicking on\n"
+          "the 'Robot' menu entry, and selecting 'Configure Robot Bluetooth'.\n");
+      BCF_Destroy(g_bcf);
+      g_bcf = NULL;
+      return -1;
+    }
+  }
   return 0;
 }
 
@@ -1237,22 +1303,33 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
   }
   MUTEX_LOCK(comms->commsLock);
   comms->recvBuf_ready = 0;
-  str[0] = cmd;
-  str[1] = datasize + 8;
-  if(comms->connectionMode == MOBOTCONNECT_ZIGBEE) {
-    str[2] = comms->zigbeeAddr >> 8;
-    str[3] = comms->zigbeeAddr & 0x00ff;
-  } else {
-    str[2] = 0x00;
-    str[3] = 0x00;
-  }
-  str[4] = 1;
-  str[5] = cmd;
-  str[6] = datasize + 3;
 
-  if(datasize > 0) memcpy(&str[7], data, datasize);
-  str[datasize+7] = MSG_SENDEND;
-  len = datasize + 8;
+  if(comms->connectionMode == MOBOTCONNECT_BLUETOOTH) {
+    str[0] = cmd;
+    str[1] = datasize + 3;
+    if(datasize > 0) {
+      memcpy(&str[2], data, datasize);
+    }
+    str[datasize+2] = MSG_SENDEND;
+    len = datasize + 3;
+  } else {
+    str[0] = cmd;
+    str[1] = datasize + 8;
+    if(comms->connectionMode == MOBOTCONNECT_ZIGBEE) {
+      str[2] = comms->zigbeeAddr >> 8;
+      str[3] = comms->zigbeeAddr & 0x00ff;
+    } else {
+      str[2] = 0x00;
+      str[3] = 0x00;
+    }
+    str[4] = 1;
+    str[5] = cmd;
+    str[6] = datasize + 3;
+
+    if(datasize > 0) memcpy(&str[7], data, datasize);
+    str[datasize+7] = MSG_SENDEND;
+    len = datasize + 8;
+  }
 #if 0
   char* str;
   str = (char*)malloc(strlen(buf)+2);
@@ -1261,13 +1338,11 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
   len++;
 #endif
   //printf("SEND %d: <<%s>>\n", comms->socket, str);
-  /*
   printf("SEND: ");
   for(i = 0; i < len; i++) {
     printf("0x%x ", str[i]);
   }
   printf("\n");
-  */
 
 #ifndef _WIN32
   if(comms->connectionMode == MOBOTCONNECT_ZIGBEE) {
@@ -1378,13 +1453,12 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
   memcpy(buf, comms->recvBuf, comms->recvBuf_bytes);
 
   /* Print out results */
-  /* 
   int i;
+  printf("RECV: ");
   for(i = 0; i < buf[1]; i++) {
     printf("0x%2x ", buf[i]);
   }
   printf("\n");
-  */
   MUTEX_UNLOCK(comms->recvBuf_lock);
   MUTEX_UNLOCK(comms->commsLock);
   return 0;
@@ -1561,7 +1635,7 @@ void* commsEngine(void* arg)
     /* Received a byte. If it is the first one, check to see if it is a
      * response or a triggered event */
     /* DEBUG */
-    //printf("%d RECV: 0x%0x\n", bytes, byte);
+    printf("%d RECV: 0x%0x\n", bytes, byte);
     if(bytes == 0) {
       MUTEX_LOCK(comms->commsBusy_lock);
       comms->commsBusy = 1;
@@ -1585,32 +1659,42 @@ void* commsEngine(void* arg)
       {
         /* We have received the entire response */
         /* We need to copy it to the correct receive buffer */
-        /* Check to see if it matches our address */
-        uint16 = 0;
-        uint16 = comms->recvBuf[2]<<8;
-        uint16 |= comms->recvBuf[3] & 0x00ff;
-        if(uint16 == 0) {
-          /* Address of 0 means the connected TTY mobot */
-          MUTEX_LOCK(comms->recvBuf_lock);
-          tmpbuf = (uint8_t*)malloc(comms->recvBuf[6]);
-          memcpy(tmpbuf, &comms->recvBuf[5], comms->recvBuf[6]);
-          memcpy(comms->recvBuf, tmpbuf, tmpbuf[1]);
-          free(tmpbuf);
-          comms->recvBuf_ready = 1;
-          comms->recvBuf_bytes = comms->recvBuf[1];
-          COND_BROADCAST(comms->recvBuf_cond);
-          MUTEX_UNLOCK(comms->recvBuf_lock);
-        } else { 
-          /* See if it matches any of our children */
-          for(iter = comms->next; iter != NULL; iter = iter->next) {
-            if(uint16 == iter->zigbeeAddr) {
-              MUTEX_LOCK(iter->recvBuf_lock);
-              memcpy(iter->recvBuf, &comms->recvBuf[5], comms->recvBuf[6]);
-              iter->recvBuf_ready = 1;
-              iter->recvBuf_bytes = iter->recvBuf[1];
-              COND_BROADCAST(iter->recvBuf_cond);
-              MUTEX_UNLOCK(iter->recvBuf_lock);
-              break;
+        /* First, check to see if we are using the old Bluetooth protocol or
+         * the new Zigbee protocol... */
+        if(comms->connectionMode == MOBOTCONNECT_BLUETOOTH) {
+            MUTEX_LOCK(comms->recvBuf_lock);
+            comms->recvBuf_ready = 1;
+            comms->recvBuf_bytes = comms->recvBuf[1];
+            COND_BROADCAST(comms->recvBuf_cond);
+            MUTEX_UNLOCK(comms->recvBuf_lock);
+        } else {
+          /* Check to see if it matches our address */
+          uint16 = 0;
+          uint16 = comms->recvBuf[2]<<8;
+          uint16 |= comms->recvBuf[3] & 0x00ff;
+          if(uint16 == 0) {
+            /* Address of 0 means the connected TTY mobot */
+            MUTEX_LOCK(comms->recvBuf_lock);
+            tmpbuf = (uint8_t*)malloc(comms->recvBuf[6]);
+            memcpy(tmpbuf, &comms->recvBuf[5], comms->recvBuf[6]);
+            memcpy(comms->recvBuf, tmpbuf, tmpbuf[1]);
+            free(tmpbuf);
+            comms->recvBuf_ready = 1;
+            comms->recvBuf_bytes = comms->recvBuf[1];
+            COND_BROADCAST(comms->recvBuf_cond);
+            MUTEX_UNLOCK(comms->recvBuf_lock);
+          } else { 
+            /* See if it matches any of our children */
+            for(iter = comms->next; iter != NULL; iter = iter->next) {
+              if(uint16 == iter->zigbeeAddr) {
+                MUTEX_LOCK(iter->recvBuf_lock);
+                memcpy(iter->recvBuf, &comms->recvBuf[5], comms->recvBuf[6]);
+                iter->recvBuf_ready = 1;
+                iter->recvBuf_bytes = iter->recvBuf[1];
+                COND_BROADCAST(iter->recvBuf_cond);
+                MUTEX_UNLOCK(iter->recvBuf_lock);
+                break;
+              }
             }
           }
         }
