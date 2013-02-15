@@ -1426,20 +1426,20 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
     ts.tv_nsec = mts.tv_nsec;
 #endif
     /* Add a timeout */
-    ts.tv_nsec += 900000000; // 100 ms
+    ts.tv_nsec += 200000000; // 100 ms
     if(ts.tv_nsec > 1000000000) {
       ts.tv_nsec -= 1000000000;
       ts.tv_sec += 1;
     }
-    /*
     rc = pthread_cond_timedwait(
       comms->recvBuf_cond, 
       comms->recvBuf_lock,
       &ts);
-      */
+    /*
     rc = pthread_cond_wait(
       comms->recvBuf_cond, 
       comms->recvBuf_lock);
+      */
     if(rc) {
       /* Disconnect and return error */
       MUTEX_UNLOCK(comms->recvBuf_lock);
