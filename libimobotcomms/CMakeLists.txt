@@ -14,6 +14,7 @@ if(CMAKE_HOST_WIN32)
   include(FindPkgConfig)
   pkg_check_modules(MXML REQUIRED mxml)
   include_directories(${MXML_INCLUDE_DIRS})
+  link_directories(/usr/lib)
   add_definitions(-D_WIN32_WINNT=0x501 -DENABLE_BLUETOOTH)
 	add_library(mobot STATIC
 	  mobot.cpp
@@ -23,7 +24,7 @@ if(CMAKE_HOST_WIN32)
     mobot_record_functions.cpp
     mobot_set_functions.cpp
 	  )
-	target_link_libraries(mobot Ws2_32 baroboconfigfile)
+	target_link_libraries(mobot Ws2_32 baroboconfigfile regex mxml pthread)
   #set_target_properties(mobot PROPERTIES COMPILE_FLAGS "/GS-")
   install(TARGETS mobot
           ARCHIVE DESTINATION lib)

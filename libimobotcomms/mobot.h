@@ -697,7 +697,7 @@ DLLIMPORT int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], c
 DLLIMPORT int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address);
 #endif
 DLLIMPORT int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename);
-DLLIMPORT int Mobot_connectChild(mobot_t* parent, mobot_t** child);
+DLLIMPORT int Mobot_connectChild(mobot_t* parent, mobot_t* child);
 DLLIMPORT int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSerialID);
 DLLIMPORT int Mobot_connectWithAddress(
     mobot_t* comms, const char* address, int channel);

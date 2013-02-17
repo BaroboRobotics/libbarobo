@@ -592,7 +592,7 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   rc = finishConnect(comms);
   if(rc) {
     comms->connected = 0;
-    comms->connectionMode = 0;
+    comms->connectionMode = MOBOTCONNECT_NONE;
     return rc;
   }
   Mobot_getID(comms);
