@@ -1342,11 +1342,13 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
   len++;
 #endif
   //printf("SEND %d: <<%s>>\n", comms->socket, str);
+  /*
   printf("SEND: ");
   for(i = 0; i < len; i++) {
     printf("0x%x ", str[i]);
   }
   printf("\n");
+  */
 
 #ifndef _WIN32
   if(comms->connectionMode == MOBOTCONNECT_ZIGBEE) {
@@ -1463,11 +1465,13 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
 
   /* Print out results */
   int i;
+  /*
   printf("RECV: ");
   for(i = 0; i < buf[1]; i++) {
     printf("0x%2x ", buf[i]);
   }
   printf("\n");
+  */
   MUTEX_UNLOCK(comms->recvBuf_lock);
   MUTEX_UNLOCK(comms->commsLock);
   return 0;
@@ -1644,7 +1648,7 @@ void* commsEngine(void* arg)
     /* Received a byte. If it is the first one, check to see if it is a
      * response or a triggered event */
     /* DEBUG */
-    printf("%d RECV: 0x%0x\n", bytes, byte);
+    //printf("%d RECV: 0x%0x\n", bytes, byte);
     if(bytes == 0) {
       MUTEX_LOCK(comms->commsBusy_lock);
       comms->commsBusy = 1;
