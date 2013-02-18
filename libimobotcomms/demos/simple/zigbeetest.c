@@ -17,7 +17,8 @@ int main()
   mobot_t child;
   Mobot_init(&mobot);
   Mobot_init(&mobot2);
-  if(rc = Mobot_connectWithTTY(&mobot, "COM3")) {
+  Mobot_init(&child);
+  if(rc = Mobot_connect(&mobot)) {
     fprintf(stderr, "Connection failed.\n");
     exit(0);
   }
@@ -29,11 +30,13 @@ int main()
   sleep(3);
   Mobot_getQueriedAddresses(&mobot);
   */
+  /*
   if(rc = Mobot_connectChild(&mobot, &child)) {
   //if(rc = Mobot_connectChildID(&mobot, &child, "A001")) {
     fprintf(stderr, "Error connecting to child.\n");
     exit(0);
   }
+  */
 
   /*
   printf("Setting motor 1 to full power...\n");
@@ -94,9 +97,9 @@ int main()
     //Mobot_moveJointToNB(child, 2, angle2);
     for(i = 0; i < 20; i++) {
       //Mobot_getBatteryVoltage(child, &v);
-      Mobot_setBuzzerFrequencyOn(&child, rand()%2000);
+      Mobot_setBuzzerFrequencyOn(&mobot, rand()%2000);
       //Mobot_setBuzzerFrequency(child, 0);
-      Mobot_setColorRGB(&child, rand()%255, rand()%255, rand()%255);
+      Mobot_setColorRGB(&mobot, rand()%255, rand()%255, rand()%255);
 /*
       if(Mobot_getAccelData(child, &x, &y, &z)) {
         printf("Error getting accel data...\n");

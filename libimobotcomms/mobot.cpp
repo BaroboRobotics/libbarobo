@@ -108,52 +108,6 @@ int Mobot_connect(mobot_t* comms)
   if(Mobot_connectWithTCP(comms) == 0) {
     return 0;
   }
-#ifdef _WIN32
-  /* Find the user's local appdata directory */
-  int i;
-  FILE *fp;
-  char* path;
-  char buf[512];
-  path = comms->configFilePath;
-  fp = fopen(path, "r");
-  if(fp == NULL) {
-    /* The file doesn't exist. Gotta make the file */
-    fprintf(stderr, 
-        "ERROR: Your Barobo configuration file does not exist.\n"
-        "Please create one by opening the MoBot remote control, clicking on\n"
-        "the 'Robot' menu entry, and selecting 'Configure Robot Bluetooth'.\n");
-    return -1;
-  }
-  /* Read the correct line */
-  for(i = 0; i < g_numConnected+1; i++) {
-    if(fgets(buf, MAX_PATH, fp) == NULL) {
-      return -4;
-    }
-  }
-  fclose(fp);
-  /* Get rid of trailing newline and/or carriage return */
-  while(
-      (buf[strlen(buf)-1] == '\r' ) ||
-      (buf[strlen(buf)-1] == '\n' ) 
-      )
-  {
-    buf[strlen(buf)-1] = '\0';
-  }
-  /* Make sure the format is correct */
-  if(strlen(buf) != 17) {
-    return -3;
-  }
-  /* Pass it on to connectWithAddress() */
-  if(i = Mobot_connectWithAddress(comms, buf, 1)) {
-    return i;
-  } else {
-    g_numConnected++;
-    return i;
-  }
-  return -1;
-
-#else /* if not Windows */
-#define MAX_PATH 512
   FILE *fp;
   int i;
   const char* path = comms->configFilePath;
@@ -185,7 +139,7 @@ int Mobot_connect(mobot_t* comms)
   {
     buf[strlen(buf)-1] = '\0';
   }
-#ifndef __MACH__ /* If Unix */
+#ifndef __MACH__ /* If Unix or Windows */
   /* Pass it on to connectWithAddress() */
   if(i = Mobot_connectWithAddress(comms, buf, 1)) {
     return i;
@@ -211,7 +165,7 @@ int Mobot_connect(mobot_t* comms)
     return i;
   }
 #endif /* Fi Linux/Mac */
-#endif
+  return 0;
 }
 
 #define PORT "5768"
