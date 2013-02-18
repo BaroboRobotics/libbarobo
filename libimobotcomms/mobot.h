@@ -61,7 +61,7 @@
 #ifndef _CH_
 typedef unsigned char uint8_t;
 #ifndef _MSYS
-typedef WORD uint16_t;
+typedef unsigned short uint16_t;
 #endif
 #endif
 #endif
@@ -147,7 +147,7 @@ typedef struct mobotInfo_s
 typedef struct mobot_s
 {
   int socket;
-#ifdef _WIN32
+#if defined (_WIN32) && !defined(_CH_)
   HANDLE commHandle;
 #else
   void* commHandle;
