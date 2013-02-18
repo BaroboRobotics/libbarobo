@@ -86,7 +86,7 @@ int Mobot_getID(mobot_t* comms)
   return 0;
 }
 
-int Mobot_getAccelerometerData(mobot_t* comms, int *accel_x, int *accel_y, int *accel_z)
+int Mobot_getAccelerometerData(mobot_t* comms, double *accel_x, double *accel_y, double *accel_z)
 {
   uint8_t buf[32];
   float f;
@@ -103,11 +103,11 @@ int Mobot_getAccelerometerData(mobot_t* comms, int *accel_x, int *accel_y, int *
   }
   /* Copy the data */
   memcpy(&i, &buf[2], 2);
-  *accel_x = i;
+  *accel_x = (double)i/16384.0;
   memcpy(&i, &buf[4], 2);
-  *accel_y = i;
+  *accel_y = (double)i/16384.0;
   memcpy(&i, &buf[6], 2);
-  *accel_z = i;
+  *accel_z = (double)i/16384.0;
   return 0;
 }
 
@@ -691,14 +691,14 @@ int CMobot::getID()
 
 int CMobot::getAccelerometerData(double &accel_x, double &accel_y, double &accel_z)
 {
-  int _x, _y, _z, rc;
+  double _x, _y, _z; int rc;
   rc = Mobot_getAccelerometerData(_comms, &_x, &_y, &_z);
   if(rc) {
     return rc;
   }
-  accel_x = _x/16384.0;
-  accel_y = _y/16384.0;
-  accel_z = _z/16384.0;
+  accel_x = _x;
+  accel_y = _y;
+  accel_z = _z;
   return 0;
 }
 
