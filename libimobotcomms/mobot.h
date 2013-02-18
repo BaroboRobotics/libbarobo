@@ -61,7 +61,7 @@
 #ifndef _CH_
 typedef unsigned char uint8_t;
 #ifndef _MSYS
-typedef WORD uint16_t;
+typedef unsigned short uint16_t;
 #endif
 #endif
 #endif
@@ -147,7 +147,7 @@ typedef struct mobotInfo_s
 typedef struct mobot_s
 {
   int socket;
-#ifdef _WIN32
+#if defined (_WIN32) && !defined(_CH_)
   HANDLE commHandle;
 #else
   void* commHandle;
@@ -697,7 +697,7 @@ DLLIMPORT int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], c
 DLLIMPORT int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address);
 #endif
 DLLIMPORT int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename);
-DLLIMPORT int Mobot_connectChild(mobot_t* parent, mobot_t** child);
+DLLIMPORT int Mobot_connectChild(mobot_t* parent, mobot_t* child);
 DLLIMPORT int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSerialID);
 DLLIMPORT int Mobot_connectWithAddress(
     mobot_t* comms, const char* address, int channel);

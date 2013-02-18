@@ -3,16 +3,33 @@ VERSION=0.1
 HEADERS=../mobot.h
 PKGDIR=$(PACKAGE)-$(VERSION)/$(PACKAGE)
 
+CFLAGS= -DNONRELEASE -I../../../BaroboConfigFile -I./
+
 target: libmobot.dl
 
-libmobot.dl: mobot.obj chmobot_chdl.obj
-	ch dllink libmobot.dl cplusplus mobot.obj chmobot_chdl.obj ws2_32.lib shell32.lib
+libmobot.dl: mobot.obj chmobot_chdl.obj mobot_get_functions.obj mobot_motion_functions.obj mobot_movement_functions.obj mobot_record_functions.obj mobot_set_functions.obj
+	ch dllink libmobot.dl cplusplus mobot.obj chmobot_chdl.obj mobot_get_functions.obj mobot_motion_functions.obj mobot_movement_functions.obj mobot_record_functions.obj mobot_set_functions.obj ws2_32.lib shell32.lib baroboconfigfile.lib regex.lib mxml.lib intl.lib C:/MinGW/lib/libmingwex.a C:/MinGW/lib/gcc/mingw32/4.6.2/libgcc.a #C:/MinGW/lib/libmsvcrt.a
 
 mobot.obj: ../mobot.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus -DNONRELEASE ../mobot.cpp
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot.cpp
+
+mobot_get_functions.obj: ../mobot_get_functions.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_get_functions.cpp
+
+mobot_motion_functions.obj: ../mobot_motion_functions.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_motion_functions.cpp
+
+mobot_movement_functions.obj: ../mobot_movement_functions.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_movement_functions.cpp
+
+mobot_record_functions.obj: ../mobot_record_functions.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_record_functions.cpp
+
+mobot_set_functions.obj: ../mobot_set_functions.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_set_functions.cpp
 
 chmobot_chdl.obj: chmobot_chdl.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus -DNONRELEASE chmobot_chdl.cpp
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) chmobot_chdl.cpp
 
 install:
 	ch pkginstall.ch $(PACKAGE)
