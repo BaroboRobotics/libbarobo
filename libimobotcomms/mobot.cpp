@@ -601,6 +601,24 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
 
 #endif
 
+int getFormFactor(mobot_t* comms, int* form)
+{
+  uint8_t buf[32];
+  int status;
+  status = SendToIMobot(comms, BTCMD(CMD_GETFORMFACTOR), NULL, 0);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 4) {
+    return -1;
+  }
+  /* Copy the data */
+  *form = buf[2];
+  return 0;
+}
+
 int Mobot_connectChild(mobot_t* parent, mobot_t* child)
 {
   /* First check to see if the requested child is already in the list of knows
@@ -661,7 +679,7 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
    * Serial ID's */  
   bool idFound = false;
   mobotInfo_t* iter;
-  int i;
+  int i; int form; int rc;
   for(i = 0; i < 2; i++) {
     MUTEX_LOCK(parent->mobotTree_lock);
     for(iter = parent->children; iter != NULL; iter = iter->next)
@@ -676,7 +694,14 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
       child->connectionMode = MOBOTCONNECT_ZIGBEE;
       child->parent = iter->parent;
       child->zigbeeAddr = iter->zigbeeAddr;
+      /* Get the form factor */
       iter->mobot = child;
+      rc = getFormFactor(child, &form);
+      if(rc) {
+        child->formFactor = MOBOTFORM_ORIGINAL;
+      } else {
+        child->formFactor = (mobotFormFactor_t)form;
+      }
       MUTEX_UNLOCK(parent->mobotTree_lock);
       return 0;
     } else if (i == 0){
@@ -698,7 +723,8 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
  * Perform final connecting tasks common to all connection methods */
 int finishConnect(mobot_t* comms)
 {
-  int i = 0;
+  int i = 0, rc;
+  mobotFormFactor_t form;
   uint8_t buf[256];
   /* Start the comms engine */
   THREAD_CREATE(comms->commsThread, commsEngine, comms);
@@ -728,6 +754,12 @@ int finishConnect(mobot_t* comms)
     fprintf(stderr, "Mobot Firmware Protocol Version: %d\n", version);
     fprintf(stderr, "CMobot Library Protocol Version: %d\n", CMD_NUMCOMMANDS);
   }
+  /* Get form factor */
+  rc = getFormFactor(comms, (int*)&form);
+  if(rc) {
+    form = MOBOTFORM_ORIGINAL;
+  }
+  comms->formFactor = form;
   /* Get the joint max speeds */
   /* DEBUG */
 #if 0
@@ -938,6 +970,12 @@ int Mobot_clearQueriedAddresses(mobot_t* comms)
   if(buf[1] != 3) {
     return -1;
   }
+  return 0;
+}
+
+int Mobot_setDongleMobot(mobot_t* comms)
+{
+  g_dongleMobot = comms;
   return 0;
 }
 
