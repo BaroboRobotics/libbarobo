@@ -242,7 +242,6 @@ void Mobot_initDongle()
   if(g_dongleMobot->connected == 0) {
     int i;
     for(i = 0; i < BCF_GetNumDongles(g_bcf); i++) {
-      printf("%s\n", BCF_GetDongle(g_bcf, i));
       rc = Mobot_connectWithTTY(g_dongleMobot, BCF_GetDongle(g_bcf, i));
       if(rc == 0) {
         break;
@@ -617,12 +616,10 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
 { 
   int form; int rc;
   Mobot_initDongle();
-  printf("Connecting to %s\n", childSerialID);
   if(parent == NULL) {
     parent = g_dongleMobot;
   }
   /* First, check to see if it is our ID */
-  printf("Parent ID: %s\n", parent->serialID);
   if(!strcmp(parent->serialID, childSerialID)) {
     child->parent = parent;
     child->connected = 1;
