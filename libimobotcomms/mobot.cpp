@@ -660,7 +660,8 @@ int Mobot_connectChild(mobot_t* parent, mobot_t* child)
 }
 
 int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSerialID)
-{
+{ 
+  int form; int rc;
   Mobot_initDongle();
   printf("Connecting to %s\n", childSerialID);
   if(parent == NULL) {
@@ -673,13 +674,20 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
     child->connected = 1;
     child->connectionMode = MOBOTCONNECT_ZIGBEE;
     parent->child = child;
+    /* Get the form factor */
+    rc = getFormFactor(child, &form);
+    if(rc) {
+      child->formFactor = MOBOTFORM_ORIGINAL;
+    } else {
+      child->formFactor = (mobotFormFactor_t)form;
+    }
     return 0;
   }
   /* Now check to see if the requested child is already in the list of known
    * Serial ID's */  
   bool idFound = false;
   mobotInfo_t* iter;
-  int i; int form; int rc;
+  int i;
   for(i = 0; i < 2; i++) {
     MUTEX_LOCK(parent->mobotTree_lock);
     for(iter = parent->children; iter != NULL; iter = iter->next)
@@ -694,8 +702,8 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
       child->connectionMode = MOBOTCONNECT_ZIGBEE;
       child->parent = iter->parent;
       child->zigbeeAddr = iter->zigbeeAddr;
-      /* Get the form factor */
       iter->mobot = child;
+      /* Get the form factor */
       rc = getFormFactor(child, &form);
       if(rc) {
         child->formFactor = MOBOTFORM_ORIGINAL;
@@ -896,6 +904,11 @@ int Mobot_loadMelody(mobot_t* comms, int id, mobotMelodyNote_t* melody)
   }
   status = SendToIMobot(comms, BTCMD(CMD_LOADMELODY), data, length*2+1);
   if(status < 0) return status;
+#ifndef _WIN32
+  usleep(500000);
+#else
+  Sleep(500);
+#endif
   if(RecvFromIMobot(comms, data, sizeof(data))) {
     return -1;
   }
@@ -1466,12 +1479,11 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
     ts.tv_nsec = mts.tv_nsec;
 #endif
     /* Add a timeout */
-    ts.tv_nsec += 500000000; // 100 ms
+    ts.tv_nsec += 200000000; // 100 ms
     if(ts.tv_nsec > 1000000000) {
       ts.tv_nsec -= 1000000000;
       ts.tv_sec += 1;
     }
-    ts.tv_sec+=1;
     rc = pthread_cond_timedwait(
       comms->recvBuf_cond, 
       comms->recvBuf_lock,
