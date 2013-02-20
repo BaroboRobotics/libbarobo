@@ -204,6 +204,7 @@ typedef struct mobot_s
    * connected. We must talk through the parent mobot to reach this mobot. */
   uint16_t zigbeeAddr;
   char serialID[5];
+  mobotFormFactor_t formFactor;
 
   MUTEX_T* mobotTree_lock;
   COND_T* mobotTree_cond;
@@ -922,6 +923,7 @@ DLLIMPORT int Mobot_setHWRev(mobot_t* comms, uint8_t rev);
 DLLIMPORT int Mobot_setBuzzerFrequency(mobot_t* comms, unsigned int frequency, double time);
 DLLIMPORT int Mobot_setBuzzerFrequencyOn(mobot_t* comms, unsigned int frequency);
 DLLIMPORT int Mobot_setBuzzerFrequencyOff(mobot_t* comms);
+DLLIMPORT int Mobot_setDongleMobot(mobot_t* comms);
 DLLIMPORT int Mobot_setJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir);
 DLLIMPORT int Mobot_setJointMovementStateNB(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir);
 DLLIMPORT int Mobot_setJointMovementStateTime(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir, double seconds);

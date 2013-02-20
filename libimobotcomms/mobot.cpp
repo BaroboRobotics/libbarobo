@@ -555,6 +555,24 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
 
 #endif
 
+int getFormFactor(mobot_t* comms, int* form)
+{
+  uint8_t buf[32];
+  int status;
+  status = SendToIMobot(comms, BTCMD(CMD_GETFORMFACTOR), NULL, 0);
+  if(status < 0) return status;
+  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 4) {
+    return -1;
+  }
+  /* Copy the data */
+  *form = buf[2];
+  return 0;
+}
+
 int Mobot_connectChild(mobot_t* parent, mobot_t* child)
 {
   /* First check to see if the requested child is already in the list of knows
@@ -596,7 +614,8 @@ int Mobot_connectChild(mobot_t* parent, mobot_t* child)
 }
 
 int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSerialID)
-{
+{ 
+  int form; int rc;
   Mobot_initDongle();
   printf("Connecting to %s\n", childSerialID);
   if(parent == NULL) {
@@ -609,6 +628,13 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
     child->connected = 1;
     child->connectionMode = MOBOTCONNECT_ZIGBEE;
     parent->child = child;
+    /* Get the form factor */
+    rc = getFormFactor(child, &form);
+    if(rc) {
+      child->formFactor = MOBOTFORM_ORIGINAL;
+    } else {
+      child->formFactor = (mobotFormFactor_t)form;
+    }
     return 0;
   }
   /* Now check to see if the requested child is already in the list of known
@@ -631,6 +657,13 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
       child->parent = iter->parent;
       child->zigbeeAddr = iter->zigbeeAddr;
       iter->mobot = child;
+      /* Get the form factor */
+      rc = getFormFactor(child, &form);
+      if(rc) {
+        child->formFactor = MOBOTFORM_ORIGINAL;
+      } else {
+        child->formFactor = (mobotFormFactor_t)form;
+      }
       MUTEX_UNLOCK(parent->mobotTree_lock);
       return 0;
     } else if (i == 0){
@@ -652,7 +685,8 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
  * Perform final connecting tasks common to all connection methods */
 int finishConnect(mobot_t* comms)
 {
-  int i = 0;
+  int i = 0, rc;
+  mobotFormFactor_t form;
   uint8_t buf[256];
   /* Start the comms engine */
   THREAD_CREATE(comms->commsThread, commsEngine, comms);
@@ -682,6 +716,12 @@ int finishConnect(mobot_t* comms)
     fprintf(stderr, "Mobot Firmware Protocol Version: %d\n", version);
     fprintf(stderr, "CMobot Library Protocol Version: %d\n", CMD_NUMCOMMANDS);
   }
+  /* Get form factor */
+  rc = getFormFactor(comms, (int*)&form);
+  if(rc) {
+    form = MOBOTFORM_ORIGINAL;
+  }
+  comms->formFactor = form;
   /* Get the joint max speeds */
   /* DEBUG */
 #if 0
@@ -818,6 +858,11 @@ int Mobot_loadMelody(mobot_t* comms, int id, mobotMelodyNote_t* melody)
   }
   status = SendToIMobot(comms, BTCMD(CMD_LOADMELODY), data, length*2+1);
   if(status < 0) return status;
+#ifndef _WIN32
+  usleep(500000);
+#else
+  Sleep(500);
+#endif
   if(RecvFromIMobot(comms, data, sizeof(data))) {
     return -1;
   }
@@ -892,6 +937,12 @@ int Mobot_clearQueriedAddresses(mobot_t* comms)
   if(buf[1] != 3) {
     return -1;
   }
+  return 0;
+}
+
+int Mobot_setDongleMobot(mobot_t* comms)
+{
+  g_dongleMobot = comms;
   return 0;
 }
 

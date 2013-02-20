@@ -175,7 +175,16 @@ int Mobot_motionInchwormRightNB(mobot_t* comms, int num)
 
 int Mobot_motionRollBackward(mobot_t* comms, double angle)
 {
-  Mobot_move(comms, -angle, 0, 0, -angle);
+  if(
+      (comms->formFactor == MOBOTFORM_I) ||
+      (comms->formFactor == MOBOTFORM_L) ||
+      (comms->formFactor == MOBOTFORM_T) 
+    )
+  {
+    Mobot_move(comms, -angle, 0, angle, 0 );
+  } else {
+    Mobot_move(comms, -angle, 0, 0, -angle);
+  }
   return 0;
 }
 
@@ -207,7 +216,16 @@ int Mobot_motionRollForward(mobot_t* comms, double angle)
   Mobot_moveJointToNB(comms, MOBOT_JOINT4, motorPosition[1] + angle);
   Mobot_moveWait(comms);
   */
-  Mobot_move(comms, angle, 0, 0, angle);
+  if(
+      (comms->formFactor == MOBOTFORM_I) ||
+      (comms->formFactor == MOBOTFORM_L) ||
+      (comms->formFactor == MOBOTFORM_T) 
+    )
+  {
+    Mobot_move(comms, angle, 0, -angle, 0 );
+  } else {
+    Mobot_move(comms, angle, 0, 0, angle);
+  }
   return 0;
 }
 
@@ -293,7 +311,16 @@ int Mobot_motionSkinnyNB(mobot_t* comms, double angle)
 
 int Mobot_motionTurnLeft(mobot_t* comms, double angle)
 {
-  Mobot_move(comms, -angle, 0, 0, angle);
+  if(
+      (comms->formFactor == MOBOTFORM_I) ||
+      (comms->formFactor == MOBOTFORM_L) ||
+      (comms->formFactor == MOBOTFORM_T) 
+    )
+  {
+    Mobot_move(comms, -angle, 0, -angle, 0 );
+  } else {
+    Mobot_move(comms, -angle, 0, 0, angle);
+  }
   return 0;
 }
 
@@ -317,7 +344,16 @@ int Mobot_motionTurnLeftNB(mobot_t* comms, double angle)
 
 int Mobot_motionTurnRight(mobot_t* comms, double angle)
 {
-  Mobot_move(comms, angle, 0, 0, -angle);
+  if(
+      (comms->formFactor == MOBOTFORM_I) ||
+      (comms->formFactor == MOBOTFORM_L) ||
+      (comms->formFactor == MOBOTFORM_T) 
+    )
+  {
+    Mobot_move(comms, angle, 0, angle, 0 );
+  } else {
+    Mobot_move(comms, angle, 0, 0, -angle);
+  }
   return 0;
 }
 
