@@ -186,7 +186,6 @@ int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], const char 
   memset(&hints, 0, sizeof hints);
   hints.ai_family = AF_UNSPEC;
   hints.ai_socktype = SOCK_STREAM;
-
   if ((rv = getaddrinfo(address, port, &hints, &servinfo)) != 0) {
     //fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
     return -1;
@@ -1377,7 +1376,7 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
     sendBufAppend(comms, str, len);
   } else {
     MUTEX_LOCK(comms->socket_lock);
-    err = send(comms->parent->socket, (const char*)str, len, 0);
+    err = send(comms->socket, (const char*)str, len, 0);
     MUTEX_UNLOCK(comms->socket_lock);
   }
 #endif
