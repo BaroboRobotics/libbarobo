@@ -226,9 +226,9 @@ int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], const char 
   freeaddrinfo(servinfo); // all done with this structure
   comms->socket = sockfd;
   comms->connected = 1;
+  comms->connectionMode = MOBOTCONNECT_TCP;
   rc = finishConnect(comms);
   if(rc) return rc;
-  comms->connectionMode = MOBOTCONNECT_TCP;
   return 0;
 }
 
@@ -1310,7 +1310,11 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
   MUTEX_LOCK(comms->commsLock);
   comms->recvBuf_ready = 0;
 
-  if(comms->connectionMode == MOBOTCONNECT_BLUETOOTH) {
+  if(
+      (comms->connectionMode == MOBOTCONNECT_BLUETOOTH) ||
+      (comms->connectionMode == MOBOTCONNECT_TCP) 
+    ) 
+  {
     str[0] = cmd;
     str[1] = datasize + 3;
     if(datasize > 0) {
@@ -1379,6 +1383,7 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
 #endif
   return 0;
 }
+
 int SendToMobotDirect(mobot_t* comms, const void* data, int datasize)
 {
   int err;
@@ -1676,7 +1681,11 @@ void* commsEngine(void* arg)
         /* We need to copy it to the correct receive buffer */
         /* First, check to see if we are using the old Bluetooth protocol or
          * the new Zigbee protocol... */
-        if(comms->connectionMode == MOBOTCONNECT_BLUETOOTH) {
+        if(
+            (comms->connectionMode == MOBOTCONNECT_BLUETOOTH) ||
+            (comms->connectionMode == MOBOTCONNECT_TCP)
+          ) 
+        {
             MUTEX_LOCK(comms->recvBuf_lock);
             comms->recvBuf_ready = 1;
             comms->recvBuf_bytes = comms->recvBuf[1];
