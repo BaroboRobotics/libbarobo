@@ -2,13 +2,14 @@ PACKAGE=chmobot
 VERSION=0.1
 HEADERS=../mobot.h
 PKGDIR=$(PACKAGE)-$(VERSION)/$(PACKAGE)
+LIBDIR=lib32
 
 CFLAGS= -DNONRELEASE -I./
 
 target: libmobot.dl
 
 libmobot.dl: mobot.obj chmobot_chdl.obj mobot_get_functions.obj mobot_motion_functions.obj mobot_movement_functions.obj mobot_record_functions.obj mobot_set_functions.obj
-	ch dllink libmobot.dl cplusplus mobot.obj chmobot_chdl.obj mobot_get_functions.obj mobot_motion_functions.obj mobot_movement_functions.obj mobot_record_functions.obj mobot_set_functions.obj ws2_32.lib shell32.lib libbaroboconfigfile.a mxml.lib intl.lib regex.o libgcc.a libmingwex.a #C:/MinGW/lib/libmsvcrt.a
+	ch dllink libmobot.dl cplusplus mobot.obj chmobot_chdl.obj mobot_get_functions.obj mobot_motion_functions.obj mobot_movement_functions.obj mobot_record_functions.obj mobot_set_functions.obj ws2_32.lib shell32.lib $(LIBDIR)/libbaroboconfigfile.a $(LIBDIR)/libmxml.a $(LIBDIR)/regex.o $(LIBDIR)/libgcc.a $(LIBDIR)/libmingwex.a #C:/MinGW/lib/libmsvcrt.a
 
 mobot.obj: ../mobot.cpp $(HEADERS)
 	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot.cpp
