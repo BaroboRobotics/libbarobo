@@ -390,6 +390,10 @@ int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address)
   return Mobot_connectWithTTY(comms, buf);
 }
 
+#ifndef _WIN32
+#define MAX_PATH 512
+#endif
+
 int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
 {
   FILE *lockfile;
