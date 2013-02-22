@@ -1190,18 +1190,6 @@ int Mobot_init(mobot_t* comms)
   comms->parent = NULL;
   comms->children = NULL;
 
-  if(g_bcf == NULL) {
-    g_bcf = BCF_New();
-    if(BCF_Read(g_bcf, path)) {
-      fprintf(stderr, 
-          "ERROR: Your Barobo configuration file does not exist.\n"
-          "Please create one by opening the MoBot remote control, clicking on\n"
-          "the 'Robot' menu entry, and selecting 'Configure Robot Bluetooth'.\n");
-      BCF_Destroy(g_bcf);
-      g_bcf = NULL;
-      return -1;
-    }
-  }
   return 0;
 }
 
