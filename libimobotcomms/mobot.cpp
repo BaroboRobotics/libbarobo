@@ -406,7 +406,6 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   lockfile = fopen(lockfileName, "r");
   if(lockfile == NULL) {
     /* Lock file does not exist. Proceed. */
-    comms->lockfileName = strdup(lockfileName);
   } else {
     /* Lockfile exists. Need to check PID in the lock file and see if that
      * process is still running. */
@@ -422,6 +421,7 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
       return -2;
     }
   }
+  comms->lockfileName = strdup(lockfileName);
   if(lockfile != NULL) {
     fclose(lockfile);
   }
@@ -618,9 +618,23 @@ int Mobot_connectChild(mobot_t* parent, mobot_t* child)
 int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSerialID)
 { 
   int form; int rc;
-  Mobot_initDongle();
+  /* If a parent was specified, use it as a dongle */
   if(parent == NULL) {
+    if(g_bcf == NULL) {
+      g_bcf = BCF_New();
+      if(BCF_Read(g_bcf, child->configFilePath)) {
+        fprintf(stderr, 
+            "ERROR: Your Barobo configuration file does not exist.\n"
+            "Please create one by opening the MoBot remote control, clicking on\n"
+            "the 'Robot' menu entry, and selecting 'Configure Robot Bluetooth'.\n");
+        BCF_Destroy(g_bcf);
+        g_bcf = NULL;
+        return -1;
+      }
+    }
+    Mobot_initDongle();
     parent = g_dongleMobot;
+  } else {
   }
   /* First, check to see if it is our ID */
   if(!strcmp(parent->serialID, childSerialID)) {
@@ -1016,9 +1030,9 @@ int Mobot_disconnect(mobot_t* comms)
         free(comms->lockfileName);
         comms->lockfileName = NULL;
       }
-      while(g_disconnectSignal);
       g_disconnectSignal = 1;
       pthread_kill(*comms->commsThread, SIGINT);
+      while(g_disconnectSignal);
       if(close(comms->socket)) {
         rc = -1;
       }

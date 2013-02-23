@@ -47,7 +47,15 @@ elseif(CMAKE_HOST_APPLE)
   install(FILES mobot.h DESTINATION include)
 else(CMAKE_HOST_WIN32)
   add_definitions(-DENABLE_BLUETOOTH)
-	add_library(mobot SHARED
+	add_library(mobotStatic STATIC
+	  mobot.cpp
+    mobot_get_functions.cpp
+    mobot_motion_functions.cpp
+    mobot_movement_functions.cpp
+    mobot_record_functions.cpp
+    mobot_set_functions.cpp
+	  )
+	add_library(mobot SHARED 
 	  mobot.cpp
     mobot_get_functions.cpp
     mobot_motion_functions.cpp
@@ -56,8 +64,9 @@ else(CMAKE_HOST_WIN32)
     mobot_set_functions.cpp
 	  )
 	target_link_libraries(mobot bluetooth pthread rt baroboconfigfile mxml)
-  install(TARGETS mobot
-          LIBRARY DESTINATION lib)
+  install(TARGETS mobot mobotStatic
+          LIBRARY DESTINATION lib
+          ARCHIVE DESTINATION lib)
   install(FILES mobot.h DESTINATION include)
 endif(CMAKE_HOST_WIN32)
 
