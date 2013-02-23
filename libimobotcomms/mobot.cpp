@@ -549,6 +549,7 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   if(rc) {
     comms->connected = 0;
     comms->connectionMode = MOBOTCONNECT_NONE;
+    CloseHandle(comms->commHandle);
     return rc;
   }
   Mobot_getID(comms);
@@ -1464,7 +1465,7 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
 #else
     ResetEvent(*comms->recvBuf_cond);
     ReleaseMutex(*comms->recvBuf_lock);
-    rc = WaitForSingleObject(*comms->recvBuf_cond, 3000);
+    rc = WaitForSingleObject(*comms->recvBuf_cond, 500);
     if(rc == WAIT_TIMEOUT) {
       MUTEX_UNLOCK(comms->recvBuf_lock);
       MUTEX_UNLOCK(comms->commsLock);
