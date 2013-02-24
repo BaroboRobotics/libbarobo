@@ -14,7 +14,7 @@ int main()
   Mobot_moveJointContinuousNB(&comms, 1, MOBOT_FORWARD);
   for(speed = 60; speed > -60; speed = speed - 10) {
     Mobot_setJointSpeed(&comms, 1, DEG2RAD(speed));
-    sleep(1);
+    //sleep(1);
   }
   return 0;
 }
