@@ -15,7 +15,7 @@ if(CMAKE_HOST_WIN32)
   pkg_check_modules(MXML REQUIRED mxml)
   include_directories(${MXML_INCLUDE_DIRS})
   link_directories(/usr/lib)
-  add_definitions(-D_WIN32_WINNT=0x501 -DENABLE_BLUETOOTH)
+  add_definitions(-D_WIN32_WINNT=0x502 -DENABLE_BLUETOOTH)
 	add_library(mobot STATIC
 	  mobot.cpp
     mobot_get_functions.cpp
@@ -24,8 +24,17 @@ if(CMAKE_HOST_WIN32)
     mobot_record_functions.cpp
     mobot_set_functions.cpp
 	  )
-	target_link_libraries(mobot Ws2_32 baroboconfigfile regex mxml pthread)
-  #set_target_properties(mobot PROPERTIES COMPILE_FLAGS "/GS-")
+  if( 
+      (CMAKE_GENERATOR MATCHES "Visual Studio") OR
+      (CMAKE_GENERATOR MATCHES "NMake")
+    )
+    message(STATUS "Compiling for Visual Studio detected")
+    set_target_properties(mobot PROPERTIES COMPILE_FLAGS "/GS- /QIfist")
+    target_link_libraries(mobot Ws2_32 baroboconfigfile regex mxml thread)
+  else()
+    add_subdirectory(demos)
+    target_link_libraries(mobot Ws2_32 baroboconfigfile regex mxml pthread)
+  endif()
   install(TARGETS mobot
           ARCHIVE DESTINATION lib)
   install(FILES mobot.h DESTINATION include)
@@ -45,6 +54,7 @@ elseif(CMAKE_HOST_APPLE)
   install(TARGETS mobot
           LIBRARY DESTINATION lib)
   install(FILES mobot.h DESTINATION include)
+  add_subdirectory(demos)
 else(CMAKE_HOST_WIN32)
   add_definitions(-DENABLE_BLUETOOTH)
 	add_library(mobotStatic STATIC
@@ -68,8 +78,8 @@ else(CMAKE_HOST_WIN32)
           LIBRARY DESTINATION lib
           ARCHIVE DESTINATION lib)
   install(FILES mobot.h DESTINATION include)
+  add_subdirectory(demos)
 endif(CMAKE_HOST_WIN32)
 
 #install(TARGETS mobot LIBRARY DESTINATION lib)
 
-add_subdirectory(demos)
