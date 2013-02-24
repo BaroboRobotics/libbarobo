@@ -51,6 +51,8 @@
 int g_numConnected = 0;
 int g_disconnectSignal = 0;
 
+volatile int g_mobotThreadInitializing = 0;
+
 mobot_t* g_dongleMobot = NULL;
 
 void sendBufAppend(mobot_t* comms, uint8_t* data, int len);
@@ -704,9 +706,13 @@ int finishConnect(mobot_t* comms)
   mobotFormFactor_t form;
   uint8_t buf[256];
   /* Start the comms engine */
+  g_mobotThreadInitializing = 1;
   THREAD_CREATE(comms->commsThread, commsEngine, comms);
+  while(g_mobotThreadInitializing);
   if(comms->connectionMode == MOBOTCONNECT_TTY) {
+    g_mobotThreadInitializing = 1;
     THREAD_CREATE(comms->commsOutThread, commsOutEngine, comms);
+    while(g_mobotThreadInitializing);
   }
   while(1) {
     if(i > 2) {
@@ -1361,6 +1367,7 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
   }
   printf("\n");
   */
+  //Sleep(1);
 
 #ifndef _WIN32
   if(comms->connectionMode == MOBOTCONNECT_ZIGBEE) {
@@ -1597,7 +1604,7 @@ void* commsEngine(void* arg)
   memset(&ov, 0, sizeof(ov));
   ov.hEvent = CreateEvent(0, true, 0, 0);
 #endif
-
+  g_mobotThreadInitializing = 0;
   while(1) {
     /* Try and receive a byte */
 #ifndef _WIN32
@@ -1642,6 +1649,7 @@ void* commsEngine(void* arg)
           NULL,
           &ov);
       GetOverlappedResult(comms->commHandle, &ov, &readbytes, TRUE);
+      CloseHandle(ov.hEvent);
       err = readbytes;
     } else {
       err = recvfrom(comms->socket, (char*)&byte, 1, 0, (struct sockaddr*)0, 0);
@@ -1856,6 +1864,7 @@ void* commsOutEngine(void* arg)
 #endif
 
   MUTEX_LOCK(comms->sendBuf_lock);
+  g_mobotThreadInitializing = 0;
   while(1) {
     while(comms->sendBuf_N == 0) {
       COND_WAIT(comms->sendBuf_cond, comms->sendBuf_lock);
@@ -1874,6 +1883,7 @@ void* commsOutEngine(void* arg)
         //printf("Error writing. %d \n", GetLastError());
       }
       GetOverlappedResult(comms->commHandle, &ov, &bytesWritten, TRUE);
+      memset(&ov, 0, sizeof(ov));
 #else
       MUTEX_LOCK(comms->socket_lock);
       err = write(comms->socket, byte, 1);
