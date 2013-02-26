@@ -7,8 +7,8 @@ project(LIBIMOBOTCOMMS)
 
 add_definitions(-DNONRELEASE)
 
-include_directories(${CMAKE_SOURCE_DIR}/../../BaroboConfigFile)
-link_directories(${CMAKE_SOURCE_DIR}/../../BaroboConfigFile)
+include_directories(${CMAKE_SOURCE_DIR}/BaroboConfigFile)
+link_directories(${CMAKE_SOURCE_DIR}/BaroboConfigFile)
 
 if(CMAKE_HOST_WIN32)
   include(FindPkgConfig)
