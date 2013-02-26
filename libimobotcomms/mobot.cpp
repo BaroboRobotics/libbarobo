@@ -3,7 +3,9 @@
 #include <stdlib.h>
 #include <math.h>
 #include <ctype.h>
+#ifndef _WIN32
 #include <regex.h>
+#endif
 #include "mobot.h"
 #include "mobot_internal.h"
 #ifndef _WIN32
@@ -256,6 +258,7 @@ int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
   /* Depending on the format of the address, we should either try bluetooth
    * connection or zigbee connection */
   int rc;
+#ifndef _WIN32
   regex_t regex;
   /* Try to match a Bluetooth mac address similar to 00:06:66:45:AE:3F */
   rc = regcomp(&regex, "\\<\\([0-9a-fA-F]\\{2\\}:\\)\\{5\\}[0-9a-fA-F]\\{2\\}\\>", REG_ICASE);
@@ -265,6 +268,13 @@ int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
   }
   rc = regexec(&regex, address, 0, NULL, 0);
   regfree(&regex);
+#else
+  if(strlen(address) == 17) {
+    rc = 0;
+  } else {
+    rc = -1;
+  }
+#endif
   if(rc == 0) {
     return Mobot_connectWithBluetoothAddress(comms, address, channel);
   } else {
@@ -429,7 +439,7 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   }
   comms->socket = open(ttyfilename, O_RDWR | O_NOCTTY | O_ASYNC);
   if(comms->socket < 0) {
-    perror("Unable to open tty port.");
+    //perror("Unable to open tty port.");
     return -1;
   }
   /* Change the baud rate to 57600 */
