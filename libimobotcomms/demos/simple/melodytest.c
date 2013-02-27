@@ -11,7 +11,7 @@ int main()
   int rc;
   Mobot_init(&mobot);
   //Mobot_connectWithTTY(&mobot, "/dev/ttyACM0");
-  if(rc = Mobot_connect(&mobot)) {
+  if(rc = Mobot_connectWithTTY(&mobot, "/dev/ttyACM2")) {
     printf("connection failed.\n");
     exit(-1);
   }
