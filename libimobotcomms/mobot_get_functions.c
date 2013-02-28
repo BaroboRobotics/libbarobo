@@ -158,7 +158,7 @@ int Mobot_getChildrenInfo(mobot_t* comms, mobotInfo_t **mobotInfo, int *numChild
     return 0;
   }
   /* Count the number of children */
-  int n=0, i=0;;
+  int n=0, i=0;
   mobotInfo_t* iter;
   MUTEX_LOCK(comms->mobotTree_lock);
   for(iter = comms->children; iter != NULL; iter = iter->next) {
