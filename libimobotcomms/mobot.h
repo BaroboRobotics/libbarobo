@@ -554,6 +554,431 @@ class CMobot
 #endif /* Not _CH_*/
 };
 
+class CMobotI
+{
+  public:
+    CMobotI();
+    ~CMobotI();
+    int blinkLED(double delay, int numBlinks);
+/* connect() Return Error Codes:
+   -1 : General Error
+   -2 : Lockfile Exists
+   -3 : Address Format Incorrect
+   -4 : Not enough entries in the configuration file
+   -5 : Bluetooth device not found
+   -6 : Protocol version mismatch
+   */
+    int connect();
+#ifndef _CH_
+    int connectWithAddress(const char address[], int channel = 1);
+    int connectWithIPAddress(const char address[], const char port[] = "5768");
+#else
+    int connectWithAddress(const char address[], ...);
+    int connectWithIPAddress(const char address[], ...);
+#endif
+#ifndef _WIN32
+    int connectWithTTY(const char ttyfilename[]);
+#endif
+    int disconnect();
+    int driveJointToDirect(mobotJointId_t id, double angle);
+    int driveJointTo(mobotJointId_t id, double angle);
+    int driveJointToDirectNB(mobotJointId_t id, double angle);
+    int driveJointToNB(mobotJointId_t id, double angle);
+    int driveToDirect(double angle1, double angle2, double angle3);
+    int driveTo(double angle1, double angle2, double angle3);
+    int driveToDirectNB(double angle1, double angle2, double angle3);
+    int driveToNB(double angle1, double angle2, double angle3);
+    int enableButtonCallback(void (*buttonCallback)(CMobot* mobot, int button, int buttonDown));
+    int disableButtonCallback();
+    int isConnected();
+    int isMoving();
+#ifdef SWIG
+    %apply double & OUTPUT {double &angle};
+    %apply double & OUTPUT {double &angle1, double &angle2, double &angle3};
+    %apply double & OUTPUT {double &maxSpeed};
+    %apply double & OUTPUT {double &seconds};
+    %apply double & OUTPUT {double &speed};
+    %apply double & OUTPUT {double &ratio};
+    %apply double & OUTPUT {double &speed1, double &speed2, double &speed3};
+    %apply double & OUTPUT {double &ratio1, double &ratio2, double &ratio3};
+    %apply double & OUTPUT {mobotJointState_t &state};
+#endif
+    int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
+    int getBatteryVoltage(double &voltage);
+    int getFormFactor(int &formFactor);
+    static const char* getConfigFilePath();
+    int getID();
+    int getJointAngle(mobotJointId_t id, double &angle);
+#ifdef _CH_
+    int getJointAngleAverage(mobotJointId_t id, double &angle, ... );
+#else
+    int getJointAngleAverage(mobotJointId_t id, double &angle, int numReadings=10);
+#endif
+    int getJointAngles(double &angle1, double &angle2, double &angle3, double &angle4);
+#ifdef _CH_
+    int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, ...);
+#else
+    int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, int numReadings=10);
+#endif
+    int getJointMaxSpeed(mobotJointId_t id, double &maxSpeed);
+    int getJointSafetyAngle(double &angle);
+    int getJointSafetyAngleTimeout(double &seconds);
+    int getJointSpeed(mobotJointId_t id, double &speed);
+    int getJointSpeedRatio(mobotJointId_t id, double &ratio);
+    int getJointSpeeds(double &speed1, double &speed2, double &speed3);
+    int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3);
+    int getJointState(mobotJointId_t id, mobotJointState_t &state);
+    mobot_t* getMobotObject();
+    int getColorRGB(double &r, double &g, double &b);
+    int move(double angle1, double angle2, double angle3);
+    int moveNB(double angle1, double angle2, double angle3);
+    int moveContinuousNB(mobotJointState_t dir1, 
+                       mobotJointState_t dir2, 
+                       mobotJointState_t dir3);
+    int moveContinuousTime(mobotJointState_t dir1, 
+                           mobotJointState_t dir2, 
+                           mobotJointState_t dir3, 
+                           double seconds);
+    int moveJointContinuousNB(mobotJointId_t id, mobotJointState_t dir);
+    int moveJointContinuousTime(mobotJointId_t id, mobotJointState_t dir, double seconds);
+    int moveJoint(mobotJointId_t id, double angle);
+    int moveJointNB(mobotJointId_t id, double angle);
+    int moveJointTo(mobotJointId_t id, double angle);
+    int moveJointToDirect(mobotJointId_t id, double angle);
+    int moveJointToNB(mobotJointId_t id, double angle);
+    int moveJointToDirectNB(mobotJointId_t id, double angle);
+    int moveJointWait(mobotJointId_t id);
+    int moveTo(double angle1, double angle2, double angle3);
+    int moveToDirect(double angle1, double angle2, double angle3);
+    int moveToNB(double angle1, double angle2, double angle3);
+    int moveToDirectNB(double angle1, double angle2, double angle3);
+    int moveWait();
+    int moveToZero();
+    int moveToZeroNB();
+#ifdef _CH_
+    int recordAngle(mobotJointId_t id, double time[:], double angle[:], int num, double seconds, ...);
+    int recordAngles(double time[:], 
+                     double angle1[:], 
+                     double angle2[:], 
+                     double angle3[:], 
+                     int num, 
+                     double seconds,
+                     ...);
+#else
+    int recordAngle(mobotJointId_t id, double time[], double angle[], int num, double seconds, int shiftData = 1);
+    int recordAngles(double time[], 
+                     double angle1[], 
+                     double angle2[], 
+                     double angle3[], 
+                     int num, 
+                     double seconds,
+                     int shiftData = 1);
+#endif
+#ifndef _CH_
+    int recordAngleBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double seconds, int shiftData = 1);
+    int recordDistanceBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &distance, double radius, double seconds, int shiftData = 1);
+#else
+    int recordAngleBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double seconds, ...);
+    int recordDistanceBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &distance, double radius, double seconds, ...);
+#endif
+    int recordAngleEnd(mobotJointId_t id, int &num);
+    int recordDistanceEnd(mobotJointId_t id, int &num);
+#ifndef _CH_
+    int recordAnglesBegin(mobotRecordData_t &time, 
+                          mobotRecordData_t &angle1, 
+                          mobotRecordData_t &angle2, 
+                          mobotRecordData_t &angle3, 
+                          double seconds,
+                          int shiftData = 1);
+    int recordDistancesBegin(mobotRecordData_t &time, 
+                          mobotRecordData_t &distance1, 
+                          mobotRecordData_t &distance2, 
+                          mobotRecordData_t &distance3, 
+                          double radius,
+                          double seconds,
+                          int shiftData = 1);
+#else
+    int recordAnglesBegin(mobotRecordData_t &time, 
+                          mobotRecordData_t &angle1, 
+                          mobotRecordData_t &angle2, 
+                          mobotRecordData_t &angle3, 
+                          double seconds,
+                          ...);
+    int recordDistancesBegin(mobotRecordData_t &time, 
+                          mobotRecordData_t &distance1, 
+                          mobotRecordData_t &distance2, 
+                          mobotRecordData_t &distance3, 
+                          double radius,
+                          double seconds,
+                          ...);
+#endif
+    int recordAnglesEnd(int &num);
+    int recordDistancesEnd(int &num);
+    int recordWait();
+    int reset();
+    int resetToZero();
+    int resetToZeroNB();
+    int setColorRGB(int r, int g, int b);
+    int setExitState(mobotJointState_t exitState);
+    int setJointMovementStateNB(mobotJointId_t id, mobotJointState_t dir);
+    int setJointMovementStateTime(mobotJointId_t id, mobotJointState_t dir, double seconds);
+    int setJointSafetyAngle(double angle);
+    int setJointSafetyAngleTimeout(double seconds);
+    int setJointSpeed(mobotJointId_t id, double speed);
+    int setJointSpeeds(double speed1, double speed2, double speed3);
+    int setJointSpeedRatio(mobotJointId_t id, double ratio);
+    int setJointSpeedRatios(double ratios1, double ratios2, double ratios3);
+    int setMotorPower(mobotJointId_t id, int power);
+    int setMovementStateNB( mobotJointState_t dir1,
+        mobotJointState_t dir2,
+        mobotJointState_t dir3);
+    int setMovementStateTime( mobotJointState_t dir1,
+        mobotJointState_t dir2,
+        mobotJointState_t dir3,
+        double seconds);
+    int setMovementStateTimeNB( mobotJointState_t dir1,
+        mobotJointState_t dir2,
+        mobotJointState_t dir3,
+        double seconds);
+    int setTwoWheelRobotSpeed(double speed, double radius);
+    int stop();
+    int stopOneJoint(mobotJointId_t id);
+    int stopTwoJoints(mobotJointId_t id1, mobotJointId_t id2);
+    int stopThreeJoints(mobotJointId_t id1, mobotJointId_t id2, mobotJointId_t id3);
+    int stopAllJoints();
+
+    int motionDistance(double distance, double radius);
+    int motionRollBackward(double angle);
+    int motionRollForward(double angle);
+    int motionTurnLeft(double angle);
+    int motionTurnRight(double angle);
+
+    /* Non-Blocking motion functions */
+    int motionDistanceNB(double distance, double radius);
+    int motionRollBackwardNB(double angle);
+    int motionRollForwardNB(double angle);
+    int motionTurnLeftNB(double angle);
+    int motionTurnRightNB(double angle);
+    int motionWait();
+#ifndef _CH_
+  private:
+    int getJointDirection(mobotJointId_t id, mobotJointState_t &dir);
+    int setJointDirection(mobotJointId_t id, mobotJointState_t dir);
+    mobot_t *_comms;
+    void (*buttonCallback)(CMobot *mobot, int button, int buttonDown);
+#else
+  public:
+    static void *g_chmobot_dlhandle;
+    static int g_chmobot_dlcount;
+#endif /* Not _CH_*/
+};
+
+class CMobotL
+{
+  public:
+    CMobotL();
+    ~CMobotL();
+    int blinkLED(double delay, int numBlinks);
+/* connect() Return Error Codes:
+   -1 : General Error
+   -2 : Lockfile Exists
+   -3 : Address Format Incorrect
+   -4 : Not enough entries in the configuration file
+   -5 : Bluetooth device not found
+   -6 : Protocol version mismatch
+   */
+    int connect();
+#ifndef _CH_
+    int connectWithAddress(const char address[], int channel = 1);
+    int connectWithIPAddress(const char address[], const char port[] = "5768");
+#else
+    int connectWithAddress(const char address[], ...);
+    int connectWithIPAddress(const char address[], ...);
+#endif
+#ifndef _WIN32
+    int connectWithTTY(const char ttyfilename[]);
+#endif
+    int disconnect();
+    int driveJointToDirect(mobotJointId_t id, double angle);
+    int driveJointTo(mobotJointId_t id, double angle);
+    int driveJointToDirectNB(mobotJointId_t id, double angle);
+    int driveJointToNB(mobotJointId_t id, double angle);
+    int driveToDirect(double angle1, double angle2, double angle3);
+    int driveTo(double angle1, double angle2, double angle3);
+    int driveToDirectNB(double angle1, double angle2, double angle3);
+    int driveToNB(double angle1, double angle2, double angle3);
+    int enableButtonCallback(void (*buttonCallback)(CMobot* mobot, int button, int buttonDown));
+    int disableButtonCallback();
+    int isConnected();
+    int isMoving();
+#ifdef SWIG
+    %apply double & OUTPUT {double &angle};
+    %apply double & OUTPUT {double &angle1, double &angle2, double &angle3};
+    %apply double & OUTPUT {double &maxSpeed};
+    %apply double & OUTPUT {double &seconds};
+    %apply double & OUTPUT {double &speed};
+    %apply double & OUTPUT {double &ratio};
+    %apply double & OUTPUT {double &speed1, double &speed2, double &speed3};
+    %apply double & OUTPUT {double &ratio1, double &ratio2, double &ratio3};
+    %apply double & OUTPUT {mobotJointState_t &state};
+#endif
+    int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
+    int getBatteryVoltage(double &voltage);
+    int getFormFactor(int &formFactor);
+    static const char* getConfigFilePath();
+    int getID();
+    int getJointAngle(mobotJointId_t id, double &angle);
+#ifdef _CH_
+    int getJointAngleAverage(mobotJointId_t id, double &angle, ... );
+#else
+    int getJointAngleAverage(mobotJointId_t id, double &angle, int numReadings=10);
+#endif
+    int getJointAngles(double &angle1, double &angle2, double &angle3);
+#ifdef _CH_
+    int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, ...);
+#else
+    int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, int numReadings=10);
+#endif
+    int getJointMaxSpeed(mobotJointId_t id, double &maxSpeed);
+    int getJointSafetyAngle(double &angle);
+    int getJointSafetyAngleTimeout(double &seconds);
+    int getJointSpeed(mobotJointId_t id, double &speed);
+    int getJointSpeedRatio(mobotJointId_t id, double &ratio);
+    int getJointSpeeds(double &speed1, double &speed2, double &speed3);
+    int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3);
+    int getJointState(mobotJointId_t id, mobotJointState_t &state);
+    mobot_t* getMobotObject();
+    int getColorRGB(int &r, int &g, int &b);
+    int move(double angle1, double angle2, double angle3);
+    int moveNB(double angle1, double angle2, double angle3);
+    int moveContinuousNB(mobotJointState_t dir1, 
+                       mobotJointState_t dir2, 
+                       mobotJointState_t dir3);
+    int moveContinuousTime(mobotJointState_t dir1, 
+                           mobotJointState_t dir2, 
+                           mobotJointState_t dir3, 
+                           double seconds);
+    int moveJointContinuousNB(mobotJointId_t id, mobotJointState_t dir);
+    int moveJointContinuousTime(mobotJointId_t id, mobotJointState_t dir, double seconds);
+    int moveJoint(mobotJointId_t id, double angle);
+    int moveJointNB(mobotJointId_t id, double angle);
+    int moveJointTo(mobotJointId_t id, double angle);
+    int moveJointToDirect(mobotJointId_t id, double angle);
+    int moveJointToNB(mobotJointId_t id, double angle);
+    int moveJointToDirectNB(mobotJointId_t id, double angle);
+    int moveJointWait(mobotJointId_t id);
+    int moveTo(double angle1, double angle2, double angle3);
+    int moveToDirect(double angle1, double angle2, double angle3);
+    int moveToNB(double angle1, double angle2, double angle3);
+    int moveToDirectNB(double angle1, double angle2, double angle3);
+    int moveWait();
+    int moveToZero();
+    int moveToZeroNB();
+#ifdef _CH_
+    int recordAngle(mobotJointId_t id, double time[:], double angle[:], int num, double seconds, ...);
+    int recordAngles(double time[:], 
+                     double angle1[:], 
+                     double angle2[:], 
+                     double angle3[:], 
+                     int num, 
+                     double seconds,
+                     ...);
+#else
+    int recordAngle(mobotJointId_t id, double time[], double angle[], int num, double seconds, int shiftData = 1);
+    int recordAngles(double time[], 
+                     double angle1[], 
+                     double angle2[], 
+                     double angle3[], 
+                     int num, 
+                     double seconds,
+                     int shiftData = 1);
+#endif
+#ifndef _CH_
+    int recordAngleBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double seconds, int shiftData = 1);
+    int recordDistanceBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &distance, double radius, double seconds, int shiftData = 1);
+#else
+    int recordAngleBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double seconds, ...);
+    int recordDistanceBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &distance, double radius, double seconds, ...);
+#endif
+    int recordAngleEnd(mobotJointId_t id, int &num);
+    int recordDistanceEnd(mobotJointId_t id, int &num);
+#ifndef _CH_
+    int recordAnglesBegin(mobotRecordData_t &time, 
+                          mobotRecordData_t &angle1, 
+                          mobotRecordData_t &angle2, 
+                          mobotRecordData_t &angle3, 
+                          double seconds,
+                          int shiftData = 1);
+    int recordDistancesBegin(mobotRecordData_t &time, 
+                          mobotRecordData_t &distance1, 
+                          mobotRecordData_t &distance2, 
+                          mobotRecordData_t &distance3, 
+                          double radius,
+                          double seconds,
+                          int shiftData = 1);
+#else
+    int recordAnglesBegin(mobotRecordData_t &time, 
+                          mobotRecordData_t &angle1, 
+                          mobotRecordData_t &angle2, 
+                          mobotRecordData_t &angle3, 
+                          double seconds,
+                          ...);
+    int recordDistancesBegin(mobotRecordData_t &time, 
+                          mobotRecordData_t &distance1, 
+                          mobotRecordData_t &distance2, 
+                          mobotRecordData_t &distance3, 
+                          double radius,
+                          double seconds,
+                          ...);
+#endif
+    int recordAnglesEnd(int &num);
+    int recordDistancesEnd(int &num);
+    int recordWait();
+    int reset();
+    int resetToZero();
+    int resetToZeroNB();
+    int setColorRGB(int r, int g, int b);
+    int setExitState(mobotJointState_t exitState);
+    int setJointMovementStateNB(mobotJointId_t id, mobotJointState_t dir);
+    int setJointMovementStateTime(mobotJointId_t id, mobotJointState_t dir, double seconds);
+    int setJointSafetyAngle(double angle);
+    int setJointSafetyAngleTimeout(double seconds);
+    int setJointSpeed(mobotJointId_t id, double speed);
+    int setJointSpeeds(double speed1, double speed2, double speed3);
+    int setJointSpeedRatio(mobotJointId_t id, double ratio);
+    int setJointSpeedRatios(double ratios1, double ratios2, double ratios3);
+    int setMotorPower(mobotJointId_t id, int power);
+    int setMovementStateNB( mobotJointState_t dir1,
+        mobotJointState_t dir2,
+        mobotJointState_t dir3);
+    int setMovementStateTime( mobotJointState_t dir1,
+        mobotJointState_t dir2,
+        mobotJointState_t dir3,
+        double seconds);
+    int setMovementStateTimeNB( mobotJointState_t dir1,
+        mobotJointState_t dir2,
+        mobotJointState_t dir3,
+        double seconds);
+    int setTwoWheelRobotSpeed(double speed, double radius);
+    int stop();
+    int stopOneJoint(mobotJointId_t id);
+    int stopTwoJoints(mobotJointId_t id1, mobotJointId_t id2);
+    int stopThreeJoints(mobotJointId_t id1, mobotJointId_t id2, mobotJointId_t id3);
+    int stopAllJoints();
+
+#ifndef _CH_
+  private:
+    int getJointDirection(mobotJointId_t id, mobotJointState_t &dir);
+    int setJointDirection(mobotJointId_t id, mobotJointState_t dir);
+    mobot_t *_comms;
+    void (*buttonCallback)(CMobot *mobot, int button, int buttonDown);
+#else
+  public:
+    static void *g_chmobot_dlhandle;
+    static int g_chmobot_dlcount;
+#endif /* Not _CH_*/
+};
+
 class CMobotGroup
 {
   public:

@@ -19,12 +19,19 @@ if(CMAKE_HOST_WIN32)
   link_directories(${MXML_BINARY_DIR})
   add_definitions(-D_WIN32_WINNT=0x502 -DENABLE_BLUETOOTH)
 	add_library(mobot STATIC
-	  mobot.cpp
-    mobot_get_functions.cpp
-    mobot_motion_functions.cpp
-    mobot_movement_functions.cpp
-    mobot_record_functions.cpp
-    mobot_set_functions.cpp
+      mobot.c
+      mobot.cpp
+      mobot_get_functions.c
+      mobot_get_functions.cpp
+      mobotgroup.cpp
+      mobot_motion_functions.c
+      mobot_motion_functions.cpp
+      mobot_movement_functions.c
+      mobot_movement_functions.cpp
+      mobot_record_functions.c
+      mobot_record_functions.cpp
+      mobot_set_functions.c
+      mobot_set_functions.cpp
 	  )
   if( 
       (CMAKE_GENERATOR MATCHES "Visual Studio") OR
@@ -43,12 +50,19 @@ if(CMAKE_HOST_WIN32)
 elseif(CMAKE_HOST_APPLE)
   set(CMAKE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 	add_library(mobot SHARED
-	  mobot.cpp
-    mobot_get_functions.cpp
-    mobot_motion_functions.cpp
-    mobot_movement_functions.cpp
-    mobot_record_functions.cpp
-    mobot_set_functions.cpp
+      mobot.c
+      mobot.cpp
+      mobot_get_functions.c
+      mobot_get_functions.cpp
+      mobotgroup.cpp
+      mobot_motion_functions.c
+      mobot_motion_functions.cpp
+      mobot_movement_functions.c
+      mobot_movement_functions.cpp
+      mobot_record_functions.c
+      mobot_record_functions.cpp
+      mobot_set_functions.c
+      mobot_set_functions.cpp
 	  )
 	target_link_libraries(mobot pthread baroboconfigfile)
   set_target_properties(mobot PROPERTIES
@@ -60,20 +74,34 @@ elseif(CMAKE_HOST_APPLE)
 else(CMAKE_HOST_WIN32)
   add_definitions(-DENABLE_BLUETOOTH)
 	add_library(mobotStatic STATIC
-	  mobot.cpp
-    mobot_get_functions.cpp
-    mobot_motion_functions.cpp
-    mobot_movement_functions.cpp
-    mobot_record_functions.cpp
-    mobot_set_functions.cpp
+      mobot.c
+      mobot.cpp
+      mobot_get_functions.c
+      mobot_get_functions.cpp
+      mobotgroup.cpp
+      mobot_motion_functions.c
+      mobot_motion_functions.cpp
+      mobot_movement_functions.c
+      mobot_movement_functions.cpp
+      mobot_record_functions.c
+      mobot_record_functions.cpp
+      mobot_set_functions.c
+      mobot_set_functions.cpp
 	  )
 	add_library(mobot SHARED 
-	  mobot.cpp
-    mobot_get_functions.cpp
-    mobot_motion_functions.cpp
-    mobot_movement_functions.cpp
-    mobot_record_functions.cpp
-    mobot_set_functions.cpp
+      mobot.c
+      mobot.cpp
+      mobot_get_functions.c
+      mobot_get_functions.cpp
+      mobotgroup.cpp
+      mobot_motion_functions.c
+      mobot_motion_functions.cpp
+      mobot_movement_functions.c
+      mobot_movement_functions.cpp
+      mobot_record_functions.c
+      mobot_record_functions.cpp
+      mobot_set_functions.c
+      mobot_set_functions.cpp
 	  )
 	target_link_libraries(mobot bluetooth pthread rt baroboconfigfile mxml)
   install(TARGETS mobot mobotStatic
