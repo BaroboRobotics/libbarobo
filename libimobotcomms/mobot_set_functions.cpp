@@ -4,11 +4,6 @@
 #define DEPRECATED(from, to) \
   fprintf(stderr, "Warning: The function \"%s()\" is deprecated. Please use \"%s()\"\n" , from, to)
 
-int CMobot::setColorRGB(double r, double g, double b)
-{
-  return Mobot_setColorRGB(_comms, r, g, b);
-}
-
 int CMobot::setExitState(mobotJointState_t exitState)
 {
   return Mobot_setExitState(_comms, exitState);

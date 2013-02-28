@@ -357,11 +357,8 @@ class CMobot
     %apply double & OUTPUT {double &ratio1, double &ratio2, double &ratio3, double &ratio4};
     %apply double & OUTPUT {mobotJointState_t &state};
 #endif
-    int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
-    int getBatteryVoltage(double &voltage);
     int getFormFactor(int &formFactor);
     static const char* getConfigFilePath();
-    int getID();
     int getJointAngle(mobotJointId_t id, double &angle);
 #ifdef _CH_
     int getJointAngleAverage(mobotJointId_t id, double &angle, ... );
@@ -383,7 +380,6 @@ class CMobot
     int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3, double &ratio4);
     int getJointState(mobotJointId_t id, mobotJointState_t &state);
     mobot_t* getMobotObject();
-    int getColorRGB(int &r, int &g, int &b);
     int move(double angle1, double angle2, double angle3, double angle4);
     int moveNB(double angle1, double angle2, double angle3, double angle4);
     int moveContinuousNB(mobotJointState_t dir1, 
@@ -480,7 +476,6 @@ class CMobot
     int reset();
     int resetToZero();
     int resetToZeroNB();
-    int setColorRGB(double r, double g, double b);
     int setExitState(mobotJointState_t exitState);
     int setJointMovementStateNB(mobotJointId_t id, mobotJointState_t dir);
     int setJointMovementStateTime(mobotJointId_t id, mobotJointState_t dir, double seconds);

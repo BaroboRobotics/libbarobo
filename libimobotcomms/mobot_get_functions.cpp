@@ -10,29 +10,6 @@ const char* CMobot::getConfigFilePath()
   return Mobot_getConfigFilePath();
 }
 
-int CMobot::getID()
-{
-  return Mobot_getID(_comms);
-}
-
-int CMobot::getAccelerometerData(double &accel_x, double &accel_y, double &accel_z)
-{
-  double _x, _y, _z; int rc;
-  rc = Mobot_getAccelerometerData(_comms, &_x, &_y, &_z);
-  if(rc) {
-    return rc;
-  }
-  accel_x = _x;
-  accel_y = _y;
-  accel_z = _z;
-  return 0;
-}
-
-int CMobot::getBatteryVoltage(double &voltage)
-{
-  return Mobot_getBatteryVoltage(_comms, &voltage);
-}
-
 int CMobot::getFormFactor(int &formFactor)
 {
   return Mobot_getFormFactor(_comms, &formFactor);
@@ -165,7 +142,3 @@ mobot_t* CMobot::getMobotObject()
   return _comms;
 }
 
-int CMobot::getColorRGB(int &r, int &g, int &b)
-{
-  return Mobot_getColorRGB(_comms, &r, &g, &b);
-}
