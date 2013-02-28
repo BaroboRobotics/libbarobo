@@ -5,17 +5,17 @@
 #define DEPRECATED(from, to) \
   fprintf(stderr, "Warning: The function \"%s()\" is deprecated. Please use \"%s()\"\n" , from, to)
 
-const char* CMobot::getConfigFilePath()
+const char* CMobotL::getConfigFilePath()
 {
   return Mobot_getConfigFilePath();
 }
 
-int CMobot::getID()
+int CMobotL::getID()
 {
   return Mobot_getID(_comms);
 }
 
-int CMobot::getAccelerometerData(double &accel_x, double &accel_y, double &accel_z)
+int CMobotL::getAccelerometerData(double &accel_x, double &accel_y, double &accel_z)
 {
   double _x, _y, _z; int rc;
   rc = Mobot_getAccelerometerData(_comms, &_x, &_y, &_z);
@@ -28,17 +28,17 @@ int CMobot::getAccelerometerData(double &accel_x, double &accel_y, double &accel
   return 0;
 }
 
-int CMobot::getBatteryVoltage(double &voltage)
+int CMobotL::getBatteryVoltage(double &voltage)
 {
   return Mobot_getBatteryVoltage(_comms, &voltage);
 }
 
-int CMobot::getFormFactor(int &formFactor)
+int CMobotL::getFormFactor(int &formFactor)
 {
   return Mobot_getFormFactor(_comms, &formFactor);
 }
 
-int CMobot::getJointAngle(mobotJointId_t id, double &angle)
+int CMobotL::getJointAngle(mobotJointId_t id, double &angle)
 {
   int err;
   err = Mobot_getJointAngle(_comms, id, &angle);
@@ -46,7 +46,7 @@ int CMobot::getJointAngle(mobotJointId_t id, double &angle)
   return err;
 }
 
-int CMobot::getJointAngleAverage(mobotJointId_t id, double &angle, int numReadings)
+int CMobotL::getJointAngleAverage(mobotJointId_t id, double &angle, int numReadings)
 {
   int err;
   err = Mobot_getJointAngleAverage(_comms, id, &angle, numReadings);
@@ -54,13 +54,13 @@ int CMobot::getJointAngleAverage(mobotJointId_t id, double &angle, int numReadin
   return err;
 }
 
-int CMobot::getJointAngles(
+int CMobotL::getJointAngles(
     double &angle1,
     double &angle2,
-    double &angle3,
-    double &angle4)
+    double &angle3)
 {
   double time;
+  double angle4;
   int err;
   err = Mobot_getJointAnglesTime(
       _comms, 
@@ -77,14 +77,14 @@ int CMobot::getJointAngles(
   return 0;
 }
 
-int CMobot::getJointAnglesAverage(
+int CMobotL::getJointAnglesAverage(
     double &angle1,
     double &angle2,
     double &angle3,
-    double &angle4,
     int numReadings)
 {
   int err;
+  double angle4;
   err = Mobot_getJointAnglesAverage(
       _comms, 
       &angle1,
@@ -100,19 +100,19 @@ int CMobot::getJointAnglesAverage(
   return 0;
 }
 
-int CMobot::getJointDirection(mobotJointId_t id, mobotJointState_t &dir)
+int CMobotL::getJointDirection(mobotJointId_t id, mobotJointState_t &dir)
 {
   return Mobot_getJointDirection(_comms, id, &dir);
 }
 
-int CMobot::getJointMaxSpeed(mobotJointId_t id, double &maxSpeed)
+int CMobotL::getJointMaxSpeed(mobotJointId_t id, double &maxSpeed)
 {
   int err = Mobot_getJointMaxSpeed(_comms, id, &maxSpeed);
   maxSpeed = RAD2DEG(maxSpeed);
   return err;
 }
 
-int CMobot::getJointSafetyAngle(double &angle)
+int CMobotL::getJointSafetyAngle(double &angle)
 {
   int r;
   double a;
@@ -121,12 +121,12 @@ int CMobot::getJointSafetyAngle(double &angle)
   return r;
 }
 
-int CMobot::getJointSafetyAngleTimeout(double &seconds)
+int CMobotL::getJointSafetyAngleTimeout(double &seconds)
 {
   return Mobot_getJointSafetyAngleTimeout(_comms, &seconds);
 }
 
-int CMobot::getJointSpeed(mobotJointId_t id, double &speed)
+int CMobotL::getJointSpeed(mobotJointId_t id, double &speed)
 {
   int err;
   err = Mobot_getJointSpeed(_comms, id, &speed);
@@ -134,14 +134,15 @@ int CMobot::getJointSpeed(mobotJointId_t id, double &speed)
   return err;
 }
 
-int CMobot::getJointSpeedRatio(mobotJointId_t id, double &ratio)
+int CMobotL::getJointSpeedRatio(mobotJointId_t id, double &ratio)
 {
   return Mobot_getJointSpeedRatio(_comms, id, &ratio);
 }
 
-int CMobot::getJointSpeeds(double &speed1, double &speed2, double &speed3, double &speed4)
+int CMobotL::getJointSpeeds(double &speed1, double &speed2, double &speed3)
 {
   int i;
+  double speed4;
   int err = Mobot_getJointSpeeds(_comms, &speed1, &speed2, &speed3, &speed4);
   speed1 = RAD2DEG(speed1);
   speed2 = RAD2DEG(speed2);
@@ -150,22 +151,23 @@ int CMobot::getJointSpeeds(double &speed1, double &speed2, double &speed3, doubl
   return err;
 }
 
-int CMobot::getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3, double &ratio4)
+int CMobotL::getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3)
 {
+  double ratio4;
   return Mobot_getJointSpeedRatios(_comms, &ratio1, &ratio2, &ratio3, &ratio4);
 }
 
-int CMobot::getJointState(mobotJointId_t id, mobotJointState_t &state)
+int CMobotL::getJointState(mobotJointId_t id, mobotJointState_t &state)
 {
   return Mobot_getJointState(_comms, id, &state);
 }
 
-mobot_t* CMobot::getMobotObject()
+mobot_t* CMobotL::getMobotObject()
 {
   return _comms;
 }
 
-int CMobot::getColorRGB(int &r, int &g, int &b)
+int CMobotL::getColorRGB(int &r, int &g, int &b)
 {
   return Mobot_getColorRGB(_comms, &r, &g, &b);
 }

@@ -167,7 +167,7 @@ mobot_t* CMobotI::getMobotObject()
   return _comms;
 }
 
-int CMobotI::getColorRGB(double &r, double &g, double &b)
+int CMobotI::getColorRGB(int &r, int &g, int &b)
 {
   return Mobot_getColorRGB(_comms, &r, &g, &b);
 }

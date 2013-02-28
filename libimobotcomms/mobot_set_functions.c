@@ -342,7 +342,7 @@ int Mobot_setMovementStateTimeNB(mobot_t* comms,
   return 0;
 }
 
-int Mobot_setColorRGB(mobot_t* comms, double r, double g, double b)
+int Mobot_setColorRGB(mobot_t* comms, int r, int g, int b)
 {
   uint8_t buf[32];
   float f;
@@ -356,9 +356,9 @@ int Mobot_setColorRGB(mobot_t* comms, double r, double g, double b)
   buf[0] = 0xff;
   buf[1] = 0xff;
   buf[2] = 0xff;
-  buf[3] = (r)*255.0;
-  buf[4] = (g)*255.0;
-  buf[5] = (b)*255.0;
+  buf[3] = (uint8_t)r;
+  buf[4] = (uint8_t)g;
+  buf[5] = (uint8_t)b;
 
   status = SendToIMobot(comms, BTCMD(CMD_RGBLED), buf, 6);
   if(status < 0) return status;

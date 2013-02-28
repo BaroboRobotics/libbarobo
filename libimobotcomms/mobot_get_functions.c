@@ -610,7 +610,7 @@ int Mobot_getJointSpeeds(mobot_t* comms, double *speed1, double *speed2, double 
   return 0;
 }
 
-int Mobot_getColorRGB(mobot_t* comms, double *r, double *g, double *b)
+int Mobot_getColorRGB(mobot_t* comms, int *r, int *g, int *b)
 {
   uint8_t buf[32];
   float f;
@@ -625,9 +625,9 @@ int Mobot_getColorRGB(mobot_t* comms, double *r, double *g, double *b)
   if(buf[1] != 6) {
     return -1;
   }
-  *r = ((double)buf[2])/((double)0xff);
-  *g = ((double)buf[3])/((double)0xff);
-  *b = ((double)buf[4])/((double)0xff);
+  *r = buf[2];
+  *g = buf[3];
+  *b = buf[4];
   return 0;
 }
 

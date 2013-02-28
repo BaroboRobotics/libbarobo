@@ -38,6 +38,12 @@ if(CMAKE_HOST_WIN32)
       moboti_movement_functions.cpp
       moboti_record_functions.cpp
       moboti_set_functions.cpp
+      mobotl.cpp
+      mobotl_get_functions.cpp
+      mobotl_motion_functions.cpp
+      mobotl_movement_functions.cpp
+      mobotl_record_functions.cpp
+      mobotl_set_functions.cpp
 	  )
   if( 
       (CMAKE_GENERATOR MATCHES "Visual Studio") OR
@@ -75,6 +81,12 @@ elseif(CMAKE_HOST_APPLE)
       moboti_movement_functions.cpp
       moboti_record_functions.cpp
       moboti_set_functions.cpp
+      mobotl.cpp
+      mobotl_get_functions.cpp
+      mobotl_motion_functions.cpp
+      mobotl_movement_functions.cpp
+      mobotl_record_functions.cpp
+      mobotl_set_functions.cpp
 	  )
 	target_link_libraries(mobot pthread baroboconfigfile)
   set_target_properties(mobot PROPERTIES
@@ -105,6 +117,12 @@ else(CMAKE_HOST_WIN32)
       moboti_movement_functions.cpp
       moboti_record_functions.cpp
       moboti_set_functions.cpp
+      mobotl.cpp
+      mobotl_get_functions.cpp
+      mobotl_motion_functions.cpp
+      mobotl_movement_functions.cpp
+      mobotl_record_functions.cpp
+      mobotl_set_functions.cpp
 	  )
 	add_library(mobot SHARED 
       mobot.c
@@ -126,6 +144,12 @@ else(CMAKE_HOST_WIN32)
       moboti_movement_functions.cpp
       moboti_record_functions.cpp
       moboti_set_functions.cpp
+      mobotl.cpp
+      mobotl_get_functions.cpp
+      mobotl_motion_functions.cpp
+      mobotl_movement_functions.cpp
+      mobotl_record_functions.cpp
+      mobotl_set_functions.cpp
 	  )
 	target_link_libraries(mobot bluetooth pthread rt baroboconfigfile mxml)
   install(TARGETS mobot mobotStatic

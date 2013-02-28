@@ -383,7 +383,7 @@ class CMobot
     int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3, double &ratio4);
     int getJointState(mobotJointId_t id, mobotJointState_t &state);
     mobot_t* getMobotObject();
-    int getColorRGB(double &r, double &g, double &b);
+    int getColorRGB(int &r, int &g, int &b);
     int move(double angle1, double angle2, double angle3, double angle4);
     int moveNB(double angle1, double angle2, double angle3, double angle4);
     int moveContinuousNB(mobotJointState_t dir1, 
@@ -629,7 +629,7 @@ class CMobotI
     int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3);
     int getJointState(mobotJointId_t id, mobotJointState_t &state);
     mobot_t* getMobotObject();
-    int getColorRGB(double &r, double &g, double &b);
+    int getColorRGB(int &r, int &g, int &b);
     int move(double angle1, double angle2, double angle3);
     int moveNB(double angle1, double angle2, double angle3);
     int moveContinuousNB(mobotJointState_t dir1, 
@@ -1236,7 +1236,7 @@ DLLIMPORT int Mobot_getJointSpeedRatios(mobot_t* comms,
                                         double *ratio3, 
                                         double *ratio4);
 DLLIMPORT int Mobot_getJointState(mobot_t* comms, mobotJointId_t id, mobotJointState_t *state);
-DLLIMPORT int Mobot_getColorRGB(mobot_t* comms, double *r, double *g, double *b);
+DLLIMPORT int Mobot_getColorRGB(mobot_t* comms, int *r, int *g, int *b);
 DLLIMPORT int Mobot_getStatus(mobot_t* comms);
 DLLIMPORT int Mobot_getVersion(mobot_t* comms);
 DLLIMPORT int Mobot_move(mobot_t* comms,
@@ -1397,7 +1397,7 @@ DLLIMPORT int Mobot_setMovementStateTimeNB(mobot_t* comms,
                                   mobotJointState_t dir3,
                                   mobotJointState_t dir4,
                                   double seconds);
-DLLIMPORT int Mobot_setColorRGB(mobot_t* comms, double r, double g, double b);
+DLLIMPORT int Mobot_setColorRGB(mobot_t* comms, int r, int g, int b);
 DLLIMPORT int Mobot_setTwoWheelRobotSpeed(mobot_t* comms, double speed, double radius);
 DLLIMPORT int Mobot_stop(mobot_t* comms);
 DLLIMPORT int Mobot_stopOneJoint(mobot_t* comms, mobotJointId_t id);
