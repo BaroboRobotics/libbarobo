@@ -10,6 +10,8 @@ target: libmobot.dl
 
 OBJS= mobotgroup++.obj \
       chmobot_chdl.obj \
+      chmoboti_chdl.obj \
+      chmobotl_chdl.obj \
       mobot++.obj \
       mobot_get_functions++.obj \
       mobot_motion_functions++.obj \
@@ -119,6 +121,12 @@ mobotl_set_functions++.obj: ../mobotl_set_functions++.cpp $(HEADERS)
 
 chmobot_chdl.obj: chmobot_chdl.cpp $(HEADERS)
 	ch dlcomp libmobot.dl cplusplus $(CFLAGS) chmobot_chdl.cpp
+
+chmoboti_chdl.obj: chmoboti_chdl.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) chmoboti_chdl.cpp
+
+chmobotl_chdl.obj: chmobotl_chdl.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) chmobotl_chdl.cpp
 
 install:
 	ch pkginstall.ch $(PACKAGE)

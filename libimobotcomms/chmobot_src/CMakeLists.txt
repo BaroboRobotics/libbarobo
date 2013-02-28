@@ -98,6 +98,8 @@ else()
   add_definitions(-DENABLE_BLUETOOTH -DLINUX -D_REENTRANT -DNeedFunctionPrototypes)
 	add_library(chmobot SHARED 
       chmobot_chdl.cpp
+      chmoboti_chdl.cpp
+      chmobotl_chdl.cpp
 	  )
 	target_link_libraries(chmobot mobotStatic bluetooth pthread rt baroboconfigfile mxml chsdk)
   set_target_properties(chmobot PROPERTIES SUFFIX .dl)
