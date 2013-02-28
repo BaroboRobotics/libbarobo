@@ -184,55 +184,6 @@ EXPORTCH int isMoving_chdl(void *varg) {
     return retval;
 }
 
-EXPORTCH int getAccelerometerData_chdl(void *varg) {
-    ChInterp_t interp;
-    ChVaList_t ap;
-    class CMobot *mobot;
-    double *x, *y, *z;
-    int retval;
-
-    Ch_VaStart(interp, ap, varg);
-    mobot = Ch_VaArg(interp, ap, class CMobot *);
-    x = Ch_VaArg(interp, ap, double*);
-    y = Ch_VaArg(interp, ap, double*);
-    z = Ch_VaArg(interp, ap, double*);
-    retval = mobot->getAccelerometerData(*x, *y, *z);
-    Ch_VaEnd(interp, ap);
-    return retval;
-}
-
-EXPORTCH int getBatteryVoltage_chdl(void *varg) {
-    ChInterp_t interp;
-    ChVaList_t ap;
-    class CMobot *mobot;
-    double *v;
-    int retval;
-
-    Ch_VaStart(interp, ap, varg);
-    mobot = Ch_VaArg(interp, ap, class CMobot *);
-    v = Ch_VaArg(interp, ap, double*);
-    retval = mobot->getBatteryVoltage(*v);
-    Ch_VaEnd(interp, ap);
-    return retval;
-}
-
-EXPORTCH int getColorRGB_chdl(void *varg) {
-    ChInterp_t interp;
-    ChVaList_t ap;
-    class CMobot *mobot;
-    double *r, *g, *b;
-    int retval;
-
-    Ch_VaStart(interp, ap, varg);
-    mobot = Ch_VaArg(interp, ap, class CMobot *);
-    r = Ch_VaArg(interp, ap, double*);
-    g = Ch_VaArg(interp, ap, double*);
-    b = Ch_VaArg(interp, ap, double*);
-    retval = mobot->getColorRGB(*r, *g, *b);
-    Ch_VaEnd(interp, ap);
-    return retval;
-}
-
 EXPORTCH int getJointAngle_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -1227,23 +1178,6 @@ EXPORTCH int resetToZeroNB_chdl(void *varg) {
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobot *);
     retval = mobot->resetToZeroNB();
-    Ch_VaEnd(interp, ap);
-    return retval;
-}
-
-EXPORTCH int setColorRGB_chdl(void *varg) {
-    ChInterp_t interp;
-    ChVaList_t ap;
-    class CMobot *mobot;
-    double r, g, b;
-    int retval;
-
-    Ch_VaStart(interp, ap, varg);
-    mobot = Ch_VaArg(interp, ap, class CMobot *);
-    r = Ch_VaArg(interp, ap, double);
-    g = Ch_VaArg(interp, ap, double);
-    b = Ch_VaArg(interp, ap, double);
-    retval = mobot->setColorRGB(r, g, b);
     Ch_VaEnd(interp, ap);
     return retval;
 }
