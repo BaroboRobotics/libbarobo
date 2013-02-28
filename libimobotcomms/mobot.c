@@ -1657,7 +1657,7 @@ void* commsEngine(void* arg)
           NULL,
           &ov);
       GetOverlappedResult(comms->commHandle, &ov, &readbytes, TRUE);
-      CloseHandle(ov.hEvent);
+      //CloseHandle(ov.hEvent);
       err = readbytes;
     } else {
       err = recvfrom(comms->socket, (char*)&byte, 1, 0, (struct sockaddr*)0, 0);
