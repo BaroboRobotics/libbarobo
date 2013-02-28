@@ -347,12 +347,6 @@ int Mobot_setColorRGB(mobot_t* comms, int r, int g, int b)
   uint8_t buf[32];
   float f;
   int status;
-  if(r > 1.0) r = 1.0;
-  if(r < 0) r = 0;
-  if(g > 1.0) g = 1.0;
-  if(g < 0) g = 0;
-  if(b > 1.0) b = 1.0;
-  if(b < 0) b = 0;
   buf[0] = 0xff;
   buf[1] = 0xff;
   buf[2] = 0xff;

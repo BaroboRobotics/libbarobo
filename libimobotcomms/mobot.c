@@ -1877,6 +1877,9 @@ void* commsOutEngine(void* arg)
     while(comms->sendBuf_N == 0) {
       COND_WAIT(comms->sendBuf_cond, comms->sendBuf_lock);
     }
+    if(comms->connected == 0) {
+      break;
+    }
     /* Write one byte at a time */
     while(comms->sendBuf_N > 0) {
       index = comms->sendBuf_index % SENDBUF_SIZE;
@@ -1901,6 +1904,7 @@ void* commsOutEngine(void* arg)
       comms->sendBuf_index++;
     }
   }
+  return NULL;
 }
 
 void* callbackThread(void* arg)
