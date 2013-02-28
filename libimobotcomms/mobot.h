@@ -588,7 +588,7 @@ class CMobotI
     int driveTo(double angle1, double angle2, double angle3);
     int driveToDirectNB(double angle1, double angle2, double angle3);
     int driveToNB(double angle1, double angle2, double angle3);
-    int enableButtonCallback(void (*buttonCallback)(CMobot* mobot, int button, int buttonDown));
+    int enableButtonCallback(void (*buttonCallback)(CMobotI* mobot, int button, int buttonDown));
     int disableButtonCallback();
     int isConnected();
     int isMoving();
@@ -614,7 +614,7 @@ class CMobotI
 #else
     int getJointAngleAverage(mobotJointId_t id, double &angle, int numReadings=10);
 #endif
-    int getJointAngles(double &angle1, double &angle2, double &angle3, double &angle4);
+    int getJointAngles(double &angle1, double &angle2, double &angle3);
 #ifdef _CH_
     int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, ...);
 #else
@@ -807,7 +807,7 @@ class CMobotL
     int driveTo(double angle1, double angle2, double angle3);
     int driveToDirectNB(double angle1, double angle2, double angle3);
     int driveToNB(double angle1, double angle2, double angle3);
-    int enableButtonCallback(void (*buttonCallback)(CMobot* mobot, int button, int buttonDown));
+    int enableButtonCallback(void (*buttonCallback)(CMobotL* mobot, int button, int buttonDown));
     int disableButtonCallback();
     int isConnected();
     int isMoving();
