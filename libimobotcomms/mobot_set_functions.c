@@ -370,8 +370,15 @@ int Mobot_setTwoWheelRobotSpeed(mobot_t* comms, double speed, double radius)
 {
   double omega;
   omega = speed/radius;
-  Mobot_setJointSpeed(comms, MOBOT_JOINT1, omega);
-  Mobot_setJointSpeed(comms, MOBOT_JOINT4, omega);
+  if(comms->formFactor == MOBOTFORM_ORIGINAL) {
+    Mobot_setJointSpeed(comms, MOBOT_JOINT1, omega);
+    Mobot_setJointSpeed(comms, MOBOT_JOINT4, omega);
+  } else if (comms->formFactor == MOBOTFORM_I) {
+    Mobot_setJointSpeed(comms, MOBOT_JOINT1, omega);
+    Mobot_setJointSpeed(comms, MOBOT_JOINT3, omega);
+  } else {
+    return -1;
+  }
   return 0;
 }
 

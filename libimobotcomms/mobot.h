@@ -574,6 +574,7 @@ class CMobotI
 #ifndef _WIN32
     int connectWithTTY(const char ttyfilename[]);
 #endif
+    int connectWithSerialID(const char serialID[]);
     int disconnect();
     int driveJointToDirect(mobotJointId_t id, double angle);
     int driveJointTo(mobotJointId_t id, double angle);
@@ -790,6 +791,7 @@ class CMobotL
 #ifndef _WIN32
     int connectWithTTY(const char ttyfilename[]);
 #endif
+    int connectWithSerialID(const char serialID[]);
     int disconnect();
     int driveJointToDirect(mobotJointId_t id, double angle);
     int driveJointTo(mobotJointId_t id, double angle);
@@ -1120,6 +1122,7 @@ DLLIMPORT int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], c
 DLLIMPORT int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address);
 #endif
 DLLIMPORT int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename);
+DLLIMPORT int Mobot_connectWithSerialID(mobot_t* comms, const char* address);
 DLLIMPORT int Mobot_connectChild(mobot_t* parent, mobot_t* child);
 DLLIMPORT int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSerialID);
 DLLIMPORT int Mobot_connectWithAddress(

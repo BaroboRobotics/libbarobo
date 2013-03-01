@@ -283,6 +283,11 @@ int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
   }
 }
 
+int Mobot_connectWithSerialID(mobot_t* comms, const char* address)
+{
+  return Mobot_connectChildID(g_dongleMobot, comms, address);
+}
+
 int Mobot_connectWithBluetoothAddress(mobot_t* comms, const char* address, int channel)
 {
   int err = -1;
@@ -488,6 +493,23 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   // constants)
   //
 
+#ifdef __MACH__
+  cfsetspeed(&term, 500000);
+  cfsetispeed(&term, 500000);
+  cfsetospeed(&term, 500000);
+  if(status = tcsetattr(comms->socket, TCSANOW, &term)) {
+    fprintf(stderr, "Error setting tty settings. %d\n", errno);
+  }
+  tcgetattr(comms->socket, &term);
+  if(cfgetispeed(&term) != 500000) {
+    fprintf(stderr, "Error setting input speed.\n");
+    exit(0);
+  }
+  if(cfgetospeed(&term) != 500000) {
+    fprintf(stderr, "Error setting output speed.\n");
+    exit(0);
+  }
+#else
   cfsetspeed(&term, B500000);
   cfsetispeed(&term, B500000);
   cfsetospeed(&term, B500000);
@@ -503,13 +525,21 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
     fprintf(stderr, "Error setting output speed.\n");
     exit(0);
   }
+#endif
   comms->connected = 1;
   comms->connectionMode = MOBOTCONNECT_TTY;
   tcflush(comms->socket, TCIOFLUSH);
   status = finishConnect(comms);
+  if(
+      (comms->formFactor == MOBOTFORM_I) ||
+      (comms->formFactor == MOBOTFORM_L) 
+    )
+  {
+    comms->zigbeeAddr = Mobot_getAddress(comms);
+    /* See if we can get the serial id */
+    Mobot_getID(comms);
+  }
   if(status) return status;
-  /* See if we can get the serial id */
-  Mobot_getID(comms);
   /* Finished connecting. Create the lockfile. */
   lockfile = fopen(lockfileName, "w");
   if(lockfile == NULL) {
@@ -559,9 +589,10 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
 
   rc = finishConnect(comms);
   if(rc) {
-    comms->connected = 0;
-    comms->connectionMode = MOBOTCONNECT_NONE;
-    CloseHandle(comms->commHandle);
+    //comms->connected = 0;
+    //comms->connectionMode = MOBOTCONNECT_NONE;
+    //CloseHandle(comms->commHandle);
+    Mobot_disconnect(comms);
     return rc;
   }
   Mobot_getID(comms);
@@ -1088,6 +1119,7 @@ int Mobot_disconnect(mobot_t* comms)
   if(comms->connectionMode == MOBOTCONNECT_TTY) {
     CancelIo(comms->commHandle);
   }
+  sendBufAppend(comms, (uint8_t*)&rc, 1);
   //THREAD_JOIN(*comms->commsThread);
   //CloseHandle(*comms->commsThread);
   //CloseHandle((LPVOID)comms->socket);

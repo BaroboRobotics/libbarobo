@@ -12,11 +12,11 @@ add_definitions(-DNONRELEASE)
 include_directories(${BAROBOCONFIGFILE_SOURCE_DIR})
 link_directories(${BAROBOCONFIGFILE_BINARY_DIR})
 
+include_directories(${MXML_SOURCE_DIR})
+link_directories(${MXML_BINARY_DIR})
 if(CMAKE_HOST_WIN32)
   #include(FindPkgConfig)
   #pkg_check_modules(MXML REQUIRED mxml)
-  include_directories(${MXML_SOURCE_DIR})
-  link_directories(${MXML_BINARY_DIR})
   add_definitions(-D_WIN32_WINNT=0x502 -DENABLE_BLUETOOTH)
 	add_library(mobot SHARED
       mobot.c

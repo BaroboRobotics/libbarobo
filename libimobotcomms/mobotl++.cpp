@@ -52,6 +52,11 @@ int CMobotL::connectWithTTY(const char* ttyfilename)
 }
 #endif
 
+int CMobotL::connectWithSerialID(const char* serialID)
+{
+  return Mobot_connectWithSerialID(_comms, serialID);
+}
+
 int CMobotL::disconnect()
 {
   return Mobot_disconnect(_comms);
