@@ -559,9 +559,10 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
 
   rc = finishConnect(comms);
   if(rc) {
-    comms->connected = 0;
-    comms->connectionMode = MOBOTCONNECT_NONE;
-    CloseHandle(comms->commHandle);
+    //comms->connected = 0;
+    //comms->connectionMode = MOBOTCONNECT_NONE;
+    //CloseHandle(comms->commHandle);
+    Mobot_disconnect(comms);
     return rc;
   }
   Mobot_getID(comms);
@@ -1062,6 +1063,7 @@ int Mobot_disconnect(mobot_t* comms)
   if(comms->connectionMode == MOBOTCONNECT_TTY) {
     CancelIo(comms->commHandle);
   }
+  sendBufAppend(comms, (uint8_t*)&rc, 1);
   //THREAD_JOIN(*comms->commsThread);
   //CloseHandle(*comms->commsThread);
   //CloseHandle((LPVOID)comms->socket);
