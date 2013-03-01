@@ -283,6 +283,11 @@ int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
   }
 }
 
+int Mobot_connectWithSerialID(mobot_t* comms, const char* address)
+{
+  return Mobot_connectChildID(g_dongleMobot, comms, address);
+}
+
 int Mobot_connectWithBluetoothAddress(mobot_t* comms, const char* address, int channel)
 {
   int err = -1;

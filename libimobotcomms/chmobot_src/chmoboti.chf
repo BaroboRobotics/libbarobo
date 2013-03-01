@@ -110,6 +110,20 @@ int CMobotI::connectWithIPAddress(char *address, ...) {
     va_end(ap);
     return retval;
 }
+int CMobotI::connectWithSerialID(char *address) {
+    void *fptr;
+    int retval;
+    va_list ap;
+    char* port = NULL;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "MobotI_connectWithSerialID_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, connectWithSerialID, this, address);
+    return retval;
+}
 int CMobotI::disconnect() {
     void *fptr;
     int retval;

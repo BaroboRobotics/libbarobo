@@ -96,6 +96,21 @@ EXPORTCH int MobotL_connectWithIPAddress_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int MobotL_connectWithSerialID_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotL *mobot;
+    char *address;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotL *);
+    address = Ch_VaArg(interp, ap, char *);
+    retval = mobot->connectWithSerialID(address);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int MobotL_disconnect_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
