@@ -1168,6 +1168,8 @@ DLLIMPORT int Mobot_disableButtonCallback(mobot_t* comms);
 DLLIMPORT int Mobot_init(mobot_t* comms);
 DLLIMPORT int Mobot_isConnected(mobot_t* comms);
 DLLIMPORT int Mobot_isMoving(mobot_t* comms);
+DLLIMPORT int Mobot_pair(mobot_t* mobot);
+DLLIMPORT int Mobot_unpair(mobot_t* mobot);
 DLLIMPORT int Mobot_protocolVersion();
 DLLIMPORT int Mobot_getAccelerometerData(mobot_t* comms, double *accel_x, double *accel_y, double *accel_z);
 DLLIMPORT int Mobot_getBatteryVoltage(mobot_t* comms, double *voltage);

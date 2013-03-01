@@ -691,6 +691,22 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
       } else {
         child->formFactor = (mobotFormFactor_t)form;
       }
+      if(
+          (child->formFactor == MOBOTFORM_I) ||
+          (child->formFactor == MOBOTFORM_L)
+        )
+      {
+        /* Tell the Mobot it is now paired */
+        if(Mobot_pair(child)) {
+          /* The child is already paired. Disconnect and return error... */
+          child->connected = 0;
+          child->connectionMode = MOBOTCONNECT_NONE;
+          child->parent = NULL;
+          iter->mobot = NULL;
+          MUTEX_UNLOCK(parent->mobotTree_lock);
+          return -1;
+        }
+      }
       MUTEX_UNLOCK(parent->mobotTree_lock);
       return 0;
     } else if (i == 0){
@@ -1030,6 +1046,7 @@ int Mobot_reboot(mobot_t* comms)
 int Mobot_disconnect(mobot_t* comms)
 {
   int rc = 0;
+  mobotInfo_t* iter;
   comms->connected = 0;
 #ifndef _WIN32
   switch(comms->connectionMode) {
@@ -1042,6 +1059,12 @@ int Mobot_disconnect(mobot_t* comms)
       } 
       break;
     case MOBOTCONNECT_TTY:
+      /* Unpair all children */
+      for(iter = comms->children; iter != NULL; iter = iter->next) {
+        if(iter->mobot) {
+          Mobot_disconnect(iter->mobot);
+        }
+      }
       if(comms->lockfileName != NULL) {
         unlink(comms->lockfileName);
         free(comms->lockfileName);
@@ -1053,6 +1076,9 @@ int Mobot_disconnect(mobot_t* comms)
       if(close(comms->socket)) {
         rc = -1;
       }
+      break;
+    case MOBOTCONNECT_ZIGBEE:
+      Mobot_unpair(comms);
       break;
     default:
       rc = 0;
@@ -1239,6 +1265,46 @@ int Mobot_isConnected(mobot_t* comms)
 int Mobot_protocolVersion()
 {
   return CMD_NUMCOMMANDS;
+}
+
+int Mobot_pair(mobot_t* mobot)
+{
+  int status;
+  uint8_t buf[8];
+  if(mobot->parent == NULL) {
+    return -1;
+  }
+  buf[0] = mobot->parent->zigbeeAddr>>8;
+  buf[1] = mobot->parent->zigbeeAddr & 0x00ff;
+  status = SendToIMobot(mobot , BTCMD(CMD_PAIRPARENT), buf, 2);
+  if(status < 0) return status;
+  if(RecvFromIMobot(mobot, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the buf size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
+  return 0;
+}
+
+int Mobot_unpair(mobot_t* mobot)
+{
+  int status;
+  uint8_t buf[8];
+  if(mobot->parent == NULL) {
+    return -1;
+  }
+  status = SendToIMobot(mobot, BTCMD(CMD_UNPAIRPARENT), NULL, 0);
+  if(status < 0) return status;
+  if(RecvFromIMobot(mobot, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the buf size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
+  return 0;
 }
 
 int Mobot_reset(mobot_t* comms)
