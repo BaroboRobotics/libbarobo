@@ -601,6 +601,7 @@ class CMobotI
 #endif
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int getBatteryVoltage(double &voltage);
+    int getColorRGB(int &r, int &g, int &b);
     int getFormFactor(int &formFactor);
     static const char* getConfigFilePath();
     int getID();
@@ -625,7 +626,6 @@ class CMobotI
     int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3);
     int getJointState(mobotJointId_t id, mobotJointState_t &state);
     mobot_t* getMobotObject();
-    int getColorRGB(int &r, int &g, int &b);
     int move(double angle1, double angle2, double angle3);
     int moveNB(double angle1, double angle2, double angle3);
     int moveContinuousNB(mobotJointState_t dir1, 
@@ -714,6 +714,9 @@ class CMobotI
     int reset();
     int resetToZero();
     int resetToZeroNB();
+    int setBuzzerFrequency(int frequency, double time);
+    int setBuzzerFrequencyOn(int frequency);
+    int setBuzzerFrequencyOff();
     int setColorRGB(int r, int g, int b);
     int setExitState(mobotJointState_t exitState);
     int setJointMovementStateNB(mobotJointId_t id, mobotJointState_t dir);
@@ -931,6 +934,9 @@ class CMobotL
     int reset();
     int resetToZero();
     int resetToZeroNB();
+    int setBuzzerFrequency(int frequency, double time);
+    int setBuzzerFrequencyOn(int frequency);
+    int setBuzzerFrequencyOff();
     int setColorRGB(int r, int g, int b);
     int setExitState(mobotJointState_t exitState);
     int setJointMovementStateNB(mobotJointId_t id, mobotJointState_t dir);

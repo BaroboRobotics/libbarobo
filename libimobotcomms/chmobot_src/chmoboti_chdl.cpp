@@ -178,6 +178,70 @@ EXPORTCH int MobotI_isMoving_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int MobotI_getAccelerometerData_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotI *mobot;
+    double *x, *y, *z;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotI *);
+    x = Ch_VaArg(interp, ap, double *);
+    y = Ch_VaArg(interp, ap, double *);
+    z = Ch_VaArg(interp, ap, double *);
+    retval = mobot->getAccelerometerData(*x, *y, *z);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int MobotI_getBatteryVoltage_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotI *mobot;
+    double* voltage;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotI *);
+    voltage = Ch_VaArg(interp, ap, double *);
+    retval = mobot->getBatteryVoltage(*voltage);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int MobotI_getColorRGB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotI *mobot;
+    int *r, *g, *b;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotI *);
+    r = Ch_VaArg(interp, ap, int *);
+    g = Ch_VaArg(interp, ap, int *);
+    b = Ch_VaArg(interp, ap, int *);
+    retval = mobot->getColorRGB(*r, *g, *b);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int MobotI_getFormFactor_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotI *mobot;
+    int* formFactor;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotI *);
+    formFactor = Ch_VaArg(interp, ap, int *);
+    retval = mobot->getFormFactor(*formFactor);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int MobotI_getJointAngle_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -1130,6 +1194,68 @@ EXPORTCH int MobotI_resetToZeroNB_chdl(void *varg) {
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobotI *);
     retval = mobot->resetToZeroNB();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int MobotI_setBuzzerFrequency_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotI *mobot;
+    int frequency;
+    double time;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotI *);
+    frequency = Ch_VaArg(interp, ap, int);
+    time = Ch_VaArg(interp, ap, double);
+    retval = mobot->setBuzzerFrequency(frequency, time);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int MobotI_setBuzzerFrequencyOn_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotI *mobot;
+    int frequency;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotI *);
+    frequency = Ch_VaArg(interp, ap, int);
+    retval = mobot->setBuzzerFrequencyOn(frequency);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int MobotI_setBuzzerFrequencyOff_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotI *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotI *);
+    retval = mobot->setBuzzerFrequencyOff();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int MobotI_setColorRGB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotI *mobot;
+    int r, g, b;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotI *);
+    r = Ch_VaArg(interp, ap, int);
+    g = Ch_VaArg(interp, ap, int);
+    b = Ch_VaArg(interp, ap, int);
+    retval = mobot->setColorRGB(r, g, b);
     Ch_VaEnd(interp, ap);
     return retval;
 }

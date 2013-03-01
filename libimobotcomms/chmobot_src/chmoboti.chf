@@ -208,6 +208,54 @@ int CMobotI::enableButtonCallback(void (*buttonCallback)(CMobotI* robot, int but
     dlrunfun(fptr, &retval, NULL, this, buttonCallback);
     return retval;
 }
+int CMobotI::getAccelerometerData(double & x, double & y, double & z) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "MobotI_getAccelerometerData_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, &x, &y, &z);
+    return retval;
+}
+int CMobotI::getBatteryVoltage(double & voltage) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "MobotI_getBatteryVoltage_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, &voltage);
+    return retval;
+}
+int CMobotI::getColorRGB(int & r, int & g, int & b) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "MobotI_getColorRGB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, &r, &g, &b);
+    return retval;
+}
+int CMobotI::getFormFactor(int & formFactor) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "MobotI_getFormFactor_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, &formFactor);
+    return retval;
+}
 int CMobotI::getJointAngle(int id, double & angle) {
     void *fptr;
     int retval;
@@ -1024,6 +1072,54 @@ int CMobotI::resetToZeroNB() {
         return -1;
     }
     dlrunfun(fptr, &retval, resetToZeroNB, this);
+    return retval;
+}
+int CMobotI::setBuzzerFrequency(int frequency, double time) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "MobotI_setBuzzerFrequency_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setBuzzerFrequency, this, frequency, time);
+    return retval;
+}
+int CMobotI::setBuzzerFrequencyOn(int frequency) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "MobotI_setBuzzerFrequencyOn_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setBuzzerFrequencyOn, this, frequency);
+    return retval;
+}
+int CMobotI::setBuzzerFrequencyOff() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "MobotI_setBuzzerFrequencyOff_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setBuzzerFrequencyOff, this);
+    return retval;
+}
+int CMobotI::setColorRGB(int r, int g, int b) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "MobotI_setColorRGB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setColorRGB, this, r, g, b);
     return retval;
 }
 int CMobotI::setExitState(int exitState) {

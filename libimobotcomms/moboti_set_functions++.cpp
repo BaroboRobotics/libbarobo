@@ -4,6 +4,21 @@
 #define DEPRECATED(from, to) \
   fprintf(stderr, "Warning: The function \"%s()\" is deprecated. Please use \"%s()\"\n" , from, to)
 
+int CMobotI::setBuzzerFrequency(int frequency, double time)
+{
+  return Mobot_setBuzzerFrequency(_comms, frequency, time);
+}
+
+int CMobotI::setBuzzerFrequencyOn(int frequency)
+{
+  return Mobot_setBuzzerFrequencyOn(_comms, frequency);
+}
+
+int CMobotI::setBuzzerFrequencyOff()
+{
+  return Mobot_setBuzzerFrequencyOff(_comms);
+}
+
 int CMobotI::setColorRGB(int r, int g, int b)
 {
   return Mobot_setColorRGB(_comms, r, g, b);
