@@ -1468,11 +1468,13 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
   len++;
 #endif
   //printf("SEND %d: <<%s>>\n", comms->socket, str);
+  /*
   printf("SEND: ");
   for(i = 0; i < len; i++) {
     printf("0x%x ", str[i]);
   }
   printf("\n");
+  */
   //Sleep(1);
 
 #ifndef _WIN32
@@ -1775,7 +1777,7 @@ void* commsEngine(void* arg)
     /* Received a byte. If it is the first one, check to see if it is a
      * response or a triggered event */
     /* DEBUG */
-    printf("%d RECV: 0x%0x\n", bytes, byte);
+    //printf("%d RECV: 0x%0x\n", bytes, byte);
     if(bytes == 0) {
       MUTEX_LOCK(comms->commsBusy_lock);
       comms->commsBusy = 1;
@@ -1872,24 +1874,71 @@ void* commsEngine(void* arg)
       if( (bytes >= 2) &&
           (comms->recvBuf[1] == bytes) )
       {
+        uint16_t address;
+        uint8_t events;
+        uint8_t buttonDown;
         if(comms->recvBuf[0] == EVENT_BUTTON) {
           /* We got the entire message */
           MUTEX_LOCK(comms->callback_lock);
-          if(comms->callbackEnabled) {
-            /* Call the callback multiple times depending on the events */
-            int bit;
-            uint8_t events = comms->recvBuf[6];
-            uint8_t buttonDown = comms->recvBuf[7];
-            THREAD_T callbackThreadHandle;
-            callbackArg_t* callbackArg;
-            for(bit = 0; bit < 2; bit++) {
-              if(events & (1<<bit)) {
-                callbackArg = (callbackArg_t*)malloc(sizeof(callbackArg_t));
-                callbackArg->comms = comms;
-                callbackArg->button = bit;
-                callbackArg->buttonDown = (buttonDown & (1<<bit)) ? 1 : 0;
-                //comms->buttonCallback(bit, (buttonDown & (1<<bit)) ? 1 : 0 );
-                THREAD_CREATE(&callbackThreadHandle, callbackThread, callbackArg);
+          /* First, we need to see which mobot initiated the button press */
+          address = comms->recvBuf[2] << 8;
+          address |= comms->recvBuf[3] & 0x00ff;
+          if( (address == 0) || (address == comms->zigbeeAddr)) {
+            if(comms->callbackEnabled) {
+              /* Call the callback multiple times depending on the events */
+              int bit;
+              if(
+                  (comms->connectionMode == MOBOTCONNECT_BLUETOOTH) ||
+                  (comms->connectionMode == MOBOTCONNECT_TCP) 
+                )
+              {
+                events = comms->recvBuf[6];
+                buttonDown = comms->recvBuf[7];
+              } else {
+                events = comms->recvBuf[11];
+                buttonDown = comms->recvBuf[12];
+              }
+              THREAD_T callbackThreadHandle;
+              callbackArg_t* callbackArg;
+              for(bit = 0; bit < 2; bit++) {
+                if(events & (1<<bit)) {
+                  callbackArg = (callbackArg_t*)malloc(sizeof(callbackArg_t));
+                  callbackArg->comms = comms;
+                  callbackArg->button = bit;
+                  callbackArg->buttonDown = (buttonDown & (1<<bit)) ? 1 : 0;
+                  //comms->buttonCallback(bit, (buttonDown & (1<<bit)) ? 1 : 0 );
+                  THREAD_CREATE(&callbackThreadHandle, callbackThread, callbackArg);
+                }
+              }
+            }
+          } else {
+            /* Perhaps a child triggered the event? Cycle through all children
+             * to see if we can match the address. */
+            mobotInfo_t* target;
+            for(target = comms->children; target != NULL; target = target->next) {
+              if(target->zigbeeAddr == address) {
+                if(target->mobot == NULL) {
+                  break;
+                }
+                if(target->mobot->callbackEnabled) {
+                  /* Call the callback multiple times depending on the events */
+                  int bit;
+                  THREAD_T callbackThreadHandle;
+                  callbackArg_t* callbackArg;
+                  events = comms->recvBuf[11];
+                  buttonDown = comms->recvBuf[12];
+                  for(bit = 0; bit < 2; bit++) {
+                    if(events & (1<<bit)) {
+                      callbackArg = (callbackArg_t*)malloc(sizeof(callbackArg_t));
+                      callbackArg->comms = target->mobot;
+                      callbackArg->button = bit;
+                      callbackArg->buttonDown = (buttonDown & (1<<bit)) ? 1 : 0;
+                      //target->mobot->buttonCallback(bit, (buttonDown & (1<<bit)) ? 1 : 0 );
+                      THREAD_CREATE(&callbackThreadHandle, callbackThread, callbackArg);
+                    }
+                  }
+                }
+                break;
               }
             }
           }
