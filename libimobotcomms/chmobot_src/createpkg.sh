@@ -13,6 +13,8 @@ mkdir $PKGDIR/dl
 mkdir $PKGDIR/include
 mkdir $PKGDIR/docs
 cp chmobot.chf $PKGDIR/lib
+cp chmoboti.chf $PKGDIR/lib
+cp chmobotl.chf $PKGDIR/lib
 cp shiftTime.chf $PKGDIR/lib
 cp delay.chf $PKGDIR/lib
 cp libchmobot.dl $PKGDIR/dl/libmobot.dl

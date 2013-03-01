@@ -234,16 +234,6 @@ int CMobotI::stopOneJoint(mobotJointId_t id)
   return Mobot_stopOneJoint(_comms, id);
 }
 
-int CMobotI::stopTwoJoints(mobotJointId_t id1, mobotJointId_t id2)
-{
-  return Mobot_stopTwoJoints(_comms, id1, id2);
-}
-
-int CMobotI::stopThreeJoints(mobotJointId_t id1, mobotJointId_t id2, mobotJointId_t id3)
-{
-  return Mobot_stopThreeJoints(_comms, id1, id2, id3);
-}
-
 int CMobotI::stopAllJoints()
 {
   return Mobot_stopAllJoints(_comms);

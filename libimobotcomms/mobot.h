@@ -762,9 +762,6 @@ class CMobotI
     mobot_t *_comms;
     void (*buttonCallback)(CMobot *mobot, int button, int buttonDown);
 #else
-  public:
-    static void *g_chmobot_dlhandle;
-    static int g_chmobot_dlcount;
 #endif /* Not _CH_*/
 };
 
@@ -968,9 +965,6 @@ class CMobotL
     mobot_t *_comms;
     void (*buttonCallback)(CMobot *mobot, int button, int buttonDown);
 #else
-  public:
-    static void *g_chmobot_dlhandle;
-    static int g_chmobot_dlcount;
 #endif /* Not _CH_*/
 };
 
@@ -1445,6 +1439,8 @@ extern void delay(double seconds);
 void * CMobot::g_chmobot_dlhandle = NULL;
 int CMobot::g_chmobot_dlcount = 0;
 #pragma importf "chmobot.chf"
+#pragma importf "chmoboti.chf"
+#pragma importf "chmobotl.chf"
 #endif
 
 #endif /* Header Guard */
