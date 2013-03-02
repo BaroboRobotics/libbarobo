@@ -6,5 +6,5 @@ link_directories( ${LIBIMOBOTCOMMS_BINARY_DIR})
 
 add_executable(standtest standtest.cpp)
 add_executable(continuousmotiontest continuousmotiontest.cpp)
-target_link_libraries(standtest mobot)
-target_link_libraries(continuousmotiontest mobot)
+target_link_libraries(standtest mobotStatic)
+target_link_libraries(continuousmotiontest mobotStatic)
