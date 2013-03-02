@@ -506,11 +506,17 @@ int Mobot_driveToNB(mobot_t* comms,
 int Mobot_moveWait(mobot_t* comms)
 {
   int i;
-  /* Make sure there is no non-blocking function running */
-//  THREAD_JOIN(comms->thread);
-  for(i = 0; i < 4; i++) {
-    if(Mobot_moveJointWait(comms, (mobotJointId_t)(i+1))) {
-      return -1;
+  if(comms->formFactor == MOBOTFORM_I) {
+    Mobot_moveJointWait(comms, MOBOT_JOINT1);
+    Mobot_moveJointWait(comms, MOBOT_JOINT3);
+  } else if (comms->formFactor == MOBOTFORM_L) {
+    Mobot_moveJointWait(comms, MOBOT_JOINT1);
+    Mobot_moveJointWait(comms, MOBOT_JOINT2);
+  } else {
+    for(i = 0; i < 4; i++) {
+      if(Mobot_moveJointWait(comms, (mobotJointId_t)(i+1))) {
+        return -1;
+      }
     }
   }
   return 0;

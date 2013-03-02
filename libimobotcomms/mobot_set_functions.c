@@ -115,7 +115,30 @@ int Mobot_setJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t
   uint8_t buf[32];
   int status;
   buf[0] = (uint8_t)id-1;
-  buf[1] = (uint8_t) dir;
+  if(
+      (comms->formFactor == MOBOTFORM_I) && 
+      (id == MOBOT_JOINT3)
+    )
+  {
+    switch (dir) {
+      case MOBOT_FORWARD:
+        buf[1] = MOBOT_BACKWARD;
+        break;
+      case MOBOT_BACKWARD:
+        buf[1] = MOBOT_FORWARD;
+        break;
+      case MOBOT_POSITIVE:
+        buf[1] = MOBOT_FORWARD;
+        break;
+      case MOBOT_NEGATIVE:
+        buf[1] = MOBOT_BACKWARD;
+        break;
+      default:
+        buf[1] = dir;
+    }
+  } else {
+    buf[1] = (uint8_t) dir;
+  }
   status = SendToIMobot(comms, BTCMD(CMD_SETMOTORDIR), buf, 2);
   if(status < 0) return status;
   if(RecvFromIMobot(comms, buf, sizeof(buf))) {
@@ -271,6 +294,24 @@ int Mobot_setMovementStateNB(mobot_t* comms,
   mobotJointState_t dirs[4];
   dirs[0] = dir1; dirs[1] = dir2; dirs[2] = dir3; dirs[3] = dir4;
   buf[0] = 0x0F;
+  if(comms->formFactor == MOBOTFORM_I) {
+    switch(dir3) {
+      case MOBOT_FORWARD:
+        dirs[2] = MOBOT_BACKWARD;
+        break;
+      case MOBOT_BACKWARD:
+        dirs[2] = MOBOT_FORWARD;
+        break;
+      case MOBOT_POSITIVE:
+        dirs[2] = MOBOT_FORWARD;
+        break;
+      case MOBOT_NEGATIVE:
+        dirs[2] = MOBOT_BACKWARD;
+        break;
+      default:
+        dirs[2] = dir3;
+    }
+  }
   for(i = 0; i < 4; i++) {
     buf[i*6 + 1] = dirs[i];
     buf[i*6 + 2] = MOBOT_HOLD;
@@ -324,6 +365,24 @@ int Mobot_setMovementStateTimeNB(mobot_t* comms,
   int status;
   mobotJointState_t dirs[4];
   dirs[0] = dir1; dirs[1] = dir2; dirs[2] = dir3; dirs[3] = dir4;
+  if(comms->formFactor == MOBOTFORM_I) {
+    switch(dir3) {
+      case MOBOT_FORWARD:
+        dirs[2] = MOBOT_BACKWARD;
+        break;
+      case MOBOT_BACKWARD:
+        dirs[2] = MOBOT_FORWARD;
+        break;
+      case MOBOT_POSITIVE:
+        dirs[2] = MOBOT_FORWARD;
+        break;
+      case MOBOT_NEGATIVE:
+        dirs[2] = MOBOT_BACKWARD;
+        break;
+      default:
+        dirs[2] = dir3;
+    }
+  }
   buf[0] = 0x0F;
   for(i = 0; i < 4; i++) {
     buf[i*6 + 1] = dirs[i];

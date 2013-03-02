@@ -420,6 +420,13 @@ int Mobot_getJointAnglesTimeState(mobot_t* comms,
   *angle2 = angles[1];
   *angle3 = angles[2];
   *angle4 = angles[3];
+  if( comms->formFactor == MOBOTFORM_I) {
+    if(*angle3 == MOBOT_FORWARD) {
+      *angle3 = MOBOT_BACKWARD;
+    } else if (*angle3 == MOBOT_BACKWARD) {
+      *angle3 = MOBOT_FORWARD;
+    }
+  }
   return 0;
 }
 
@@ -472,6 +479,17 @@ int Mobot_getJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t
     return -1;
   }
   *dir = (mobotJointState_t)buf[2];
+  if(
+      (comms->formFactor == MOBOTFORM_I) &&
+      (id == MOBOT_JOINT3)
+    )
+  {
+    if(*dir == MOBOT_FORWARD) {
+      *dir = MOBOT_BACKWARD;
+    } else if (*dir == MOBOT_BACKWARD) {
+      *dir = MOBOT_FORWARD;
+    }
+  }
   return 0;
 }
 
@@ -590,9 +608,21 @@ int Mobot_getJointState(mobot_t* comms, mobotJointId_t id, mobotJointState_t *st
   }
   /* Make sure the data size is correct */
   if(buf[1] != 0x04) {
+    *state = MOBOT_NEUTRAL;
     return -1;
   }
   *state = (mobotJointState_t)buf[2];
+  if(
+      (comms->formFactor == MOBOTFORM_I) &&
+      (id == MOBOT_JOINT3)
+    )
+  {
+    if(*state == MOBOT_FORWARD) {
+      *state = MOBOT_BACKWARD;
+    } else if (*state == MOBOT_BACKWARD) {
+      *state = MOBOT_FORWARD;
+    }
+  }
   return 0;
 }
 

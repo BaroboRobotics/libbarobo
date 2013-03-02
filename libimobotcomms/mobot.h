@@ -123,6 +123,8 @@ typedef enum mobotJointState_e
     MOBOT_FORWARD,
     MOBOT_BACKWARD,
     MOBOT_HOLD,
+    MOBOT_POSITIVE,
+    MOBOT_NEGATIVE
 } mobotJointState_t;
 #endif
 
