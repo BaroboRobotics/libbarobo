@@ -1240,7 +1240,7 @@ CMobotLGroup::~CMobotLGroup() {
   }
 }
 
-int CMobotLGroup::addRobot(CMobot &robot) {
+int CMobotLGroup::addRobot(CMobotL &robot) {
     void *fptr;
     int retval;
 
