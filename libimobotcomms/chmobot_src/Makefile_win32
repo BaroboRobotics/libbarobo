@@ -43,6 +43,12 @@ libmobot.dl: $(OBJS)
 mobotgroup++.obj: ../mobotgroup++.cpp $(HEADERS)
 	ch dlcomp libmobotgroup.dl cplusplus $(CFLAGS) ../mobotgroup++.cpp
 
+mobotigroup++.obj: ../mobotigroup++.cpp $(HEADERS)
+	ch dlcomp libmobotigroup.dl cplusplus $(CFLAGS) ../mobotigroup++.cpp
+
+mobotlgroup++.obj: ../mobotlgroup++.cpp $(HEADERS)
+	ch dlcomp libmobotlgroup.dl cplusplus $(CFLAGS) ../mobotlgroup++.cpp
+
 # Mobot Files
 mobot.obj: ../mobot.c $(HEADERS)
 	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot.c
