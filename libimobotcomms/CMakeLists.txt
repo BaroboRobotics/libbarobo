@@ -24,6 +24,8 @@ if(CMAKE_HOST_WIN32)
       mobot_get_functions.c
       mobot_get_functions++.cpp
       mobotgroup++.cpp
+      mobotigroup++.cpp
+      mobotlgroup++.cpp
       mobot_motion_functions.c
       mobot_motion_functions++.cpp
       mobot_movement_functions.c
@@ -51,6 +53,8 @@ if(CMAKE_HOST_WIN32)
       mobot_get_functions.c
       mobot_get_functions++.cpp
       mobotgroup++.cpp
+      mobotigroup++.cpp
+      mobotlgroup++.cpp
       mobot_motion_functions.c
       mobot_motion_functions++.cpp
       mobot_movement_functions.c
@@ -95,6 +99,8 @@ elseif(CMAKE_HOST_APPLE)
       mobot_get_functions.c
       mobot_get_functions++.cpp
       mobotgroup++.cpp
+      mobotigroup++.cpp
+      mobotlgroup++.cpp
       mobot_motion_functions.c
       mobot_motion_functions++.cpp
       mobot_movement_functions.c
@@ -122,6 +128,8 @@ elseif(CMAKE_HOST_APPLE)
       mobot_get_functions.c
       mobot_get_functions++.cpp
       mobotgroup++.cpp
+      mobotigroup++.cpp
+      mobotlgroup++.cpp
       mobot_motion_functions.c
       mobot_motion_functions++.cpp
       mobot_movement_functions.c
@@ -158,6 +166,8 @@ else(CMAKE_HOST_WIN32)
       mobot_get_functions.c
       mobot_get_functions++.cpp
       mobotgroup++.cpp
+      mobotigroup++.cpp
+      mobotlgroup++.cpp
       mobot_motion_functions.c
       mobot_motion_functions++.cpp
       mobot_movement_functions.c
@@ -185,6 +195,8 @@ else(CMAKE_HOST_WIN32)
       mobot_get_functions.c
       mobot_get_functions++.cpp
       mobotgroup++.cpp
+      mobotigroup++.cpp
+      mobotlgroup++.cpp
       mobot_motion_functions.c
       mobot_motion_functions++.cpp
       mobot_movement_functions.c
