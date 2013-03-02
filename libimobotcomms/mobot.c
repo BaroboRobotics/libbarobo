@@ -662,6 +662,12 @@ int Mobot_connectChild(mobot_t* parent, mobot_t* child)
 int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSerialID)
 { 
   int form; int rc;
+  int i;
+  char* _childSerialID;
+  _childSerialID = strdup(childSerialID);
+  for(i = 0; i < strlen(_childSerialID); i++) {
+    _childSerialID[i] = toupper(_childSerialID[i]);
+  }
   /* If a parent was specified, use it as a dongle */
   if(parent == NULL) {
     if(g_bcf == NULL) {
@@ -673,6 +679,7 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
             "the 'Robot' menu entry, and selecting 'Configure Robot Bluetooth'.\n");
         BCF_Destroy(g_bcf);
         g_bcf = NULL;
+        free(_childSerialID);
         return -1;
       }
     }
@@ -681,7 +688,7 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
   } else {
   }
   /* First, check to see if it is our ID */
-  if(!strcmp(parent->serialID, childSerialID)) {
+  if(!strcmp(parent->serialID, _childSerialID)) {
     child->parent = parent;
     child->connected = 1;
     child->connectionMode = MOBOTCONNECT_ZIGBEE;
@@ -693,18 +700,18 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
     } else {
       child->formFactor = (mobotFormFactor_t)form;
     }
+    free(_childSerialID);
     return 0;
   }
   /* Now check to see if the requested child is already in the list of known
    * Serial ID's */  
   int idFound = 0;
   mobotInfo_t* iter;
-  int i;
   for(i = 0; i < 2; i++) {
     MUTEX_LOCK(parent->mobotTree_lock);
     for(iter = parent->children; iter != NULL; iter = iter->next)
     {
-      if(!strncmp(iter->serialID, childSerialID, 4)) {
+      if(!strncmp(iter->serialID, _childSerialID, 4)) {
         idFound = 1;
         break;
       }
@@ -735,10 +742,12 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
           child->parent = NULL;
           iter->mobot = NULL;
           MUTEX_UNLOCK(parent->mobotTree_lock);
+          free(_childSerialID);
           return -1;
         }
       }
       MUTEX_UNLOCK(parent->mobotTree_lock);
+      free(_childSerialID);
       return 0;
     } else if (i == 0){
       MUTEX_UNLOCK(parent->mobotTree_lock);
@@ -752,6 +761,7 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
   }
   /* Did not find the child */
   MUTEX_UNLOCK(parent->mobotTree_lock);
+  free(_childSerialID);
   return -1;
 }
 
