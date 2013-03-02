@@ -8,6 +8,7 @@ int main()
 {
   mobot_t mobot;
   mobot_t* child;
+  mobotMelodyNote_t* head;
   int rc;
   Mobot_init(&mobot);
   //Mobot_connectWithTTY(&mobot, "/dev/ttyACM0");
@@ -15,7 +16,6 @@ int main()
     printf("connection failed.\n");
     exit(-1);
   }
-  mobotMelodyNote_t* head;
   head = Mobot_createMelody(120);
   /*
   Mobot_melodyAddNote(head, "A", 16);
@@ -67,7 +67,11 @@ int main()
   Mobot_loadMelody(&mobot, 1, head);
   //Mobot_loadMelody(child, 1, head);
   Mobot_playMelody(&mobot, 1);
+#ifndef _WIN32
   usleep(3200000);
+#else
+  Sleep(3200);
+#endif
 
   head = Mobot_createMelody(120);
   Mobot_melodyAddNote(head, "E5", 16);

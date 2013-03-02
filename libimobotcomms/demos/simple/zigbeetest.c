@@ -12,6 +12,10 @@ int main()
   uint8_t channel;
   int i;
   int rc;
+  double v;
+  int x, y, z;
+  double angle1, angle2;
+  int power = 255;
   mobot_t mobot;
   mobot_t mobot2;
   mobot_t child;
@@ -61,10 +65,6 @@ int main()
     sleep(2);
   }
 #endif
-  double v;
-  i = -20;
-  int x, y, z;
-  double angle1, angle2;
   //Mobot_moveJointToNB(child, 1, M_PI/2.0);
   //Mobot_stop(child);
   /*
@@ -79,7 +79,6 @@ int main()
     //Mobot_moveJointToNB(child, 2, 0);
     //Mobot_setJointSafetyAngleTimeout(child, 5);
     //Mobot_driveJointToDirect(child, 2, 0 * M_PI/180.0);
-  int power = 255;
   //Mobot_moveJointToNB(child, 1, 0);
   //Mobot_moveJointToNB(child, 2, 0);
   while(1) {
@@ -95,6 +94,7 @@ int main()
     //printf("Joint Targets: %lf %lf\n", angle1*180.0/M_PI, (-10)*180.0/M_PI);
     //Mobot_moveJointToNB(child, 1, angle1);
     //Mobot_moveJointToNB(child, 2, angle2);
+    i = -20;
     for(i = 0; i < 20; i++) {
       //Mobot_getBatteryVoltage(child, &v);
       Mobot_setBuzzerFrequencyOn(&mobot, rand()%2000);

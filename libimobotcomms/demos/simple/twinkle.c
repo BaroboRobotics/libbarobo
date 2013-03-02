@@ -9,13 +9,13 @@ int main()
   mobot_t mobot;
   mobot_t* child;
   int rc;
+  mobotMelodyNote_t* head;
   Mobot_init(&mobot);
   //Mobot_connectWithTTY(&mobot, "/dev/ttyACM0");
   if(rc = Mobot_connect(&mobot)) {
     printf("connection failed.\n");
     exit(-1);
   }
-  mobotMelodyNote_t* head;
   head = Mobot_createMelody(60);
   Mobot_melodyAddNote(head, "C", 16);
   Mobot_melodyAddNote(head, "C", 16);

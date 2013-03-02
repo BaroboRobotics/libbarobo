@@ -12,6 +12,9 @@
 int main(int argc, char *argv[])
 {
   mobot_t mobot;
+  int i;
+  double d;
+  double x, y, z;
   Mobot_init(&mobot);
   if(argc != 2) {
     printf("Usage: %s <tty device>\n", argv[0]);
@@ -23,9 +26,6 @@ int main(int argc, char *argv[])
     exit(0);
   }
 
-  int i;
-  double d;
-  double x, y, z;
   for(i = 0; i < 20; i++) {
     ASSERT(Mobot_getStatus(&mobot), "Error retrieving mobot status.\n");
     ASSERT(Mobot_getJointAngle(&mobot, MOBOT_JOINT1, &d), "Error getting joint angle.\n");
