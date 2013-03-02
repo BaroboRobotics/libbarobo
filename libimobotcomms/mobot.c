@@ -493,6 +493,23 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   // constants)
   //
 
+#ifdef __MACH__
+  cfsetspeed(&term, 500000);
+  cfsetispeed(&term, 500000);
+  cfsetospeed(&term, 500000);
+  if(status = tcsetattr(comms->socket, TCSANOW, &term)) {
+    fprintf(stderr, "Error setting tty settings. %d\n", errno);
+  }
+  tcgetattr(comms->socket, &term);
+  if(cfgetispeed(&term) != 500000) {
+    fprintf(stderr, "Error setting input speed.\n");
+    exit(0);
+  }
+  if(cfgetospeed(&term) != 500000) {
+    fprintf(stderr, "Error setting output speed.\n");
+    exit(0);
+  }
+#else
   cfsetspeed(&term, B500000);
   cfsetispeed(&term, B500000);
   cfsetospeed(&term, B500000);
@@ -508,13 +525,21 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
     fprintf(stderr, "Error setting output speed.\n");
     exit(0);
   }
+#endif
   comms->connected = 1;
   comms->connectionMode = MOBOTCONNECT_TTY;
   tcflush(comms->socket, TCIOFLUSH);
   status = finishConnect(comms);
+  if(
+      (comms->formFactor == MOBOTFORM_I) ||
+      (comms->formFactor == MOBOTFORM_L) 
+    )
+  {
+    comms->zigbeeAddr = Mobot_getAddress(comms);
+    /* See if we can get the serial id */
+    Mobot_getID(comms);
+  }
   if(status) return status;
-  /* See if we can get the serial id */
-  Mobot_getID(comms);
   /* Finished connecting. Create the lockfile. */
   lockfile = fopen(lockfileName, "w");
   if(lockfile == NULL) {
@@ -696,6 +721,22 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
         child->formFactor = MOBOTFORM_ORIGINAL;
       } else {
         child->formFactor = (mobotFormFactor_t)form;
+      }
+      if(
+          (child->formFactor == MOBOTFORM_I) ||
+          (child->formFactor == MOBOTFORM_L)
+        )
+      {
+        /* Tell the Mobot it is now paired */
+        if(Mobot_pair(child)) {
+          /* The child is already paired. Disconnect and return error... */
+          child->connected = 0;
+          child->connectionMode = MOBOTCONNECT_NONE;
+          child->parent = NULL;
+          iter->mobot = NULL;
+          MUTEX_UNLOCK(parent->mobotTree_lock);
+          return -1;
+        }
       }
       MUTEX_UNLOCK(parent->mobotTree_lock);
       return 0;
@@ -1036,6 +1077,7 @@ int Mobot_reboot(mobot_t* comms)
 int Mobot_disconnect(mobot_t* comms)
 {
   int rc = 0;
+  mobotInfo_t* iter;
   comms->connected = 0;
 #ifndef _WIN32
   switch(comms->connectionMode) {
@@ -1048,6 +1090,12 @@ int Mobot_disconnect(mobot_t* comms)
       } 
       break;
     case MOBOTCONNECT_TTY:
+      /* Unpair all children */
+      for(iter = comms->children; iter != NULL; iter = iter->next) {
+        if(iter->mobot) {
+          Mobot_disconnect(iter->mobot);
+        }
+      }
       if(comms->lockfileName != NULL) {
         unlink(comms->lockfileName);
         free(comms->lockfileName);
@@ -1059,6 +1107,9 @@ int Mobot_disconnect(mobot_t* comms)
       if(close(comms->socket)) {
         rc = -1;
       }
+      break;
+    case MOBOTCONNECT_ZIGBEE:
+      Mobot_unpair(comms);
       break;
     default:
       rc = 0;
@@ -1248,6 +1299,46 @@ int Mobot_protocolVersion()
   return CMD_NUMCOMMANDS;
 }
 
+int Mobot_pair(mobot_t* mobot)
+{
+  int status;
+  uint8_t buf[8];
+  if(mobot->parent == NULL) {
+    return -1;
+  }
+  buf[0] = mobot->parent->zigbeeAddr>>8;
+  buf[1] = mobot->parent->zigbeeAddr & 0x00ff;
+  status = SendToIMobot(mobot , BTCMD(CMD_PAIRPARENT), buf, 2);
+  if(status < 0) return status;
+  if(RecvFromIMobot(mobot, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the buf size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
+  return 0;
+}
+
+int Mobot_unpair(mobot_t* mobot)
+{
+  int status;
+  uint8_t buf[8];
+  if(mobot->parent == NULL) {
+    return -1;
+  }
+  status = SendToIMobot(mobot, BTCMD(CMD_UNPAIRPARENT), NULL, 0);
+  if(status < 0) return status;
+  if(RecvFromIMobot(mobot, buf, sizeof(buf))) {
+    return -1;
+  }
+  /* Make sure the buf size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
+  return 0;
+}
+
 int Mobot_reset(mobot_t* comms)
 {
   uint8_t buf[64];
@@ -1377,11 +1468,13 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
   len++;
 #endif
   //printf("SEND %d: <<%s>>\n", comms->socket, str);
+  /*
   printf("SEND: ");
   for(i = 0; i < len; i++) {
     printf("0x%x ", str[i]);
   }
   printf("\n");
+  */
   //Sleep(1);
 
 #ifndef _WIN32
@@ -1684,7 +1777,7 @@ void* commsEngine(void* arg)
     /* Received a byte. If it is the first one, check to see if it is a
      * response or a triggered event */
     /* DEBUG */
-    printf("%d RECV: 0x%0x\n", bytes, byte);
+    //printf("%d RECV: 0x%0x\n", bytes, byte);
     if(bytes == 0) {
       MUTEX_LOCK(comms->commsBusy_lock);
       comms->commsBusy = 1;
@@ -1781,24 +1874,71 @@ void* commsEngine(void* arg)
       if( (bytes >= 2) &&
           (comms->recvBuf[1] == bytes) )
       {
+        uint16_t address;
+        uint8_t events;
+        uint8_t buttonDown;
         if(comms->recvBuf[0] == EVENT_BUTTON) {
           /* We got the entire message */
           MUTEX_LOCK(comms->callback_lock);
-          if(comms->callbackEnabled) {
-            /* Call the callback multiple times depending on the events */
-            int bit;
-            uint8_t events = comms->recvBuf[6];
-            uint8_t buttonDown = comms->recvBuf[7];
-            THREAD_T callbackThreadHandle;
-            callbackArg_t* callbackArg;
-            for(bit = 0; bit < 2; bit++) {
-              if(events & (1<<bit)) {
-                callbackArg = (callbackArg_t*)malloc(sizeof(callbackArg_t));
-                callbackArg->comms = comms;
-                callbackArg->button = bit;
-                callbackArg->buttonDown = (buttonDown & (1<<bit)) ? 1 : 0;
-                //comms->buttonCallback(bit, (buttonDown & (1<<bit)) ? 1 : 0 );
-                THREAD_CREATE(&callbackThreadHandle, callbackThread, callbackArg);
+          /* First, we need to see which mobot initiated the button press */
+          address = comms->recvBuf[2] << 8;
+          address |= comms->recvBuf[3] & 0x00ff;
+          if( (address == 0) || (address == comms->zigbeeAddr)) {
+            if(comms->callbackEnabled) {
+              /* Call the callback multiple times depending on the events */
+              int bit;
+              if(
+                  (comms->connectionMode == MOBOTCONNECT_BLUETOOTH) ||
+                  (comms->connectionMode == MOBOTCONNECT_TCP) 
+                )
+              {
+                events = comms->recvBuf[6];
+                buttonDown = comms->recvBuf[7];
+              } else {
+                events = comms->recvBuf[11];
+                buttonDown = comms->recvBuf[12];
+              }
+              THREAD_T callbackThreadHandle;
+              callbackArg_t* callbackArg;
+              for(bit = 0; bit < 2; bit++) {
+                if(events & (1<<bit)) {
+                  callbackArg = (callbackArg_t*)malloc(sizeof(callbackArg_t));
+                  callbackArg->comms = comms;
+                  callbackArg->button = bit;
+                  callbackArg->buttonDown = (buttonDown & (1<<bit)) ? 1 : 0;
+                  //comms->buttonCallback(bit, (buttonDown & (1<<bit)) ? 1 : 0 );
+                  THREAD_CREATE(&callbackThreadHandle, callbackThread, callbackArg);
+                }
+              }
+            }
+          } else {
+            /* Perhaps a child triggered the event? Cycle through all children
+             * to see if we can match the address. */
+            mobotInfo_t* target;
+            for(target = comms->children; target != NULL; target = target->next) {
+              if(target->zigbeeAddr == address) {
+                if(target->mobot == NULL) {
+                  break;
+                }
+                if(target->mobot->callbackEnabled) {
+                  /* Call the callback multiple times depending on the events */
+                  int bit;
+                  THREAD_T callbackThreadHandle;
+                  callbackArg_t* callbackArg;
+                  events = comms->recvBuf[11];
+                  buttonDown = comms->recvBuf[12];
+                  for(bit = 0; bit < 2; bit++) {
+                    if(events & (1<<bit)) {
+                      callbackArg = (callbackArg_t*)malloc(sizeof(callbackArg_t));
+                      callbackArg->comms = target->mobot;
+                      callbackArg->button = bit;
+                      callbackArg->buttonDown = (buttonDown & (1<<bit)) ? 1 : 0;
+                      //target->mobot->buttonCallback(bit, (buttonDown & (1<<bit)) ? 1 : 0 );
+                      THREAD_CREATE(&callbackThreadHandle, callbackThread, callbackArg);
+                    }
+                  }
+                }
+                break;
               }
             }
           }

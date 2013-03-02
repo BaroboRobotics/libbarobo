@@ -9,11 +9,17 @@ add_definitions(-DNONRELEASE)
 
 #include_directories(${CMAKE_SOURCE_DIR}/../../BaroboConfigFile)
 #link_directories(${CMAKE_SOURCE_DIR}/../../BaroboConfigFile)
+if(NOT (EXISTS $ENV{CHHOME}))
+  MESSAGE(FATAL_ERROR "Environment variable CHHOME does not refer to a valid directory.")
+endif()
 include_directories(${BAROBOCONFIGFILE_SOURCE_DIR} $ENV{CHHOME}/extern/include)
 link_directories(${BAROBOCONFIGFILE_BINARY_DIR} $ENV{CHHOME}/extern/lib)
 
 include_directories(${MXML_SOURCE_DIR})
 link_directories(${MXML_BINARY_DIR})
+
+include_directories(${LIBIMOBOTCOMMS_SOURCE_DIR})
+link_directories(${LIBIMOBOTCOMMS_BINARY_DIR})
 
 if(CMAKE_HOST_WIN32)
   #include(FindPkgConfig)
@@ -32,68 +38,14 @@ if(CMAKE_HOST_WIN32)
   set_target_properties(chmobot PROPERTIES SUFFIX .dl)
   target_link_libraries(chmobot mobotStatic Ws2_32 baroboconfigfile mxml chsdk ch)
 elseif(CMAKE_HOST_APPLE)
-  set(CMAKE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib")
-	add_library(mobot SHARED
-      mobot.c
-      mobot.cpp
-      mobot_get_functions.c
-      mobot_get_functions.cpp
-      mobotgroup.cpp
-      mobot_motion_functions.c
-      mobot_motion_functions.cpp
-      mobot_movement_functions.c
-      mobot_movement_functions.cpp
-      mobot_record_functions.c
-      mobot_record_functions.cpp
-      mobot_set_functions.c
-      mobot_set_functions.cpp
-      moboti.cpp
-      moboti_get_functions.cpp
-      moboti_motion_functions.cpp
-      moboti_movement_functions.cpp
-      moboti_record_functions.cpp
-      moboti_set_functions.cpp
-      mobotl.cpp
-      mobotl_get_functions.cpp
-      mobotl_motion_functions.cpp
-      mobotl_movement_functions.cpp
-      mobotl_record_functions.cpp
-      mobotl_set_functions.cpp
+  add_definitions(-DENABLE_BLUETOOTH -DDARWIN -D_REENTRANT -DNeedFunctionPrototypes)
+	add_library(chmobot SHARED 
+      chmobot_chdl.cpp
+      chmoboti_chdl.cpp
+      chmobotl_chdl.cpp
 	  )
-	add_library(mobotStatic STATIC 
-      mobot.c
-      mobot.cpp
-      mobot_get_functions.c
-      mobot_get_functions.cpp
-      mobotgroup.cpp
-      mobot_motion_functions.c
-      mobot_motion_functions.cpp
-      mobot_movement_functions.c
-      mobot_movement_functions.cpp
-      mobot_record_functions.c
-      mobot_record_functions.cpp
-      mobot_set_functions.c
-      mobot_set_functions.cpp
-      moboti.cpp
-      moboti_get_functions.cpp
-      moboti_motion_functions.cpp
-      moboti_movement_functions.cpp
-      moboti_record_functions.cpp
-      moboti_set_functions.cpp
-      mobotl.cpp
-      mobotl_get_functions.cpp
-      mobotl_motion_functions.cpp
-      mobotl_movement_functions.cpp
-      mobotl_record_functions.cpp
-      mobotl_set_functions.cpp
-	  )
-	target_link_libraries(mobot pthread baroboconfigfile)
-  set_target_properties(mobot PROPERTIES
-    INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
-  install(TARGETS mobot
-          LIBRARY DESTINATION lib)
-  install(FILES mobot.h DESTINATION include)
-  add_subdirectory(demos)
+	target_link_libraries(chmobot mobotStatic bluetooth pthread rt baroboconfigfile mxml chsdk)
+  set_target_properties(chmobot PROPERTIES SUFFIX .dl)
 else()
   add_definitions(-DENABLE_BLUETOOTH -DLINUX -D_REENTRANT -DNeedFunctionPrototypes)
 	add_library(chmobot SHARED 

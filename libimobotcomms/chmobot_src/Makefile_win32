@@ -9,6 +9,8 @@ CFLAGS= -DNONRELEASE -I./ -I../../../BaroboConfigFile/ -I../../../mxml-2.7/ /TP
 target: libmobot.dl
 
 OBJS= mobotgroup++.obj \
+      mobotigroup++.obj \
+      mobotlgroup++.obj \
       chmobot_chdl.obj \
       chmoboti_chdl.obj \
       chmobotl_chdl.obj \
