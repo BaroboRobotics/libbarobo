@@ -238,17 +238,27 @@ int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], const char 
 void Mobot_initDongle()
 {
   int rc;
+  char buf[32];
+  int i;
   if(g_dongleMobot == NULL) {
     g_dongleMobot = (mobot_t*)malloc(sizeof(mobot_t));
     Mobot_init(g_dongleMobot);
   }
   if(g_dongleMobot->connected == 0) {
-    int i;
     for(i = 0; i < BCF_GetNumDongles(g_bcf); i++) {
       rc = Mobot_connectWithTTY(g_dongleMobot, BCF_GetDongle(g_bcf, i));
       if(rc == 0) {
-        break;
+        return;
       }
+    }
+  }
+  /* If we are still not connected to a dongle at this point, search through a
+   * bunch of dongles */
+  for(i = 0; i < 64; i++) {
+    sprintf(buf, "COM%d", i);
+    rc = Mobot_connectWithTTY(g_dongleMobot, buf);
+    if(rc == 0) {
+      return;
     }
   }
 }
@@ -556,17 +566,27 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
 int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
 {
   int rc;
+  /* Check the file name. If we receive something like "COM45", we want to
+   * change it to "\\.\COM45" */
+  char *tty;
+  tty = (char*)malloc((sizeof(char)*strlen(ttyfilename))+20);
+  tty[0] = '\0';
+  if(ttyfilename[0] != '\\') {
+    strcpy(tty, "\\\\.\\");
+  }
+  strcat(tty, ttyfilename);
   /* For windows, we should connect to a com port */
   comms->commHandle = CreateFile(
-      ttyfilename, 
+      tty, 
       GENERIC_READ | GENERIC_WRITE,
       0,
       0,
       OPEN_EXISTING,
       FILE_FLAG_OVERLAPPED,
       0 );
+  free(tty);
   if(comms->commHandle == INVALID_HANDLE_VALUE) {
-    fprintf(stderr, "Error connecting to COM port: %s\n", ttyfilename);
+    //fprintf(stderr, "Error connecting to COM port: %s\n", ttyfilename);
     return -1;
   }
   /* Adjust settings */
@@ -2042,6 +2062,8 @@ void* commsOutEngine(void* arg)
       index = comms->sendBuf_index % SENDBUF_SIZE;
       byte = &comms->sendBuf[index];
 #ifdef _WIN32
+      //printf(" ** OUT: 0x%02x %d\n", *byte, comms->sendBuf_N);
+      MUTEX_LOCK(comms->socket_lock);
       if(!WriteFile(
           comms->commHandle, 
           byte, 
@@ -2050,6 +2072,7 @@ void* commsOutEngine(void* arg)
           &ov)) {
         //printf("Error writing. %d \n", GetLastError());
       }
+      MUTEX_UNLOCK(comms->socket_lock);
       GetOverlappedResult(comms->commHandle, &ov, &bytesWritten, TRUE);
       memset(&ov, 0, sizeof(ov));
 #else
