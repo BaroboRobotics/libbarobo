@@ -15,7 +15,11 @@ int main()
 	  if(!Mobot_connectWithTTY(&mobot, "COM13")) 
 	  {
 		  Mobot_setBuzzerFrequencyOn(&mobot, 440);
+#ifdef _WIN32
 		  Sleep(1000);
+#else
+      sleep(1);
+#endif
 		  Mobot_setBuzzerFrequencyOff(&mobot);
 	  }
 	  printf("Disconnect...\n");
