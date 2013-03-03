@@ -20,12 +20,12 @@ int main()
 	  exit(0);
   }
   mobot.recordDistanceBegin(MOBOT_JOINT1, 
-		  (mobotRecordData_t)time, 
-		  (mobotRecordData_t)data, 
+		  time, 
+		  data, 
 		  3, 0.1, 0);
   mobot2.recordDistanceBegin(MOBOT_JOINT1, 
-		  (mobotRecordData_t)time2, 
-		  (mobotRecordData_t)data2, 
+		  time2, 
+		  data2, 
 		  3, 0.1, 0);
   for(i = 0; i < 10; i++) { 
     mobot.moveJointToNB(MOBOT_JOINT1, rand()%90);

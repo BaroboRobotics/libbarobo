@@ -222,6 +222,7 @@ else(CMAKE_HOST_WIN32)
 	  )
   set_target_properties(mobotStatic PROPERTIES COMPILE_FLAGS "-fPIC")
 	target_link_libraries(mobot bluetooth pthread rt baroboconfigfile mxml)
+	target_link_libraries(mobotStatic bluetooth pthread rt baroboconfigfile mxml)
   install(TARGETS mobot mobotStatic
           LIBRARY DESTINATION lib
           ARCHIVE DESTINATION lib)

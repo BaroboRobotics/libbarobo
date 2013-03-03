@@ -1372,7 +1372,7 @@ CMobotIGroup::~CMobotIGroup() {
   }
 }
 
-int CMobotIGroup::addRobot(CMobot &robot) {
+int CMobotIGroup::addRobot(CMobotI &robot) {
     void *fptr;
     int retval;
 
