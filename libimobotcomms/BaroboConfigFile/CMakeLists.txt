@@ -10,6 +10,8 @@ else(CMAKE_HOST_WIN32)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 endif(CMAKE_HOST_WIN32)
 
+add_subdirectory(mxml-2.7)
+
 #include_directories(${MXML_INCLUDE_DIRS})
 include_directories(${MXML_SOURCE_DIR})
 #link_directories(${MXML_LIBRARY_DIRS})
