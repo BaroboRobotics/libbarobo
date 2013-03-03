@@ -1108,6 +1108,9 @@ int Mobot_disconnect(mobot_t* comms)
 {
   int rc = 0;
   mobotInfo_t* iter;
+  if(comms->connected == 0) {
+    return 0;
+  }
   comms->connected = 0;
 #ifndef _WIN32
   switch(comms->connectionMode) {
@@ -1145,6 +1148,7 @@ int Mobot_disconnect(mobot_t* comms)
       rc = 0;
   }
 #else
+#if 0
   closesocket(comms->socket);
   if(comms->connectionMode == MOBOTCONNECT_TTY) {
     CancelIo(comms->commHandle);
@@ -1153,6 +1157,36 @@ int Mobot_disconnect(mobot_t* comms)
   //THREAD_JOIN(*comms->commsThread);
   //CloseHandle(*comms->commsThread);
   //CloseHandle((LPVOID)comms->socket);
+#endif
+  switch(comms->connectionMode) {
+    case MOBOTCONNECT_BLUETOOTH:
+    case MOBOTCONNECT_TCP:
+      if(closesocket(comms->socket)) {
+        /* Error closing file descriptor */
+        rc = -1;
+      } 
+      break;
+    case MOBOTCONNECT_TTY:
+      /* Cancel IO, stop threads */
+      SetEvent(comms->cancelEvent);
+      sendBufAppend(comms, (uint8_t*)&rc, 1);
+      THREAD_JOIN(comms->commsThread);
+      THREAD_JOIN(comms->commsOutThread);
+      CloseHandle(comms->commHandle);
+
+      /* Unpair all children */
+      for(iter = comms->children; iter != NULL; iter = iter->next) {
+        if(iter->mobot) {
+          Mobot_disconnect(iter->mobot);
+        }
+      }
+      break;
+    case MOBOTCONNECT_ZIGBEE:
+      Mobot_unpair(comms);
+      break;
+    default:
+      rc = 0;
+  }
 #endif
   if(g_numConnected > 0) {
     g_numConnected--;
@@ -1292,6 +1326,15 @@ int Mobot_init(mobot_t* comms)
   }
   strcat(path, "\\Barobo.config");
   comms->configFilePath = strdup(path);
+
+  /* Initialize overlapped communication shit */
+  comms->ovIncoming = (LPOVERLAPPED)malloc(sizeof(OVERLAPPED));
+  comms->ovOutgoing = (LPOVERLAPPED)malloc(sizeof(OVERLAPPED));
+  memset(comms->ovIncoming, 0, sizeof(OVERLAPPED));
+  memset(comms->ovOutgoing, 0, sizeof(OVERLAPPED));
+  comms->ovIncoming->hEvent = CreateEvent(0, true, 0, 0);
+  comms->ovOutgoing->hEvent = CreateEvent(0, true, 0, 0);
+  comms->cancelEvent = CreateEvent(0, true, 0, 0);
 #else
   /* Try to open the barobo configuration file. */
 #define MAX_PATH 512
@@ -1738,9 +1781,9 @@ void* commsEngine(void* arg)
 #else
   DWORD readbytes = 0;
   DWORD mask;
-  OVERLAPPED ov;
-  memset(&ov, 0, sizeof(ov));
-  ov.hEvent = CreateEvent(0, true, 0, 0);
+  HANDLE events[2];
+  events[0] = comms->ovIncoming->hEvent;
+  events[1] = comms->cancelEvent;
 #endif
   g_mobotThreadInitializing = 0;
   while(1) {
@@ -1762,8 +1805,8 @@ void* commsEngine(void* arg)
         if(!SetCommMask(comms->commHandle, EV_RXFLAG)) {
           fprintf(stderr, "Could not set Comm flags to detect RX.\n");
         }
-        if(WaitCommEvent(comms->commHandle, &mask, &ov) == FALSE) {
-          WaitForSingleObject(ov.hEvent, INFINITE);
+        if(WaitCommEvent(comms->commHandle, &mask, &comms->ovIncoming) == FALSE) {
+          WaitForSingleObject(comms->ovIncoming.hEvent, INFINITE);
         }
         printf("Byte received\n");
         exit(0);
@@ -1774,9 +1817,9 @@ void* commsEngine(void* arg)
         if(!SetCommMask(comms->commHandle, EV_RXFLAG)) {
           fprintf(stderr, "Could not set Comm flags to detect RX.\n");
         }
-        if(WaitCommEvent(comms->commHandle, &mask, &ov) == FALSE) {
+        if(WaitCommEvent(comms->commHandle, &mask, &comms->ovIncoming) == FALSE) {
           printf("Watiing...\n");
-          WaitForSingleObject(ov.hEvent, INFINITE);
+          WaitForSingleObject(comms->ovIncoming.hEvent, INFINITE);
         }
       }
       */
@@ -1785,9 +1828,16 @@ void* commsEngine(void* arg)
           &byte,
           1,
           NULL,
-          &ov);
-      GetOverlappedResult(comms->commHandle, &ov, &readbytes, TRUE);
-      //CloseHandle(ov.hEvent);
+          comms->ovIncoming);
+      WaitForMultipleObjects(
+          2,
+          events,
+          false,
+          INFINITE);
+      ResetEvent(events[0]);
+      ResetEvent(events[1]);
+      //GetOverlappedResult(comms->commHandle, &comms->ovIncoming, &readbytes, TRUE);
+      //CloseHandle(comms->ovIncoming.hEvent);
       err = readbytes;
     } else {
       err = recvfrom(comms->socket, (char*)&byte, 1, 0, (struct sockaddr*)0, 0);
@@ -1795,6 +1845,7 @@ void* commsEngine(void* arg)
 #endif
     /* If we are no longer connected, just return */
     if(comms->connected == 0) {
+      printf("Incoming thread exiting...\n");
       MUTEX_LOCK(comms->commsBusy_lock);
       comms->commsBusy = 1;
       COND_SIGNAL(comms->commsBusy_cond);
@@ -2043,9 +2094,7 @@ void* commsOutEngine(void* arg)
   int err;
 #ifdef _WIN32
   DWORD bytesWritten;
-  OVERLAPPED ov;
-  memset(&ov, 0, sizeof(ov));
-  //ov.hEvent = CreateEvent(0, true, 0, 0);
+  //comms->ovOutgoing.hEvent = CreateEvent(0, true, 0, 0);
 #endif
 
   MUTEX_LOCK(comms->sendBuf_lock);
@@ -2055,6 +2104,7 @@ void* commsOutEngine(void* arg)
       COND_WAIT(comms->sendBuf_cond, comms->sendBuf_lock);
     }
     if(comms->connected == 0) {
+      printf("CommsOut thread exiting...\n");
       break;
     }
     /* Write one byte at a time */
@@ -2069,12 +2119,12 @@ void* commsOutEngine(void* arg)
           byte, 
           1,
           NULL,
-          &ov)) {
+          comms->ovOutgoing)) {
         //printf("Error writing. %d \n", GetLastError());
       }
       MUTEX_UNLOCK(comms->socket_lock);
-      GetOverlappedResult(comms->commHandle, &ov, &bytesWritten, TRUE);
-      memset(&ov, 0, sizeof(ov));
+      GetOverlappedResult(comms->commHandle, comms->ovOutgoing, &bytesWritten, TRUE);
+      ResetEvent(comms->ovOutgoing->hEvent);
 #else
       MUTEX_LOCK(comms->socket_lock);
       err = write(comms->socket, byte, 1);
