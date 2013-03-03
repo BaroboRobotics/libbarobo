@@ -151,7 +151,7 @@ int BCF_GetNum(bcf_t* bcf)
 
 const char* BCF_GetDongle(bcf_t* bcf, int index)
 {
-  if (index > bcf->numDongles) {
+  if (index >= bcf->numDongles) {
     return NULL;
   }
   return bcf->dongles[index];

@@ -1168,10 +1168,11 @@ int Mobot_disconnect(mobot_t* comms)
       break;
     case MOBOTCONNECT_TTY:
       /* Cancel IO, stop threads */
-      SetEvent(comms->cancelEvent);
       sendBufAppend(comms, (uint8_t*)&rc, 1);
+      SetEvent(comms->cancelEvent);
       THREAD_JOIN(comms->commsThread);
       THREAD_JOIN(comms->commsOutThread);
+      Sleep(100);
       CloseHandle(comms->commHandle);
 
       /* Unpair all children */
@@ -1829,14 +1830,16 @@ void* commsEngine(void* arg)
           1,
           NULL,
           comms->ovIncoming);
+      /*
       WaitForMultipleObjects(
           2,
           events,
           false,
           INFINITE);
-      ResetEvent(events[0]);
-      ResetEvent(events[1]);
-      //GetOverlappedResult(comms->commHandle, &comms->ovIncoming, &readbytes, TRUE);
+          */
+      GetOverlappedResult(comms->commHandle, comms->ovIncoming, &readbytes, TRUE);
+      //ResetEvent(events[0]);
+      //ResetEvent(events[1]);
       //CloseHandle(comms->ovIncoming.hEvent);
       err = readbytes;
     } else {
@@ -1845,7 +1848,6 @@ void* commsEngine(void* arg)
 #endif
     /* If we are no longer connected, just return */
     if(comms->connected == 0) {
-      printf("Incoming thread exiting...\n");
       MUTEX_LOCK(comms->commsBusy_lock);
       comms->commsBusy = 1;
       COND_SIGNAL(comms->commsBusy_cond);
@@ -2104,7 +2106,6 @@ void* commsOutEngine(void* arg)
       COND_WAIT(comms->sendBuf_cond, comms->sendBuf_lock);
     }
     if(comms->connected == 0) {
-      printf("CommsOut thread exiting...\n");
       break;
     }
     /* Write one byte at a time */

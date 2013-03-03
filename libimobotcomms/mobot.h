@@ -159,8 +159,8 @@ typedef struct mobot_s
   int socket;
 #if defined (_WIN32) && !defined(_CH_)
   HANDLE commHandle;
-  LPOVERLAPPED ovIncoming;
-  LPOVERLAPPED ovOutgoing;
+  OVERLAPPED *ovIncoming;
+  OVERLAPPED *ovOutgoing;
   HANDLE cancelEvent;
 #else
   void* commHandle;
