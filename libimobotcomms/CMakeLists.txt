@@ -9,6 +9,7 @@ add_definitions(-DNONRELEASE)
 
 #include_directories(${CMAKE_SOURCE_DIR}/../../BaroboConfigFile)
 #link_directories(${CMAKE_SOURCE_DIR}/../../BaroboConfigFile)
+add_subdirectory(BaroboConfigFile)
 include_directories(${BAROBOCONFIGFILE_SOURCE_DIR})
 link_directories(${BAROBOCONFIGFILE_BINARY_DIR})
 
