@@ -1333,9 +1333,9 @@ int Mobot_init(mobot_t* comms)
   comms->ovOutgoing = (LPOVERLAPPED)malloc(sizeof(OVERLAPPED));
   memset(comms->ovIncoming, 0, sizeof(OVERLAPPED));
   memset(comms->ovOutgoing, 0, sizeof(OVERLAPPED));
-  comms->ovIncoming->hEvent = CreateEvent(0, true, 0, 0);
-  comms->ovOutgoing->hEvent = CreateEvent(0, true, 0, 0);
-  comms->cancelEvent = CreateEvent(0, true, 0, 0);
+  comms->ovIncoming->hEvent = CreateEvent(0, 1, 0, 0);
+  comms->ovOutgoing->hEvent = CreateEvent(0, 1, 0, 0);
+  comms->cancelEvent = CreateEvent(0, 1, 0, 0);
 #else
   /* Try to open the barobo configuration file. */
 #define MAX_PATH 512

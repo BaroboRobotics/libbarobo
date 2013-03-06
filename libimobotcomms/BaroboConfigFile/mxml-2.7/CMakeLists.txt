@@ -35,3 +35,5 @@ add_library(mxml STATIC
     mxml-set.c
     mxml-string.c)
 
+target_link_libraries(mxml pthread)
+

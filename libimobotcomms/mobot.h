@@ -1637,4 +1637,12 @@ int CMobot::g_chmobot_dlcount = 0;
 #pragma importf "chmobotl.chf"
 #endif
 
+#ifndef NONRELEASE
+#undef DLLIMPORT
+#undef THREAD_T
+#undef MUTEX_T
+#undef COND_T
+#undef sockaddr_t
+#endif
+
 #endif /* Header Guard */

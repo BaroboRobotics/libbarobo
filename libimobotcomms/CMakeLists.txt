@@ -89,7 +89,15 @@ if(CMAKE_HOST_WIN32)
     add_subdirectory(demos)
   else()
     add_subdirectory(demos)
-    target_link_libraries(mobot Ws2_32 baroboconfigfile mxml pthread)
+    add_definitions(-DMSYS)
+    target_link_libraries(mobot 
+        Ws2_32 
+        baroboconfigfile 
+        mxml )
+    target_link_libraries(mobotStatic 
+        Ws2_32 
+        baroboconfigfile 
+        mxml)
   endif()
   install(TARGETS mobot
           ARCHIVE DESTINATION lib)
