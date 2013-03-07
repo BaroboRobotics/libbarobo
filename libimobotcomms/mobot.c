@@ -625,11 +625,8 @@ int getFormFactor(mobot_t* comms, int* form)
 {
   uint8_t buf[32];
   int status;
-  status = SendToIMobot(comms, BTCMD(CMD_GETFORMFACTOR), NULL, 0);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GETFORMFACTOR), buf, 0);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 4) {
     return -1;
@@ -856,11 +853,8 @@ int Mobot_blinkLED(mobot_t* comms, double delay, int numBlinks)
   millis = delay*1000.0;
   memcpy(&buf[0], &millis, 4);
   buf[4] = (uint8_t)numBlinks;
-  status = SendToIMobot(comms, BTCMD(CMD_BLINKLED), buf, 5);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_BLINKLED), buf, 5);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 3) {
     return -1;
@@ -953,7 +947,9 @@ int Mobot_loadMelody(mobot_t* comms, int id, mobotMelodyNote_t* melody)
 {
   uint8_t data[256];
   uint8_t length;
-  int status;
+  int status = 1;
+  int retries;
+  int recvBuf[16];
   mobotMelodyNote_t* iter;
   iter = melody->next;
   for(length = 0; iter != NULL; length++, iter = iter->next);
@@ -964,21 +960,20 @@ int Mobot_loadMelody(mobot_t* comms, int id, mobotMelodyNote_t* melody)
   for(length = 1; iter != NULL; length++, iter = iter->next) {
     memcpy(&data[length*2+1], &iter->notedata[0], 2);
   }
-  status = SendToIMobot(comms, BTCMD(CMD_LOADMELODY), data, length*2+1);
-  if(status < 0) return status;
+  for(retries = 0; retries <= MAX_RETRIES && status != 0; retries++) {
+    SendToIMobot(comms, BTCMD(CMD_LOADMELODY), data, length*2+1);
 #ifndef _WIN32
-  usleep(500000);
+    usleep(500000);
 #else
-  Sleep(500);
+    Sleep(500);
 #endif
-  if(RecvFromIMobot(comms, data, sizeof(data))) {
-    return -1;
+    status = RecvFromIMobot(comms, recvBuf, sizeof(recvBuf));
   }
   /* Make sure the data size is correct */
-  if(data[1] != 3) {
+  if(recvBuf[1] != 3) {
     return -1;
   }
-  return 0;
+  return status;
 }
 
 int Mobot_playMelody(mobot_t* comms, int id)
@@ -986,11 +981,8 @@ int Mobot_playMelody(mobot_t* comms, int id)
   int status;
   uint8_t buf[8];
   buf[0] = (uint8_t)id;
-  status = SendToIMobot(comms, BTCMD(CMD_PLAYMELODY), buf, 1);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_PLAYMELODY), buf, 1);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the buf size is correct */
   if(buf[1] != 3) {
     return -1;
@@ -1003,11 +995,8 @@ int Mobot_getAddress(mobot_t* comms)
   int status;
   uint8_t buf[8];
   int addr;
-  status = SendToIMobot(comms, BTCMD(CMD_GETADDRESS), NULL, 0);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GETADDRESS), buf, 0);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the buf size is correct */
   if(buf[1] != 5) {
     return -1;
@@ -1020,11 +1009,8 @@ int Mobot_queryAddresses(mobot_t* comms)
 {
   int status;
   uint8_t buf[8];
-  status = SendToIMobot(comms, BTCMD(CMD_QUERYADDRESSES), NULL, 0);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_QUERYADDRESSES), buf, 0);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the buf size is correct */
   if(buf[1] != 3) {
     return -1;
@@ -1036,11 +1022,8 @@ int Mobot_clearQueriedAddresses(mobot_t* comms)
 {
   int status;
   uint8_t buf[8];
-  status = SendToIMobot(comms, BTCMD(CMD_CLEARQUERIEDADDRESSES), NULL, 0);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_CLEARQUERIEDADDRESSES), buf, 0);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the buf size is correct */
   if(buf[1] != 3) {
     return -1;
@@ -1060,11 +1043,8 @@ int Mobot_setRFChannel(mobot_t* comms, uint8_t channel)
   uint8_t buf[8];
   int addr;
   buf[0] = channel;
-  status = SendToIMobot(comms, BTCMD(CMD_SETRFCHANNEL), buf, 1);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SETRFCHANNEL), buf, 1);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the buf size is correct */
   if(buf[1] != 3) {
     return -1;
@@ -1082,11 +1062,8 @@ int Mobot_setID(mobot_t* comms, const char* id)
     buf[i] = id[i];
     i++;
   }
-  status = SendToIMobot(comms, BTCMD(CMD_SETSERIALID), buf, i);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SETSERIALID), buf, i);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the buf size is correct */
   if(buf[1] != 3) {
     return -1;
@@ -1099,7 +1076,8 @@ int Mobot_reboot(mobot_t* comms)
   int status;
   uint16_t addr;
   int i;
-  status = SendToIMobot(comms, BTCMD(CMD_REBOOT), NULL, 0);
+  uint8_t buf[8];
+  status = MobotMsgTransaction(comms, BTCMD(CMD_REBOOT), buf, 0);
   if(status < 0) return status;
   return 0;
 }
@@ -1202,14 +1180,10 @@ int Mobot_enableButtonCallback(mobot_t* comms, void* data, void (*buttonCallback
   MUTEX_LOCK(comms->callback_lock);
   /* Send a message to the Mobot */
   buf[0] = 1;
-  status = SendToIMobot(comms, BTCMD(CMD_ENABLEBUTTONHANDLER), buf, 1);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_ENABLEBUTTONHANDLER), buf, 1);
   if(status < 0) {
     MUTEX_UNLOCK(comms->callback_lock);
     return status;
-  }
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    MUTEX_UNLOCK(comms->callback_lock);
-    return -1;
   }
   /* Make sure the data size is correct */
   if(buf[1] != 0x03) {
@@ -1231,14 +1205,10 @@ int Mobot_disableButtonCallback(mobot_t* comms)
   MUTEX_LOCK(comms->callback_lock);
   /* Send a message to the Mobot */
   buf[0] = 0;
-  status = SendToIMobot(comms, BTCMD(CMD_ENABLEBUTTONHANDLER), buf, 1);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_ENABLEBUTTONHANDLER), buf, 1);
   if(status < 0) {
     MUTEX_UNLOCK(comms->callback_lock);
     return status;
-  }
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    MUTEX_UNLOCK(comms->callback_lock);
-    return -1;
   }
   /* Make sure the data size is correct */
   if(buf[1] != 0x03) {
@@ -1382,11 +1352,8 @@ int Mobot_pair(mobot_t* mobot)
   }
   buf[0] = mobot->parent->zigbeeAddr>>8;
   buf[1] = mobot->parent->zigbeeAddr & 0x00ff;
-  status = SendToIMobot(mobot , BTCMD(CMD_PAIRPARENT), buf, 2);
+  status = MobotMsgTransaction(mobot , BTCMD(CMD_PAIRPARENT), buf, 2);
   if(status < 0) return status;
-  if(RecvFromIMobot(mobot, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the buf size is correct */
   if(buf[1] != 3) {
     return -1;
@@ -1401,11 +1368,8 @@ int Mobot_unpair(mobot_t* mobot)
   if(mobot->parent == NULL) {
     return -1;
   }
-  status = SendToIMobot(mobot, BTCMD(CMD_UNPAIRPARENT), NULL, 0);
+  status = MobotMsgTransaction(mobot, BTCMD(CMD_UNPAIRPARENT), buf, 0);
   if(status < 0) return status;
-  if(RecvFromIMobot(mobot, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the buf size is correct */
   if(buf[1] != 3) {
     return -1;
@@ -1417,11 +1381,8 @@ int Mobot_reset(mobot_t* comms)
 {
   uint8_t buf[64];
   int status;
-  status = SendToIMobot(comms, BTCMD(CMD_RESETABSCOUNTER), NULL, 0);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_RESETABSCOUNTER), buf, 0);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 3) {
     return -1;
@@ -1450,11 +1411,8 @@ int Mobot_setFourierCoefficients(mobot_t* comms, mobotJointId_t id, double* a, d
     coefs[i+5] = (b[i]/5.0) * 128;
   }
   memcpy(&buf[1], &coefs[0], 10);
-  status = SendToIMobot(comms, BTCMD(CMD_SETFOURIERCOEFS), buf, 10);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SETFOURIERCOEFS), buf, 10);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 3) {
     return -1;
@@ -1491,6 +1449,33 @@ int str2ba(const char *str, bdaddr_t *ba)
 	return 0;
 }
 #endif
+
+/* This function does a complete message transaction with a Mobot, including
+ * sending the message, waiting for a response, and resending the message in
+ * case a response times out. The buffer "buf" is used as both the send buffer
+ * and receive buffer, so care must be taken to ensure that it is large enough
+ * to hold any response from the Mobot. */
+int MobotMsgTransaction(mobot_t* comms, uint8_t cmd, /*IN&OUT*/ void* buf, int size)
+{
+  int retries = 0;
+  int rc = 1;
+  void* sendbuf;
+  if(size > 0) {
+    sendbuf = malloc(size); 
+    memcpy(sendbuf, buf, size);
+  }
+  while(
+      (retries <= MAX_RETRIES) &&
+      (rc != 0)
+      ) 
+  {
+    SendToIMobot(comms, cmd, sendbuf, size);
+    rc = RecvFromIMobot(comms, buf, size);
+    retries++;
+  }
+  if(size > 0) free(sendbuf);
+  return rc;
+}
 
 int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
 {
@@ -1921,7 +1906,7 @@ void* commsEngine(void* arg)
               memcpy(comms->child->recvBuf, tmpbuf, tmpbuf[1]);
               free(tmpbuf);
               comms->child->recvBuf_ready = 1;
-              comms->child->recvBuf_bytes = comms->recvBuf[1];
+              comms->child->recvBuf_bytes = comms->child->recvBuf[1];
               COND_BROADCAST(comms->child->recvBuf_cond);
               MUTEX_UNLOCK(comms->child->recvBuf_lock);
               MUTEX_UNLOCK(comms->recvBuf_lock);

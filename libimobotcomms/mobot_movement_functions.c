@@ -109,8 +109,7 @@ int Mobot_moveNB(mobot_t* comms,
     f = angles[i];
     memcpy(&buf[i*4], &f, 4);
   }
-  SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLESABS), buf, 4*4);
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
+  if(MobotMsgTransaction(comms, BTCMD(CMD_SETMOTORANGLESABS), buf, 4*4)) {
     return -1;
   }
   /* Make sure the data size is correct */
@@ -201,11 +200,8 @@ int Mobot_driveJointToDirectNB(mobot_t* comms, mobotJointId_t id, double angle)
   buf[0] = (uint8_t)id-1;
   f = angle;
   memcpy(&buf[1], &f, 4);
-  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLEPID), buf, 5);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SETMOTORANGLEPID), buf, 5);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 3) {
     return -1;
@@ -221,11 +217,8 @@ int Mobot_driveJointToNB(mobot_t* comms, mobotJointId_t id, double angle)
   buf[0] = (uint8_t)id-1;
   f = angle;
   memcpy(&buf[1], &f, 4);
-  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLEPID), buf, 5);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SETMOTORANGLEPID), buf, 5);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 3) {
     return -1;
@@ -251,11 +244,8 @@ int Mobot_moveJointToNB(mobot_t* comms, mobotJointId_t id, double angle)
   buf[0] = (uint8_t)id-1;
   f = angle;
   memcpy(&buf[1], &f, 4);
-  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLEABS), buf, 5);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SETMOTORANGLEABS), buf, 5);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 3) {
     return -1;
@@ -281,11 +271,8 @@ int Mobot_moveJointToDirectNB(mobot_t* comms, mobotJointId_t id, double angle)
   buf[0] = (uint8_t)id-1;
   f = angle;
   memcpy(&buf[1], &f, 4);
-  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLEDIRECT), buf, 5);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SETMOTORANGLEDIRECT), buf, 5);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 3) {
     return -1;
@@ -403,11 +390,8 @@ int Mobot_moveToNB(mobot_t* comms,
   memcpy(&buf[8], &f, 4);
   f = angle4;
   memcpy(&buf[12], &f, 4);
-  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLESABS), buf, 16);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SETMOTORANGLESABS), buf, 16);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 3) {
     return -1;
@@ -432,11 +416,8 @@ int Mobot_moveToDirectNB(mobot_t* comms,
   memcpy(&buf[8], &f, 4);
   f = angle4;
   memcpy(&buf[12], &f, 4);
-  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLESDIRECT), buf, 16);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SETMOTORANGLESDIRECT), buf, 16);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 3) {
     return -1;
@@ -462,11 +443,8 @@ int Mobot_driveToDirectNB(mobot_t* comms,
   memcpy(&buf[8], &f, 4);
   f = angle4;
   memcpy(&buf[12], &f, 4);
-  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLESPID), buf, 16);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SETMOTORANGLESPID), buf, 16);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 3) {
     return -1;
@@ -491,11 +469,8 @@ int Mobot_driveToNB(mobot_t* comms,
   memcpy(&buf[8], &f, 4);
   f = angle4;
   memcpy(&buf[12], &f, 4);
-  status = SendToIMobot(comms, BTCMD(CMD_SETMOTORANGLESPID), buf, 16);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SETMOTORANGLESPID), buf, 16);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 3) {
     return -1;
@@ -527,11 +502,8 @@ int Mobot_beginFourierControl(mobot_t* comms, uint8_t motorMask)
   uint8_t buf[32];
   int status;
   buf[0] = motorMask;
-  status = SendToIMobot(comms, BTCMD(CMD_STARTFOURIER), buf, 1);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_STARTFOURIER), buf, 1);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 3) {
     return -1;
@@ -544,11 +516,8 @@ int Mobot_stop(mobot_t* comms)
   uint8_t buf[32];
   float f;
   int status;
-  status = SendToIMobot(comms, BTCMD(CMD_STOP), NULL, 0);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_STOP), buf, 0);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 3) {
     return -1;
