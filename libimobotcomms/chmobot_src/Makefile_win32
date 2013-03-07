@@ -4,7 +4,7 @@ HEADERS=../mobot.h
 PKGDIR=$(PACKAGE)-$(VERSION)/$(PACKAGE)
 LIBDIR=lib32
 
-CFLAGS= -DNONRELEASE -I./ -I../../../BaroboConfigFile/ -I../../../mxml-2.7/ /TP
+CFLAGS= -DNONRELEASE -I./ -I../BaroboConfigFile/ -I../BaroboConfigFile/mxml-2.7/ /TP
 
 target: libmobot.dl
 
@@ -40,7 +40,7 @@ OBJS= mobotgroup++.obj \
       mobot_set_functions.obj 
 
 libmobot.dl: $(OBJS)
-	ch dllink libmobot.dl cplusplus $(OBJS) ws2_32.lib shell32.lib ../../../BaroboConfigFile/baroboconfigfile.lib ../../../mxml-2.7/mxml.lib
+	ch dllink libmobot.dl cplusplus $(OBJS) ws2_32.lib shell32.lib ../BaroboConfigFile/baroboconfigfile.lib ../BaroboConfigFile/mxml-2.7/mxml.lib
 
 mobotgroup++.obj: ../mobotgroup++.cpp $(HEADERS)
 	ch dlcomp libmobotgroup.dl cplusplus $(CFLAGS) ../mobotgroup++.cpp
