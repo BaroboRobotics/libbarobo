@@ -42,6 +42,8 @@
 
 #include "commands.h"
 
+#define MAX_RETRIES 3
+
 void* Mobot_recordAngleThread(void* arg);
 int Mobot_recordAngle(mobot_t* comms, mobotJointId_t id, double* time, double* angle, int num, double timeInterval, int shiftData)
 {
@@ -79,6 +81,8 @@ unsigned int diff_msecs(struct timespec t1, struct timespec t2)
 void* Mobot_recordAngleThread(void* arg)
 {
   double angles[4];
+  int rc;
+  int retries = 0;
   int *isMoving;
   recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
   isMoving = (int*)malloc(sizeof(int) * rArg->num);
@@ -100,14 +104,21 @@ void* Mobot_recordAngleThread(void* arg)
     cur_time.tv_nsec = mts.tv_nsec;
 #endif
     //Mobot_getJointAngleTime(rArg->comms, rArg->id, &rArg->time[i], &rArg->angle[i]);
-    Mobot_getJointAnglesTimeIsMoving(
-        rArg->comms, 
-        &rArg->time[i],
-        &angles[0],
-        &angles[1],
-        &angles[2],
-        &angles[3],
-        &isMoving[i]);
+    while(
+        (rc = Mobot_getJointAnglesTimeIsMoving(
+                                               rArg->comms, 
+                                               &rArg->time[i],
+                                               &angles[0],
+                                               &angles[1],
+                                               &angles[2],
+                                               &angles[3],
+                                               &isMoving[i])) &&
+        retries <= MAX_RETRIES)
+    {
+      retries++;
+    }
+    if(rc) break;
+    retries = 0;
     rArg->angle[i] = angles[rArg->id-1];
     if(i == 0) {
       start_time = rArg->time[i];
@@ -136,14 +147,21 @@ void* Mobot_recordAngleThread(void* arg)
   double start_time;
   for(i = 0; i < rArg->num; i++) {
     cur_time = GetTickCount();
-    Mobot_getJointAnglesTimeIsMoving(
-        rArg->comms, 
-        &rArg->time[i],
-        &angles[0],
-        &angles[1],
-        &angles[2],
-        &angles[3],
-        &isMoving[i]);
+    while(
+        (rc = Mobot_getJointAnglesTimeIsMoving(
+                                               rArg->comms, 
+                                               &rArg->time[i],
+                                               &angles[0],
+                                               &angles[1],
+                                               &angles[2],
+                                               &angles[3],
+                                               &isMoving[i])) &&
+        retries <= MAX_RETRIES)
+    {
+      retries++;
+    }
+    if(rc) break;
+    retries = 0;
     rArg->angle[i] = angles[rArg->id-1];
     if(i == 0) {
       start_time = rArg->time[i];
@@ -188,7 +206,7 @@ void* Mobot_recordAngleBeginThread(void* arg)
 {
   double angles[4];
   recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
-  int i;
+  int i; int rc; int retries = 0;
   int isMoving;
   MUTEX_LOCK(rArg->comms->recordingActive_lock);
   rArg->comms->recordingActive[rArg->id-1] = 1;
@@ -228,14 +246,21 @@ void* Mobot_recordAngleBeginThread(void* arg)
     cur_time.tv_nsec = mts.tv_nsec;
 #endif
     //Mobot_getJointAngleTime(rArg->comms, rArg->id, &((*rArg->time_p)[i]), &((*rArg->angle_p)[i]));
-    Mobot_getJointAnglesTimeIsMoving(
-        rArg->comms, 
-        &((*rArg->time_p)[i]),
-        &angles[0],
-        &angles[1],
-        &angles[2],
-        &angles[3],
-        &isMoving);
+    while(
+        (rc = Mobot_getJointAnglesTimeIsMoving(
+                                               rArg->comms, 
+                                               &((*rArg->time_p)[i]),
+                                               &angles[0],
+                                               &angles[1],
+                                               &angles[2],
+                                               &angles[3],
+                                               &isMoving)) &&
+        retries <= MAX_RETRIES)
+    {
+      retries++;
+    }
+    if(rc) break;
+    retries = 0;
     (*rArg->angle_p)[i] = angles[rArg->id-1];
     if(i == 0) {
       start_time = (*rArg->time_p)[i];
@@ -285,14 +310,21 @@ void* Mobot_recordAngleBeginThread(void* arg)
     }
     cur_time = GetTickCount();
     //Mobot_getJointAngleTime(rArg->comms, rArg->id, &((*rArg->time_p)[i]), &((*rArg->angle_p)[i]));
-    Mobot_getJointAnglesTimeIsMoving(
-        rArg->comms, 
-        &((*rArg->time_p)[i]),
-        &angles[0],
-        &angles[1],
-        &angles[2],
-        &angles[3],
-        &isMoving);
+    while(
+        (rc = Mobot_getJointAnglesTimeIsMoving(
+                                               rArg->comms, 
+                                               &((*rArg->time_p)[i]),
+                                               &angles[0],
+                                               &angles[1],
+                                               &angles[2],
+                                               &angles[3],
+                                               &isMoving)) &&
+        retries <= MAX_RETRIES)
+    {
+      retries++;
+    }
+    if(rc) break;
+    retries = 0;
     (*rArg->angle_p)[i] = angles[rArg->id-1];
     if(i == 0) {
       start_time = (*rArg->time_p)[i];
@@ -438,8 +470,10 @@ int Mobot_recordAngles(mobot_t* comms,
 void* recordAnglesThread(void* arg)
 {
   int *isMoving;
+  int rc;
   recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
   isMoving = (int*)malloc(sizeof(int)*rArg->num);
+  int retries = 0;
 #ifndef _WIN32
   int i;
   struct timespec cur_time, itime;
@@ -457,14 +491,24 @@ void* recordAnglesThread(void* arg)
     cur_time.tv_sec = mts.tv_sec;
     cur_time.tv_nsec = mts.tv_nsec;
 #endif
-    Mobot_getJointAnglesTimeIsMoving(
-        rArg->comms, 
-        &rArg->time[i], 
-        &rArg->angle[i], 
-        &rArg->angle2[i], 
-        &rArg->angle3[i], 
-        &rArg->angle4[i],
-        &isMoving[i]);
+    while( 
+        (rc = Mobot_getJointAnglesTimeIsMoving(
+                                               rArg->comms, 
+                                               &rArg->time[i], 
+                                               &rArg->angle[i], 
+                                               &rArg->angle2[i], 
+                                               &rArg->angle3[i], 
+                                               &rArg->angle4[i],
+                                               &isMoving[i])) &&
+        (retries <= MAX_RETRIES)
+        )
+    {
+      retries++;
+    }
+    if(rc) {
+      break;
+    }
+    retries = 0;
     if(i == 0) {
       start_time = rArg->time[i];
     }
@@ -495,14 +539,24 @@ void* recordAnglesThread(void* arg)
   double start_time;
   for(i = 0; i < rArg->num; i++) {
     cur_time = GetTickCount();
-    Mobot_getJointAnglesTimeIsMoving(
-        rArg->comms, 
-        &rArg->time[i], 
-        &rArg->angle[i], 
-        &rArg->angle2[i], 
-        &rArg->angle3[i], 
-        &rArg->angle4[i],
-        &isMoving[i]);
+    while(
+        (rc = Mobot_getJointAnglesTimeIsMoving(
+                                               rArg->comms, 
+                                               &rArg->time[i], 
+                                               &rArg->angle[i], 
+                                               &rArg->angle2[i], 
+                                               &rArg->angle3[i], 
+                                               &rArg->angle4[i],
+                                               &isMoving[i])) &&
+        (retries <= MAX_RETRIES)
+        )
+    {
+      retries++;
+    }
+    if(rc) {
+      break;
+    }
+    retries = 0;
     if(i == 0) {
       start_time = rArg->time[i];
     }
@@ -557,6 +611,8 @@ void* recordAnglesThread(void* arg)
 void* Mobot_recordAnglesBeginThread(void* arg)
 {
   int i;
+  int rc;
+  int retries = 0;
   recordAngleArg_t *rArg = (recordAngleArg_t*) arg;
   MUTEX_LOCK(rArg->comms->recordingActive_lock);
   for(i = 0; i < 4; i++) {
@@ -613,14 +669,23 @@ void* Mobot_recordAnglesBeginThread(void* arg)
     cur_time.tv_sec = mts.tv_sec;
     cur_time.tv_nsec = mts.tv_nsec;
 #endif
-    Mobot_getJointAnglesTime(
+    while(rc = Mobot_getJointAnglesTime(
         rArg->comms, 
         &((*rArg->time_p)[i]), 
         &((*rArg->angle_p)[i]),
         &((*rArg->angle2_p)[i]),
         &((*rArg->angle3_p)[i]),
         &((*rArg->angle4_p)[i])
-        );
+        ) &&
+        (retries <= MAX_RETRIES)
+        )
+    {
+      retries++;
+    }
+    if(rc) {
+      break;
+    }
+    retries = 0;
     if(i == 0) {
       start_time = (*rArg->time_p)[i];
     }
@@ -684,14 +749,23 @@ void* Mobot_recordAnglesBeginThread(void* arg)
       *rArg->angle4_p = newBuf;
     }
     cur_time = GetTickCount();
-    Mobot_getJointAnglesTime(
-        rArg->comms, 
-        &((*rArg->time_p)[i]), 
-        &((*rArg->angle_p)[i]),
-        &((*rArg->angle2_p)[i]),
-        &((*rArg->angle3_p)[i]),
-        &((*rArg->angle4_p)[i])
-        );
+    while(
+        (rc = Mobot_getJointAnglesTime(
+                                       rArg->comms, 
+                                       &((*rArg->time_p)[i]), 
+                                       &((*rArg->angle_p)[i]),
+                                       &((*rArg->angle2_p)[i]),
+                                       &((*rArg->angle3_p)[i]),
+                                       &((*rArg->angle4_p)[i])
+                                      )) &&
+        retries <= MAX_RETRIES)
+    {
+      retries++;
+    }
+    if(rc) {
+      break;
+    }
+    retries = 0;
     if(i == 0) {
       start_time = (*rArg->time_p)[i];
     }

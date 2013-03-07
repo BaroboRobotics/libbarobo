@@ -2087,6 +2087,7 @@ void sendBufAppend(mobot_t* comms, uint8_t* data, int len)
   MUTEX_UNLOCK(comms->sendBuf_lock);
 }
 
+#ifdef _WIN32
 void* commsOutEngine(void* arg)
 {
   mobot_t* comms = (mobot_t*)arg;
@@ -2094,10 +2095,55 @@ void* commsOutEngine(void* arg)
   uint8_t* byte;
   uint8_t b;
   int err;
-#ifdef _WIN32
   DWORD bytesWritten;
+  uint8_t msgbuf[256];
+  int i = 0;
   //comms->ovOutgoing.hEvent = CreateEvent(0, true, 0, 0);
-#endif
+
+  MUTEX_LOCK(comms->sendBuf_lock);
+  g_mobotThreadInitializing = 0;
+  while(1) {
+    while(comms->sendBuf_N == 0) {
+      COND_WAIT(comms->sendBuf_cond, comms->sendBuf_lock);
+    }
+    if(comms->connected == 0) {
+      break;
+    }
+    i = 0;
+    /* Write one whole message at a time */
+    while(comms->sendBuf_N > 0) {
+      index = comms->sendBuf_index % SENDBUF_SIZE;
+      byte = &comms->sendBuf[index];
+      msgbuf[i] = *byte;
+      comms->sendBuf_N--;
+      comms->sendBuf_index++;
+      i++;
+    }
+    //printf(" ** OUT: 0x%02x %d\n", *byte, comms->sendBuf_N);
+    MUTEX_LOCK(comms->socket_lock);
+    if(!WriteFile(
+          comms->commHandle, 
+          msgbuf, 
+          i,
+          NULL,
+          comms->ovOutgoing)) {
+      //printf("Error writing. %d \n", GetLastError());
+    }
+    MUTEX_UNLOCK(comms->socket_lock);
+    GetOverlappedResult(comms->commHandle, comms->ovOutgoing, &bytesWritten, TRUE);
+    ResetEvent(comms->ovOutgoing->hEvent);
+  }
+  return NULL;
+}
+
+#else
+void* commsOutEngine(void* arg)
+{
+  mobot_t* comms = (mobot_t*)arg;
+  int index;
+  uint8_t* byte;
+  uint8_t b;
+  int err;
 
   MUTEX_LOCK(comms->sendBuf_lock);
   g_mobotThreadInitializing = 0;
@@ -2112,31 +2158,17 @@ void* commsOutEngine(void* arg)
     while(comms->sendBuf_N > 0) {
       index = comms->sendBuf_index % SENDBUF_SIZE;
       byte = &comms->sendBuf[index];
-#ifdef _WIN32
-      //printf(" ** OUT: 0x%02x %d\n", *byte, comms->sendBuf_N);
-      MUTEX_LOCK(comms->socket_lock);
-      if(!WriteFile(
-          comms->commHandle, 
-          byte, 
-          1,
-          NULL,
-          comms->ovOutgoing)) {
-        //printf("Error writing. %d \n", GetLastError());
-      }
-      MUTEX_UNLOCK(comms->socket_lock);
-      GetOverlappedResult(comms->commHandle, comms->ovOutgoing, &bytesWritten, TRUE);
-      ResetEvent(comms->ovOutgoing->hEvent);
-#else
       MUTEX_LOCK(comms->socket_lock);
       err = write(comms->socket, byte, 1);
       MUTEX_UNLOCK(comms->socket_lock);
-#endif
       comms->sendBuf_N--;
       comms->sendBuf_index++;
     }
   }
   return NULL;
 }
+
+#endif
 
 void* callbackThread(void* arg)
 {
