@@ -19,6 +19,9 @@ mobot1.connectWithAddress("HFRS", 1);
 mobot2.connectWithAddress("104C", 1);
 mobot1.resetToZeroNB();  mobot2.resetToZeroNB();
 mobot1.moveWait();       mobot2.moveWait();
+mobot1.resetToZeroNB();  mobot2.resetToZeroNB();
+mobot1.moveWait();       mobot2.moveWait();
+>>>>>>> 794d7f1377e4ebbc116e6ce391da21b41a424f9f
 
 /* set the speeds for mobot1 and mobot2 */
 mobot1.setTwoWheelRobotSpeed(speed1, radius1);

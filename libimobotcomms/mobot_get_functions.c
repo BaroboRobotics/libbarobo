@@ -52,11 +52,8 @@ int Mobot_getQueriedAddresses(mobot_t* comms)
   uint8_t buf[256];
   uint16_t addr;
   int i;
-  status = SendToIMobot(comms, BTCMD(CMD_GETQUERIEDADDRESSES), NULL, 0);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GETQUERIEDADDRESSES), buf, 0);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
 
   for(i = 0; i < (buf[1]-3)/6; i++) {
     addr = buf[2+i*6] << 8;
@@ -73,11 +70,8 @@ int Mobot_getID(mobot_t* comms)
   int status;
   uint8_t buf[8];
   int addr;
-  status = SendToIMobot(comms, BTCMD(CMD_GETSERIALID), NULL, 0);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GETSERIALID), buf, 0);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the buf size is correct */
   if(buf[1] != 7) {
     return -1;
@@ -92,11 +86,8 @@ int Mobot_getAccelerometerData(mobot_t* comms, double *accel_x, double *accel_y,
   float f;
   int status;
   int16_t i;
-  status = SendToIMobot(comms, BTCMD(CMD_GETACCEL), NULL, 0);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GETACCEL), buf, 0);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 0x09) {
     return -1;
@@ -116,11 +107,8 @@ int Mobot_getBatteryVoltage(mobot_t* comms, double *voltage)
   uint8_t buf[32];
   float f;
   int status;
-  status = SendToIMobot(comms, BTCMD(CMD_GETBATTERYVOLTAGE), NULL, 0);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GETBATTERYVOLTAGE), buf, 0);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 7) {
     return -1;
@@ -136,11 +124,8 @@ int Mobot_getButtonVoltage(mobot_t* comms, double *voltage)
   uint8_t buf[32];
   float f;
   int status;
-  status = SendToIMobot(comms, BTCMD(CMD_GETBUTTONVOLTAGE), NULL, 0);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GETBUTTONVOLTAGE), buf, 0);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 7) {
     return -1;
@@ -205,11 +190,8 @@ int Mobot_getEncoderVoltage(mobot_t* comms, int pinNumber, double *voltage)
   float f;
   int status;
   buf[0] = pinNumber;
-  status = SendToIMobot(comms, BTCMD(CMD_GETENCODERVOLTAGE), buf, 1);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GETENCODERVOLTAGE), buf, 1);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 7) {
     return -1;
@@ -230,11 +212,8 @@ int Mobot_getHWRev(mobot_t* comms, int* rev)
 {
   uint8_t buf[20];
   int status;
-  if(status = SendToIMobot(comms, BTCMD(CMD_GETHWREV), NULL, 0)) {
+  if(status = MobotMsgTransaction(comms, BTCMD(CMD_GETHWREV), buf, 0)) {
     return status;
-  }
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
   }
   if(buf[0] != RESP_OK) {
     return -1;
@@ -249,11 +228,8 @@ int Mobot_getJointAngle(mobot_t* comms, mobotJointId_t id, double *angle)
   float f;
   int status;
   buf[0] = (uint8_t)id-1;
-  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORANGLEABS), buf, 1);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GETMOTORANGLEABS), buf, 1);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 7) {
     return -1;
@@ -289,11 +265,8 @@ int Mobot_getJointAngles(mobot_t* comms,
   float f;
   uint32_t millis;
   int status;
-  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORANGLESTIMESTAMPABS), NULL, 0);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GETMOTORANGLESTIMESTAMPABS), buf, 0);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 0x17) {
     return -1;
@@ -353,11 +326,8 @@ int Mobot_getJointAnglesTime(mobot_t* comms,
   float f;
   uint32_t millis;
   int status;
-  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORANGLESTIMESTAMPABS), NULL, 0);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GETMOTORANGLESTIMESTAMPABS), buf, 0);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 0x17) {
     return -1;
@@ -398,11 +368,8 @@ int Mobot_getJointAnglesTimeState(mobot_t* comms,
   states[1] = state2;
   states[2] = state3;
   states[3] = state4;
-  status = SendToIMobot(comms, BTCMD(CMD_GETBIGSTATE), NULL, 0);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GETBIGSTATE), buf, 0);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 27) {
     return -1;
@@ -469,11 +436,8 @@ int Mobot_getJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t
   uint8_t buf[32];
   int status;
   buf[0] = (uint8_t)id-1;
-  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORDIR), buf, 1);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GETMOTORDIR), buf, 1);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 0x04) {
     return -1;
@@ -500,11 +464,8 @@ int Mobot_getJointMaxSpeed(mobot_t* comms, mobotJointId_t id, double *maxSpeed)
   int status;
   int bytes_read;
   buf[0] = (uint8_t) id-1;
-  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORMAXSPEED), &buf[0], 1);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GETMOTORMAXSPEED), &buf[0], 1);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 7) {
     return -1;
@@ -520,11 +481,8 @@ int Mobot_getJointSafetyAngle(mobot_t* comms, double *angle)
   uint8_t buf[32];
   float f;
   int status;
-  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORSAFETYLIMIT), NULL, 0);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GETMOTORSAFETYLIMIT), buf, 0);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 0x07) {
     return -1;
@@ -539,11 +497,8 @@ int Mobot_getJointSafetyAngleTimeout(mobot_t* comms, double *seconds)
   uint8_t buf[32];
   float f;
   int status;
-  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORSAFETYTIMEOUT), NULL, 0);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GETMOTORSAFETYTIMEOUT), buf, 0);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 0x07) {
     return -1;
@@ -559,11 +514,8 @@ int Mobot_getJointSpeed(mobot_t* comms, mobotJointId_t id, double *speed)
   float f;
   int status;
   buf[0] = (uint8_t)id-1;
-  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORSPEED), buf, 1);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GETMOTORSPEED), buf, 1);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 0x07) {
     return -1;
@@ -601,11 +553,8 @@ int Mobot_getJointState(mobot_t* comms, mobotJointId_t id, mobotJointState_t *st
   uint8_t buf[32];
   int status;
   buf[0] = (uint8_t)id-1;
-  status = SendToIMobot(comms, BTCMD(CMD_GETMOTORSTATE), buf, 1);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GETMOTORSTATE), buf, 1);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 0x04) {
     *state = MOBOT_NEUTRAL;
@@ -646,11 +595,8 @@ int Mobot_getColorRGB(mobot_t* comms, int *r, int *g, int *b)
   float f;
   int status;
 
-  status = SendToIMobot(comms, BTCMD(CMD_GETRGB), NULL, 0);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GETRGB), buf, 0);
   if(status < 0) return status;
-  if(RecvFromIMobot(comms, buf, sizeof(buf))) {
-    return -1;
-  }
   /* Make sure the data size is correct */
   if(buf[1] != 6) {
     return -1;
@@ -664,10 +610,9 @@ int Mobot_getColorRGB(mobot_t* comms, int *r, int *g, int *b)
 int Mobot_getStatus(mobot_t* comms)
 {
   uint8_t buf[64];
-  SendToIMobot(comms, BTCMD(CMD_STATUS), NULL, 0);
-  if(RecvFromIMobot(comms, buf, 64)) {
-    return -1;
-  }
+  int rc;
+  rc = MobotMsgTransaction(comms, BTCMD(CMD_STATUS), buf, 0);
+  if(rc) {return rc;}
   if(buf[0] != RESP_OK) {
     return -1;
   }
@@ -684,8 +629,9 @@ int Mobot_getVersion(mobot_t* comms)
 {
   uint8_t buf[16];
   int version;
-  SendToIMobot(comms, BTCMD(CMD_GETVERSION), NULL, 0);
-  RecvFromIMobot(comms, buf, 16);
+  int rc;
+  rc = MobotMsgTransaction(comms, BTCMD(CMD_GETVERSION), buf, 0);
+  if(rc) {return rc;}
   if(buf[0] != RESP_OK) {
     return -1;
   }
