@@ -98,6 +98,7 @@ void* callbackThread(void* arg);
 
 #define MAX_RETRIES 3
 int MobotMsgTransaction(mobot_t* comms, uint8_t cmd, /*IN&OUT*/ void* buf, int sendsize);
+int Mobot_waitForReportedSerialID(mobot_t* comms, char* id);
 #endif /* Not _CH_ */
 
 #ifdef _WIN32

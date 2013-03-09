@@ -666,9 +666,9 @@ int Mobot_connectChild(mobot_t* parent, mobot_t* child)
     MUTEX_UNLOCK(parent->mobotTree_lock);
     Mobot_queryAddresses(parent);
 #ifdef _WIN32
-    Sleep(3000);
+    Sleep(5000);
 #else
-    sleep(3);
+    sleep(5);
 #endif
   }
   /* Did not find the child */
@@ -769,11 +769,7 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
     } else if (i == 0){
       MUTEX_UNLOCK(parent->mobotTree_lock);
       Mobot_queryAddresses(parent);
-#ifdef _WIN32
-      Sleep(3000);
-#else
-      sleep(3);
-#endif
+      Mobot_waitForReportedSerialID(parent, _childSerialID);
     }
   }
   /* Did not find the child */
@@ -1418,6 +1414,79 @@ int Mobot_setFourierCoefficients(mobot_t* comms, mobotJointId_t id, double* a, d
     return -1;
   }
   return 0;
+}
+
+int Mobot_waitForReportedSerialID(mobot_t* comms, char* id) 
+{
+  /* Wait on the mobot tree condition variable... Return if our mobot shows up
+   * or we time out */
+  int rc;
+  mobotInfo_t *iter;
+#ifndef _WIN32
+  struct timespec ts;
+#else
+#endif
+  /* Wait until transaction is ready */
+  MUTEX_LOCK(comms->mobotTree_lock);
+  while(1) {
+#ifndef _WIN32
+    /* Set up a wait with timeout */
+    /* Get the current time */
+#ifndef __MACH__
+    clock_gettime(CLOCK_REALTIME, &ts);
+#else
+    clock_serv_t cclock;
+    mach_timespec_t mts;
+    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    clock_get_time(cclock, &mts);
+    mach_port_deallocate(mach_task_self(), cclock);
+    ts.tv_sec = mts.tv_sec;
+    ts.tv_nsec = mts.tv_nsec;
+#endif
+    /* Add a timeout */
+    ts.tv_sec += 1;
+    rc = pthread_cond_timedwait(
+      comms->mobotTree_cond, 
+      comms->mobotTree_lock,
+      &ts);
+    if(rc) {
+      /* Timed out */
+      /* return error */
+      MUTEX_UNLOCK(comms->mobotTree_lock);
+      return -1;
+    } else {
+      /* We got an entry. Cycle through the tree and see if the one we are
+       * looking for arrived */
+      for(iter = comms->children; iter != NULL; iter = iter->next) {
+        if(!strcmp(id, iter->serialID)) {
+          /* We found it. We can return now */
+          MUTEX_UNLOCK(comms->mobotTree_lock);
+          return 0;
+        }
+      }
+    }
+#else
+    ResetEvent(*comms->mobotTree_cond);
+    ReleaseMutex(*comms->mobotTree_lock);
+    rc = WaitForSingleObject(*comms->recvBuf_cond, 1000);
+    if(rc == WAIT_TIMEOUT) {
+      /* Timed out */
+      /* return error */
+      MUTEX_UNLOCK(comms->mobotTree_lock);
+      return -1;
+    } else {
+      /* We got an entry. Cycle through the tree and see if the one we are
+       * looking for arrived */
+      for(iter = comms->children; iter != NULL; iter = iter->next) {
+        if(!strcmp(id, iter->serialID)) {
+          /* We found it. We can return now */
+          MUTEX_UNLOCK(comms->mobotTree_lock);
+          return 0;
+        }
+      }
+    }
+#endif
+  }
 }
 
 #ifdef _WIN32
