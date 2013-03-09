@@ -963,7 +963,7 @@ int Mobot_loadMelody(mobot_t* comms, int id, mobotMelodyNote_t* melody)
 #else
     Sleep(500);
 #endif
-    status = RecvFromIMobot(comms, recvBuf, sizeof(recvBuf));
+    status = RecvFromIMobot(comms, (uint8_t*)recvBuf, sizeof(recvBuf));
   }
   /* Make sure the data size is correct */
   if(recvBuf[1] != 3) {
@@ -1539,7 +1539,7 @@ int MobotMsgTransaction(mobot_t* comms, uint8_t cmd, /*IN&OUT*/ void* buf, int s
       ) 
   {
     SendToIMobot(comms, cmd, sendbuf, size);
-    rc = RecvFromIMobot(comms, buf, size);
+    rc = RecvFromIMobot(comms, (uint8_t*)buf, size);
     retries++;
   }
   if(size > 0) free(sendbuf);
