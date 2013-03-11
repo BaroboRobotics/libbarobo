@@ -709,7 +709,9 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
     child->parent = parent;
     child->connected = 1;
     child->connectionMode = MOBOTCONNECT_ZIGBEE;
+    child->zigbeeAddr = Mobot_getAddress(parent);
     parent->child = child;
+    Mobot_pair(child);
     /* Get the form factor */
     rc = getFormFactor(child, &form);
     if(rc) {
@@ -2020,7 +2022,7 @@ void* commsEngine(void* arg)
           /* First, we need to see which mobot initiated the button press */
           address = comms->recvBuf[2] << 8;
           address |= comms->recvBuf[3] & 0x00ff;
-          if( (address == 0) || (address == comms->zigbeeAddr)) {
+          if( address == 0 ) {
             if(comms->callbackEnabled) {
               /* Call the callback multiple times depending on the events */
               int bit;
@@ -2044,6 +2046,29 @@ void* commsEngine(void* arg)
                   callbackArg->button = bit;
                   callbackArg->buttonDown = (buttonDown & (1<<bit)) ? 1 : 0;
                   //comms->buttonCallback(bit, (buttonDown & (1<<bit)) ? 1 : 0 );
+                  THREAD_CREATE(&callbackThreadHandle, callbackThread, callbackArg);
+                }
+              }
+            }
+          } else if (
+              (comms->child) &&
+              (comms->child->zigbeeAddr == address)
+              ) 
+          {
+            if(comms->child->callbackEnabled) {
+              /* Call the callback multiple times depending on the events */
+              int bit;
+              events = comms->recvBuf[11];
+              buttonDown = comms->recvBuf[12];
+              THREAD_T callbackThreadHandle;
+              callbackArg_t* callbackArg;
+              for(bit = 0; bit < 2; bit++) {
+                if(events & (1<<bit)) {
+                  callbackArg = (callbackArg_t*)malloc(sizeof(callbackArg_t));
+                  callbackArg->comms = comms->child;
+                  callbackArg->button = bit;
+                  callbackArg->buttonDown = (buttonDown & (1<<bit)) ? 1 : 0;
+                  //comms->child->buttonCallback(bit, (buttonDown & (1<<bit)) ? 1 : 0 );
                   THREAD_CREATE(&callbackThreadHandle, callbackThread, callbackArg);
                 }
               }
@@ -2214,6 +2239,7 @@ void* commsOutEngine(void* arg)
       byte = &comms->sendBuf[index];
       MUTEX_LOCK(comms->socket_lock);
       err = write(comms->socket, byte, 1);
+      //printf("*** OUT: 0x%2x\n", *byte);
       MUTEX_UNLOCK(comms->socket_lock);
       comms->sendBuf_N--;
       comms->sendBuf_index++;
