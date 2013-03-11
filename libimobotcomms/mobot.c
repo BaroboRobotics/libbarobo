@@ -2220,9 +2220,12 @@ void* commsOutEngine(void* arg)
 {
   mobot_t* comms = (mobot_t*)arg;
   int index;
-  uint8_t* byte;
+  uint8_t* bytes = NULL;
+  int n;
+  int bufsize = 0;
   uint8_t b;
   int err;
+  int i;
 
   MUTEX_LOCK(comms->sendBuf_lock);
   g_mobotThreadInitializing = 0;
@@ -2233,17 +2236,28 @@ void* commsOutEngine(void* arg)
     if(comms->connected == 0) {
       break;
     }
-    /* Write one byte at a time */
+    /* Copy the whole buffer and send it */
+    if(comms->sendBuf_N > bufsize) {
+      if(bytes != NULL) {
+        free(bytes);
+      }
+      bufsize = comms->sendBuf_N;
+      bytes = (uint8_t*)malloc(bufsize);
+    }
+    i = 0;
     while(comms->sendBuf_N > 0) {
       index = comms->sendBuf_index % SENDBUF_SIZE;
-      byte = &comms->sendBuf[index];
-      MUTEX_LOCK(comms->socket_lock);
-      err = write(comms->socket, byte, 1);
-      //printf("*** OUT: 0x%2x\n", *byte);
-      MUTEX_UNLOCK(comms->socket_lock);
+      bytes[i] = comms->sendBuf[index];
       comms->sendBuf_N--;
       comms->sendBuf_index++;
+      i++;
     }
+    MUTEX_UNLOCK(comms->sendBuf_lock);
+    MUTEX_LOCK(comms->socket_lock);
+    err = write(comms->socket, bytes, i);
+    //printf("*** OUT: 0x%2x\n", *byte);
+    MUTEX_UNLOCK(comms->socket_lock);
+    MUTEX_LOCK(comms->sendBuf_lock);
   }
   return NULL;
 }
