@@ -811,20 +811,28 @@ int finishConnect(mobot_t* comms)
 #endif
     i++;
   }
-  /* Get the protocol version; make sure it matches ours */
-  int version;
-  version = Mobot_getVersion(comms); 
-  if(version != CMD_NUMCOMMANDS) {
-    fprintf(stderr, "Warning. Bluetooth protocol version mismatch.\n");
-    fprintf(stderr, "Mobot Firmware Protocol Version: %d\n", version);
-    fprintf(stderr, "CMobot Library Protocol Version: %d\n", CMD_NUMCOMMANDS);
-  }
   /* Get form factor */
   rc = getFormFactor(comms, (int*)&form);
   if(rc) {
     form = MOBOTFORM_ORIGINAL;
   }
   comms->formFactor = form;
+  /* Get the protocol version; make sure it matches ours */
+  int version;
+  version = Mobot_getVersion(comms); 
+  if(comms->formFactor == MOBOTFORM_ORIGINAL) {
+    if(version != 38) {
+      fprintf(stderr, "Warning. Bluetooth protocol version mismatch.\n");
+      fprintf(stderr, "Mobot Firmware Protocol Version: %d\n", version);
+      fprintf(stderr, "CMobot Library Protocol Version: %d\n", CMD_NUMCOMMANDS);
+    }
+  } else {
+    if(version != CMD_NUMCOMMANDS) {
+      fprintf(stderr, "Warning. Communications protocol version mismatch.\n");
+      fprintf(stderr, "Mobot Firmware Protocol Version: %d\n", version);
+      fprintf(stderr, "CMobot Library Protocol Version: %d\n", CMD_NUMCOMMANDS);
+    }
+  }
   /* Get the joint max speeds */
   /* DEBUG */
 #if 0
