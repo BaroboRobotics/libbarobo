@@ -1095,11 +1095,11 @@ int Mobot_disconnect(mobot_t* comms)
   if(comms->connected == 0) {
     return 0;
   }
-  comms->connected = 0;
 #ifndef _WIN32
   switch(comms->connectionMode) {
     case MOBOTCONNECT_BLUETOOTH:
     case MOBOTCONNECT_TCP:
+      comms->connected = 0;
       shutdown(comms->socket, SHUT_RDWR);
       if(close(comms->socket)) {
         /* Error closing file descriptor */
@@ -1107,6 +1107,11 @@ int Mobot_disconnect(mobot_t* comms)
       } 
       break;
     case MOBOTCONNECT_TTY:
+      MUTEX_LOCK(comms->sendBuf_lock);
+      comms->connected = 0;
+      /* Signal the commsOut engine */
+      COND_SIGNAL(comms->sendBuf_cond);
+      MUTEX_UNLOCK(comms->sendBuf_lock);
       /* Unpair all children */
       for(iter = comms->children; iter != NULL; iter = iter->next) {
         if(iter->mobot) {
@@ -1120,7 +1125,7 @@ int Mobot_disconnect(mobot_t* comms)
       }
       g_disconnectSignal = 1;
       pthread_kill(*comms->commsThread, SIGINT);
-      while(g_disconnectSignal);
+      //while(g_disconnectSignal);
       if(close(comms->socket)) {
         rc = -1;
       }
@@ -2190,10 +2195,14 @@ void* commsOutEngine(void* arg)
   MUTEX_LOCK(comms->sendBuf_lock);
   g_mobotThreadInitializing = 0;
   while(1) {
-    while(comms->sendBuf_N == 0) {
+    while(
+        (comms->sendBuf_N == 0) &&
+        (comms->connected) ) 
+    {
       COND_WAIT(comms->sendBuf_cond, comms->sendBuf_lock);
     }
     if(comms->connected == 0) {
+      MUTEX_UNLOCK(comms->sendBuf_lock);
       break;
     }
     i = 0;
@@ -2238,10 +2247,14 @@ void* commsOutEngine(void* arg)
   MUTEX_LOCK(comms->sendBuf_lock);
   g_mobotThreadInitializing = 0;
   while(1) {
-    while(comms->sendBuf_N == 0) {
+    while(
+        (comms->sendBuf_N == 0) &&
+        (comms->connected) ) 
+    {
       COND_WAIT(comms->sendBuf_cond, comms->sendBuf_lock);
     }
     if(comms->connected == 0) {
+      MUTEX_UNLOCK(comms->sendBuf_lock);
       break;
     }
     /* Copy the whole buffer and send it */
