@@ -1091,8 +1091,16 @@ int Mobot_reboot(mobot_t* comms)
 int Mobot_disconnect(mobot_t* comms)
 {
   int rc = 0;
+  /* Only globally allow one mobot to disconnect at a time */
+  static int initialized = 0;
+  static MUTEX_T lock;
+  if(!initialized) {
+    MUTEX_INIT(&lock);
+  }
+  MUTEX_LOCK(&lock);
   mobotInfo_t* iter;
   if(comms->connected == 0) {
+    MUTEX_UNLOCK(&lock);
     return 0;
   }
 #ifndef _WIN32
@@ -1157,12 +1165,13 @@ int Mobot_disconnect(mobot_t* comms)
       break;
     case MOBOTCONNECT_TTY:
       /* Cancel IO, stop threads */
+      Mobot_unpair(comms);
       sendBufAppend(comms, (uint8_t*)&rc, 1);
       SetEvent(comms->cancelEvent);
       THREAD_JOIN(comms->commsThread);
       THREAD_JOIN(comms->commsOutThread);
       Sleep(100);
-      //CloseHandle(comms->commHandle);
+      CloseHandle(comms->commHandle);
 
       /* Unpair all children */
       for(iter = comms->children; iter != NULL; iter = iter->next) {
@@ -1181,6 +1190,7 @@ int Mobot_disconnect(mobot_t* comms)
   if(g_numConnected > 0) {
     g_numConnected--;
   }
+  MUTEX_UNLOCK(&lock);
   return rc;
 }
 
