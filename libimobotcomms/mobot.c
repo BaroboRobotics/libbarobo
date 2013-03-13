@@ -1162,7 +1162,7 @@ int Mobot_disconnect(mobot_t* comms)
       THREAD_JOIN(comms->commsThread);
       THREAD_JOIN(comms->commsOutThread);
       Sleep(100);
-      CloseHandle(comms->commHandle);
+      //CloseHandle(comms->commHandle);
 
       /* Unpair all children */
       for(iter = comms->children; iter != NULL; iter = iter->next) {
