@@ -1173,8 +1173,8 @@ int Mobot_disconnect(mobot_t* comms)
       Mobot_unpair(comms);
       sendBufAppend(comms, (uint8_t*)&rc, 1);
       SetEvent(comms->cancelEvent);
-      THREAD_JOIN(comms->commsThread);
-      THREAD_JOIN(comms->commsOutThread);
+      THREAD_JOIN(*comms->commsThread);
+      THREAD_JOIN(*comms->commsOutThread);
       Sleep(100);
       CloseHandle(comms->commHandle);
 
@@ -1289,6 +1289,7 @@ int Mobot_init(mobot_t* comms)
   COND_NEW(comms->recvBuf_cond);
   COND_INIT(comms->recvBuf_cond);
   comms->recvBuf_ready = 0;
+  comms->commsEngine_bytes = 0;
   MUTEX_NEW(comms->commsBusy_lock);
   MUTEX_INIT(comms->commsBusy_lock);
   COND_NEW(comms->commsBusy_cond);
@@ -1729,6 +1730,8 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
       comms->recvBuf_lock);
       */
     if(rc) {
+      /* Reset the incoming message queue */
+      comms->commsEngine_bytes = 0;
       /* Disconnect and return error */
       MUTEX_UNLOCK(comms->recvBuf_lock);
       MUTEX_UNLOCK(comms->commsLock);
@@ -1855,7 +1858,6 @@ void* commsEngine(void* arg)
   mobotInfo_t* iter;
   uint8_t byte;
   uint16_t uint16;
-  int bytes = 0;
   int err;
   int isResponse;
   uint8_t* tmpbuf;
@@ -1944,8 +1946,8 @@ void* commsEngine(void* arg)
     /* Received a byte. If it is the first one, check to see if it is a
      * response or a triggered event */
     /* DEBUG */
-    //printf("%d RECV: 0x%0x\n", bytes, byte);
-    if(bytes == 0) {
+    //printf("%d RECV: 0x%0x\n", comms->commsEngine_bytes, byte);
+    if(comms->commsEngine_bytes == 0) {
       MUTEX_LOCK(comms->commsBusy_lock);
       comms->commsBusy = 1;
       COND_SIGNAL(comms->commsBusy_cond);
@@ -1958,13 +1960,19 @@ void* commsEngine(void* arg)
         isResponse = 0;
       }
     }
+    if( (comms->commsEngine_bytes >= 2) &&
+        (comms->recvBuf[1] > 255) )
+    {
+      /* We cannot accept a message of this size... */
+      comms->commsEngine_bytes = 0;
+    }
     if(isResponse) {
       MUTEX_LOCK(comms->recvBuf_lock);
-      comms->recvBuf[bytes] = byte;
-      bytes++;
+      comms->recvBuf[comms->commsEngine_bytes] = byte;
+      comms->commsEngine_bytes++;
       MUTEX_UNLOCK(comms->recvBuf_lock);
-      if( (bytes >= 2) &&
-          (comms->recvBuf[1] == bytes) )
+      if( (comms->commsEngine_bytes >= 2) &&
+          (comms->recvBuf[1] == comms->commsEngine_bytes) )
       {
         /* We have received the entire response */
         /* We need to copy it to the correct receive buffer */
@@ -2026,20 +2034,28 @@ void* commsEngine(void* arg)
           }
         }
         /* Reset state vars */
-        bytes = 0;
+        comms->commsEngine_bytes = 0;
         MUTEX_LOCK(comms->commsBusy_lock);
         comms->commsBusy = 0;
         COND_SIGNAL(comms->commsBusy_cond);
         MUTEX_UNLOCK(comms->commsBusy_lock);
       }
     } else {
+      if(
+          (comms->recvBuf[0] != EVENT_BUTTON) &&
+          (comms->recvBuf[0] != EVENT_REPORTADDRESS)
+        )
+      {
+        /* Not a valid event. */
+        comms->commsEngine_bytes = 0;
+      }
       /* It was a user triggered event */
       MUTEX_LOCK(comms->recvBuf_lock);
-      comms->recvBuf[bytes] = byte;
-      bytes++;
+      comms->recvBuf[comms->commsEngine_bytes] = byte;
+      comms->commsEngine_bytes++;
       MUTEX_UNLOCK(comms->recvBuf_lock);
-      if( (bytes >= 2) &&
-          (comms->recvBuf[1] == bytes) )
+      if( (comms->commsEngine_bytes >= 2) &&
+          (comms->recvBuf[1] == comms->commsEngine_bytes) )
       {
         uint16_t address;
         uint8_t events;
@@ -2133,7 +2149,7 @@ void* commsEngine(void* arg)
             }
           }
           /* Reset state vars */
-          bytes = 0;
+          comms->commsEngine_bytes = 0;
           MUTEX_LOCK(comms->commsBusy_lock);
           comms->commsBusy = 0;
           COND_SIGNAL(comms->commsBusy_cond);
@@ -2170,7 +2186,7 @@ void* commsEngine(void* arg)
           MUTEX_UNLOCK(comms->mobotTree_lock);
 
           /* Reset state vars */
-          bytes = 0;
+          comms->commsEngine_bytes = 0;
           MUTEX_LOCK(comms->commsBusy_lock);
           comms->commsBusy = 0;
           COND_SIGNAL(comms->commsBusy_cond);

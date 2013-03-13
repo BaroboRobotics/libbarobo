@@ -26,7 +26,9 @@
   TerminateThread( thread_handle, 0)
 
 #define THREAD_JOIN(thread_handle) \
-  WaitForSingleObject(thread_handle, INFINITE)
+  WaitForSingleObject(thread_handle, INFINITE); \
+  CloseHandle(thread_handle)
+
 
 #define THREAD_EXIT() \
   ExitThread(0)
