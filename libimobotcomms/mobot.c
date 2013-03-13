@@ -1139,6 +1139,11 @@ int Mobot_disconnect(mobot_t* comms)
       }
       break;
     case MOBOTCONNECT_ZIGBEE:
+      /* If we are the ghost-child of a TTY connected robot, we need to set
+       * child back to NULL */
+      if(comms == comms->parent->child) {
+        comms->parent->child = NULL;
+      }
       Mobot_unpair(comms);
       break;
     default:
