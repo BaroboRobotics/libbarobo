@@ -144,7 +144,7 @@ int Mobot_setJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t
 
 int Mobot_setJointMovementStateNB(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir)
 {
-  Mobot_setJointSpeed(comms, id, comms->jointSpeeds[(int)id-1]);
+  //Mobot_setJointSpeed(comms, id, comms->jointSpeeds[(int)id-1]);
   Mobot_setJointDirection(comms, id, dir);
   return 0;
 }

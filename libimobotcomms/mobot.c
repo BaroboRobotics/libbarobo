@@ -796,21 +796,13 @@ int finishConnect(mobot_t* comms)
     THREAD_CREATE(comms->commsOutThread, commsOutEngine, comms);
     while(g_mobotThreadInitializing);
   }
-  while(1) {
-    if(i > 2) {
-      Mobot_disconnect(comms);
-      return -1;
-    }
-    if(Mobot_getStatus(comms) == 0) {
-      break;
-    }
-#ifndef _WIN32
-    usleep(200000);
-#else
-    Sleep(200);
-#endif
-    i++;
+
+  /* Make sure we are connected to a Mobot */
+  if(Mobot_getStatus(comms)) {
+    Mobot_disconnect(comms);
+    return -1;
   }
+
   /* Get form factor */
   rc = getFormFactor(comms, (int*)&form);
   if(rc) {
@@ -1139,12 +1131,12 @@ int Mobot_disconnect(mobot_t* comms)
       }
       break;
     case MOBOTCONNECT_ZIGBEE:
+      Mobot_unpair(comms);
       /* If we are the ghost-child of a TTY connected robot, we need to set
        * child back to NULL */
       if(comms == comms->parent->child) {
         comms->parent->child = NULL;
       }
-      Mobot_unpair(comms);
       break;
     default:
       rc = 0;
@@ -1715,11 +1707,12 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
     ts.tv_nsec = mts.tv_nsec;
 #endif
     /* Add a timeout */
-    ts.tv_nsec += 200000000; // 100 ms
+    ts.tv_nsec += 500000000; // 100 ms
     if(ts.tv_nsec > 1000000000) {
       ts.tv_nsec -= 1000000000;
       ts.tv_sec += 1;
     }
+    ts.tv_sec++;
     rc = pthread_cond_timedwait(
       comms->recvBuf_cond, 
       comms->recvBuf_lock,
