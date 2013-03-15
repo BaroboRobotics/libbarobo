@@ -1712,7 +1712,6 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
       ts.tv_nsec -= 1000000000;
       ts.tv_sec += 1;
     }
-    ts.tv_sec++;
     rc = pthread_cond_timedwait(
       comms->recvBuf_cond, 
       comms->recvBuf_lock,
