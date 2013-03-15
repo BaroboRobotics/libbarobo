@@ -1319,6 +1319,7 @@ DLLIMPORT int Mobot_connectWithAddress(
     mobot_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_connectWithBluetoothAddress(
     mobot_t* comms, const char* address, int channel);
+DLLIMPORT int Mobot_findMobot(mobot_t* parent, const char* childSerialID);
 DLLIMPORT mobotMelodyNote_t* Mobot_createMelody(int tempo);
 DLLIMPORT int Mobot_melodyAddNote(mobotMelodyNote_t* melody, const char* note, int divider);
 DLLIMPORT int Mobot_loadMelody(mobot_t* comms, int id, mobotMelodyNote_t* melody);

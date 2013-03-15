@@ -676,6 +676,22 @@ int Mobot_connectChild(mobot_t* parent, mobot_t* child)
   return -1;
 }
 
+int Mobot_findMobot(mobot_t* parent, const char* childSerialID)
+{
+  uint8_t buf[64];
+  int rc;
+  /* If a parent was specified, use it as a dongle */
+  if(parent == NULL) {
+    Mobot_initDongle();
+    parent = g_dongleMobot;
+  }
+  memcpy(buf, childSerialID, 4);
+  rc = MobotMsgTransaction(parent, BTCMD(CMD_FINDMOBOT), buf, 4);
+  if(rc) {return rc;}
+  if(buf[0] == 0xff) { return -1; } 
+  return 0;
+}
+
 int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSerialID)
 { 
   int form; int rc;
@@ -770,7 +786,8 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
       return 0;
     } else if (i == 0){
       MUTEX_UNLOCK(parent->mobotTree_lock);
-      Mobot_queryAddresses(parent);
+      //Mobot_queryAddresses(parent);
+      Mobot_findMobot(parent, _childSerialID);
       Mobot_waitForReportedSerialID(parent, _childSerialID);
     }
   }
@@ -1075,7 +1092,7 @@ int Mobot_reboot(mobot_t* comms)
   uint16_t addr;
   int i;
   uint8_t buf[8];
-  status = MobotMsgTransaction(comms, BTCMD(CMD_REBOOT), buf, 0);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_REBOOT), buf, 3);
   if(status < 0) return status;
   return 0;
 }
