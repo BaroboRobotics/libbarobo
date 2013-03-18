@@ -822,13 +822,20 @@ int finishConnect(mobot_t* comms)
 
   /* Get form factor */
   rc = getFormFactor(comms, (int*)&form);
-  if(rc) {
+  if(rc == -1) {
     form = MOBOTFORM_ORIGINAL;
+  } else if (rc == -2) {
+    Mobot_disconnect(comms);
+    return rc;
   }
   comms->formFactor = form;
   /* Get the protocol version; make sure it matches ours */
   int version;
   version = Mobot_getVersion(comms); 
+  if(version < 0) {
+    Mobot_disconnect(comms);
+    return rc;
+  }
   if(comms->formFactor == MOBOTFORM_ORIGINAL) {
     if(version != 38) {
       fprintf(stderr, "Warning. Bluetooth protocol version mismatch.\n");
@@ -1588,7 +1595,11 @@ int MobotMsgTransaction(mobot_t* comms, uint8_t cmd, /*IN&OUT*/ void* buf, int s
     retries++;
   }
   if(size > 0) free(sendbuf);
-  return rc;
+  if(rc) {return rc;}
+  if(((uint8_t*)buf)[0] == 0xff) {
+    return -1;
+  }
+  return 0;
 }
 
 int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
@@ -1750,7 +1761,7 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
       MUTEX_UNLOCK(comms->recvBuf_lock);
       MUTEX_UNLOCK(comms->commsLock);
       //Mobot_disconnect(comms);
-      return -1;
+      return -2;
     }
 #else
     ResetEvent(*comms->recvBuf_cond);
@@ -1760,7 +1771,7 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
       MUTEX_UNLOCK(comms->recvBuf_lock);
       MUTEX_UNLOCK(comms->commsLock);
       //Mobot_disconnect(comms);
-      return -1;
+      return -2;
     }
 #endif
   }
