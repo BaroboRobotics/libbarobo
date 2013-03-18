@@ -775,7 +775,7 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
           child->connected = 0;
           child->connectionMode = MOBOTCONNECT_NONE;
           child->parent = NULL;
-          iter->mobot = NULL;
+          //iter->mobot = NULL;
           MUTEX_UNLOCK(parent->mobotTree_lock);
           free(_childSerialID);
           return -1;
@@ -1990,6 +1990,7 @@ void* commsEngine(void* arg)
     {
       /* We cannot accept a message of this size... */
       comms->commsEngine_bytes = 0;
+      continue;
     }
     if(isResponse) {
       MUTEX_LOCK(comms->recvBuf_lock);
