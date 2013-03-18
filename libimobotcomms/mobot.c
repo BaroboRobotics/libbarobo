@@ -540,6 +540,9 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   comms->connectionMode = MOBOTCONNECT_TTY;
   tcflush(comms->socket, TCIOFLUSH);
   status = finishConnect(comms);
+  if(status) {
+    return status;
+  }
   if(
       (comms->formFactor == MOBOTFORM_I) ||
       (comms->formFactor == MOBOTFORM_L) 
@@ -615,7 +618,15 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
     Mobot_disconnect(comms);
     return rc;
   }
-  Mobot_getID(comms);
+  if(
+      (comms->formFactor == MOBOTFORM_I) ||
+      (comms->formFactor == MOBOTFORM_L) 
+    )
+  {
+    comms->zigbeeAddr = Mobot_getAddress(comms);
+    /* See if we can get the serial id */
+    Mobot_getID(comms);
+  }
   return 0;
 }
 
