@@ -813,6 +813,7 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
 int finishConnect(mobot_t* comms)
 {
   int i = 0, rc;
+  int numJoints = 0;
   mobotFormFactor_t form;
   uint8_t buf[256];
   /* Start the comms engine */
@@ -840,6 +841,18 @@ int finishConnect(mobot_t* comms)
     return rc;
   }
   comms->formFactor = form;
+  switch(form) {
+    case MOBOTFORM_ORIGINAL:
+      numJoints = 4;
+      break;
+    case MOBOTFORM_I:
+    case MOBOTFORM_L:
+    case MOBOTFORM_T:
+      numJoints = 3;
+      break;
+    default:
+      numJoints = 0;
+  }
   /* Get the protocol version; make sure it matches ours */
   int version;
   version = Mobot_getVersion(comms); 
@@ -862,18 +875,18 @@ int finishConnect(mobot_t* comms)
   }
   /* Get the joint max speeds */
   /* DEBUG */
-#if 0
-  for(i = 4; i >= 1; i--) {
+  /*
+  for(i = numJoints; i >= 1; i--) {
     if(Mobot_getJointMaxSpeed(comms, (mobotJointId_t)i, &(comms->maxSpeed[i-1])) < 0) {
       i++;
     }
   }
+  */
   Mobot_setJointSpeeds( comms, 
       DEG2RAD(45), 
       DEG2RAD(45), 
       DEG2RAD(45), 
       DEG2RAD(45) );
-#endif
   return 0;
 }
 
