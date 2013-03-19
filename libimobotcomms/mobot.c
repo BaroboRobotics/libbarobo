@@ -792,6 +792,12 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
           return -1;
         }
       }
+      /* Set initial speeds */
+      Mobot_setJointSpeeds( child, 
+          DEG2RAD(45), 
+          DEG2RAD(45), 
+          DEG2RAD(45), 
+          DEG2RAD(45) );
       MUTEX_UNLOCK(parent->mobotTree_lock);
       free(_childSerialID);
       return 0;
@@ -882,6 +888,9 @@ int finishConnect(mobot_t* comms)
     }
   }
   */
+  for(i = 0; i < 4; i++) {
+    comms->maxSpeed[i] = DEG2RAD(120);
+  }
   Mobot_setJointSpeeds( comms, 
       DEG2RAD(45), 
       DEG2RAD(45), 
