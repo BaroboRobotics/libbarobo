@@ -257,6 +257,22 @@ int CMobotIGroup::moveNB(double angle1, double angle2, double angle3)
   return 0;
 } 
 
+int CMobotIGroup::moveBackward(double angle)
+{
+  int rc;
+  rc = moveBackwardNB(angle);
+  if(rc) return rc;
+  return moveWait();
+}
+
+int CMobotIGroup::moveBackwardNB(double angle)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveBackwardNB(angle);
+  }
+  return 0;
+}
+
 int CMobotIGroup::moveContinuousNB(mobotJointState_t dir1, 
                        mobotJointState_t dir2, 
                        mobotJointState_t dir3)
@@ -272,6 +288,38 @@ int CMobotIGroup::moveContinuousTime(mobotJointState_t dir1,
 {
   DEPRECATED("moveContinuousTime", "setMovementStateTime");
   return setMovementStateTime(dir1, dir2, dir3, seconds);
+}
+
+int CMobotIGroup::moveDistance(double distance, double radius)
+{
+  int rc;
+  rc = moveDistanceNB(distance, radius);
+  if(rc) return rc;
+  return moveWait();
+}
+
+int CMobotIGroup::moveDistanceNB(double distance, double radius)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveDistanceNB(distance, radius);
+  }
+  return 0;
+}
+
+int CMobotIGroup::moveForward(double angle)
+{
+  int rc;
+  rc = moveForwardNB(angle);
+  if(rc) return rc;
+  return moveWait();
+}
+
+int CMobotIGroup::moveForwardNB(double angle)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveForwardNB(angle);
+  }
+  return 0;
 }
 
 int CMobotIGroup::moveJointContinuousNB(mobotJointId_t id, mobotJointState_t dir)
@@ -525,6 +573,38 @@ int CMobotIGroup::setTwoWheelRobotSpeed(double speed, double radius)
 {
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->setTwoWheelRobotSpeed(speed, radius);
+  }
+  return 0;
+}
+
+int CMobotIGroup::turnLeft(double angle)
+{
+  int rc;
+  rc = turnLeftNB(angle);
+  if(rc) return rc;
+  return moveWait();
+}
+
+int CMobotIGroup::turnLeftNB(double angle)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->turnLeftNB(angle);
+  }
+  return 0;
+}
+
+int CMobotIGroup::turnRight(double angle)
+{
+  int rc;
+  rc = turnRightNB(angle);
+  if(rc) return rc;
+  return moveWait();
+}
+
+int CMobotIGroup::turnRightNB(double angle)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->turnRightNB(angle);
   }
   return 0;
 }

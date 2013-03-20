@@ -102,6 +102,16 @@ int CMobotI::moveNB( double angle1,
       DEG2RAD(0));
 }
 
+int CMobotI::moveBackward(double angle)
+{
+  return Mobot_moveBackward(_comms, DEG2RAD(angle));
+}
+
+int CMobotI::moveBackwardNB(double angle)
+{
+  return Mobot_moveBackwardNB(_comms, DEG2RAD(angle));
+}
+
 int CMobotI::moveContinuousNB( mobotJointState_t dir1, mobotJointState_t dir2, mobotJointState_t dir3)
 {
   DEPRECATED("moveContinuousNB", "setMovementStateNB");
@@ -112,6 +122,26 @@ int CMobotI::moveContinuousTime( mobotJointState_t dir1, mobotJointState_t dir2,
 {
   DEPRECATED("moveContinuousTime", "setMovementStateTime");
   return Mobot_moveContinuousTime(_comms, dir1, dir2, dir3, MOBOT_NEUTRAL, seconds);
+}
+
+int CMobotI::moveDistance(double distance, double radius)
+{
+  return Mobot_moveDistance(_comms, distance, radius);
+}
+
+int CMobotI::moveDistanceNB(double distance, double radius)
+{
+  return Mobot_moveDistanceNB(_comms, distance, radius);
+}
+
+int CMobotI::moveForward(double angle)
+{
+  return Mobot_moveForward(_comms, DEG2RAD(angle));
+}
+
+int CMobotI::moveForwardNB(double angle)
+{
+  return Mobot_moveForwardNB(_comms, DEG2RAD(angle));
 }
 
 int CMobotI::moveJointContinuousNB(mobotJointId_t id, mobotJointState_t dir)
@@ -239,3 +269,22 @@ int CMobotI::stopAllJoints()
   return Mobot_stopAllJoints(_comms);
 }
 
+int CMobotI::turnLeft(double angle)
+{
+  return Mobot_turnLeft(_comms, angle);
+}
+
+int CMobotI::turnLeftNB(double angle)
+{
+  return Mobot_turnLeftNB(_comms, angle);
+}
+
+int CMobotI::turnRight(double angle)
+{
+  return Mobot_turnRight(_comms, angle);
+}
+
+int CMobotI::turnRightNB(double angle)
+{
+  return Mobot_turnRightNB(_comms, angle);
+}

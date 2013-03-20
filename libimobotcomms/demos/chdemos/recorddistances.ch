@@ -15,13 +15,10 @@ mobotRecordData_t timedata2, distances2; // recorded time and distances for Mobo
 CPlot plot;                  // plotting class
 
 /* connect to Mobots and move to the zero position at the same time. */
-mobot1.connectWithAddress("HFRS", 1);        
-mobot2.connectWithAddress("104C", 1);
+mobot1.connect();        
+mobot2.connect();
 mobot1.resetToZeroNB();  mobot2.resetToZeroNB();
 mobot1.moveWait();       mobot2.moveWait();
-mobot1.resetToZeroNB();  mobot2.resetToZeroNB();
-mobot1.moveWait();       mobot2.moveWait();
->>>>>>> 794d7f1377e4ebbc116e6ce391da21b41a424f9f
 
 /* set the speeds for mobot1 and mobot2 */
 mobot1.setTwoWheelRobotSpeed(speed1, radius1);

@@ -22,11 +22,11 @@ int main()
   mobot.recordDistanceBegin(MOBOT_JOINT1, 
 		  time, 
 		  data, 
-		  3, 0.1, 0);
+		  3, 0.1, 1);
   mobot2.recordDistanceBegin(MOBOT_JOINT1, 
 		  time2, 
 		  data2, 
-		  3, 0.1, 0);
+		  3, 0.1, 1);
   for(i = 0; i < 10; i++) { 
     mobot.moveJointToNB(MOBOT_JOINT1, rand()%90);
     mobot.moveJointToNB(MOBOT_JOINT3, rand()%90);

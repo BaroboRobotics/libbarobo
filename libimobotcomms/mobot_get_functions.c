@@ -393,6 +393,15 @@ int Mobot_getJointAnglesTimeState(mobot_t* comms,
     } else if (*angle3 == MOBOT_BACKWARD) {
       *angle3 = MOBOT_FORWARD;
     }
+    *angle2 = 0;
+    *state2 = MOBOT_NEUTRAL;
+    *angle4 = 0;
+    *state4 = MOBOT_NEUTRAL;
+  } else if( comms->formFactor == MOBOTFORM_L) {
+    *angle3 = 0;
+    *state3 = MOBOT_NEUTRAL;
+    *angle4 = 0;
+    *state4 = MOBOT_NEUTRAL;
   }
   return 0;
 }

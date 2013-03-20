@@ -119,6 +119,60 @@ int Mobot_moveNB(mobot_t* comms,
   return 0;
 }
 
+int Mobot_moveBackward(mobot_t* comms, double angle)
+{
+  int rc;
+  rc = Mobot_moveBackwardNB(comms, angle);
+  if(rc) return rc;
+  return Mobot_moveWait(comms);
+}
+
+int Mobot_moveBackwardNB(mobot_t* comms, double angle)
+{
+  switch(comms->formFactor) {
+    case MOBOTFORM_ORIGINAL:
+      return Mobot_moveNB(comms, -angle, 0, 0, -angle);
+    case MOBOTFORM_I:
+      return Mobot_moveNB(comms, -angle, 0, angle, 0);
+    default:
+      return -1;
+  }
+}
+
+int Mobot_moveDistance(mobot_t* comms, double distance, double radius)
+{
+  double theta;
+  theta = distance/radius;
+  return Mobot_moveForward(comms, theta);
+}
+
+int Mobot_moveDistanceNB(mobot_t* comms, double distance, double radius)
+{
+  double theta;
+  theta = distance/radius;
+  return Mobot_moveForwardNB(comms, theta);
+}
+
+int Mobot_moveForward(mobot_t* comms, double angle)
+{
+  int rc;
+  rc = Mobot_moveForwardNB(comms, angle);
+  if(rc) return rc;
+  return Mobot_moveWait(comms);
+}
+
+int Mobot_moveForwardNB(mobot_t* comms, double angle)
+{
+  switch(comms->formFactor) {
+    case MOBOTFORM_ORIGINAL:
+      return Mobot_moveNB(comms, angle, 0, 0, angle);
+    case MOBOTFORM_I:
+      return Mobot_moveNB(comms, angle, 0, -angle, 0);
+    default:
+      return -1;
+  }
+}
+
 int Mobot_moveContinuousNB(mobot_t* comms,
                                   mobotJointState_t dir1,
                                   mobotJointState_t dir2,
@@ -548,3 +602,44 @@ int Mobot_stopAllJoints(mobot_t* comms)
   return Mobot_stop(comms);
 }
 
+int Mobot_turnLeft(mobot_t* comms, double angle)
+{
+  int rc;
+  if(rc = Mobot_turnLeftNB(comms, angle)) {
+    return rc;
+  }
+  return Mobot_moveWait(comms);
+}
+
+int Mobot_turnLeftNB(mobot_t* comms, double angle)
+{
+  switch(comms->formFactor) {
+    case MOBOTFORM_ORIGINAL:
+      return Mobot_moveNB(comms, -angle, 0, 0, angle);
+    case MOBOTFORM_I:
+      return Mobot_moveNB(comms, -angle, 0, -angle, 0);
+    default:
+      return -1;
+  }
+}
+
+int Mobot_turnRight(mobot_t* comms, double angle)
+{
+  int rc;
+  if(rc = Mobot_turnRightNB(comms, angle)) {
+    return rc;
+  }
+  return Mobot_moveWait(comms);
+}
+
+int Mobot_turnRightNB(mobot_t* comms, double angle)
+{
+  switch(comms->formFactor) {
+    case MOBOTFORM_ORIGINAL:
+      return Mobot_moveNB(comms, angle, 0, 0, -angle);
+    case MOBOTFORM_I:
+      return Mobot_moveNB(comms, angle, 0, angle, 0);
+    default:
+      return -1;
+  }
+}
