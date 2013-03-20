@@ -271,20 +271,20 @@ int CMobotI::stopAllJoints()
 
 int CMobotI::turnLeft(double angle)
 {
-  return Mobot_turnLeft(_comms, angle);
+  return Mobot_turnLeft(_comms, DEG2RAD(angle));
 }
 
 int CMobotI::turnLeftNB(double angle)
 {
-  return Mobot_turnLeftNB(_comms, angle);
+  return Mobot_turnLeftNB(_comms, DEG2RAD(angle));
 }
 
 int CMobotI::turnRight(double angle)
 {
-  return Mobot_turnRight(_comms, angle);
+  return Mobot_turnRight(_comms, DEG2RAD(angle));
 }
 
 int CMobotI::turnRightNB(double angle)
 {
-  return Mobot_turnRightNB(_comms, angle);
+  return Mobot_turnRightNB(_comms, DEG2RAD(angle));
 }
