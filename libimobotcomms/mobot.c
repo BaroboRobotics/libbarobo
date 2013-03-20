@@ -1212,13 +1212,16 @@ int Mobot_disconnect(mobot_t* comms)
   switch(comms->connectionMode) {
     case MOBOTCONNECT_BLUETOOTH:
     case MOBOTCONNECT_TCP:
+      comms->connected = 0;
       if(closesocket(comms->socket)) {
         /* Error closing file descriptor */
         rc = -1;
       } 
+      THREAD_JOIN(*comms->commsThread);
       break;
     case MOBOTCONNECT_TTY:
       /* Cancel IO, stop threads */
+      comms->connected = 0;
       Mobot_unpair(comms);
       sendBufAppend(comms, (uint8_t*)&rc, 1);
       SetEvent(comms->cancelEvent);
@@ -1237,6 +1240,7 @@ int Mobot_disconnect(mobot_t* comms)
     case MOBOTCONNECT_ZIGBEE:
       /* If we are the ghost-child of a TTY connected robot, we need to set
        * child back to NULL */
+      comms->connected = 0;
       if(comms == comms->parent->child) {
         comms->parent->child = NULL;
       }
