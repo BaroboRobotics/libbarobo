@@ -1222,7 +1222,6 @@ int Mobot_disconnect(mobot_t* comms)
     case MOBOTCONNECT_TTY:
       /* Cancel IO, stop threads */
       comms->connected = 0;
-      Mobot_unpair(comms);
       sendBufAppend(comms, (uint8_t*)&rc, 1);
       SetEvent(comms->cancelEvent);
       THREAD_JOIN(*comms->commsThread);
