@@ -1132,7 +1132,9 @@ int Mobot_reboot(mobot_t* comms)
   uint16_t addr;
   int i;
   uint8_t buf[8];
-  status = MobotMsgTransaction(comms, BTCMD(CMD_REBOOT), buf, 3);
+  //status = MobotMsgTransaction(comms, BTCMD(CMD_REBOOT), buf, 3);
+  SendToIMobot(comms, BTCMD(CMD_REBOOT), NULL, 0);
+  MUTEX_UNLOCK(comms->commsLock);
   if(status < 0) return status;
   return 0;
 }
@@ -1748,8 +1750,7 @@ int SendToMobotDirect(mobot_t* comms, const void* data, int datasize)
   } else {
     return 0;
   }
-}
-
+} 
 int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
 {
   int rc;
