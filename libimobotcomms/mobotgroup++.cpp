@@ -11,6 +11,7 @@ CMobotGroup::CMobotGroup()
   _motionInProgress = 0;
   _thread = (THREAD_T*)malloc(sizeof(THREAD_T));
   _numAllocated = 0;
+  _robots = NULL;
 }
 
 CMobotGroup::~CMobotGroup()
@@ -19,8 +20,30 @@ CMobotGroup::~CMobotGroup()
 
 int CMobotGroup::addRobot(CMobot& robot)
 {
+  int allocStep = 64;
+  /* See if we need to allocate more robots */
+  if(_numRobots >= _numAllocated) {
+    /* Allocate more */
+    CMobot** tmp;
+    tmp = (CMobot**)malloc(sizeof(CMobot*) * (_numAllocated + allocStep));
+    if(_robots != NULL) {
+      memcpy(tmp, _robots, sizeof(CMobot*)*_numRobots);
+      free(_robots);
+    }
+    _robots = tmp;
+    _numAllocated += allocStep;
+  }
   _robots[_numRobots] = &robot;
   _numRobots++;
+  return 0;
+}
+
+int CMobotGroup::addRobots(CMobot robots[], int numRobots)
+{
+  int i;
+  for(i = 0; i < numRobots; i++) {
+    addRobot(robots[i]);
+  }
   return 0;
 }
 

@@ -775,7 +775,7 @@ class CMobot
     int motionUnstandNB();
     int motionWait();
 #ifndef _CH_
-  private:
+  protected:
     int getJointDirection(mobotJointId_t id, mobotJointState_t &dir);
     int setJointDirection(mobotJointId_t id, mobotJointState_t dir);
     mobot_t *_comms;
@@ -1014,7 +1014,6 @@ class CMobotI
   private:
     mobot_t *_comms;
     void (*buttonCallback)(CMobot *mobot, int button, int buttonDown);
-#else
 #endif /* Not _CH_*/
 };
 #else
@@ -1086,15 +1085,6 @@ class CMobotI : public CMobot
         mobotJointState_t dir2,
         mobotJointState_t dir3,
         double seconds);
-
-#ifndef _CH_
-  private:
-    int getJointDirection(mobotJointId_t id, mobotJointState_t &dir);
-    int setJointDirection(mobotJointId_t id, mobotJointState_t dir);
-    mobot_t *_comms;
-    void (*buttonCallback)(CMobot *mobot, int button, int buttonDown);
-#else
-#endif /* Not _CH_*/
 };
 #endif
 
@@ -1374,21 +1364,16 @@ class CMobotL : public CMobot
         mobotJointState_t dir2,
         mobotJointState_t dir3,
         double seconds);
-
-#ifndef _CH_
-  private:
-    mobot_t *_comms;
-    void (*buttonCallback)(CMobot *mobot, int button, int buttonDown);
-#else
-#endif /* Not _CH_*/
 };
 #endif
+
 class CMobotGroup
 {
   public:
     CMobotGroup();
     ~CMobotGroup();
     int addRobot(CMobot& mobot);
+    int addRobots(CMobot mobots[], int numMobots);
     int driveJointToDirect(mobotJointId_t id, double angle);
     int driveJointTo(mobotJointId_t id, double angle);
     int driveJointToDirectNB(mobotJointId_t id, double angle);
@@ -1507,9 +1492,9 @@ class CMobotGroup
     static void* motionUnstandThread(void*);
     int motionWait();
 
-  private:
-    int _numRobots;
+  protected:
     CMobot **_robots;
+    int _numRobots;
     int argInt;
     double argDouble;
     int _numAllocated;
@@ -1521,6 +1506,7 @@ class CMobotGroup
     int _motionInProgress;
 };
 
+#ifdef _CH_
 class CMobotIGroup
 {
   public:
@@ -1616,6 +1602,61 @@ class CMobotIGroup
 
   private:
     int _numRobots;
+    CMobot **_robots;
+    int argInt;
+    double argDouble;
+    int _numAllocated;
+#ifndef _CH_
+    THREAD_T* _thread;
+#else
+    void* _thread;
+#endif
+    int _motionInProgress;
+};
+#else
+class CMobotIGroup : public CMobotGroup
+{
+  public:
+    CMobotIGroup();
+    ~CMobotIGroup();
+    int addRobot(CMobotI& mobot);
+    int addRobots(CMobotI mobots[], int numMobots);
+    int driveToDirect(double angle1, double angle2, double angle3);
+    int driveTo(double angle1, double angle2, double angle3);
+    int driveToDirectNB(double angle1, double angle2, double angle3);
+    int driveToNB(double angle1, double angle2, double angle3);
+    int move(double angle1, double angle2, double angle3);
+    int moveNB(double angle1, double angle2, double angle3);
+    int moveContinuousNB(mobotJointState_t dir1, 
+                       mobotJointState_t dir2, 
+                       mobotJointState_t dir3);
+    int moveContinuousTime(mobotJointState_t dir1, 
+                           mobotJointState_t dir2, 
+                           mobotJointState_t dir3, 
+                           double seconds);
+    int moveTo(double angle1, double angle2, double angle3);
+    int moveToDirect(double angle1, double angle2, double angle3);
+    int moveToNB(double angle1, double angle2, double angle3);
+    int moveToDirectNB(double angle1, double angle2, double angle3);
+    int setJointSpeeds(double speed1, double speed2, double speed3);
+    int setJointSpeedRatios(double ratio1, double ratio2, double ratio3);
+    int setMovementStateNB(mobotJointState_t dir1, 
+        mobotJointState_t dir2, 
+        mobotJointState_t dir3);
+    int setMovementStateTime(mobotJointState_t dir1, 
+        mobotJointState_t dir2, 
+        mobotJointState_t dir3, 
+        double seconds);
+    int setMovementStateTimeNB(mobotJointState_t dir1, 
+        mobotJointState_t dir2, 
+        mobotJointState_t dir3, 
+        double seconds);
+    /* All of these private members should be inherited from CMobotGroup */
+  protected:
+    CMobotI **_robots;
+#if 0
+  private:
+    int _numRobots;
     CMobotI *_robots[64];
     int argInt;
     double argDouble;
@@ -1625,7 +1666,9 @@ class CMobotIGroup
     void* _thread;
 #endif
     int _motionInProgress;
+#endif
 };
+#endif
 
 class CMobotLGroup
 {
