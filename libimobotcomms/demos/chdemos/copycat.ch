@@ -3,38 +3,44 @@
 * mobots so that the second mobot copies the motions of the first mobot. */
 #include <mobot.h>
 
-CMobot mobot1;
-CMobot mobot2;
-CMobot mobot3;
-CMobot mobot4;
-CMobotGroup group1;
+#define NUM_MOBOTS 4
+
+CMobotI mobots[NUM_MOBOTS];
+
+CMobotIGroup group1;
+CMobotIGroup group2;
 double angles[4];
 int i;
 
 /* Connect to the paired MoBots */
-mobot1.connect();
-mobot2.connect();
-mobot3.connect();
-mobot4.connect();
+for(i = 0; i < NUM_MOBOTS; i++) {
+  mobots[i].connect();
+}
 
 /* Add mobots to the group */
-group1.addRobot(mobot2);
-group1.addRobot(mobot3);
-group1.addRobot(mobot4);
+for(i = 0; i < NUM_MOBOTS/2; i++) {
+  mobots[i].setColorRGB(0, 255, 0);
+  mobots[i+NUM_MOBOTS/2].setColorRGB(255, 0, 0);
+  mobots[i+NUM_MOBOTS/2].moveContinuousNB(MOBOT_FORWARD, MOBOT_FORWARD, MOBOT_FORWARD);
+}
+
+int j;
 
 while(1) {
   /* Get the beginning time of loop */
-  /* Get the first mobots joint angles */
-  mobot1.getJointAngles(
-      angles[0],
-      angles[1],
-      angles[2],
-      angles[3]);
-  /* Move the second mobot */
-  group1.driveToDirectNB(
-      angles[0],
-      angles[1],
-      angles[2],
-      angles[3]);
+  for(i = 0; i < NUM_MOBOTS/2; i++) {
+    mobots[i].getJointAngles(angles[0], angles[1], angles[2]);
+    for(j = 0; j < 3; j++) {
+      while(angles[j] > 180) {
+        angles[j] -= 360;
+      } 
+      while(angles[j] < -180) {
+        angles[j] += 360;
+      }
+    }
+    //mobots[i].setColorRGB(angles[0], angles[1], angles[2]);
+    mobots[i+NUM_MOBOTS/2].setJointSpeeds(angles[0], angles[1]/2, -angles[2]);
+    //mobots[i+NUM_MOBOTS/2].setColorRGB(angles[0], angles[1], angles[2]);
+  }
 }
 

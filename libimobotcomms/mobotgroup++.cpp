@@ -10,6 +10,7 @@ CMobotGroup::CMobotGroup()
   _numRobots = 0;
   _motionInProgress = 0;
   _thread = (THREAD_T*)malloc(sizeof(THREAD_T));
+  _numAllocated = 0;
 }
 
 CMobotGroup::~CMobotGroup()
