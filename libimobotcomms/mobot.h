@@ -1097,6 +1097,8 @@ class CMobotI : public CMobot
 #endif /* Not _CH_*/
 };
 #endif
+
+#ifdef _CH_
 class CMobotL
 {
   public:
@@ -1303,7 +1305,84 @@ class CMobotL
 #else
 #endif /* Not _CH_*/
 };
+#else
+class CMobotL : public CMobot
+{
+  public:
+    CMobotL();
+    ~CMobotL();
+    int connectWithSerialID(const char serialID[]);
+    int driveToDirect(double angle1, double angle2, double angle3);
+    int driveTo(double angle1, double angle2, double angle3);
+    int driveToDirectNB(double angle1, double angle2, double angle3);
+    int driveToNB(double angle1, double angle2, double angle3);
+    int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
+    int getBatteryVoltage(double &voltage);
+    int getID();
+    int getJointAngles(double &angle1, double &angle2, double &angle3);
+    int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, int numReadings=10);
+    int getJointSpeeds(double &speed1, double &speed2, double &speed3);
+    int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3);
+    int getColorRGB(int &r, int &g, int &b);
+    int move(double angle1, double angle2, double angle3);
+    int moveNB(double angle1, double angle2, double angle3);
+    int moveContinuousNB(mobotJointState_t dir1, 
+                       mobotJointState_t dir2, 
+                       mobotJointState_t dir3);
+    int moveContinuousTime(mobotJointState_t dir1, 
+                           mobotJointState_t dir2, 
+                           mobotJointState_t dir3, 
+                           double seconds);
+    int moveTo(double angle1, double angle2, double angle3);
+    int moveToDirect(double angle1, double angle2, double angle3);
+    int moveToNB(double angle1, double angle2, double angle3);
+    int moveToDirectNB(double angle1, double angle2, double angle3);
+    int recordAngles(double time[], 
+                     double angle1[], 
+                     double angle2[], 
+                     double angle3[], 
+                     int num, 
+                     double seconds,
+                     int shiftData = 1);
+    int recordAnglesBegin(mobotRecordData_t &time, 
+                          mobotRecordData_t &angle1, 
+                          mobotRecordData_t &angle2, 
+                          mobotRecordData_t &angle3, 
+                          double seconds,
+                          int shiftData = 1);
+    int recordDistancesBegin(mobotRecordData_t &time, 
+                          mobotRecordData_t &distance1, 
+                          mobotRecordData_t &distance2, 
+                          mobotRecordData_t &distance3, 
+                          double radius,
+                          double seconds,
+                          int shiftData = 1);
+    int setBuzzerFrequency(int frequency, double time);
+    int setBuzzerFrequencyOn(int frequency);
+    int setBuzzerFrequencyOff();
+    int setColorRGB(int r, int g, int b);
+    int setJointSpeeds(double speed1, double speed2, double speed3);
+    int setJointSpeedRatios(double ratios1, double ratios2, double ratios3);
+    int setMovementStateNB( mobotJointState_t dir1,
+        mobotJointState_t dir2,
+        mobotJointState_t dir3);
+    int setMovementStateTime( mobotJointState_t dir1,
+        mobotJointState_t dir2,
+        mobotJointState_t dir3,
+        double seconds);
+    int setMovementStateTimeNB( mobotJointState_t dir1,
+        mobotJointState_t dir2,
+        mobotJointState_t dir3,
+        double seconds);
 
+#ifndef _CH_
+  private:
+    mobot_t *_comms;
+    void (*buttonCallback)(CMobot *mobot, int button, int buttonDown);
+#else
+#endif /* Not _CH_*/
+};
+#endif
 class CMobotGroup
 {
   public:

@@ -141,12 +141,12 @@ EXPORTCH int MobotL_enableButtonCallback_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CMobotL *mobot;
-    void (*cb)(CMobotL*,int,int);
+    void (*cb)(CMobot*,int,int);
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobotL *);
-    cb = (void(*)(CMobotL*,int,int))Ch_VaArg(interp, ap, void*);
+    cb = (void(*)(CMobot*,int,int))Ch_VaArg(interp, ap, void*);
     retval = mobot->enableButtonCallback(cb);
     Ch_VaEnd(interp, ap);
     return retval;
