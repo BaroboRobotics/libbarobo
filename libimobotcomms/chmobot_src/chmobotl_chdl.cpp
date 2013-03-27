@@ -1590,6 +1590,23 @@ EXPORTCH int CMGL_addRobot_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int CMGL_addRobots_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotLGroup *mobot;
+    class CMobotL *robots;
+    int numRobots;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotLGroup *);
+    robots = Ch_VaArg(interp, ap, class CMobotL*);
+    numRobots = Ch_VaArg(interp, ap, int);
+    retval = mobot->addRobots(robots, numRobots);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int CMGL_driveJointToDirect_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

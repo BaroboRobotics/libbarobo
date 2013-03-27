@@ -19,15 +19,13 @@ CMobotLGroup::~CMobotLGroup()
 
 int CMobotLGroup::addRobot(CMobotL& robot)
 {
-  int rc = CMobotGroup::addRobot((CMobot&)robot);
-  _robots = (CMobotL**)CMobotGroup::_robots;
+  int rc = CMobotIGroup::addRobot((CMobotI&)robot);
   return 0;
 }
 
 int CMobotLGroup::addRobots(CMobotL robots[], int numRobots)
 {
-  int rc = CMobotGroup::addRobots(robots, numRobots);
-  _robots = (CMobotL**)CMobotGroup::_robots;
+  int rc = CMobotIGroup::addRobots((CMobotI*)robots, numRobots);
   return rc;
 }
 

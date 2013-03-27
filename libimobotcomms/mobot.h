@@ -1760,9 +1760,6 @@ class CMobotLGroup : public CMobotIGroup
     ~CMobotLGroup();
     int addRobot(CMobotL& mobot);
     int addRobots(CMobotL robots[], int numRobots);
-
-  private:
-    CMobotL **_robots;
 };
 #endif
 
