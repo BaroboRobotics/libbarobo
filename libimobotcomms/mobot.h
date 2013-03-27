@@ -1371,7 +1371,7 @@ class CMobotGroup
 {
   public:
     CMobotGroup();
-    ~CMobotGroup();
+    virtual ~CMobotGroup();
     int addRobot(CMobot& mobot);
     int addRobots(CMobot mobots[], int numMobots);
     int driveJointToDirect(mobotJointId_t id, double angle);
@@ -1513,6 +1513,7 @@ class CMobotIGroup
     CMobotIGroup();
     ~CMobotIGroup();
     int addRobot(CMobotI& mobot);
+    int addRobots(CMobotI mobots[], int numMobots);
     int driveJointToDirect(mobotJointId_t id, double angle);
     int driveJointTo(mobotJointId_t id, double angle);
     int driveJointToDirectNB(mobotJointId_t id, double angle);
@@ -1600,9 +1601,8 @@ class CMobotIGroup
     static void* motionTurnRightThread(void*);
     int motionWait();
 
-  private:
+    CMobot **_robots2;
     int _numRobots;
-    CMobot **_robots;
     int argInt;
     double argDouble;
     int _numAllocated;
@@ -1612,6 +1612,7 @@ class CMobotIGroup
     void* _thread;
 #endif
     int _motionInProgress;
+    CMobot **_robots;
 };
 #else
 class CMobotIGroup : public CMobotGroup
@@ -1670,12 +1671,14 @@ class CMobotIGroup : public CMobotGroup
 };
 #endif
 
+#ifdef _CH_
 class CMobotLGroup
 {
   public:
     CMobotLGroup();
     ~CMobotLGroup();
     int addRobot(CMobotL& mobot);
+    int addRobots(CMobotL mobots[], int numMobots);
     int driveJointToDirect(mobotJointId_t id, double angle);
     int driveJointTo(mobotJointId_t id, double angle);
     int driveJointToDirectNB(mobotJointId_t id, double angle);
@@ -1736,18 +1739,32 @@ class CMobotLGroup
     int stopAllJoints();
     int stopOneJoint(mobotJointId_t id);
 
-  private:
+    CMobot **_robots2;
     int _numRobots;
-    CMobotL *_robots[64];
     int argInt;
     double argDouble;
+    int _numAllocated;
 #ifndef _CH_
     THREAD_T* _thread;
 #else
     void* _thread;
 #endif
     int _motionInProgress;
+    CMobot **_robots;
 };
+#else
+class CMobotLGroup : public CMobotIGroup
+{
+  public:
+    CMobotLGroup();
+    ~CMobotLGroup();
+    int addRobot(CMobotL& mobot);
+    int addRobots(CMobotL robots[], int numRobots);
+
+  private:
+    CMobotL **_robots;
+};
+#endif
 
 class CMelody
 {
