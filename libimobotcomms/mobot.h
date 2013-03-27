@@ -19,6 +19,7 @@
 #include <stdint.h>
 #define UINT8 uint8_t
 #endif
+#include <array.h>
 #endif
 
 #include <stdio.h>
@@ -1373,7 +1374,11 @@ class CMobotGroup
     CMobotGroup();
     virtual ~CMobotGroup();
     int addRobot(CMobot& mobot);
+#ifdef _CH_
+    int addRobots(array CMobot mobots[], ...);
+#else
     int addRobots(CMobot mobots[], int numMobots);
+#endif
     int connect();
     int driveJointToDirect(mobotJointId_t id, double angle);
     int driveJointTo(mobotJointId_t id, double angle);
@@ -1514,7 +1519,7 @@ class CMobotIGroup
     CMobotIGroup();
     ~CMobotIGroup();
     int addRobot(CMobotI& mobot);
-    int addRobots(CMobotI mobots[], int numMobots);
+    int addRobots(array CMobotI mobots[], ...);
     int connect();
     int driveJointToDirect(mobotJointId_t id, double angle);
     int driveJointTo(mobotJointId_t id, double angle);
@@ -1680,7 +1685,7 @@ class CMobotLGroup
     CMobotLGroup();
     ~CMobotLGroup();
     int addRobot(CMobotL& mobot);
-    int addRobots(CMobotL mobots[], int numMobots);
+    int addRobots(array CMobotL mobots[], ...);
     int connect();
     int driveJointToDirect(mobotJointId_t id, double angle);
     int driveJointTo(mobotJointId_t id, double angle);

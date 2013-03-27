@@ -1,6 +1,7 @@
 #include <mobot.h>
 #include <dlfcn.h>
 #include <stdarg.h>
+#include <array.h>
 
 CMobotL::CMobotL() {
   void *fptr;
@@ -1252,16 +1253,25 @@ int CMobotLGroup::addRobot(CMobotL &robot) {
     dlrunfun(fptr, &retval, NULL, this, &robot);
     return retval;
 }
-int CMobotLGroup::addRobots(CMobotL robots[], int numRobots) {
+int CMobotLGroup::addRobots(array CMobotL robots[], ...) {
     void *fptr;
     int retval;
+    int numRobots;
+    va_list ap;
+    va_start(ap, robots);
 
     fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGL_addRobots_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
+    if(va_count(ap) == 1) {
+      numRobots = va_arg(ap, int);
+    } else {
+      numRobots = (int)shape(robots);
+    }
     dlrunfun(fptr, &retval, NULL, this, robots, numRobots);
+    va_end(ap);
     return retval;
 }
 int CMobotLGroup::connect() {
