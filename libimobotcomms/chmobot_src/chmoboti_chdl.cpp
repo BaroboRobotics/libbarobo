@@ -1923,6 +1923,19 @@ EXPORTCH int CMGI_addRobots_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int CMGI_connect_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotIGroup *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotIGroup *);
+    retval = mobot->connect();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int CMGI_driveJointToDirect_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

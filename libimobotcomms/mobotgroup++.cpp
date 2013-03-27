@@ -47,6 +47,14 @@ int CMobotGroup::addRobots(CMobot robots[], int numRobots)
   return 0;
 }
 
+int CMobotGroup::connect()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->connect();
+  }
+  return 0;
+}
+
 int CMobotGroup::reset()
 {
   for(int i = 0; i < _numRobots; i++) {

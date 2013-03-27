@@ -1518,6 +1518,20 @@ int CMobotIGroup::addRobots(CMobotI robots[], int numRobots)
     return retval;
 }
 
+int CMobotIGroup::connect()
+{
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGI_connect_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this);
+    return retval;
+}
+
 int CMobotIGroup::driveJointToDirect(int id, double angle) {
     void *fptr;
     int retval;

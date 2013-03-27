@@ -1374,6 +1374,7 @@ class CMobotGroup
     virtual ~CMobotGroup();
     int addRobot(CMobot& mobot);
     int addRobots(CMobot mobots[], int numMobots);
+    int connect();
     int driveJointToDirect(mobotJointId_t id, double angle);
     int driveJointTo(mobotJointId_t id, double angle);
     int driveJointToDirectNB(mobotJointId_t id, double angle);
@@ -1514,6 +1515,7 @@ class CMobotIGroup
     ~CMobotIGroup();
     int addRobot(CMobotI& mobot);
     int addRobots(CMobotI mobots[], int numMobots);
+    int connect();
     int driveJointToDirect(mobotJointId_t id, double angle);
     int driveJointTo(mobotJointId_t id, double angle);
     int driveJointToDirectNB(mobotJointId_t id, double angle);
@@ -1679,6 +1681,7 @@ class CMobotLGroup
     ~CMobotLGroup();
     int addRobot(CMobotL& mobot);
     int addRobots(CMobotL mobots[], int numMobots);
+    int connect();
     int driveJointToDirect(mobotJointId_t id, double angle);
     int driveJointTo(mobotJointId_t id, double angle);
     int driveJointToDirectNB(mobotJointId_t id, double angle);

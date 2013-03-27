@@ -2009,6 +2009,36 @@ EXPORTCH int CMG_addRobot_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int CMG_addRobots_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotGroup *mobot;
+    class CMobot *robot;
+    int numRobots;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
+    robot = Ch_VaArg(interp, ap, class CMobot*);
+    numRobots = Ch_VaArg(interp, ap, int);
+    retval = mobot->addRobots(robot, numRobots);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMG_connect_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotGroup *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
+    retval = mobot->connect();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int CMG_driveJointToDirect_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
