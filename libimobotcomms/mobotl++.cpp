@@ -10,12 +10,12 @@ CMobotL::CMobotL()
 
 CMobotL::~CMobotL() 
 {
-  if(_comms->exitState == MOBOT_HOLD) {
-    setMovementStateNB(MOBOT_HOLD, MOBOT_HOLD, MOBOT_HOLD);
-  } else {
-    stop();
-  }
   if(_comms->connected) {
+    if(_comms->exitState == MOBOT_HOLD) {
+      setMovementStateNB(MOBOT_HOLD, MOBOT_HOLD, MOBOT_HOLD);
+    } else {
+      stop();
+    }
     disconnect();
   }
   /* Free stuff that should be freed */
