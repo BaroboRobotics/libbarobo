@@ -1226,10 +1226,9 @@ int Mobot_disconnect(mobot_t* comms)
       comms->connected = 0;
       sendBufAppend(comms, (uint8_t*)&rc, 1);
       SetEvent(comms->cancelEvent);
+      CloseHandle(comms->commHandle);
       THREAD_JOIN(*comms->commsThread);
       THREAD_JOIN(*comms->commsOutThread);
-      Sleep(100);
-      CloseHandle(comms->commHandle);
 
       /* Unpair all children */
       for(iter = comms->children; iter != NULL; iter = iter->next) {
