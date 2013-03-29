@@ -12,6 +12,8 @@
 /* General messages */
 #define MSG_SENDEND 0x00
 
+#define MSG_ESCAPE 0xAA
+
 /* Response Messages */
 #define RESP_OK 0x10
 #define RESP_END 0x11
@@ -382,6 +384,9 @@ enum protocol_commands_e {
    Expected Response: [0x10] [0x06] [1 byte r] [1 byte g] [1 byte b] [0x11]
    */
   CMD_GETRGB,
+
+/* 0x6E Placeholder to increase version number */
+  CMD_PLACEHOLDER201303291416,
 
   CMD_NUMCOMMANDS
 };
