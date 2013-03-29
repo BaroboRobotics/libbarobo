@@ -1,4 +1,4 @@
-mobot.pdf: 
+mobot.pdf: mobot.tex
 	pdflatex mobot.tex
 	makeindex mobot.idx
 	pdflatex mobot.tex
