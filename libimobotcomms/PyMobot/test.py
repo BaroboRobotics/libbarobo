@@ -7,11 +7,7 @@ def sigint_handler(signal, frame):
 
 signal.signal(signal.SIGINT, sigint_handler)
 
-robot1 = CMobot()
-robot2 = CMobot()
+robot1 = CMobotI()
 robot1.connect()
-robot2.connect()
 
-while 1:
-  ret,angle1,angle2,angle3,angle4 = robot1.getJointAngles()
-  robot2.moveToPIDNB(angle1, angle2, angle3, angle4)
+robot1.move(90, 90, 90)

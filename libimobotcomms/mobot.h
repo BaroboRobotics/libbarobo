@@ -264,8 +264,6 @@ typedef struct mobotMelodyNote_s
 #endif
 #endif
 
-extern int g_numConnected;
-
 #ifndef MOBOT_JOINTS_E
 #define MOBOT_JOINTS_E
 typedef enum mobotJoints_e {
@@ -1788,6 +1786,9 @@ class CMelody
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+extern int g_numConnected;
+
 DLLIMPORT int Mobot_blinkLED(mobot_t* comms, double delay, int numBlinks);
 DLLIMPORT int Mobot_connect(mobot_t* comms);
 DLLIMPORT int Mobot_connectWithTCP(mobot_t* comms);
