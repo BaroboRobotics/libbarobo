@@ -1612,6 +1612,66 @@ EXPORTCH int stop_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int turnLeft_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->turnLeft(angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int turnLeftNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->turnLeftNB(angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int turnRight_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->turnRight(angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int turnRightNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->turnRightNB(angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int motionArch_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -2210,6 +2270,36 @@ EXPORTCH int CMG_moveNB_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int CMG_moveBackward_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotGroup *mobot;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->moveBackward(angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMG_moveBackwardNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotGroup *mobot;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->moveBackwardNB(angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int CMG_moveContinuousNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -2250,6 +2340,36 @@ EXPORTCH int CMG_moveContinuousTime_chdl(void *varg) {
     dir4 = Ch_VaArg(interp, ap, mobotJointState_t);
     seconds = Ch_VaArg(interp, ap, double );
     retval = mobot->moveContinuousTime(dir1, dir2, dir3, dir4, seconds);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMG_moveForward_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotGroup *mobot;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->moveForward(angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMG_moveForwardNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobotGroup *mobot;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->moveForwardNB(angle);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -2851,60 +2971,60 @@ EXPORTCH int CMG_stopThreeJoints_chdl(void *varg) {
     return retval;
 }
 
-EXPORTCH int turnLeft_chdl(void *varg) {
+EXPORTCH int CMG_turnLeft_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
-    class CMobot *mobot;
+    class CMobotGroup *mobot;
     double angle;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
-    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
     angle = Ch_VaArg(interp, ap, double);
     retval = mobot->turnLeft(angle);
     Ch_VaEnd(interp, ap);
     return retval;
 }
 
-EXPORTCH int turnLeftNB_chdl(void *varg) {
+EXPORTCH int CMG_turnLeftNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
-    class CMobot *mobot;
+    class CMobotGroup *mobot;
     double angle;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
-    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
     angle = Ch_VaArg(interp, ap, double);
     retval = mobot->turnLeftNB(angle);
     Ch_VaEnd(interp, ap);
     return retval;
 }
 
-EXPORTCH int turnRight_chdl(void *varg) {
+EXPORTCH int CMG_turnRight_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
-    class CMobot *mobot;
+    class CMobotGroup *mobot;
     double angle;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
-    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
     angle = Ch_VaArg(interp, ap, double);
     retval = mobot->turnRight(angle);
     Ch_VaEnd(interp, ap);
     return retval;
 }
 
-EXPORTCH int turnRightNB_chdl(void *varg) {
+EXPORTCH int CMG_turnRightNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
-    class CMobot *mobot;
+    class CMobotGroup *mobot;
     double angle;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
-    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    mobot = Ch_VaArg(interp, ap, class CMobotGroup *);
     angle = Ch_VaArg(interp, ap, double);
     retval = mobot->turnRightNB(angle);
     Ch_VaEnd(interp, ap);
