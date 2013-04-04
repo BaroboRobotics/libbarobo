@@ -1135,6 +1135,12 @@ int Mobot_reboot(mobot_t* comms)
   //status = MobotMsgTransaction(comms, BTCMD(CMD_REBOOT), buf, 3);
   SendToIMobot(comms, BTCMD(CMD_REBOOT), NULL, 0);
   MUTEX_UNLOCK(comms->commsLock);
+  /* Wait until message is sent before returning */
+  MUTEX_LOCK(comms->sendBuf_lock);
+  while(comms->sendBuf_N > 0) {
+    COND_WAIT(comms->sendBuf_cond, comms->sendBuf_lock);
+  }
+  MUTEX_UNLOCK(comms->sendBuf_lock);
   if(status < 0) return status;
   return 0;
 }
@@ -2365,6 +2371,7 @@ void* commsOutEngine(void* arg)
       comms->sendBuf_index++;
       i++;
     }
+    COND_SIGNAL(comms->sendBuf_cond);
     MUTEX_UNLOCK(comms->sendBuf_lock);
     MUTEX_LOCK(comms->socket_lock);
     err = write(comms->socket, bytes, i);

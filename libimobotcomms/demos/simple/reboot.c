@@ -8,6 +8,6 @@ int main()
 {
   mobot_t mobot;
   Mobot_init(&mobot);
-  Mobot_connectWithTTY(&mobot, "/dev/ttyACM1");
+  Mobot_connectWithTTY(&mobot, "/dev/ttyACM0");
   Mobot_reboot(&mobot);
 }
