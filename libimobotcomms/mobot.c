@@ -2325,6 +2325,7 @@ void* commsOutEngine(void* arg)
     }
     MUTEX_UNLOCK(comms->socket_lock);
     GetOverlappedResult(comms->commHandle, comms->ovOutgoing, &bytesWritten, TRUE);
+    COND_SIGNAL(comms->sendBuf_cond);
     ResetEvent(comms->ovOutgoing->hEvent);
   }
   return NULL;
@@ -2371,13 +2372,13 @@ void* commsOutEngine(void* arg)
       comms->sendBuf_index++;
       i++;
     }
-    COND_SIGNAL(comms->sendBuf_cond);
     MUTEX_UNLOCK(comms->sendBuf_lock);
     MUTEX_LOCK(comms->socket_lock);
     err = write(comms->socket, bytes, i);
     //printf("*** OUT: 0x%2x\n", *byte);
     MUTEX_UNLOCK(comms->socket_lock);
     MUTEX_LOCK(comms->sendBuf_lock);
+    COND_SIGNAL(comms->sendBuf_cond);
   }
   return NULL;
 }
