@@ -32,7 +32,16 @@ int CMobot::blinkLED(double delay, int numBlinks)
 
 int CMobot::connect()
 {
-  return Mobot_connect(_comms);
+  int rc = Mobot_connect(_comms);
+  if(rc) {
+    return rc;
+  }
+  if(_comms->formFactor != MOBOTFORM_ORIGINAL) {
+    fprintf(stderr, "Error: Connected Mobot is not a Mobot-A.\n");
+    Mobot_disconnect(_comms);
+    return -1;
+  }
+  return 0;
 }
 
 int CMobot::connectWithAddress(const char* address, int channel)

@@ -1021,6 +1021,7 @@ class CMobotI : public CMobot
   public:
     CMobotI();
     ~CMobotI();
+    int connect();
     int connectWithSerialID(const char serialID[]);
     int driveToDirect(double angle1, double angle2, double angle3);
     int driveTo(double angle1, double angle2, double angle3);
@@ -1300,6 +1301,7 @@ class CMobotL : public CMobot
   public:
     CMobotL();
     ~CMobotL();
+    int connect();
     int connectWithSerialID(const char serialID[]);
     int driveToDirect(double angle1, double angle2, double angle3);
     int driveTo(double angle1, double angle2, double angle3);
