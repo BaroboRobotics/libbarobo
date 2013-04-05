@@ -29,3 +29,11 @@ int CMobotLGroup::addRobots(CMobotL robots[], int numRobots)
   return rc;
 }
 
+int CMobotLGroup::connect()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    ((CMobotL*)_robots[i])->connect();
+  }
+  return 0;
+}
+

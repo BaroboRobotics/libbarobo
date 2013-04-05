@@ -1629,6 +1629,7 @@ class CMobotIGroup : public CMobotGroup
     ~CMobotIGroup();
     int addRobot(CMobotI& mobot);
     int addRobots(CMobotI mobots[], int numMobots);
+    int connect();
     int driveToDirect(double angle1, double angle2, double angle3);
     int driveTo(double angle1, double angle2, double angle3);
     int driveToDirectNB(double angle1, double angle2, double angle3);
@@ -1768,6 +1769,7 @@ class CMobotLGroup : public CMobotIGroup
     ~CMobotLGroup();
     int addRobot(CMobotL& mobot);
     int addRobots(CMobotL robots[], int numRobots);
+    int connect();
 };
 #endif
 

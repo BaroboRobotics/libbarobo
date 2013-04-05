@@ -32,6 +32,14 @@ int CMobotIGroup::addRobots(CMobotI mobots[], int numMobots)
   return rc;
 }
 
+int CMobotIGroup::connect()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    ((CMobotI*)_robots[i])->connect();
+  }
+  return 0;
+}
+
 int CMobotIGroup::driveToDirect(double angle1, double angle2, double angle3)
 {
   driveToDirectNB(angle1, angle2, angle3);
