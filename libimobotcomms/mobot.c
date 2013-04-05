@@ -1226,6 +1226,7 @@ int Mobot_disconnect(mobot_t* comms)
         rc = -1;
       } 
       THREAD_JOIN(*comms->commsThread);
+      Sleep(200);
       break;
     case MOBOTCONNECT_TTY:
       /* Cancel IO, stop threads */
@@ -1235,6 +1236,7 @@ int Mobot_disconnect(mobot_t* comms)
       CloseHandle(comms->commHandle);
       THREAD_JOIN(*comms->commsThread);
       THREAD_JOIN(*comms->commsOutThread);
+      Sleep(200);
 
       /* Unpair all children */
       for(iter = comms->children; iter != NULL; iter = iter->next) {
