@@ -134,6 +134,7 @@ int BCF_Write(bcf_t* bcf, const char* filename)
   }
   mxmlSaveFile(bcf->root, fp, MXML_NO_CALLBACK);
   fclose(fp);
+  return 0;
 }
 
 const char* BCF_GetIndex(bcf_t* bcf, int index)
@@ -210,6 +211,7 @@ int BCF_Remove(bcf_t* bcf, int index)
     bcf->entries[i] = bcf->entries[i+1];
   }
   bcf->num--;
+  return 0;
 }
 
 int BCF_MoveUp(bcf_t* bcf, int index)
