@@ -35,5 +35,9 @@ add_library(mxml STATIC
     mxml-set.c
     mxml-string.c)
 
+if(CMAKE_HOST_WIN32)
+target_link_libraries(mxml)
+else(CMAKE_HOST_WIN32)
 target_link_libraries(mxml pthread)
+endif(CMAKE_HOST_WIN32)
 
