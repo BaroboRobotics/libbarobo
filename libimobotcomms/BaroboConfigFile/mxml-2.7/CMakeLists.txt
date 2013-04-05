@@ -36,7 +36,11 @@ add_library(mxml STATIC
     mxml-string.c)
 
 if(CMAKE_HOST_WIN32)
+if(CMAKE_GENERATOR MATCHES "MSYS")
+target_link_libraries(mxml pthread)
+else()
 target_link_libraries(mxml)
+endif()
 else(CMAKE_HOST_WIN32)
 target_link_libraries(mxml pthread)
 endif(CMAKE_HOST_WIN32)
