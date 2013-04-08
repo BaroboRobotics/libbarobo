@@ -16,8 +16,8 @@ int CMobotL::connect()
   if(rc) {
     return rc;
   }
-  if(_comms->formFactor != MOBOTFORM_I) {
-    fprintf(stderr, "Error: Connected Mobot is not a Mobot-I.\n");
+  if(_comms->formFactor != MOBOTFORM_L) {
+    fprintf(stderr, "Error: Connected Mobot is not a Mobot-L.\n");
     Mobot_disconnect(_comms);
     return -1;
   }
