@@ -18,6 +18,7 @@
 #define RESP_OK 0x10
 #define RESP_END 0x11
 #define RESP_ERR 0xff
+#define RESP_ALREADY_PAIRED 0xfe
 
 /* Button Callback Messages */
 /* Command format:
@@ -26,6 +27,8 @@
 #define EVENT_BUTTON 0x20
 
 /* Callback message for a remote Mobot reporting its address and serial number */
+/* Format:
+   [CMD] [0x09] [zigbee addr high] [zigbee addr low] [4 bytes id] [0x00] */
 #define EVENT_REPORTADDRESS 0x21
 
 #define CMD_START 0x30
@@ -387,6 +390,9 @@ enum protocol_commands_e {
 
 /* 0x6E Placeholder to increase version number */
   CMD_PLACEHOLDER201303291416,
+
+/* 0x6F Placeholder to increase version number */
+  CMD_PLACEHOLDER201304121823,
 
   CMD_NUMCOMMANDS
 };
