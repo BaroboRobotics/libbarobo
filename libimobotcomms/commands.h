@@ -329,7 +329,7 @@ enum protocol_commands_e {
    Note: The response is sent _after_ the channel change */
   CMD_SETRFCHANNEL,
 
-/* 0x64 CMD_FINDMOBOT: This is a broadcasted command searching for a specific Mobot
+/* 0x64 CMD_FINDMOBOT: This is a broadcasted command searching for a specific Mobot [52]
  * of a certain serial address. If a Mobot receives this message and finds a
  * match on its serial address, it will respond with a REPORTADDRESS command in
  * an appropriate amount of time. 
@@ -337,7 +337,7 @@ enum protocol_commands_e {
  * Expected Response: None */
   CMD_FINDMOBOT,
 
-/* 0x65 CMD_PAIRPARENT: After receiving this message, the receiving Mobot should
+/* 0x65 CMD_PAIRPARENT: After receiving this message, the receiving Mobot should [53]
  * consider itself paired to the requesting parent. All button events, etc.
  * should be sent to the parent, and further pairing requests should be
  * ignored.
@@ -345,54 +345,57 @@ enum protocol_commands_e {
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_PAIRPARENT,
 
-/* 0x66 CMD_UNPAIRPARENT: After receiving this message, the Mobot should consider
+/* 0x66 CMD_UNPAIRPARENT: After receiving this message, the Mobot should consider [54]
  * itself unpaired.
  * Command Format: [CMD] [0x03] [0x00]
  * Expected Response: [0x10] [0x03] 0x11] */
   CMD_UNPAIRPARENT,
 
-/* 0x67 CMD_RGBLED: Modify the RGBLED colors, flashing, etc.
+/* 0x67 CMD_RGBLED: Modify the RGBLED colors, flashing, etc. [55]
  * Command Format: [CMD] [0x08] [3 bytes mask 0xrrggbb] [3 bytes values] [0x11]
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_RGBLED,
 
-/* 0x68 CMD_SETMOTORPOWER: Set the motor at a certain power
+/* 0x68 CMD_SETMOTORPOWER: Set the motor at a certain power [56]
    Command Format: [CMD] [0x0A] [1 byte mask] [3x2 byte int16_t PWM values] [0x11]
    Expected Response: [0x10] [0x03] [0x11] */
   CMD_SETMOTORPOWER,
 
-/* 0x69 CMD_GETBATTERYVOLTAGE: Get the battery voltage.
+/* 0x69 CMD_GETBATTERYVOLTAGE: Get the battery voltage. [57]
    Command Format: [CMD] [0x03] [0x00]
    Expected Response: [0x10] [0x07] [4 byte float] [0x11] */
   CMD_GETBATTERYVOLTAGE,
 
-/* 0x6A CMD_BUZZERFREQ: Play a frequency on the buzzer. If the frequency given is 0,
+/* 0x6A CMD_BUZZERFREQ: Play a frequency on the buzzer. If the frequency given is 0, [58]
  * stop the buzzer.
  * Command Format: [CMD] [0x05] [2 bytes uint16 frequency, msb first] [0x00]
  * Expected Response: [0x10] [0x03] [0x11] */
   CMD_BUZZERFREQ,
 
-/* 0x6B CMD_GETACCEL: Get the accelerometer data.
+/* 0x6B CMD_GETACCEL: Get the accelerometer data. [59]
  * Command Format: [CMD] [0x03] [0x00]
  * Expected Response: [0x10] [0x09] [3*2 bytes float data, x,y,z] [0x11] */
   CMD_GETACCEL,
 
-/* 0x6C CMD_GETFORMFACTOR: Get the mobot's form factor.
+/* 0x6C CMD_GETFORMFACTOR: Get the mobot's form factor. [60]
  * Command Format: [CMD] [0x03] [0x00]
  * Expected Response: [0x10] [0x04] [1 byte identifier] [0x11] */
   CMD_GETFORMFACTOR,
 
-/* 0x6D CMD_GETRGB: Get the current RGB values for the LED
+/* 0x6D CMD_GETRGB: Get the current RGB values for the LED [61]
    Command Format: [CMD] [0x03] [0x00]
    Expected Response: [0x10] [0x06] [1 byte r] [1 byte g] [1 byte b] [0x11]
    */
   CMD_GETRGB,
 
-/* 0x6E Placeholder to increase version number */
+/* 0x6E Placeholder to increase version number [62] */
   CMD_PLACEHOLDER201303291416,
 
-/* 0x6F Placeholder to increase version number */
+/* 0x6F Placeholder to increase version number [63] */
   CMD_PLACEHOLDER201304121823,
+
+/* 0x70 Placeholder to increase version number [64] */
+  CMD_PLACEHOLDER201304152311,
 
   CMD_NUMCOMMANDS
 };
