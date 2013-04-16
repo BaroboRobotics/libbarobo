@@ -2013,7 +2013,8 @@ void* commsEngine(void* arg)
       COND_SIGNAL(comms->commsBusy_cond);
       MUTEX_UNLOCK(comms->commsBusy_lock);
       if( (byte == RESP_OK) ||
-          (byte == RESP_ERR)
+          (byte == RESP_ERR) ||
+          (byte == RESP_ALREADY_PAIRED)
           ) {
         isResponse = 1;
       } else {
@@ -2110,7 +2111,6 @@ void* commsEngine(void* arg)
       else
       {
         /* Not a valid event. */
-        printf("0x%x is Not a valid event.\n", comms->recvBuf[0]);
         comms->commsEngine_bytes = 0;
         continue;
       }
