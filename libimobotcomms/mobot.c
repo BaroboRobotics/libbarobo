@@ -2027,11 +2027,11 @@ void* commsEngine(void* arg)
       comms->commsEngine_bytes = 0;
       continue;
     }
+    MUTEX_LOCK(comms->recvBuf_lock);
+    comms->recvBuf[comms->commsEngine_bytes] = byte;
+    comms->commsEngine_bytes++;
+    MUTEX_UNLOCK(comms->recvBuf_lock);
     if(isResponse) {
-      MUTEX_LOCK(comms->recvBuf_lock);
-      comms->recvBuf[comms->commsEngine_bytes] = byte;
-      comms->commsEngine_bytes++;
-      MUTEX_UNLOCK(comms->recvBuf_lock);
       if( (comms->commsEngine_bytes >= 2) &&
           (comms->recvBuf[1] == comms->commsEngine_bytes) )
       {
@@ -2103,18 +2103,18 @@ void* commsEngine(void* arg)
       }
     } else {
       if(
-          (comms->recvBuf[0] != EVENT_BUTTON) &&
-          (comms->recvBuf[0] != EVENT_REPORTADDRESS)
+          (comms->recvBuf[0] == EVENT_BUTTON) ||
+          (comms->recvBuf[0] == EVENT_REPORTADDRESS)
         )
+      { /* It is a valid event */ }
+      else
       {
         /* Not a valid event. */
+        printf("0x%x is Not a valid event.\n", comms->recvBuf[0]);
         comms->commsEngine_bytes = 0;
+        continue;
       }
       /* It was a user triggered event */
-      MUTEX_LOCK(comms->recvBuf_lock);
-      comms->recvBuf[comms->commsEngine_bytes] = byte;
-      comms->commsEngine_bytes++;
-      MUTEX_UNLOCK(comms->recvBuf_lock);
       if( (comms->commsEngine_bytes >= 2) &&
           (comms->recvBuf[1] == comms->commsEngine_bytes) )
       {
