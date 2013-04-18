@@ -2057,29 +2057,27 @@ void* commsEngine(void* arg)
           uint16 |= comms->recvBuf[3] & 0x00ff;
           if(uint16 == 0) {
             /* Address of 0 means the connected TTY mobot */
-            if(comms->child == NULL) { 
-              MUTEX_LOCK(comms->recvBuf_lock);
-              tmpbuf = (uint8_t*)malloc(comms->recvBuf[6]);
-              memcpy(tmpbuf, &comms->recvBuf[5], comms->recvBuf[6]);
-              memcpy(comms->recvBuf, tmpbuf, tmpbuf[1]);
-              free(tmpbuf);
-              comms->recvBuf_ready = 1;
-              comms->recvBuf_bytes = comms->recvBuf[1];
-              COND_BROADCAST(comms->recvBuf_cond);
-              MUTEX_UNLOCK(comms->recvBuf_lock);
-            } else {
-              MUTEX_LOCK(comms->child->recvBuf_lock);
-              MUTEX_LOCK(comms->recvBuf_lock);
-              tmpbuf = (uint8_t*)malloc(comms->recvBuf[6]);
-              memcpy(tmpbuf, &comms->recvBuf[5], comms->recvBuf[6]);
-              memcpy(comms->child->recvBuf, tmpbuf, tmpbuf[1]);
-              free(tmpbuf);
-              comms->child->recvBuf_ready = 1;
-              comms->child->recvBuf_bytes = comms->child->recvBuf[1];
-              COND_BROADCAST(comms->child->recvBuf_cond);
-              MUTEX_UNLOCK(comms->child->recvBuf_lock);
-              MUTEX_UNLOCK(comms->recvBuf_lock);
-            }
+            MUTEX_LOCK(comms->recvBuf_lock);
+            tmpbuf = (uint8_t*)malloc(comms->recvBuf[6]);
+            memcpy(tmpbuf, &comms->recvBuf[5], comms->recvBuf[6]);
+            memcpy(comms->recvBuf, tmpbuf, tmpbuf[1]);
+            free(tmpbuf);
+            comms->recvBuf_ready = 1;
+            comms->recvBuf_bytes = comms->recvBuf[1];
+            COND_BROADCAST(comms->recvBuf_cond);
+            MUTEX_UNLOCK(comms->recvBuf_lock);
+          } else if ((comms->child != NULL) && (comms->child->zigbeeAddr == uint16)) {
+            MUTEX_LOCK(comms->child->recvBuf_lock);
+            MUTEX_LOCK(comms->recvBuf_lock);
+            tmpbuf = (uint8_t*)malloc(comms->recvBuf[6]);
+            memcpy(tmpbuf, &comms->recvBuf[5], comms->recvBuf[6]);
+            memcpy(comms->child->recvBuf, tmpbuf, tmpbuf[1]);
+            free(tmpbuf);
+            comms->child->recvBuf_ready = 1;
+            comms->child->recvBuf_bytes = comms->child->recvBuf[1];
+            COND_BROADCAST(comms->child->recvBuf_cond);
+            MUTEX_UNLOCK(comms->child->recvBuf_lock);
+            MUTEX_UNLOCK(comms->recvBuf_lock);
           } else { 
             /* See if it matches any of our children */
             for(iter = comms->children; iter != NULL; iter = iter->next) {
