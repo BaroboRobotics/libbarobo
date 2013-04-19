@@ -403,6 +403,9 @@ enum protocol_commands_e {
 /* 0x72 Placeholder to increase version number [66] */
   CMD_PLACEHOLDER201304181705,
 
+/* 0x73 Placeholder to increase version number [67] */
+  CMD_PLACEHOLDER201304181425,
+
   CMD_NUMCOMMANDS
 };
 
