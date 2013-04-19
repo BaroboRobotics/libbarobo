@@ -738,9 +738,13 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
     child->connectionMode = MOBOTCONNECT_ZIGBEE;
     child->zigbeeAddr = Mobot_getAddress(parent);
     parent->child = child;
-    Mobot_pair(child);
+    rc = Mobot_pair(child);
+    if(rc) {return rc;}
     /* Get the form factor */
     rc = getFormFactor(child, &form);
+    if(rc == -2) {
+      return -2;
+    }
     if(rc) {
       child->formFactor = MOBOTFORM_ORIGINAL;
     } else {
@@ -1347,6 +1351,10 @@ int Mobot_init(mobot_t* comms)
   COND_INIT(comms->recvBuf_cond);
   comms->recvBuf_ready = 0;
   comms->commsEngine_bytes = 0;
+
+  comms->commsWaitingForMessage = 0;
+  MUTEX_NEW(comms->commsWaitingForMessage_lock);
+  MUTEX_INIT(comms->commsWaitingForMessage_lock);
   MUTEX_NEW(comms->commsBusy_lock);
   MUTEX_INIT(comms->commsBusy_lock);
   COND_NEW(comms->commsBusy_cond);
@@ -1626,8 +1634,14 @@ int MobotMsgTransaction(mobot_t* comms, uint8_t cmd, /*IN&OUT*/ void* buf, int s
       (rc != 0)
       ) 
   {
+    MUTEX_LOCK(comms->commsWaitingForMessage_lock);
+    comms->commsWaitingForMessage = 1;
+    MUTEX_UNLOCK(comms->commsWaitingForMessage_lock);
     SendToIMobot(comms, cmd, sendbuf, size);
     rc = RecvFromIMobot(comms, (uint8_t*)buf, size);
+    MUTEX_LOCK(comms->commsWaitingForMessage_lock);
+    comms->commsWaitingForMessage = 0;
+    MUTEX_UNLOCK(comms->commsWaitingForMessage_lock);
     retries++;
   }
   if(size > 0) free(sendbuf);
@@ -2056,16 +2070,33 @@ void* commsEngine(void* arg)
           uint16 = comms->recvBuf[2]<<8;
           uint16 |= comms->recvBuf[3] & 0x00ff;
           if(uint16 == 0) {
-            /* Address of 0 means the connected TTY mobot */
-            MUTEX_LOCK(comms->recvBuf_lock);
-            tmpbuf = (uint8_t*)malloc(comms->recvBuf[6]);
-            memcpy(tmpbuf, &comms->recvBuf[5], comms->recvBuf[6]);
-            memcpy(comms->recvBuf, tmpbuf, tmpbuf[1]);
-            free(tmpbuf);
-            comms->recvBuf_ready = 1;
-            comms->recvBuf_bytes = comms->recvBuf[1];
-            COND_BROADCAST(comms->recvBuf_cond);
-            MUTEX_UNLOCK(comms->recvBuf_lock);
+            /* Make sure the parent is waiting for a message first */
+            MUTEX_LOCK(comms->commsWaitingForMessage_lock);
+            if(comms->commsWaitingForMessage) {
+              /* Address of 0 means the connected TTY mobot */
+              MUTEX_LOCK(comms->recvBuf_lock);
+              tmpbuf = (uint8_t*)malloc(comms->recvBuf[6]);
+              memcpy(tmpbuf, &comms->recvBuf[5], comms->recvBuf[6]);
+              memcpy(comms->recvBuf, tmpbuf, tmpbuf[1]);
+              free(tmpbuf);
+              comms->recvBuf_ready = 1;
+              comms->recvBuf_bytes = comms->recvBuf[1];
+              COND_BROADCAST(comms->recvBuf_cond);
+              MUTEX_UNLOCK(comms->recvBuf_lock);
+            } else if (comms->child != NULL) {
+              MUTEX_LOCK(comms->child->recvBuf_lock);
+              MUTEX_LOCK(comms->recvBuf_lock);
+              tmpbuf = (uint8_t*)malloc(comms->recvBuf[6]);
+              memcpy(tmpbuf, &comms->recvBuf[5], comms->recvBuf[6]);
+              memcpy(comms->child->recvBuf, tmpbuf, tmpbuf[1]);
+              free(tmpbuf);
+              comms->child->recvBuf_ready = 1;
+              comms->child->recvBuf_bytes = comms->child->recvBuf[1];
+              COND_BROADCAST(comms->child->recvBuf_cond);
+              MUTEX_UNLOCK(comms->child->recvBuf_lock);
+              MUTEX_UNLOCK(comms->recvBuf_lock);
+            }
+            MUTEX_UNLOCK(comms->commsWaitingForMessage_lock);
           } else if ((comms->child != NULL) && (comms->child->zigbeeAddr == uint16)) {
             MUTEX_LOCK(comms->child->recvBuf_lock);
             MUTEX_LOCK(comms->recvBuf_lock);

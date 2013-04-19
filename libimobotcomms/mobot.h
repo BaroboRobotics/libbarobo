@@ -199,6 +199,8 @@ typedef struct mobot_s
   int recvBuf_bytes;
   int commsEngine_bytes;
   int commsBusy;
+  int commsWaitingForMessage;
+  MUTEX_T* commsWaitingForMessage_lock;
   MUTEX_T* commsBusy_lock;
   COND_T* commsBusy_cond;
   MUTEX_T* socket_lock;
