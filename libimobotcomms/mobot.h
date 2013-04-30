@@ -8,6 +8,16 @@
 %{
 #include "mobot.h"
 %}
+%apply double & OUTPUT {double &angle};
+%apply double & OUTPUT {double &angle1, double &angle2, double &angle3, double &angle4};
+//%apply double & OUTPUT {double &angle1, double &angle2, double &angle3};
+%apply double & OUTPUT {double &maxSpeed};
+%apply double & OUTPUT {double &seconds};
+%apply double & OUTPUT {double &speed};
+%apply double & OUTPUT {double &ratio};
+%apply double & OUTPUT {double &speed1, double &speed2, double &speed3, double &speed4};
+%apply double & OUTPUT {double &ratio1, double &ratio2, double &ratio3, double &ratio4};
+%apply double & OUTPUT {mobotJointState_t &state};
 #endif
 
 #include <math.h>
@@ -357,17 +367,6 @@ class CMobot
     int disableButtonCallback();
     int isConnected();
     int isMoving();
-#ifdef SWIG
-    %apply double & OUTPUT {double &angle};
-    %apply double & OUTPUT {double &angle1, double &angle2, double &angle3, double &angle4};
-    %apply double & OUTPUT {double &maxSpeed};
-    %apply double & OUTPUT {double &seconds};
-    %apply double & OUTPUT {double &speed};
-    %apply double & OUTPUT {double &ratio};
-    %apply double & OUTPUT {double &speed1, double &speed2, double &speed3, double &speed4};
-    %apply double & OUTPUT {double &ratio1, double &ratio2, double &ratio3, double &ratio4};
-    %apply double & OUTPUT {mobotJointState_t &state};
-#endif
     int getFormFactor(int &formFactor);
     static const char* getConfigFilePath();
     int getJointAngle(mobotJointId_t id, double &angle);
@@ -585,15 +584,9 @@ class CMobot
    -6 : Protocol version mismatch
    */
     int connect();
-#ifndef _CH_
     int connectWithAddress(const char address[], int channel = 1);
     int connectWithBluetoothAddress(const char address[], int channel = 1);
     int connectWithIPAddress(const char address[], const char port[] = "5768");
-#else
-    int connectWithAddress(const char address[], ...);
-    int connectWithBluetoothAddress(const char address[], ...);
-    int connectWithIPAddress(const char address[], ...);
-#endif
 #ifndef _WIN32
     int connectWithTTY(const char ttyfilename[]);
 #endif
@@ -610,31 +603,16 @@ class CMobot
     int disableButtonCallback();
     int isConnected();
     int isMoving();
-#ifdef SWIG
-    %apply double & OUTPUT {double &angle};
-    %apply double & OUTPUT {double &angle1, double &angle2, double &angle3, double &angle4};
-    %apply double & OUTPUT {double &maxSpeed};
-    %apply double & OUTPUT {double &seconds};
-    %apply double & OUTPUT {double &speed};
-    %apply double & OUTPUT {double &ratio};
-    %apply double & OUTPUT {double &speed1, double &speed2, double &speed3, double &speed4};
-    %apply double & OUTPUT {double &ratio1, double &ratio2, double &ratio3, double &ratio4};
-    %apply double & OUTPUT {mobotJointState_t &state};
-#endif
     int getFormFactor(int &formFactor);
     static const char* getConfigFilePath();
+#ifndef SWIG
     int getJointAngle(mobotJointId_t id, double &angle);
-#ifdef _CH_
-    int getJointAngleAverage(mobotJointId_t id, double &angle, ... );
 #else
-    int getJointAngleAverage(mobotJointId_t id, double &angle, int numReadings=10);
+    void getJointAngle(mobotJointId_t id, double &angle);
 #endif
     int getJointAngles(double &angle1, double &angle2, double &angle3, double &angle4);
-#ifdef _CH_
-    int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, double &angle4, ...);
-#else
+    int getJointAngleAverage(mobotJointId_t id, double &angle, int numReadings=10);
     int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, double &angle4, int numReadings=10);
-#endif
     int getJointMaxSpeed(mobotJointId_t id, double &maxSpeed);
     int getJointSafetyAngle(double &angle);
     int getJointSafetyAngleTimeout(double &seconds);
@@ -775,17 +753,11 @@ class CMobot
     int motionTumbleLeftNB(int num);
     int motionUnstandNB();
     int motionWait();
-#ifndef _CH_
   protected:
     int getJointDirection(mobotJointId_t id, mobotJointState_t &dir);
     int setJointDirection(mobotJointId_t id, mobotJointState_t dir);
     mobot_t *_comms;
     void (*buttonCallback)(CMobot *mobot, int button, int buttonDown);
-#else
-  public:
-    static void *g_chmobot_dlhandle;
-    static int g_chmobot_dlcount;
-#endif /* Not _CH_*/
 };
 #endif
 
@@ -830,17 +802,6 @@ class CMobotI
     int disableButtonCallback();
     int isConnected();
     int isMoving();
-#ifdef SWIG
-    %apply double & OUTPUT {double &angle};
-    %apply double & OUTPUT {double &angle1, double &angle2, double &angle3};
-    %apply double & OUTPUT {double &maxSpeed};
-    %apply double & OUTPUT {double &seconds};
-    %apply double & OUTPUT {double &speed};
-    %apply double & OUTPUT {double &ratio};
-    %apply double & OUTPUT {double &speed1, double &speed2, double &speed3};
-    %apply double & OUTPUT {double &ratio1, double &ratio2, double &ratio3};
-    %apply double & OUTPUT {mobotJointState_t &state};
-#endif
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int getBatteryVoltage(double &voltage);
     int getColorRGB(int &r, int &g, int &b);
@@ -1033,7 +994,12 @@ class CMobotI : public CMobot
     int getBatteryVoltage(double &voltage);
     int getColorRGB(int &r, int &g, int &b);
     int getID();
+#ifdef SWIG
+    %apply double& OUTPUT {double &angle1, double &angle2, double &angle3};
+    void getJointAngles(double &angle1, double &angle2, double &angle3);
+#else
     int getJointAngles(double &angle1, double &angle2, double &angle3);
+#endif
     int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, int numReadings=10);
     int getJointSpeeds(double &speed1, double &speed2, double &speed3);
     int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3);
@@ -1130,17 +1096,6 @@ class CMobotL
     int disableButtonCallback();
     int isConnected();
     int isMoving();
-#ifdef SWIG
-    %apply double & OUTPUT {double &angle};
-    %apply double & OUTPUT {double &angle1, double &angle2, double &angle3};
-    %apply double & OUTPUT {double &maxSpeed};
-    %apply double & OUTPUT {double &seconds};
-    %apply double & OUTPUT {double &speed};
-    %apply double & OUTPUT {double &ratio};
-    %apply double & OUTPUT {double &speed1, double &speed2, double &speed3};
-    %apply double & OUTPUT {double &ratio1, double &ratio2, double &ratio3};
-    %apply double & OUTPUT {mobotJointState_t &state};
-#endif
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int getBatteryVoltage(double &voltage);
     int getFormFactor(int &formFactor);
@@ -1856,6 +1811,20 @@ DLLIMPORT int Mobot_isMoving(mobot_t* comms);
 DLLIMPORT int Mobot_pair(mobot_t* mobot);
 DLLIMPORT int Mobot_unpair(mobot_t* mobot);
 DLLIMPORT int Mobot_protocolVersion();
+#ifdef SWIG
+%apply double *OUTPUT{double *accel_x, double *accel_y, double *accel_z};
+%apply double *OUTPUT{double *voltage};
+%apply double *OUTPUT{double *angle};
+%apply double *OUTPUT{double *time,
+                      double *angle1,
+                      double *angle2,
+                      double *angle3,
+                      double *angle4};
+%apply double *OUTPUT{double *angle1,
+                      double *angle2,
+                      double *angle3,
+                      double *angle4};
+#endif
 DLLIMPORT int Mobot_getAccelerometerData(mobot_t* comms, double *accel_x, double *accel_y, double *accel_z);
 DLLIMPORT int Mobot_getBatteryVoltage(mobot_t* comms, double *voltage);
 DLLIMPORT int Mobot_getButtonVoltage(mobot_t* comms, double *voltage);

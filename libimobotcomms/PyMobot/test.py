@@ -11,3 +11,7 @@ robot1 = CMobotI()
 robot1.connect()
 
 robot1.move(90, 90, 90)
+
+[a1, a2, a3] = robot1.getJointAngles()
+
+print(a1)
