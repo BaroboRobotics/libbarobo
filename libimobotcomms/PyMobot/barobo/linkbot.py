@@ -38,6 +38,7 @@ class LinkBot():
       return ret
 
   def driveJointTo(self, joint, angle):
+    """Drive joint 'joint' to 'angle' (degrees) using PID controller"""
     Mobot_driveJointTo(self.mobot, joint, deg2rad(angle))
 
   def driveJointToNB(self, joint, angle):
@@ -55,7 +56,7 @@ class LinkBot():
     Mobot_moveNB(self.mobot, deg2rad(angle1), deg2rad(angle2), deg2rad(angle3), 0)
 
   def recordAnglesBegin(self):
-    self.recordThread = LinkBotRecordThread(self)
+    self.recordThread = _LinkBotRecordThread(self)
     self.recordThread.start()
 
   def recordAnglesEnd(self):
@@ -75,7 +76,7 @@ class LinkBot():
     pylab.show()
     
     
-class LinkBotRecordThread(threading.Thread):
+class _LinkBotRecordThread(threading.Thread):
   def __init__(self, linkbot):
     self.linkbot = linkbot
     self.runflag = False
