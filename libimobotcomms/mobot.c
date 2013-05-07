@@ -871,9 +871,11 @@ int finishConnect(mobot_t* comms)
     return rc;
   }
   if(version != CMD_NUMCOMMANDS) {
+    /*
     fprintf(stderr, "Warning. Communications protocol version mismatch.\n");
     fprintf(stderr, "Mobot Firmware Protocol Version: %d\n", version);
     fprintf(stderr, "CMobot Library Protocol Version: %d\n", CMD_NUMCOMMANDS);
+    */
   }
   /* Get the joint max speeds */
   /* DEBUG */

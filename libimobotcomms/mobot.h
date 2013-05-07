@@ -34,7 +34,7 @@
 
 #include <stdio.h>
 
-#ifdef NONRELEASE
+#if defined (NONRELEASE) || defined (SWIG)
 #ifndef _CH_
 #ifndef _WIN32
 #include <unistd.h>

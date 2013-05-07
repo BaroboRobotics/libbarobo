@@ -11,17 +11,27 @@ def rad2deg(deg):
   return deg * 180.0 / math.pi
 
 class LinkBot():
+  """
+  Each instance of the LinkBot class represents a physical LinkBot. This class
+  is used to control and get data from a LinkBot.
+  """
   def __init__(self):
     self._mobot = mobot_t()
     Mobot_init(self._mobot)
 
   def connect(self):
+    """Connect to a LinkBot
+  
+    Use this function to control LinkBots that are currently 
+    connected in RoboMancer. """
     Mobot_connect(self._mobot)
 
   def disconnect(self):
+    """Disconnect from a LinkBot"""
     Mobot_disconnect(self._mobot)
 
   def getJointAngles(self):
+    """Return a list of joint angles in degrees"""
     r = Mobot_getJointAngles(self._mobot)
     if r[0] != 0:
       return -1
@@ -29,6 +39,7 @@ class LinkBot():
       return map(lambda x: rad2deg(x), r[1:4])
 
   def getJointAnglesTime(self):
+    """Returns a list: [millis, deg1, deg2, deg3]"""
     r = Mobot_getJointAnglesTime(self._mobot)
     if r[0] != 0:
       return None
@@ -42,9 +53,15 @@ class LinkBot():
     Mobot_driveJointTo(self._mobot, joint, deg2rad(angle))
 
   def driveJointToNB(self, joint, angle):
+    """Drive joint 'joint' to 'angle' (degrees) using PID controller"""
     Mobot_driveJointToNB(self._mobot, joint, deg2rad(angle))
 
   def move(self, angle1, angle2, angle3):
+    """Move the joints on a LinkBot
+      
+    Move joints from current location by amount specified in arguments in
+    degrees. If the joint is not a movable joint (e.g. Joint 2 on a
+    LinkBot-I), the argument is ignored."""
     self.moveNB(angle1, angle2, angle3)
     self.moveWait()
 
