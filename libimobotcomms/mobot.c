@@ -1659,7 +1659,7 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
   int err = 0;
   int i;
   int len;
-  uint8_t str[64];
+  uint8_t str[1024];
   if(comms->connected == 0) {
     return -1;
   }
