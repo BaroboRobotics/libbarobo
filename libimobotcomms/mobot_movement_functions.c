@@ -52,8 +52,8 @@ int Mobot_isMoving(mobot_t* comms)
   int i;
   for(i = 1; i <= 4; i++) {
     Mobot_getJointState(comms, (mobotJointId_t)i, &state);
-    if( (state == MOBOT_FORWARD) ||
-        (state == MOBOT_BACKWARD) ) 
+    if( (state == ROBOT_FORWARD) ||
+        (state == ROBOT_BACKWARD) ) 
     {
       moving = 1;
       break;
@@ -285,7 +285,7 @@ int Mobot_moveJointToNB(mobot_t* comms, mobotJointId_t id, double angle)
   uint8_t buf[32];
   float f;
   int status;
-  if((id == MOBOT_JOINT2) || (id == MOBOT_JOINT3)) {
+  if((id == ROBOT_JOINT2) || (id == ROBOT_JOINT3)) {
     if(angle > 90) {
       fprintf(stderr, "Warning: Angle for joint %d set beyond limits.\n", (int)(id + 1));
       angle = 90;
@@ -312,7 +312,7 @@ int Mobot_moveJointToDirectNB(mobot_t* comms, mobotJointId_t id, double angle)
   uint8_t buf[32];
   float f;
   int status;
-  if((id == MOBOT_JOINT2) || (id == MOBOT_JOINT3)) {
+  if((id == ROBOT_JOINT2) || (id == ROBOT_JOINT3)) {
     if(angle > 90) {
       fprintf(stderr, "Warning: Angle for joint %d set beyond limits.\n", (int)(id + 1));
       angle = 90;
@@ -346,8 +346,8 @@ int Mobot_moveJointWait(mobot_t* comms, mobotJointId_t id)
       return -1;
     }
     if(
-      (state == MOBOT_NEUTRAL) ||
-      (state == MOBOT_HOLD) )
+      (state == ROBOT_NEUTRAL) ||
+      (state == ROBOT_HOLD) )
     {
       return 0;
     } else {
@@ -536,11 +536,11 @@ int Mobot_moveWait(mobot_t* comms)
 {
   int i;
   if(comms->formFactor == MOBOTFORM_I) {
-    Mobot_moveJointWait(comms, MOBOT_JOINT1);
-    Mobot_moveJointWait(comms, MOBOT_JOINT3);
+    Mobot_moveJointWait(comms, ROBOT_JOINT1);
+    Mobot_moveJointWait(comms, ROBOT_JOINT3);
   } else if (comms->formFactor == MOBOTFORM_L) {
-    Mobot_moveJointWait(comms, MOBOT_JOINT1);
-    Mobot_moveJointWait(comms, MOBOT_JOINT2);
+    Mobot_moveJointWait(comms, ROBOT_JOINT1);
+    Mobot_moveJointWait(comms, ROBOT_JOINT2);
   } else {
     for(i = 0; i < 4; i++) {
       if(Mobot_moveJointWait(comms, (mobotJointId_t)(i+1))) {
@@ -581,20 +581,20 @@ int Mobot_stop(mobot_t* comms)
 
 int Mobot_stopOneJoint(mobot_t* comms, mobotJointId_t id)
 {
-  return Mobot_moveJointContinuousNB(comms, id, MOBOT_NEUTRAL);
+  return Mobot_moveJointContinuousNB(comms, id, ROBOT_NEUTRAL);
 }
 
 int Mobot_stopTwoJoints(mobot_t* comms, mobotJointId_t id1, mobotJointId_t id2)
 {
-  Mobot_moveJointContinuousNB(comms, id1, MOBOT_NEUTRAL);
-  return Mobot_moveJointContinuousNB(comms, id2, MOBOT_NEUTRAL);
+  Mobot_moveJointContinuousNB(comms, id1, ROBOT_NEUTRAL);
+  return Mobot_moveJointContinuousNB(comms, id2, ROBOT_NEUTRAL);
 }
 
 int Mobot_stopThreeJoints(mobot_t* comms, mobotJointId_t id1, mobotJointId_t id2, mobotJointId_t id3)
 {
-  Mobot_moveJointContinuousNB(comms, id1, MOBOT_NEUTRAL);
-  Mobot_moveJointContinuousNB(comms, id2, MOBOT_NEUTRAL);
-  return Mobot_moveJointContinuousNB(comms, id3, MOBOT_NEUTRAL);
+  Mobot_moveJointContinuousNB(comms, id1, ROBOT_NEUTRAL);
+  Mobot_moveJointContinuousNB(comms, id2, ROBOT_NEUTRAL);
+  return Mobot_moveJointContinuousNB(comms, id3, ROBOT_NEUTRAL);
 }
 
 int Mobot_stopAllJoints(mobot_t* comms)

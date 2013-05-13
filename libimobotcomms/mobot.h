@@ -126,20 +126,20 @@ typedef enum mobotConnectionMode_e
   MOBOTCONNECT_NUMMODES
 } mobotConnectionMode_t;
 
-#ifndef MOBOT_JOINT_STATE_E
-#define MOBOT_JOINT_STATE_E
+#ifndef ROBOT_JOINT_STATE_E
+#define ROBOT_JOINT_STATE_E
 typedef enum mobotJointState_e
 {
-    MOBOT_NEUTRAL = 0,
-    MOBOT_FORWARD,
-    MOBOT_BACKWARD,
-    MOBOT_HOLD,
-    MOBOT_POSITIVE,
-    MOBOT_NEGATIVE
+    ROBOT_NEUTRAL = 0,
+    ROBOT_FORWARD,
+    ROBOT_BACKWARD,
+    ROBOT_HOLD,
+    ROBOT_POSITIVE,
+    ROBOT_NEGATIVE
 } mobotJointState_t;
 #endif
 
-#ifndef MOBOT_FORMFACTOR_E
+#ifndef ROBOT_FORMFACTOR_E
 typedef enum mobotFormFactor_e
 {
   MOBOTFORM_NULL,
@@ -257,8 +257,8 @@ typedef struct motionArg_s
 }motionArg_t;
 #endif
 
-#ifndef MOBOT_MELODY_NOTE
-#define MOBOT_MELODY_NOTE
+#ifndef ROBOT_MELODY_NOTE
+#define ROBOT_MELODY_NOTE
 typedef struct mobotMelodyNote_s
 {
   int tempo;
@@ -276,14 +276,14 @@ typedef struct mobotMelodyNote_s
 #endif
 #endif
 
-#ifndef MOBOT_JOINTS_E
-#define MOBOT_JOINTS_E
+#ifndef ROBOT_JOINTS_E
+#define ROBOT_JOINTS_E
 typedef enum mobotJoints_e {
-  MOBOT_ZERO,
-  MOBOT_JOINT1,
-  MOBOT_JOINT2,
-  MOBOT_JOINT3,
-  MOBOT_JOINT4,
+  ROBOT_ZERO,
+  ROBOT_JOINT1,
+  ROBOT_JOINT2,
+  ROBOT_JOINT3,
+  ROBOT_JOINT4,
   ROBOT_NUM_JOINTS = 4
 } mobotJointId_t;
 #endif

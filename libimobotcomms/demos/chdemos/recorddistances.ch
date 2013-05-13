@@ -25,23 +25,23 @@ mobot1.setTwoWheelRobotSpeed(speed1, radius1);
 mobot2.setTwoWheelRobotSpeed(speed2, radius2);
 
 /* begin recording time and distance */
-mobot1.recordDistanceBegin(MOBOT_JOINT1, timedata1, distances1, radius1, timeInterval,
+mobot1.recordDistanceBegin(ROBOT_JOINT1, timedata1, distances1, radius1, timeInterval,
                            shiftData);
-mobot2.recordDistanceBegin(MOBOT_JOINT1, timedata2, distances2, radius2, timeInterval, 
+mobot2.recordDistanceBegin(ROBOT_JOINT1, timedata2, distances2, radius2, timeInterval, 
                            shiftData);
 
 /* mobot1 moves first, 'delaytime' seconds later, mobot2 moves.
    Both mobots move for 'time-delaytime' seconds at the same time. Then, both mobots stop */
-mobot1.setMovementStateNB(MOBOT_FORWARD, NaN, MOBOT_FORWARD);
+mobot1.setMovementStateNB(ROBOT_FORWARD, NaN, ROBOT_FORWARD);
 delay(delaytime);
-mobot2.setMovementStateNB(MOBOT_FORWARD, NaN, MOBOT_FORWARD);
+mobot2.setMovementStateNB(ROBOT_FORWARD, NaN, ROBOT_FORWARD);
 delay(time-delaytime);
-mobot1.setMovementStateNB(MOBOT_HOLD, NaN, MOBOT_HOLD);
-mobot2.setMovementStateNB(MOBOT_HOLD, NaN, MOBOT_HOLD);
+mobot1.setMovementStateNB(ROBOT_HOLD, NaN, ROBOT_HOLD);
+mobot2.setMovementStateNB(ROBOT_HOLD, NaN, ROBOT_HOLD);
 
 /* end recording time and distance */
-mobot1.recordDistanceEnd(MOBOT_JOINT1, numDataPoints1);
-mobot2.recordDistanceEnd(MOBOT_JOINT1, numDataPoints2);
+mobot1.recordDistanceEnd(ROBOT_JOINT1, numDataPoints1);
+mobot2.recordDistanceEnd(ROBOT_JOINT1, numDataPoints2);
 
 /* plot the data */
 plot.mathCoord();

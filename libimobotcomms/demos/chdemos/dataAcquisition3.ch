@@ -36,7 +36,7 @@ mobot.resetToZero();
 mobot.setTwoWheelRobotSpeed(speed, radius);
 
 /* Start capturing data */
-mobot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
+mobot.recordAngle(ROBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
 
 /* Roll the mobot the calculated distance */
 mobot.motionRollForward(angle);

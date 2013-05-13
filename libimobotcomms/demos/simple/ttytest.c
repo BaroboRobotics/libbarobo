@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 
   for(i = 0; i < 20; i++) {
     ASSERT(Mobot_getStatus(&mobot), "Error retrieving mobot status.\n");
-    ASSERT(Mobot_getJointAngle(&mobot, MOBOT_JOINT1, &d), "Error getting joint angle.\n");
+    ASSERT(Mobot_getJointAngle(&mobot, ROBOT_JOINT1, &d), "Error getting joint angle.\n");
     ASSERT(Mobot_getAccelerometerData(&mobot, &x, &y, &z), "Error getting accel data.\n");
     printf("Joint angle: %lf\t", d);
     printf("Accel Data: %lf %lf %lf\n", x, y, z);

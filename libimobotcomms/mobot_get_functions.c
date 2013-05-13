@@ -388,20 +388,20 @@ int Mobot_getJointAnglesTimeState(mobot_t* comms,
   *angle3 = angles[2];
   *angle4 = angles[3];
   if( comms->formFactor == MOBOTFORM_I) {
-    if(*angle3 == MOBOT_FORWARD) {
-      *angle3 = MOBOT_BACKWARD;
-    } else if (*angle3 == MOBOT_BACKWARD) {
-      *angle3 = MOBOT_FORWARD;
+    if(*angle3 == ROBOT_FORWARD) {
+      *angle3 = ROBOT_BACKWARD;
+    } else if (*angle3 == ROBOT_BACKWARD) {
+      *angle3 = ROBOT_FORWARD;
     }
     *angle2 = 0;
-    *state2 = MOBOT_NEUTRAL;
+    *state2 = ROBOT_NEUTRAL;
     *angle4 = 0;
-    *state4 = MOBOT_NEUTRAL;
+    *state4 = ROBOT_NEUTRAL;
   } else if( comms->formFactor == MOBOTFORM_L) {
     *angle3 = 0;
-    *state3 = MOBOT_NEUTRAL;
+    *state3 = ROBOT_NEUTRAL;
     *angle4 = 0;
-    *state4 = MOBOT_NEUTRAL;
+    *state4 = ROBOT_NEUTRAL;
   }
   return 0;
 }
@@ -431,8 +431,8 @@ int Mobot_getJointAnglesTimeIsMoving(mobot_t* comms,
   }
   *isMoving = 0;
   for(i = 0; i < 4; i++) {
-    if(states[i] == MOBOT_FORWARD ||
-        states[i] == MOBOT_BACKWARD)
+    if(states[i] == ROBOT_FORWARD ||
+        states[i] == ROBOT_BACKWARD)
     {
       *isMoving = 1;
     }
@@ -454,13 +454,13 @@ int Mobot_getJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t
   *dir = (mobotJointState_t)buf[2];
   if(
       (comms->formFactor == MOBOTFORM_I) &&
-      (id == MOBOT_JOINT3)
+      (id == ROBOT_JOINT3)
     )
   {
-    if(*dir == MOBOT_FORWARD) {
-      *dir = MOBOT_BACKWARD;
-    } else if (*dir == MOBOT_BACKWARD) {
-      *dir = MOBOT_FORWARD;
+    if(*dir == ROBOT_FORWARD) {
+      *dir = ROBOT_BACKWARD;
+    } else if (*dir == ROBOT_BACKWARD) {
+      *dir = ROBOT_FORWARD;
     }
   }
   return 0;
@@ -566,19 +566,19 @@ int Mobot_getJointState(mobot_t* comms, mobotJointId_t id, mobotJointState_t *st
   if(status < 0) return status;
   /* Make sure the data size is correct */
   if(buf[1] != 0x04) {
-    *state = MOBOT_NEUTRAL;
+    *state = ROBOT_NEUTRAL;
     return -1;
   }
   *state = (mobotJointState_t)buf[2];
   if(
       (comms->formFactor == MOBOTFORM_I) &&
-      (id == MOBOT_JOINT3)
+      (id == ROBOT_JOINT3)
     )
   {
-    if(*state == MOBOT_FORWARD) {
-      *state = MOBOT_BACKWARD;
-    } else if (*state == MOBOT_BACKWARD) {
-      *state = MOBOT_FORWARD;
+    if(*state == ROBOT_FORWARD) {
+      *state = ROBOT_BACKWARD;
+    } else if (*state == ROBOT_BACKWARD) {
+      *state = ROBOT_FORWARD;
     }
   }
   return 0;

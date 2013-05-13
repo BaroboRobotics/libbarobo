@@ -33,9 +33,9 @@ mobot2.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
 mobot3.setJointSpeedRatios(0.4, 0.4, 0.4, 0.4);
 
 /* First motion */
-mobot1.moveJointNB(MOBOT_JOINT4, 90);
+mobot1.moveJointNB(ROBOT_JOINT4, 90);
 mobot2.moveToNB(0, 0, 0, 0);
-mobot3.moveJointNB(MOBOT_JOINT1, 90);
+mobot3.moveJointNB(ROBOT_JOINT1, 90);
 mobot1.moveWait();
 mobot2.moveWait();
 mobot3.moveWait();
@@ -61,9 +61,9 @@ mobot3.moveWait();
 delay(2);
 
 /* fourth motion: spin the middle one */
-mobot1.moveJointNB(MOBOT_JOINT4, -90);
+mobot1.moveJointNB(ROBOT_JOINT4, -90);
 mobot2.moveToNB(0, 0, 0, 0);
-mobot3.moveJointNB(MOBOT_JOINT1, -90);
+mobot3.moveJointNB(ROBOT_JOINT1, -90);
 mobot1.moveWait();
 mobot2.moveWait();
 mobot3.moveWait();
@@ -127,8 +127,8 @@ delay(2);
 
 /* 11th motion */
 mobot2.moveToNB(0, 0, 0, 0);
-mobot1.moveJointNB(MOBOT_JOINT4, 90);
-mobot3.moveJointNB(MOBOT_JOINT1, 90);
+mobot1.moveJointNB(ROBOT_JOINT4, 90);
+mobot3.moveJointNB(ROBOT_JOINT1, 90);
 mobot2.moveWait();
 mobot1.moveWait();
 mobot3.moveWait();
@@ -144,9 +144,9 @@ mobot3.moveWait();
 delay(2);
 
 /* 13th motion */
-mobot1.moveJointNB(MOBOT_JOINT4, -90);
+mobot1.moveJointNB(ROBOT_JOINT4, -90);
 mobot2.moveToNB(0, 0, 0, 0);
-mobot3.moveJointNB(MOBOT_JOINT1, -90);
+mobot3.moveJointNB(ROBOT_JOINT1, -90);
 mobot1.moveWait();
 mobot2.moveWait();
 mobot3.moveWait();

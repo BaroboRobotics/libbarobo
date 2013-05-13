@@ -47,7 +47,7 @@ int main()
   mobot.resetToZero();
 
   /* Begin testing. First, rotate joint 2 */
-  mobot.moveJointToNB(MOBOT_JOINT2, -85);
+  mobot.moveJointToNB(ROBOT_JOINT2, -85);
   /* This should take about 2 seconds */
 #ifndef _WIN32
   usleep(1000000);
@@ -67,16 +67,16 @@ int main()
     ERRMSG("Error: Robot did not reach joint angle in time.");
     return -1;
   }
-  mobot.getJointAngle(MOBOT_JOINT2, angles[0]);
+  mobot.getJointAngle(ROBOT_JOINT2, angles[0]);
   if(checkAngle(angles[0], -85)) {
     ERRMSG("Angle mismatch");
     return -1;
   } 
 
   /*Now rotate joint 3 */
-  mobot.moveJointTo(MOBOT_JOINT3, 70);
-  mobot.moveJointTo(MOBOT_JOINT1, 45);
-  mobot.moveJointTo(MOBOT_JOINT2, 20);
+  mobot.moveJointTo(ROBOT_JOINT3, 70);
+  mobot.moveJointTo(ROBOT_JOINT1, 45);
+  mobot.moveJointTo(ROBOT_JOINT2, 20);
   
   /* Check the joint angles */
   mobot.getJointAngles(angles[0], angles[1], angles[2], angles[3]);

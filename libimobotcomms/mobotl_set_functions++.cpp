@@ -44,7 +44,7 @@ int CLinkbotL::setMovementStateNB( mobotJointState_t dir1,
                                 mobotJointState_t dir2,
                                 mobotJointState_t dir3)
 {
-  return Mobot_setMovementStateNB(_comms, dir1, dir2, dir3, MOBOT_NEUTRAL);
+  return Mobot_setMovementStateNB(_comms, dir1, dir2, dir3, ROBOT_NEUTRAL);
 }
 
 int CLinkbotL::setMovementStateTime( mobotJointState_t dir1,
@@ -52,7 +52,7 @@ int CLinkbotL::setMovementStateTime( mobotJointState_t dir1,
                                   mobotJointState_t dir3,
                                   double seconds)
 {
-  return Mobot_setMovementStateTime(_comms, dir1, dir2, dir3, MOBOT_NEUTRAL, seconds);
+  return Mobot_setMovementStateTime(_comms, dir1, dir2, dir3, ROBOT_NEUTRAL, seconds);
 }
 
 int CLinkbotL::setMovementStateTimeNB( mobotJointState_t dir1,
@@ -60,6 +60,6 @@ int CLinkbotL::setMovementStateTimeNB( mobotJointState_t dir1,
                                   mobotJointState_t dir3,
                                   double seconds)
 {
-  return Mobot_setMovementStateTimeNB(_comms, dir1, dir2, dir3, MOBOT_NEUTRAL, seconds);
+  return Mobot_setMovementStateTimeNB(_comms, dir1, dir2, dir3, ROBOT_NEUTRAL, seconds);
 }
 

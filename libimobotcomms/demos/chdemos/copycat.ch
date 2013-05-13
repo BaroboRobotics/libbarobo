@@ -21,7 +21,7 @@ for(i = 0; i < NUM_MOBOTS; i++) {
 for(i = 0; i < NUM_MOBOTS/2; i++) {
   mobots[i].setColorRGB(0, 255, 0);
   mobots[i+NUM_MOBOTS/2].setColorRGB(255, 0, 0);
-  mobots[i+NUM_MOBOTS/2].moveContinuousNB(MOBOT_FORWARD, MOBOT_FORWARD, MOBOT_FORWARD);
+  mobots[i+NUM_MOBOTS/2].moveContinuousNB(ROBOT_FORWARD, ROBOT_FORWARD, ROBOT_FORWARD);
 }
 
 int j;

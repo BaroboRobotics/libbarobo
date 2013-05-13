@@ -170,7 +170,7 @@ int CLinkbotIGroup::setMovementStateTime(mobotJointState_t dir1,
 #endif
   for(int i = 0; i < _numRobots; i++) {
     //_robots[i]->stop();
-    _robots[i]->setMovementStateNB(MOBOT_HOLD, MOBOT_HOLD, MOBOT_HOLD);
+    _robots[i]->setMovementStateNB(ROBOT_HOLD, ROBOT_HOLD, ROBOT_HOLD);
   }
   return 0;
 }

@@ -4,8 +4,8 @@
 
 #define NUMBOTS 1
 
-#define MOBOT_ADDR1 0x8D04
-#define MOBOT_ADDR2 0xA53F
+#define ROBOT_ADDR1 0x8D04
+#define ROBOT_ADDR2 0xA53F
 
 int main()
 {

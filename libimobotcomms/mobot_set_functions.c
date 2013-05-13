@@ -111,21 +111,21 @@ int Mobot_setJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t
   buf[0] = (uint8_t)id-1;
   if(
       (comms->formFactor == MOBOTFORM_I) && 
-      (id == MOBOT_JOINT3)
+      (id == ROBOT_JOINT3)
     )
   {
     switch (dir) {
-      case MOBOT_FORWARD:
-        buf[1] = MOBOT_BACKWARD;
+      case ROBOT_FORWARD:
+        buf[1] = ROBOT_BACKWARD;
         break;
-      case MOBOT_BACKWARD:
-        buf[1] = MOBOT_FORWARD;
+      case ROBOT_BACKWARD:
+        buf[1] = ROBOT_FORWARD;
         break;
-      case MOBOT_POSITIVE:
-        buf[1] = MOBOT_FORWARD;
+      case ROBOT_POSITIVE:
+        buf[1] = ROBOT_FORWARD;
         break;
-      case MOBOT_NEGATIVE:
-        buf[1] = MOBOT_BACKWARD;
+      case ROBOT_NEGATIVE:
+        buf[1] = ROBOT_BACKWARD;
         break;
       default:
         buf[1] = dir;
@@ -275,17 +275,17 @@ int Mobot_setMovementStateNB(mobot_t* comms,
   buf[0] = 0x0F;
   if(comms->formFactor == MOBOTFORM_I) {
     switch(dir3) {
-      case MOBOT_FORWARD:
-        dirs[2] = MOBOT_BACKWARD;
+      case ROBOT_FORWARD:
+        dirs[2] = ROBOT_BACKWARD;
         break;
-      case MOBOT_BACKWARD:
-        dirs[2] = MOBOT_FORWARD;
+      case ROBOT_BACKWARD:
+        dirs[2] = ROBOT_FORWARD;
         break;
-      case MOBOT_POSITIVE:
-        dirs[2] = MOBOT_FORWARD;
+      case ROBOT_POSITIVE:
+        dirs[2] = ROBOT_FORWARD;
         break;
-      case MOBOT_NEGATIVE:
-        dirs[2] = MOBOT_BACKWARD;
+      case ROBOT_NEGATIVE:
+        dirs[2] = ROBOT_BACKWARD;
         break;
       default:
         dirs[2] = dir3;
@@ -293,7 +293,7 @@ int Mobot_setMovementStateNB(mobot_t* comms,
   }
   for(i = 0; i < 4; i++) {
     buf[i*6 + 1] = dirs[i];
-    buf[i*6 + 2] = MOBOT_HOLD;
+    buf[i*6 + 2] = ROBOT_HOLD;
     memcpy(&buf[i*6 + 3], &msecs, 4);
   }
   status = MobotMsgTransaction(comms, BTCMD(CMD_TIMEDACTION), buf, 6*4 + 1);
@@ -343,17 +343,17 @@ int Mobot_setMovementStateTimeNB(mobot_t* comms,
   dirs[0] = dir1; dirs[1] = dir2; dirs[2] = dir3; dirs[3] = dir4;
   if(comms->formFactor == MOBOTFORM_I) {
     switch(dir3) {
-      case MOBOT_FORWARD:
-        dirs[2] = MOBOT_BACKWARD;
+      case ROBOT_FORWARD:
+        dirs[2] = ROBOT_BACKWARD;
         break;
-      case MOBOT_BACKWARD:
-        dirs[2] = MOBOT_FORWARD;
+      case ROBOT_BACKWARD:
+        dirs[2] = ROBOT_FORWARD;
         break;
-      case MOBOT_POSITIVE:
-        dirs[2] = MOBOT_FORWARD;
+      case ROBOT_POSITIVE:
+        dirs[2] = ROBOT_FORWARD;
         break;
-      case MOBOT_NEGATIVE:
-        dirs[2] = MOBOT_BACKWARD;
+      case ROBOT_NEGATIVE:
+        dirs[2] = ROBOT_BACKWARD;
         break;
       default:
         dirs[2] = dir3;
@@ -362,7 +362,7 @@ int Mobot_setMovementStateTimeNB(mobot_t* comms,
   buf[0] = 0x0F;
   for(i = 0; i < 4; i++) {
     buf[i*6 + 1] = dirs[i];
-    buf[i*6 + 2] = MOBOT_HOLD;
+    buf[i*6 + 2] = ROBOT_HOLD;
     memcpy(&buf[i*6 + 3], &msecs, 4);
   }
   status = MobotMsgTransaction(comms, BTCMD(CMD_TIMEDACTION), buf, 6*4 + 1);
@@ -400,11 +400,11 @@ int Mobot_setTwoWheelRobotSpeed(mobot_t* comms, double speed, double radius)
   double omega;
   omega = speed/radius;
   if(comms->formFactor == MOBOTFORM_ORIGINAL) {
-    Mobot_setJointSpeed(comms, MOBOT_JOINT1, omega);
-    Mobot_setJointSpeed(comms, MOBOT_JOINT4, omega);
+    Mobot_setJointSpeed(comms, ROBOT_JOINT1, omega);
+    Mobot_setJointSpeed(comms, ROBOT_JOINT4, omega);
   } else if (comms->formFactor == MOBOTFORM_I) {
-    Mobot_setJointSpeed(comms, MOBOT_JOINT1, omega);
-    Mobot_setJointSpeed(comms, MOBOT_JOINT3, omega);
+    Mobot_setJointSpeed(comms, ROBOT_JOINT1, omega);
+    Mobot_setJointSpeed(comms, ROBOT_JOINT3, omega);
   } else {
     return -1;
   }

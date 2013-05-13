@@ -13,8 +13,8 @@ int main()
     /* Calculate forward-backward */
     motorPower = 500 * accel_y;
     motorOffset = 256 * accel_x;
-    slave.setMotorPower(MOBOT_JOINT1, -motorPower - motorOffset);
-    slave.setMotorPower(MOBOT_JOINT2, motorPower - motorOffset);
+    slave.setMotorPower(ROBOT_JOINT1, -motorPower - motorOffset);
+    slave.setMotorPower(ROBOT_JOINT2, motorPower - motorOffset);
   }
   return 0;
 }

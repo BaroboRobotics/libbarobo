@@ -31,11 +31,11 @@ CPlot plot1, plot2, plot3;
 /* Start the motion. First, move mobot to zero position */
 mobot.resetToZero();
 /* Set the joint 1 speed to 45 degrees/second */
-mobot.setJointSpeed(MOBOT_JOINT1, speed);
-mobot.setJointSpeed(MOBOT_JOINT4, speed);
+mobot.setJointSpeed(ROBOT_JOINT1, speed);
+mobot.setJointSpeed(ROBOT_JOINT4, speed);
 
 /* Start capturing data */
-mobot.recordAngle(MOBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
+mobot.recordAngle(ROBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
 
 /* Move the joint 720 degrees */
 mobot.move(angle, 0, 0, angle);

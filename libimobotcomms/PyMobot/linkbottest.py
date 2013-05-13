@@ -1,4 +1,4 @@
-from linkbot import *
+from barobo.linkbot import *
 
 linkbot_6PV8 = LinkBot()
 linkbot_6PV8.connect()
