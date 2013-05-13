@@ -5,10 +5,10 @@
 
 #define NUM_MOBOTS 4
 
-CMobotI mobots[NUM_MOBOTS];
+CLinkbotI mobots[NUM_MOBOTS];
 
-CMobotIGroup group1;
-CMobotIGroup group2;
+CLinkbotIGroup group1;
+CLinkbotIGroup group2;
 double angles[4];
 int i;
 

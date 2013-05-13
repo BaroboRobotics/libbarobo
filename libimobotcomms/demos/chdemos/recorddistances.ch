@@ -2,7 +2,7 @@
    Record time and distances, plot the acquired data for two Mobots */
 #include <mobot.h>
 #include <chplot.h>
-CMobotI mobot1, mobot2;
+CLinkbotI mobot1, mobot2;
 double speed1=1.5, speed2=3; // speeds of mobots in inches per second
 double radius1=1.75, radius2=1.75; // the radii of two wheels of mobot1 and 2
 double time=16;              // motion time in seconds for mobot1

@@ -24,7 +24,8 @@ class LinkBot():
   
     Use this function to control LinkBots that are currently 
     connected in RoboMancer. """
-    Mobot_connect(self._mobot)
+    if Mobot_connect(self._mobot) != 0:
+      raise RuntimeError("Error connecting to robot.")
 
   def disconnect(self):
     """Disconnect from a LinkBot"""

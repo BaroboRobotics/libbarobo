@@ -1,4 +1,5 @@
 #include <mobot.h>
+#include <linkbot.h>
 #include <stdlib.h>
 #ifndef _WIN32
 #include <unistd.h>
@@ -9,8 +10,8 @@ int main()
   int i, n, n2;
   double* data, *data2;
   double* time, *time2;
-  CMobotI mobot;
-  CMobotI mobot2;
+  CLinkbotI mobot;
+  CLinkbotI mobot2;
   if(mobot.connectWithAddress("HFRS", 1)) {
 	  printf("Error connecting to 59MQ\n");
 	  exit(0);

@@ -1,58 +1,59 @@
 #include <stdlib.h>
 #include "mobot.h"
 #include "mobot_internal.h"
+#include "linkbot.h"
 
 #define DEPRECATED(from, to) \
   fprintf(stderr, "Warning: The function \"%s()\" is deprecated. Please use \"%s()\"\n" , from, to)
 
-CMobotIGroup::CMobotIGroup()
+CLinkbotIGroup::CLinkbotIGroup()
 {
   _numRobots = 0;
   _motionInProgress = 0;
   _thread = (THREAD_T*)malloc(sizeof(THREAD_T));
-  _robots = (CMobotI**)CMobotGroup::_robots;
+  _robots = (CLinkbotI**)CMobotGroup::_robots;
 }
 
-CMobotIGroup::~CMobotIGroup()
+CLinkbotIGroup::~CLinkbotIGroup()
 {
 }
 
-int CMobotIGroup::addRobot(CMobotI& mobot)
+int CLinkbotIGroup::addRobot(CLinkbotI& mobot)
 {
   int rc;
   rc = CMobotGroup::addRobot((CMobot&)mobot);
-  _robots = (CMobotI**)CMobotGroup::_robots;
+  _robots = (CLinkbotI**)CMobotGroup::_robots;
   return rc;
 }
 
-int CMobotIGroup::addRobots(CMobotI mobots[], int numMobots)
+int CLinkbotIGroup::addRobots(CLinkbotI mobots[], int numMobots)
 {
   int rc = CMobotGroup::addRobots(mobots, numMobots);
-  _robots = (CMobotI**)CMobotGroup::_robots;
+  _robots = (CLinkbotI**)CMobotGroup::_robots;
   return rc;
 }
 
-int CMobotIGroup::connect()
+int CLinkbotIGroup::connect()
 {
   for(int i = 0; i < _numRobots; i++) {
-    ((CMobotI*)_robots[i])->connect();
+    ((CLinkbotI*)_robots[i])->connect();
   }
   return 0;
 }
 
-int CMobotIGroup::driveToDirect(double angle1, double angle2, double angle3)
+int CLinkbotIGroup::driveToDirect(double angle1, double angle2, double angle3)
 {
   driveToDirectNB(angle1, angle2, angle3);
   return moveWait();
 }
 
-int CMobotIGroup::driveTo(double angle1, double angle2, double angle3)
+int CLinkbotIGroup::driveTo(double angle1, double angle2, double angle3)
 {
   driveToDirectNB(angle1, angle2, angle3);
   return moveWait();
 }
 
-int CMobotIGroup::driveToDirectNB(double angle1, double angle2, double angle3)
+int CLinkbotIGroup::driveToDirectNB(double angle1, double angle2, double angle3)
 {
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->driveToDirectNB(angle1, angle2, angle3);
@@ -60,7 +61,7 @@ int CMobotIGroup::driveToDirectNB(double angle1, double angle2, double angle3)
   return 0;
 }
 
-int CMobotIGroup::driveToNB(double angle1, double angle2, double angle3)
+int CLinkbotIGroup::driveToNB(double angle1, double angle2, double angle3)
 {
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->driveToDirectNB(angle1, angle2, angle3);
@@ -68,13 +69,13 @@ int CMobotIGroup::driveToNB(double angle1, double angle2, double angle3)
   return 0;
 }
 
-int CMobotIGroup::move(double angle1, double angle2, double angle3)
+int CLinkbotIGroup::move(double angle1, double angle2, double angle3)
 {
   moveNB(angle1, angle2, angle3);
   return moveWait();
 }
 
-int CMobotIGroup::moveNB(double angle1, double angle2, double angle3)
+int CLinkbotIGroup::moveNB(double angle1, double angle2, double angle3)
 {
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->moveNB(angle1, angle2, angle3);
@@ -82,7 +83,7 @@ int CMobotIGroup::moveNB(double angle1, double angle2, double angle3)
   return 0;
 } 
 
-int CMobotIGroup::moveContinuousNB(mobotJointState_t dir1, 
+int CLinkbotIGroup::moveContinuousNB(mobotJointState_t dir1, 
                        mobotJointState_t dir2, 
                        mobotJointState_t dir3)
 {
@@ -90,7 +91,7 @@ int CMobotIGroup::moveContinuousNB(mobotJointState_t dir1,
   return setMovementStateNB(dir1, dir2, dir3);
 }
 
-int CMobotIGroup::moveContinuousTime(mobotJointState_t dir1, 
+int CLinkbotIGroup::moveContinuousTime(mobotJointState_t dir1, 
                            mobotJointState_t dir2, 
                            mobotJointState_t dir3, 
                            double seconds)
@@ -99,19 +100,19 @@ int CMobotIGroup::moveContinuousTime(mobotJointState_t dir1,
   return setMovementStateTime(dir1, dir2, dir3, seconds);
 }
 
-int CMobotIGroup::moveTo(double angle1, double angle2, double angle3)
+int CLinkbotIGroup::moveTo(double angle1, double angle2, double angle3)
 {
   moveToNB(angle1, angle2, angle3);
   return moveWait();
 }
 
-int CMobotIGroup::moveToDirect(double angle1, double angle2, double angle3)
+int CLinkbotIGroup::moveToDirect(double angle1, double angle2, double angle3)
 {
   moveToDirectNB(angle1, angle2, angle3);
   return moveWait();
 }
 
-int CMobotIGroup::moveToNB(double angle1, double angle2, double angle3)
+int CLinkbotIGroup::moveToNB(double angle1, double angle2, double angle3)
 {
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->moveToNB(angle1, angle2, angle3);
@@ -119,7 +120,7 @@ int CMobotIGroup::moveToNB(double angle1, double angle2, double angle3)
   return 0;
 }
 
-int CMobotIGroup::moveToDirectNB(double angle1, double angle2, double angle3)
+int CLinkbotIGroup::moveToDirectNB(double angle1, double angle2, double angle3)
 {
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->moveToDirectNB(angle1, angle2, angle3);
@@ -127,7 +128,7 @@ int CMobotIGroup::moveToDirectNB(double angle1, double angle2, double angle3)
   return 0;
 }
 
-int CMobotIGroup::setJointSpeeds(double speed1, double speed2, double speed3)
+int CLinkbotIGroup::setJointSpeeds(double speed1, double speed2, double speed3)
 {
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->setJointSpeeds(speed1, speed2, speed3);
@@ -135,7 +136,7 @@ int CMobotIGroup::setJointSpeeds(double speed1, double speed2, double speed3)
   return 0;
 }
 
-int CMobotIGroup::setJointSpeedRatios(double ratio1, double ratio2, double ratio3)
+int CLinkbotIGroup::setJointSpeedRatios(double ratio1, double ratio2, double ratio3)
 {
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->setJointSpeedRatios(ratio1, ratio2, ratio3);
@@ -143,7 +144,7 @@ int CMobotIGroup::setJointSpeedRatios(double ratio1, double ratio2, double ratio
   return 0;
 }
 
-int CMobotIGroup::setMovementStateNB(mobotJointState_t dir1, 
+int CLinkbotIGroup::setMovementStateNB(mobotJointState_t dir1, 
                        mobotJointState_t dir2, 
                        mobotJointState_t dir3)
 {
@@ -153,7 +154,7 @@ int CMobotIGroup::setMovementStateNB(mobotJointState_t dir1,
   return 0;
 }
 
-int CMobotIGroup::setMovementStateTime(mobotJointState_t dir1, 
+int CLinkbotIGroup::setMovementStateTime(mobotJointState_t dir1, 
                            mobotJointState_t dir2, 
                            mobotJointState_t dir3, 
                            double seconds)
@@ -174,7 +175,7 @@ int CMobotIGroup::setMovementStateTime(mobotJointState_t dir1,
   return 0;
 }
 
-int CMobotIGroup::setMovementStateTimeNB(mobotJointState_t dir1, 
+int CLinkbotIGroup::setMovementStateTimeNB(mobotJointState_t dir1, 
                            mobotJointState_t dir2, 
                            mobotJointState_t dir3, 
                            double seconds)

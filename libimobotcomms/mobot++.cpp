@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "mobot.h"
 #include "mobot_internal.h"
+#include "linkbot.h"
 
 CMobot::CMobot()
 {

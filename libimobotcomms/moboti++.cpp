@@ -1,16 +1,17 @@
 #include <stdlib.h>
 #include "mobot.h"
 #include "mobot_internal.h"
+#include "linkbot.h"
 
-CMobotI::CMobotI()
+CLinkbotI::CLinkbotI()
 {
 }
 
-CMobotI::~CMobotI() 
+CLinkbotI::~CLinkbotI() 
 {
 }
 
-int CMobotI::connect()
+int CLinkbotI::connect()
 {
   int rc = Mobot_connect(_comms);
   if(rc) {
@@ -23,7 +24,7 @@ int CMobotI::connect()
   }
 }
 
-int CMobotI::connectWithSerialID(const char* serialID)
+int CLinkbotI::connectWithSerialID(const char* serialID)
 {
   return Mobot_connectWithSerialID(_comms, serialID);
 }

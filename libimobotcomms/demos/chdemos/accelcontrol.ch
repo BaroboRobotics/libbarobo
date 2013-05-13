@@ -2,7 +2,7 @@
 
 int main()
 {
-  CMobotI master, slave;
+  CLinkbotI master, slave;
   master.connect();
   slave.connect();
   double accel_x, accel_y, accel_z;

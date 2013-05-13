@@ -1,11 +1,12 @@
 
 #include "mobot.h"
 #include "mobot_internal.h"
+#include "linkbot.h"
 
 #define DEPRECATED(from, to) \
   fprintf(stderr, "Warning: The function \"%s()\" is deprecated. Please use \"%s()\"\n" , from, to)
 
-int CMobotI::driveToDirect( double angle1,
+int CLinkbotI::driveToDirect( double angle1,
                           double angle2,
                           double angle3)
 {
@@ -17,7 +18,7 @@ int CMobotI::driveToDirect( double angle1,
       DEG2RAD(0));
 }
 
-int CMobotI::driveTo( double angle1,
+int CLinkbotI::driveTo( double angle1,
                           double angle2,
                           double angle3)
 {
@@ -29,7 +30,7 @@ int CMobotI::driveTo( double angle1,
       DEG2RAD(0));
 }
 
-int CMobotI::driveToDirectNB( double angle1,
+int CLinkbotI::driveToDirectNB( double angle1,
                           double angle2,
                           double angle3)
 {
@@ -41,7 +42,7 @@ int CMobotI::driveToDirectNB( double angle1,
       DEG2RAD(0));
 }
 
-int CMobotI::driveToNB( double angle1,
+int CLinkbotI::driveToNB( double angle1,
                           double angle2,
                           double angle3)
 {
@@ -53,7 +54,7 @@ int CMobotI::driveToNB( double angle1,
       DEG2RAD(0));
 }
 
-int CMobotI::move( double angle1,
+int CLinkbotI::move( double angle1,
                         double angle2,
                         double angle3)
 {
@@ -65,7 +66,7 @@ int CMobotI::move( double angle1,
       DEG2RAD(0));
 }
 
-int CMobotI::moveNB( double angle1,
+int CLinkbotI::moveNB( double angle1,
                         double angle2,
                         double angle3)
 {
@@ -77,19 +78,19 @@ int CMobotI::moveNB( double angle1,
       DEG2RAD(0));
 }
 
-int CMobotI::moveContinuousNB( mobotJointState_t dir1, mobotJointState_t dir2, mobotJointState_t dir3)
+int CLinkbotI::moveContinuousNB( mobotJointState_t dir1, mobotJointState_t dir2, mobotJointState_t dir3)
 {
   DEPRECATED("moveContinuousNB", "setMovementStateNB");
   return Mobot_moveContinuousNB(_comms, dir1, dir2, dir3, MOBOT_NEUTRAL);
 }
 
-int CMobotI::moveContinuousTime( mobotJointState_t dir1, mobotJointState_t dir2, mobotJointState_t dir3, double seconds)
+int CLinkbotI::moveContinuousTime( mobotJointState_t dir1, mobotJointState_t dir2, mobotJointState_t dir3, double seconds)
 {
   DEPRECATED("moveContinuousTime", "setMovementStateTime");
   return Mobot_moveContinuousTime(_comms, dir1, dir2, dir3, MOBOT_NEUTRAL, seconds);
 }
 
-int CMobotI::moveTo( double angle1,
+int CLinkbotI::moveTo( double angle1,
                           double angle2,
                           double angle3)
 {
@@ -101,7 +102,7 @@ int CMobotI::moveTo( double angle1,
       DEG2RAD(0));
 }
 
-int CMobotI::moveToDirect( double angle1,
+int CLinkbotI::moveToDirect( double angle1,
                           double angle2,
                           double angle3)
 {
@@ -113,7 +114,7 @@ int CMobotI::moveToDirect( double angle1,
       DEG2RAD(0));
 }
 
-int CMobotI::moveToNB( double angle1,
+int CLinkbotI::moveToNB( double angle1,
                           double angle2,
                           double angle3)
 {
@@ -125,7 +126,7 @@ int CMobotI::moveToNB( double angle1,
       DEG2RAD(0));
 }
 
-int CMobotI::moveToDirectNB( double angle1,
+int CLinkbotI::moveToDirectNB( double angle1,
                           double angle2,
                           double angle3)
 {

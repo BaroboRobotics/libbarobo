@@ -1,8 +1,9 @@
 #include <stdlib.h>
 #include "mobot.h"
 #include "mobot_internal.h"
+#include "linkbot.h"
 
-int CMobotL::recordAngles(double *time, 
+int CLinkbotL::recordAngles(double *time, 
     double *angle1, 
     double *angle2, 
     double *angle3, 
@@ -18,7 +19,7 @@ int CMobotL::recordAngles(double *time,
   return rc;
 }
 
-int CMobotL::recordAnglesBegin(double* &time, 
+int CLinkbotL::recordAnglesBegin(double* &time, 
     double* &angle1, 
     double* &angle2, 
     double* &angle3, 
@@ -29,7 +30,7 @@ int CMobotL::recordAnglesBegin(double* &time,
   return Mobot_recordAnglesBegin(_comms, &time, &angle1, &angle2, &angle3, &angle4, seconds, shiftData);
 }
 
-int CMobotL::recordDistancesBegin(
+int CLinkbotL::recordDistancesBegin(
     double* &time,
     double* &distance1,
     double* &distance2,
