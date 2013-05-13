@@ -112,7 +112,7 @@ typedef SOCKADDR_BTH sockaddr_t;
 #endif
 #endif
 
-typedef double* mobotRecordData_t;
+typedef double* robotRecordData_t;
 #define angle2distance(radius, angle) ((radius) * ((angle) * M_PI / 180.0))
 #define distance2angle(radius, distance) (((distance) / (radius)) * 180 / M_PI)
 
@@ -445,43 +445,43 @@ class CMobot
                      int shiftData = 1);
 #endif
 #ifndef _CH_
-    int recordAngleBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double seconds, int shiftData = 1);
-    int recordDistanceBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &distance, double radius, double seconds, int shiftData = 1);
+    int recordAngleBegin(mobotJointId_t id, robotRecordData_t &time, robotRecordData_t &angle, double seconds, int shiftData = 1);
+    int recordDistanceBegin(mobotJointId_t id, robotRecordData_t &time, robotRecordData_t &distance, double radius, double seconds, int shiftData = 1);
 #else
-    int recordAngleBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double seconds, ...);
-    int recordDistanceBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &distance, double radius, double seconds, ...);
+    int recordAngleBegin(mobotJointId_t id, robotRecordData_t &time, robotRecordData_t &angle, double seconds, ...);
+    int recordDistanceBegin(mobotJointId_t id, robotRecordData_t &time, robotRecordData_t &distance, double radius, double seconds, ...);
 #endif
     int recordAngleEnd(mobotJointId_t id, int &num);
     int recordDistanceEnd(mobotJointId_t id, int &num);
 #ifndef _CH_
-    int recordAnglesBegin(mobotRecordData_t &time, 
-                          mobotRecordData_t &angle1, 
-                          mobotRecordData_t &angle2, 
-                          mobotRecordData_t &angle3, 
-                          mobotRecordData_t &angle4, 
+    int recordAnglesBegin(robotRecordData_t &time, 
+                          robotRecordData_t &angle1, 
+                          robotRecordData_t &angle2, 
+                          robotRecordData_t &angle3, 
+                          robotRecordData_t &angle4, 
                           double seconds,
                           int shiftData = 1);
-    int recordDistancesBegin(mobotRecordData_t &time, 
-                          mobotRecordData_t &distance1, 
-                          mobotRecordData_t &distance2, 
-                          mobotRecordData_t &distance3, 
-                          mobotRecordData_t &distance4, 
+    int recordDistancesBegin(robotRecordData_t &time, 
+                          robotRecordData_t &distance1, 
+                          robotRecordData_t &distance2, 
+                          robotRecordData_t &distance3, 
+                          robotRecordData_t &distance4, 
                           double radius,
                           double seconds,
                           int shiftData = 1);
 #else
-    int recordAnglesBegin(mobotRecordData_t &time, 
-                          mobotRecordData_t &angle1, 
-                          mobotRecordData_t &angle2, 
-                          mobotRecordData_t &angle3, 
-                          mobotRecordData_t &angle4, 
+    int recordAnglesBegin(robotRecordData_t &time, 
+                          robotRecordData_t &angle1, 
+                          robotRecordData_t &angle2, 
+                          robotRecordData_t &angle3, 
+                          robotRecordData_t &angle4, 
                           double seconds,
                           ...);
-    int recordDistancesBegin(mobotRecordData_t &time, 
-                          mobotRecordData_t &distance1, 
-                          mobotRecordData_t &distance2, 
-                          mobotRecordData_t &distance3, 
-                          mobotRecordData_t &distance4, 
+    int recordDistancesBegin(robotRecordData_t &time, 
+                          robotRecordData_t &distance1, 
+                          robotRecordData_t &distance2, 
+                          robotRecordData_t &distance3, 
+                          robotRecordData_t &distance4, 
                           double radius,
                           double seconds,
                           ...);
@@ -664,22 +664,22 @@ class CMobot
                      int num, 
                      double seconds,
                      int shiftData = 1);
-    int recordAngleBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &angle, double seconds, int shiftData = 1);
-    int recordDistanceBegin(mobotJointId_t id, mobotRecordData_t &time, mobotRecordData_t &distance, double radius, double seconds, int shiftData = 1);
+    int recordAngleBegin(mobotJointId_t id, robotRecordData_t &time, robotRecordData_t &angle, double seconds, int shiftData = 1);
+    int recordDistanceBegin(mobotJointId_t id, robotRecordData_t &time, robotRecordData_t &distance, double radius, double seconds, int shiftData = 1);
     int recordAngleEnd(mobotJointId_t id, int &num);
     int recordDistanceEnd(mobotJointId_t id, int &num);
-    int recordAnglesBegin(mobotRecordData_t &time, 
-                          mobotRecordData_t &angle1, 
-                          mobotRecordData_t &angle2, 
-                          mobotRecordData_t &angle3, 
-                          mobotRecordData_t &angle4, 
+    int recordAnglesBegin(robotRecordData_t &time, 
+                          robotRecordData_t &angle1, 
+                          robotRecordData_t &angle2, 
+                          robotRecordData_t &angle3, 
+                          robotRecordData_t &angle4, 
                           double seconds,
                           int shiftData = 1);
-    int recordDistancesBegin(mobotRecordData_t &time, 
-                          mobotRecordData_t &distance1, 
-                          mobotRecordData_t &distance2, 
-                          mobotRecordData_t &distance3, 
-                          mobotRecordData_t &distance4, 
+    int recordDistancesBegin(robotRecordData_t &time, 
+                          robotRecordData_t &distance1, 
+                          robotRecordData_t &distance2, 
+                          robotRecordData_t &distance3, 
+                          robotRecordData_t &distance4, 
                           double radius,
                           double seconds,
                           int shiftData = 1);

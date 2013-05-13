@@ -10,8 +10,8 @@ double delaytime=8;          // delay time for mobot2
 double timeInterval = 0.1;   // time interval in 0.1 second 
 int shiftData = 0;           // flag to disable the shifting of data
 int numDataPoints1, numDataPoints2; // number of data points recorded
-mobotRecordData_t timedata1, distances1; // recorded time and distances for Mobot1
-mobotRecordData_t timedata2, distances2; // recorded time and distances for Mobot2
+robotRecordData_t timedata1, distances1; // recorded time and distances for Mobot1
+robotRecordData_t timedata2, distances2; // recorded time and distances for Mobot2
 CPlot plot;                  // plotting class
 
 /* connect to Mobots and move to the zero position at the same time. */
