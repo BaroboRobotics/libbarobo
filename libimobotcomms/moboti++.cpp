@@ -18,7 +18,7 @@ int CLinkbotI::connect()
     return rc;
   }
   if(_comms->formFactor != MOBOTFORM_I) {
-    fprintf(stderr, "Error: Connected Mobot is not a Mobot-I.\n");
+    fprintf(stderr, "Error: Connected Mobot is not a Linkbot-I.\n");
     Mobot_disconnect(_comms);
     return -1;
   }

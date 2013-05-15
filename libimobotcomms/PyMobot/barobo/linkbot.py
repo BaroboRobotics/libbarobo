@@ -10,25 +10,25 @@ def deg2rad(deg):
 def rad2deg(deg):
   return deg * 180.0 / math.pi
 
-class LinkBot():
+class Linkbot():
   """
-  Each instance of the LinkBot class represents a physical LinkBot. This class
-  is used to control and get data from a LinkBot.
+  Each instance of the Linkbot class represents a physical Linkbot. This class
+  is used to control and get data from a Linkbot.
   """
   def __init__(self):
     self._mobot = mobot_t()
     Mobot_init(self._mobot)
 
   def connect(self):
-    """Connect to a LinkBot
+    """Connect to a Linkbot
   
-    Use this function to control LinkBots that are currently 
+    Use this function to control Linkbots that are currently 
     connected in RoboMancer. """
     if Mobot_connect(self._mobot) != 0:
       raise RuntimeError("Error connecting to robot.")
 
   def disconnect(self):
-    """Disconnect from a LinkBot"""
+    """Disconnect from a Linkbot"""
     Mobot_disconnect(self._mobot)
 
   def getJointAngles(self):
@@ -58,11 +58,11 @@ class LinkBot():
     Mobot_driveJointToNB(self._mobot, joint, deg2rad(angle))
 
   def move(self, angle1, angle2, angle3):
-    """Move the joints on a LinkBot
+    """Move the joints on a Linkbot
       
     Move joints from current location by amount specified in arguments in
     degrees. If the joint is not a movable joint (e.g. Joint 2 on a
-    LinkBot-I), the argument is ignored."""
+    Linkbot-I), the argument is ignored."""
     self.moveNB(angle1, angle2, angle3)
     self.moveWait()
 
@@ -84,8 +84,8 @@ class LinkBot():
     while Mobot_isMoving(self._mobot):
       time.sleep(0.5)
 
-  def recordAnglesBegin(self):
-    self.recordThread = _LinkBotRecordThread(self)
+  def recordAnglesBegin(self, delay=0.05):
+    self.recordThread = _LinkbotRecordThread(self, delay)
     self.recordThread.start()
 
   def recordAnglesEnd(self):
@@ -95,6 +95,10 @@ class LinkBot():
     # Wait for recording to end
     while self.recordThread.isRunning:
       time.sleep(0.5)
+    return [self.recordThread.time, 
+        self.recordThread.angles[0], 
+        self.recordThread.angles[1], 
+        self.recordThread.angles[2]]
 
   def recordAnglesPlot(self):
     pylab.plot(
@@ -119,8 +123,9 @@ class LinkBot():
   def stop(self):
     Mobot_stop(self._mobot) 
     
-class _LinkBotRecordThread(threading.Thread):
-  def __init__(self, linkbot):
+class _LinkbotRecordThread(threading.Thread):
+  def __init__(self, linkbot, delay):
+    self.delay = delay
     self.linkbot = linkbot
     self.runflag = False
     self.isRunning = False;
@@ -144,5 +149,5 @@ class _LinkBotRecordThread(threading.Thread):
       self.angles[0].append(data[1])
       self.angles[1].append(data[2])
       self.angles[2].append(data[3])
-      time.sleep(0.05)
+      time.sleep(self.delay)
     self.isRunning = False
