@@ -84,7 +84,7 @@ int Mobot_setBuzzerFrequencyOff(mobot_t* comms)
   return Mobot_setBuzzerFrequencyOn(comms, 0);
 }
 
-int Mobot_setExitState(mobot_t* comms, mobotJointState_t exitState)
+int Mobot_setExitState(mobot_t* comms, robotJointState_t exitState)
 {
   comms->exitState = exitState;
   return 0;
@@ -104,7 +104,7 @@ int Mobot_setHWRev(mobot_t* comms, uint8_t rev)
   return 0;
 }
 
-int Mobot_setJointDirection(mobot_t* comms, robotJointId_t id, mobotJointState_t dir)
+int Mobot_setJointDirection(mobot_t* comms, robotJointId_t id, robotJointState_t dir)
 {
   uint8_t buf[32];
   int status;
@@ -142,14 +142,14 @@ int Mobot_setJointDirection(mobot_t* comms, robotJointId_t id, mobotJointState_t
   return 0;
 }
 
-int Mobot_setJointMovementStateNB(mobot_t* comms, robotJointId_t id, mobotJointState_t dir)
+int Mobot_setJointMovementStateNB(mobot_t* comms, robotJointId_t id, robotJointState_t dir)
 {
   //Mobot_setJointSpeed(comms, id, comms->jointSpeeds[(int)id-1]);
   Mobot_setJointDirection(comms, id, dir);
   return 0;
 }
 
-int Mobot_setJointMovementStateTime(mobot_t* comms, robotJointId_t id, mobotJointState_t dir, double seconds)
+int Mobot_setJointMovementStateTime(mobot_t* comms, robotJointId_t id, robotJointState_t dir, double seconds)
 {
   int msecs = seconds * 1000;
   Mobot_moveJointContinuousNB(comms, id, dir);
@@ -261,16 +261,16 @@ int Mobot_setMotorPower(mobot_t* comms, robotJointId_t id, int power)
 }
 
 int Mobot_setMovementStateNB(mobot_t* comms,
-                                  mobotJointState_t dir1,
-                                  mobotJointState_t dir2,
-                                  mobotJointState_t dir3,
-                                  mobotJointState_t dir4)
+                                  robotJointState_t dir1,
+                                  robotJointState_t dir2,
+                                  robotJointState_t dir3,
+                                  robotJointState_t dir4)
 {
   int i;
   int32_t msecs = -1;
   uint8_t buf[64];
   int status;
-  mobotJointState_t dirs[4];
+  robotJointState_t dirs[4];
   dirs[0] = dir1; dirs[1] = dir2; dirs[2] = dir3; dirs[3] = dir4;
   buf[0] = 0x0F;
   if(comms->formFactor == MOBOTFORM_I) {
@@ -306,10 +306,10 @@ int Mobot_setMovementStateNB(mobot_t* comms,
 }
 
 int Mobot_setMovementStateTime(mobot_t* comms,
-                                  mobotJointState_t dir1,
-                                  mobotJointState_t dir2,
-                                  mobotJointState_t dir3,
-                                  mobotJointState_t dir4,
+                                  robotJointState_t dir1,
+                                  robotJointState_t dir2,
+                                  robotJointState_t dir3,
+                                  robotJointState_t dir4,
                                   double seconds)
 {
   int32_t msecs = seconds * 1000;
@@ -329,17 +329,17 @@ int Mobot_setMovementStateTime(mobot_t* comms,
 }
 
 int Mobot_setMovementStateTimeNB(mobot_t* comms,
-                                  mobotJointState_t dir1,
-                                  mobotJointState_t dir2,
-                                  mobotJointState_t dir3,
-                                  mobotJointState_t dir4,
+                                  robotJointState_t dir1,
+                                  robotJointState_t dir2,
+                                  robotJointState_t dir3,
+                                  robotJointState_t dir4,
                                   double seconds)
 {
   int i;
   int32_t msecs = seconds * 1000;
   uint8_t buf[64];
   int status;
-  mobotJointState_t dirs[4];
+  robotJointState_t dirs[4];
   dirs[0] = dir1; dirs[1] = dir2; dirs[2] = dir3; dirs[3] = dir4;
   if(comms->formFactor == MOBOTFORM_I) {
     switch(dir3) {

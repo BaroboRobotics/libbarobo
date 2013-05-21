@@ -48,7 +48,7 @@
 int Mobot_isMoving(mobot_t* comms)
 {
   int moving = 0;
-  mobotJointState_t state;
+  robotJointState_t state;
   int i;
   for(i = 1; i <= 4; i++) {
     Mobot_getJointState(comms, (robotJointId_t)i, &state);
@@ -174,30 +174,30 @@ int Mobot_moveForwardNB(mobot_t* comms, double angle)
 }
 
 int Mobot_moveContinuousNB(mobot_t* comms,
-                                  mobotJointState_t dir1,
-                                  mobotJointState_t dir2,
-                                  mobotJointState_t dir3,
-                                  mobotJointState_t dir4)
+                                  robotJointState_t dir1,
+                                  robotJointState_t dir2,
+                                  robotJointState_t dir3,
+                                  robotJointState_t dir4)
 {
   return Mobot_setMovementStateNB(comms, dir1, dir2, dir3, dir4);
 }
 
 int Mobot_moveContinuousTime(mobot_t* comms,
-                                  mobotJointState_t dir1,
-                                  mobotJointState_t dir2,
-                                  mobotJointState_t dir3,
-                                  mobotJointState_t dir4,
+                                  robotJointState_t dir1,
+                                  robotJointState_t dir2,
+                                  robotJointState_t dir3,
+                                  robotJointState_t dir4,
                                   double seconds)
 {
   return Mobot_setMovementStateTime(comms, dir1, dir2, dir3, dir4, seconds);
 }
 
-int Mobot_moveJointContinuousNB(mobot_t* comms, robotJointId_t id, mobotJointState_t dir)
+int Mobot_moveJointContinuousNB(mobot_t* comms, robotJointId_t id, robotJointState_t dir)
 {
   return Mobot_setJointMovementStateNB(comms, id, dir);
 }
 
-int Mobot_moveJointContinuousTime(mobot_t* comms, robotJointId_t id, mobotJointState_t dir, double seconds)
+int Mobot_moveJointContinuousTime(mobot_t* comms, robotJointId_t id, robotJointState_t dir, double seconds)
 {
   return Mobot_setJointMovementStateTime(comms, id, dir, seconds);
 }
@@ -336,7 +336,7 @@ int Mobot_moveJointToDirectNB(mobot_t* comms, robotJointId_t id, double angle)
 
 int Mobot_moveJointWait(mobot_t* comms, robotJointId_t id)
 {
-  mobotJointState_t state;
+  robotJointState_t state;
   /* Make sure there is no non-blocking function running */
 //  THREAD_JOIN(comms->thread);
 

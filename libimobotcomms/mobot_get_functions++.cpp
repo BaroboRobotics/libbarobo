@@ -77,7 +77,7 @@ int CMobot::getJointAnglesAverage(
   return 0;
 }
 
-int CMobot::getJointDirection(robotJointId_t id, mobotJointState_t &dir)
+int CMobot::getJointDirection(robotJointId_t id, robotJointState_t &dir)
 {
   return Mobot_getJointDirection(_comms, id, &dir);
 }
@@ -132,7 +132,7 @@ int CMobot::getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3, 
   return Mobot_getJointSpeedRatios(_comms, &ratio1, &ratio2, &ratio3, &ratio4);
 }
 
-int CMobot::getJointState(robotJointId_t id, mobotJointState_t &state)
+int CMobot::getJointState(robotJointId_t id, robotJointState_t &state)
 {
   return Mobot_getJointState(_comms, id, &state);
 }

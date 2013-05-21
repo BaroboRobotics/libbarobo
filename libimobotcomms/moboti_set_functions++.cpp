@@ -40,24 +40,24 @@ int CLinkbotI::setJointSpeedRatios(double ratio1, double ratio2, double ratio3)
   return Mobot_setJointSpeedRatios(_comms, ratio1, ratio2, ratio3, 0);
 }
 
-int CLinkbotI::setMovementStateNB( mobotJointState_t dir1,
-                                mobotJointState_t dir2,
-                                mobotJointState_t dir3)
+int CLinkbotI::setMovementStateNB( robotJointState_t dir1,
+                                robotJointState_t dir2,
+                                robotJointState_t dir3)
 {
   return Mobot_setMovementStateNB(_comms, dir1, dir2, dir3, ROBOT_NEUTRAL);
 }
 
-int CLinkbotI::setMovementStateTime( mobotJointState_t dir1,
-                                  mobotJointState_t dir2,
-                                  mobotJointState_t dir3,
+int CLinkbotI::setMovementStateTime( robotJointState_t dir1,
+                                  robotJointState_t dir2,
+                                  robotJointState_t dir3,
                                   double seconds)
 {
   return Mobot_setMovementStateTime(_comms, dir1, dir2, dir3, ROBOT_NEUTRAL, seconds);
 }
 
-int CLinkbotI::setMovementStateTimeNB( mobotJointState_t dir1,
-                                  mobotJointState_t dir2,
-                                  mobotJointState_t dir3,
+int CLinkbotI::setMovementStateTimeNB( robotJointState_t dir1,
+                                  robotJointState_t dir2,
+                                  robotJointState_t dir3,
                                   double seconds)
 {
   return Mobot_setMovementStateTimeNB(_comms, dir1, dir2, dir3, ROBOT_NEUTRAL, seconds);

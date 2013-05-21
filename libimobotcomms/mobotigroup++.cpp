@@ -83,17 +83,17 @@ int CLinkbotIGroup::moveNB(double angle1, double angle2, double angle3)
   return 0;
 } 
 
-int CLinkbotIGroup::moveContinuousNB(mobotJointState_t dir1, 
-                       mobotJointState_t dir2, 
-                       mobotJointState_t dir3)
+int CLinkbotIGroup::moveContinuousNB(robotJointState_t dir1, 
+                       robotJointState_t dir2, 
+                       robotJointState_t dir3)
 {
   DEPRECATED("moveContinuousNB", "setMovementStateNB");
   return setMovementStateNB(dir1, dir2, dir3);
 }
 
-int CLinkbotIGroup::moveContinuousTime(mobotJointState_t dir1, 
-                           mobotJointState_t dir2, 
-                           mobotJointState_t dir3, 
+int CLinkbotIGroup::moveContinuousTime(robotJointState_t dir1, 
+                           robotJointState_t dir2, 
+                           robotJointState_t dir3, 
                            double seconds)
 {
   DEPRECATED("moveContinuousTime", "setMovementStateTime");
@@ -144,9 +144,9 @@ int CLinkbotIGroup::setJointSpeedRatios(double ratio1, double ratio2, double rat
   return 0;
 }
 
-int CLinkbotIGroup::setMovementStateNB(mobotJointState_t dir1, 
-                       mobotJointState_t dir2, 
-                       mobotJointState_t dir3)
+int CLinkbotIGroup::setMovementStateNB(robotJointState_t dir1, 
+                       robotJointState_t dir2, 
+                       robotJointState_t dir3)
 {
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->setMovementStateNB(dir1, dir2, dir3);
@@ -154,9 +154,9 @@ int CLinkbotIGroup::setMovementStateNB(mobotJointState_t dir1,
   return 0;
 }
 
-int CLinkbotIGroup::setMovementStateTime(mobotJointState_t dir1, 
-                           mobotJointState_t dir2, 
-                           mobotJointState_t dir3, 
+int CLinkbotIGroup::setMovementStateTime(robotJointState_t dir1, 
+                           robotJointState_t dir2, 
+                           robotJointState_t dir3, 
                            double seconds)
 {
   int msecs = seconds * 1000.0;
@@ -175,9 +175,9 @@ int CLinkbotIGroup::setMovementStateTime(mobotJointState_t dir1,
   return 0;
 }
 
-int CLinkbotIGroup::setMovementStateTimeNB(mobotJointState_t dir1, 
-                           mobotJointState_t dir2, 
-                           mobotJointState_t dir3, 
+int CLinkbotIGroup::setMovementStateTimeNB(robotJointState_t dir1, 
+                           robotJointState_t dir2, 
+                           robotJointState_t dir3, 
                            double seconds)
 {
   int msecs = seconds * 1000.0;

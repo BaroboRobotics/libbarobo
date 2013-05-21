@@ -118,13 +118,13 @@ int CMobot::moveBackwardNB(double angle)
   return Mobot_moveBackwardNB(_comms, DEG2RAD(angle));
 }
 
-int CMobot::moveContinuousNB( mobotJointState_t dir1, mobotJointState_t dir2, mobotJointState_t dir3, mobotJointState_t dir4)
+int CMobot::moveContinuousNB( robotJointState_t dir1, robotJointState_t dir2, robotJointState_t dir3, robotJointState_t dir4)
 {
   DEPRECATED("moveContinuousNB", "setMovementStateNB");
   return Mobot_moveContinuousNB(_comms, dir1, dir2, dir3, dir4);
 }
 
-int CMobot::moveContinuousTime( mobotJointState_t dir1, mobotJointState_t dir2, mobotJointState_t dir3, mobotJointState_t dir4, double seconds)
+int CMobot::moveContinuousTime( robotJointState_t dir1, robotJointState_t dir2, robotJointState_t dir3, robotJointState_t dir4, double seconds)
 {
   DEPRECATED("moveContinuousTime", "setMovementStateTime");
   return Mobot_moveContinuousTime(_comms, dir1, dir2, dir3, dir4, seconds);
@@ -150,13 +150,13 @@ int CMobot::moveForwardNB(double angle)
   return Mobot_moveForwardNB(_comms, DEG2RAD(angle));
 }
 
-int CMobot::moveJointContinuousNB(robotJointId_t id, mobotJointState_t dir)
+int CMobot::moveJointContinuousNB(robotJointId_t id, robotJointState_t dir)
 {
   DEPRECATED("moveJointContinuousNB", "setJointMovementStateNB");
   return Mobot_moveJointContinuousNB(_comms, id, dir);
 }
 
-int CMobot::moveJointContinuousTime(robotJointId_t id, mobotJointState_t dir, double seconds)
+int CMobot::moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, double seconds)
 {
   DEPRECATED("moveJointContinuousTime", "setJointMovementStateTime");
   return Mobot_moveJointContinuousTime(_comms, id, dir, seconds);

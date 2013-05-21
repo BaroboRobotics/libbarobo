@@ -458,7 +458,7 @@ EXPORTCH int LinkbotI_getJointState_chdl(void *varg) {
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     id = Ch_VaArg(interp, ap, int);
     state = Ch_VaArg(interp, ap, int *);
-    retval = mobot->getJointState((robotJointId_t)id, (mobotJointState_t&)(*state));
+    retval = mobot->getJointState((robotJointId_t)id, (robotJointState_t&)(*state));
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -535,16 +535,16 @@ EXPORTCH int LinkbotI_moveContinuousNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointState_t dir1;
-    mobotJointState_t dir2;
-    mobotJointState_t dir3;
+    robotJointState_t dir1;
+    robotJointState_t dir2;
+    robotJointState_t dir3;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    dir1 = (mobotJointState_t)Ch_VaArg(interp, ap, int);
-    dir2 = (mobotJointState_t)Ch_VaArg(interp, ap, int);
-    dir3 = (mobotJointState_t)Ch_VaArg(interp, ap, int);
+    dir1 = (robotJointState_t)Ch_VaArg(interp, ap, int);
+    dir2 = (robotJointState_t)Ch_VaArg(interp, ap, int);
+    dir3 = (robotJointState_t)Ch_VaArg(interp, ap, int);
     retval = mobot->moveContinuousNB(dir1, dir2, dir3);
     Ch_VaEnd(interp, ap);
     return retval;
@@ -554,17 +554,17 @@ EXPORTCH int LinkbotI_moveContinuousTime_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointState_t dir1;
-    mobotJointState_t dir2;
-    mobotJointState_t dir3;
+    robotJointState_t dir1;
+    robotJointState_t dir2;
+    robotJointState_t dir3;
     double seconds;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    dir1 = Ch_VaArg(interp, ap, mobotJointState_t);
-    dir2 = Ch_VaArg(interp, ap, mobotJointState_t);
-    dir3 = Ch_VaArg(interp, ap, mobotJointState_t);
+    dir1 = Ch_VaArg(interp, ap, robotJointState_t);
+    dir2 = Ch_VaArg(interp, ap, robotJointState_t);
+    dir3 = Ch_VaArg(interp, ap, robotJointState_t);
     seconds = Ch_VaArg(interp, ap, double);
     retval = mobot->moveContinuousTime(dir1, dir2, dir3, seconds);
     Ch_VaEnd(interp, ap);
@@ -640,13 +640,13 @@ EXPORTCH int LinkbotI_moveJointContinuousNB_chdl(void *varg) {
     ChVaList_t ap;
     class CLinkbotI *mobot;
     robotJointId_t id;
-    mobotJointState_t dir;
+    robotJointState_t dir;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     id = Ch_VaArg(interp, ap, robotJointId_t );
-    dir = Ch_VaArg(interp, ap, mobotJointState_t);
+    dir = Ch_VaArg(interp, ap, robotJointState_t);
     retval = mobot->moveJointContinuousNB(id, dir);
     Ch_VaEnd(interp, ap);
     return retval;
@@ -657,14 +657,14 @@ EXPORTCH int LinkbotI_moveJointContinuousTime_chdl(void *varg) {
     ChVaList_t ap;
     class CLinkbotI *mobot;
     robotJointId_t id;
-    mobotJointState_t dir;
+    robotJointState_t dir;
     double seconds;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     id = Ch_VaArg(interp, ap, robotJointId_t);
-    dir = Ch_VaArg(interp, ap, mobotJointState_t);
+    dir = Ch_VaArg(interp, ap, robotJointState_t);
     seconds = Ch_VaArg(interp, ap, double);
     retval = mobot->moveJointContinuousTime(id, dir, seconds);
     Ch_VaEnd(interp, ap);
@@ -1359,12 +1359,12 @@ EXPORTCH int LinkbotI_setExitState_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointState_t dir;
+    robotJointState_t dir;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    dir = Ch_VaArg(interp, ap, mobotJointState_t);
+    dir = Ch_VaArg(interp, ap, robotJointState_t);
     retval = mobot->setExitState(dir);
     Ch_VaEnd(interp, ap);
     return retval;
@@ -1375,13 +1375,13 @@ EXPORTCH int LinkbotI_setJointMovementStateNB_chdl(void *varg) {
     ChVaList_t ap;
     class CLinkbotI *mobot;
     robotJointId_t id;
-    mobotJointState_t dir;
+    robotJointState_t dir;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     id = Ch_VaArg(interp, ap, robotJointId_t );
-    dir = Ch_VaArg(interp, ap, mobotJointState_t);
+    dir = Ch_VaArg(interp, ap, robotJointState_t);
     retval = mobot->setJointMovementStateNB(id, dir);
     Ch_VaEnd(interp, ap);
     return retval;
@@ -1392,14 +1392,14 @@ EXPORTCH int LinkbotI_setJointMovementStateTime_chdl(void *varg) {
     ChVaList_t ap;
     class CLinkbotI *mobot;
     robotJointId_t id;
-    mobotJointState_t dir;
+    robotJointState_t dir;
     double seconds;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     id = Ch_VaArg(interp, ap, robotJointId_t);
-    dir = Ch_VaArg(interp, ap, mobotJointState_t);
+    dir = Ch_VaArg(interp, ap, robotJointState_t);
     seconds = Ch_VaArg(interp, ap, double);
     retval = mobot->setJointMovementStateTime(id, dir, seconds);
     Ch_VaEnd(interp, ap);
@@ -1530,16 +1530,16 @@ EXPORTCH int LinkbotI_setMovementStateNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointState_t dir1;
-    mobotJointState_t dir2;
-    mobotJointState_t dir3;
+    robotJointState_t dir1;
+    robotJointState_t dir2;
+    robotJointState_t dir3;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    dir1 = (mobotJointState_t)Ch_VaArg(interp, ap, int);
-    dir2 = (mobotJointState_t)Ch_VaArg(interp, ap, int);
-    dir3 = (mobotJointState_t)Ch_VaArg(interp, ap, int);
+    dir1 = (robotJointState_t)Ch_VaArg(interp, ap, int);
+    dir2 = (robotJointState_t)Ch_VaArg(interp, ap, int);
+    dir3 = (robotJointState_t)Ch_VaArg(interp, ap, int);
     retval = mobot->setMovementStateNB(dir1, dir2, dir3);
     Ch_VaEnd(interp, ap);
     return retval;
@@ -1549,17 +1549,17 @@ EXPORTCH int LinkbotI_setMovementStateTime_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointState_t dir1;
-    mobotJointState_t dir2;
-    mobotJointState_t dir3;
+    robotJointState_t dir1;
+    robotJointState_t dir2;
+    robotJointState_t dir3;
     double seconds;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    dir1 = Ch_VaArg(interp, ap, mobotJointState_t);
-    dir2 = Ch_VaArg(interp, ap, mobotJointState_t);
-    dir3 = Ch_VaArg(interp, ap, mobotJointState_t);
+    dir1 = Ch_VaArg(interp, ap, robotJointState_t);
+    dir2 = Ch_VaArg(interp, ap, robotJointState_t);
+    dir3 = Ch_VaArg(interp, ap, robotJointState_t);
     seconds = Ch_VaArg(interp, ap, double);
     retval = mobot->setMovementStateTime(dir1, dir2, dir3, seconds);
     Ch_VaEnd(interp, ap);
@@ -1570,17 +1570,17 @@ EXPORTCH int LinkbotI_setMovementStateTimeNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointState_t dir1;
-    mobotJointState_t dir2;
-    mobotJointState_t dir3;
+    robotJointState_t dir1;
+    robotJointState_t dir2;
+    robotJointState_t dir3;
     double seconds;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    dir1 = Ch_VaArg(interp, ap, mobotJointState_t);
-    dir2 = Ch_VaArg(interp, ap, mobotJointState_t);
-    dir3 = Ch_VaArg(interp, ap, mobotJointState_t);
+    dir1 = Ch_VaArg(interp, ap, robotJointState_t);
+    dir2 = Ch_VaArg(interp, ap, robotJointState_t);
+    dir3 = Ch_VaArg(interp, ap, robotJointState_t);
     seconds = Ch_VaArg(interp, ap, double);
     retval = mobot->setMovementStateTimeNB(dir1, dir2, dir3, seconds);
     Ch_VaEnd(interp, ap);
@@ -2130,16 +2130,16 @@ EXPORTCH int CMGI_moveContinuousNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointState_t dir1;
-    mobotJointState_t dir2;
-    mobotJointState_t dir3;
+    robotJointState_t dir1;
+    robotJointState_t dir2;
+    robotJointState_t dir3;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-    dir1 = (mobotJointState_t)Ch_VaArg(interp, ap, int);
-    dir2 = (mobotJointState_t)Ch_VaArg(interp, ap, int);
-    dir3 = (mobotJointState_t)Ch_VaArg(interp, ap, int);
+    dir1 = (robotJointState_t)Ch_VaArg(interp, ap, int);
+    dir2 = (robotJointState_t)Ch_VaArg(interp, ap, int);
+    dir3 = (robotJointState_t)Ch_VaArg(interp, ap, int);
     retval = mobot->moveContinuousNB(dir1, dir2, dir3);
     Ch_VaEnd(interp, ap);
     return retval;
@@ -2149,17 +2149,17 @@ EXPORTCH int CMGI_moveContinuousTime_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointState_t dir1;
-    mobotJointState_t dir2;
-    mobotJointState_t dir3;
+    robotJointState_t dir1;
+    robotJointState_t dir2;
+    robotJointState_t dir3;
     double seconds;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-    dir1 = Ch_VaArg(interp, ap, mobotJointState_t);
-    dir2 = Ch_VaArg(interp, ap, mobotJointState_t);
-    dir3 = Ch_VaArg(interp, ap, mobotJointState_t);
+    dir1 = Ch_VaArg(interp, ap, robotJointState_t);
+    dir2 = Ch_VaArg(interp, ap, robotJointState_t);
+    dir3 = Ch_VaArg(interp, ap, robotJointState_t);
     seconds = Ch_VaArg(interp, ap, double );
     retval = mobot->moveContinuousTime(dir1, dir2, dir3, seconds);
     Ch_VaEnd(interp, ap);
@@ -2235,13 +2235,13 @@ EXPORTCH int CMGI_moveJointContinuousNB_chdl(void *varg) {
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
     robotJointId_t id;
-    mobotJointState_t dir;
+    robotJointState_t dir;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
     id = Ch_VaArg(interp, ap, robotJointId_t );
-    dir = Ch_VaArg(interp, ap, mobotJointState_t);
+    dir = Ch_VaArg(interp, ap, robotJointState_t);
     retval = mobot->moveJointContinuousNB(id, dir);
     Ch_VaEnd(interp, ap);
     return retval;
@@ -2252,14 +2252,14 @@ EXPORTCH int CMGI_moveJointContinuousTime_chdl(void *varg) {
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
     robotJointId_t id;
-    mobotJointState_t dir;
+    robotJointState_t dir;
     double seconds;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
     id = Ch_VaArg(interp, ap, robotJointId_t);
-    dir = Ch_VaArg(interp, ap, mobotJointState_t);
+    dir = Ch_VaArg(interp, ap, robotJointState_t);
     seconds = Ch_VaArg(interp, ap, double);
     retval = mobot->moveJointContinuousTime(id, dir, seconds);
     Ch_VaEnd(interp, ap);
@@ -2507,12 +2507,12 @@ EXPORTCH int CMGI_setExitState_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointState_t exitState;
+    robotJointState_t exitState;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-    exitState = Ch_VaArg(interp, ap, mobotJointState_t);
+    exitState = Ch_VaArg(interp, ap, robotJointState_t);
     retval = mobot->setExitState(exitState);
     Ch_VaEnd(interp, ap);
     return retval;
@@ -2523,13 +2523,13 @@ EXPORTCH int CMGI_setJointMovementStateNB_chdl(void *varg) {
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
     robotJointId_t id;
-    mobotJointState_t dir;
+    robotJointState_t dir;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
     id = Ch_VaArg(interp, ap, robotJointId_t );
-    dir = Ch_VaArg(interp, ap, mobotJointState_t);
+    dir = Ch_VaArg(interp, ap, robotJointState_t);
     retval = mobot->setJointMovementStateNB(id, dir);
     Ch_VaEnd(interp, ap);
     return retval;
@@ -2540,14 +2540,14 @@ EXPORTCH int CMGI_setJointMovementStateTime_chdl(void *varg) {
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
     robotJointId_t id;
-    mobotJointState_t dir;
+    robotJointState_t dir;
     double seconds;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
     id = Ch_VaArg(interp, ap, robotJointId_t);
-    dir = Ch_VaArg(interp, ap, mobotJointState_t);
+    dir = Ch_VaArg(interp, ap, robotJointState_t);
     seconds = Ch_VaArg(interp, ap, double);
     retval = mobot->setJointMovementStateTime(id, dir, seconds);
     Ch_VaEnd(interp, ap);
@@ -2559,14 +2559,14 @@ EXPORTCH int CMGI_setJointMovementStateTimeNB_chdl(void *varg) {
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
     robotJointId_t id;
-    mobotJointState_t dir;
+    robotJointState_t dir;
     double seconds;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
     id = Ch_VaArg(interp, ap, robotJointId_t);
-    dir = Ch_VaArg(interp, ap, mobotJointState_t);
+    dir = Ch_VaArg(interp, ap, robotJointState_t);
     seconds = Ch_VaArg(interp, ap, double);
     retval = mobot->setJointMovementStateTimeNB(id, dir, seconds);
     Ch_VaEnd(interp, ap);
@@ -2678,16 +2678,16 @@ EXPORTCH int CMGI_setMovementStateNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointState_t dir1;
-    mobotJointState_t dir2;
-    mobotJointState_t dir3;
+    robotJointState_t dir1;
+    robotJointState_t dir2;
+    robotJointState_t dir3;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-    dir1 = (mobotJointState_t)Ch_VaArg(interp, ap, int);
-    dir2 = (mobotJointState_t)Ch_VaArg(interp, ap, int);
-    dir3 = (mobotJointState_t)Ch_VaArg(interp, ap, int);
+    dir1 = (robotJointState_t)Ch_VaArg(interp, ap, int);
+    dir2 = (robotJointState_t)Ch_VaArg(interp, ap, int);
+    dir3 = (robotJointState_t)Ch_VaArg(interp, ap, int);
     retval = mobot->setMovementStateNB(dir1, dir2, dir3);
     Ch_VaEnd(interp, ap);
     return retval;
@@ -2697,17 +2697,17 @@ EXPORTCH int CMGI_setMovementStateTime_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointState_t dir1;
-    mobotJointState_t dir2;
-    mobotJointState_t dir3;
+    robotJointState_t dir1;
+    robotJointState_t dir2;
+    robotJointState_t dir3;
     double seconds;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-    dir1 = Ch_VaArg(interp, ap, mobotJointState_t);
-    dir2 = Ch_VaArg(interp, ap, mobotJointState_t);
-    dir3 = Ch_VaArg(interp, ap, mobotJointState_t);
+    dir1 = Ch_VaArg(interp, ap, robotJointState_t);
+    dir2 = Ch_VaArg(interp, ap, robotJointState_t);
+    dir3 = Ch_VaArg(interp, ap, robotJointState_t);
     seconds = Ch_VaArg(interp, ap, double );
     retval = mobot->setMovementStateTime(dir1, dir2, dir3, seconds);
     Ch_VaEnd(interp, ap);
@@ -2718,17 +2718,17 @@ EXPORTCH int CMGI_setMovementStateTimeNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointState_t dir1;
-    mobotJointState_t dir2;
-    mobotJointState_t dir3;
+    robotJointState_t dir1;
+    robotJointState_t dir2;
+    robotJointState_t dir3;
     double seconds;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-    dir1 = Ch_VaArg(interp, ap, mobotJointState_t);
-    dir2 = Ch_VaArg(interp, ap, mobotJointState_t);
-    dir3 = Ch_VaArg(interp, ap, mobotJointState_t);
+    dir1 = Ch_VaArg(interp, ap, robotJointState_t);
+    dir2 = Ch_VaArg(interp, ap, robotJointState_t);
+    dir3 = Ch_VaArg(interp, ap, robotJointState_t);
     seconds = Ch_VaArg(interp, ap, double );
     retval = mobot->setMovementStateTimeNB(dir1, dir2, dir3, seconds);
     Ch_VaEnd(interp, ap);

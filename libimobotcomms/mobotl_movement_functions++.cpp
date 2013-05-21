@@ -78,13 +78,13 @@ int CLinkbotL::moveNB( double angle1,
       DEG2RAD(0));
 }
 
-int CLinkbotL::moveContinuousNB( mobotJointState_t dir1, mobotJointState_t dir2, mobotJointState_t dir3)
+int CLinkbotL::moveContinuousNB( robotJointState_t dir1, robotJointState_t dir2, robotJointState_t dir3)
 {
   DEPRECATED("moveContinuousNB", "setMovementStateNB");
   return Mobot_moveContinuousNB(_comms, dir1, dir2, dir3, ROBOT_NEUTRAL);
 }
 
-int CLinkbotL::moveContinuousTime( mobotJointState_t dir1, mobotJointState_t dir2, mobotJointState_t dir3, double seconds)
+int CLinkbotL::moveContinuousTime( robotJointState_t dir1, robotJointState_t dir2, robotJointState_t dir3, double seconds)
 {
   DEPRECATED("moveContinuousTime", "setMovementStateTime");
   return Mobot_moveContinuousTime(_comms, dir1, dir2, dir3, ROBOT_NEUTRAL, seconds);
