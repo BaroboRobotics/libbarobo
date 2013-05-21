@@ -91,7 +91,7 @@ is allowed to connect to. The is also necessary for certain
 functions in the \texttt{CMobot} API, such as \texttt{connect()},
 to determine which Mobot-As to connect to.
 
-The configuration is performed through the Barobo RoboMancer
+The configuration is performed through the Barobo BaroboLink
 program. The remainder of the section contains step-by-step instructions
 and screenshots showing how to configure your Mobot-As.
 
@@ -170,32 +170,32 @@ repeat this step for all Mobot-As that need to be paired before continuing.
 \end{figure}
 
 
-\subsection{\label{sec:pairing_robotcontroller} Adding Bluetooth Addresses of Robots in RoboMancer}
-First, start the provided Barobo RoboMancer application.
+\subsection{\label{sec:pairing_robotcontroller} Adding Bluetooth Addresses of Robots in BaroboLink}
+First, start the provided Barobo BaroboLink application.
 In Windows, start the provided Barobo Robot Control Program by clicking on the icon labeled 
-``RoboMancer'' on your desktop, as shown in \ref{fig:barobo_icon.png}. On Mac OS X systems,
-the RoboMancer application is located inside the ``Applications'' folder in Finder. The 
+``BaroboLink'' on your desktop, as shown in \ref{fig:barobo_icon.png}. On Mac OS X systems,
+the BaroboLink application is located inside the ``Applications'' folder in Finder. The 
 control dialog as shown in Figure \ref{fig:shot1.png} should pop up.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=1in]{images/barobo_icon.png}
 \end{center}
-\caption{\label{fig:barobo_icon.png} The icon for Barobo RoboMancer.}
+\caption{\label{fig:barobo_icon.png} The icon for Barobo BaroboLink.}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=4.5in]{images/robomancer_screenshot1.png}
 \end{center}
-\caption{\label{fig:shot1.png} The opening screen for RoboMancer.}
+\caption{\label{fig:shot1.png} The opening screen for BaroboLink.}
 \end{figure}
 
-The RoboMancer application, as seen in Figure \ref{fig:shot1.png}, is organized into
+The BaroboLink application, as seen in Figure \ref{fig:shot1.png}, is organized into
 several different sections, each denoted by a tab. Upon startup, the default tab
 that is selected is the ``Connect'' tab. This section of the application allows
 you to manage, connect, and disconnect from Mobot-As. 
 
-First, add your Mobot-A address(es) into RoboMancer by typing in the address and
+First, add your Mobot-A address(es) into BaroboLink by typing in the address and
 clicking on the ``Add Robot'' button. The dialog should now something like
 the figure shown in Figure \ref{fig:shot3.png}. 
 
@@ -216,13 +216,13 @@ of another robot, the dialog appears as shown in Figure \ref{fig:shot4_a.png}.
 \caption{\label{fig:shot4_a.png} The Connection dialog two Mobot-A entries.}
 \end{figure}
 
-Once new addresses are added, RoboMancer will remember the addresses in the future. 
+Once new addresses are added, BaroboLink will remember the addresses in the future. 
 The red dot next to the added addresses indicate
 the current connection status of the robot. A red dot indicates that the Mobot-A
 is not currently connected, and a green dot indicates that the Mobot-A is 
 properly connected. To connect to a robot, make sure the robot is on by moving the 
 power switch to the ``RUN'' position, and click on the button labeled ``connect'' 
-inside RoboMancer.
+inside BaroboLink.
 
 \begin{figure}[H]
 \begin{center}
@@ -255,16 +255,16 @@ maximum number of connected Mobot-As decreases to 5, for a total of 7 connected
 devices.
 
 \subsection{Upgrading the Mobot-A's Firmware}
-Upon connecting to Mobot-As, RoboMancer is able to determine if the firmware 
+Upon connecting to Mobot-As, BaroboLink is able to determine if the firmware 
 currently residing on the Mobot-A is up to date. If the firmware is not up to 
-date, RoboMancer will draw an ``Upgrade Firmware'' button, as shown in 
+date, BaroboLink will draw an ``Upgrade Firmware'' button, as shown in 
 Figure \ref{fig:update1}. 
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=4.5in]{images/update1.png}
 \end{center}
-\caption{\label{fig:update1} The RoboMancer connect dialog showing a connected
+\caption{\label{fig:update1} The BaroboLink connect dialog showing a connected
 Mobot-A with out-of-date firmware.}
 \end{figure}
 
@@ -335,7 +335,7 @@ and click on the button labeled ``begin''.
 
 The rest of the process is similar to the normal upgrading process of the Mobot-A. Once
 the ``safe'' version of the firmware has been flashed onto the Mobot-A, it is recommended to
-connect to the Mobot-A using RoboMancer and upgrade the firmware back to the most up-to-date
+connect to the Mobot-A using BaroboLink and upgrade the firmware back to the most up-to-date
 version.
 
 \section{Configuring the Mobot-I/L for Remote Control}
@@ -347,14 +347,14 @@ When connecting a module to the computer for the first time, Windows may need to
 special drivers in order to communicate with the module. The drivers are located in the
 ``C:/Ch'' directory.
 
-The first time RoboMancer is started, it will try and search for a Mobot-I/L or a Mobot dongle
+The first time BaroboLink is started, it will try and search for a Mobot-I/L or a Mobot dongle
 that is connected using a USB cable. 
 
-There are a couple ways to associate Mobot-I/L modules with RoboMancer. First, RoboMancer
+There are a couple ways to associate Mobot-I/L modules with BaroboLink. First, BaroboLink
 is capable of scanning for Mobot-I/L modules which are powered on, within range, and
 not currently connected to any other computer. Simply click on the button 
 labelled ``Scan for nearby Mobot-I's and Mobot-L's'' to start scanning. Otherwise,
-Mobot-I/L's may be manually added to RoboMancer by typing the Mobot's serial ID
+Mobot-I/L's may be manually added to BaroboLink by typing the Mobot's serial ID
 directly into the ``Add Robot'' text box. The Mobot's serial ID is a string of 
 four letters and numbers located on the black sticker directly above buttons A and B
 on the module. Once the robots are added, they may be connected by clicking on the 
@@ -366,7 +366,7 @@ to the number of simultaneously connected modules.
 \begin{center}
 \includegraphics[width=4.5in]{images/robomancer_screenshot5.png}
 \end{center}
-\caption{\label{fig:shot1_populated.png} The graphical display of RoboMancer
+\caption{\label{fig:shot1_populated.png} The graphical display of BaroboLink
 while connected to a Mobot-A.}
 \end{figure}
 
@@ -374,13 +374,13 @@ while connected to a Mobot-A.}
 \begin{center}
 \includegraphics[width=4.5in]{images/shot1_dof.png}
 \end{center}
-\caption{\label{fig:shot1_dof.png} The graphical display of RoboMancer
+\caption{\label{fig:shot1_dof.png} The graphical display of BaroboLink
 while connected to a Mobot-I or -L.}
 \end{figure}
 
-Once a robot is connected to RoboMancer, the joint angles and speeds
+Once a robot is connected to BaroboLink, the joint angles and speeds
 of the robot are displayed as shown in Figure \ref{fig:shot1_populated.png}.
-This dialog is located under the third tab of RoboMancer, labeled 
+This dialog is located under the third tab of BaroboLink, labeled 
 ``Motion Control''.
 The ``Motion Control'' tab can be
 used to display
@@ -528,7 +528,7 @@ connected Mobots and saves them as a single recorded pose.
 Note that when the Mobots are being used in this mode, all of the Mobot buttons are
 connected together and do the same functions. In other words, if both Mobot1 and Mobot2 are connected, pressing the "A" button
 on Mobot1 is identical to pressing the "A" button on Mobot2; They will both result
-in a new recorded pose of both Mobots being created in RoboMancer.
+in a new recorded pose of both Mobots being created in BaroboLink.
 
 The joints of the Mobots can be set to either ``Neutral'' mode or ``Hold'' mode by clicking
 on either the ``Set Joints Neutral'' button or the ''Hold Joints'' button, respectively. 
@@ -557,7 +557,7 @@ LED color control, which are displayed in the dialog. The Mobot-A has no sensors
 so this dialog has no functionality with Mobot-As. 
 
 \section{Getting Started with Programming the Mobot}
-RoboMancer can be used to control the Mobot for simple tasks and applications.
+BaroboLink can be used to control the Mobot for simple tasks and applications.
 For more complicated applications, computer programs are better suited for controlling
 the Mobot.
 Mobot can be controlled using a C/C++ program through Ch, a C/C++ interpreter.
@@ -566,7 +566,7 @@ demo programs for controlling Mobot. Ch is available from SoftIntegration, Inc. 
 \texttt{http://www.softintegration.com}
 
 Before the Ch program is executed, the Bluetooth addresses of the robots
-need to be added using RoboMancer as described in Section \ref{sec:pairing}.
+need to be added using BaroboLink as described in Section \ref{sec:pairing}.
 
 To help the user become acquainted with the Mobot control programs, sample
 programs will be presented in this section to illustrate the basics and minimum requirements of
@@ -574,14 +574,14 @@ a Mobot control program. The sample programs are located at
 \texttt{CHHOME/package/chmobot/demos}, where \texttt{CHHOME} is the
 Ch home directory, such as \texttt{C:$\backslash$Ch} for Windows. For Windows,
 it is located at \texttt{C:$\backslash$Ch$\backslash$package$\backslash$chmobot$\backslash$demos} by default.
-Alternatively, the demos may be accessed in RoboMancer application
+Alternatively, the demos may be accessed in BaroboLink application
 by clicking on the ``Help $\rightarrow$ Demos'' menu item, as shown in Figure
 \ref{fig:help_demos_screenshot}.
 
 \begin{figure}
   \centering
   \includegraphics[width=4in]{images/help_demos_screenshot.png}
-  \caption{The ``Help $\rightarrow$ Demos'' menu item on the RoboMancer Application.}
+  \caption{The ``Help $\rightarrow$ Demos'' menu item on the BaroboLink Application.}
   \label{fig:help_demos_screenshot}
 \end{figure}
 
@@ -1731,7 +1731,7 @@ CMobotGroup groupD;
 \end{verbatim}
 
 Next, we connect our four robot variables to the first four robots 
-configured in RoboMancer.
+configured in BaroboLink.
 \begin{verbatim}
 mobot1.connect();
 mobot2.connect();
