@@ -8,7 +8,7 @@
 \usepackage{subfig}
 \usepackage[left=1in,top=1in,right=1in]{geometry}
 
-\title{Programming the Mobot}  
+\title{Programming the Mobot and Linkbot}  
 %\author{David Ko\\Mechanical and Aerospace Engineering}
 %\date{\today} 
 \makeindex
@@ -19,7 +19,7 @@
 \hrule
 \begin{center}
 \vspace*{2.5cm}
-{\Huge\sf\bf Mobot User's Guide}\\
+{\Huge\sf\bf Mobot and Linkbot User's Guide}\\
 \vspace*{2.5cm}
 {\Large\bf Version 1.9}
 \vspace{4.5cm}
@@ -33,67 +33,66 @@
 \tableofcontents
 \newpage
 \section{Introduction}
-The Mobot is a breakthrough modular robot. A single Mobot module is a fully 
-functional robot capable of performing many possible motions. The Mobot
+The Mobot and Linkbot are breakthrough modular robots. A single module is a fully 
+functional robot capable of performing many possible motions. The robots
 can also be used as a building block to create robots with different
 geometric configurations. 
 
-Currently, there are three major flavors of Mobots in use; The Mobot-A, Mobot-I, and
-Mobot-L. As shown in Figure \ref{fig:joint_diagram_il}, 
-  The Mobot-I and Mobot-L are architecturally similar and they will may 
-be jointly referred to as the ``Mobot-I/L'' in the remainder of this document. 
-``Mobot-A'' will be used to refer specifically to the robot shown in
-Figure \ref{fig:joint_diagram_verbose.png}. The term ``Mobot'' will refer all
-forms of Mobot, including the Mobot-A, -I, and -L. 
+As shown in Figure \ref{fig:joint_diagram_il}, 
+The Linkbot-I and Linkbot-L are architecturally similar and they will may 
+be jointly referred to as the ``Linkbot-I/L'' in the remainder of this document. 
+``Mobot'' will be used to refer specifically to the robot shown in
+Figure \ref{fig:joint_diagram_verbose.png}. The term ``robot'' will refer all
+forms of Mobots and Linkbots, including the Mobot, -I, and -L. 
 This documentation introduces the basic computer setup required for controlling 
 the Mobot, as well as several demo programs and a complete reference for all
-API function provided with the \texttt{CMobot, CMobotI, CMobotL, CMobotGroup,
-  CMobotIGroup}, and \texttt{CMobotLGroup} classes.
+API function provided with the \texttt{CMobot, CLinkbotI, CLinkbotL, CMobotGroup,
+  CLinkbotIGroup}, and \texttt{CLinkbotLGroup} classes.
 
-The \texttt{CMobot} libraries are collections of functions geared towards
-controlling the motors and reading sensor values of a Mobot module. The
+The \texttt{CMobot} and \texttt{CLinkbot} libraries are collections of functions geared towards
+controlling the motors and reading sensor values of a robotic modules. The
 functions are designed to be intuitive
 and easy to use. Various functions are provided to control or obtain the speed,
 direction, and position of the motors.
 
-\subsection{Introducing the Mobot-A}
+\subsection{Introducing the Mobot}
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=4.5in]{images/joint_diagram_verbose.png}
 \end{center}
-\caption{\label{fig:joint_diagram_verbose.png} A schematic diagram of a Mobot-A module.}
+\caption{\label{fig:joint_diagram_verbose.png} A schematic diagram of a Mobot module.}
 \end{figure}
 
 Figure \ref{fig:joint_diagram_verbose.png} shows a schematic diagram displaying the
-locations and positive directions of the four joints of a Mobot-A module. The
+locations and positive directions of the four joints of a Mobot module. The
 joints 1 and 4 shown in the figure are fully rotational and have no joint limits.
 Joints 2 and 3, however, can only move in the range -90 to +90 degrees.
 
-\subsection{Introducing the Mobot-I/L}
+\subsection{Introducing the Linkbot-I/L}
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=3.5in]{images/DOF_joint_diagram.png}
 \end{center}
-\caption{\label{fig:joint_diagram_il} A schematic diagram of a Mobot-I/L module.}
+\caption{\label{fig:joint_diagram_il} A schematic diagram of a Linkbot-I/L module.}
 \end{figure}
 
 Figure \ref{fig:joint_diagram_il} shows a schematic diagram displaying the
-locations and positive directions of the four joints of a Mobot-I/L module. 
+locations and positive directions of the four joints of a Linkbot-I/L module. 
 Note that while Figure \ref{fig:joint_diagram_il} displays three joints,
-only joints 1 and 3 are able to move on the Mobot-I, and only joints 1 and 2 are
+only joints 1 and 3 are able to move on the Linkbot-I, and only joints 1 and 2 are
 able to move on the Mobot-L.
 
-\section{\label{sec:pairing}Configuring the Mobot-A for Remote Control}
-Mobot-A modules should be configured the first time they are used with 
-a new computer. The process informs the computer which Mobot-As it
+\section{\label{sec:pairing}Configuring the Mobot for Remote Control}
+Mobot modules should be configured the first time they are used with 
+a new computer. The process informs the computer which Mobots it
 is allowed to connect to. The is also necessary for certain 
 functions in the \texttt{CMobot} API, such as \texttt{connect()},
-to determine which Mobot-As to connect to.
+to determine which Mobots to connect to.
 
 The configuration is performed through the Barobo BaroboLink
 program. The remainder of the section contains step-by-step instructions
-and screenshots showing how to configure your Mobot-As.
+and screenshots showing how to configure your Mobots.
 
 \subsection{Bluetooth Pairing for Mac OS X}
 For the Mac OS X operating system, an additional initial step needs to be performed.
@@ -121,11 +120,11 @@ Next, click on the menu item labeled ``Set Up Bluetooth Device...''.
 \end{figure}
 
 The previous step should start a dialog used to find and pair with Bluetooth devices. Make sure the
-Mobot-A is turned on, and it should appear as a device in the dialog, as shown in Figure \ref{fig:mac_pairing3}.
-If there are multiple Mobot-A devices, as shown in the figure, you may pinpoint the specific Mobot-A to pair
-with by looking inside the battery compartment on the side of the Mobot-A with the power switch. Inside,
-there is a sticker with the Mobot-A's unique ID number. The last four digits of the ID number will
-coincide with the Mobot-A's Bluetooth ID number. Once the correct Mobot-A is selected, click on the ``Continue''
+Mobot is turned on, and it should appear as a device in the dialog, as shown in Figure \ref{fig:mac_pairing3}.
+If there are multiple Mobot devices, as shown in the figure, you may pinpoint the specific Mobot to pair
+with by looking inside the battery compartment on the side of the Mobot with the power switch. Inside,
+there is a sticker with the Mobot's unique ID number. The last four digits of the ID number will
+coincide with the Mobot's Bluetooth ID number. Once the correct Mobot is selected, click on the ``Continue''
 button.
 
 \begin{figure}[H]
@@ -135,8 +134,8 @@ button.
 \caption{\label{fig:mac_pairing3} The Bluetooth Pairing Dialog.}
 \end{figure}
 
-At this point, the pairing dialog will attempt to pair with the Mobot-A using a default pairing key, ``0000'', as
-shown in Figure \ref{fig:mac_pairing4}. This initial pairing attempt will fail because the Mobot-A pairing key
+At this point, the pairing dialog will attempt to pair with the Mobot using a default pairing key, ``0000'', as
+shown in Figure \ref{fig:mac_pairing4}. This initial pairing attempt will fail because the Mobot pairing key
 is hard-coded to a value of ``1234''. Click on the button labeled ``Passcode Options...'' in order to 
 modify the passcode options. This should bring up the dialog shown in Figure \ref{fig:mac_pairing5}.
 
@@ -158,9 +157,9 @@ In the dialog shown in Figure \ref{fig:mac_pairing5}, select the option to
 ``use a specific passcode'', and enter the value ``1234''. Next, 
 click on the ''OK'' button.
 
-You should be greeted with the dialog shown in Figure \ref{fig:mac_pairing6}, which indicates that the Mobot-A
+You should be greeted with the dialog shown in Figure \ref{fig:mac_pairing6}, which indicates that the Mobot
 has successfully paired. At this point, you may continue on with the rest of the pairing process, or 
-repeat this step for all Mobot-As that need to be paired before continuing.
+repeat this step for all Mobots that need to be paired before continuing.
 
 \begin{figure}[H]
 \begin{center}
@@ -193,9 +192,9 @@ control dialog as shown in Figure \ref{fig:shot1.png} should pop up.
 The BaroboLink application, as seen in Figure \ref{fig:shot1.png}, is organized into
 several different sections, each denoted by a tab. Upon startup, the default tab
 that is selected is the ``Connect'' tab. This section of the application allows
-you to manage, connect, and disconnect from Mobot-As. 
+you to manage, connect, and disconnect from Mobots. 
 
-First, add your Mobot-A address(es) into BaroboLink by typing in the address and
+First, add your Mobot address(es) into BaroboLink by typing in the address and
 clicking on the ``Add Robot'' button. The dialog should now something like
 the figure shown in Figure \ref{fig:shot3.png}. 
 
@@ -206,20 +205,20 @@ the figure shown in Figure \ref{fig:shot3.png}.
 \caption{\label{fig:shot3.png} Configuring robot Bluetooth connection.}
 \end{figure}
 
-Each additional Mobot-A added occupies its own row in the dialog. After the addition
+Each additional Mobot added occupies its own row in the dialog. After the addition
 of another robot, the dialog appears as shown in Figure \ref{fig:shot4_a.png}.
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=4.5in]{images/robomancer_screenshot4.png}
 \end{center}
-\caption{\label{fig:shot4_a.png} The Connection dialog two Mobot-A entries.}
+\caption{\label{fig:shot4_a.png} The Connection dialog two Mobot entries.}
 \end{figure}
 
 Once new addresses are added, BaroboLink will remember the addresses in the future. 
 The red dot next to the added addresses indicate
-the current connection status of the robot. A red dot indicates that the Mobot-A
-is not currently connected, and a green dot indicates that the Mobot-A is 
+the current connection status of the robot. A red dot indicates that the Mobot
+is not currently connected, and a green dot indicates that the Mobot is 
 properly connected. To connect to a robot, make sure the robot is on by moving the 
 power switch to the ``RUN'' position, and click on the button labeled ``connect'' 
 inside BaroboLink.
@@ -228,35 +227,35 @@ inside BaroboLink.
 \begin{center}
 \includegraphics[width=4.5in]{images/robomancer_screenshot4_connected.png}
 \end{center}
-\caption{\label{fig:shot4.png} The Connection dialog showing a connected Mobot-A.}
+\caption{\label{fig:shot4.png} The Connection dialog showing a connected Mobot.}
 \end{figure}
 
 If the connection succeeds, the red dot should
 turn green to indicate that a connection has been established, as shown in 
 Figure \ref{fig:shot4.png}.  Should the connection
-fail, please check that the address has been entered correctly, the Mobot-A is on,
-your computer has Bluetooth capability, and that the Mobot-A is within range of 
+fail, please check that the address has been entered correctly, the Mobot is on,
+your computer has Bluetooth capability, and that the Mobot is within range of 
 your computer, and try again.
 Note that in Figure \ref{fig:shot4.png}, an additional
-Mobot-A had been added to the list of known Mobot-As to illustrate how the dialog
-behaves as more Mobot-As are added. Each additional Mobot-A appears as its own
+Mobot had been added to the list of known Mobots to illustrate how the dialog
+behaves as more Mobots are added. Each additional Mobot appears as its own
 row in the dialog.
 
-Once the connection succeeds, the ``Connect'' button for that Mobot-A turns into
+Once the connection succeeds, the ``Connect'' button for that Mobot turns into
 a ``Disconnect'' button. Clicking on the ``Disconnect'' button disconnects
-the Mobot-A.
+the Mobot.
 
 Furthermore, please note that Bluetooth devices have a maximum limit of connected 
 devices. The maximum limit is 7 devices connected simultaneously. This means that 
-a maximum of 7 Mobot-As may be connected to a computer simultaneously, if no
+a maximum of 7 Mobots may be connected to a computer simultaneously, if no
 other devices are connected. If, for instance, two other devices are currently 
 connected, such as a Bluetooth enabled phone and a Bluetooth mouse, then the 
-maximum number of connected Mobot-As decreases to 5, for a total of 7 connected 
+maximum number of connected Mobots decreases to 5, for a total of 7 connected 
 devices.
 
-\subsection{Upgrading the Mobot-A's Firmware}
-Upon connecting to Mobot-As, BaroboLink is able to determine if the firmware 
-currently residing on the Mobot-A is up to date. If the firmware is not up to 
+\subsection{Upgrading the Mobot's Firmware}
+Upon connecting to Mobots, BaroboLink is able to determine if the firmware 
+currently residing on the Mobot is up to date. If the firmware is not up to 
 date, BaroboLink will draw an ``Upgrade Firmware'' button, as shown in 
 Figure \ref{fig:update1}. 
 
@@ -265,17 +264,17 @@ Figure \ref{fig:update1}.
 \includegraphics[width=4.5in]{images/update1.png}
 \end{center}
 \caption{\label{fig:update1} The BaroboLink connect dialog showing a connected
-Mobot-A with out-of-date firmware.}
+Mobot with out-of-date firmware.}
 \end{figure}
 
-Upgrading the firmware of a Mobot-A is optional, but Mobot-As with out-of-date firmware
+Upgrading the firmware of a Mobot is optional, but Mobots with out-of-date firmware
 may have missing functionality. It is recommended to update the firmware of
-out-of-date Mobot-As as soon as possible. The update process is started by
+out-of-date Mobots as soon as possible. The update process is started by
 clicking on the button labeled ``Upgrade Firmware''. 
 
 After clicking the ``Upgrade Firmware'' button, the dialog shown in Figure
 \ref{fig:update2} is shown. This dialog instructs the user to press the ``A''
-button on the Mobot-A and waits until the button-press is detected. The 
+button on the Mobot and waits until the button-press is detected. The 
 entire upgrade process can be canceled by clicking on the ``Cancel'' button.
 Once the ``A'' button is pressed, the upgrade process proceeds to the next screen.
 
@@ -302,7 +301,7 @@ clicking on ``Continue''. At this point, the
 robot should be turned on by moving the switch to the ``RUN'' position. Once the
 robot is on, the update process begins immediately. The progress bar shown in 
 Figure \ref{fig:update4} should begin moving until completion. The entire process 
-may take several minutes, and the Mobot-A should not be turned off or moved away from
+may take several minutes, and the Mobot should not be turned off or moved away from
 the computer during this time, or the firmware may become corrupted.
 
 \begin{figure}[H]
@@ -312,34 +311,34 @@ the computer during this time, or the firmware may become corrupted.
 \caption{\label{fig:update4} The third step in the upgrade firmware process.}
 \end{figure}
 
-\subsection{Forcing a Mobot-A's Firmware to Reset}
-In the rare event that a Mobot-A's firmware gets corrupted, it is possible to 
-reset the firmware to a ``safe'' version. Symptoms of a Mobot-A whose firmware
+\subsection{Forcing a Mobot's Firmware to Reset}
+In the rare event that a Mobot's firmware gets corrupted, it is possible to 
+reset the firmware to a ``safe'' version. Symptoms of a Mobot whose firmware
 may have been corrupted include the following:
 \begin{itemize}
-\item The blue light on the Mobot-A does not turn on.
-\item The Mobot-A resets randomly.
+\item The blue light on the Mobot does not turn on.
+\item The Mobot resets randomly.
 \item The default button actions do not work.
 \end{itemize}
 To begin the reset process, click on
 ``File $\rightarrow$ Reset Mobot Firmware'' in the application menu. This will bring up the dialog shown
-in \ref{fig:reset1}. To begin the process, type in the address of the Mobot-A to be re-flashed
+in \ref{fig:reset1}. To begin the process, type in the address of the Mobot to be re-flashed
 and click on the button labeled ``begin''. 
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=4.5in]{images/reset1.png}
 \end{center}
-\caption{\label{fig:reset1} The opening dialog for force-reflashing a Mobot-A.}
+\caption{\label{fig:reset1} The opening dialog for force-reflashing a Mobot.}
 \end{figure}
 
-The rest of the process is similar to the normal upgrading process of the Mobot-A. Once
-the ``safe'' version of the firmware has been flashed onto the Mobot-A, it is recommended to
-connect to the Mobot-A using BaroboLink and upgrade the firmware back to the most up-to-date
+The rest of the process is similar to the normal upgrading process of the Mobot. Once
+the ``safe'' version of the firmware has been flashed onto the Mobot, it is recommended to
+connect to the Mobot using BaroboLink and upgrade the firmware back to the most up-to-date
 version.
 
-\section{Configuring the Mobot-I/L for Remote Control}
-In order to control Mobot-I/L modules, at least one Mobot-I/L module must be directly 
+\section{Configuring the Linkbot-I/L for Remote Control}
+In order to control Linkbot-I/L modules, at least one Linkbot-I/L module must be directly 
 connected to the computer using a Micro-USB cable. The connected module acts as a 
 coordinator, relaying messages between the computer and other modules connected wirelessly.
 
@@ -347,18 +346,18 @@ When connecting a module to the computer for the first time, Windows may need to
 special drivers in order to communicate with the module. The drivers are located in the
 ``C:/Ch'' directory.
 
-The first time BaroboLink is started, it will try and search for a Mobot-I/L or a Mobot dongle
+The first time BaroboLink is started, it will try and search for a Linkbot-I/L dongle
 that is connected using a USB cable. 
 
-There are a couple ways to associate Mobot-I/L modules with BaroboLink. First, BaroboLink
-is capable of scanning for Mobot-I/L modules which are powered on, within range, and
+There are a couple ways to associate Linkbot-I/L modules with BaroboLink. First, BaroboLink
+is capable of scanning for Linkbot-I/L modules which are powered on, within range, and
 not currently connected to any other computer. Simply click on the button 
-labelled ``Scan for nearby Mobot-I's and Mobot-L's'' to start scanning. Otherwise,
-Mobot-I/L's may be manually added to BaroboLink by typing the Mobot's serial ID
+labelled ``Scan for nearby Linkbots'' to start scanning. Otherwise,
+Linkbot-I/L's may be manually added to BaroboLink by typing the Mobot's serial ID
 directly into the ``Add Robot'' text box. The Mobot's serial ID is a string of 
 four letters and numbers located on the black sticker directly above buttons A and B
 on the module. Once the robots are added, they may be connected by clicking on the 
-``Connect'' button for each module. Unlike the Mobot-A, there is no maximum limit
+``Connect'' button for each module. Unlike the Mobot, there is no maximum limit
 to the number of simultaneously connected modules.
 
 \section{ The ``Motion Control'' Panel}
@@ -367,7 +366,7 @@ to the number of simultaneously connected modules.
 \includegraphics[width=4.5in]{images/robomancer_screenshot5.png}
 \end{center}
 \caption{\label{fig:shot1_populated.png} The graphical display of BaroboLink
-while connected to a Mobot-A.}
+while connected to a Mobot.}
 \end{figure}
 
 \begin{figure}[H]
@@ -375,7 +374,7 @@ while connected to a Mobot-A.}
 \includegraphics[width=4.5in]{images/shot1_dof.png}
 \end{center}
 \caption{\label{fig:shot1_dof.png} The graphical display of BaroboLink
-while connected to a Mobot-I or -L.}
+while connected to a Linkbot-I or -L.}
 \end{figure}
 
 Once a robot is connected to BaroboLink, the joint angles and speeds
@@ -389,14 +388,14 @@ speeds and positions of the Mobot's joints. The interface is divided
 up into six sections; three on the top half of the interface, and three on 
 the bottom half. 
 
-\subsection{The Mobot Diagram and ``Reset To Zero'' Button}
+\subsection{The Robot Diagram and ``Reset To Zero'' Button}
 The first section of the GUI located on the top left of the interface
-displays a schematic diagram of the Mobot, displaying motor positions.
+displays a schematic diagram of the robot, displaying motor positions.
 Underneath the diagram, there is a large button with the text 
 ``Reset To Zero''. When clicked, this button will command the connected
 Mobot to rotate all of its joints to a flat ``Zero'' position.
 
-It is also possible to move the Mobot into zero position using the
+It is also possible to move the robot into zero position using the
 on-board buttons. Please refer to Section \ref{sec:zeroposition} on
 page \pageref{sec:zeroposition} for more details.
 
@@ -404,7 +403,7 @@ page \pageref{sec:zeroposition} for more details.
 The second section, located at the top-middle section of the interface,
 is the ``Individual Joint Control'' section. These buttons command the
 Mobot to move individual joints. When the up or down arrows are clicked,
-the Mobot begins to move the corresponding joint in either the positive,
+the robot begins to move the corresponding joint in either the positive,
 or negative direction. The joint will continue to move until the stop 
 button, located between the up and down arrows, is clicked. 
 
@@ -413,17 +412,17 @@ joint will automatically disengage power to the joint. This may happen,
 example, if a body joint attempts to rotate beyond its limits,
 or if it collides with the other corresponding body joint. 
 
-\subsection{Rolling Control (Mobot-A and Mobot-I only)}
+\subsection{Rolling Control (Mobot and Linkbot-I only)}
 This section contains buttons for controlling the Mobot as a 
-two wheeled mobile Mobot. The up and down buttons cause the Mobot to
-roll forward or backward. The left and right buttons cause the Mobot 
+two wheeled mobile robot. The up and down buttons cause the robot to
+roll forward or backward. The left and right buttons cause the robot 
 to rotate towards the left, or towards the right. The stop button in the
-middle causes the Mobot to stop where it is. Note that this functionality
-does not exist for the Mobot-L.
+middle causes the robot to stop where it is. Note that this functionality
+does not exist for the Linkbot-L.
 
 \subsection{Joint Speeds}
 The ``Joint Speeds'' section, located at the bottom left of the interface,
-displays and controls the current joint speeds of the Mobot.
+displays and controls the current joint speeds of the robot.
 The joint speeds are in units of degrees per second. To set a specific 
 desired joint speed for a particular joint, the joint speed may be 
 typed directly into the edit boxes below the sliders, and the ``Set''
@@ -432,7 +431,7 @@ button should be clicked.
 \subsection{Joint Positions}
 This section, located in the bottom-middle of the interface, is used to display
 and control the positions of each of the four
-joints of a Mobot. The joint positions are displayed in the numerical
+joints of a robot. The joint positions are displayed in the numerical
 text located above each vertical slider. The displayed joint positions are in
 units of degrees.  
 %There are two methods to control the joints using this interface.
@@ -440,7 +439,7 @@ units of degrees.
 The method of controlling the joints is by using the vertical sliders.
 Each vertical slider's position represents a joint's angle. 
  The angles for the two body joints vary from -90 to 90 degrees. When
-the position of the slider is moved, the Mobot will move its joints to match the 
+the position of the slider is moved, the robot will move its joints to match the 
 sliders. 
 
 Underneath the sliders, there are four text entry boxes. The text boxes
@@ -453,7 +452,7 @@ not move.
 The second method for moving the joints is by entering the exact angles for the
 joints. Below each of the four sliders lies a text entry box. Values in degrees
 may be typed into each of the four entry boxes. When the button on the lower
-right of the section labeled ``Move'' is clicked, the Mobot will move its joints
+right of the section labeled ``Move'' is clicked, the robot will move its joints
 to match the values typed into the boxes. If no value is typed into a box, that 
 joint will not move.
 \end{comment}
@@ -462,44 +461,44 @@ joint will not move.
 Joints 1 and 4 are fully rotational and have no joint limits. Joints 2 and 3, however, are 
 limited to a range of -90 to +90 degrees.
 
-\subsection{Motions (Mobot-A only)}
+\subsection{Motions (Mobot only)}
 This section, located on the bottom right of the interface, contains a set of
 preprogrammed motions for the Mobot. To execute a preprogrammed motion, simply
 click on the name of the motion you wish to execute, and then click the button
-labeled ``Play''. Note that this functionality only works for the Mobot-A. 
-This section of the dialog will not appear if controlling a Mobot-I or Mobot-L.
+labeled ``Play''. Note that this functionality only works for the Mobot. 
+This section of the dialog will not appear if controlling a Linkbot-I or -L.
 
 \section{Using the On-Board Buttons}
 \subsection{Running the On-Board Joint Test program}
-The Mobot comes with a demo test program hard-coded into the on-board
-computer. The test program is designed to test the Mobot's joints range of 
+Each robot comes with a demo test program hard-coded into the on-board
+computer. The test program is designed to test the robot's joints range of 
 motion and make sure everything is working properly. The test program will
-move the mobot continuously until the Mobot is shut off.
+move the robot continuously until the robot is shut off.
 
 To run the test program, simply hold the ``A'' button for 3 seconds. After
 3 seconds have passed, the blue LED should blink 3 times quickly, and the
 demo motion will begin.
 
-\subsection{Recalibrating the Mobot's Zero Position}
-A user may recalibrate the Mobot's zero positions if necessary. To recalibrate
-the Mobot, perform the following steps:
+\subsection{Recalibrating the robot's Zero Position}
+A user may recalibrate the robot's zero positions if necessary. To recalibrate
+the robot, perform the following steps:
 \begin{itemize}
-\item Position the Mobot into its zero position. If the Mobot is currently
+\item Position the robot into its zero position. If the Mobot is currently
 actuating any of its joints, or if any joints feel ``stiff'', you may power the
-Mobot off and on again.
-\item While the Mobot is powered on, press both the ``A'' and ``B'' buttons
+robot off and on again.
+\item While the robot is powered on, press and hold both the ``A'' and ``B'' buttons
 simultaneously. After three seconds, the LED should flash quickly 3 times. The Mobot has now
-been recalibrated.
+been recalibrated and you may release the buttons.
 \end{itemize}
 
-\subsection{\label{sec:zeroposition}Testing the Mobot's Zero Position}
+\subsection{\label{sec:zeroposition}Testing the robot's Zero Position}
 Buttons ``A'' and ``B'' pressed together may be used to toggle the mobot between holding its zero position 
 or relaxing all of its joints.  If the Mobot is currently relaxed,
 the Mobot will move to zero position and hold its position. If the ``A'' and ``B'' buttons are pressed again, the 
 Mobot will relax its motors, allowing the user to reposition the Mobot.
 
-This function is typically used to check the Mobot's zero position to make sure
-it is properly calibrated. The button may also be used to relax a Mobot that
+This function is typically used to check the robot's zero position to make sure
+it is properly calibrated. The button may also be used to relax a robot that
 is currently holding any of its joints at a position.
 
 \section{The ``Pose Teaching'' Panel}
@@ -552,9 +551,9 @@ in ChIDE.
 \end{figure}
 
 The ``Sensors'' panel displays relevant information regarding any sensors the
-Mobot has access to. The Mobot-I and -L robots have an internal accelerometer and
-LED color control, which are displayed in the dialog. The Mobot-A has no sensors
-so this dialog has no functionality with Mobot-As. 
+Mobot has access to. The Linkbot-I and -L robots have an internal accelerometer and
+LED color control, which are displayed in the dialog. The Mobot has no sensors
+so this dialog has no functionality with Mobots. 
 
 \section{Getting Started with Programming the Mobot}
 BaroboLink can be used to control the Mobot for simple tasks and applications.
