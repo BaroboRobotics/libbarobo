@@ -45,7 +45,7 @@
 #define MAX_RETRIES 3
 
 void* Mobot_recordAngleThread(void* arg);
-int Mobot_recordAngle(mobot_t* comms, mobotJointId_t id, double* time, double* angle, int num, double timeInterval, int shiftData)
+int Mobot_recordAngle(mobot_t* comms, robotJointId_t id, double* time, double* angle, int num, double timeInterval, int shiftData)
 {
   THREAD_T thread;
   recordAngleArg_t *rArg;
@@ -357,7 +357,7 @@ void* Mobot_recordAngleBeginThread(void* arg)
 }
 
 int Mobot_recordAngleBegin(mobot_t* comms,
-                                     mobotJointId_t id,
+                                     robotJointId_t id,
                                      double **time,
                                      double **angle,
                                      double timeInterval,
@@ -386,7 +386,7 @@ int Mobot_recordAngleBegin(mobot_t* comms,
   return 0;
 }
 
-int Mobot_recordAngleEnd(mobot_t* comms, mobotJointId_t id, int *num)
+int Mobot_recordAngleEnd(mobot_t* comms, robotJointId_t id, int *num)
 {
   int i;
   double timeShift = 0;
@@ -409,7 +409,7 @@ int Mobot_recordAngleEnd(mobot_t* comms, mobotJointId_t id, int *num)
 }
 
 int Mobot_recordDistanceBegin(mobot_t* comms,
-                                     mobotJointId_t id,
+                                     robotJointId_t id,
                                      double **time,
                                      double **distance,
                                      double radius,
@@ -420,7 +420,7 @@ int Mobot_recordDistanceBegin(mobot_t* comms,
   return Mobot_recordAngleBegin(comms, id, time, distance, timeInterval, shiftTime);
 }
 
-int Mobot_recordDistanceEnd(mobot_t* comms, mobotJointId_t id, int *num)
+int Mobot_recordDistanceEnd(mobot_t* comms, robotJointId_t id, int *num)
 {
   int i;
   Mobot_recordAngleEnd(comms, id, num);

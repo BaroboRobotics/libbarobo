@@ -5,22 +5,22 @@
 #define DEPRECATED(from, to) \
   fprintf(stderr, "Warning: The function \"%s()\" is deprecated. Please use \"%s()\"\n" , from, to)
 
-int CMobot::driveJointToDirect(mobotJointId_t id, double angle)
+int CMobot::driveJointToDirect(robotJointId_t id, double angle)
 {
   return Mobot_driveJointToDirect(_comms, id, DEG2RAD(angle));
 }
 
-int CMobot::driveJointTo(mobotJointId_t id, double angle)
+int CMobot::driveJointTo(robotJointId_t id, double angle)
 {
   return Mobot_driveJointToDirect(_comms, id, DEG2RAD(angle));
 }
 
-int CMobot::driveJointToDirectNB(mobotJointId_t id, double angle)
+int CMobot::driveJointToDirectNB(robotJointId_t id, double angle)
 {
   return Mobot_driveJointToDirectNB(_comms, id, DEG2RAD(angle));
 }
 
-int CMobot::driveJointToNB(mobotJointId_t id, double angle)
+int CMobot::driveJointToNB(robotJointId_t id, double angle)
 {
   return Mobot_driveJointToDirectNB(_comms, id, DEG2RAD(angle));
 }
@@ -150,49 +150,49 @@ int CMobot::moveForwardNB(double angle)
   return Mobot_moveForwardNB(_comms, DEG2RAD(angle));
 }
 
-int CMobot::moveJointContinuousNB(mobotJointId_t id, mobotJointState_t dir)
+int CMobot::moveJointContinuousNB(robotJointId_t id, mobotJointState_t dir)
 {
   DEPRECATED("moveJointContinuousNB", "setJointMovementStateNB");
   return Mobot_moveJointContinuousNB(_comms, id, dir);
 }
 
-int CMobot::moveJointContinuousTime(mobotJointId_t id, mobotJointState_t dir, double seconds)
+int CMobot::moveJointContinuousTime(robotJointId_t id, mobotJointState_t dir, double seconds)
 {
   DEPRECATED("moveJointContinuousTime", "setJointMovementStateTime");
   return Mobot_moveJointContinuousTime(_comms, id, dir, seconds);
 }
 
-int CMobot::moveJoint(mobotJointId_t id, double angle)
+int CMobot::moveJoint(robotJointId_t id, double angle)
 {
   return Mobot_moveJoint(_comms, id, DEG2RAD(angle));
 }
 
-int CMobot::moveJointNB(mobotJointId_t id, double angle)
+int CMobot::moveJointNB(robotJointId_t id, double angle)
 {
   return Mobot_moveJointNB(_comms, id, DEG2RAD(angle));
 }
 
-int CMobot::moveJointTo(mobotJointId_t id, double angle)
+int CMobot::moveJointTo(robotJointId_t id, double angle)
 {
   return Mobot_moveJointTo(_comms, id, DEG2RAD(angle));
 }
 
-int CMobot::moveJointToDirect(mobotJointId_t id, double angle)
+int CMobot::moveJointToDirect(robotJointId_t id, double angle)
 {
   return Mobot_moveJointToDirect(_comms, id, DEG2RAD(angle));
 }
 
-int CMobot::moveJointToNB(mobotJointId_t id, double angle)
+int CMobot::moveJointToNB(robotJointId_t id, double angle)
 {
   return Mobot_moveJointToNB(_comms, id, DEG2RAD(angle));
 }
 
-int CMobot::moveJointToDirectNB(mobotJointId_t id, double angle)
+int CMobot::moveJointToDirectNB(robotJointId_t id, double angle)
 {
   return Mobot_moveJointToDirectNB(_comms, id, DEG2RAD(angle));
 }
 
-int CMobot::moveJointWait(mobotJointId_t id)
+int CMobot::moveJointWait(robotJointId_t id)
 {
   return Mobot_moveJointWait(_comms, id);
 }
@@ -269,17 +269,17 @@ int CMobot::stop()
   return Mobot_stop(_comms);
 }
 
-int CMobot::stopOneJoint(mobotJointId_t id)
+int CMobot::stopOneJoint(robotJointId_t id)
 {
   return Mobot_stopOneJoint(_comms, id);
 }
 
-int CMobot::stopTwoJoints(mobotJointId_t id1, mobotJointId_t id2)
+int CMobot::stopTwoJoints(robotJointId_t id1, robotJointId_t id2)
 {
   return Mobot_stopTwoJoints(_comms, id1, id2);
 }
 
-int CMobot::stopThreeJoints(mobotJointId_t id1, mobotJointId_t id2, mobotJointId_t id3)
+int CMobot::stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3)
 {
   return Mobot_stopThreeJoints(_comms, id1, id2, id3);
 }

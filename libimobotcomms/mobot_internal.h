@@ -43,7 +43,7 @@ typedef enum mobotJoints_e{
   ROBOT_JOINT3,
   ROBOT_JOINT4,
   ROBOT_NUM_JOINTS = 4
-} mobotJointId_t;
+} robotJointId_t;
 #endif
 
 #ifndef ROBOT_JOINT_STATE_E

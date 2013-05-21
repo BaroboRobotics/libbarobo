@@ -222,7 +222,7 @@ int Mobot_getHWRev(mobot_t* comms, int* rev)
   return 0;
 }
 
-int Mobot_getJointAngle(mobot_t* comms, mobotJointId_t id, double *angle)
+int Mobot_getJointAngle(mobot_t* comms, robotJointId_t id, double *angle)
 {
   uint8_t buf[32];
   float f;
@@ -240,7 +240,7 @@ int Mobot_getJointAngle(mobot_t* comms, mobotJointId_t id, double *angle)
   return 0;
 }
 
-int Mobot_getJointAngleAverage(mobot_t* comms, mobotJointId_t id, double *angle, int numReadings)
+int Mobot_getJointAngleAverage(mobot_t* comms, robotJointId_t id, double *angle, int numReadings)
 {
   int i;
   double d;
@@ -440,7 +440,7 @@ int Mobot_getJointAnglesTimeIsMoving(mobot_t* comms,
   return 0;
 }
 
-int Mobot_getJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t *dir)
+int Mobot_getJointDirection(mobot_t* comms, robotJointId_t id, mobotJointState_t *dir)
 {
   uint8_t buf[32];
   int status;
@@ -466,7 +466,7 @@ int Mobot_getJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t
   return 0;
 }
 
-int Mobot_getJointMaxSpeed(mobot_t* comms, mobotJointId_t id, double *maxSpeed)
+int Mobot_getJointMaxSpeed(mobot_t* comms, robotJointId_t id, double *maxSpeed)
 {
   float f;
   uint8_t buf[64];
@@ -517,7 +517,7 @@ int Mobot_getJointSafetyAngleTimeout(mobot_t* comms, double *seconds)
   return 0;
 }
 
-int Mobot_getJointSpeed(mobot_t* comms, mobotJointId_t id, double *speed)
+int Mobot_getJointSpeed(mobot_t* comms, robotJointId_t id, double *speed)
 {
   uint8_t buf[32];
   float f;
@@ -535,7 +535,7 @@ int Mobot_getJointSpeed(mobot_t* comms, mobotJointId_t id, double *speed)
   return 0;
 }
 
-int Mobot_getJointSpeedRatio(mobot_t* comms, mobotJointId_t id, double *ratio)
+int Mobot_getJointSpeedRatio(mobot_t* comms, robotJointId_t id, double *ratio)
 {
   double speed;
   Mobot_getJointSpeed(comms, id, &speed);
@@ -552,12 +552,12 @@ int Mobot_getJointSpeedRatios(mobot_t* comms, double *ratio1, double *ratio2, do
   ratios[2] = ratio3;
   ratios[3] = ratio4;
   for(i = 0; i < 4; i++) {
-    Mobot_getJointSpeedRatio(comms, (mobotJointId_t)(i+1), ratios[i]);
+    Mobot_getJointSpeedRatio(comms, (robotJointId_t)(i+1), ratios[i]);
   }
   return 0;
 }
 
-int Mobot_getJointState(mobot_t* comms, mobotJointId_t id, mobotJointState_t *state)
+int Mobot_getJointState(mobot_t* comms, robotJointId_t id, mobotJointState_t *state)
 {
   uint8_t buf[32];
   int status;
@@ -593,7 +593,7 @@ int Mobot_getJointSpeeds(mobot_t* comms, double *speed1, double *speed2, double 
   speeds[2] = speed3;
   speeds[3] = speed4;
   for(i = 0; i < 4; i++) {
-    Mobot_getJointSpeed(comms, (mobotJointId_t)(i+1), speeds[i]);
+    Mobot_getJointSpeed(comms, (robotJointId_t)(i+1), speeds[i]);
   }
   return 0;
 }

@@ -881,7 +881,7 @@ int finishConnect(mobot_t* comms)
   /* DEBUG */
   /*
   for(i = numJoints; i >= 1; i--) {
-    if(Mobot_getJointMaxSpeed(comms, (mobotJointId_t)i, &(comms->maxSpeed[i-1])) < 0) {
+    if(Mobot_getJointMaxSpeed(comms, (robotJointId_t)i, &(comms->maxSpeed[i-1])) < 0) {
       i++;
     }
   }
@@ -1494,7 +1494,7 @@ int Mobot_resetToZeroNB(mobot_t* comms) {
   return Mobot_moveToZeroNB(comms);
 }
 
-int Mobot_setFourierCoefficients(mobot_t* comms, mobotJointId_t id, double* a, double* b)
+int Mobot_setFourierCoefficients(mobot_t* comms, robotJointId_t id, double* a, double* b)
 {
   uint8_t buf[32];
   int8_t coefs[10];

@@ -255,7 +255,7 @@ EXPORTCH int LinkbotI_getJointAngle_chdl(void *varg) {
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     id = Ch_VaArg(interp, ap, int);
     angle = Ch_VaArg(interp, ap, double *);
-    retval = mobot->getJointAngle((mobotJointId_t)id, *angle);
+    retval = mobot->getJointAngle((robotJointId_t)id, *angle);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -275,9 +275,9 @@ EXPORTCH int LinkbotI_getJointAngleAverage_chdl(void *varg) {
     angle = Ch_VaArg(interp, ap, double *);
     if(Ch_VaCount(interp, ap) == 1) {
       numReadings = Ch_VaArg(interp, ap, int);
-      retval = mobot->getJointAngleAverage((mobotJointId_t)id, *angle, numReadings);
+      retval = mobot->getJointAngleAverage((robotJointId_t)id, *angle, numReadings);
     } else {
-      retval = mobot->getJointAngleAverage((mobotJointId_t)id, *angle);
+      retval = mobot->getJointAngleAverage((robotJointId_t)id, *angle);
     }
     Ch_VaEnd(interp, ap);
     return retval;
@@ -339,7 +339,7 @@ EXPORTCH int LinkbotI_getJointMaxSpeed_chdl(void *varg) {
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     id = Ch_VaArg(interp, ap, int);
     speed = Ch_VaArg(interp, ap, double *);
-    retval = mobot->getJointMaxSpeed((mobotJointId_t)id, *speed);
+    retval = mobot->getJointMaxSpeed((robotJointId_t)id, *speed);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -386,7 +386,7 @@ EXPORTCH int LinkbotI_getJointSpeed_chdl(void *varg) {
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     id = Ch_VaArg(interp, ap, int);
     speed = Ch_VaArg(interp, ap, double *);
-    retval = mobot->getJointSpeed((mobotJointId_t)id, *speed);
+    retval = mobot->getJointSpeed((robotJointId_t)id, *speed);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -422,7 +422,7 @@ EXPORTCH int LinkbotI_getJointSpeedRatio_chdl(void *varg) {
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     id = Ch_VaArg(interp, ap, int);
     speed = Ch_VaArg(interp, ap, double *);
-    retval = mobot->getJointSpeedRatio((mobotJointId_t)id, *speed);
+    retval = mobot->getJointSpeedRatio((robotJointId_t)id, *speed);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -458,7 +458,7 @@ EXPORTCH int LinkbotI_getJointState_chdl(void *varg) {
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     id = Ch_VaArg(interp, ap, int);
     state = Ch_VaArg(interp, ap, int *);
-    retval = mobot->getJointState((mobotJointId_t)id, (mobotJointState_t&)(*state));
+    retval = mobot->getJointState((robotJointId_t)id, (mobotJointState_t&)(*state));
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -639,13 +639,13 @@ EXPORTCH int LinkbotI_moveJointContinuousNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     mobotJointState_t dir;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t );
+    id = Ch_VaArg(interp, ap, robotJointId_t );
     dir = Ch_VaArg(interp, ap, mobotJointState_t);
     retval = mobot->moveJointContinuousNB(id, dir);
     Ch_VaEnd(interp, ap);
@@ -656,14 +656,14 @@ EXPORTCH int LinkbotI_moveJointContinuousTime_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     mobotJointState_t dir;
     double seconds;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     dir = Ch_VaArg(interp, ap, mobotJointState_t);
     seconds = Ch_VaArg(interp, ap, double);
     retval = mobot->moveJointContinuousTime(id, dir, seconds);
@@ -675,13 +675,13 @@ EXPORTCH int LinkbotI_moveJoint_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     double angle;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     angle = Ch_VaArg(interp, ap, double);
     retval = mobot->moveJoint(id, angle);
     Ch_VaEnd(interp, ap);
@@ -692,13 +692,13 @@ EXPORTCH int LinkbotI_moveJointNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     double angle;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     angle = Ch_VaArg(interp, ap, double);
     retval = mobot->moveJointNB(id, angle);
     Ch_VaEnd(interp, ap);
@@ -709,13 +709,13 @@ EXPORTCH int LinkbotI_moveJointTo_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     double angle;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     angle = Ch_VaArg(interp, ap, double);
     retval = mobot->moveJointTo(id, angle);
     Ch_VaEnd(interp, ap);
@@ -726,13 +726,13 @@ EXPORTCH int LinkbotI_moveJointToDirect_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     double angle;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     angle = Ch_VaArg(interp, ap, double);
     retval = mobot->moveJointToDirect(id, angle);
     Ch_VaEnd(interp, ap);
@@ -743,13 +743,13 @@ EXPORTCH int LinkbotI_moveJointToNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     double angle;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     angle = Ch_VaArg(interp, ap, double);
     retval = mobot->moveJointToNB(id, angle);
     Ch_VaEnd(interp, ap);
@@ -760,13 +760,13 @@ EXPORTCH int LinkbotI_moveJointToDirectNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     double angle;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     angle = Ch_VaArg(interp, ap, double);
     retval = mobot->moveJointToDirectNB(id, angle);
     Ch_VaEnd(interp, ap);
@@ -777,12 +777,12 @@ EXPORTCH int LinkbotI_moveJointWait_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     retval = mobot->moveJointWait(id);
     Ch_VaEnd(interp, ap);
     return retval;
@@ -981,7 +981,7 @@ EXPORTCH int LinkbotI_recordAngle_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     double* time;
     double* angle;
     int num;
@@ -991,7 +991,7 @@ EXPORTCH int LinkbotI_recordAngle_chdl(void *varg) {
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     time = Ch_VaArg(interp, ap, double*);
     angle = Ch_VaArg(interp, ap, double*);
     num = Ch_VaArg(interp, ap, int);
@@ -1010,7 +1010,7 @@ EXPORTCH int LinkbotI_recordAngleBegin_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     double** time;
     double** angle;
     double seconds;
@@ -1019,7 +1019,7 @@ EXPORTCH int LinkbotI_recordAngleBegin_chdl(void *varg) {
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     time = Ch_VaArg(interp, ap, double**);
     angle = Ch_VaArg(interp, ap, double**);
     seconds = Ch_VaArg(interp, ap, double);
@@ -1037,13 +1037,13 @@ EXPORTCH int LinkbotI_recordAngleEnd_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     int *num;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     num = Ch_VaArg(interp, ap, int* );
     retval = mobot->recordAngleEnd(id, *num);
     Ch_VaEnd(interp, ap);
@@ -1140,7 +1140,7 @@ EXPORTCH int LinkbotI_recordDistanceBegin_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     double** time;
     double** angle;
     double radius;
@@ -1150,7 +1150,7 @@ EXPORTCH int LinkbotI_recordDistanceBegin_chdl(void *varg) {
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     time = Ch_VaArg(interp, ap, double**);
     angle = Ch_VaArg(interp, ap, double**);
     radius = Ch_VaArg(interp, ap, double);
@@ -1169,13 +1169,13 @@ EXPORTCH int LinkbotI_recordDistanceEnd_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     int *num;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     num = Ch_VaArg(interp, ap, int* );
     retval = mobot->recordDistanceEnd(id, *num);
     Ch_VaEnd(interp, ap);
@@ -1374,13 +1374,13 @@ EXPORTCH int LinkbotI_setJointMovementStateNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     mobotJointState_t dir;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t );
+    id = Ch_VaArg(interp, ap, robotJointId_t );
     dir = Ch_VaArg(interp, ap, mobotJointState_t);
     retval = mobot->setJointMovementStateNB(id, dir);
     Ch_VaEnd(interp, ap);
@@ -1391,14 +1391,14 @@ EXPORTCH int LinkbotI_setJointMovementStateTime_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     mobotJointState_t dir;
     double seconds;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     dir = Ch_VaArg(interp, ap, mobotJointState_t);
     seconds = Ch_VaArg(interp, ap, double);
     retval = mobot->setJointMovementStateTime(id, dir, seconds);
@@ -1440,13 +1440,13 @@ EXPORTCH int LinkbotI_setJointSpeed_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     double speed;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     speed = Ch_VaArg(interp, ap, double);
     retval = mobot->setJointSpeed(id, speed);
     Ch_VaEnd(interp, ap);
@@ -1457,7 +1457,7 @@ EXPORTCH int LinkbotI_setJointSpeeds_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     double speed1;
     double speed2;
     double speed3;
@@ -1477,13 +1477,13 @@ EXPORTCH int LinkbotI_setJointSpeedRatio_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     double speed;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     speed = Ch_VaArg(interp, ap, double);
     retval = mobot->setJointSpeedRatio(id, speed);
     Ch_VaEnd(interp, ap);
@@ -1513,13 +1513,13 @@ EXPORTCH int LinkbotI_setMotorPower_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     int power;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     power = Ch_VaArg(interp, ap, int);
     retval = mobot->setMotorPower(id, power);
     Ch_VaEnd(interp, ap);
@@ -1608,12 +1608,12 @@ EXPORTCH int LinkbotI_stopOneJoint_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     retval = mobot->stopOneJoint(id);
     Ch_VaEnd(interp, ap);
     return retval;
@@ -1941,13 +1941,13 @@ EXPORTCH int CMGI_driveJointToDirect_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     double angle;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     angle = Ch_VaArg(interp, ap, double);
     retval = mobot->driveJointToDirect(id, angle);
     Ch_VaEnd(interp, ap);
@@ -2032,13 +2032,13 @@ EXPORTCH int CMGI_driveJointToDirectNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     double angle;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     angle = Ch_VaArg(interp, ap, double);
     retval = mobot->driveJointToDirectNB(id, angle);
     Ch_VaEnd(interp, ap);
@@ -2234,13 +2234,13 @@ EXPORTCH int CMGI_moveJointContinuousNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     mobotJointState_t dir;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t );
+    id = Ch_VaArg(interp, ap, robotJointId_t );
     dir = Ch_VaArg(interp, ap, mobotJointState_t);
     retval = mobot->moveJointContinuousNB(id, dir);
     Ch_VaEnd(interp, ap);
@@ -2251,14 +2251,14 @@ EXPORTCH int CMGI_moveJointContinuousTime_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     mobotJointState_t dir;
     double seconds;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     dir = Ch_VaArg(interp, ap, mobotJointState_t);
     seconds = Ch_VaArg(interp, ap, double);
     retval = mobot->moveJointContinuousTime(id, dir, seconds);
@@ -2270,13 +2270,13 @@ EXPORTCH int CMGI_moveJointTo_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     double angle;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     angle = Ch_VaArg(interp, ap, double);
     retval = mobot->moveJointTo(id, angle);
     Ch_VaEnd(interp, ap);
@@ -2287,13 +2287,13 @@ EXPORTCH int CMGI_moveJointToDirect_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     double angle;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     angle = Ch_VaArg(interp, ap, double);
     retval = mobot->moveJointToDirect(id, angle);
     Ch_VaEnd(interp, ap);
@@ -2304,13 +2304,13 @@ EXPORTCH int CMGI_moveJointToNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     double angle;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     angle = Ch_VaArg(interp, ap, double);
     retval = mobot->moveJointToNB(id, angle);
     Ch_VaEnd(interp, ap);
@@ -2321,13 +2321,13 @@ EXPORTCH int CMGI_moveJointToDirectNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     double angle;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     angle = Ch_VaArg(interp, ap, double);
     retval = mobot->moveJointToDirectNB(id, angle);
     Ch_VaEnd(interp, ap);
@@ -2338,12 +2338,12 @@ EXPORTCH int CMGI_moveJointWait_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     retval = mobot->moveJointWait(id);
     Ch_VaEnd(interp, ap);
     return retval;
@@ -2522,13 +2522,13 @@ EXPORTCH int CMGI_setJointMovementStateNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     mobotJointState_t dir;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t );
+    id = Ch_VaArg(interp, ap, robotJointId_t );
     dir = Ch_VaArg(interp, ap, mobotJointState_t);
     retval = mobot->setJointMovementStateNB(id, dir);
     Ch_VaEnd(interp, ap);
@@ -2539,14 +2539,14 @@ EXPORTCH int CMGI_setJointMovementStateTime_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     mobotJointState_t dir;
     double seconds;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     dir = Ch_VaArg(interp, ap, mobotJointState_t);
     seconds = Ch_VaArg(interp, ap, double);
     retval = mobot->setJointMovementStateTime(id, dir, seconds);
@@ -2558,14 +2558,14 @@ EXPORTCH int CMGI_setJointMovementStateTimeNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     mobotJointState_t dir;
     double seconds;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     dir = Ch_VaArg(interp, ap, mobotJointState_t);
     seconds = Ch_VaArg(interp, ap, double);
     retval = mobot->setJointMovementStateTimeNB(id, dir, seconds);
@@ -2607,13 +2607,13 @@ EXPORTCH int CMGI_setJointSpeed_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     double speed;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     speed = Ch_VaArg(interp, ap, double);
     retval = mobot->setJointSpeed(id, speed);
     Ch_VaEnd(interp, ap);
@@ -2641,13 +2641,13 @@ EXPORTCH int CMGI_setJointSpeedRatio_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     double speed;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     speed = Ch_VaArg(interp, ap, double);
     retval = mobot->setJointSpeedRatio(id, speed);
     Ch_VaEnd(interp, ap);
@@ -2658,7 +2658,7 @@ EXPORTCH int CMGI_setJointSpeedRatios_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     double ratio1;
     double ratio2;
     double ratio3;
@@ -2768,12 +2768,12 @@ EXPORTCH int CMGI_stopOneJoint_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
-    mobotJointId_t id;
+    robotJointId_t id;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-    id = Ch_VaArg(interp, ap, mobotJointId_t);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
     retval = mobot->stopOneJoint(id);
     Ch_VaEnd(interp, ap);
     return retval;

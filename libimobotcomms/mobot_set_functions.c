@@ -104,7 +104,7 @@ int Mobot_setHWRev(mobot_t* comms, uint8_t rev)
   return 0;
 }
 
-int Mobot_setJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir)
+int Mobot_setJointDirection(mobot_t* comms, robotJointId_t id, mobotJointState_t dir)
 {
   uint8_t buf[32];
   int status;
@@ -142,14 +142,14 @@ int Mobot_setJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t
   return 0;
 }
 
-int Mobot_setJointMovementStateNB(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir)
+int Mobot_setJointMovementStateNB(mobot_t* comms, robotJointId_t id, mobotJointState_t dir)
 {
   //Mobot_setJointSpeed(comms, id, comms->jointSpeeds[(int)id-1]);
   Mobot_setJointDirection(comms, id, dir);
   return 0;
 }
 
-int Mobot_setJointMovementStateTime(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir, double seconds)
+int Mobot_setJointMovementStateTime(mobot_t* comms, robotJointId_t id, mobotJointState_t dir, double seconds)
 {
   int msecs = seconds * 1000;
   Mobot_moveJointContinuousNB(comms, id, dir);
@@ -193,7 +193,7 @@ int Mobot_setJointSafetyAngleTimeout(mobot_t* comms, double seconds)
   return 0;
 }
 
-int Mobot_setJointSpeed(mobot_t* comms, mobotJointId_t id, double speed)
+int Mobot_setJointSpeed(mobot_t* comms, robotJointId_t id, double speed)
 {
   uint8_t buf[32];
   float f;
@@ -217,7 +217,7 @@ int Mobot_setJointSpeed(mobot_t* comms, mobotJointId_t id, double speed)
   return 0;
 }
 
-int Mobot_setJointSpeedRatio(mobot_t* comms, mobotJointId_t id, double ratio)
+int Mobot_setJointSpeedRatio(mobot_t* comms, robotJointId_t id, double ratio)
 {
   if((ratio < 0) || (ratio > 1)) {
     return -1;
@@ -234,12 +234,12 @@ int Mobot_setJointSpeedRatios(mobot_t* comms, double ratio1, double ratio2, doub
   ratios[2] = ratio3;
   ratios[3] = ratio4;
   for(i = 0; i < 4; i++) {
-    Mobot_setJointSpeedRatio(comms, (mobotJointId_t)(i+1), ratios[i]);
+    Mobot_setJointSpeedRatio(comms, (robotJointId_t)(i+1), ratios[i]);
   }
   return 0;
 }
 
-int Mobot_setMotorPower(mobot_t* comms, mobotJointId_t id, int power)
+int Mobot_setMotorPower(mobot_t* comms, robotJointId_t id, int power)
 {
   uint8_t buf[32];
   float f;
@@ -420,7 +420,7 @@ int Mobot_setJointSpeeds(mobot_t* comms, double speed1, double speed2, double sp
   speeds[2] = speed3;
   speeds[3] = speed4;
   for(i = 0; i < 4; i++) {
-    Mobot_setJointSpeed(comms, (mobotJointId_t)(i+1), speeds[i]);
+    Mobot_setJointSpeed(comms, (robotJointId_t)(i+1), speeds[i]);
   }
   return 0;
 }

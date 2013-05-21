@@ -285,7 +285,7 @@ typedef enum mobotJoints_e {
   ROBOT_JOINT3,
   ROBOT_JOINT4,
   ROBOT_NUM_JOINTS = 4
-} mobotJointId_t;
+} robotJointId_t;
 #endif
 
 #ifndef _CH_
@@ -307,7 +307,7 @@ extern "C" {
 typedef struct recordAngleArg_s 
 {
   mobot_t* comms;
-  mobotJointId_t id;
+  robotJointId_t id;
   double *time;
   double *angle;
   double *angle2;
@@ -355,10 +355,10 @@ class CMobot
     int connectWithTTY(const char ttyfilename[]);
 #endif
     int disconnect();
-    int driveJointToDirect(mobotJointId_t id, double angle);
-    int driveJointTo(mobotJointId_t id, double angle);
-    int driveJointToDirectNB(mobotJointId_t id, double angle);
-    int driveJointToNB(mobotJointId_t id, double angle);
+    int driveJointToDirect(robotJointId_t id, double angle);
+    int driveJointTo(robotJointId_t id, double angle);
+    int driveJointToDirectNB(robotJointId_t id, double angle);
+    int driveJointToNB(robotJointId_t id, double angle);
     int driveToDirect(double angle1, double angle2, double angle3, double angle4);
     int driveTo(double angle1, double angle2, double angle3, double angle4);
     int driveToDirectNB(double angle1, double angle2, double angle3, double angle4);
@@ -369,11 +369,11 @@ class CMobot
     int isMoving();
     int getFormFactor(int &formFactor);
     static const char* getConfigFilePath();
-    int getJointAngle(mobotJointId_t id, double &angle);
+    int getJointAngle(robotJointId_t id, double &angle);
 #ifdef _CH_
-    int getJointAngleAverage(mobotJointId_t id, double &angle, ... );
+    int getJointAngleAverage(robotJointId_t id, double &angle, ... );
 #else
-    int getJointAngleAverage(mobotJointId_t id, double &angle, int numReadings=10);
+    int getJointAngleAverage(robotJointId_t id, double &angle, int numReadings=10);
 #endif
     int getJointAngles(double &angle1, double &angle2, double &angle3, double &angle4);
 #ifdef _CH_
@@ -381,14 +381,14 @@ class CMobot
 #else
     int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, double &angle4, int numReadings=10);
 #endif
-    int getJointMaxSpeed(mobotJointId_t id, double &maxSpeed);
+    int getJointMaxSpeed(robotJointId_t id, double &maxSpeed);
     int getJointSafetyAngle(double &angle);
     int getJointSafetyAngleTimeout(double &seconds);
-    int getJointSpeed(mobotJointId_t id, double &speed);
-    int getJointSpeedRatio(mobotJointId_t id, double &ratio);
+    int getJointSpeed(robotJointId_t id, double &speed);
+    int getJointSpeedRatio(robotJointId_t id, double &ratio);
     int getJointSpeeds(double &speed1, double &speed2, double &speed3, double &speed4);
     int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3, double &ratio4);
-    int getJointState(mobotJointId_t id, mobotJointState_t &state);
+    int getJointState(robotJointId_t id, mobotJointState_t &state);
     mobot_t* getMobotObject();
     int move(double angle1, double angle2, double angle3, double angle4);
     int moveNB(double angle1, double angle2, double angle3, double angle4);
@@ -407,15 +407,15 @@ class CMobot
     int moveDistanceNB(double distance, double radius);
     int moveForward(double angle);
     int moveForwardNB(double angle);
-    int moveJointContinuousNB(mobotJointId_t id, mobotJointState_t dir);
-    int moveJointContinuousTime(mobotJointId_t id, mobotJointState_t dir, double seconds);
-    int moveJoint(mobotJointId_t id, double angle);
-    int moveJointNB(mobotJointId_t id, double angle);
-    int moveJointTo(mobotJointId_t id, double angle);
-    int moveJointToDirect(mobotJointId_t id, double angle);
-    int moveJointToNB(mobotJointId_t id, double angle);
-    int moveJointToDirectNB(mobotJointId_t id, double angle);
-    int moveJointWait(mobotJointId_t id);
+    int moveJointContinuousNB(robotJointId_t id, mobotJointState_t dir);
+    int moveJointContinuousTime(robotJointId_t id, mobotJointState_t dir, double seconds);
+    int moveJoint(robotJointId_t id, double angle);
+    int moveJointNB(robotJointId_t id, double angle);
+    int moveJointTo(robotJointId_t id, double angle);
+    int moveJointToDirect(robotJointId_t id, double angle);
+    int moveJointToNB(robotJointId_t id, double angle);
+    int moveJointToDirectNB(robotJointId_t id, double angle);
+    int moveJointWait(robotJointId_t id);
     int moveTo(double angle1, double angle2, double angle3, double angle4);
     int moveToDirect(double angle1, double angle2, double angle3, double angle4);
     int moveToNB(double angle1, double angle2, double angle3, double angle4);
@@ -424,7 +424,7 @@ class CMobot
     int moveToZero();
     int moveToZeroNB();
 #ifdef _CH_
-    int recordAngle(mobotJointId_t id, double time[:], double angle[:], int num, double seconds, ...);
+    int recordAngle(robotJointId_t id, double time[:], double angle[:], int num, double seconds, ...);
     int recordAngles(double time[:], 
                      double angle1[:], 
                      double angle2[:], 
@@ -434,7 +434,7 @@ class CMobot
                      double seconds,
                      ...);
 #else
-    int recordAngle(mobotJointId_t id, double time[], double angle[], int num, double seconds, int shiftData = 1);
+    int recordAngle(robotJointId_t id, double time[], double angle[], int num, double seconds, int shiftData = 1);
     int recordAngles(double time[], 
                      double angle1[], 
                      double angle2[], 
@@ -445,14 +445,14 @@ class CMobot
                      int shiftData = 1);
 #endif
 #ifndef _CH_
-    int recordAngleBegin(mobotJointId_t id, robotRecordData_t &time, robotRecordData_t &angle, double seconds, int shiftData = 1);
-    int recordDistanceBegin(mobotJointId_t id, robotRecordData_t &time, robotRecordData_t &distance, double radius, double seconds, int shiftData = 1);
+    int recordAngleBegin(robotJointId_t id, robotRecordData_t &time, robotRecordData_t &angle, double seconds, int shiftData = 1);
+    int recordDistanceBegin(robotJointId_t id, robotRecordData_t &time, robotRecordData_t &distance, double radius, double seconds, int shiftData = 1);
 #else
-    int recordAngleBegin(mobotJointId_t id, robotRecordData_t &time, robotRecordData_t &angle, double seconds, ...);
-    int recordDistanceBegin(mobotJointId_t id, robotRecordData_t &time, robotRecordData_t &distance, double radius, double seconds, ...);
+    int recordAngleBegin(robotJointId_t id, robotRecordData_t &time, robotRecordData_t &angle, double seconds, ...);
+    int recordDistanceBegin(robotJointId_t id, robotRecordData_t &time, robotRecordData_t &distance, double radius, double seconds, ...);
 #endif
-    int recordAngleEnd(mobotJointId_t id, int &num);
-    int recordDistanceEnd(mobotJointId_t id, int &num);
+    int recordAngleEnd(robotJointId_t id, int &num);
+    int recordDistanceEnd(robotJointId_t id, int &num);
 #ifndef _CH_
     int recordAnglesBegin(robotRecordData_t &time, 
                           robotRecordData_t &angle1, 
@@ -493,15 +493,15 @@ class CMobot
     int resetToZero();
     int resetToZeroNB();
     int setExitState(mobotJointState_t exitState);
-    int setJointMovementStateNB(mobotJointId_t id, mobotJointState_t dir);
-    int setJointMovementStateTime(mobotJointId_t id, mobotJointState_t dir, double seconds);
+    int setJointMovementStateNB(robotJointId_t id, mobotJointState_t dir);
+    int setJointMovementStateTime(robotJointId_t id, mobotJointState_t dir, double seconds);
     int setJointSafetyAngle(double angle);
     int setJointSafetyAngleTimeout(double seconds);
-    int setJointSpeed(mobotJointId_t id, double speed);
+    int setJointSpeed(robotJointId_t id, double speed);
     int setJointSpeeds(double speed1, double speed2, double speed3, double speed4);
-    int setJointSpeedRatio(mobotJointId_t id, double ratio);
+    int setJointSpeedRatio(robotJointId_t id, double ratio);
     int setJointSpeedRatios(double ratios1, double ratios2, double ratios3, double ratios4);
-    int setMotorPower(mobotJointId_t id, int power);
+    int setMotorPower(robotJointId_t id, int power);
     int setMovementStateNB( mobotJointState_t dir1,
         mobotJointState_t dir2,
         mobotJointState_t dir3,
@@ -518,9 +518,9 @@ class CMobot
         double seconds);
     int setTwoWheelRobotSpeed(double speed, double radius);
     int stop();
-    int stopOneJoint(mobotJointId_t id);
-    int stopTwoJoints(mobotJointId_t id1, mobotJointId_t id2);
-    int stopThreeJoints(mobotJointId_t id1, mobotJointId_t id2, mobotJointId_t id3);
+    int stopOneJoint(robotJointId_t id);
+    int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
+    int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
     int stopAllJoints();
     int turnLeft(double angle);
     int turnLeftNB(double angle);
@@ -558,8 +558,8 @@ class CMobot
     int motionWait();
 #ifndef _CH_
   private:
-    int getJointDirection(mobotJointId_t id, mobotJointState_t &dir);
-    int setJointDirection(mobotJointId_t id, mobotJointState_t dir);
+    int getJointDirection(robotJointId_t id, mobotJointState_t &dir);
+    int setJointDirection(robotJointId_t id, mobotJointState_t dir);
     mobot_t *_comms;
     void (*buttonCallback)(CMobot *mobot, int button, int buttonDown);
 #else
@@ -591,10 +591,10 @@ class CMobot
     int connectWithTTY(const char ttyfilename[]);
 #endif
     int disconnect();
-    int driveJointToDirect(mobotJointId_t id, double angle);
-    int driveJointTo(mobotJointId_t id, double angle);
-    int driveJointToDirectNB(mobotJointId_t id, double angle);
-    int driveJointToNB(mobotJointId_t id, double angle);
+    int driveJointToDirect(robotJointId_t id, double angle);
+    int driveJointTo(robotJointId_t id, double angle);
+    int driveJointToDirectNB(robotJointId_t id, double angle);
+    int driveJointToNB(robotJointId_t id, double angle);
     int driveToDirect(double angle1, double angle2, double angle3, double angle4);
     int driveTo(double angle1, double angle2, double angle3, double angle4);
     int driveToDirectNB(double angle1, double angle2, double angle3, double angle4);
@@ -606,21 +606,21 @@ class CMobot
     int getFormFactor(int &formFactor);
     static const char* getConfigFilePath();
 #ifndef SWIG
-    int getJointAngle(mobotJointId_t id, double &angle);
+    int getJointAngle(robotJointId_t id, double &angle);
 #else
-    void getJointAngle(mobotJointId_t id, double &angle);
+    void getJointAngle(robotJointId_t id, double &angle);
 #endif
     int getJointAngles(double &angle1, double &angle2, double &angle3, double &angle4);
-    int getJointAngleAverage(mobotJointId_t id, double &angle, int numReadings=10);
+    int getJointAngleAverage(robotJointId_t id, double &angle, int numReadings=10);
     int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, double &angle4, int numReadings=10);
-    int getJointMaxSpeed(mobotJointId_t id, double &maxSpeed);
+    int getJointMaxSpeed(robotJointId_t id, double &maxSpeed);
     int getJointSafetyAngle(double &angle);
     int getJointSafetyAngleTimeout(double &seconds);
-    int getJointSpeed(mobotJointId_t id, double &speed);
-    int getJointSpeedRatio(mobotJointId_t id, double &ratio);
+    int getJointSpeed(robotJointId_t id, double &speed);
+    int getJointSpeedRatio(robotJointId_t id, double &ratio);
     int getJointSpeeds(double &speed1, double &speed2, double &speed3, double &speed4);
     int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3, double &ratio4);
-    int getJointState(mobotJointId_t id, mobotJointState_t &state);
+    int getJointState(robotJointId_t id, mobotJointState_t &state);
     mobot_t* getMobotObject();
     int move(double angle1, double angle2, double angle3, double angle4);
     int moveNB(double angle1, double angle2, double angle3, double angle4);
@@ -639,15 +639,15 @@ class CMobot
     int moveDistanceNB(double distance, double radius);
     int moveForward(double angle);
     int moveForwardNB(double angle);
-    int moveJointContinuousNB(mobotJointId_t id, mobotJointState_t dir);
-    int moveJointContinuousTime(mobotJointId_t id, mobotJointState_t dir, double seconds);
-    int moveJoint(mobotJointId_t id, double angle);
-    int moveJointNB(mobotJointId_t id, double angle);
-    int moveJointTo(mobotJointId_t id, double angle);
-    int moveJointToDirect(mobotJointId_t id, double angle);
-    int moveJointToNB(mobotJointId_t id, double angle);
-    int moveJointToDirectNB(mobotJointId_t id, double angle);
-    int moveJointWait(mobotJointId_t id);
+    int moveJointContinuousNB(robotJointId_t id, mobotJointState_t dir);
+    int moveJointContinuousTime(robotJointId_t id, mobotJointState_t dir, double seconds);
+    int moveJoint(robotJointId_t id, double angle);
+    int moveJointNB(robotJointId_t id, double angle);
+    int moveJointTo(robotJointId_t id, double angle);
+    int moveJointToDirect(robotJointId_t id, double angle);
+    int moveJointToNB(robotJointId_t id, double angle);
+    int moveJointToDirectNB(robotJointId_t id, double angle);
+    int moveJointWait(robotJointId_t id);
     int moveTo(double angle1, double angle2, double angle3, double angle4);
     int moveToDirect(double angle1, double angle2, double angle3, double angle4);
     int moveToNB(double angle1, double angle2, double angle3, double angle4);
@@ -655,7 +655,7 @@ class CMobot
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
-    int recordAngle(mobotJointId_t id, double time[], double angle[], int num, double seconds, int shiftData = 1);
+    int recordAngle(robotJointId_t id, double time[], double angle[], int num, double seconds, int shiftData = 1);
     int recordAngles(double time[], 
                      double angle1[], 
                      double angle2[], 
@@ -664,10 +664,10 @@ class CMobot
                      int num, 
                      double seconds,
                      int shiftData = 1);
-    int recordAngleBegin(mobotJointId_t id, robotRecordData_t &time, robotRecordData_t &angle, double seconds, int shiftData = 1);
-    int recordDistanceBegin(mobotJointId_t id, robotRecordData_t &time, robotRecordData_t &distance, double radius, double seconds, int shiftData = 1);
-    int recordAngleEnd(mobotJointId_t id, int &num);
-    int recordDistanceEnd(mobotJointId_t id, int &num);
+    int recordAngleBegin(robotJointId_t id, robotRecordData_t &time, robotRecordData_t &angle, double seconds, int shiftData = 1);
+    int recordDistanceBegin(robotJointId_t id, robotRecordData_t &time, robotRecordData_t &distance, double radius, double seconds, int shiftData = 1);
+    int recordAngleEnd(robotJointId_t id, int &num);
+    int recordDistanceEnd(robotJointId_t id, int &num);
     int recordAnglesBegin(robotRecordData_t &time, 
                           robotRecordData_t &angle1, 
                           robotRecordData_t &angle2, 
@@ -690,15 +690,15 @@ class CMobot
     int resetToZero();
     int resetToZeroNB();
     int setExitState(mobotJointState_t exitState);
-    int setJointMovementStateNB(mobotJointId_t id, mobotJointState_t dir);
-    int setJointMovementStateTime(mobotJointId_t id, mobotJointState_t dir, double seconds);
+    int setJointMovementStateNB(robotJointId_t id, mobotJointState_t dir);
+    int setJointMovementStateTime(robotJointId_t id, mobotJointState_t dir, double seconds);
     int setJointSafetyAngle(double angle);
     int setJointSafetyAngleTimeout(double seconds);
-    int setJointSpeed(mobotJointId_t id, double speed);
+    int setJointSpeed(robotJointId_t id, double speed);
     int setJointSpeeds(double speed1, double speed2, double speed3, double speed4);
-    int setJointSpeedRatio(mobotJointId_t id, double ratio);
+    int setJointSpeedRatio(robotJointId_t id, double ratio);
     int setJointSpeedRatios(double ratios1, double ratios2, double ratios3, double ratios4);
-    int setMotorPower(mobotJointId_t id, int power);
+    int setMotorPower(robotJointId_t id, int power);
     int setMovementStateNB( mobotJointState_t dir1,
         mobotJointState_t dir2,
         mobotJointState_t dir3,
@@ -715,9 +715,9 @@ class CMobot
         double seconds);
     int setTwoWheelRobotSpeed(double speed, double radius);
     int stop();
-    int stopOneJoint(mobotJointId_t id);
-    int stopTwoJoints(mobotJointId_t id1, mobotJointId_t id2);
-    int stopThreeJoints(mobotJointId_t id1, mobotJointId_t id2, mobotJointId_t id3);
+    int stopOneJoint(robotJointId_t id);
+    int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
+    int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
     int stopAllJoints();
     int turnLeft(double angle);
     int turnLeftNB(double angle);
@@ -754,8 +754,8 @@ class CMobot
     int motionUnstandNB();
     int motionWait();
   protected:
-    int getJointDirection(mobotJointId_t id, mobotJointState_t &dir);
-    int setJointDirection(mobotJointId_t id, mobotJointState_t dir);
+    int getJointDirection(robotJointId_t id, mobotJointState_t &dir);
+    int setJointDirection(robotJointId_t id, mobotJointState_t dir);
     mobot_t *_comms;
     void (*buttonCallback)(CMobot *mobot, int button, int buttonDown);
 };
@@ -773,10 +773,10 @@ class CMobotGroup
     int addRobots(CMobot mobots[], int numMobots);
 #endif
     int connect();
-    int driveJointToDirect(mobotJointId_t id, double angle);
-    int driveJointTo(mobotJointId_t id, double angle);
-    int driveJointToDirectNB(mobotJointId_t id, double angle);
-    int driveJointToNB(mobotJointId_t id, double angle);
+    int driveJointToDirect(robotJointId_t id, double angle);
+    int driveJointTo(robotJointId_t id, double angle);
+    int driveJointToDirectNB(robotJointId_t id, double angle);
+    int driveJointToNB(robotJointId_t id, double angle);
     int driveToDirect(double angle1, double angle2, double angle3, double angle4);
     int driveTo(double angle1, double angle2, double angle3, double angle4);
     int driveToDirectNB(double angle1, double angle2, double angle3, double angle4);
@@ -799,13 +799,13 @@ class CMobotGroup
     int moveDistanceNB(double distance, double radius);
     int moveForward(double angle);
     int moveForwardNB(double angle);
-    int moveJointContinuousNB(mobotJointId_t id, mobotJointState_t dir);
-    int moveJointContinuousTime(mobotJointId_t id, mobotJointState_t dir, double seconds);
-    int moveJointTo(mobotJointId_t id, double angle);
-    int moveJointToDirect(mobotJointId_t id, double angle);
-    int moveJointToNB(mobotJointId_t id, double angle);
-    int moveJointToDirectNB(mobotJointId_t id, double angle);
-    int moveJointWait(mobotJointId_t id);
+    int moveJointContinuousNB(robotJointId_t id, mobotJointState_t dir);
+    int moveJointContinuousTime(robotJointId_t id, mobotJointState_t dir, double seconds);
+    int moveJointTo(robotJointId_t id, double angle);
+    int moveJointToDirect(robotJointId_t id, double angle);
+    int moveJointToNB(robotJointId_t id, double angle);
+    int moveJointToDirectNB(robotJointId_t id, double angle);
+    int moveJointWait(robotJointId_t id);
     int moveTo(double angle1, double angle2, double angle3, double angle4);
     int moveToDirect(double angle1, double angle2, double angle3, double angle4);
     int moveToNB(double angle1, double angle2, double angle3, double angle4);
@@ -817,14 +817,14 @@ class CMobotGroup
     int resetToZero();
     int resetToZeroNB();
     int setExitState(mobotJointState_t exitState);
-    int setJointMovementStateNB(mobotJointId_t id, mobotJointState_t dir);
-    int setJointMovementStateTime(mobotJointId_t id, mobotJointState_t dir, double seconds);
-    int setJointMovementStateTimeNB(mobotJointId_t id, mobotJointState_t dir, double seconds);
+    int setJointMovementStateNB(robotJointId_t id, mobotJointState_t dir);
+    int setJointMovementStateTime(robotJointId_t id, mobotJointState_t dir, double seconds);
+    int setJointMovementStateTimeNB(robotJointId_t id, mobotJointState_t dir, double seconds);
     int setJointSafetyAngle(double angle);
     int setJointSafetyAngleTimeout(double angle);
-    int setJointSpeed(mobotJointId_t id, double speed);
+    int setJointSpeed(robotJointId_t id, double speed);
     int setJointSpeeds(double speed1, double speed2, double speed3, double speed4);
-    int setJointSpeedRatio(mobotJointId_t id, double ratio);
+    int setJointSpeedRatio(robotJointId_t id, double ratio);
     int setJointSpeedRatios(double ratio1, double ratio2, double ratio3, double ratio4);
     int setMovementStateNB(mobotJointState_t dir1, 
         mobotJointState_t dir2, 
@@ -842,9 +842,9 @@ class CMobotGroup
         double seconds);
     int setTwoWheelRobotSpeed(double speed, double radius);
     int stopAllJoints();
-    int stopOneJoint(mobotJointId_t id);
-    int stopTwoJoints(mobotJointId_t id1, mobotJointId_t id2);
-    int stopThreeJoints(mobotJointId_t id1, mobotJointId_t id2, mobotJointId_t id3);
+    int stopOneJoint(robotJointId_t id);
+    int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
+    int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
     int turnLeft(double angle);
     int turnLeftNB(double angle);
     int turnRight(double angle);
@@ -943,10 +943,10 @@ DLLIMPORT int Mobot_getID(mobot_t* comms);
 DLLIMPORT int Mobot_setID(mobot_t* comms, const char* id);
 DLLIMPORT int Mobot_reboot(mobot_t* comms);
 DLLIMPORT int Mobot_disconnect(mobot_t* comms);
-DLLIMPORT int Mobot_driveJointToDirect(mobot_t* comms, mobotJointId_t id, double angle);
-DLLIMPORT int Mobot_driveJointTo(mobot_t* comms, mobotJointId_t id, double angle);
-DLLIMPORT int Mobot_driveJointToDirectNB(mobot_t* comms, mobotJointId_t id, double angle);
-DLLIMPORT int Mobot_driveJointToNB(mobot_t* comms, mobotJointId_t id, double angle);
+DLLIMPORT int Mobot_driveJointToDirect(mobot_t* comms, robotJointId_t id, double angle);
+DLLIMPORT int Mobot_driveJointTo(mobot_t* comms, robotJointId_t id, double angle);
+DLLIMPORT int Mobot_driveJointToDirectNB(mobot_t* comms, robotJointId_t id, double angle);
+DLLIMPORT int Mobot_driveJointToNB(mobot_t* comms, robotJointId_t id, double angle);
 DLLIMPORT int Mobot_driveToDirect(mobot_t* comms,
                                double angle1,
                                double angle2,
@@ -997,8 +997,8 @@ DLLIMPORT const char* Mobot_getConfigFilePath();
 DLLIMPORT int Mobot_getEncoderVoltage(mobot_t* comms, int pinNumber, double *voltage);
 DLLIMPORT int Mobot_getFormFactor(mobot_t* comms, int* form);
 DLLIMPORT int Mobot_getHWRev(mobot_t* comms, int* rev);
-DLLIMPORT int Mobot_getJointAngle(mobot_t* comms, mobotJointId_t id, double *angle);
-DLLIMPORT int Mobot_getJointAngleAverage(mobot_t* comms, mobotJointId_t id, double *angle, int numReadings);
+DLLIMPORT int Mobot_getJointAngle(mobot_t* comms, robotJointId_t id, double *angle);
+DLLIMPORT int Mobot_getJointAngleAverage(mobot_t* comms, robotJointId_t id, double *angle, int numReadings);
 DLLIMPORT int Mobot_getJointAnglesTime(mobot_t* comms, 
                                        double *time, 
                                        double *angle1, 
@@ -1033,18 +1033,18 @@ DLLIMPORT int Mobot_getJointAnglesAverage(mobot_t* comms,
                                        double *angle3, 
                                        double *angle4,
                                        int numReadings);
-DLLIMPORT int Mobot_getJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t *dir);
-DLLIMPORT int Mobot_getJointMaxSpeed(mobot_t* comms, mobotJointId_t, double *maxSpeed);
+DLLIMPORT int Mobot_getJointDirection(mobot_t* comms, robotJointId_t id, mobotJointState_t *dir);
+DLLIMPORT int Mobot_getJointMaxSpeed(mobot_t* comms, robotJointId_t, double *maxSpeed);
 DLLIMPORT int Mobot_getJointSafetyAngle(mobot_t* comms, double *angle);
 DLLIMPORT int Mobot_getJointSafetyAngleTimeout(mobot_t* comms, double *seconds);
-DLLIMPORT int Mobot_getJointSpeed(mobot_t* comms, mobotJointId_t id, double *speed);
-DLLIMPORT int Mobot_getJointSpeedRatio(mobot_t* comms, mobotJointId_t id, double *ratio);
+DLLIMPORT int Mobot_getJointSpeed(mobot_t* comms, robotJointId_t id, double *speed);
+DLLIMPORT int Mobot_getJointSpeedRatio(mobot_t* comms, robotJointId_t id, double *ratio);
 DLLIMPORT int Mobot_getJointSpeedRatios(mobot_t* comms, 
                                         double *ratio1, 
                                         double *ratio2, 
                                         double *ratio3, 
                                         double *ratio4);
-DLLIMPORT int Mobot_getJointState(mobot_t* comms, mobotJointId_t id, mobotJointState_t *state);
+DLLIMPORT int Mobot_getJointState(mobot_t* comms, robotJointId_t id, mobotJointState_t *state);
 DLLIMPORT int Mobot_getColorRGB(mobot_t* comms, int *r, int *g, int *b);
 DLLIMPORT int Mobot_getStatus(mobot_t* comms);
 DLLIMPORT int Mobot_getVersion(mobot_t* comms);
@@ -1075,18 +1075,18 @@ DLLIMPORT int Mobot_moveDistance(mobot_t* comms, double distance, double radius)
 DLLIMPORT int Mobot_moveDistanceNB(mobot_t* comms, double distance, double radius);
 DLLIMPORT int Mobot_moveForward(mobot_t* comms, double angle);
 DLLIMPORT int Mobot_moveForwardNB(mobot_t* comms, double angle);
-DLLIMPORT int Mobot_moveJoint(mobot_t* comms, mobotJointId_t id, double angle);
-DLLIMPORT int Mobot_moveJointNB(mobot_t* comms, mobotJointId_t id, double angle);
-DLLIMPORT int Mobot_moveJointContinuousNB(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir);
+DLLIMPORT int Mobot_moveJoint(mobot_t* comms, robotJointId_t id, double angle);
+DLLIMPORT int Mobot_moveJointNB(mobot_t* comms, robotJointId_t id, double angle);
+DLLIMPORT int Mobot_moveJointContinuousNB(mobot_t* comms, robotJointId_t id, mobotJointState_t dir);
 DLLIMPORT int Mobot_moveJointContinuousTime(mobot_t* comms, 
-                                            mobotJointId_t id, 
+                                            robotJointId_t id, 
                                             mobotJointState_t dir, 
                                             double seconds);
-DLLIMPORT int Mobot_moveJointTo(mobot_t* comms, mobotJointId_t id, double angle);
-DLLIMPORT int Mobot_moveJointToDirect(mobot_t* comms, mobotJointId_t id, double angle);
-DLLIMPORT int Mobot_moveJointToNB(mobot_t* comms, mobotJointId_t id, double angle);
-DLLIMPORT int Mobot_moveJointToDirectNB(mobot_t* comms, mobotJointId_t id, double angle);
-DLLIMPORT int Mobot_moveJointWait(mobot_t* comms, mobotJointId_t id);
+DLLIMPORT int Mobot_moveJointTo(mobot_t* comms, robotJointId_t id, double angle);
+DLLIMPORT int Mobot_moveJointToDirect(mobot_t* comms, robotJointId_t id, double angle);
+DLLIMPORT int Mobot_moveJointToNB(mobot_t* comms, robotJointId_t id, double angle);
+DLLIMPORT int Mobot_moveJointToDirectNB(mobot_t* comms, robotJointId_t id, double angle);
+DLLIMPORT int Mobot_moveJointWait(mobot_t* comms, robotJointId_t id);
 DLLIMPORT int Mobot_moveTo(mobot_t* comms,
                                double angle1,
                                double angle2,
@@ -1111,19 +1111,19 @@ DLLIMPORT int Mobot_moveToZero(mobot_t* comms);
 DLLIMPORT int Mobot_moveToZeroNB(mobot_t* comms);
 DLLIMPORT int Mobot_moveWait(mobot_t* comms);
 DLLIMPORT int Mobot_recordAngle(mobot_t* comms, 
-                                mobotJointId_t id, 
+                                robotJointId_t id, 
                                 double* time, 
                                 double* angle, 
                                 int num, 
                                 double timeInterval,
                                 int shiftData);
 DLLIMPORT int Mobot_recordAngleBegin(mobot_t* comms,
-                                     mobotJointId_t id,
+                                     robotJointId_t id,
                                      double **time,
                                      double **angle,
                                      double timeInterval, 
                                      int shiftData);
-DLLIMPORT int Mobot_recordAngleEnd(mobot_t* comms, mobotJointId_t id, int *num);
+DLLIMPORT int Mobot_recordAngleEnd(mobot_t* comms, robotJointId_t id, int *num);
 DLLIMPORT int Mobot_recordAngles(mobot_t* comms, 
                                  double *time, 
                                  double* angle1, 
@@ -1143,13 +1143,13 @@ DLLIMPORT int Mobot_recordAnglesBegin(mobot_t* comms,
                                      int shiftData);
 DLLIMPORT int Mobot_recordAnglesEnd(mobot_t* comms, int* num);
 DLLIMPORT int Mobot_recordDistanceBegin(mobot_t* comms,
-                                     mobotJointId_t id,
+                                     robotJointId_t id,
                                      double **time,
                                      double **distance,
                                      double radius,
                                      double timeInterval, 
                                      int shiftData);
-DLLIMPORT int Mobot_recordDistanceEnd(mobot_t* comms, mobotJointId_t id, int *num);
+DLLIMPORT int Mobot_recordDistanceEnd(mobot_t* comms, robotJointId_t id, int *num);
 DLLIMPORT int Mobot_recordDistancesBegin(mobot_t* comms,
                                double **time,
                                double **distance1,
@@ -1165,20 +1165,20 @@ DLLIMPORT int Mobot_reset(mobot_t* comms);
 DLLIMPORT int Mobot_resetToZero(mobot_t* comms);
 DLLIMPORT int Mobot_resetToZeroNB(mobot_t* comms);
 DLLIMPORT int Mobot_setExitState(mobot_t* comms, mobotJointState_t exitState);
-DLLIMPORT int Mobot_setFourierCoefficients(mobot_t* comms, mobotJointId_t id, double* a, double* b);
+DLLIMPORT int Mobot_setFourierCoefficients(mobot_t* comms, robotJointId_t id, double* a, double* b);
 DLLIMPORT int Mobot_beginFourierControl(mobot_t* comms, uint8_t motorMask);
 DLLIMPORT int Mobot_setHWRev(mobot_t* comms, uint8_t rev);
 DLLIMPORT int Mobot_setBuzzerFrequency(mobot_t* comms, unsigned int frequency, double time);
 DLLIMPORT int Mobot_setBuzzerFrequencyOn(mobot_t* comms, unsigned int frequency);
 DLLIMPORT int Mobot_setBuzzerFrequencyOff(mobot_t* comms);
 DLLIMPORT int Mobot_setDongleMobot(mobot_t* comms);
-DLLIMPORT int Mobot_setJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir);
-DLLIMPORT int Mobot_setJointMovementStateNB(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir);
-DLLIMPORT int Mobot_setJointMovementStateTime(mobot_t* comms, mobotJointId_t id, mobotJointState_t dir, double seconds);
+DLLIMPORT int Mobot_setJointDirection(mobot_t* comms, robotJointId_t id, mobotJointState_t dir);
+DLLIMPORT int Mobot_setJointMovementStateNB(mobot_t* comms, robotJointId_t id, mobotJointState_t dir);
+DLLIMPORT int Mobot_setJointMovementStateTime(mobot_t* comms, robotJointId_t id, mobotJointState_t dir, double seconds);
 DLLIMPORT int Mobot_setJointSafetyAngle(mobot_t* comms, double angle);
 DLLIMPORT int Mobot_setJointSafetyAngleTimeout(mobot_t* comms, double seconds);
-DLLIMPORT int Mobot_setJointSpeed(mobot_t* comms, mobotJointId_t id, double speed);
-DLLIMPORT int Mobot_setJointSpeedRatio(mobot_t* comms, mobotJointId_t id, double ratio);
+DLLIMPORT int Mobot_setJointSpeed(mobot_t* comms, robotJointId_t id, double speed);
+DLLIMPORT int Mobot_setJointSpeedRatio(mobot_t* comms, robotJointId_t id, double ratio);
 DLLIMPORT int Mobot_setJointSpeeds(mobot_t* comms, 
                                    double speeds1, 
                                    double speeds2, 
@@ -1194,7 +1194,7 @@ DLLIMPORT int Mobot_getJointSpeeds(mobot_t* comms,
                                    double *speed2, 
                                    double *speed3, 
                                    double *speed4);
-DLLIMPORT int Mobot_setMotorPower(mobot_t* comms, mobotJointId_t id, int power);
+DLLIMPORT int Mobot_setMotorPower(mobot_t* comms, robotJointId_t id, int power);
 DLLIMPORT int Mobot_setMovementStateNB(mobot_t* comms,
                                   mobotJointState_t dir1,
                                   mobotJointState_t dir2,
@@ -1215,9 +1215,9 @@ DLLIMPORT int Mobot_setMovementStateTimeNB(mobot_t* comms,
 DLLIMPORT int Mobot_setColorRGB(mobot_t* comms, int r, int g, int b);
 DLLIMPORT int Mobot_setTwoWheelRobotSpeed(mobot_t* comms, double speed, double radius);
 DLLIMPORT int Mobot_stop(mobot_t* comms);
-DLLIMPORT int Mobot_stopOneJoint(mobot_t* comms, mobotJointId_t id);
-DLLIMPORT int Mobot_stopTwoJoints(mobot_t* comms, mobotJointId_t id1, mobotJointId_t id2);
-DLLIMPORT int Mobot_stopThreeJoints(mobot_t* comms, mobotJointId_t id1, mobotJointId_t id2, mobotJointId_t id3);
+DLLIMPORT int Mobot_stopOneJoint(mobot_t* comms, robotJointId_t id);
+DLLIMPORT int Mobot_stopTwoJoints(mobot_t* comms, robotJointId_t id1, robotJointId_t id2);
+DLLIMPORT int Mobot_stopThreeJoints(mobot_t* comms, robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
 DLLIMPORT int Mobot_stopAllJoints(mobot_t* comms);
 DLLIMPORT int Mobot_turnLeft(mobot_t* comms, double angle);
 DLLIMPORT int Mobot_turnLeftNB(mobot_t* comms, double angle);
