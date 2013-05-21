@@ -23,7 +23,7 @@ class Linkbot():
     """Connect to a Linkbot
   
     Use this function to control Linkbots that are currently 
-    connected in RoboMancer. """
+    connected in BaroboLink. """
     if Mobot_connect(self._mobot) != 0:
       raise RuntimeError("Error connecting to robot.")
 

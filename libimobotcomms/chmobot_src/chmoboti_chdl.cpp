@@ -1,4 +1,5 @@
 #include "../mobot.h"
+#include "../linkbot.h"
 #include <ch.h>
 
 EXPORTCH void CLinkbotI_CLinkbotI_chdl(void *varg) {
