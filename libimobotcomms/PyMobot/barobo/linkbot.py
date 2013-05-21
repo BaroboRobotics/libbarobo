@@ -67,13 +67,18 @@ class Linkbot():
     self.moveWait()
 
   def moveNB(self, angle1, angle2, angle3):
+    """Nonblocking version ofthe move() function"""
     Mobot_moveNB(self._mobot, deg2rad(angle1), deg2rad(angle2), deg2rad(angle3), 0)
 
   def moveTo(self, angle1, angle2, angle3):
+    """Move the joints on a Linkbot
+
+    Move the joints on a Linkbot to absolute positions."""
     self.moveToNB(angle1, angle2, angle3)
     self.moveWait()
 
   def moveToNB(self, angle1, angle2, angle3):
+    """Nonblocking version of the moveTo() function"""
     Mobot_moveToNB(self._mobot, 
         deg2rad(angle1),
         deg2rad(angle2),
@@ -81,6 +86,7 @@ class Linkbot():
         0)
 
   def moveWait(self):
+    """Wait until a non-blocking movement function is finished moving"""
     while Mobot_isMoving(self._mobot):
       time.sleep(0.5)
 
