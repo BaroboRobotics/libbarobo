@@ -2,7 +2,8 @@ import math
 import threading
 import time
 import pylab
-from mobot import *
+#from mobot import *
+import mobot
 
 def deg2rad(deg):
   return deg * math.pi / 180.0
@@ -17,23 +18,23 @@ class Linkbot():
   """
   def __init__(self):
     self._mobot = mobot_t()
-    Mobot_init(self._mobot)
+    mobot.Mobot_init(self._mobot)
 
   def connect(self):
     """Connect to a Linkbot
   
     Use this function to control Linkbots that are currently 
     connected in BaroboLink. """
-    if Mobot_connect(self._mobot) != 0:
+    if mobot.Mobot_connect(self._mobot) != 0:
       raise RuntimeError("Error connecting to robot.")
 
   def disconnect(self):
     """Disconnect from a Linkbot"""
-    Mobot_disconnect(self._mobot)
+    mobot.Mobot_disconnect(self._mobot)
 
   def getJointAngles(self):
     """Return a list of joint angles in degrees"""
-    r = Mobot_getJointAngles(self._mobot)
+    r = mobot.Mobot_getJointAngles(self._mobot)
     if r[0] != 0:
       return -1
     else:
@@ -41,7 +42,7 @@ class Linkbot():
 
   def getJointAnglesTime(self):
     """Returns a list: [millis, deg1, deg2, deg3]"""
-    r = Mobot_getJointAnglesTime(self._mobot)
+    r = mobot.Mobot_getJointAnglesTime(self._mobot)
     if r[0] != 0:
       return None
     else:
@@ -51,11 +52,11 @@ class Linkbot():
 
   def driveJointTo(self, joint, angle):
     """Drive joint 'joint' to 'angle' (degrees) using PID controller"""
-    Mobot_driveJointTo(self._mobot, joint, deg2rad(angle))
+    mobot.Mobot_driveJointTo(self._mobot, joint, deg2rad(angle))
 
   def driveJointToNB(self, joint, angle):
     """Drive joint 'joint' to 'angle' (degrees) using PID controller"""
-    Mobot_driveJointToNB(self._mobot, joint, deg2rad(angle))
+    mobot.Mobot_driveJointToNB(self._mobot, joint, deg2rad(angle))
 
   def move(self, angle1, angle2, angle3):
     """Move the joints on a Linkbot
@@ -68,7 +69,7 @@ class Linkbot():
 
   def moveNB(self, angle1, angle2, angle3):
     """Nonblocking version ofthe move() function"""
-    Mobot_moveNB(self._mobot, deg2rad(angle1), deg2rad(angle2), deg2rad(angle3), 0)
+    mobot.Mobot_moveNB(self._mobot, deg2rad(angle1), deg2rad(angle2), deg2rad(angle3), 0)
 
   def moveTo(self, angle1, angle2, angle3):
     """Move the joints on a Linkbot
@@ -79,7 +80,7 @@ class Linkbot():
 
   def moveToNB(self, angle1, angle2, angle3):
     """Nonblocking version of the moveTo() function"""
-    Mobot_moveToNB(self._mobot, 
+    mobot.Mobot_moveToNB(self._mobot, 
         deg2rad(angle1),
         deg2rad(angle2),
         deg2rad(angle3), 
@@ -87,14 +88,21 @@ class Linkbot():
 
   def moveWait(self):
     """Wait until a non-blocking movement function is finished moving"""
-    while Mobot_isMoving(self._mobot):
+    while mobot.Mobot_isMoving(self._mobot):
       time.sleep(0.5)
 
   def recordAnglesBegin(self, delay=0.05):
+    """Begin recording joint angles.
+
+    Keyword arguments:
+    delay -- Seconds to delay between recorded datapoints. 0 indicates no delay (as fast as possible)
+    """
     self.recordThread = _LinkbotRecordThread(self, delay)
     self.recordThread.start()
 
   def recordAnglesEnd(self):
+    """ End recording angles and return a list consisting of [time_values,
+    joint1angles, joint2angles, joint3angles]"""
     self.recordThread.runflag_lock.acquire()
     self.recordThread.runflag = False
     self.recordThread.runflag_lock.release()
@@ -107,6 +115,10 @@ class Linkbot():
         self.recordThread.angles[2]]
 
   def recordAnglesPlot(self):
+    """Plot recorded angles.
+
+    See recordAnglesBegin() and recordAnglesEnd() to record joint motions.
+    """
     pylab.plot(
         self.recordThread.time, 
         self.recordThread.angles[0],
@@ -115,19 +127,32 @@ class Linkbot():
     pylab.show()
 
   def setBuzzerFrequency(self, frequency):
-    Mobot_setBuzzerFrequencyOn(self._mobot, int(frequency))
+    """Sets the buzzer to buz at a frequency specified in Hz.
+
+    Set frequency to 0 to silence the buzzer"""
+    mobot.Mobot_setBuzzerFrequencyOn(self._mobot, int(frequency))
 
   def setColorRGB(self, r, g, b):
-    Mobot_setColorRGB(self._mobot, int(r), int(g), int(b))
+    """Set the multicolor LED on a linkbot.
+
+    Arguments should be in the range [0, 255].
+    """
+    mobot.Mobot_setColorRGB(self._mobot, int(r), int(g), int(b))
 
   def setJointSpeed(self, joint, speed):
-    Mobot_setJointSpeed(self._mobot, int(joint), float(speed))
+    """Set the constant-velocity speed of a joint to "speed", in deg/sec."""
+    mobot.Mobot_setJointSpeed(self._mobot, int(joint), float(speed))
 
   def setMotorPower(self, joint, power):
-    Mobot_setMotorPower(self._mobot, int(joint), int(power))
+    """Set the power of a joint.
+
+    Power is a value in the range [0, 255]
+    """
+    mobot.Mobot_setMotorPower(self._mobot, int(joint), int(power))
    
   def stop(self):
-    Mobot_stop(self._mobot) 
+    """Stop all motors."""
+    mobot.Mobot_stop(self._mobot) 
     
 class _LinkbotRecordThread(threading.Thread):
   def __init__(self, linkbot, delay):
