@@ -17,7 +17,7 @@ class Linkbot():
   is used to control and get data from a Linkbot.
   """
   def __init__(self):
-    self._mobot = mobot_t()
+    self._mobot = mobot.mobot_t()
     mobot.Mobot_init(self._mobot)
 
   def connect(self):
@@ -109,7 +109,7 @@ class Linkbot():
     # Wait for recording to end
     while self.recordThread.isRunning:
       time.sleep(0.5)
-    return [self.recordThread.time, 
+    return [map(lambda x: x-self.recordThread.time[0], self.recordThread.time), 
         self.recordThread.angles[0], 
         self.recordThread.angles[1], 
         self.recordThread.angles[2]]
@@ -141,7 +141,7 @@ class Linkbot():
 
   def setJointSpeed(self, joint, speed):
     """Set the constant-velocity speed of a joint to "speed", in deg/sec."""
-    mobot.Mobot_setJointSpeed(self._mobot, int(joint), float(speed))
+    mobot.Mobot_setJointSpeed(self._mobot, int(joint), float(deg2rad(speed)))
 
   def setMotorPower(self, joint, power):
     """Set the power of a joint.
