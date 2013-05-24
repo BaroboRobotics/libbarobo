@@ -7,7 +7,7 @@ CMobot mobot;
 mobot.connect();
 mobot.resetToZero();
 
-mobot.moveJointToNB(MOBOT_JOINT2, -85);
-mobot.moveJointToNB(MOBOT_JOINT3, 45);
+mobot.moveJointToNB(ROBOT_JOINT2, -85);
+mobot.moveJointToNB(ROBOT_JOINT3, 45);
 mobot.moveWait();
 mobot.resetToZero();

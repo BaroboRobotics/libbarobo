@@ -1,11 +1,12 @@
 #include <stdlib.h>
 #include "mobot.h"
 #include "mobot_internal.h"
+#include "linkbot.h"
 
 #define DEPRECATED(from, to) \
   fprintf(stderr, "Warning: The function \"%s()\" is deprecated. Please use \"%s()\"\n" , from, to)
 
-CMobotLGroup::CMobotLGroup()
+CLinkbotLGroup::CLinkbotLGroup()
 {
   _numRobots = 0;
   _motionInProgress = 0;
@@ -13,26 +14,26 @@ CMobotLGroup::CMobotLGroup()
   _robots = NULL;
 }
 
-CMobotLGroup::~CMobotLGroup()
+CLinkbotLGroup::~CLinkbotLGroup()
 {
 }
 
-int CMobotLGroup::addRobot(CMobotL& robot)
+int CLinkbotLGroup::addRobot(CLinkbotL& robot)
 {
-  int rc = CMobotIGroup::addRobot((CMobotI&)robot);
+  int rc = CLinkbotIGroup::addRobot((CLinkbotI&)robot);
   return 0;
 }
 
-int CMobotLGroup::addRobots(CMobotL robots[], int numRobots)
+int CLinkbotLGroup::addRobots(CLinkbotL robots[], int numRobots)
 {
-  int rc = CMobotIGroup::addRobots((CMobotI*)robots, numRobots);
+  int rc = CLinkbotIGroup::addRobots((CLinkbotI*)robots, numRobots);
   return rc;
 }
 
-int CMobotLGroup::connect()
+int CLinkbotLGroup::connect()
 {
   for(int i = 0; i < _numRobots; i++) {
-    ((CMobotL*)_robots[i])->connect();
+    ((CLinkbotL*)_robots[i])->connect();
   }
   return 0;
 }

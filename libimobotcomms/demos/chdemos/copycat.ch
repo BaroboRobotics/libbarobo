@@ -5,10 +5,10 @@
 
 #define NUM_MOBOTS 4
 
-CMobotI mobots[NUM_MOBOTS];
+CLinkbotI mobots[NUM_MOBOTS];
 
-CMobotIGroup group1;
-CMobotIGroup group2;
+CLinkbotIGroup group1;
+CLinkbotIGroup group2;
 double angles[4];
 int i;
 
@@ -21,7 +21,7 @@ for(i = 0; i < NUM_MOBOTS; i++) {
 for(i = 0; i < NUM_MOBOTS/2; i++) {
   mobots[i].setColorRGB(0, 255, 0);
   mobots[i+NUM_MOBOTS/2].setColorRGB(255, 0, 0);
-  mobots[i+NUM_MOBOTS/2].moveContinuousNB(MOBOT_FORWARD, MOBOT_FORWARD, MOBOT_FORWARD);
+  mobots[i+NUM_MOBOTS/2].moveContinuousNB(ROBOT_FORWARD, ROBOT_FORWARD, ROBOT_FORWARD);
 }
 
 int j;

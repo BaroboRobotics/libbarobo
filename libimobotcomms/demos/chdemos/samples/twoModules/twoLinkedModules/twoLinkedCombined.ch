@@ -23,17 +23,17 @@ mobot1.moveWait();
 mobot2.moveWait();
 /* inch warm right with two modules 1*/
 for( i = 0; i < 3; i++){
-    mobot2.moveJointTo(MOBOT_JOINT3, 60);
-    mobot1.moveJointTo(MOBOT_JOINT2, -60);
-    mobot2.moveJointTo(MOBOT_JOINT3, 0);
-    mobot1.moveJointTo(MOBOT_JOINT2, 0);
+    mobot2.moveJointTo(ROBOT_JOINT3, 60);
+    mobot1.moveJointTo(ROBOT_JOINT2, -60);
+    mobot2.moveJointTo(ROBOT_JOINT3, 0);
+    mobot1.moveJointTo(ROBOT_JOINT2, 0);
 }
 /* inch warm left with two modules 1*/
 for( i = 0; i < 3; i++){
-    mobot1.moveJointTo(MOBOT_JOINT2, -60);
-    mobot2.moveJointTo(MOBOT_JOINT3, 60);
-    mobot1.moveJointTo(MOBOT_JOINT2, 0);
-    mobot2.moveJointTo(MOBOT_JOINT3, 0);
+    mobot1.moveJointTo(ROBOT_JOINT2, -60);
+    mobot2.moveJointTo(ROBOT_JOINT3, 60);
+    mobot1.moveJointTo(ROBOT_JOINT2, 0);
+    mobot2.moveJointTo(ROBOT_JOINT3, 0);
 }
 /* lifting with two modules */
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */

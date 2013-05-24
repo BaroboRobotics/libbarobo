@@ -45,17 +45,17 @@ mobot1.motionWait();
 mobot2.motionWait();
 
 /* scan x axis */
-mobot3.moveJoint(MOBOT_JOINT1, 90);
-mobot3.moveJoint(MOBOT_JOINT2, -90);
+mobot3.moveJoint(ROBOT_JOINT1, 90);
+mobot3.moveJoint(ROBOT_JOINT2, -90);
 
 for(i = -90; i<=90;i = i+ 10)
 {
-    mobot3.moveJointToNB(MOBOT_JOINT2, i);
+    mobot3.moveJointToNB(ROBOT_JOINT2, i);
     mobot3.moveWait();
 }
 
-mobot3.moveJoint(MOBOT_JOINT1, -90);
-mobot3.moveJoint(MOBOT_JOINT3, 45);
+mobot3.moveJoint(ROBOT_JOINT1, -90);
+mobot3.moveJoint(ROBOT_JOINT3, 45);
 
 /* move forward */
 mobot1.motionRollForwardNB(360);
@@ -88,15 +88,15 @@ mobot1.motionWait();
 mobot2.motionWait();
 
 /* scan x axis */
-mobot3.moveJointTo(MOBOT_JOINT3,0);
-mobot3.moveJoint(MOBOT_JOINT1, 90);
-mobot3.moveJoint(MOBOT_JOINT2, -90);
+mobot3.moveJointTo(ROBOT_JOINT3,0);
+mobot3.moveJoint(ROBOT_JOINT1, 90);
+mobot3.moveJoint(ROBOT_JOINT2, -90);
 
 for(i = -90; i<=90;i = i+ 10)
 {
-    mobot3.moveJointToNB(MOBOT_JOINT2, i);
+    mobot3.moveJointToNB(ROBOT_JOINT2, i);
     mobot3.moveWait();
 }
 
-mobot3.moveJoint(MOBOT_JOINT2, 90);
-mobot3.moveJoint(MOBOT_JOINT1, -90);
+mobot3.moveJoint(ROBOT_JOINT2, 90);
+mobot3.moveJoint(ROBOT_JOINT1, -90);

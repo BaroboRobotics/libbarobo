@@ -222,7 +222,7 @@ int Mobot_getHWRev(mobot_t* comms, int* rev)
   return 0;
 }
 
-int Mobot_getJointAngle(mobot_t* comms, mobotJointId_t id, double *angle)
+int Mobot_getJointAngle(mobot_t* comms, robotJointId_t id, double *angle)
 {
   uint8_t buf[32];
   float f;
@@ -240,7 +240,7 @@ int Mobot_getJointAngle(mobot_t* comms, mobotJointId_t id, double *angle)
   return 0;
 }
 
-int Mobot_getJointAngleAverage(mobot_t* comms, mobotJointId_t id, double *angle, int numReadings)
+int Mobot_getJointAngleAverage(mobot_t* comms, robotJointId_t id, double *angle, int numReadings)
 {
   int i;
   double d;
@@ -353,17 +353,17 @@ int Mobot_getJointAnglesTimeState(mobot_t* comms,
                              double *angle2,
                              double *angle3,
                              double *angle4,
-                             mobotJointState_t* state1,
-                             mobotJointState_t* state2,
-                             mobotJointState_t* state3,
-                             mobotJointState_t* state4)
+                             robotJointState_t* state1,
+                             robotJointState_t* state2,
+                             robotJointState_t* state3,
+                             robotJointState_t* state4)
 {
   uint32_t millis;
   uint8_t buf[64];
   int status;
   int i;
   float angles[4];
-  mobotJointState_t* states[4];
+  robotJointState_t* states[4];
   states[0] = state1;
   states[1] = state2;
   states[2] = state3;
@@ -381,27 +381,27 @@ int Mobot_getJointAnglesTimeState(mobot_t* comms,
     /* Copy the motor angles */
     memcpy(&angles[i], &buf[6 + i*4], 4);
     /* Copy the motor states */
-    *states[i] = (mobotJointState_t)buf[22+i];
+    *states[i] = (robotJointState_t)buf[22+i];
   }
   *angle1 = angles[0];
   *angle2 = angles[1];
   *angle3 = angles[2];
   *angle4 = angles[3];
   if( comms->formFactor == MOBOTFORM_I) {
-    if(*angle3 == MOBOT_FORWARD) {
-      *angle3 = MOBOT_BACKWARD;
-    } else if (*angle3 == MOBOT_BACKWARD) {
-      *angle3 = MOBOT_FORWARD;
+    if(*angle3 == ROBOT_FORWARD) {
+      *angle3 = ROBOT_BACKWARD;
+    } else if (*angle3 == ROBOT_BACKWARD) {
+      *angle3 = ROBOT_FORWARD;
     }
     *angle2 = 0;
-    *state2 = MOBOT_NEUTRAL;
+    *state2 = ROBOT_NEUTRAL;
     *angle4 = 0;
-    *state4 = MOBOT_NEUTRAL;
+    *state4 = ROBOT_NEUTRAL;
   } else if( comms->formFactor == MOBOTFORM_L) {
     *angle3 = 0;
-    *state3 = MOBOT_NEUTRAL;
+    *state3 = ROBOT_NEUTRAL;
     *angle4 = 0;
-    *state4 = MOBOT_NEUTRAL;
+    *state4 = ROBOT_NEUTRAL;
   }
   return 0;
 }
@@ -415,7 +415,7 @@ int Mobot_getJointAnglesTimeIsMoving(mobot_t* comms,
                              int *isMoving)
 {
   int i, rc;
-  mobotJointState_t states[4];
+  robotJointState_t states[4];
   rc = Mobot_getJointAnglesTimeState( comms,
      time, 
      angle1,
@@ -431,8 +431,8 @@ int Mobot_getJointAnglesTimeIsMoving(mobot_t* comms,
   }
   *isMoving = 0;
   for(i = 0; i < 4; i++) {
-    if(states[i] == MOBOT_FORWARD ||
-        states[i] == MOBOT_BACKWARD)
+    if(states[i] == ROBOT_FORWARD ||
+        states[i] == ROBOT_BACKWARD)
     {
       *isMoving = 1;
     }
@@ -440,7 +440,7 @@ int Mobot_getJointAnglesTimeIsMoving(mobot_t* comms,
   return 0;
 }
 
-int Mobot_getJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t *dir)
+int Mobot_getJointDirection(mobot_t* comms, robotJointId_t id, robotJointState_t *dir)
 {
   uint8_t buf[32];
   int status;
@@ -451,22 +451,22 @@ int Mobot_getJointDirection(mobot_t* comms, mobotJointId_t id, mobotJointState_t
   if(buf[1] != 0x04) {
     return -1;
   }
-  *dir = (mobotJointState_t)buf[2];
+  *dir = (robotJointState_t)buf[2];
   if(
       (comms->formFactor == MOBOTFORM_I) &&
-      (id == MOBOT_JOINT3)
+      (id == ROBOT_JOINT3)
     )
   {
-    if(*dir == MOBOT_FORWARD) {
-      *dir = MOBOT_BACKWARD;
-    } else if (*dir == MOBOT_BACKWARD) {
-      *dir = MOBOT_FORWARD;
+    if(*dir == ROBOT_FORWARD) {
+      *dir = ROBOT_BACKWARD;
+    } else if (*dir == ROBOT_BACKWARD) {
+      *dir = ROBOT_FORWARD;
     }
   }
   return 0;
 }
 
-int Mobot_getJointMaxSpeed(mobot_t* comms, mobotJointId_t id, double *maxSpeed)
+int Mobot_getJointMaxSpeed(mobot_t* comms, robotJointId_t id, double *maxSpeed)
 {
   float f;
   uint8_t buf[64];
@@ -517,7 +517,7 @@ int Mobot_getJointSafetyAngleTimeout(mobot_t* comms, double *seconds)
   return 0;
 }
 
-int Mobot_getJointSpeed(mobot_t* comms, mobotJointId_t id, double *speed)
+int Mobot_getJointSpeed(mobot_t* comms, robotJointId_t id, double *speed)
 {
   uint8_t buf[32];
   float f;
@@ -535,7 +535,7 @@ int Mobot_getJointSpeed(mobot_t* comms, mobotJointId_t id, double *speed)
   return 0;
 }
 
-int Mobot_getJointSpeedRatio(mobot_t* comms, mobotJointId_t id, double *ratio)
+int Mobot_getJointSpeedRatio(mobot_t* comms, robotJointId_t id, double *ratio)
 {
   double speed;
   Mobot_getJointSpeed(comms, id, &speed);
@@ -552,12 +552,12 @@ int Mobot_getJointSpeedRatios(mobot_t* comms, double *ratio1, double *ratio2, do
   ratios[2] = ratio3;
   ratios[3] = ratio4;
   for(i = 0; i < 4; i++) {
-    Mobot_getJointSpeedRatio(comms, (mobotJointId_t)(i+1), ratios[i]);
+    Mobot_getJointSpeedRatio(comms, (robotJointId_t)(i+1), ratios[i]);
   }
   return 0;
 }
 
-int Mobot_getJointState(mobot_t* comms, mobotJointId_t id, mobotJointState_t *state)
+int Mobot_getJointState(mobot_t* comms, robotJointId_t id, robotJointState_t *state)
 {
   uint8_t buf[32];
   int status;
@@ -566,19 +566,19 @@ int Mobot_getJointState(mobot_t* comms, mobotJointId_t id, mobotJointState_t *st
   if(status < 0) return status;
   /* Make sure the data size is correct */
   if(buf[1] != 0x04) {
-    *state = MOBOT_NEUTRAL;
+    *state = ROBOT_NEUTRAL;
     return -1;
   }
-  *state = (mobotJointState_t)buf[2];
+  *state = (robotJointState_t)buf[2];
   if(
       (comms->formFactor == MOBOTFORM_I) &&
-      (id == MOBOT_JOINT3)
+      (id == ROBOT_JOINT3)
     )
   {
-    if(*state == MOBOT_FORWARD) {
-      *state = MOBOT_BACKWARD;
-    } else if (*state == MOBOT_BACKWARD) {
-      *state = MOBOT_FORWARD;
+    if(*state == ROBOT_FORWARD) {
+      *state = ROBOT_BACKWARD;
+    } else if (*state == ROBOT_BACKWARD) {
+      *state = ROBOT_FORWARD;
     }
   }
   return 0;
@@ -593,7 +593,7 @@ int Mobot_getJointSpeeds(mobot_t* comms, double *speed1, double *speed2, double 
   speeds[2] = speed3;
   speeds[3] = speed4;
   for(i = 0; i < 4; i++) {
-    Mobot_getJointSpeed(comms, (mobotJointId_t)(i+1), speeds[i]);
+    Mobot_getJointSpeed(comms, (robotJointId_t)(i+1), speeds[i]);
   }
   return 0;
 }

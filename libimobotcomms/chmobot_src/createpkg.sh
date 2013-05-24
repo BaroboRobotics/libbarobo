@@ -13,12 +13,13 @@ mkdir $PKGDIR/dl
 mkdir $PKGDIR/include
 mkdir $PKGDIR/docs
 cp chmobot.chf $PKGDIR/lib
-cp chmoboti.chf $PKGDIR/lib
-cp chmobotl.chf $PKGDIR/lib
+cp chlinkboti.chf $PKGDIR/lib
+cp chlinkbotl.chf $PKGDIR/lib
 cp shiftTime.chf $PKGDIR/lib
 cp delay.chf $PKGDIR/lib
 cp libchmobot.dl $PKGDIR/dl/libmobot.dl
 cp ../mobot.h $PKGDIR/include
+cp ../linkbot.h $PKGDIR/include
 cp ../docs/mobot.pdf $PKGDIR/docs
 cp -R ../demos/chdemos/* $PKGDIR/demos
 cp Makefile_pkg $PACKAGE-$VERSION/Makefile

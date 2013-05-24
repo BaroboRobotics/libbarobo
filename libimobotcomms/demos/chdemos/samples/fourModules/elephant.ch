@@ -48,8 +48,8 @@ group1.moveWait();
 group2.moveWait();
 */
 // move joint 1 to 90 degree
-group1.moveJointToNB(MOBOT_JOINT1, 90);
-group2.moveJointToNB(MOBOT_JOINT1, 90);
+group1.moveJointToNB(ROBOT_JOINT1, 90);
+group2.moveJointToNB(ROBOT_JOINT1, 90);
 group1.moveWait();
 group2.moveWait();
 // walk forward

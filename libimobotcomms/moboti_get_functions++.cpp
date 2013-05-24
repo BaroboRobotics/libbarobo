@@ -2,15 +2,16 @@
 #include <string.h>
 #include <stdlib.h>
 #include "mobot.h"
+#include "linkbot.h"
 #define DEPRECATED(from, to) \
   fprintf(stderr, "Warning: The function \"%s()\" is deprecated. Please use \"%s()\"\n" , from, to)
 
-int CMobotI::getID()
+int CLinkbotI::getID()
 {
   return Mobot_getID(_comms);
 }
 
-int CMobotI::getAccelerometerData(double &accel_x, double &accel_y, double &accel_z)
+int CLinkbotI::getAccelerometerData(double &accel_x, double &accel_y, double &accel_z)
 {
   double _x, _y, _z; int rc;
   rc = Mobot_getAccelerometerData(_comms, &_x, &_y, &_z);
@@ -23,12 +24,12 @@ int CMobotI::getAccelerometerData(double &accel_x, double &accel_y, double &acce
   return 0;
 }
 
-int CMobotI::getBatteryVoltage(double &voltage)
+int CLinkbotI::getBatteryVoltage(double &voltage)
 {
   return Mobot_getBatteryVoltage(_comms, &voltage);
 }
 
-int CMobotI::getJointAngles(
+int CLinkbotI::getJointAngles(
     double &angle1,
     double &angle2,
     double &angle3)
@@ -51,7 +52,7 @@ int CMobotI::getJointAngles(
   return 0;
 }
 
-int CMobotI::getJointAnglesAverage(
+int CLinkbotI::getJointAnglesAverage(
     double &angle1,
     double &angle2,
     double &angle3,
@@ -74,7 +75,7 @@ int CMobotI::getJointAnglesAverage(
   return 0;
 }
 
-int CMobotI::getJointSpeeds(double &speed1, double &speed2, double &speed3)
+int CLinkbotI::getJointSpeeds(double &speed1, double &speed2, double &speed3)
 {
   int i;
   double speed4;
@@ -86,13 +87,13 @@ int CMobotI::getJointSpeeds(double &speed1, double &speed2, double &speed3)
   return err;
 }
 
-int CMobotI::getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3)
+int CLinkbotI::getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3)
 {
   double ratio4;
   return Mobot_getJointSpeedRatios(_comms, &ratio1, &ratio2, &ratio3, &ratio4);
 }
 
-int CMobotI::getColorRGB(int &r, int &g, int &b)
+int CLinkbotI::getColorRGB(int &r, int &g, int &b)
 {
   return Mobot_getColorRGB(_comms, &r, &g, &b);
 }

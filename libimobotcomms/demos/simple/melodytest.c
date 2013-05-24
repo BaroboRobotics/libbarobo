@@ -12,11 +12,11 @@ int main()
   int rc;
   Mobot_init(&mobot);
   //Mobot_connectWithTTY(&mobot, "/dev/ttyACM0");
-  if(rc = Mobot_connectWithTTY(&mobot, "/dev/ttyACM2")) {
+  if(rc = Mobot_connectWithTTY(&mobot, "/dev/ttyACM0")) {
     printf("connection failed.\n");
     exit(-1);
   }
-  head = Mobot_createMelody(120);
+  head = Mobot_createMelody(90);
   /*
   Mobot_melodyAddNote(head, "A", 16);
   Mobot_melodyAddNote(head, "C", 16);
@@ -59,6 +59,7 @@ int main()
   Mobot_melodyAddNote(head, "g#4", 16);
   Mobot_melodyAddNote(head, "b4", 16);
   Mobot_melodyAddNote(head, "c5", 8);
+#if 0
   /*
   Mobot_melodyAddNote(head, "e3", 16);
   Mobot_melodyAddNote(head, "a3", 16);
@@ -68,12 +69,15 @@ int main()
   //Mobot_loadMelody(child, 1, head);
   Mobot_playMelody(&mobot, 1);
 #ifndef _WIN32
-  usleep(3200000);
+  usleep(2800000);
+  usleep(2800000);
 #else
   Sleep(3200);
 #endif
 
   head = Mobot_createMelody(120);
+#endif
+  Mobot_melodyAddNote(head, "E4", 16);
   Mobot_melodyAddNote(head, "E5", 16);
   Mobot_melodyAddNote(head, "D#5", 16);
   Mobot_melodyAddNote(head, "E5", 16);

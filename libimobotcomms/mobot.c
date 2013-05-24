@@ -879,7 +879,7 @@ int finishConnect(mobot_t* comms)
   /* DEBUG */
   /*
   for(i = numJoints; i >= 1; i--) {
-    if(Mobot_getJointMaxSpeed(comms, (mobotJointId_t)i, &(comms->maxSpeed[i-1])) < 0) {
+    if(Mobot_getJointMaxSpeed(comms, (robotJointId_t)i, &(comms->maxSpeed[i-1])) < 0) {
       i++;
     }
   }
@@ -1332,7 +1332,7 @@ int Mobot_init(mobot_t* comms)
     /* Set the default maximum speed to something reasonable */
     comms->maxSpeed[i] = DEF_MOTOR_MAXSPEED;
   }
-  comms->exitState = MOBOT_NEUTRAL;
+  comms->exitState = ROBOT_NEUTRAL;
   comms->thread = (THREAD_T*)malloc(sizeof(THREAD_T));
   comms->commsThread = (THREAD_T*)malloc(sizeof(THREAD_T));
   THREAD_CREATE(comms->thread, nullThread, NULL);
@@ -1492,7 +1492,7 @@ int Mobot_resetToZeroNB(mobot_t* comms) {
   return Mobot_moveToZeroNB(comms);
 }
 
-int Mobot_setFourierCoefficients(mobot_t* comms, mobotJointId_t id, double* a, double* b)
+int Mobot_setFourierCoefficients(mobot_t* comms, robotJointId_t id, double* a, double* b)
 {
   uint8_t buf[32];
   int8_t coefs[10];
@@ -1657,7 +1657,7 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
   int err = 0;
   int i;
   int len;
-  uint8_t str[64];
+  uint8_t str[1024];
   if(comms->connected == 0) {
     return -1;
   }

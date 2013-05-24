@@ -46,7 +46,7 @@ int main()
   }
   mobot.setJointSpeeds(45, 45, 45, 45);
   mobot.resetToZero();
-  mobot.moveContinuousNB(MOBOT_FORWARD, MOBOT_HOLD, MOBOT_HOLD, MOBOT_BACKWARD);
+  mobot.moveContinuousNB(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_BACKWARD);
   mobot.recordAnglesBegin(time, 
                           angles[0], 
                           angles[1], 
@@ -66,7 +66,7 @@ int main()
 
   /* Check end angle. */
   double angle;
-  mobot.getJointAngle(MOBOT_JOINT1, angle);
+  mobot.getJointAngle(ROBOT_JOINT1, angle);
   if(ABS(angle - 45*12) > 20) {
     ERRMSG("Mobot movement speed incorrect");
     return -1;
@@ -113,7 +113,7 @@ int main()
   /* Now do it again but faster */
   mobot.setJointSpeeds(60, 60, 60, 60);
   mobot.resetToZero();
-  mobot.moveContinuousNB(MOBOT_FORWARD, MOBOT_HOLD, MOBOT_HOLD, MOBOT_BACKWARD);
+  mobot.moveContinuousNB(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_BACKWARD);
   mobot.recordAnglesBegin(time, 
                           angles[0], 
                           angles[1], 
@@ -132,7 +132,7 @@ int main()
   printf("Joints Stopped.\n");
 
   /* Check end angle. */
-  mobot.getJointAngle(MOBOT_JOINT1, angle);
+  mobot.getJointAngle(ROBOT_JOINT1, angle);
   if(ABS(angle - 60*12) > 30) {
     ERRMSG("Mobot movement speed incorrect");
     return -1;

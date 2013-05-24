@@ -1,29 +1,30 @@
 #include <stdlib.h>
 #include "mobot.h"
 #include "mobot_internal.h"
+#include "linkbot.h"
 
-CMobotL::CMobotL()
+CLinkbotL::CLinkbotL()
 {
 }
 
-CMobotL::~CMobotL() 
+CLinkbotL::~CLinkbotL() 
 {
 }
 
-int CMobotL::connect()
+int CLinkbotL::connect()
 {
   int rc = Mobot_connect(_comms);
   if(rc) {
     return rc;
   }
   if(_comms->formFactor != MOBOTFORM_L) {
-    fprintf(stderr, "Error: Connected Mobot is not a Mobot-L.\n");
+    fprintf(stderr, "Error: Connected Mobot is not a Linkbot-L.\n");
     Mobot_disconnect(_comms);
     return -1;
   }
 }
 
-int CMobotL::connectWithSerialID(const char* serialID)
+int CLinkbotL::connectWithSerialID(const char* serialID)
 {
   return Mobot_connectWithSerialID(_comms, serialID);
 }

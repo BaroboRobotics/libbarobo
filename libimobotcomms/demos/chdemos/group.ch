@@ -2,8 +2,8 @@
  * Control multiple Mobot modules simultaneously using the CMobotGroup class */
 #include <mobot.h>
 #define NUM_ROBOTS 13
-CMobotI mobots[NUM_ROBOTS];
-CMobotIGroup group;
+CLinkbotI mobots[NUM_ROBOTS];
+CLinkbotIGroup group;
 
 /* Add the two modules to be members of our group */
 group.addRobots(mobots);

@@ -15,7 +15,7 @@ int CMobot::getFormFactor(int &formFactor)
   return Mobot_getFormFactor(_comms, &formFactor);
 }
 
-int CMobot::getJointAngle(mobotJointId_t id, double &angle)
+int CMobot::getJointAngle(robotJointId_t id, double &angle)
 {
   int err;
   err = Mobot_getJointAngle(_comms, id, &angle);
@@ -23,7 +23,7 @@ int CMobot::getJointAngle(mobotJointId_t id, double &angle)
   return err;
 }
 
-int CMobot::getJointAngleAverage(mobotJointId_t id, double &angle, int numReadings)
+int CMobot::getJointAngleAverage(robotJointId_t id, double &angle, int numReadings)
 {
   int err;
   err = Mobot_getJointAngleAverage(_comms, id, &angle, numReadings);
@@ -77,12 +77,12 @@ int CMobot::getJointAnglesAverage(
   return 0;
 }
 
-int CMobot::getJointDirection(mobotJointId_t id, mobotJointState_t &dir)
+int CMobot::getJointDirection(robotJointId_t id, robotJointState_t &dir)
 {
   return Mobot_getJointDirection(_comms, id, &dir);
 }
 
-int CMobot::getJointMaxSpeed(mobotJointId_t id, double &maxSpeed)
+int CMobot::getJointMaxSpeed(robotJointId_t id, double &maxSpeed)
 {
   int err = Mobot_getJointMaxSpeed(_comms, id, &maxSpeed);
   maxSpeed = RAD2DEG(maxSpeed);
@@ -103,7 +103,7 @@ int CMobot::getJointSafetyAngleTimeout(double &seconds)
   return Mobot_getJointSafetyAngleTimeout(_comms, &seconds);
 }
 
-int CMobot::getJointSpeed(mobotJointId_t id, double &speed)
+int CMobot::getJointSpeed(robotJointId_t id, double &speed)
 {
   int err;
   err = Mobot_getJointSpeed(_comms, id, &speed);
@@ -111,7 +111,7 @@ int CMobot::getJointSpeed(mobotJointId_t id, double &speed)
   return err;
 }
 
-int CMobot::getJointSpeedRatio(mobotJointId_t id, double &ratio)
+int CMobot::getJointSpeedRatio(robotJointId_t id, double &ratio)
 {
   return Mobot_getJointSpeedRatio(_comms, id, &ratio);
 }
@@ -132,7 +132,7 @@ int CMobot::getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3, 
   return Mobot_getJointSpeedRatios(_comms, &ratio1, &ratio2, &ratio3, &ratio4);
 }
 
-int CMobot::getJointState(mobotJointId_t id, mobotJointState_t &state)
+int CMobot::getJointState(robotJointId_t id, robotJointState_t &state)
 {
   return Mobot_getJointState(_comms, id, &state);
 }

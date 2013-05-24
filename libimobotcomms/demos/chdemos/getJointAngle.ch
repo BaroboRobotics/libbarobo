@@ -8,7 +8,7 @@ mobot.connect();
 
 /* Get the joint angle of the first joint */
 double angle;
-mobot.getJointAngle(MOBOT_JOINT1, angle);
+mobot.getJointAngle(ROBOT_JOINT1, angle);
 
 /* Print out the joint angle */
 printf("The current joint angle for joint 1 is %lf degrees.\n", angle);

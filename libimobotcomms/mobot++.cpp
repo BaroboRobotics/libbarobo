@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "mobot.h"
 #include "mobot_internal.h"
+#include "linkbot.h"
 
 CMobot::CMobot()
 {
@@ -11,8 +12,8 @@ CMobot::CMobot()
 CMobot::~CMobot() 
 {
   if(_comms->connected) {
-    if(_comms->exitState == MOBOT_HOLD) {
-      setMovementStateNB(MOBOT_HOLD, MOBOT_HOLD, MOBOT_HOLD, MOBOT_HOLD);
+    if(_comms->exitState == ROBOT_HOLD) {
+      setMovementStateNB(ROBOT_HOLD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_HOLD);
     } else {
       stop();
     }

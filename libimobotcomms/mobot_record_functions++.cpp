@@ -2,17 +2,17 @@
 #include "mobot.h"
 #include "mobot_internal.h"
 
-int CMobot::recordAngle(mobotJointId_t id, double* time, double* angle, int num, double seconds, int shiftTime)
+int CMobot::recordAngle(robotJointId_t id, double* time, double* angle, int num, double seconds, int shiftTime)
 {
   return Mobot_recordAngle(_comms, id, time, angle, num, seconds, shiftTime);
 }
 
-int CMobot::recordAngleBegin(mobotJointId_t id, double* &time, double* &angle, double seconds, int shiftData)
+int CMobot::recordAngleBegin(robotJointId_t id, double* &time, double* &angle, double seconds, int shiftData)
 {
 return Mobot_recordAngleBegin(_comms, id, &time, &angle, seconds, shiftData);
 }
 
-int CMobot::recordAngleEnd(mobotJointId_t id, int &num)
+int CMobot::recordAngleEnd(robotJointId_t id, int &num)
 {
   return Mobot_recordAngleEnd(_comms, id, &num);
 }
@@ -45,7 +45,7 @@ int CMobot::recordAnglesEnd(int &num)
   return Mobot_recordAnglesEnd(_comms, &num);
 }
 
-int CMobot::recordDistanceBegin( mobotJointId_t id,
+int CMobot::recordDistanceBegin( robotJointId_t id,
                                      double* &time,
                                      double* &distance,
                                      double radius,
@@ -61,7 +61,7 @@ int CMobot::recordDistanceBegin( mobotJointId_t id,
       shiftData);
 }
 
-int CMobot::recordDistanceEnd( mobotJointId_t id, int &num)
+int CMobot::recordDistanceEnd( robotJointId_t id, int &num)
 {
   return Mobot_recordDistanceEnd(_comms, id, &num);
 }

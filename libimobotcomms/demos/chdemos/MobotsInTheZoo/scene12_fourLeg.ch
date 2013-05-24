@@ -88,8 +88,8 @@ mobot4.moveToNB(0, 0, 0, 0);
 mobot1.moveWait();
 mobot4.moveWait();
 
-mobot1.moveJointNB(MOBOT_JOINT4, -360);
-mobot4.moveJointNB(MOBOT_JOINT1, 360);
+mobot1.moveJointNB(ROBOT_JOINT4, -360);
+mobot4.moveJointNB(ROBOT_JOINT1, 360);
 mobot1.moveWait();
 mobot2.moveWait();
 
@@ -103,8 +103,8 @@ mobot3.moveToNB(0, 0, 0, 0);
 mobot2.moveWait();
 mobot3.moveWait();
 
-mobot2.moveJointNB(MOBOT_JOINT4, 360);
-mobot3.moveJointNB(MOBOT_JOINT1, -360);
+mobot2.moveJointNB(ROBOT_JOINT4, 360);
+mobot3.moveJointNB(ROBOT_JOINT1, -360);
 mobot2.moveWait();
 mobot3.moveWait();
 
@@ -125,26 +125,26 @@ group1.moveWait();
 group2.moveWait();
 
 // turn right
-group1.moveJointToNB(MOBOT_JOINT1, 360);
-group2.moveJointToNB(MOBOT_JOINT4, -360);
+group1.moveJointToNB(ROBOT_JOINT1, 360);
+group2.moveJointToNB(ROBOT_JOINT4, -360);
 group1.moveWait();
 group2.moveWait();
 
 // move forward
-group1.moveJointToNB(MOBOT_JOINT1, 2*360);
-group2.moveJointToNB(MOBOT_JOINT4, 2*360);
+group1.moveJointToNB(ROBOT_JOINT1, 2*360);
+group2.moveJointToNB(ROBOT_JOINT4, 2*360);
 group1.moveWait();
 group2.moveWait();
 /*
 // move backward
-group1.moveJointToNB(MOBOT_JOINT1, -360);
-group2.moveJointToNB(MOBOT_JOINT4, -360);
+group1.moveJointToNB(ROBOT_JOINT1, -360);
+group2.moveJointToNB(ROBOT_JOINT4, -360);
 group1.moveWait();
 group2.moveWait();
 
 // turn left
-group1.moveJointToNB(MOBOT_JOINT1, -360);
-group2.moveJointToNB(MOBOT_JOINT4, 360);
+group1.moveJointToNB(ROBOT_JOINT1, -360);
+group2.moveJointToNB(ROBOT_JOINT4, 360);
 group1.moveWait();
 group2.moveWait();
 

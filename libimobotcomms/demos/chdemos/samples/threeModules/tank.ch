@@ -39,7 +39,7 @@ mobot2.moveWait();
 mobot3.moveWait();
 
 /* "gun" ready */
-mobot3.moveJoint(MOBOT_JOINT2, -90);
+mobot3.moveJoint(ROBOT_JOINT2, -90);
 
 /* "gun" scan */
 mobot3.moveTo(360, -90, 0, 0);

@@ -40,22 +40,22 @@ group2.addRobot(mobot6);
 group.motionStand(); /* Cause both mobots to stand */
 
 // discuss
-group1.moveJointToNB(MOBOT_JOINT1, 90+45);
-group2.moveJointToNB(MOBOT_JOINT1, -90+45);
+group1.moveJointToNB(ROBOT_JOINT1, 90+45);
+group2.moveJointToNB(ROBOT_JOINT1, -90+45);
 group1.moveWait();
 group2.moveWait();
 
-group1.moveJointToNB(MOBOT_JOINT3, 90);
-group2.moveJointToNB(MOBOT_JOINT3, 90);
+group1.moveJointToNB(ROBOT_JOINT3, 90);
+group2.moveJointToNB(ROBOT_JOINT3, 90);
 group1.moveWait();
 group2.moveWait();
 
-group1.moveJointToNB(MOBOT_JOINT3, 70);
-group2.moveJointToNB(MOBOT_JOINT3, 70);
+group1.moveJointToNB(ROBOT_JOINT3, 70);
+group2.moveJointToNB(ROBOT_JOINT3, 70);
 group1.moveWait();
 group2.moveWait();
 
-group1.moveJointToNB(MOBOT_JOINT1, 45);
-group2.moveJointToNB(MOBOT_JOINT1, 45);
+group1.moveJointToNB(ROBOT_JOINT1, 45);
+group2.moveJointToNB(ROBOT_JOINT1, 45);
 group1.moveWait();
 group2.moveWait();

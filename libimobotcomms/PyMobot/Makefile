@@ -1,5 +1,5 @@
-CFLAGS=-I/usr/include/python2.7 -I../ -I../BaroboConfigFile -fPIC
-LIBS=-lstdc++ -lbluetooth -lpthread -lrt 
+CFLAGS=-I/usr/include/python2.7 -I../ -I../BaroboConfigFile -I../BaroboConfigFile/mxml-2.7 -fPIC
+LIBS=-L../BaroboConfigFile -L../BaroboConfigFile/mxml-2.7 -lbaroboconfigfile -lmxml -lstdc++ -lbluetooth -lpthread -lrt 
 
 SRCS=../mobot.c \
 ../mobot++.cpp \

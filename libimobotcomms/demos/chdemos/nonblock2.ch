@@ -9,6 +9,6 @@ mobot.connect();
 mobot.resetToZero();
 
 /* Rotate each of the faceplates by 360 degrees */
-//mobot.moveJoint(MOBOT_JOINT1, 360); // Blocking version
-mobot.moveJointNB(MOBOT_JOINT1, 360); // Non-Blocking version
-mobot.moveJoint(MOBOT_JOINT4, 360);
+//mobot.moveJoint(ROBOT_JOINT1, 360); // Blocking version
+mobot.moveJointNB(ROBOT_JOINT1, 360); // Non-Blocking version
+mobot.moveJoint(ROBOT_JOINT4, 360);
