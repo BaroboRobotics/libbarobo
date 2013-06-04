@@ -1,0 +1,83 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobot::moveToDirect()}\index{CMobot::moveToDirect()}}\\
+{\LARGE \texttt{CMobot::moveToDirectNB()}\index{CMobot::moveToDirectNB()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{moveToDirect()}
+\addcontentsline{toc}{section}{moveToDirectNB()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobot::moveToDirect(double angle1, double angle2, double angle3, double angle4);
+int CMobot::moveToDirectNB(double angle1, double angle2, double angle3, double angle4);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Move all of the joints of a mobot to the specified positions.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{15 mm}p{105 mm}}
+\texttt{angle1} & The absolute position to move joint 1, expressed in degrees. \\
+\texttt{angle2} & The absolute position to move joint 2, expressed in degrees. \\
+\texttt{angle3} & The absolute position to move joint 3, expressed in degrees. \\
+\texttt{angle4} & The absolute position to move joint 4, expressed in degrees. \\
+\end{tabular}
+\end{description}
+\noindent
+
+{\bf Description}\\
+\vspace{-12pt}
+\begin{quote}
+{\bf CMobot::moveToDirect()}\\
+This function moves all of the joints of a mobot to the specified absolute positions. 
+
+{\bf CMobot::moveToDirectNB()}\\
+This function moves all of the joints of a mobot to the specified absolute positions. 
+
+The function \texttt{moveToDirectNB()} is the non-blocking version of
+the \texttt{moveToDirect()} function, which means that the function will return
+immediately and the physical mobot motion will occur asynchronously. For
+more details on blocking and non-blocking functions, please refer to 
+Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\
+\end{quote}
+
+Note that the main difference between this function and its sister function,
+\texttt{moveJointTo()}, is that this function explicitly moves the motor in
+whichever direction is the shortest to achieve its goal.
+
+\noindent
+{\bf Example}\\
+The \texttt{moveToDirect()} function moves the joint to the requested position choosing
+the shortest distance. For instance, consider the following function calls:
+\begin{verbatim}
+mobot.moveTo(350, 0, 0, 0);
+\end{verbatim}
+When the preceding line of code is executed, joint 1 on the mobot will rotate 350
+degrees in the forward direction. However, in the following line,
+\begin{verbatim}
+mobot.moveToDirect(350, 0, 0, 0);
+\end{verbatim}
+the first joint of the mobot will actually rotate -10 degrees in the negative direction to achieve the
+desired final position. Instead of rotating the entire 350 degrees, the mobot calculates
+that a movement of -10 degrees will require less traveled distance to achieve the same final
+position.\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

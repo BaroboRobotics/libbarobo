@@ -76,72 +76,175 @@ IDI_ICON_down           ICON                    "res\\ico00001.ico"
 IDI_ICON_stop           ICON                    "res\\icon2.ico"
 IDI_ICON_right          ICON                    "res\\ico00002.ico"
 IDI_ICON_left           ICON                    "res\\ico00003.ico"
+IDI_ICON1               ICON                    "res\\ico00004.ico"
+IDI_ICON_GREENDOT       ICON                    "res\\ico00005.ico"
+IDI_ICON_BAROBO         ICON                    "res\\barobo.ico"
+IDI_ICON_REDDOT         ICON                    "res\\icon4.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Dialog
 //
 
-IDD_ABOUTBOX DIALOGEX 0, 0, 170, 62
+IDD_ABOUTBOX DIALOGEX 0, 0, 191, 63
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "About iMobotController_Windows"
+CAPTION "About RobotController"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
-    ICON            IDR_MAINFRAME,IDC_STATIC,14,14,21,20
-    LTEXT           "iMobotController_Windows, Version 1.0",IDC_STATIC,42,14,114,8,SS_NOPREFIX
-    LTEXT           "Copyright (C) 2011",IDC_STATIC,42,26,114,8
-    DEFPUSHBUTTON   "OK",IDOK,113,41,50,14,WS_GROUP
+    LTEXT           "RobotController, Version 1.6",IDC_STATIC,42,14,114,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2012, Barobo, Inc.",IDC_STATIC,42,26,114,8
+    DEFPUSHBUTTON   "OK",IDOK,134,42,50,14,WS_GROUP
+    CONTROL         145,IDC_STATIC,"Static",SS_BITMAP,14,15,21,20
 END
 
-IDD_IMOBOTCONTROLLER_WINDOWS_DIALOG DIALOGEX 0, 0, 388, 258
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_MAXIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
-EXSTYLE WS_EX_APPWINDOW
-CAPTION "iMobotController_Windows"
+IDD_IMOBOTCONTROLLER_WINDOWS_DIALOG DIALOGEX 7, 19, 388, 305
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_BORDER
+EXSTYLE WS_EX_CLIENTEDGE
+MENU IDR_MENU1
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
-    CONTROL         "",IDC_SLIDER_speed1,"msctls_trackbar32",TBS_VERT | TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,12,156,16,88
-    EDITTEXT        IDC_EDIT_speed1,11,138,24,14,ES_AUTOHSCROLL | ES_READONLY
-    CONTROL         "",IDC_SLIDER_speed2,"msctls_trackbar32",TBS_VERT | TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,41,156,16,88
-    EDITTEXT        IDC_EDIT_speed2,41,138,24,14,ES_AUTOHSCROLL | ES_READONLY
-    CONTROL         "",IDC_SLIDER_speed4,"msctls_trackbar32",TBS_VERT | TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,101,156,16,88
-    EDITTEXT        IDC_EDIT_speed3,71,138,24,14,ES_AUTOHSCROLL | ES_READONLY
-    CONTROL         "",IDC_SLIDER_speed3,"msctls_trackbar32",TBS_VERT | TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,71,156,16,88
-    EDITTEXT        IDC_EDIT_speed4,101,138,24,14,ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_EDIT_position1,143,150,23,14,ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_EDIT_position2,173,150,24,14,ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_EDIT_position3,203,150,24,14,ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_EDIT_position4,233,150,24,14,ES_AUTOHSCROLL | ES_READONLY
-    LISTBOX         IDC_LIST_gaits,279,138,96,86,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
-    PUSHBUTTON      "Play",IDC_BUTTON_play,279,228,96,18
-    GROUPBOX        "Joint Speed Control",IDC_STATIC,6,126,126,127
-    LTEXT           "Joint Angle (degrees [0-360])",IDC_STATIC,143,137,96,8
-    PUSHBUTTON      "Button1",IDC_BUTTON_Motor2Forward,187,25,24,24,BS_ICON
-    PUSHBUTTON      "Button1",IDC_BUTTON_Motor3Forward,211,25,24,24,BS_ICON
-    PUSHBUTTON      "Button1",IDC_BUTTON_Motor4Forward,235,25,24,24,BS_ICON
-    PUSHBUTTON      "Button1",IDC_BUTTON_Motor1Stop,163,49,24,24,BS_ICON
-    PUSHBUTTON      "Button1",IDC_BUTTON_Motor2Stop,187,49,24,24,BS_ICON
-    PUSHBUTTON      "Button1",IDC_BUTTON_Motor3Stop,211,49,24,24,BS_ICON
-    PUSHBUTTON      "Button1",IDC_BUTTON_Motor4Stop,235,49,24,24,BS_ICON
-    PUSHBUTTON      "Button1",IDC_BUTTON_Motor1Backward,163,73,24,24,BS_ICON
-    PUSHBUTTON      "Button1",IDC_BUTTON_Motor2Backward,187,73,24,24,BS_ICON
-    PUSHBUTTON      "Button1",IDC_BUTTON_Motor3Backward,211,73,24,24,BS_ICON
-    PUSHBUTTON      "Button1",IDC_BUTTON_Motor4Backward,235,73,24,24,BS_ICON
-    PUSHBUTTON      "Button1",IDC_BUTTON_Motor1Forward,163,25,24,24,BS_ICON
-    GROUPBOX        "Joint Position Control",IDC_STATIC,138,126,126,126
-    CONTROL         "",IDC_SLIDER_position1,"msctls_trackbar32",TBS_VERT | TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,143,167,22,84
-    CONTROL         "",IDC_SLIDER_position2,"msctls_trackbar32",TBS_VERT | TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,173,167,22,84
-    CONTROL         "",IDC_SLIDER_position3,"msctls_trackbar32",TBS_VERT | TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,203,167,22,84
-    CONTROL         "",IDC_SLIDER_position4,"msctls_trackbar32",TBS_VERT | TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,233,167,22,84
-    GROUPBOX        "Gaits",IDC_STATIC,270,126,114,126
-    GROUPBOX        "Individual Joint Control",IDC_STATIC,156,12,109,90
-    PUSHBUTTON      "Connect",IDC_BUTTON_connect,6,0,54,12
-    PUSHBUTTON      "Button1",IDC_BUTTON_rollLeft,276,49,24,24,BS_ICON
-    PUSHBUTTON      "Button1",IDC_BUTTON_rollForward,300,25,24,24,BS_ICON
-    PUSHBUTTON      "Button1",IDC_BUTTON_rollRight,324,49,24,24,BS_ICON
-    PUSHBUTTON      "Button1",IDC_BUTTON_rollStop,300,49,24,24,BS_ICON
-    PUSHBUTTON      "Button1",IDC_BUTTON_rollBack,300,73,24,24,BS_ICON
-    GROUPBOX        "Rolling Control",IDC_STATIC,270,12,84,90
-    CONTROL         137,IDC_STATIC,"Static",SS_BITMAP,6,12,143,105
+    CONTROL         "",IDC_SLIDER_speed1,"msctls_trackbar32",TBS_VERT | TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,12,180,16,84
+    EDITTEXT        IDC_EDIT_speed1,12,162,24,14,ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "",IDC_SLIDER_speed2,"msctls_trackbar32",TBS_VERT | TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,41,180,16,84
+    EDITTEXT        IDC_EDIT_speed2,42,162,24,14,ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "",IDC_SLIDER_speed4,"msctls_trackbar32",TBS_VERT | TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,102,180,16,84
+    EDITTEXT        IDC_EDIT_speed3,72,162,24,14,ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "",IDC_SLIDER_speed3,"msctls_trackbar32",TBS_VERT | TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,71,180,16,84
+    EDITTEXT        IDC_EDIT_speed4,102,162,24,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_position1,144,162,23,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_position2,174,162,24,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_position3,204,162,24,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_position4,234,162,24,14,ES_AUTOHSCROLL | ES_READONLY
+    LISTBOX         IDC_LIST_gaits,276,138,102,138,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Play",IDC_BUTTON_play,276,282,102,12
+    GROUPBOX        "Joint Speed Control",IDC_STATIC,6,126,126,174
+    LTEXT           "Joint Angle ( [-180, 180] degrees)",IDC_STATIC,143,137,110,8
+    PUSHBUTTON      "Button1",IDC_BUTTON_Motor2Forward,180,30,24,24,BS_ICON
+    PUSHBUTTON      "Button1",IDC_BUTTON_Motor3Forward,204,30,24,24,BS_ICON
+    PUSHBUTTON      "Button1",IDC_BUTTON_Motor4Forward,228,30,24,24,BS_ICON
+    PUSHBUTTON      "Button1",IDC_BUTTON_Motor1Stop,156,54,24,24,BS_ICON
+    PUSHBUTTON      "Button1",IDC_BUTTON_Motor2Stop,180,54,24,24,BS_ICON
+    PUSHBUTTON      "Button1",IDC_BUTTON_Motor3Stop,204,54,24,24,BS_ICON
+    PUSHBUTTON      "Button1",IDC_BUTTON_Motor4Stop,228,54,24,24,BS_ICON
+    PUSHBUTTON      "Button1",IDC_BUTTON_Motor1Backward,156,78,24,24,BS_ICON
+    PUSHBUTTON      "Button1",IDC_BUTTON_Motor2Backward,180,78,24,24,BS_ICON
+    PUSHBUTTON      "Button1",IDC_BUTTON_Motor3Backward,204,78,24,24,BS_ICON
+    PUSHBUTTON      "Button1",IDC_BUTTON_Motor4Backward,228,78,24,24,BS_ICON
+    PUSHBUTTON      "Button1",IDC_BUTTON_Motor1Forward,156,30,24,24,BS_ICON
+    GROUPBOX        "Joint Position Control",IDC_STATIC,138,126,126,174
+    CONTROL         "",IDC_SLIDER_position1,"msctls_trackbar32",TBS_AUTOTICKS | TBS_VERT | TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,144,180,22,84
+    CONTROL         "",IDC_SLIDER_position2,"msctls_trackbar32",TBS_VERT | TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,174,180,22,84
+    CONTROL         "",IDC_SLIDER_position3,"msctls_trackbar32",TBS_VERT | TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,204,180,22,84
+    CONTROL         "",IDC_SLIDER_position4,"msctls_trackbar32",TBS_VERT | TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,234,180,22,84
+    GROUPBOX        "Motions",IDC_STATIC,270,126,114,174
+    GROUPBOX        "Individual Joint Control",IDC_STATIC,150,6,109,102
+    PUSHBUTTON      "Button1",IDC_BUTTON_rollLeft,276,43,24,24,BS_ICON
+    PUSHBUTTON      "Button1",IDC_BUTTON_rollForward,300,19,24,24,BS_ICON
+    PUSHBUTTON      "Button1",IDC_BUTTON_rollRight,324,43,24,24,BS_ICON
+    PUSHBUTTON      "Button1",IDC_BUTTON_rollStop,300,43,24,24,BS_ICON
+    PUSHBUTTON      "Button1",IDC_BUTTON_rollBack,300,67,24,24,BS_ICON
+    GROUPBOX        "Rolling Control",IDC_STATIC,270,6,84,90
+    EDITTEXT        IDC_EDIT_setpos1,145,264,24,12,ES_AUTOHSCROLL | ES_WANTRETURN
+    EDITTEXT        IDC_EDIT_setpos2,175,264,24,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_setpos3,205,264,24,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_setpos4,235,264,24,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "MoveTo",IDC_BUTTON_GOPOS,144,282,54,12
+    CONTROL         142,IDC_JOINTPICTURE,"Static",SS_BITMAP | SS_SUNKEN,6,6,138,102,WS_EX_STATICEDGE
+    PUSHBUTTON      "Move To Zero",IDC_BUTTON_MOVETOZERO,6,108,120,12
+    CTEXT           "1",IDC_STATIC,12,150,24,8
+    CTEXT           "2",IDC_STATIC,42,150,24,8
+    CTEXT           "3",IDC_STATIC,72,150,24,8
+    CTEXT           "4",IDC_STATIC,102,150,24,8
+    EDITTEXT        IDC_EDIT_setspd1,12,265,24,12,ES_AUTOHSCROLL | ES_WANTRETURN
+    EDITTEXT        IDC_EDIT_setspd2,42,265,24,12,ES_AUTOHSCROLL | ES_WANTRETURN
+    EDITTEXT        IDC_EDIT_setspd3,72,265,24,12,ES_AUTOHSCROLL | ES_WANTRETURN
+    EDITTEXT        IDC_EDIT_setspd4,102,265,24,12,ES_AUTOHSCROLL | ES_WANTRETURN
+    PUSHBUTTON      "Set",IDC_BUTTON_SETSPD,12,282,114,12
+    CTEXT           "1",IDC_STATIC,162,18,8,8
+    CTEXT           "2",IDC_STATIC,186,18,8,8
+    CTEXT           "3",IDC_STATIC,210,18,8,8
+    CTEXT           "4",IDC_STATIC,234,18,8,8
+    CTEXT           "1",IDC_STATIC,144,150,24,8
+    CTEXT           "2",IDC_STATIC,174,150,24,8
+    CTEXT           "3",IDC_STATIC,204,150,24,8
+    CTEXT           "4",IDC_STATIC,234,150,24,8
+    LTEXT           "Joint speed ( [0, 120] deg/sec)",IDC_STATIC,12,138,100,8
+    PUSHBUTTON      "Move",IDC_BUTTON_MOVE,204,282,54,12
+END
+
+IDD_DIALOG_CONFIG DIALOGEX 0, 0, 214, 174
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configure Robot Bluetooth"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,102,156,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,156,156,50,14
+    EDITTEXT        IDC_EDIT1,12,12,144,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "Add",IDC_BUTTON_ADD,162,12,42,12
+    LISTBOX         IDC_LIST2,12,48,144,102,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Move Up",IDC_BUTTON_MOVEUP,162,48,42,12
+    PUSHBUTTON      "Move Down",IDC_BUTTON_MOVEDOWN,162,66,42,12
+    PUSHBUTTON      "Remove",IDC_BUTTON_REMOVE,162,84,42,12
+    LTEXT           "Configured Robot Addresses:",IDC_STATIC,12,36,96,8
+    LTEXT           "Add a Robot Address:",IDC_STATIC,12,0,72,8
+END
+
+IDD_DIALOG_TEACHING DIALOGEX 7, 19, 274, 182
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_BORDER | WS_SYSMENU
+EXSTYLE WS_EX_CLIENTEDGE
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    GROUPBOX        "Recorded Motions",IDC_STATIC,6,73,264,102
+    CONTROL         "",IDC_LIST_RECORDEDMOTIONS,"SysListView32",LVS_REPORT | LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,12,84,150,84
+    PUSHBUTTON      "Record Position",IDC_BUTTON_TEACHING_RECORD,168,96,96,12
+    CONTROL         "Play Looped",IDC_CHECK_TEACHING_LOOPED,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,168,84,55,10
+    PUSHBUTTON      "Add Delay (sec)",IDC_BUTTON_TEACHING_ADDDELAY,168,108,60,12
+    EDITTEXT        IDC_EDIT_TEACHING_DELAY,228,108,36,12,ES_AUTOHSCROLL | ES_NUMBER
+    PUSHBUTTON      "Delete Selected Position",IDC_BUTTON_TEACHING_DELETEPOS,168,120,96,12
+    PUSHBUTTON      "Save To Program",IDC_BUTTON_TEACHING_SAVE,168,144,96,12
+    PUSHBUTTON      "Play",IDC_BUTTON_play,168,156,48,12
+    PUSHBUTTON      "Stop",IDC_BUTTON_stop,216,156,48,12
+    PUSHBUTTON      "Clear All Poses",IDC_BUTTONCLEARALL,168,132,96,12
+    GROUPBOX        "Instructions",IDC_STATIC,6,6,264,60
+    LTEXT           "The buttons on the Mobot perform different actions in the Teaching Dialog.",IDC_STATIC,12,18,252,8
+    LTEXT           "Button A: Record the current pose.",IDC_STATIC,12,30,240,12
+    LTEXT           "Button B: Play / Stop",IDC_STATIC,12,42,240,12
+    LTEXT           "Button A and B together: Clear recorded motions.",IDC_STATIC,12,54,240,8
+END
+
+IDD_DIALOG_MAINTABCTRL DIALOGEX 0, 0, 400, 401
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Barobo RoboMancer"
+MENU IDR_MENU1
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_TAB1,"SysTabControl32",0x0,7,7,386,12
+END
+
+IDD_DIALOG_CONNECT DIALOGEX 7, 19, 386, 161
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_BORDER | WS_SYSMENU
+EXSTYLE WS_EX_CLIENTEDGE
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_LIST_AVAILABLEBOTS,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,12,36,90,96
+    CONTROL         "",IDC_LIST_CONNECTEDBOTS,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,174,18,90,114
+    PUSHBUTTON      "Connect ->",IDC_BUTTON_TEACHING_CONNECT,55,138,50,14
+    PUSHBUTTON      "Disconnect <-",IDC_BUTTON_TEACHING_DISCONNECT,216,138,50,14
+    GROUPBOX        "Available Robots",IDC_STATIC,6,6,156,149
+    GROUPBOX        "Connected Robots",IDC_STATIC,168,6,162,149
+    PUSHBUTTON      "Move Up",IDC_BUTTON_TEACHING_MOVEUP,270,18,50,14
+    PUSHBUTTON      "Move Down",IDC_BUTTON_TEACHING_MOVEDOWN,270,36,50,14
+    PUSHBUTTON      "Remove",IDC_BUTTON_REMOVEBOT,108,36,50,14
+    EDITTEXT        IDC_EDIT_ROBOTADDRESS,12,18,90,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Add Robot",IDC_BUTTON_ADDNEWBOT,108,18,50,14
+END
+
+IDD_DIALOG_PROGRAM DIALOGEX 7, 19, 386, 342
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_BORDER | WS_SYSMENU
+EXSTYLE WS_EX_CLIENTEDGE
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_EDIT1,7,7,372,195,ES_AUTOHSCROLL
 END
 
 
@@ -195,17 +298,56 @@ BEGIN
     IDD_ABOUTBOX, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 163
+        RIGHTMARGIN, 184
         TOPMARGIN, 7
-        BOTTOMMARGIN, 55
+        BOTTOMMARGIN, 56
     END
 
     IDD_IMOBOTCONTROLLER_WINDOWS_DIALOG, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 381
+        RIGHTMARGIN, 384
+        BOTTOMMARGIN, 298
+    END
+
+    IDD_DIALOG_CONFIG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 207
         TOPMARGIN, 7
-        BOTTOMMARGIN, 251
+        BOTTOMMARGIN, 167
+    END
+
+    IDD_DIALOG_TEACHING, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 267
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 175
+    END
+
+    IDD_DIALOG_MAINTABCTRL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 393
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 394
+    END
+
+    IDD_DIALOG_CONNECT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 379
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 154
+    END
+
+    IDD_DIALOG_PROGRAM, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 379
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 335
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -218,14 +360,63 @@ END
 
 IDB_BITMAP1             BITMAP                  "res\\bitmap1.bmp"
 IDB_BITMAP2             BITMAP                  "res\\bitmap2.bmp"
-IDB_BITMAP3             BITMAP                  "C:\\Documents and Settings\\david\\Projects\\Barobo\\iMobot_gumstix_api\\libimobotcomms\\demos\\iMobotController_Windows\\iMobot_diagram.bmp"
+IDB_BITMAP3             BITMAP                  "res\\iMobot_diagram.bmp"
+IDB_BITMAP4             BITMAP                  "res\\joint_diagram3.bmp"
+IDB_BITMAP5             BITMAP                  "res\\bitmap5.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // PNG
 //
 
-IDB_PNG1                PNG                     "C:\\Documents and Settings\\david\\Projects\\Barobo\\iMobot_gumstix_api\\libimobot\\Demos\\GtkGui\\interface\\imobot_diagram.png"
+IDB_PNG1                PNG                     "res\\imobot_diagram.png"
+IDB_PNG2                PNG                     "res\\Barobo_square_32.png"
+IDB_PNG3                PNG                     "res\\joint_diagram_verbose.png"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU1 MENU 
+BEGIN
+    POPUP "File"
+    BEGIN
+        MENUITEM "Exit",                        ID_FILE_EXIT
+    END
+    POPUP "Configure"
+    BEGIN
+        MENUITEM "Configure Robot Bluetooth",   ID_ROBOT_CONFIGUREROBOTBLUETOOTH
+    END
+    POPUP "Connect"
+    BEGIN
+        MENUITEM "Connect to Robot",            ID_ROBOT_CONNECTTOAROBOT
+        MENUITEM "Disconnect from Robot",       ID_CONNECT_DISCONNECTFROMROBOT
+    END
+    POPUP "Teaching Mode"
+    BEGIN
+        MENUITEM "Teaching Mode Dialog",        ID_TEACHINGMODE_TEACHINGMODEDIALOG
+    END
+    POPUP "Help"
+    BEGIN
+        MENUITEM "Help",                        ID_HELP_HELP
+        MENUITEM "Demos",                       ID_HELP_DEMOS
+        MENUITEM "About RobotController",       ID_HELP_ABOUTROBOTCONTROLLER
+    END
+END
+
+IDR_MENU_RECORDEDMOTIONPOPUP MENU 
+BEGIN
+    POPUP "RECORDED_MOTION_CONTEXT_POPUP"
+    BEGIN
+        MENUITEM "Go To Pose",                  ID_RECORDED_GOTOPOSE
+        MENUITEM "Rename",                      ID_RENAME_REMOVE
+        MENUITEM "Remove",                      ID_RENAME_REMOVE32782
+        MENUITEM "Move Up",                     ID_RECORDED_MOVEUP
+        MENUITEM "Move Down",                   ID_RECORDED_MOVEDOWN
+    END
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

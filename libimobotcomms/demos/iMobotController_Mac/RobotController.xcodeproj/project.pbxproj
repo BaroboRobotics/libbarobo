@@ -1,0 +1,399 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
+		256AC3DA0F4B6AC300CF3369 /* iMobotController_MacAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 256AC3D90F4B6AC300CF3369 /* iMobotController_MacAppDelegate.m */; };
+		7A6D09C314FD7EE4004EC18C /* joint_diagram3.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A6D09C214FD7EE4004EC18C /* joint_diagram3.png */; };
+		7A6D09C914FEAD6D004EC18C /* move_forward.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A6D09C814FEAD6D004EC18C /* move_forward.png */; };
+		7A6D09CD14FEADC6004EC18C /* inch_left.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A6D09CA14FEADC6004EC18C /* inch_left.png */; };
+		7A6D09CE14FEADC6004EC18C /* inch_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A6D09CB14FEADC6004EC18C /* inch_right.png */; };
+		7A6D09CF14FEADC6004EC18C /* move_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A6D09CC14FEADC6004EC18C /* move_back.png */; };
+		7A6D09D114FEADE0004EC18C /* stop.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A6D09D014FEADE0004EC18C /* stop.png */; };
+		7A6D09D414FEB166004EC18C /* ConfigFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6D09D314FEB166004EC18C /* ConfigFile.m */; };
+		7A6D0B1A15056A31004EC18C /* UIHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6D0B1915056A31004EC18C /* UIHandler.m */; };
+		7A6D0C6D1506B97F004EC18C /* UISlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6D0C6C1506B97F004EC18C /* UISlider.m */; };
+		7A6D0D431507F328004EC18C /* Motions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6D0D421507F328004EC18C /* Motions.m */; };
+		7A6D0F1D15094F36004EC18C /* Barobo_square.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A6D0F1C15094F36004EC18C /* Barobo_square.png */; };
+		7AB34FE3150A7C7500F20D5C /* libmobot.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AB34FE2150A7C7500F20D5C /* libmobot.dylib */; };
+		7AB350AB150A860600F20D5C /* libmobot.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7AB34FE2150A7C7500F20D5C /* libmobot.dylib */; };
+		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7AB3509E150A857700F20D5C /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+				7AB350AB150A860600F20D5C /* libmobot.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+		1DDD58150DA1D0A300B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		256AC3D80F4B6AC300CF3369 /* iMobotController_MacAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iMobotController_MacAppDelegate.h; sourceTree = "<group>"; };
+		256AC3D90F4B6AC300CF3369 /* iMobotController_MacAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iMobotController_MacAppDelegate.m; sourceTree = "<group>"; };
+		256AC3F00F4B6AF500CF3369 /* RobotController_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RobotController_Prefix.pch; sourceTree = "<group>"; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		7A6D09C214FD7EE4004EC18C /* joint_diagram3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = joint_diagram3.png; sourceTree = "<group>"; };
+		7A6D09C814FEAD6D004EC18C /* move_forward.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = move_forward.png; sourceTree = "<group>"; };
+		7A6D09CA14FEADC6004EC18C /* inch_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = inch_left.png; sourceTree = "<group>"; };
+		7A6D09CB14FEADC6004EC18C /* inch_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = inch_right.png; sourceTree = "<group>"; };
+		7A6D09CC14FEADC6004EC18C /* move_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = move_back.png; sourceTree = "<group>"; };
+		7A6D09D014FEADE0004EC18C /* stop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stop.png; sourceTree = "<group>"; };
+		7A6D09D214FEB166004EC18C /* ConfigFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigFile.h; sourceTree = "<group>"; };
+		7A6D09D314FEB166004EC18C /* ConfigFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigFile.m; sourceTree = "<group>"; };
+		7A6D0B1815056A31004EC18C /* UIHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIHandler.h; sourceTree = "<group>"; };
+		7A6D0B1915056A31004EC18C /* UIHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIHandler.m; sourceTree = "<group>"; };
+		7A6D0B3415057775004EC18C /* mobot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mobot.h; path = ../../mobot.h; sourceTree = SOURCE_ROOT; };
+		7A6D0B86150590A9004EC18C /* mobot_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mobot_internal.h; path = ../../mobot_internal.h; sourceTree = SOURCE_ROOT; };
+		7A6D0C6B1506B97F004EC18C /* UISlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISlider.h; sourceTree = "<group>"; };
+		7A6D0C6C1506B97F004EC18C /* UISlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISlider.m; sourceTree = "<group>"; };
+		7A6D0D411507F328004EC18C /* Motions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Motions.h; sourceTree = "<group>"; };
+		7A6D0D421507F328004EC18C /* Motions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Motions.m; sourceTree = "<group>"; };
+		7A6D0D471507F46E004EC18C /* Motions.x.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Motions.x.h; sourceTree = "<group>"; };
+		7A6D0F1C15094F36004EC18C /* Barobo_square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Barobo_square.png; sourceTree = "<group>"; };
+		7AB34FE2150A7C7500F20D5C /* libmobot.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; name = libmobot.dylib; path = ../../libmobot.dylib; sourceTree = SOURCE_ROOT; };
+		8D1107310486CEB800E47090 /* RobotController-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "RobotController-Info.plist"; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* RobotController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RobotController.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D11072E0486CEB800E47090 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+				7AB34FE3150A7C7500F20D5C /* libmobot.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				7A6D0B86150590A9004EC18C /* mobot_internal.h */,
+				256AC3D80F4B6AC300CF3369 /* iMobotController_MacAppDelegate.h */,
+				256AC3D90F4B6AC300CF3369 /* iMobotController_MacAppDelegate.m */,
+				7A6D09D214FEB166004EC18C /* ConfigFile.h */,
+				7A6D09D314FEB166004EC18C /* ConfigFile.m */,
+				7A6D0B1815056A31004EC18C /* UIHandler.h */,
+				7A6D0B1915056A31004EC18C /* UIHandler.m */,
+				7A6D0B3415057775004EC18C /* mobot.h */,
+				7A6D0C6B1506B97F004EC18C /* UISlider.h */,
+				7A6D0C6C1506B97F004EC18C /* UISlider.m */,
+				7A6D0D411507F328004EC18C /* Motions.h */,
+				7A6D0D421507F328004EC18C /* Motions.m */,
+				7A6D0D471507F46E004EC18C /* Motions.x.h */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				13E42FB307B3F0F600E4EEF1 /* CoreData.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107320486CEB800E47090 /* RobotController.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* iMobotController_Mac */ = {
+			isa = PBXGroup;
+			children = (
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = iMobotController_Mac;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				256AC3F00F4B6AF500CF3369 /* RobotController_Prefix.pch */,
+				29B97316FDCFA39411CA2CEA /* main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				7A6D0F1C15094F36004EC18C /* Barobo_square.png */,
+				7A6D09D014FEADE0004EC18C /* stop.png */,
+				7A6D09CA14FEADC6004EC18C /* inch_left.png */,
+				7A6D09CB14FEADC6004EC18C /* inch_right.png */,
+				7A6D09CC14FEADC6004EC18C /* move_back.png */,
+				7A6D09C814FEAD6D004EC18C /* move_forward.png */,
+				7A6D09C214FD7EE4004EC18C /* joint_diagram3.png */,
+				8D1107310486CEB800E47090 /* RobotController-Info.plist */,
+				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7AB34FE2150A7C7500F20D5C /* libmobot.dylib */,
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8D1107260486CEB800E47090 /* RobotController */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "RobotController" */;
+			buildPhases = (
+				8D1107290486CEB800E47090 /* Resources */,
+				8D11072C0486CEB800E47090 /* Sources */,
+				8D11072E0486CEB800E47090 /* Frameworks */,
+				7AB3509E150A857700F20D5C /* CopyFiles */,
+				7AB350B4150A862200F20D5C /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RobotController;
+			productInstallPath = "$(HOME)/Applications";
+			productName = iMobotController_Mac;
+			productReference = 8D1107320486CEB800E47090 /* RobotController.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "RobotController" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* iMobotController_Mac */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8D1107260486CEB800E47090 /* RobotController */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D1107290486CEB800E47090 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
+				7A6D09C314FD7EE4004EC18C /* joint_diagram3.png in Resources */,
+				7A6D09C914FEAD6D004EC18C /* move_forward.png in Resources */,
+				7A6D09CD14FEADC6004EC18C /* inch_left.png in Resources */,
+				7A6D09CE14FEADC6004EC18C /* inch_right.png in Resources */,
+				7A6D09CF14FEADC6004EC18C /* move_back.png in Resources */,
+				7A6D09D114FEADE0004EC18C /* stop.png in Resources */,
+				7A6D0F1D15094F36004EC18C /* Barobo_square.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7AB350B4150A862200F20D5C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#env > /tmp/srcroot\nEXECUTABLE=$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/$EXECUTABLE_NAME\nLIBMOBOT=$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/libmobot.dylib\n#echo $EXECUTABLE >> /tmp/srcroot\nOLD_DYLIB_PATH=`otool -L $EXECUTABLE | grep libmobot.dylib | sed '/libmobot.dylib/ s/(.*)//'`\n#echo $OLD_DYLIB_PATH >> /tmp/srcroot\ninstall_name_tool -change $OLD_DYLIB_PATH @executable_path/libmobot.dylib $EXECUTABLE\ninstall_name_tool -id libmobot.dylib $LIBMOBOT";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D11072C0486CEB800E47090 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072D0486CEB800E47090 /* main.m in Sources */,
+				256AC3DA0F4B6AC300CF3369 /* iMobotController_MacAppDelegate.m in Sources */,
+				7A6D09D414FEB166004EC18C /* ConfigFile.m in Sources */,
+				7A6D0B1A15056A31004EC18C /* UIHandler.m in Sources */,
+				7A6D0C6D1506B97F004EC18C /* UISlider.m in Sources */,
+				7A6D0D431507F328004EC18C /* Motions.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C165DFE840E0CC02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		1DDD58140DA1D0A300B32029 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1DDD58150DA1D0A300B32029 /* English */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C01FCF4B08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = RobotController_Prefix.pch;
+				INFOPLIST_FILE = "RobotController-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../..\"",
+				);
+				PRODUCT_NAME = RobotController;
+			};
+			name = Debug;
+		};
+		C01FCF4C08A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = RobotController_Prefix.pch;
+				INFOPLIST_FILE = "RobotController-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../..\"",
+				);
+				PRODUCT_NAME = RobotController;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ../../;
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ../../;
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "RobotController" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4B08A954540054247B /* Debug */,
+				C01FCF4C08A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "RobotController" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

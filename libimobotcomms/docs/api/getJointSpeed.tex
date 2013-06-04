@@ -2,12 +2,13 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CMobot::getJointSpeed()}\index{getJointSpeed()}}\\
+{\LARGE \texttt{CMobot::getJointSpeed()}\index{CMobot::getJointSpeed()}}\\
 %\phantomsection
 \addcontentsline{toc}{section}{getJointSpeed()}
 
 \noindent
-{\bf Synopsis}\\
+{\bf Synopsis}
+\vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
 int CMobot::getJointSpeed(mobotJointId_t id, double &speed);
@@ -15,7 +16,7 @@ int CMobot::getJointSpeed(mobotJointId_t id, double &speed);
 
 \noindent
 {\bf Purpose}\\
-Get the speed of a joint on the MoBot.\\
+Get the speed of a joint on the mobot.\\
 
 \noindent
 {\bf Return Value}\\
@@ -31,14 +32,16 @@ The function returns 0 on success and non-zero otherwise.\\
 discussed in Section \ref{sec:mobotJointId_t} on page
 \pageref{sec:mobotJointId_t}.\\
 \texttt{speed} & A variable of type \texttt{double}. The value of this variable
-will be overwritten with the current speed setting of the joint, which is a
-value between 0 and 1.
+will be overwritten with the current speed setting of the joint, which is 
+in units of degrees per second.
 \end{tabular}
 \end{description}
 
 \noindent
 {\bf Description}\\
-This function is used to find the speed of a joint.  This is the speed at which the joint will move when given motion commands. The values should be between 0 and 1. \\
+This function is used to find the current speed setting of a joint.  This is
+the speed at which the joint will move when given motion commands. The values
+are in units of degrees per second.
 
 \noindent
 {\bf Example}\\
@@ -46,5 +49,6 @@ This function is used to find the speed of a joint.  This is the speed at which 
 
 \noindent
 {\bf See Also}\\
+\texttt{getJointMaxSpeed(), getJointSpeedRatio(), setJointSpeed(), setJointSpeedRatio()}
 
 %\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

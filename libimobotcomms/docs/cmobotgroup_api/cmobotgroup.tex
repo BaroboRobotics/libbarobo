@@ -1,0 +1,66 @@
+%\lhead{libimobotcomms API Documentation}
+The \texttt{CMobotGroup} class is used to control multiple modules simultaneously. The
+member functions of the \texttt{CMobotGroup} class closely mimic those of the \texttt{CMobot}
+group. The main difference is that the member functions of the \texttt{CMobot} class
+affect a single mobot, whereas the member functions of the \texttt{CMobotGroup} class
+move and affect a group of many mobots. 
+
+\begin{table}[!h]
+%\capstart
+\begin{center}
+\caption{CMobotGroup Member Functions.}
+\input{cmobotgroup_table.tex}
+\end{center}
+\label{mobilec_api_cbinary}
+\end{table}
+
+\begin{table}[!h]
+%\capstart
+\begin{center}
+\caption{CMobotGroup Member Functions for Compound Motions.}
+\input{cmobotgroup_motions_table.tex}
+\end{center}
+\label{mobilec_api_compound}
+\end{table}
+
+\clearpage
+\newpage
+\input{cmobotgroup_api/addRobot}
+\input{cmobotgroup_api/driveJointTo}
+\input{cmobotgroup_api/driveTo}
+\input{cmobotgroup_api/motionArch}
+\input{cmobotgroup_api/motionDistance}
+\input{cmobotgroup_api/motionInchwormLeft}
+\input{cmobotgroup_api/motionInchwormRight}
+\input{cmobotgroup_api/motionRollBackward}
+\input{cmobotgroup_api/motionRollForward}
+\input{cmobotgroup_api/motionSkinny}
+\input{cmobotgroup_api/motionStand}
+\input{cmobotgroup_api/motionTumbleLeft}
+\input{cmobotgroup_api/motionTumbleRight}
+\input{cmobotgroup_api/motionTurnLeft}
+\input{cmobotgroup_api/motionTurnRight}
+\input{cmobotgroup_api/motionUnstand}
+\input{cmobotgroup_api/motionWait}
+\input{cmobotgroup_api/move}
+\input{cmobotgroup_api/moveJoint}
+\input{cmobotgroup_api/moveJointTo}
+\input{cmobotgroup_api/moveJointWait}
+\input{cmobotgroup_api/moveTo}
+\input{cmobotgroup_api/moveToZero}
+\input{cmobotgroup_api/moveWait}
+\input{cmobotgroup_api/resetToZero}
+%\input{cmobotgroup_api/setJointDirection}
+\input{cmobotgroup_api/setExitState}
+\input{cmobotgroup_api/setJointMovementStateNB}
+\input{cmobotgroup_api/setJointMovementStateTime}
+\input{cmobotgroup_api/setJointSafetyAngle}
+\input{cmobotgroup_api/setJointSafetyAngleTimeout}
+\input{cmobotgroup_api/setJointSpeed}
+\input{cmobotgroup_api/setJointSpeedRatio}
+\input{cmobotgroup_api/setJointSpeedRatios}
+\input{cmobotgroup_api/setJointSpeeds}
+\input{cmobotgroup_api/setMovementStateNB}
+\input{cmobotgroup_api/setMovementStateTime}
+\input{cmobotgroup_api/setTwoWheelRobotSpeed}
+\input{cmobotgroup_api/stop}

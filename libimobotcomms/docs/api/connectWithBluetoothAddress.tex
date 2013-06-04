@@ -1,0 +1,54 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in} \\
+\noindent
+{\LARGE \texttt{CMobot::connectWithBluetoothAddress()}\index{CMobot::connectWithBluetoothAddress()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{connectWithBluetoothAddress()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobot::connectWithBluetoothAddress(char address[], int channel = 1);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Connect to a remote mobot via Bluetooth by specifying the specific Bluetooth
+address of the device.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{10 mm}p{145 mm}}
+\texttt{address} & The Bluetooth address of the mobot. \\
+\texttt{channel} & (optional) The Bluetooth channel that the listening program is
+listening on. The default channel is channel 1. \\
+\end{tabular}
+\end{description}
+
+\noindent
+{\bf Description}\\
+This function is used to connect to a mobot. 
+
+\noindent
+{\bf Example}\\
+\begin{verbatim}
+mobot.connectWithBluetoothAddress("00:06:66:45:DA:02", 1);
+mobot.connectWithBluetoothAddress("00:06:66:45:DA:F3");
+\end{verbatim}
+\noindent
+
+\noindent
+{\bf See Also}\\
+\texttt{connect(), disconnect()}
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

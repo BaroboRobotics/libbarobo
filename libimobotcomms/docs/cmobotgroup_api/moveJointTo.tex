@@ -1,0 +1,73 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::moveJointTo()}\index{CMobotGroup::moveJointTo()}}\\
+{\LARGE \texttt{CMobotGroup::moveJointToNB()}\index{CMobotGroup::moveJointToNB()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{moveJointTo()}
+\addcontentsline{toc}{section}{moveJointToNB()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::moveJointTo(mobotJointId_t id, double angle);
+int CMobotGroup::moveJointToNB(mobotJointId_t id, double angle);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Move a joint on mobots to an absolute position.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{10 mm}p{145 mm}}
+\texttt{id} & The joint number to wait for. \\
+\texttt{angle} & The absolute angle in degrees to move the motor to.  \\
+\end{tabular}
+\end{description}
+
+\noindent
+{\bf Description}\\
+\vspace{-12pt}
+\begin{quote}
+{\bf CMobot::moveJointTo()}\\
+This function commands the motor on mobots in a group to move to a position specified in degrees at
+the current motor's speed. The current motor speed may be set with the
+\texttt{setJointSpeed()} member function. Please note that if the motor speed
+is set to zero, the motor will not move after calling the
+\texttt{moveJointTo()} function. 
+
+{\bf CMobot::moveJointToNB()}\\
+This function commands the motor on mobots in a group to move to a position specified in degrees at
+the current motor's speed. The current motor speed may be set with the
+\texttt{setJointSpeed()} member function. Please note that if the motor speed
+is set to zero, the motor will not move after calling the
+\texttt{moveJointToNB()} function. 
+
+The function \texttt{moveJointTo()} is a blocking function, which means that 
+the function will not return until the commanded motion is 
+completed. The function \texttt{moveJointToNB()} is the non-blocking version of
+the \texttt{moveJointTo()} function, which means that the function will return
+immediately and the physical mobot motion will occur asynchronously. For
+more details on blocking and non-blocking functions, please refer to 
+Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\
+\end{quote}
+\noindent
+{\bf Example}\\
+Please see the example in Section \ref{sec:democode} on page \pageref{sec:democode}.\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

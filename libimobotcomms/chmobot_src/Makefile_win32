@@ -1,0 +1,173 @@
+PACKAGE=chmobot
+VERSION=0.1
+HEADERS=../mobot.h
+PKGDIR=$(PACKAGE)-$(VERSION)/$(PACKAGE)
+LIBDIR=lib32
+
+CFLAGS= -DNONRELEASE -I./ -I../BaroboConfigFile/ -I../BaroboConfigFile/mxml-2.7/ /TP
+
+target: libmobot.dl
+
+OBJS= mobotgroup++.obj \
+      mobotigroup++.obj \
+      mobotlgroup++.obj \
+      chmobot_chdl.obj \
+      chmoboti_chdl.obj \
+      chmobotl_chdl.obj \
+      mobot++.obj \
+      mobot_get_functions++.obj \
+      mobot_motion_functions++.obj \
+      mobot_movement_functions++.obj \
+      mobot_record_functions++.obj \
+      mobot_set_functions++.obj \
+      moboti++.obj \
+      moboti_get_functions++.obj \
+      moboti_motion_functions++.obj \
+      moboti_movement_functions++.obj \
+      moboti_record_functions++.obj \
+      moboti_set_functions++.obj \
+      mobotl++.obj \
+      mobotl_get_functions++.obj \
+      mobotl_motion_functions++.obj \
+      mobotl_movement_functions++.obj \
+      mobotl_record_functions++.obj \
+      mobotl_set_functions++.obj \
+      mobot.obj \
+      mobot_get_functions.obj \
+      mobot_motion_functions.obj \
+      mobot_movement_functions.obj \
+      mobot_record_functions.obj \
+      mobot_set_functions.obj 
+
+libmobot.dl: $(OBJS)
+	ch dllink libmobot.dl cplusplus $(OBJS) ws2_32.lib shell32.lib ../BaroboConfigFile/baroboconfigfile.lib ../BaroboConfigFile/mxml-2.7/mxml.lib
+
+mobotgroup++.obj: ../mobotgroup++.cpp $(HEADERS)
+	ch dlcomp libmobotgroup.dl cplusplus $(CFLAGS) ../mobotgroup++.cpp
+
+mobotigroup++.obj: ../mobotigroup++.cpp $(HEADERS)
+	ch dlcomp libmobotigroup.dl cplusplus $(CFLAGS) ../mobotigroup++.cpp
+
+mobotlgroup++.obj: ../mobotlgroup++.cpp $(HEADERS)
+	ch dlcomp libmobotlgroup.dl cplusplus $(CFLAGS) ../mobotlgroup++.cpp
+
+# Mobot Files
+mobot.obj: ../mobot.c $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot.c
+
+mobot_get_functions.obj: ../mobot_get_functions.c $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_get_functions.c
+
+mobot_motion_functions.obj: ../mobot_motion_functions.c $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_motion_functions.c
+
+mobot_movement_functions.obj: ../mobot_movement_functions.c $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_movement_functions.c
+
+mobot_record_functions.obj: ../mobot_record_functions.c $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_record_functions.c
+
+mobot_set_functions.obj: ../mobot_set_functions.c $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_set_functions.c
+
+mobot++.obj: ../mobot++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot++.cpp
+
+mobot_get_functions++.obj: ../mobot_get_functions++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_get_functions++.cpp
+
+mobot_motion_functions++.obj: ../mobot_motion_functions++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_motion_functions++.cpp
+
+mobot_movement_functions++.obj: ../mobot_movement_functions++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_movement_functions++.cpp
+
+mobot_record_functions++.obj: ../mobot_record_functions++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_record_functions++.cpp
+
+mobot_set_functions++.obj: ../mobot_set_functions++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_set_functions++.cpp
+
+# Mobot-I Files
+moboti++.obj: ../moboti++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../moboti++.cpp
+
+moboti_get_functions++.obj: ../moboti_get_functions++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../moboti_get_functions++.cpp
+
+moboti_motion_functions++.obj: ../moboti_motion_functions++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../moboti_motion_functions++.cpp
+
+moboti_movement_functions++.obj: ../moboti_movement_functions++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../moboti_movement_functions++.cpp
+
+moboti_record_functions++.obj: ../moboti_record_functions++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../moboti_record_functions++.cpp
+
+moboti_set_functions++.obj: ../moboti_set_functions++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../moboti_set_functions++.cpp
+
+# Mobot-L Files
+mobotl++.obj: ../mobotl++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobotl++.cpp
+
+mobotl_get_functions++.obj: ../mobotl_get_functions++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobotl_get_functions++.cpp
+
+mobotl_motion_functions++.obj: ../mobotl_motion_functions++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobotl_motion_functions++.cpp
+
+mobotl_movement_functions++.obj: ../mobotl_movement_functions++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobotl_movement_functions++.cpp
+
+mobotl_record_functions++.obj: ../mobotl_record_functions++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobotl_record_functions++.cpp
+
+mobotl_set_functions++.obj: ../mobotl_set_functions++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobotl_set_functions++.cpp
+
+
+chmobot_chdl.obj: chmobot_chdl.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) chmobot_chdl.cpp
+
+chmoboti_chdl.obj: chmoboti_chdl.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) chmoboti_chdl.cpp
+
+chmobotl_chdl.obj: chmobotl_chdl.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) chmobotl_chdl.cpp
+
+install:
+	ch pkginstall.ch $(PACKAGE)
+	ch cp -R $(CHHOME)/dl/Mi* $(CHHOME)/package/chmobot/dl/
+
+uninstall:
+	ch pkginstall.ch -u $(PACKAGE)
+
+createpkg: libmobot.dl
+	echo Building $(PACKAGE)-$(VERSION).zip ...
+	rm -rf $(PACKAGE)-$(VERSION)
+	rm -rf $(PACKAGE)-$(VERSION).zip
+	mkdir -p $(PKGDIR)
+	mkdir $(PKGDIR)/lib
+	mkdir $(PKGDIR)/demos
+	mkdir $(PKGDIR)/dl
+	mkdir $(PKGDIR)/include
+	mkdir $(PKGDIR)/docs
+	cp chmobot.chf $(PKGDIR)/lib
+	cp chlinkboti.chf $(PKGDIR)/lib
+	cp chlinkbotl.chf $(PKGDIR)/lib
+	cp shiftTime.chf $(PKGDIR)/lib
+	cp delay.chf $(PKGDIR)/lib
+	cp libmobot.dl $(PKGDIR)/dl
+	cp ../mobot.h $(PKGDIR)/include
+	cp ../docs/mobot.pdf $(PKGDIR)/docs
+	cp ../demos/chdemos/*.ch $(PKGDIR)/demos
+	cp Makefile_win32 $(PACKAGE)-$(VERSION)/Makefile
+	cp Readme.txt $(PACKAGE)-$(VERSION)
+	zip -rq $(PACKAGE)-$(VERSION).zip $(PACKAGE)-$(VERSION)
+	
+
+clean:
+	rm *.obj *.dl
+
+

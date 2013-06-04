@@ -1,0 +1,68 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::driveJointTo()}\index{CMobotGroup::driveJointTo()}}\\
+{\LARGE \texttt{CMobotGroup::driveJointToNB()}\index{CMobotGroup::driveJointToNB()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{driveJointTo()}
+\addcontentsline{toc}{section}{driveJointToNB()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::driveJointTo(moboJointId_t id, double angle);
+int CMobotGroup::driveJointToNB(moboJointId_t id, double angle);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Move all of the joints of a mobot to the specified positions.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{15 mm}p{105 mm}}
+\texttt{id} & The id of the joint to move. \\
+\texttt{angle} & The absolute position to move the joint, expressed in degrees. \\
+\end{tabular}
+\end{description}
+\noindent
+
+{\bf Description}\\
+\vspace{-12pt}
+\begin{quote}
+Note that this function is similar to the \texttt{moveJointTo()} family of functions, except
+that this variant ignores the speed settings of the robot joints. This function causes
+the robot to move its joints towards its goal using a Proportional-Integral-Derivative (PID)
+controller.
+
+{\bf CMobotGroup::driveJointTo()}\\
+This function moves all of the joints of a mobot to the specified absolute positions. 
+
+{\bf CMobotGroup::driveJointToNB()}\\
+This function moves all of the joints of a mobot to the specified absolute positions. 
+
+The function \texttt{driveJointToNB()} is the non-blocking version of
+the \texttt{driveJointTo()} function, which means that the function will return
+immediately and the physical mobot motion will occur asynchronously. For
+more details on blocking and non-blocking functions, please refer to 
+Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\
+\end{quote}
+
+\noindent
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

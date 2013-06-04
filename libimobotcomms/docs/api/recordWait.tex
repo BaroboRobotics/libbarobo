@@ -1,0 +1,44 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobot::recordWait()}\index{CMobot::recordWait()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{recordWait()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobot::recordWait();
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Wait for a joint recording operation to finish.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+None\\
+
+\noindent
+{\bf Description}\\
+This function is used in conjunction with the \texttt{recordAngle()} function and/or
+the \texttt{recordAngles()} function. The \texttt{recordAngle()} and \texttt{recordAngles()} 
+functions both initiate a recording operation that runs in the background for a certain 
+amount of time. The \texttt{recordWait()} function is used to pause the main program
+until the recording operation has finished. \\
+
+\noindent
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+\texttt{recordAngle(), recordAngles()} \\
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

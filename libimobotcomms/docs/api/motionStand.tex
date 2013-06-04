@@ -2,14 +2,15 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CMobot::motionStand()}\index{motionStand()}}\\
-{\LARGE \texttt{CMobot::motionStandNB()}\index{motionStandNB()}}\\
+{\LARGE \texttt{CMobot::motionStand()}\index{CMobot::motionStand()}}\\
+{\LARGE \texttt{CMobot::motionStandNB()}\index{CMobot::motionStandNB()}}\\
 %\phantomsection
 \addcontentsline{toc}{section}{motionStand()}
 \addcontentsline{toc}{section}{motionStandNB()}
 
 \noindent
-{\bf Synopsis}\\
+{\bf Synopsis}
+\vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
 int CMobot::motionStand();
@@ -18,7 +19,7 @@ int CMobot::motionStandNB();
 
 \noindent
 {\bf Purpose}\\
-Stand the robot up on a faceplate.\\
+Stand the mobot up on a faceplate.\\
 
 \noindent
 {\bf Return Value}\\
@@ -30,12 +31,19 @@ None.\\
 
 \noindent
 {\bf Description}\\
-This function causes the robot to motionStand up into the camera platform.
+\vspace{-12pt}
+\begin{quote}
+{\bf CMobot::motionStand()}\\
+This function causes the mobot to motionStand up into the camera platform.
+
+{\bf CMobot::motionStandNB()}\\
+This function causes the mobot to motionStand up into the camera platform.
 
 This function has both a blocking and non-blocking version.
 The blocking version, \texttt{motionStand()}, will block until the
-MoBot motion has completed. The non-blocking version, \texttt{motionStandNB()},
+mobot motion has completed. The non-blocking version, \texttt{motionStandNB()},
 will return immediately, and the motion will be performed asynchronously.\\
+\end{quote}
 
 \noindent
 {\bf See Also}\\

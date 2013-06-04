@@ -1,0 +1,45 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::moveWait()}\index{CMobotGroup::moveWait()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{moveWait()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::moveWait();
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Wait for all joints of all mobots in the group to stop moving.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Description}\\
+This function is used to wait for all joint motions to finish. Functions such as
+\texttt{moveJointToNB()} and \texttt{moveJointNB()} do not wait for a joint to finish
+moving before continuing to allow multiple joints to move at the same time. The
+\texttt{moveWait()} or \texttt{moveJointWait()} functions are used to wait for
+mobotic motions to complete.
+
+Please note that if this function is called after a motor has been commanded to
+turn indefinitely, this function may never return and your program may hang.\\
+
+\noindent
+{\bf Example}\\
+See the sample program in Section \ref{sec:democode} on page \pageref{sec:democode}.
+\noindent
+
+\noindent
+{\bf See Also}\\
+\texttt{moveWait(), moveJointWait()}
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

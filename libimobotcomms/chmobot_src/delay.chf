@@ -1,0 +1,4 @@
+void delay(double seconds)
+{
+  msleep(seconds * 1000);
+}

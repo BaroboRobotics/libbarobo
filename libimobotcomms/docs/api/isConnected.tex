@@ -2,12 +2,13 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CMobot::isConnected()}\index{isConnected()}}\\
+{\LARGE \texttt{CMobot::isConnected()}\index{CMobot::isConnected()}}\\
 %\phantomsection
 \addcontentsline{toc}{section}{isConnected()}
 
 \noindent
-{\bf Synopsis}\\
+{\bf Synopsis}
+\vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
 int CMobot::isConnected();
@@ -15,11 +16,12 @@ int CMobot::isConnected();
 
 \noindent
 {\bf Purpose}\\
-Check to see if currently connected to a remote MoBot via Bluetooth.\\
+Check to see if currently connected to a remote mobot via Bluetooth.\\
 
 \noindent
 {\bf Return Value}\\
-The function returns zero if it is not currently connected to a MoBot, or non-zero otherwise.\\
+The function returns zero if it is not currently connected to a mobot or if an 
+error has occurred, or 1 if the mobot is connected.\\
 
 \noindent
 {\bf Parameters}\\
@@ -28,7 +30,7 @@ None.\\
 \noindent
 {\bf Description}\\
 This function is used to check if the software is currently connected to
-a MoBot.\\
+a mobot.\\
 
 \noindent
 {\bf Example}\\
@@ -36,5 +38,5 @@ a MoBot.\\
 
 \noindent
 {\bf See Also}\\
-
+\texttt{connect(), disconnect()}\\
 %\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

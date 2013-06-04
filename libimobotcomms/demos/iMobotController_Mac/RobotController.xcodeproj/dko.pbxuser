@@ -1,0 +1,784 @@
+// !$*UTF8*$!
+{
+	256AC3D80F4B6AC300CF3369 /* iMobotController_MacAppDelegate.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {883, 650}}";
+			sepNavSelRange = "{908, 0}";
+			sepNavVisRange = "{0, 1076}";
+		};
+	};
+	256AC3D90F4B6AC300CF3369 /* iMobotController_MacAppDelegate.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {883, 1560}}";
+			sepNavSelRange = "{1098, 0}";
+			sepNavVisRange = "{950, 919}";
+			sepNavWindowFrame = "{{61, 237}, {750, 558}}";
+		};
+	};
+	256AC3F00F4B6AF500CF3369 /* RobotController_Prefix.pch */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {883, 525}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 171}";
+		};
+	};
+	29B97313FDCFA39411CA2CEA /* Project object */ = {
+		activeBuildConfigurationName = Release;
+		activeExecutable = 7A6D09AB14FD7D25004EC18C /* RobotController */;
+		activeTarget = 8D1107260486CEB800E47090 /* RobotController */;
+		addToTargets = (
+			8D1107260486CEB800E47090 /* RobotController */,
+		);
+		breakpoints = (
+			7A6D0A1D15018315004EC18C /* ConfigFile.m:23 */,
+			7A6D0A34150183A1004EC18C /* ConfigFile.m:24 */,
+			7A6D0A81150195E6004EC18C /* objc_exception_throw */,
+			7A6D0B6215058DD4004EC18C /* UIHandler.m:69 */,
+			7A6D0B6F15058E41004EC18C /* UIHandler.m:37 */,
+			7A6D0BAE15059916004EC18C /* UIHandler.m:47 */,
+			7A6D0BB61505994D004EC18C /* UIHandler.m:91 */,
+			7A6D0BC215059AAC004EC18C /* UIHandler.m:41 */,
+			7A6D0C971506C013004EC18C /* UISlider.m:39 */,
+			7A6D0CA31506C101004EC18C /* UISlider.m:44 */,
+			7A6D0CC21506C471004EC18C /* UISlider.m:23 */,
+			7A6D0CE61506C7AF004EC18C /* UIHandler.m:133 */,
+			7A32425015190A350011BD82 /* ConfigFile.m:16 */,
+			7A32426115190B7F0011BD82 /* iMobotController_MacAppDelegate.m:26 */,
+			7AF464F1151BC58400965B9A /* iMobotController_MacAppDelegate.m:54 */,
+		);
+		codeSenseManager = 7A6D09BE14FD7D2C004EC18C /* Code sense */;
+		executables = (
+			7A6D09AB14FD7D25004EC18C /* RobotController */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXBookmarksDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXBookmarksDataSource_NameID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					200,
+					200,
+					515,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXBookmarksDataSource_LocationID,
+					PBXBookmarksDataSource_NameID,
+					PBXBookmarksDataSource_CommentsID,
+				);
+			};
+			PBXConfiguration.PBXFileTableDataSource3.PBXExecutablesDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXExecutablesDataSource_NameID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					22,
+					300,
+					593,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXExecutablesDataSource_ActiveFlagID,
+					PBXExecutablesDataSource_NameID,
+					PBXExecutablesDataSource_CommentsID,
+				);
+			};
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = 1;
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					705,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					665,
+					60,
+					20,
+					48,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 363649595;
+			PBXWorkspaceStateSaveDate = 363649595;
+		};
+		perUserProjectItems = {
+			7A32428615190DED0011BD82 /* PBXTextBookmark */ = 7A32428615190DED0011BD82 /* PBXTextBookmark */;
+			7A32429C151948290011BD82 /* PBXTextBookmark */ = 7A32429C151948290011BD82 /* PBXTextBookmark */;
+			7A566C6E159E827C00A9F134 /* PBXTextBookmark */ = 7A566C6E159E827C00A9F134 /* PBXTextBookmark */;
+			7A566C87159E833600A9F134 /* PBXTextBookmark */ = 7A566C87159E833600A9F134 /* PBXTextBookmark */;
+			7A566CC715ACBD6000A9F134 /* PBXTextBookmark */ = 7A566CC715ACBD6000A9F134 /* PBXTextBookmark */;
+			7A566CC815ACBD6000A9F134 /* PBXTextBookmark */ = 7A566CC815ACBD6000A9F134 /* PBXTextBookmark */;
+			7A6D0A211501832E004EC18C /* PBXBookmark */ = 7A6D0A211501832E004EC18C /* PBXBookmark */;
+			7A6D0B2215056C2C004EC18C /* PBXTextBookmark */ = 7A6D0B2215056C2C004EC18C /* PBXTextBookmark */;
+			7A6D0B2315056C2C004EC18C /* PBXTextBookmark */ = 7A6D0B2315056C2C004EC18C /* PBXTextBookmark */;
+			7A6D0C4E1506B53A004EC18C /* PBXTextBookmark */ = 7A6D0C4E1506B53A004EC18C /* PBXTextBookmark */;
+			7A6D0D9D1507FE2A004EC18C /* PBXTextBookmark */ = 7A6D0D9D1507FE2A004EC18C /* PBXTextBookmark */;
+			7A6D0DEF150802A5004EC18C /* PBXTextBookmark */ = 7A6D0DEF150802A5004EC18C /* PBXTextBookmark */;
+			7A6D0F3C150951AC004EC18C /* PlistBookmark */ = 7A6D0F3C150951AC004EC18C /* PlistBookmark */;
+			7A85C8911523E1A2006C8009 /* PBXTextBookmark */ = 7A85C8911523E1A2006C8009 /* PBXTextBookmark */;
+			7A85C8981523E218006C8009 /* PBXTextBookmark */ = 7A85C8981523E218006C8009 /* PBXTextBookmark */;
+			7A85C8991523E218006C8009 /* PBXTextBookmark */ = 7A85C8991523E218006C8009 /* PBXTextBookmark */;
+			7AD90B2015ACDADB00BD5D6B /* PBXTextBookmark */ = 7AD90B2015ACDADB00BD5D6B /* PBXTextBookmark */;
+			7AD90B3515AF509300BD5D6B /* PBXTextBookmark */ = 7AD90B3515AF509300BD5D6B /* PBXTextBookmark */;
+			7AD90B3615AF509300BD5D6B /* PBXTextBookmark */ = 7AD90B3615AF509300BD5D6B /* PBXTextBookmark */;
+			7AD90B3715AF509300BD5D6B /* PBXTextBookmark */ = 7AD90B3715AF509300BD5D6B /* PBXTextBookmark */;
+			7AF4644E151A9A9300965B9A /* PBXTextBookmark */ = 7AF4644E151A9A9300965B9A /* PBXTextBookmark */;
+		};
+		sourceControlManager = 7A6D09BD14FD7D2C004EC18C /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	29B97316FDCFA39411CA2CEA /* main.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {883, 525}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 257}";
+		};
+	};
+	7A32425015190A350011BD82 /* ConfigFile.m:16 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 7A6D09D314FEB166004EC18C /* ConfigFile.m */;
+		functionName = "-initWithFilename:";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 16;
+		location = RobotController;
+		modificationTime = 362710358.447612;
+		originalNumberOfMultipleMatches = 1;
+		state = 2;
+	};
+	7A32426115190B7F0011BD82 /* iMobotController_MacAppDelegate.m:26 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 256AC3D90F4B6AC300CF3369 /* iMobotController_MacAppDelegate.m */;
+		functionName = "-applicationDidFinishLaunching:";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 26;
+		location = RobotController;
+		modificationTime = 362710358.447637;
+		originalNumberOfMultipleMatches = 1;
+		state = 2;
+	};
+	7A32428615190DED0011BD82 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A6D09D214FEB166004EC18C /* ConfigFile.h */;
+		name = "ConfigFile.h: 27";
+		rLen = 389;
+		rLoc = 637;
+		rType = 0;
+		vrLen = 1033;
+		vrLoc = 0;
+	};
+	7A32429C151948290011BD82 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A6D09D314FEB166004EC18C /* ConfigFile.m */;
+		name = "ConfigFile.m: 16";
+		rLen = 0;
+		rLoc = 341;
+		rType = 0;
+		vrLen = 943;
+		vrLoc = 0;
+	};
+	7A566C6E159E827C00A9F134 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A6D0B4F15058D07004EC18C /* mobot.h */;
+		name = "mobot.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 708;
+		vrLoc = 1772;
+	};
+	7A566C87159E833600A9F134 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A6D0B1815056A31004EC18C /* UIHandler.h */;
+		name = "UIHandler.h: 121";
+		rLen = 0;
+		rLoc = 3890;
+		rType = 0;
+		vrLen = 828;
+		vrLoc = 0;
+	};
+	7A566CC715ACBD6000A9F134 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A6D0B3415057775004EC18C /* mobot.h */;
+		name = "mobot.h: 675";
+		rLen = 0;
+		rLoc = 26059;
+		rType = 0;
+		vrLen = 1904;
+		vrLoc = 5649;
+	};
+	7A566CC815ACBD6000A9F134 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A6D0B1815056A31004EC18C /* UIHandler.h */;
+		name = "UIHandler.h: 121";
+		rLen = 0;
+		rLoc = 3890;
+		rType = 0;
+		vrLen = 1208;
+		vrLoc = 1002;
+	};
+	7A6D09AB14FD7D25004EC18C /* RobotController */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 1;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = RobotController;
+		savedGlobals = {
+		};
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+		variableFormatDictionary = {
+		};
+	};
+	7A6D09BD14FD7D2C004EC18C /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "";
+			};
+		};
+	};
+	7A6D09BE14FD7D2C004EC18C /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	7A6D09D214FEB166004EC18C /* ConfigFile.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {883, 494}}";
+			sepNavSelRange = "{637, 389}";
+			sepNavVisRange = "{0, 1033}";
+			sepNavWindowFrame = "{{15, 279}, {750, 558}}";
+		};
+	};
+	7A6D09D314FEB166004EC18C /* ConfigFile.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {883, 1469}}";
+			sepNavSelRange = "{224, 0}";
+			sepNavVisRange = "{0, 975}";
+			sepNavWindowFrame = "{{425, 284}, {750, 558}}";
+		};
+	};
+	7A6D0A1D15018315004EC18C /* ConfigFile.m:23 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 7A6D09D314FEB166004EC18C /* ConfigFile.m */;
+		functionName = "-initWithFilename:";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 23;
+		location = RobotController;
+		modificationTime = 362710358.4464079;
+		originalNumberOfMultipleMatches = 1;
+		state = 2;
+	};
+	7A6D0A211501832E004EC18C /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 7A6D09C214FD7EE4004EC18C /* joint_diagram3.png */;
+	};
+	7A6D0A34150183A1004EC18C /* ConfigFile.m:24 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 7A6D09D314FEB166004EC18C /* ConfigFile.m */;
+		functionName = "-initWithFilename:";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 24;
+		location = iMobotController_Mac;
+		modificationTime = 362710358.4464971;
+		originalNumberOfMultipleMatches = 1;
+		state = 2;
+	};
+	7A6D0A81150195E6004EC18C /* objc_exception_throw */ = {
+		isa = PBXSymbolicBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 1;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		hitCount = 0;
+		ignoreCount = 0;
+		location = libobjc.A.dylib;
+		modificationTime = 362710359.4812089;
+		originalNumberOfMultipleMatches = 1;
+		state = 1;
+		symbolName = objc_exception_throw;
+	};
+	7A6D0B1815056A31004EC18C /* UIHandler.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {691, 1573}}";
+			sepNavSelRange = "{3890, 0}";
+			sepNavVisRange = "{1002, 1208}";
+			sepNavWindowFrame = "{{84, 216}, {750, 558}}";
+		};
+	};
+	7A6D0B1915056A31004EC18C /* UIHandler.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {883, 3757}}";
+			sepNavSelRange = "{4023, 0}";
+			sepNavVisRange = "{3562, 953}";
+			sepNavWindowFrame = "{{107, 195}, {750, 558}}";
+		};
+	};
+	7A6D0B2215056C2C004EC18C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3F00F4B6AF500CF3369 /* RobotController_Prefix.pch */;
+		name = "iMobotController_Mac_Prefix.pch: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 171;
+		vrLoc = 0;
+	};
+	7A6D0B2315056C2C004EC18C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
+		name = "main.m: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 257;
+		vrLoc = 0;
+	};
+	7A6D0B3415057775004EC18C /* mobot.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {691, 8606}}";
+			sepNavSelRange = "{25754, 0}";
+			sepNavVisRange = "{5587, 1848}";
+		};
+	};
+	7A6D0B4F15058D07004EC18C /* mobot.h */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = mobot.h;
+		path = ../../mobot.h;
+		sourceTree = "<group>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {691, 8606}}";
+			sepNavSelRange = "{25754, 0}";
+			sepNavVisRange = "{5587, 1848}";
+			sepNavWindowFrame = "{{15, 279}, {750, 558}}";
+		};
+	};
+	7A6D0B6215058DD4004EC18C /* UIHandler.m:69 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 7A6D0B1915056A31004EC18C /* UIHandler.m */;
+		functionName = "-initSliders";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 69;
+		location = iMobotController_Mac;
+		modificationTime = 362710358.4465221;
+		originalNumberOfMultipleMatches = 1;
+		state = 2;
+	};
+	7A6D0B6F15058E41004EC18C /* UIHandler.m:37 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 7A6D0B1915056A31004EC18C /* UIHandler.m */;
+		functionName = "-init";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 37;
+		location = iMobotController_Mac;
+		modificationTime = 362710358.44675;
+		originalNumberOfMultipleMatches = 1;
+		state = 2;
+	};
+	7A6D0B86150590A9004EC18C /* mobot_internal.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {883, 3796}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{1612, 2217}";
+		};
+	};
+	7A6D0BAE15059916004EC18C /* UIHandler.m:47 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 7A6D0B1915056A31004EC18C /* UIHandler.m */;
+		functionName = "-initWithBRComms:";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 47;
+		location = iMobotController_Mac;
+		modificationTime = 362710358.446852;
+		originalNumberOfMultipleMatches = 1;
+		state = 2;
+	};
+	7A6D0BB61505994D004EC18C /* UIHandler.m:91 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 7A6D0B1915056A31004EC18C /* UIHandler.m */;
+		functionName = "-onButtonMoveToZero:";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 91;
+		location = iMobotController_Mac;
+		modificationTime = 362710358.44695;
+		originalNumberOfMultipleMatches = 1;
+		state = 2;
+	};
+	7A6D0BC215059AAC004EC18C /* UIHandler.m:41 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 7A6D0B1915056A31004EC18C /* UIHandler.m */;
+		functionName = "-init";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 41;
+		location = iMobotController_Mac;
+		modificationTime = 362710358.4470521;
+		originalNumberOfMultipleMatches = 1;
+		state = 2;
+	};
+	7A6D0C4E1506B53A004EC18C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A6D0B86150590A9004EC18C /* mobot_internal.h */;
+		name = "mobot_internal.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 2217;
+		vrLoc = 1612;
+	};
+	7A6D0C6B1506B97F004EC18C /* UISlider.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {883, 506}}";
+			sepNavSelRange = "{313, 0}";
+			sepNavVisRange = "{0, 510}";
+		};
+	};
+	7A6D0C6C1506B97F004EC18C /* UISlider.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {883, 741}}";
+			sepNavSelRange = "{384, 0}";
+			sepNavVisRange = "{0, 521}";
+		};
+	};
+	7A6D0C971506C013004EC18C /* UISlider.m:39 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 7A6D0C6C1506B97F004EC18C /* UISlider.m */;
+		functionName = "-startTrackingAt:inView:";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 39;
+		location = iMobotController_Mac;
+		modificationTime = 362710358.4473571;
+		originalNumberOfMultipleMatches = 1;
+		state = 2;
+	};
+	7A6D0CA31506C101004EC18C /* UISlider.m:44 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 7A6D0C6C1506B97F004EC18C /* UISlider.m */;
+		functionName = "-stopTracking:at:inView:mouseIsUp:";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 44;
+		location = iMobotController_Mac;
+		modificationTime = 362710358.447386;
+		originalNumberOfMultipleMatches = 1;
+		state = 2;
+	};
+	7A6D0CC21506C471004EC18C /* UISlider.m:23 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 7A6D0C6C1506B97F004EC18C /* UISlider.m */;
+		functionName = "-isMouseDown";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 23;
+		location = iMobotController_Mac;
+		modificationTime = 362710358.4474229;
+		originalNumberOfMultipleMatches = 1;
+		state = 2;
+	};
+	7A6D0CE61506C7AF004EC18C /* UIHandler.m:133 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 7A6D0B1915056A31004EC18C /* UIHandler.m */;
+		functionName = "-main";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 133;
+		location = iMobotController_Mac;
+		modificationTime = 362710358.4474691;
+		originalNumberOfMultipleMatches = 1;
+		state = 2;
+	};
+	7A6D0D411507F328004EC18C /* Motions.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {883, 487}}";
+			sepNavSelRange = "{251, 0}";
+			sepNavVisRange = "{0, 750}";
+		};
+	};
+	7A6D0D421507F328004EC18C /* Motions.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {883, 491}}";
+			sepNavSelRange = "{851, 0}";
+			sepNavVisRange = "{0, 858}";
+		};
+	};
+	7A6D0D471507F46E004EC18C /* Motions.x.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {883, 474}}";
+			sepNavSelRange = "{587, 0}";
+			sepNavVisRange = "{0, 632}";
+			sepNavWindowFrame = "{{15, 279}, {750, 558}}";
+		};
+	};
+	7A6D0D9D1507FE2A004EC18C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A6D0D411507F328004EC18C /* Motions.h */;
+		name = "Motions.h: 14";
+		rLen = 0;
+		rLoc = 251;
+		rType = 0;
+		vrLen = 750;
+		vrLoc = 0;
+	};
+	7A6D0DEF150802A5004EC18C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A6D0C6B1506B97F004EC18C /* UISlider.h */;
+		name = "UISlider.h: 21";
+		rLen = 0;
+		rLoc = 313;
+		rType = 0;
+		vrLen = 510;
+		vrLoc = 0;
+	};
+	7A6D0F3C150951AC004EC18C /* PlistBookmark */ = {
+		isa = PlistBookmark;
+		fRef = 8D1107310486CEB800E47090 /* RobotController-Info.plist */;
+		fallbackIsa = PBXBookmark;
+		isK = 0;
+		kPath = (
+			CFBundleName,
+		);
+		name = "/Users/dko/Projects/iMobot_gumstix_api/libimobotcomms/demos/iMobotController_Mac/RobotController-Info.plist";
+		rLen = 0;
+		rLoc = 9223372036854775808;
+	};
+	7A85C8911523E1A2006C8009 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* iMobotController_MacAppDelegate.m */;
+		name = "iMobotController_MacAppDelegate.m: 39";
+		rLen = 0;
+		rLoc = 1098;
+		rType = 0;
+		vrLen = 919;
+		vrLoc = 950;
+	};
+	7A85C8981523E218006C8009 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A6D0C6C1506B97F004EC18C /* UISlider.m */;
+		name = "UISlider.m: 29";
+		rLen = 0;
+		rLoc = 384;
+		rType = 0;
+		vrLen = 521;
+		vrLoc = 0;
+	};
+	7A85C8991523E218006C8009 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A6D0D471507F46E004EC18C /* Motions.x.h */;
+		name = "Motions.x.h: 19";
+		rLen = 0;
+		rLoc = 587;
+		rType = 0;
+		vrLen = 632;
+		vrLoc = 0;
+	};
+	7AD90B2015ACDADB00BD5D6B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A6D0B1915056A31004EC18C /* UIHandler.m */;
+		name = "UIHandler.m: 293";
+		rLen = 0;
+		rLoc = 7713;
+		rType = 0;
+		vrLen = 810;
+		vrLoc = 6968;
+	};
+	7AD90B3515AF509300BD5D6B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A6D0B1915056A31004EC18C /* UIHandler.m */;
+		name = "UIHandler.m: 156";
+		rLen = 0;
+		rLoc = 4023;
+		rType = 0;
+		vrLen = 953;
+		vrLoc = 3562;
+	};
+	7AD90B3615AF509300BD5D6B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A6D0B3415057775004EC18C /* mobot.h */;
+		name = "mobot.h: 676";
+		rLen = 0;
+		rLoc = 25754;
+		rType = 0;
+		vrLen = 1848;
+		vrLoc = 5587;
+	};
+	7AD90B3715AF509300BD5D6B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A6D0B1815056A31004EC18C /* UIHandler.h */;
+		name = "UIHandler.h: 121";
+		rLen = 0;
+		rLoc = 3890;
+		rType = 0;
+		vrLen = 1208;
+		vrLoc = 1002;
+	};
+	7AF4644E151A9A9300965B9A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D80F4B6AC300CF3369 /* iMobotController_MacAppDelegate.h */;
+		name = "iMobotController_MacAppDelegate.h: 32";
+		rLen = 0;
+		rLoc = 908;
+		rType = 0;
+		vrLen = 1076;
+		vrLoc = 0;
+	};
+	7AF464F1151BC58400965B9A /* iMobotController_MacAppDelegate.m:54 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 256AC3D90F4B6AC300CF3369 /* iMobotController_MacAppDelegate.m */;
+		functionName = "-onMenuConnectConnect:";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 54;
+		location = RobotController;
+		modificationTime = 362710358.447661;
+		originalNumberOfMultipleMatches = 1;
+		state = 2;
+	};
+	8D1107260486CEB800E47090 /* RobotController */ = {
+		activeExec = 0;
+		executables = (
+			7A6D09AB14FD7D25004EC18C /* RobotController */,
+		);
+	};
+}

@@ -4,35 +4,35 @@
 
 int main()
 {
-  CMobot robot;
+  CMobot mobot;
 
   /* Connect to the paired MoBot */
-  robot.connect();
+  mobot.connect();
 
-  /* Set robot motors to speed of 0.50 */
-  int i;
-  for(i = 1; i <= 4; i++) {
-    robot.setJointSpeed((mobotJointId_t)i, 0.50);
-  }
-  /* Set the robot to "home" position, where all joint angles are 0 degrees. */
-  robot.moveToZero();
+  /* Set mobot motors to slow speed of 10 degrees per second */
+  mobot.setJointSpeed(ROBOT_JOINT2, deg2rad(10));
+  mobot.setJointSpeed(ROBOT_JOINT3, deg2rad(10));
 
-  /* Move the robot into a fetal position */
-  robot.moveJointTo(MOBOT_JOINT2, -85);
-  robot.moveJointTo(MOBOT_JOINT3, 80);
+  /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
+  mobot.moveToZero();
+
+  /* Move the mobot into a fetal position */
+  mobot.moveJointTo(ROBOT_JOINT2, deg2rad(-85));
+  mobot.moveJointTo(ROBOT_JOINT3, deg2rad(80));
 
   /* Rotate the bottom faceplate by 45 degrees */
-  robot.moveJointTo(MOBOT_JOINT1, 45);
+  mobot.moveJointTo(ROBOT_JOINT1, deg2rad(45));
 
   /* Lift the body up */
-  robot.moveJointTo(MOBOT_JOINT2, 20);
+  mobot.moveJointTo(ROBOT_JOINT2, deg2rad(20));
 
-  /* Pan the robot around for 3 seconds */
-  robot.setJointSpeed(MOBOT_JOINT1, 0.30);
-  robot.moveContinuousTime( MOBOT_FORWARD,
-                            MOBOT_NEUTRAL,
-                            MOBOT_NEUTRAL,
-                            MOBOT_NEUTRAL,
+  /* Pan the mobot around for 3 seconds at 90 degrees per second*/
+  mobot.setJointSpeed(ROBOT_JOINT1, deg2rad(90));
+  mobot.setJointSpeed(ROBOT_JOINT1, 0.30);
+  mobot.moveContinuousTime( ROBOT_FORWARD,
+                            ROBOT_NEUTRAL,
+                            ROBOT_NEUTRAL,
+                            ROBOT_NEUTRAL,
                             3000 );
 
   return 0;

@@ -5,4 +5,4 @@ include_directories( ${LIBIMOBOTCOMMS_SOURCE_DIR})
 link_directories( ${LIBIMOBOTCOMMS_BINARY_DIR})
 
 add_executable(multipleModules multipleModules.cpp)
-target_link_libraries(multipleModules mobot)
+target_link_libraries(multipleModules mobotStatic)

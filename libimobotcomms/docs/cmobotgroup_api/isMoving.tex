@@ -1,0 +1,42 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::isMoving()}\index{isMoving()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{isMoving()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::isMoving();
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Check to see if any mobot in the group is currently moving any of its joints.\\
+
+\noindent
+{\bf Return Value}\\
+This function returns 0 if none of the joints are being driven, 1 if any joint
+is being driven, and -1 if there was an error communicating with the Mobot.\\
+
+\noindent
+{\bf Parameters}\\
+None.\\
+
+\noindent
+{\bf Description}\\
+This function is used to determine if any mobot in the mobot group is currently moving any of
+its joints. \\
+
+\noindent
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

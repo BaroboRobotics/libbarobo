@@ -1,0 +1,70 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::resetToZero()}\index{CMobotGroup::resetToZero()}}\\
+{\LARGE \texttt{CMobotGroup::resetToZeroNB()}\index{CMobotGroup::resetToZeroNB()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{resetToZero()}
+\addcontentsline{toc}{section}{resetToZeroNB()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::resetToZero();
+int CMobotGroup::resetToZeroNB();
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Move all of the joints of mobots in the group to their zero position.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+None.\\
+
+\noindent
+{\bf Description}\\
+\vspace{-12pt}
+\begin{quote}
+{\bf CMobot::resetToZero()}\\
+This function moves all of the joints of mobots in the group to their zero position.
+Please note that this function is non-blocking and will return immediately. Use
+this function in conjunction with the \texttt{moveWait()} function to block
+until the movement completes.
+
+This function differs from the \texttt{moveToZero()} function by limiting the total
+rotation back to the zero position to 180 degrees max, whereas the \texttt{moveToZero()}
+function will completely ``rewind'' back to the zero position, possible turning
+the faceplate joints more than 180 degrees.
+
+{\bf CMobot::resetToZeroNB()}\\
+This function moves all of the joints of mobots in the group to their zero position.
+Please note that this function is non-blocking and will return immediately. Use
+this function in conjunction with the \texttt{moveWait()} function to block
+until the movement completes.
+
+The function \texttt{resetToZero()} is a blocking function, which means that 
+the function will not return until the commanded motion is 
+completed. The function \texttt{resetToZeroNB()} is the non-blocking version of
+the \texttt{resetToZero()} function, which means that the function will return
+immediately and the physical mobot motion will occur asynchronously. For
+more details on blocking and non-blocking functions, please refer to 
+Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\
+\end{quote}
+
+\noindent
+{\bf Example}\\
+Please see the demo at Section \ref{sec:democode} on page \pageref{sec:democode}.\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

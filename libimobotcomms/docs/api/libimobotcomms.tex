@@ -1,41 +1,75 @@
 %\lhead{libimobotcomms API Documentation}
 \noindent
 The header file {\bf mobot.h} defines all the data types, macros 
-and function prototypes for the MoBot API library. The header file
+and function prototypes for the mobot API library. The header file
 declares a class called \texttt{CMobot} which contains member functions which
-may be used to control the robot.
+may be used to control the mobot.
 
 \begin{table}[!h]
 %\capstart
 \begin{center}
 \caption{CMobot Member Functions.}
-\begin{tabular}{p{38 mm}p{77 mm}}
+\begin{tabular}{p{48 mm}p{110 mm}}
 %\begin{tabular}{ll}
 \hline
 Function & Description \\
 \hline
-%\texttt{pose()} \dotfill & Pose multiple joints of the MoBot. \\
+%\texttt{pose()} \dotfill & Pose multiple joints of the mobot. \\
 \texttt{CMobot()} & The CMobot constructor function. This function
-is called automatically and should not be called explicitly. This constructor will 
-automatically try to connect with a paired MoBot using the \texttt{connect()} member
-function. To specify an address to connect to, please use the
-\texttt{CMobot(const char address[], int channel);} constructor.\\
-\texttt{CMobot(const char address[], int channel);} & 
-An alternate constructor which may be used to explicitly specify the address of a MoBot 
-to connect to. \\
+is called automatically and should not be called explicitly. \\
 \texttt{\textasciitilde CMobot()} & The CMobot destructor function. This function
 is called automatically and should not be called explicitly. \\
 & \\
-\texttt{connect()} & Connect to a remote MoBot module. This function connects to an already-paired MoBot module in Microsoft Windows. This function does not currently work for non-Windows operating systems, such as Mac or Linux. For those operating systems, please use the \texttt{connectWithAddress()} function instead. \\
-\texttt{connectWithAddress()} & Connect to a MoBot module by specifying its Bluetooth address. \\
-\texttt{disconnect()} & Disconnect from a MoBot module. \\
-\texttt{getJointAngle()} & Gets a joint's angle. \\
+\texttt{blinkLED()} & Blink the LED on a Mobot module. \\
+\texttt{connect()} & Connect to a remote mobot module. This function 
+connects to the first mobot listed in the Barobo configuration file. To
+edit the configuration file, use the mobot control graphical user interface,
+and select the menu item ``Mobot $\rightarrow$ Configure Mobot Bluetooth''. \\
+\texttt{connectWithBluetoothAddress()} & Connect to a mobot module by specifying its Bluetooth address. \\
+\texttt{connectWithIPAddress()} & Connect to a mobot module by specifying a remote computer's IP address. \\
+\texttt{disconnect()} & Disconnect from a mobot module. \\
+\texttt{disableButtonCallback()} & Reverts a Mobot's buttons to their factory-default functions. \\
+\texttt{driveTo()} & Move all four joints of the mobot to specified absolute angles. \\
+\texttt{driveToNB()} & Move all four joints of the mobot to specified absolute angles. \\
+\texttt{enableButtonCallback()} & Enables a user-driven callback for handling button-press events on a module. \\
+\texttt{getJointAngle()} & Get a joint's angle. \\
+\texttt{getJointAngleAverage()} & Get a joint's angle. \\
+\texttt{getJointAngles()} & Get joint angles for all joints. \\
+\texttt{getJointAnglesAverage()} & Get joint angles for all joints. \\
 %\texttt{getJointDirection()} & Gets a motor's currently assigned direction. \\
-\texttt{getJointSpeed()} & Gets a motor's speed. \\
-\texttt{getJointState()} & Gets a motor's current status. \\
-\texttt{isConnected()} & This function is used to check the connection to a MoBot. \\
-\texttt{move()} & Move all four joints of the MoBot by specified angles. \\
+\texttt{getJointMaxSpeed()} & Get a joint's maximum speed in radians per second. \\
+\texttt{getJointSafetyAngle()} & Get the Mobot's safety angle limit. \\
+\texttt{getJointSafetyAngleTimeout()} & Get the Mobot's safety angle limit timeout. \\
+\texttt{getJointSpeed()} & Get a motor's current speed setting in radians per second. \\
+\texttt{getJointSpeeds()} & Get all motor's current speed settings in radians per second. \\
+\texttt{getJointSpeedRatio()} & Get a motor's speed as a ratio of the motor's maximum speed. \\
+\texttt{getJointSpeedRatios()} & Get all motor speeds as ratios of the motor's maximum speed. \\
+\texttt{getJointState()} & Get a motor's current status. \\
+\texttt{isConnected()} & This function is used to check the connection to a mobot. \\
+\texttt{isMoving()} & This function is used to check if any joints are currently in motion. \\
+\texttt{move()} & Move all four joints of the mobot by specified angles. \\
 \texttt{moveNB()} & Identical to \texttt{move()} but non-blocking. \\
+\texttt{moveJoint()} & Move a joint. \\
+\texttt{moveJointNB()} & Move a joint. \\
+\texttt{moveJointTo()} & Set the desired motor position for a joint. \\
+\texttt{moveJointToNB()} & Identical to \texttt{moveJointTo()} but non-blocking. \\
+\texttt{moveJointWait()} & Wait until the specified motor has stopped moving. \\
+\texttt{moveTo()} & Move all four joints of the mobot to specified absolute angles. \\
+\texttt{moveToNB()} & Identical to \texttt{moveTo()} but non-blocking. \\
+\texttt{moveToZero()} & Instruct all motors to go to their zero positions. \\
+\texttt{moveToZeroNB()} & Identical to \texttt{moveToZero()} but non-blocking. \\
+\texttt{moveWait()} & Wait until all motors have stopped moving. \\
+%\texttt{setJointDirection()} & Set the motor direction of a motor. Set
+%to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
+\texttt{recordAngle()} & Begin recording the angle of a joint. \\
+\texttt{recordAngleBegin()} & Begin recording the angle of a joint. \\
+\texttt{recordAngleEnd()} & End recording the angle of a joint. \\
+\texttt{recordAngles()} & Begin recording the angle of all joints. \\
+\texttt{recordAnglesBegin()} & Begin recording the angle of all joints. \\
+\texttt{recordAnglesEnd()} & End recording the angle of all joints. \\
+\texttt{recordDistanceBegin()} & Begin recording the distance travelled of a joint. \\
+\texttt{recordDistanceEnd()} & End recording the distance of a joint. \\
+\texttt{recordWait()} & Wait for recording operations to finish. \\
 \hline
 \end{tabular}
 \end{center}
@@ -43,29 +77,35 @@ is called automatically and should not be called explicitly. \\
 \end{table}
 
 \addtocounter{table}{-1}
-\begin{table}[!H]
+
+\begin{table}[!h]
 %\capstart
 \begin{center}
-\caption{CMobot Member Functions (Continued).}
-\begin{tabular}{p{38 mm}p{77 mm}}
+\caption{CMobot Member Functions (Continued)}
+\begin{tabular}{p{48 mm}p{110 mm}}
 %\begin{tabular}{ll}
 \hline
 Function & Description \\
 \hline
-\texttt{moveContinuousNB()} & Move joints continuously. Joints will move untill stopped.\\
-\texttt{moveContinuousTime()} & Move joints continuously for a certain amount of time.\\
-\texttt{moveTo()} & Move all four joints of the MoBot to specified absolute angles. \\
-\texttt{moveToNB()} & Identical to \texttt{moveTo()} but non-blocking. \\
-\texttt{moveJointTo()} & Set the desired motor position. \\
-\texttt{moveJointToNB()} & Identical to \texttt{moveJointTo()} but non-blocking. \\
-\texttt{moveJointWait()} & Wait until the specified motor has stopped moving. \\
-\texttt{moveWait()} & Wait until all motors have stopped moving. \\
-\texttt{moveToZero()} & Instructs all motors to go to their zero positions. \\
-\texttt{moveToZeroNB()} & Identical to \texttt{moveToZero()} but non-blocking. \\
-%\texttt{setJointDirection()} & Set the motor direction of a motor. Set
-to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
-\texttt{setJointSpeed()} & Sets a motor's speed. \\
-\texttt{stop()} & Stop all currently executing motions of the MoBot. \\
+\texttt{resetToZero()} & Instruct all motors to go to their zero positions. \\
+\texttt{setExitState()} & Set the exit state of a joint. \\
+\texttt{setJointMovementStateNB()} & Set the movement state of a joint. \\
+\texttt{setJointMovementStateTime()} & Set the movement state of a joint for a period of time.\\
+\texttt{setJointMovementStateTimeNB()} & Set the movement state of a joint for a period of time.\\
+\texttt{setJointSafetyAngle()} & Set the Mobot's safety angle limit. The default value is 10 degrees.\\
+\texttt{setJointSafetyAngleTimeout()} & Set the Mobot's safety angle limit timeout. The default value is 0.5 seconds.\\
+\texttt{setJointSpeed()} & Set a motor's speed setting in radians per second. \\
+\texttt{setJointSpeeds()} & Set all motor speeds in radians per second. \\
+\texttt{setJointSpeedRatio()} & Set a joints speed setting to a fraction of its maximum speed, a value between 0 and 1. \\
+\texttt{setJointSpeedRatios()} & Set all joint speed settings to a fraction of its
+maximum speed, expressed as a value from 0 to 1. \\
+\texttt{setMovementStateNB()} & Change the movement states of the joints. Movement states include moving forward, backward, neutral, or holding their current position.\\
+\texttt{setMovementStateTime()} & Change the movement states of the joints for a certain amount of time.\\
+\texttt{setMovementStateTimeNB()} & Change the movement states of the joints for a certain amount of time.\\
+\texttt{stopAllJoints()} & Stop all currently executing motions of the mobot. \\
+\texttt{stopOneJoint()} & Stop a joint on the mobot. \\
+\texttt{stopTwoJoints()} & Stop two joints on the mobot. \\
+\texttt{stopThreeJoints()} & Stop three joints on the mobot. \\
 \hline
 \end{tabular}
 \end{center}
@@ -76,23 +116,34 @@ to "0" for automatic direction, "1" for forward, and "2" for reverse. \\
 %\capstart
 \begin{center}
 \caption{CMobot Member Functions for Compound Motions.}
-\begin{tabular}{p{38 mm}p{77 mm}}
+\begin{tabular}{p{38 mm}p{107 mm}}
 Compound Motions & These are convenience functions of commonly used compound motions. \\
 \hline
-\texttt{motionInchwormLeft()} \dotfill & Inchworm gait towards the left. \\
+\texttt{motionArch()} \dotfill & Arch the mobot for better ground clearance. \\
+\texttt{motionArchNB()} \dotfill & Identical to \texttt{motionArch} but non-blocking. \\
+\texttt{motionDistance()} \dotfill & Roll a wheeled Mobot a certain distance. \\
+\texttt{motionDistanceNB()} \dotfill & Identical to \texttt{motionDistance} but non-blocking. \\
+\texttt{motionInchwormLeft()} \dotfill & Inchworm motion towards the left. \\
 \texttt{motionInchwormLeftNB()} \dotfill & Identical to \texttt{motionInchwormLeft} but non-blocking. \\
-\texttt{motionInchwormRight()} \dotfill & Inchworm gait towards the right. \\
+\texttt{motionInchwormRight()} \dotfill & Inchworm motion towards the right. \\
 \texttt{motionInchwormRightNB()} \dotfill & Identical to \texttt{motionInchwormRight} but non-blocking. \\
 \texttt{motionRollBackward()} \dotfill & Roll on the faceplates toward the backward direction. \\
 \texttt{motionRollBackwardNB()} \dotfill & Identical to \texttt{motionRollBackward()} but non-blocking. \\
 \texttt{motionRollForward()} \dotfill & Roll on the faceplates forwards. \\
 \texttt{motionRollForwardNB()} \dotfill & Identical to \texttt{motionRollForward()} but non-blocking. \\
-\texttt{motionStand()} \dotfill & Stand the MoBot up on its end. \\
-\texttt{motionStandNB()} \dotfill & Identical to \texttt{motionStandNB()} but non-blocking. \\
-\texttt{motionTurnLeft()} \dotfill & Rotate the MoBot counterclockwise. \\
+\texttt{motionSkinny()} \dotfill & Move the mobot into a skinny profile. \\
+\texttt{motionSkinnyNB()} \dotfill & Identical to \texttt{motionSkinny()} but non-blocking. \\
+\texttt{motionStand()} \dotfill & Stand the mobot up on its end. \\
+\texttt{motionStandNB()} \dotfill & Identical to \texttt{motionStand()} but non-blocking. \\
+\texttt{motionTumbleLeft()} \dotfill & Perform the tumbling motion. \\
+\texttt{motionTumbleLeftNB()} \dotfill & Identical to \texttt{motionTumbleLeft()} but non-blocking. \\
+\texttt{motionTumbleRight()} \dotfill & Perform the tumbling motion in the opposite direction of ``motionTumbleLeft''. \\
+\texttt{motionTumbleRightNB()} \dotfill & Identical to \texttt{motionTumbleRight()} but non-blocking. \\
+\texttt{motionTurnLeft()} \dotfill & Rotate the mobot counterclockwise. \\
 \texttt{motionTurnLeftNB()} \dotfill & Identical to \texttt{motionTurnLeft()} but non-blocking. \\
-\texttt{motionTurnRight()} \dotfill & Rotate the MoBot clockwise. \\
+\texttt{motionTurnRight()} \dotfill & Rotate the mobot clockwise. \\
 \texttt{motionTurnRightNB()} \dotfill & Identical to \texttt{motionTurnRight()} but non-blocking. \\
+\texttt{motionWait()} \dotfill & Wait for a motion to finish. \\
 \hline
 \end{tabular}
 \end{center}
@@ -101,54 +152,70 @@ Compound Motions & These are convenience functions of commonly used compound mot
 
 \clearpage
 \newpage
+\input{api/blinkLED}
 \input{api/connect}
-\pagebreak
-\input{api/connectWithAddress}
-\pagebreak
+\input{api/connectWithBluetoothAddress}
+\input{api/connectWithIPAddress}
 \input{api/disconnect}
-\pagebreak
+\input{api/driveJointTo}
+\input{api/driveTo}
 \input{api/getJointAngle}
-\pagebreak
+\input{api/getJointAngleAverage}
+\input{api/getJointAngles}
+\input{api/getJointAnglesAverage}
 %\input{api/getJointDirection}
-%\pagebreak
+\input{api/getJointMaxSpeed}
+\input{api/getJointSafetyAngle}
+\input{api/getJointSafetyAngleTimeout}
 \input{api/getJointSpeed}
-\pagebreak
+\input{api/getJointSpeedRatio}
+\input{api/getJointSpeedRatios}
+\input{api/getJointSpeeds}
 \input{api/getJointState}
-\pagebreak
 \input{api/isConnected}
-\pagebreak
+\input{api/isMoving}
+\input{api/motionArch}
+\input{api/motionDistance}
 \input{api/motionInchwormLeft}
-\pagebreak
 \input{api/motionInchwormRight}
-\pagebreak
 \input{api/motionRollBackward}
-\pagebreak
 \input{api/motionRollForward}
-\pagebreak
+\input{api/motionSkinny}
 \input{api/motionStand}
-\pagebreak
+\input{api/motionTumbleLeft}
+\input{api/motionTumbleRight}
 \input{api/motionTurnLeft}
-\pagebreak
 \input{api/motionTurnRight}
-\pagebreak
+\input{api/motionUnstand}
+\input{api/motionWait}
 \input{api/move}
-\pagebreak
-\input{api/moveContinuousNB}
-\pagebreak
-\input{api/moveContinuousTime}
-\pagebreak
-\input{api/moveTo}
-\pagebreak
+\input{api/moveJoint}
 \input{api/moveJointTo}
-\pagebreak
 \input{api/moveJointWait}
-\pagebreak
-\input{api/moveWait}
-\pagebreak
+\input{api/moveTo}
 \input{api/moveToZero}
-\pagebreak
+\input{api/moveWait}
+\input{api/recordAngle}
+\input{api/recordAngleBegin}
+\input{api/recordAngleEnd}
+\input{api/recordAngles}
+\input{api/recordAnglesBegin}
+\input{api/recordAnglesEnd}
+\input{api/recordDistanceBegin}
+\input{api/recordDistanceEnd}
+\input{api/recordWait}
+\input{api/resetToZero}
 %\input{api/setJointDirection}
-%\pagebreak
+\input{api/setExitState}
+\input{api/setJointMovementStateNB}
+\input{api/setJointMovementStateTime}
+\input{api/setJointSafetyAngle}
+\input{api/setJointSafetyAngleTimeout}
 \input{api/setJointSpeed}
-\pagebreak
+\input{api/setJointSpeedRatio}
+\input{api/setJointSpeedRatios}
+\input{api/setJointSpeeds}
+\input{api/setMovementStateNB}
+\input{api/setMovementStateTime}
+\input{api/setTwoWheelRobotSpeed}
 \input{api/stop}

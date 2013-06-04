@@ -1,0 +1,53 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in} \\
+\noindent
+{\LARGE \texttt{CMobot::connectWithIPAddress()}\index{CMobot::connectWithIPAddress()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{connectWithIPAddress()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobot::connectWithIPAddress(char address[], char port[] = "5768");
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Connect to a remote mobot connected to a remote computer over the internet.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{10 mm}p{145 mm}}
+\texttt{address} & The IP address of the remote computer. \\
+\texttt{port} & (optional) The port to connect to. \\
+\end{tabular}
+\end{description}
+
+\noindent
+{\bf Description}\\
+This function is used to connect to a mobot. 
+
+\noindent
+{\bf Example}\\
+\begin{verbatim}
+mobot.connectWithIPAddress("192.168.0.132", "8734");
+mobot.connectWithIPAddress("mobots.example.com", "5768");
+mobot.connectWithIPAddress("192.168.100.221");
+\end{verbatim}
+\noindent
+
+\noindent
+{\bf See Also}\\
+\texttt{connect(), disconnect()}
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

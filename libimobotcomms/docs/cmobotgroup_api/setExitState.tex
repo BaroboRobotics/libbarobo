@@ -1,0 +1,52 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::setExitState()}\index{CMobotGroup::setExitState()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{setExitState()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::setExitState(mobotJointState_t state);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Sets the behaviour of joints when the program exits.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{10 mm}p{145 mm}}
+\texttt{state} & The desired behaviour of the robot joints on program exit. By
+default, the behavior is set to \texttt{MOBOT\_NEUTRAL}, which relaxes all of
+the joints. Alternatively, the state may be set to \texttt{MOBOT\_HOLD} to hold
+the joints on program exit. \\
+\end{tabular}
+\end{description}
+
+\noindent
+{\bf Description}\\
+This function is used to change the behaviour of the joints when the program
+exits. By default, when a Mobot program exits, the all joints of the connected
+Mobots go to the \texttt{MOBOT\_NEUTRAL} state. Using this function, the exit
+state may be changed to \texttt{MOBOT\_HOLD} or \texttt{MOBOT\_NEUTRAL}. All
+other joint states are invalid when used with this function.
+\noindent\\
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

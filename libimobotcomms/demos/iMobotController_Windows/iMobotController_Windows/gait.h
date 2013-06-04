@@ -1,6 +1,6 @@
 #ifndef _GAIT_H_
 #define _GAIT_H_
-#include <imobotcomms.h>
+#include <mobot.h>
 
 #define MOTION_ALLOC_SIZE 8
 

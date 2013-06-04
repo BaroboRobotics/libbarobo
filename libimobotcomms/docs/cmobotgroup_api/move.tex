@@ -1,0 +1,66 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::move()}\index{CMobotGroup::move()}}\\
+{\LARGE \texttt{CMobotGroup::moveNB()}\index{CMobotGroup::moveNB()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{move()}
+\addcontentsline{toc}{section}{moveNB()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::move(double angle1, double angle2, double angle3, double angle4);
+int CMobotGroup::moveNB(double angle1, double angle2, double angle3, double angle4);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Move all of the joints of mobots in a group by specified angles.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{15 mm}p{105 mm}}
+\texttt{angle1} & The amount to move joint 1, expressed in degrees relative to the current position. \\
+\texttt{angle2} & The amount to move joint 2, expressed in degrees relative to the current position. \\
+\texttt{angle3} & The amount to move joint 3, expressed in degrees relative to the current position. \\
+\texttt{angle4} & The amount to move joint 4, expressed in degrees relative to the current position. \\
+\end{tabular}
+\end{description}
+\noindent
+{\bf Description}\\
+\vspace{-12pt}
+\begin{quote}
+{\bf CMobot::move()}\\
+This function moves all of the joints of a mobot by the specified number of degrees
+from their current positions. 
+
+{\bf CMobot::moveNB()}\\
+This function moves all of the joints of a mobot by the specified number of degrees
+from their current positions. 
+
+The function \texttt{moveNB()} is the non-blocking version of
+the \texttt{move()} function, which means that the function will return
+immediately and the physical mobot motion will occur asynchronously. For 
+more information on blocking and non-blocking functions, please refer to 
+Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\
+\end{quote}
+
+\noindent
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

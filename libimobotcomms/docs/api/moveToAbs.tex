@@ -1,0 +1,88 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobot::moveToAbs()}\index{CMobot::moveToAbs()}}\\
+{\LARGE \texttt{CMobot::moveToAbsNB()}\index{CMobot::moveToAbsNB()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{moveToAbs()}
+\addcontentsline{toc}{section}{moveToAbsNB()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobot::moveToAbs(double angle1, double angle2, double angle3, double angle4);
+int CMobot::moveToAbsNB(double angle1, double angle2, double angle3, double angle4);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Move all of the joints of a mobot to the specified positions.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{15 mm}p{105 mm}}
+\texttt{angle1} & The absolute position to move joint 1, expressed in degrees. \\
+\texttt{angle2} & The absolute position to move joint 2, expressed in degrees. \\
+\texttt{angle3} & The absolute position to move joint 3, expressed in degrees. \\
+\texttt{angle4} & The absolute position to move joint 4, expressed in degrees. \\
+\end{tabular}
+\end{description}
+\noindent
+
+{\bf Description}\\
+\vspace{-12pt}
+\begin{quote}
+{\bf CMobot::moveToAbs()}\\
+This function moves all of the joints of a mobot to the specified absolute positions. 
+
+{\bf CMobot::moveToAbsNB()}\\
+This function moves all of the joints of a mobot to the specified absolute positions. 
+
+The function \texttt{moveToAbsNB()} is the non-blocking version of
+the \texttt{moveToAbs()} function, which means that the function will return
+immediately and the physical mobot motion will occur asynchronously. For
+more details on blocking and non-blocking functions, please refer to 
+Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\
+\end{quote}
+
+The difference between this function and its sister function, \texttt{moveTo()},
+is that this function takes into consideration any full rotations a joint has 
+experienced. For instance, consider the following code segment:
+\begin{verbatim}
+mobot.moveTo(375, 0, 0, 0);
+mobot.moveTo(0, 0, 0, 0);
+\end{verbatim}
+The first line in the above code segment will cause joint 1 to rotate one full
+rotation in the positive direction, plus an additional 15 degrees. The second
+line will cause the same joint to rotate backwards 15 degrees to reach its "0"
+goal.
+
+This following code segment, however, differs.
+\begin{verbatim}
+mobot.moveToAbs(375, 0, 0, 0);
+mobot.moveToAbs(0, 0, 0, 0);
+\end{verbatim}
+The first line will have the same effect as the first code segment, rotating
+joint 1 375 degrees, assuming it is starting at 0. The second line, however,
+will cause joint 1 to rotate the full 375 degrees backwards back to its original 
+location.
+
+\noindent
+{\bf Example}\\
+Please see the demo at Section \ref{sec:democode} on page \pageref{sec:democode}.\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

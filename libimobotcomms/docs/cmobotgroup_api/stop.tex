@@ -1,0 +1,50 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::stopAllJoints()}\index{CMobotGroup::stopAllJoints()}}\\
+{\LARGE \texttt{CMobotGroup::stopOneJoint()}\index{CMobotGroup::stopOneJoint()}}\\
+{\LARGE \texttt{CMobotGroup::stopTwoJoints()}\index{CMobotGroup::stopTwoJoints()}}\\
+{\LARGE \texttt{CMobotGroup::stopThreeJoints()}\index{CMobotGroup::stopThreeJoints()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{stopAllJoints()}
+\addcontentsline{toc}{section}{stopOneJoint()}
+\addcontentsline{toc}{section}{stopTwoJoints()}
+\addcontentsline{toc}{section}{stopThreeJoints()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::stopAllJoints();
+int CMobotGroup::stopOneJoint(mobotJointId_t id);
+int CMobotGroup::stopTwoJoints(mobotJointId_t id1, mobotJointId_t id2);
+int CMobotGroup::stopThreeJoints(
+    mobotJointId_t id1,
+    mobotJointId_t id2,
+    mobotJointId_t id3);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Stop all current motions on all mobot in the group.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Description}\\
+This function stops all currently occurring movements on the mobot. Internally, this function simply sets all motor speeds to zero. If it is only required to stop a single motor, use the 
+\texttt{setJointSpeed()} function to set the motor's speed to zero. \\
+
+\noindent
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+\texttt{setJointSpeed(), setJointSpeeds()}
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

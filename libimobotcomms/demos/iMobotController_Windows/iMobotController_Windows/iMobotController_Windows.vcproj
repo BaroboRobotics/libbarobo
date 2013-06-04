@@ -48,7 +48,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\Documents and Settings\david\Projects\Barobo\iMobot_gumstix_api\libimobotcomms&quot;"
+				AdditionalIncludeDirectories="..\..\..\"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -212,11 +212,12 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="..\..\..\"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
 				MinimalRebuild="false"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -362,11 +363,31 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\gait.cpp"
+				RelativePath=".\configFile.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\imobotcomms.cpp"
+				RelativePath=".\configFileDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DialogConnect.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DialogProgram.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DialogRobotController.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DialogTeaching.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\gait.cpp"
 				>
 			</File>
 			<File
@@ -375,6 +396,22 @@
 			</File>
 			<File
 				RelativePath=".\iMobotController_WindowsDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ListCtrlContext.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\mobot.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\RecordMobot.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\robotManager.cpp"
 				>
 			</File>
 			<File
@@ -413,6 +450,10 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\TabbedDialog.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -420,11 +461,35 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\gait.h"
+				RelativePath="..\..\..\commands.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\imobotcomms.h"
+				RelativePath=".\configFile.h"
+				>
+			</File>
+			<File
+				RelativePath=".\configFileDialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DialogConnect.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DialogProgram.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DialogRobotController.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DialogTeaching.h"
+				>
+			</File>
+			<File
+				RelativePath=".\gait.h"
 				>
 			</File>
 			<File
@@ -436,11 +501,39 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ListCtrlContext.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ListCtrlCtx.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ListCtrlCtx.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\mobot.h"
+				>
+			</File>
+			<File
+				RelativePath=".\RecordMobot.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Resource.h"
 				>
 			</File>
 			<File
+				RelativePath=".\robotManager.h"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TabbedDialog.h"
 				>
 			</File>
 			<File
@@ -454,11 +547,31 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
+				RelativePath=".\res\barobo.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\res\Barobo_square_32.png"
+				>
+			</File>
+			<File
 				RelativePath=".\res\bitmap1.bmp"
 				>
 			</File>
 			<File
 				RelativePath=".\res\bitmap2.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\bitmap4.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\bitmap5.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\bitmap6.bmp"
 				>
 			</File>
 			<File
@@ -474,6 +587,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\ico00004.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\res\ico00005.ico"
+				>
+			</File>
+			<File
 				RelativePath=".\res\icon1.ico"
 				>
 			</File>
@@ -482,7 +603,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\icon3.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\res\icon4.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\iMobot_diagram.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\iMobot_diagram.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\iMobot_diagram.png"
 				>
 			</File>
 			<File
@@ -499,6 +636,30 @@
 			</File>
 			<File
 				RelativePath=".\res\iMobotController_Windows.rc2"
+				>
+			</File>
+			<File
+				RelativePath=".\res\joint_diagram.png"
+				>
+			</File>
+			<File
+				RelativePath=".\res\joint_diagram2.png"
+				>
+			</File>
+			<File
+				RelativePath=".\res\joint_diagram3.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\joint_diagram3.png"
+				>
+			</File>
+			<File
+				RelativePath=".\res\joint_diagram_verbose.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\joint_diagram_verbose.png"
 				>
 			</File>
 		</Filter>

@@ -1,0 +1,43 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::motionWait()}\index{CMobotGroup::motionWait()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{motionWait()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::motionWait();
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Wait for a preprogrammed mobotic motion to finish.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Description}\\
+This function is used to wait for a preprogrammed motion to finish. Functions such as
+\texttt{motionInchwormLeftNB()} and \texttt{motionRollForwardNB()} do not wait for the motion to finish
+moving before continuing. The
+\texttt{motionWait()} function is used to wait for
+preprogrammed motions to complete. See Section \ref{sec:preprogrammed_motions} for 
+a list of all preprogrammed mobotic motions.\\
+
+\noindent
+{\bf Example}\\
+See the sample program in Section \ref{sec:democode} on page \pageref{sec:democode}.
+\noindent
+
+\noindent
+{\bf See Also}\\
+\texttt{motionWait(), moveJointWait()}
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

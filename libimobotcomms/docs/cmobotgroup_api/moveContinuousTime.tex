@@ -1,0 +1,50 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::moveContinuousTime()}\index{CMobotGroup::moveContinuousTime()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{moveContinuousTime()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::moveContinuousTime(mobotJointState_t dir1, 
+                                mobotJointState_t dir2, 
+                                mobotJointState_t dir3, 
+                                mobotJointState_t dir4, 
+                                double seconds);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Move the joints of mobots continuously in the specified directions.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+Each of the direction parameters, \texttt{dir1, dir2, dir3,} and \texttt{dir4}, specifies the direction the joint should move. The types
+are enumerated in \texttt{mobot.h} and have the following values:
+\input{jointStateTable}
+The \texttt{seconds} parameter is the time to perform the movement, in seconds.
+\\
+
+\noindent
+{\bf Description}\\
+This function causes joints of mobots to begin moving. The joints will continue moving
+until the joint hits a joint limit, or the time specified in the \texttt{seconds} parameter
+is reached. This function will block until the motion is completed.\\
+
+\noindent
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

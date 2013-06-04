@@ -1,0 +1,63 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobot::getJointAnglesAverage()}\index{CMobot::getJointAnglesAverage()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{getJointAnglesAverage()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobot::getJointAnglesAverage(
+    double &angle1,
+    double &angle2,
+    double &angle3,
+    double &angle4,
+    int numReadings = 10);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Retrieve a Mobot's current joint angles.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{15 mm}p{145 mm}}
+\texttt{angle1} & A variable to store the current angle of the mobot
+motor. The contents of this variable will be overwritten with a value that
+represents the motor's angle in degrees.  \\
+\texttt{angle2} & ...  \\
+\texttt{angle3} & ...  \\
+\texttt{angle4} & ...  \\
+\texttt{numReadings} & (Optional) The number of independent angle readings to measure 
+and average. More readings taken may yield a more accurate angle measurement, but will also
+take more time to perform. If this value is omitted, the default value of 10 readings is
+used.
+\end{tabular}
+\end{description}
+
+\noindent
+{\bf Description}\\
+This function gets the current motor angles of a Mobot's motors. In most cases, this
+function may yield a more accurate value than the \texttt{getJointAngles()} function
+because this function averages a number of separate angle readings. Averaging multiple 
+readings may reduce the effect of noise on the angle measurements.
+\\
+\noindent
+{\bf Example}\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

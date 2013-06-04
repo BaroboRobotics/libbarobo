@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "iMobotController_Windows.h"
 #include "iMobotController_WindowsDlg.h"
+#include "TabbedDialog.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -58,7 +59,8 @@ BOOL CiMobotController_WindowsApp::InitInstance()
 	// such as the name of your company or organization
 	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
 
-	CiMobotController_WindowsDlg dlg;
+	//CiMobotController_WindowsDlg dlg;
+  CTabbedDialog dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)

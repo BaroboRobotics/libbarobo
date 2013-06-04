@@ -1,0 +1,69 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::moveTo()}\index{CMobotGroup::moveTo()}}\\
+{\LARGE \texttt{CMobotGroup::moveToNB()}\index{CMobotGroup::moveToNB()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{moveTo()}
+\addcontentsline{toc}{section}{moveToNB()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::moveTo(double angle1, double angle2, double angle3, double angle4);
+int CMobotGroup::moveToNB(double angle1, double angle2, double angle3, double angle4);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Move all of the joints of mobots in the group to the specified positions.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{15 mm}p{105 mm}}
+\texttt{angle1} & The absolute position to move joint 1, expressed in degrees. \\
+\texttt{angle2} & The absolute position to move joint 2, expressed in degrees. \\
+\texttt{angle3} & The absolute position to move joint 3, expressed in degrees. \\
+\texttt{angle4} & The absolute position to move joint 4, expressed in degrees. \\
+\end{tabular}
+\end{description}
+\noindent
+
+\noindent
+{\bf Description}\\
+\vspace{-12pt}
+\begin{quote}
+{\bf CMobot::moveTo()}\\
+This function moves all of the joints of mobots in the group to the specified absolute positions. 
+
+{\bf CMobot::moveToNB()}\\
+This function moves all of the joints of mobots in the group to the specified absolute positions. 
+
+The function \texttt{moveTo()} is a blocking function, which means that 
+the function will not return until the commanded motion is 
+completed. The function \texttt{moveToNB()} is the non-blocking version of
+the \texttt{moveTo()} function, which means that the function will return
+immediately and the physical mobot motion will occur asynchronously. For
+more details on blocking and non-blocking functions, please refer to 
+Section \ref{sec:blocking} on page \pageref{sec:blocking}.\\
+\end{quote}
+
+\noindent
+{\bf Example}\\
+Please see the demo at Section \ref{sec:democode} on page \pageref{sec:democode}.\\
+\noindent
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

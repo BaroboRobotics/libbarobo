@@ -1,0 +1,60 @@
+\noindent
+\vspace{5pt}
+\rule{4.5in}{0.015in}\\
+\noindent
+{\LARGE \texttt{CMobotGroup::motionArch()}\index{CMobotGroup::motionArch()}}\\
+{\LARGE \texttt{CMobotGroup::motionArchNB()}\index{CMobotGroup::motionArchNB()}}\\
+%\phantomsection
+\addcontentsline{toc}{section}{motionArch()}
+\addcontentsline{toc}{section}{motionArchNB()}
+
+\noindent
+{\bf Synopsis}
+\vspace{-8pt}
+\begin{verbatim}
+#include <mobot.h>
+int CMobotGroup::motionArch(double angle);
+int CMobotGroup::motionArchNB(double angle);
+\end{verbatim}
+
+\noindent
+{\bf Purpose}\\
+Arch the mobots in the group for more ground clearance.\\
+
+\noindent
+{\bf Return Value}\\
+The function returns 0 on success and non-zero otherwise.\\
+
+\noindent
+{\bf Parameters}\\
+\vspace{-0.1in}
+\begin{description}
+\item               
+\begin{tabular}{p{10 mm}p{145 mm}}
+\texttt{angle} & The angle which to arch. This number can range from 0 degrees, which is
+no arch, to 180 degrees, which is a fully curled up position.\\
+\end{tabular}
+\end{description}
+
+\noindent
+{\bf Description}\\
+\vspace{-12pt}
+\begin{quote}
+{\bf CMobot::motionArch()}\\
+This function causes the mobots to Arch up for better ground clearance while 
+rolling.
+
+{\bf CMobot::motionArch()}\\
+This function causes the mobots to Arch up for better ground clearance while 
+rolling.
+
+This function has both a blocking and non-blocking version.
+The blocking version, \texttt{motionArch()}, will block until the
+mobot motion has completed. The non-blocking version, \texttt{motionArchNB()},
+will return immediately, and the motion will be performed asynchronously.\\
+\end{quote}
+
+\noindent
+{\bf See Also}\\
+
+%\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

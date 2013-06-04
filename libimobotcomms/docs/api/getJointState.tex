@@ -2,12 +2,13 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CMobot::getJointState()}\index{getJointState()}}\\
+{\LARGE \texttt{CMobot::getJointState()}\index{CMobot::getJointState()}}\\
 %\phantomsection
 \addcontentsline{toc}{section}{getJointState()}
 
 \noindent
-{\bf Synopsis}\\
+{\bf Synopsis}
+\vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
 int CMobot::getJointState(mobotJointId_t id, mobotJointState_t &state);
@@ -27,7 +28,7 @@ The function returns 0 on success and non-zero otherwise.\\
 \begin{description}
 \item               
 \begin{tabular}{p{10 mm}p{145 mm}}
-\texttt{id} & The joint number to pose. This is an enumerated type 
+\texttt{id} & The joint number. This is an enumerated type 
 discussed in Section \ref{sec:mobotJointId_t} on page
 \pageref{sec:mobotJointId_t}.\\
 \texttt{state} & An integer variable which will be overwritten with the current state of the motor. 
@@ -39,12 +40,8 @@ discussed in Section \ref{sec:mobotJointState_t} on page
 
 \noindent
 {\bf Description}\\
-This function is used to determine the current state of a motor. Valid states are:
-\begin{itemize}
-\item \texttt{IMOBOT\_JOINT\_IDLE} : 0: The motor is idle.
-\item \texttt{IMOBOT\_JOINT\_MOVING} : 1: The motor is moving.
-\item \texttt{IMOBOT\_JOINT\_GOALSEEK} : 2: The motor is heading towards a specified position.
-\end{itemize}
+This function is used to determine the current state of a motor. Valid states are listed below.
+\input{jointStateTable}
 
 \noindent
 {\bf Example}\\
@@ -52,5 +49,5 @@ This function is used to determine the current state of a motor. Valid states ar
 
 \noindent
 {\bf See Also}\\
-
+\texttt{isMoving()}\\
 %\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\
