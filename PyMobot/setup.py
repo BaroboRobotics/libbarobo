@@ -17,7 +17,7 @@ dist = setup(name='PyMobot',
       define_macros=[('NONRELEASE','1')],
       extra_compile_args=['-fpermissive'],
       library_dirs=['../', '../BaroboConfigFile', '../BaroboConfigFile/mxml-2.7'],
-      libraries=['mobotStatic', 'baroboconfigfile', 'mxml', 'pthread', 'bluetooth', 'rt'],
+      libraries=['baroboStatic', 'baroboconfigfile', 'mxml', 'pthread', 'bluetooth', 'rt'],
       )],
     )
 

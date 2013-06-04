@@ -28,6 +28,11 @@ class Linkbot():
     if mobot.Mobot_connect(self._mobot) != 0:
       raise RuntimeError("Error connecting to robot.")
 
+  def connectWithBluetoothAddress(self, address, channel=1):
+    """Connect to a Bluetooth-enabled Linkbot"""
+    if mobot.Mobot_connectWithBluetoothAddress(self._mobot, address, channel) != 0:
+      raise RuntimeError("Error connecting to robot.")
+
   def disconnect(self):
     """Disconnect from a Linkbot"""
     mobot.Mobot_disconnect(self._mobot)
