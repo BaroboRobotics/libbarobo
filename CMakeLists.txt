@@ -19,7 +19,7 @@ if(CMAKE_HOST_WIN32)
   #include(FindPkgConfig)
   #pkg_check_modules(MXML REQUIRED mxml)
   add_definitions(-D_WIN32_WINNT=0x502 -DENABLE_BLUETOOTH)
-	add_library(mobot SHARED
+	add_library(barobo SHARED
       mobot.c
       mobot++.cpp
       mobot_get_functions.c
@@ -48,7 +48,7 @@ if(CMAKE_HOST_WIN32)
       mobotl_record_functions++.cpp
       mobotl_set_functions++.cpp
 	  )
-	add_library(mobotStatic STATIC
+	add_library(baroboStatic STATIC
       mobot.c
       mobot++.cpp
       mobot_get_functions.c
@@ -82,29 +82,29 @@ if(CMAKE_HOST_WIN32)
       (CMAKE_GENERATOR MATCHES "NMake")
     )
     message(STATUS "Compiling for Visual Studio detected")
-    set_target_properties(mobot PROPERTIES COMPILE_FLAGS "/GS- /QIfist /TP")
-    set_target_properties(mobotStatic PROPERTIES COMPILE_FLAGS "/GS- /QIfist /TP")
-    target_link_libraries(mobot Ws2_32 baroboconfigfile mxml)
-    target_link_libraries(mobotStatic Ws2_32 baroboconfigfile mxml)
+    set_target_properties(barobo PROPERTIES COMPILE_FLAGS "/GS- /QIfist /TP")
+    set_target_properties(baroboStatic PROPERTIES COMPILE_FLAGS "/GS- /QIfist /TP")
+    target_link_libraries(barobo Ws2_32 baroboconfigfile mxml)
+    target_link_libraries(baroboStatic Ws2_32 baroboconfigfile mxml)
     add_subdirectory(demos)
   else()
     add_subdirectory(demos)
     add_definitions(-DMSYS)
-    target_link_libraries(mobot 
+    target_link_libraries(barobo 
         Ws2_32 
         baroboconfigfile 
         mxml )
-    target_link_libraries(mobotStatic 
+    target_link_libraries(baroboStatic 
         Ws2_32 
         baroboconfigfile 
         mxml)
   endif()
-  install(TARGETS mobot
+  install(TARGETS barobo
           ARCHIVE DESTINATION lib)
   install(FILES mobot.h DESTINATION include)
 elseif(CMAKE_HOST_APPLE)
   set(CMAKE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib")
-	add_library(mobot SHARED
+	add_library(barobo SHARED
       mobot.c
       mobot++.cpp
       mobot_get_functions.c
@@ -133,7 +133,7 @@ elseif(CMAKE_HOST_APPLE)
       mobotl_record_functions++.cpp
       mobotl_set_functions++.cpp
 	  )
-	add_library(mobotStatic STATIC 
+	add_library(baroboStatic STATIC 
       mobot.c
       mobot++.cpp
       mobot_get_functions.c
@@ -162,16 +162,16 @@ elseif(CMAKE_HOST_APPLE)
       mobotl_record_functions++.cpp
       mobotl_set_functions++.cpp
 	  )
-	target_link_libraries(mobot pthread baroboconfigfile)
-  set_target_properties(mobot PROPERTIES
+	target_link_libraries(barobo pthread baroboconfigfile)
+  set_target_properties(barobo PROPERTIES
     INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
-  install(TARGETS mobot
+  install(TARGETS barobo
           LIBRARY DESTINATION lib)
   install(FILES mobot.h DESTINATION include)
   add_subdirectory(demos)
 else(CMAKE_HOST_WIN32)
   add_definitions(-DENABLE_BLUETOOTH)
-	add_library(mobotStatic STATIC
+	add_library(baroboStatic STATIC
       mobot.c
       mobot++.cpp
       mobot_get_functions.c
@@ -200,7 +200,7 @@ else(CMAKE_HOST_WIN32)
       mobotl_record_functions++.cpp
       mobotl_set_functions++.cpp
 	  )
-	add_library(mobot SHARED 
+	add_library(barobo SHARED 
       mobot.c
       mobot++.cpp
       mobot_get_functions.c
@@ -229,10 +229,10 @@ else(CMAKE_HOST_WIN32)
       mobotl_record_functions++.cpp
       mobotl_set_functions++.cpp
 	  )
-  set_target_properties(mobotStatic PROPERTIES COMPILE_FLAGS "-fPIC")
-	target_link_libraries(mobot bluetooth pthread rt baroboconfigfile mxml)
-	target_link_libraries(mobotStatic bluetooth pthread rt baroboconfigfile mxml)
-  install(TARGETS mobot mobotStatic
+  set_target_properties(baroboStatic PROPERTIES COMPILE_FLAGS "-fPIC")
+	target_link_libraries(barobo bluetooth pthread rt baroboconfigfile mxml)
+	target_link_libraries(baroboStatic bluetooth pthread rt baroboconfigfile mxml)
+  install(TARGETS barobo baroboStatic
           LIBRARY DESTINATION lib
           ARCHIVE DESTINATION lib)
   install(FILES mobot.h DESTINATION include)
