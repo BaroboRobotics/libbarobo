@@ -37,11 +37,17 @@ class Linkbot():
     """Disconnect from a Linkbot"""
     mobot.Mobot_disconnect(self._mobot)
 
+  def getBreakoutADC(self, adc):
+    rc, value = mobot.Mobot_getBreakoutADC(self._mobot, adc)
+    if rc:
+      raise RuntimeError("Error communicating with robot. Return code {0}".format(rc))
+    return value
+
   def getJointAngles(self):
     """Return a list of joint angles in degrees"""
     r = mobot.Mobot_getJointAngles(self._mobot)
     if r[0] != 0:
-      return -1
+      raise RuntimeError("Error communicating with robot.")
     else:
       return map(lambda x: rad2deg(x), r[1:4])
 
@@ -49,7 +55,7 @@ class Linkbot():
     """Returns a list: [millis, deg1, deg2, deg3]"""
     r = mobot.Mobot_getJointAnglesTime(self._mobot)
     if r[0] != 0:
-      return None
+      raise RuntimeError("Error communicating with robot.")
     else:
       ret = [r[1]]
       ret.extend( map(lambda x: rad2deg(x), r[2:5]) )
@@ -181,6 +187,7 @@ class Linkbot():
   def stop(self):
     """Stop all motors."""
     mobot.Mobot_stop(self._mobot) 
+
     
 class _LinkbotRecordThread(threading.Thread):
   def __init__(self, linkbot, delay):
