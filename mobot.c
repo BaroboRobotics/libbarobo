@@ -1531,6 +1531,10 @@ int Mobot_setFourierCoefficients(mobot_t* comms, robotJointId_t id, double* a, d
   return 0;
 }
 
+int Mobot_twiSend(mobot_t* comms, uint8_t addr, uint8_t* buf, int size)
+{
+}
+
 int Mobot_waitForReportedSerialID(mobot_t* comms, char* id) 
 {
   /* Wait on the mobot tree condition variable... Return if our mobot shows up
