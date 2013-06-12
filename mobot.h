@@ -1039,9 +1039,11 @@ DLLIMPORT int Mobot_protocolVersion();
                       double *angle2,
                       double *angle3,
                       double *angle4};
+%apply int* OUTPUT {int* value};
 #endif
 DLLIMPORT int Mobot_getAccelerometerData(mobot_t* comms, double *accel_x, double *accel_y, double *accel_z);
 DLLIMPORT int Mobot_getBatteryVoltage(mobot_t* comms, double *voltage);
+DLLIMPORT int Mobot_getBreakoutADC(mobot_t* comms, int adc, int* value);
 DLLIMPORT int Mobot_getButtonVoltage(mobot_t* comms, double *voltage);
 DLLIMPORT int Mobot_getChildrenInfo(mobot_t* comms, mobotInfo_t **mobotInfo, int *numChildren );
 DLLIMPORT const char* Mobot_getConfigFilePath();
@@ -1274,11 +1276,11 @@ DLLIMPORT int Mobot_turnLeft(mobot_t* comms, double angle);
 DLLIMPORT int Mobot_turnLeftNB(mobot_t* comms, double angle);
 DLLIMPORT int Mobot_turnRight(mobot_t* comms, double angle);
 DLLIMPORT int Mobot_turnRightNB(mobot_t* comms, double angle);
-DLLIMPORT int Mobot_twiRecv(mobot_t* comms, uint8_t addr, uint8_t* buf, int size);
+DLLIMPORT int Mobot_twiRecv(mobot_t* comms, uint8_t addr, void* recvbuf, int size);
 DLLIMPORT int Mobot_twiSend(mobot_t* comms, uint8_t addr, uint8_t* buf, int size);
 DLLIMPORT int Mobot_twiSendRecv(mobot_t* comms, uint8_t addr, 
     uint8_t* sendbuf, int sendsize,
-    uint8_t* recvbuf, int recvsize);
+    void* recvbuf, int recvsize);
 
 /* compound motion functions */
 DLLIMPORT int Mobot_motionArch(mobot_t* comms, double angle);

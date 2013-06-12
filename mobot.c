@@ -1543,7 +1543,7 @@ int Mobot_twiSend(mobot_t* comms, uint8_t addr, uint8_t* buf, int size)
   return rc;
 }
 
-int Mobot_twiRecv(mobot_t* comms, uint8_t addr, uint8_t* buf, int size)
+int Mobot_twiRecv(mobot_t* comms, uint8_t addr, void* buf, int size)
 {
   uint8_t* sendbuf = (uint8_t*)malloc(size+10);
   sendbuf[0] = addr;
@@ -1557,7 +1557,7 @@ int Mobot_twiRecv(mobot_t* comms, uint8_t addr, uint8_t* buf, int size)
 
 int Mobot_twiSendRecv(mobot_t* comms, uint8_t addr, 
     uint8_t* sendbuf, int sendsize,
-    uint8_t* recvbuf, int recvsize)
+    void* recvbuf, int recvsize)
 {
   uint8_t *buf = (uint8_t*)malloc(sendsize+recvsize+10);
   buf[0] = addr;
@@ -1569,6 +1569,7 @@ int Mobot_twiSendRecv(mobot_t* comms, uint8_t addr,
   if(rc == 0) {
     memcpy(recvbuf, &buf[2], buf[1]-3);
   }
+  return 0;
 }
 
 int Mobot_waitForReportedSerialID(mobot_t* comms, char* id) 

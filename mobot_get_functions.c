@@ -65,6 +65,33 @@
 #define DEPRECATED(from, to) \
   fprintf(stderr, "Warning: The function \"%s()\" is deprecated. Please use \"%s()\"\n" , from, to)
 
+int Mobot_getBreakoutADC(mobot_t* comms, int adc, int* value)
+{
+  uint8_t buf[32];
+  int rc;
+  /* Select the channel */
+  buf[0] = 0x22;
+  buf[1] = 0x7C;
+  buf[2] = 0x40;
+  buf[2] |= (adc&0x0f);
+  rc = Mobot_twiSend(comms, 0x02, buf, 3);
+  if(rc) return rc;
+  /* Start a conversion */
+  buf[0] = 0x22;
+  buf[1] = 0x7A; // ADCSRA
+  buf[2] = 0xC7;
+  rc = Mobot_twiSend(comms, 0x02, buf, 3);
+  if(rc) return rc;
+  /* Get the result */
+  buf[0] = 0x22;
+  buf[1] = 0x78;
+  rc = Mobot_twiSendRecv(comms, 0x02, buf, 2, buf, 2);
+  if(rc) return rc;
+  *value = buf[1] << 8;
+  *value |= buf[0];
+  return 0;
+}
+
 int Mobot_getQueriedAddresses(mobot_t* comms)
 {
   int status;
