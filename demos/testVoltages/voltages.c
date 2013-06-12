@@ -5,7 +5,7 @@
 
 int main()
 {
-  int pins[] = {5, 6, 4, 3, 1, 2};
+  int pins[] = {1, 2, 3, 4, 5, 6};
   int i;
   double voltage;
   mobot_t* comms = (mobot_t*)malloc(sizeof(mobot_t));
@@ -20,10 +20,12 @@ int main()
       Mobot_getEncoderVoltage(comms, pins[i], &voltage);
       printf("%lf\t", voltage);
     }
+    /*
     Mobot_getButtonVoltage(comms, &voltage);
     printf("BUTTON: %lf", voltage);
+    */
     printf("\n");
-    //usleep(10000);
+    usleep(10000);
   }
 
   return 0;

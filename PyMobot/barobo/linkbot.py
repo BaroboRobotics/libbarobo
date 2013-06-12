@@ -63,6 +63,18 @@ class Linkbot():
     """Drive joint 'joint' to 'angle' (degrees) using PID controller"""
     mobot.Mobot_driveJointToNB(self._mobot, joint, deg2rad(angle))
 
+  def moveJoint(self, joint, angle):
+    mobot.Mobot_moveJoint(self._mobot, joint, deg2rad(angle))
+
+  def moveJointNB(self, joint, angle):
+    mobot.Mobot_moveJointNB(self._mobot, joint, deg2rad(angle))
+
+  def moveJointTo(self, joint, angle):
+    mobot.Mobot_moveJointTo(self._mobot, joint, deg2rad(angle))
+
+  def moveJointToNB(self, joint, angle):
+    mobot.Mobot_moveJointToNB(self._mobot, joint, deg2rad(angle))
+
   def move(self, angle1, angle2, angle3):
     """Move the joints on a Linkbot
       
@@ -130,6 +142,17 @@ class Linkbot():
         self.recordThread.time, 
         self.recordThread.angles[2])
     pylab.show()
+
+  def reset(self):
+    mobot.Mobot_reset(self._mobot)
+
+  def resetToZero(self):
+    """Reset the Linkbot to its zero positions."""
+    mobot.Mobot_resetToZero(self._mobot)
+
+  def resetToZeroNB(self):
+    """Reset the Linkbot to its zero positions."""
+    mobot.Mobot_resetToZeroNB(self._mobot)
 
   def setBuzzerFrequency(self, frequency):
     """Sets the buzzer to buz at a frequency specified in Hz.
