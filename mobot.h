@@ -1274,6 +1274,11 @@ DLLIMPORT int Mobot_turnLeft(mobot_t* comms, double angle);
 DLLIMPORT int Mobot_turnLeftNB(mobot_t* comms, double angle);
 DLLIMPORT int Mobot_turnRight(mobot_t* comms, double angle);
 DLLIMPORT int Mobot_turnRightNB(mobot_t* comms, double angle);
+DLLIMPORT int Mobot_twiRecv(mobot_t* comms, uint8_t addr, uint8_t* buf, int size);
+DLLIMPORT int Mobot_twiSend(mobot_t* comms, uint8_t addr, uint8_t* buf, int size);
+DLLIMPORT int Mobot_twiSendRecv(mobot_t* comms, uint8_t addr, 
+    uint8_t* sendbuf, int sendsize,
+    uint8_t* recvbuf, int recvsize);
 
 /* compound motion functions */
 DLLIMPORT int Mobot_motionArch(mobot_t* comms, double angle);

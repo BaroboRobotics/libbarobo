@@ -1531,6 +1531,46 @@ int Mobot_setFourierCoefficients(mobot_t* comms, robotJointId_t id, double* a, d
   return 0;
 }
 
+int Mobot_twiSend(mobot_t* comms, uint8_t addr, uint8_t* buf, int size)
+{
+  uint8_t* sendbuf = (uint8_t*)malloc(size+10);
+  sendbuf[0] = addr;
+  sendbuf[1] = size;
+  memcpy(&sendbuf[2], buf, size);
+  sendbuf[2+size] = 0x00;
+  int rc = MobotMsgTransaction(comms, BTCMD(CMD_TWI_SEND), sendbuf, 3+size);
+  free(sendbuf);
+  return rc;
+}
+
+int Mobot_twiRecv(mobot_t* comms, uint8_t addr, uint8_t* buf, int size)
+{
+  uint8_t* sendbuf = (uint8_t*)malloc(size+10);
+  sendbuf[0] = addr;
+  sendbuf[1] = size;
+  sendbuf[2] = 0x0;
+  int rc = MobotMsgTransaction(comms, BTCMD(CMD_TWI_RECV), sendbuf, 3);
+  if(rc == 0) memcpy(buf, &sendbuf[2], sendbuf[1]-3);
+  free(sendbuf);
+  return rc;
+}
+
+int Mobot_twiSendRecv(mobot_t* comms, uint8_t addr, 
+    uint8_t* sendbuf, int sendsize,
+    uint8_t* recvbuf, int recvsize)
+{
+  uint8_t *buf = (uint8_t*)malloc(sendsize+recvsize+10);
+  buf[0] = addr;
+  buf[1] = sendsize;
+  memcpy(&buf[2], sendbuf, sendsize);
+  buf[2+sendsize] = recvsize;
+  buf[3+sendsize] = 0x00;
+  int rc = MobotMsgTransaction(comms, BTCMD(CMD_TWI_SENDRECV), buf, 4+sendsize);
+  if(rc == 0) {
+    memcpy(recvbuf, &buf[2], buf[1]-3);
+  }
+}
+
 int Mobot_waitForReportedSerialID(mobot_t* comms, char* id) 
 {
   /* Wait on the mobot tree condition variable... Return if our mobot shows up
