@@ -1569,7 +1569,7 @@ int Mobot_twiSendRecv(mobot_t* comms, uint8_t addr,
   if(rc == 0) {
     memcpy(recvbuf, &buf[2], buf[1]-3);
   }
-  return 0;
+  return rc;
 }
 
 int Mobot_waitForReportedSerialID(mobot_t* comms, char* id) 

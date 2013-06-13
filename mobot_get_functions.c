@@ -69,6 +69,7 @@ int Mobot_getBreakoutADC(mobot_t* comms, int adc, int* value)
 {
   uint8_t buf[32];
   int rc;
+  *value = 0;
   /* Select the channel */
   buf[0] = 0x22;
   buf[1] = 0x7C;
