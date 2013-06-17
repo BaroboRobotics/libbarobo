@@ -1330,8 +1330,6 @@ extern void delay(double seconds);
 void * CMobot::g_chmobot_dlhandle = NULL;
 int CMobot::g_chmobot_dlcount = 0;
 #pragma importf "chmobot.chf"
-#pragma importf "chlinkboti.chf"
-#pragma importf "chlinkbotl.chf"
 #endif
 
 #ifndef NONRELEASE

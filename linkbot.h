@@ -857,4 +857,9 @@ class CMelody
     mobotMelodyNote_t* _head;
 };
 
+#ifdef _CH_
+#pragma importf "chlinkboti.chf"
+#pragma importf "chlinkbotl.chf"
+#endif
+
 #endif
