@@ -21,7 +21,7 @@
 \vspace*{2.5cm}
 {\Huge\sf\bf Mobot and Linkbot User's Guide}\\
 \vspace*{2.5cm}
-{\Large\bf Version 1.9}
+{\Large\bf Version 2.0.0}
 \vspace{4.5cm}
 
 \includegraphics[width=4in]{images/Mobot_Camera_Stand.JPG}
@@ -444,9 +444,9 @@ sliders.
 
 Underneath the sliders, there are four text entry boxes. The text boxes
 accept specific angles for each joint which the user may type in. If 
-the ``MoveTo'' button is clicked, each joint will move to their respective 
-desired absolute positions. If any text entry is left blank, the corresponding joint will
-not move. 
+the ``Move'' button is clicked, each joint will move to their respective by the
+amount specified in the text boxes. If any text entry is left blank, the
+corresponding joint will not move. 
 
 \begin{comment}
 The second method for moving the joints is by entering the exact angles for the
@@ -485,7 +485,8 @@ the robot, perform the following steps:
 \begin{itemize}
 \item Position the robot into its zero position. If the Mobot is currently
 actuating any of its joints, or if any joints feel ``stiff'', you may power the
-robot off and on again.
+robot off and on again, or you may press both the ``A'' and ``B'' buttons to relax the 
+joints.
 \item While the robot is powered on, press and hold both the ``A'' and ``B'' buttons
 simultaneously. After three seconds, the LED should flash quickly 3 times. The Mobot has now
 been recalibrated and you may release the buttons.
@@ -560,7 +561,7 @@ BaroboLink can be used to control the Mobot for simple tasks and applications.
 For more complicated applications, computer programs are better suited for controlling
 the Mobot.
 Mobot can be controlled using a C/C++ program through Ch, a C/C++ interpreter.
-Ch Professional Edition or Ch Student Edition software is required to run the
+Ch Professional Edition, Ch Student Edition, or Ch Standard Edition is required to run the
 demo programs for controlling Mobot. Ch is available from SoftIntegration, Inc. at
 \texttt{http://www.softintegration.com}
 
@@ -707,7 +708,7 @@ lines, which connect to the mobot, appear as such:
 if(mobot.connect())
 {
     printf("Failed to connect to the mobot.\n");
-    exit(0);
+    exit(-1);
 }
 \end{verbatim}
 This section connects to the remote mobot as in previous examples, but also
@@ -893,10 +894,6 @@ clearance.
   the inchworm gait once, moving the mobot towards its left.
 \item \texttt{motionInchwormRight()}: This function causes the mobot to perform
   the inchworm gait once, moving the mobot towards its right.
-\item \texttt{motionRollBackward()}: This function causes the mobot to rotate
-  its faceplates, using them as wheels to roll backward.
-\item \texttt{motionRollForward()}: This function causes the mobot to rotate
-  its faceplates, using them as wheels to roll forward.
 \item \texttt{motionSkinny()}: This function makes the mobot assume a skinnier
 rolling profile.
 \item \texttt{motionStand()}: This function causes the mobot to stand up onto a 
@@ -905,10 +902,6 @@ rolling profile.
 tumbling motion, flipping end over end.
 \item \texttt{motionTumbleLeft()}: This function causes the mobot to perform the
 tumbling motion, flipping end over end.
-\item \texttt{motionTurnLeft()}: This function uses the Mobot's faceplates as wheels, turning
-  them in opposite directions in order to rotate the mobot towards its left.
-\item \texttt{motionTurnRight()}: This function uses the Mobot's faceplates as wheels, turning
-  them in opposite directions in order to rotate the mobot towards its right.
 \item \texttt{motionUnstand()}: This function causes the mobot to drop down from a standing position.
 \end{itemize}
 
@@ -1037,10 +1030,10 @@ four times.
 
 Next, the lines
 \begin{verbatim}
-mobot.motionRollBackward(360);
-mobot.motionRollForward(360);
-mobot.motionTurnLeft(360);
-mobot.motionTurnRight(360);
+mobot.moveBackward(360);
+mobot.moveForward(360);
+mobot.turnLeft(360);
+mobot.turnRight(360);
 \end{verbatim}
 make the mobot roll backward, forward, and then turn left, and turn right
 sequentially. For each of these functions, the parameter is the angle in degrees
@@ -1234,6 +1227,9 @@ this document.
 \item \texttt{driveJointTo()}
 \item \texttt{driveTo()}
 \item \texttt{move()}
+\item \texttt{moveBackward()}
+\item \texttt{moveDistance()}
+\item \texttt{moveForward()}
 \item \texttt{moveJoint()}
 \item \texttt{moveJointTo()}
 \item \texttt{moveJointWait()}
@@ -1243,18 +1239,16 @@ this document.
 \item \texttt{motionArch()}
 \item \texttt{motionInchwormLeft()}
 \item \texttt{motionInchwormRight()}
-\item \texttt{motionRollBackward()}
-\item \texttt{motionRollForward()}
 \item \texttt{motionSkinny()}
 \item \texttt{motionStand()}
 \item \texttt{motionTumbleLeft()}
 \item \texttt{motionTumbleRight()}
-\item \texttt{motionTurnLeft()}
-\item \texttt{motionTurnRight()}
 \item \texttt{motionUnstand()}
 \item \texttt{resetToZero()}
 \item \texttt{setJointMovementStateTime()}
 \item \texttt{setMovementStateTime()}
+\item \texttt{turnLeft()}
+\item \texttt{turnRight()}
 \end{itemize}
 
 \subsection{List of Non-Blocking Movement Functions}
@@ -1262,6 +1256,9 @@ this document.
 \item \texttt{driveJointToNB()}
 \item \texttt{driveToNB()}
 \item \texttt{moveNB()}
+\item \texttt{moveBackwardNB()}
+\item \texttt{moveDistanceNB()}
+\item \texttt{moveForwardNB()}
 \item \texttt{moveJointNB()}
 \item \texttt{moveJointToNB()}
 \item \texttt{moveToNB()}
@@ -1269,20 +1266,18 @@ this document.
 \item \texttt{motionArchNB()}
 \item \texttt{motionInchwormLeftNB()}
 \item \texttt{motionInchwormRightNB()}
-\item \texttt{motionRollBackwardNB()}
-\item \texttt{motionRollForwardNB()}
 \item \texttt{motionSkinnyNB()}
 \item \texttt{motionStandNB()}
 \item \texttt{motionTumbleLeftNB()}
 \item \texttt{motionTumbleRightNB()}
-\item \texttt{motionTurnLeftNB()}
-\item \texttt{motionTurnRightNB()}
 \item \texttt{motionUnstandNB()}
 \item \texttt{resetToZeroNB()}
 \item \texttt{setJointMovementStateNB()}
 \item \texttt{setJointMovementStateTimeNB()}
 \item \texttt{setMovementStateNB()}
 \item \texttt{setMovementStateTimeNB()}
+\item \texttt{turnLeftNB()}
+\item \texttt{turnRightNB()}
 \end{itemize}
 
 \subsection{Blocking and Non-Blocking Demo Programs}
@@ -1342,12 +1337,12 @@ mobots as seen in previous demos. Next, we print a message on the screen and
 roll the mobot forward with the following two lines of code.
 \begin{verbatim}
 printf("Rolling 360 degrees.\n");
-mobot.motionRollForward(360);
+mobot.moveForward(360);
 \end{verbatim}
 Next, we make two calls to non-blocking functions.
 \begin{verbatim}
 mobot.motionArchNB(15);
-mobot.motionRollForwardNB(360);
+mobot.moveForwardNB(360);
 \end{verbatim}
 The first call is to the function \texttt{motionArchNB()}, which arches the mobot
 up by moving joints 2 and 3. Since it is a non-blocking function, the program

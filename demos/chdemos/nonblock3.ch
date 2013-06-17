@@ -9,8 +9,8 @@ mobot.connect();
 mobot.resetToZero();
 
 printf("Rolling 360 degrees.\n");
-mobot.motionRollForward(360);
+mobot.moveForward(360);
 printf("Rolling 360 degrees while arching.\n");
 mobot.motionArchNB(15);
-mobot.motionRollForwardNB(360);
-mobot.motionWait();
+mobot.moveForwardNB(360);
+mobot.moveWait();
