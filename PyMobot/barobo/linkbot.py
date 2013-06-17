@@ -225,6 +225,17 @@ class Linkbot():
     if rc < 0:
       raise IOError("Error communicating with robot. Return code {0}".format(rc))
 
+  def setJointSpeeds(self, speed1, speed2, speed3):
+    """Set the constant-velocity speed of a joint to "speed", in deg/sec."""
+    rc = mobot.Mobot_setJointSpeeds(
+        self._mobot, 
+        float(deg2rad(speed1)),
+        float(deg2rad(speed2)),
+        float(deg2rad(speed3)),
+        0)
+    if rc < 0:
+      raise IOError("Error communicating with robot. Return code {0}".format(rc))
+
   def setMotorPower(self, joint, power):
     """Set the power of a joint.
 
