@@ -539,18 +539,18 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
     exit(0);
   }
 #else
-  cfsetspeed(&term, B500000);
-  cfsetispeed(&term, B500000);
-  cfsetospeed(&term, B500000);
+  cfsetspeed(&term, B230400);
+  cfsetispeed(&term, B230400);
+  cfsetospeed(&term, B230400);
   if(status = tcsetattr(comms->socket, TCSANOW, &term)) {
     fprintf(stderr, "Error setting tty settings. %d\n", errno);
   }
   tcgetattr(comms->socket, &term);
-  if(cfgetispeed(&term) != B500000) {
+  if(cfgetispeed(&term) != B230400) {
     fprintf(stderr, "Error setting input speed.\n");
     exit(0);
   }
-  if(cfgetospeed(&term) != B500000) {
+  if(cfgetospeed(&term) != B230400) {
     fprintf(stderr, "Error setting output speed.\n");
     exit(0);
   }
@@ -615,11 +615,11 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   DCB dcb;
   FillMemory(&dcb, sizeof(dcb), 0);
   dcb.DCBlength = sizeof(dcb);
-  if (!BuildCommDCB("500000,n,8,1", &dcb)) {
+  if (!BuildCommDCB("230400,n,8,1", &dcb)) {
     fprintf(stderr, "Could not build DCB.\n");
     return -1;
   }
-  dcb.BaudRate = 500000;
+  dcb.BaudRate = 230400;
 
   if (!SetCommState(comms->commHandle, &dcb)) {
     fprintf(stderr, "Could not set Comm State to new DCB settings.\n");
@@ -1762,13 +1762,11 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
   len++;
 #endif
   //printf("SEND %d: <<%s>>\n", comms->socket, str);
-  /*
   printf("SEND: ");
   for(i = 0; i < len; i++) {
     printf("0x%x ", str[i]);
   }
   printf("\n");
-  */
   //Sleep(1);
 
 #ifndef _WIN32
@@ -2080,7 +2078,7 @@ void* commsEngine(void* arg)
     /* Received a byte. If it is the first one, check to see if it is a
      * response or a triggered event */
     /* DEBUG */
-    //printf("%d RECV: 0x%0x\n", comms->commsEngine_bytes, byte);
+    printf("%d RECV: 0x%0x\n", comms->commsEngine_bytes, byte);
     if(comms->commsEngine_bytes == 0) {
       MUTEX_LOCK(comms->commsBusy_lock);
       comms->commsBusy = 1;
