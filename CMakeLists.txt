@@ -170,6 +170,7 @@ elseif(CMAKE_HOST_APPLE)
   install(FILES mobot.h DESTINATION include)
   add_subdirectory(demos)
 else(CMAKE_HOST_WIN32)
+  add_subdirectory(chmobot_src)
   add_definitions(-DENABLE_BLUETOOTH)
 	add_library(baroboStatic STATIC
       mobot.c

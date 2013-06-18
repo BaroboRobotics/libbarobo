@@ -40,15 +40,16 @@ class CLinkbotI
     int connect();
 #ifndef _CH_
     int connectWithAddress(const char address[], int channel = 1);
+    int connectWithBluetoothAddress(const char address[], int channel = 1);
     int connectWithIPAddress(const char address[], const char port[] = "5768");
 #else
     int connectWithAddress(const char address[], ...);
+    int connectWithBluetoothAddress(const char address[], ...);
     int connectWithIPAddress(const char address[], ...);
 #endif
 #ifndef _WIN32
     int connectWithTTY(const char ttyfilename[]);
 #endif
-    int connectWithSerialID(const char serialID[]);
     int disconnect();
     int driveJointToDirect(robotJointId_t id, double angle);
     int driveJointTo(robotJointId_t id, double angle);
@@ -232,6 +233,9 @@ class CLinkbotI
     int motionTurnLeftNB(double angle);
     int motionTurnRightNB(double angle);
     int motionWait();
+
+    /* Linkbot Only Functions */
+    int connectWithSerialID(const char serialID[]);
 #ifndef _CH_
   private:
     mobot_t *_comms;

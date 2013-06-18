@@ -24,6 +24,7 @@
 
 CMobot::CMobot()
 {
+  printf("CMobot Cons\n");
   _comms = (mobot_t*)malloc(sizeof(mobot_t));
   Mobot_init(_comms);
 }
