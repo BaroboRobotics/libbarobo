@@ -40,7 +40,7 @@ OBJS= mobotgroup++.obj \
       mobot_set_functions.obj 
 
 libmobot.dl: $(OBJS)
-	ch dllink libmobot.dl cplusplus $(OBJS) ws2_32.lib shell32.lib ../BaroboConfigFile/baroboconfigfile.lib ../BaroboConfigFile/mxml-2.7/mxml.lib
+	ch dllink libmobot.dl cplusplus $(OBJS) ws2_32.lib shell32.lib lib32/baroboconfigfile.lib lib32/mxml.lib
 
 mobotgroup++.obj: ../mobotgroup++.cpp $(HEADERS)
 	ch dlcomp libmobotgroup.dl cplusplus $(CFLAGS) ../mobotgroup++.cpp
@@ -160,6 +160,7 @@ createpkg: libmobot.dl
 	cp delay.chf $(PKGDIR)/lib
 	cp libmobot.dl $(PKGDIR)/dl
 	cp ../mobot.h $(PKGDIR)/include
+	cp ../linkbot.h $(PKGDIR)/include
 	cp ../docs/mobot.pdf $(PKGDIR)/docs
 	cp ../demos/chdemos/*.ch $(PKGDIR)/demos
 	cp Makefile_win32 $(PACKAGE)-$(VERSION)/Makefile
