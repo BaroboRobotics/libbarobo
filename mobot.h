@@ -42,7 +42,7 @@
 #include <math.h>
 
 #ifdef _CH_
-#pragma package <chmobot>
+#pragma package <chbarobo>
 #ifdef _WIN32_
 #define _WIN32
 #include <stdint.h>
