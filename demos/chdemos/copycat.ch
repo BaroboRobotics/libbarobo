@@ -1,7 +1,7 @@
 /* Filename: copycat.cpp
 * Connects to the first two mobots in the configuration list. Sets up the
 * mobots so that the second mobot copies the motions of the first mobot. */
-#include <mobot.h>
+#include <linkbot.h>
 
 #define NUM_MOBOTS 4
 

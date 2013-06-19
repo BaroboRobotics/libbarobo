@@ -3,18 +3,18 @@
 
    This file is part of libbarobo.
 
-   Foobar is free software: you can redistribute it and/or modify
+   BaroboLink is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
 
-   Foobar is distributed in the hope that it will be useful,
+   BaroboLink is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+   along with BaroboLink.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef _MOBOTCOMMS_H_
@@ -42,7 +42,7 @@
 #include <math.h>
 
 #ifdef _CH_
-#pragma package <chmobot>
+#pragma package <chbarobo>
 #ifdef _WIN32_
 #define _WIN32
 #include <stdint.h>
@@ -1039,9 +1039,11 @@ DLLIMPORT int Mobot_protocolVersion();
                       double *angle2,
                       double *angle3,
                       double *angle4};
+%apply int* OUTPUT {int* value};
 #endif
 DLLIMPORT int Mobot_getAccelerometerData(mobot_t* comms, double *accel_x, double *accel_y, double *accel_z);
 DLLIMPORT int Mobot_getBatteryVoltage(mobot_t* comms, double *voltage);
+DLLIMPORT int Mobot_getBreakoutADC(mobot_t* comms, int adc, int* value);
 DLLIMPORT int Mobot_getButtonVoltage(mobot_t* comms, double *voltage);
 DLLIMPORT int Mobot_getChildrenInfo(mobot_t* comms, mobotInfo_t **mobotInfo, int *numChildren );
 DLLIMPORT const char* Mobot_getConfigFilePath();
@@ -1274,6 +1276,11 @@ DLLIMPORT int Mobot_turnLeft(mobot_t* comms, double angle);
 DLLIMPORT int Mobot_turnLeftNB(mobot_t* comms, double angle);
 DLLIMPORT int Mobot_turnRight(mobot_t* comms, double angle);
 DLLIMPORT int Mobot_turnRightNB(mobot_t* comms, double angle);
+DLLIMPORT int Mobot_twiRecv(mobot_t* comms, uint8_t addr, void* recvbuf, int size);
+DLLIMPORT int Mobot_twiSend(mobot_t* comms, uint8_t addr, uint8_t* buf, int size);
+DLLIMPORT int Mobot_twiSendRecv(mobot_t* comms, uint8_t addr, 
+    uint8_t* sendbuf, int sendsize,
+    void* recvbuf, int recvsize);
 
 /* compound motion functions */
 DLLIMPORT int Mobot_motionArch(mobot_t* comms, double angle);
@@ -1323,8 +1330,6 @@ extern void delay(double seconds);
 void * CMobot::g_chmobot_dlhandle = NULL;
 int CMobot::g_chmobot_dlcount = 0;
 #pragma importf "chmobot.chf"
-#pragma importf "chlinkboti.chf"
-#pragma importf "chlinkbotl.chf"
 #endif
 
 #ifndef NONRELEASE

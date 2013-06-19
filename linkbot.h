@@ -3,18 +3,18 @@
 
    This file is part of libbarobo.
 
-   Foobar is free software: you can redistribute it and/or modify
+   BaroboLink is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
 
-   Foobar is distributed in the hope that it will be useful,
+   BaroboLink is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+   along with BaroboLink.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef _LINKBOT_H_
@@ -40,15 +40,16 @@ class CLinkbotI
     int connect();
 #ifndef _CH_
     int connectWithAddress(const char address[], int channel = 1);
+    int connectWithBluetoothAddress(const char address[], int channel = 1);
     int connectWithIPAddress(const char address[], const char port[] = "5768");
 #else
     int connectWithAddress(const char address[], ...);
+    int connectWithBluetoothAddress(const char address[], ...);
     int connectWithIPAddress(const char address[], ...);
 #endif
 #ifndef _WIN32
     int connectWithTTY(const char ttyfilename[]);
 #endif
-    int connectWithSerialID(const char serialID[]);
     int disconnect();
     int driveJointToDirect(robotJointId_t id, double angle);
     int driveJointTo(robotJointId_t id, double angle);
@@ -232,6 +233,9 @@ class CLinkbotI
     int motionTurnLeftNB(double angle);
     int motionTurnRightNB(double angle);
     int motionWait();
+
+    /* Linkbot Only Functions */
+    int connectWithSerialID(const char serialID[]);
 #ifndef _CH_
   private:
     mobot_t *_comms;
@@ -856,5 +860,10 @@ class CMelody
   private:
     mobotMelodyNote_t* _head;
 };
+
+#ifdef _CH_
+#pragma importf "chlinkboti.chf"
+#pragma importf "chlinkbotl.chf"
+#endif
 
 #endif

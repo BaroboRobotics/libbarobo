@@ -1,22 +1,3 @@
-/*
-   Copyright 2013 Barobo, Inc.
-
-   This file is part of libbarobo.
-
-   Foobar is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-
-   Foobar is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
 #ifndef _COMMANDS_H_
 #define _COMMANDS_H_
 
@@ -49,6 +30,16 @@
 /* Format:
    [CMD] [0x09] [zigbee addr high] [zigbee addr low] [4 bytes id] [0x00] */
 #define EVENT_REPORTADDRESS 0x21
+
+/* When the Linkbot sends TWI commands to the breakout board, there are 2
+ * general types of messages. There are messages that are responses to commands
+ * that need to be forwarded to the Bluetooth module, but there are also direct
+ * register acces commands. The MSG_REGACCESS command is used to set/get
+ * register/memory values on a slave breakoutboard.
+   Format:
+   send([0x22] [reg addr] [maybe write bytes]) + maybe_recv([data])
+ */
+#define MSG_REGACCESS 0x22
 
 #define CMD_START 0x30
 #define CMD_IDLE  0x01
@@ -425,7 +416,129 @@ enum protocol_commands_e {
 /* 0x73 Placeholder to increase version number [67] */
   CMD_PLACEHOLDER201304181425,
 
+/* 0x74 CMD_SET_GRP_MASTER: If the robot is currently a slave in a group, it [68]
+ * becomes a master.
+ * Command Format: [CMD] [0x03] [0x00]
+ * Expected Response: [0x10] [0x03] [0x11] */
+  CMD_SET_GRP_MASTER,
+
+/* 0x75 CMD_SET_GRP_SLAVE: Sets the robot to be a group slave [69]
+ * Command Format: [CMD] [0x03] [0x00]
+ * Expected Response: [0x10] [0x03] [0x11] */
+  CMD_SET_GRP_SLAVE,
+
+/* 0x76 CMD_SET_GRP: Sets the robot to be in a group. If the robot is not [70]
+ * currently in a group, it defaults to being a slave in the group.
+ * Command Format: [CMD] [size] [2 byte group id msb first] [3 byte rgb] [0x00]
+ * Expected Response: [0x10] [0x03] [0x11] */
+  CMD_SET_GRP,
+
+/* 0x77 CMD_SAVE_POSE: Save the current positions to an internal pose. [71]
+   Command Format: [CMD] [4] [uint8_t pose index] [0x00]
+   Expected Response: [0x10] [0x03] [0x11] */
+  CMD_SAVE_POSE,
+
+/* 0x78 CMD_MOVE_TO_POSE: Move the motors to an indexed pose [72]
+   Command Format: [CMD] [size] [uint8_t pose index] [0x00]
+   Expected Response: [0x10] [0x03] [0x11] */
+  CMD_MOVE_TO_POSE,
+
+/* 0x79 CMD_IS_MOVING: Is the robot moving? [73]
+   Command Format: [CMD] [0x03] [0x00]
+   Expected Response: [0x10] [0x04] [1 byte truth value] [0x11] */
+  CMD_IS_MOVING,
+
+/* 0x80 CMD_GET_MOTOR_ERRORS: How far are the motors away from their goal? [74]
+   Command Format: [CMD] [3] [0x00]
+   Expected Response: [0x10] [19] [4x4 byte floats] [0x00] */
+  CMD_GET_MOTOR_ERRORS,
+
+/* 0x81 CMD_MOVE_MOTORS: Move motors from their current positions [75]
+   Command Format: [CMD] [19] [4*4 bytes floats, motor displacement angles] [0x00]
+   Expected Response: [0x10] [0x03] [0x11] */
+  CMD_MOVE_MOTORS,
+
+/* 0x82 CMD_TWI_SEND: Send data to a TWI slave [76]
+   Command Format: [CMD] [size] [TWI addr] [data send size] [data] [0x00]
+   Expected Response: [0x10] [0x03] [0x11] */
+  CMD_TWI_SEND,
+
+/* 0x83 CMD_TWI_RECV: Receive data from a TWI slave [77]
+   Command Format: [CMD] [size] [TWI addr] [recv size] [0x00]
+   Expected Response: [0x10] [size] [data] [0x11] */
+  CMD_TWI_RECV,
+
+/* 0x84 CMD_TWI_SENDRECV: Send and receive data from a TWI slave [78]
+   Command Format: [CMD] [size] [TWI addr] [send size] [send data] [recv size] [0x00]
+   Expected Response: [0x10] [size] [data] [0x11] */
+  CMD_TWI_SENDRECV,
+
   CMD_NUMCOMMANDS
+};
+
+#define GRP_CMD_START 0xD0
+#define GRP_CMD_END 0x12
+#define GRPCMD(cmd) ((cmd) + GRP_CMD_START)
+enum group_protocol_commands_e {
+  /* 0xD0 The first command is a general wrapper containing a normal CMD_ within.
+     Command Format: 
+        [CMD]
+        [size] 
+        [group ID high byte] 
+        [" " low byte] 
+        [1 byte response requested]
+        [X bytes CMD_] 
+        [0x12]
+     */
+  GRP_CMD_WRAPPER,
+
+  /* 0xD1 GRP_CMD_RESP_WRAPPER: If a group member receives a GRP_CMD_WRAPPER
+   * addressed specifically to it, it will send a wrappred response back to the
+   * sender.
+   * Command Format: [CMD] [size] [group ID high] [group ID low] [X bytes response] [0x12] */
+  GRP_CMD_RESP_WRAPPER,
+
+  /* 0xD2 GRP_CMD_SYNCSHOCK_ARBITRATE_MASTER: Synchronize two unpaired modules by using shock detection.
+     Command Format: 
+          0 [CMD] 
+          1 [size] 
+          2 [4 bytes millis passed since shock] 
+          6 [4 bytes millis passed since button down] 
+          10 [2 byte group id] 
+          12 [3 bytes RGB] 
+          [0x12]
+     */
+  GRP_CMD_SYNCSHOCK_ARBITRATE_MASTER,
+
+  /* 0xD3 GRP_CMD_SYNCSHOCK_SET_SLAVE: Synchronize a paired and unpaired
+   * master, setting the unpaired robot to be a slave.
+   * Command Format: [CMD] [size] [4 bytes millis passed since shock] [2 byte group id] [3 byte RGB] [0x12]
+   */
+  GRP_CMD_SYNCSHOCK_SET_SLAVE,
+
+/* 0xD4 CMD_SET_GRP_MASTER: If the robot is currently a slave in a group, it
+ * becomes a master.
+ * Command Format: [CMD] [0x03] [0x12]
+ * Expected Response: None */
+  GRP_CMD_SET_GRP_MASTER,
+
+/* 0xD5 CMD_SET_GRP_SLAVE: Sets the robot to be a group slave
+ * Command Format: [CMD] [0x03] [0x12]
+ * Expected Response: None */
+  GRP_CMD_SET_GRP_SLAVE,
+
+/* 0xD6 GRP_CMD_SLAVE_BEACON: All new slaves will broadcast this beacon so that
+ * the master can add them to the list of known slaves.
+ * Command Format: [CMD] [0x05] [group_id high byte] [group_id low byte] [0x12]
+ * Expected Response: None */
+  GRP_CMD_SLAVE_BEACON,
+
+/* 0xD7 GRP_CMD_PLAY_POSES: Causes the group master to begin coordinated playing of poses.
+   Command Format: [CMD] [0x05] [group higb byte] [group low byte] [0x12]
+   Expected Response: None */
+  GRP_CMD_PLAY_POSES,
+
+  GRP_CMD_NUMCOMMANDS
 };
 
 #endif

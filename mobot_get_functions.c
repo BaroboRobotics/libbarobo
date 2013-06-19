@@ -3,18 +3,18 @@
 
    This file is part of libbarobo.
 
-   Foobar is free software: you can redistribute it and/or modify
+   BaroboLink is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
 
-   Foobar is distributed in the hope that it will be useful,
+   BaroboLink is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+   along with BaroboLink.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <stdio.h>
@@ -64,6 +64,34 @@
 
 #define DEPRECATED(from, to) \
   fprintf(stderr, "Warning: The function \"%s()\" is deprecated. Please use \"%s()\"\n" , from, to)
+
+int Mobot_getBreakoutADC(mobot_t* comms, int adc, int* value)
+{
+  uint8_t buf[32];
+  int rc;
+  *value = 0;
+  /* Select the channel */
+  buf[0] = 0x22;
+  buf[1] = 0x7C;
+  buf[2] = 0x40;
+  buf[2] |= (adc&0x0f);
+  rc = Mobot_twiSend(comms, 0x02, buf, 3);
+  if(rc) return rc;
+  /* Start a conversion */
+  buf[0] = 0x22;
+  buf[1] = 0x7A; // ADCSRA
+  buf[2] = 0xC7;
+  rc = Mobot_twiSend(comms, 0x02, buf, 3);
+  if(rc) return rc;
+  /* Get the result */
+  buf[0] = 0x22;
+  buf[1] = 0x78;
+  rc = Mobot_twiSendRecv(comms, 0x02, buf, 2, buf, 2);
+  if(rc) return rc;
+  *value = buf[1] << 8;
+  *value |= buf[0];
+  return 0;
+}
 
 int Mobot_getQueriedAddresses(mobot_t* comms)
 {

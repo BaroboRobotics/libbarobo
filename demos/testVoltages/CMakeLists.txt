@@ -5,4 +5,4 @@ include_directories( ${LIBIMOBOTCOMMS_SOURCE_DIR})
 link_directories( ${LIBIMOBOTCOMMS_BINARY_DIR})
 
 add_executable(voltages voltages.c)
-target_link_libraries(voltages barobo)
+target_link_libraries(voltages baroboStatic)

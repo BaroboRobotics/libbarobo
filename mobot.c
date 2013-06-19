@@ -3,18 +3,18 @@
 
    This file is part of libbarobo.
 
-   Foobar is free software: you can redistribute it and/or modify
+   BaroboLink is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
 
-   Foobar is distributed in the hope that it will be useful,
+   BaroboLink is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+   along with BaroboLink.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <stdio.h>
@@ -539,18 +539,18 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
     exit(0);
   }
 #else
-  cfsetspeed(&term, B500000);
-  cfsetispeed(&term, B500000);
-  cfsetospeed(&term, B500000);
+  cfsetspeed(&term, B230400);
+  cfsetispeed(&term, B230400);
+  cfsetospeed(&term, B230400);
   if(status = tcsetattr(comms->socket, TCSANOW, &term)) {
     fprintf(stderr, "Error setting tty settings. %d\n", errno);
   }
   tcgetattr(comms->socket, &term);
-  if(cfgetispeed(&term) != B500000) {
+  if(cfgetispeed(&term) != B230400) {
     fprintf(stderr, "Error setting input speed.\n");
     exit(0);
   }
-  if(cfgetospeed(&term) != B500000) {
+  if(cfgetospeed(&term) != B230400) {
     fprintf(stderr, "Error setting output speed.\n");
     exit(0);
   }
@@ -615,11 +615,11 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   DCB dcb;
   FillMemory(&dcb, sizeof(dcb), 0);
   dcb.DCBlength = sizeof(dcb);
-  if (!BuildCommDCB("500000,n,8,1", &dcb)) {
+  if (!BuildCommDCB("230400,n,8,1", &dcb)) {
     fprintf(stderr, "Could not build DCB.\n");
     return -1;
   }
-  dcb.BaudRate = 500000;
+  dcb.BaudRate = 230400;
 
   if (!SetCommState(comms->commHandle, &dcb)) {
     fprintf(stderr, "Could not set Comm State to new DCB settings.\n");
@@ -1533,6 +1533,43 @@ int Mobot_setFourierCoefficients(mobot_t* comms, robotJointId_t id, double* a, d
 
 int Mobot_twiSend(mobot_t* comms, uint8_t addr, uint8_t* buf, int size)
 {
+  uint8_t* sendbuf = (uint8_t*)malloc(size+10);
+  sendbuf[0] = addr;
+  sendbuf[1] = size;
+  memcpy(&sendbuf[2], buf, size);
+  sendbuf[2+size] = 0x00;
+  int rc = MobotMsgTransaction(comms, BTCMD(CMD_TWI_SEND), sendbuf, 3+size);
+  free(sendbuf);
+  return rc;
+}
+
+int Mobot_twiRecv(mobot_t* comms, uint8_t addr, void* buf, int size)
+{
+  uint8_t* sendbuf = (uint8_t*)malloc(size+10);
+  sendbuf[0] = addr;
+  sendbuf[1] = size;
+  sendbuf[2] = 0x0;
+  int rc = MobotMsgTransaction(comms, BTCMD(CMD_TWI_RECV), sendbuf, 3);
+  if(rc == 0) memcpy(buf, &sendbuf[2], sendbuf[1]-3);
+  free(sendbuf);
+  return rc;
+}
+
+int Mobot_twiSendRecv(mobot_t* comms, uint8_t addr, 
+    uint8_t* sendbuf, int sendsize,
+    void* recvbuf, int recvsize)
+{
+  uint8_t *buf = (uint8_t*)malloc(sendsize+recvsize+10);
+  buf[0] = addr;
+  buf[1] = sendsize;
+  memcpy(&buf[2], sendbuf, sendsize);
+  buf[2+sendsize] = recvsize;
+  buf[3+sendsize] = 0x00;
+  int rc = MobotMsgTransaction(comms, BTCMD(CMD_TWI_SENDRECV), buf, 4+sendsize);
+  if(rc == 0) {
+    memcpy(recvbuf, &buf[2], buf[1]-3);
+  }
+  return rc;
 }
 
 int Mobot_waitForReportedSerialID(mobot_t* comms, char* id) 
