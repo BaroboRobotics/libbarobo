@@ -24,7 +24,6 @@
 
 CLinkbotI::CLinkbotI()
 {
-  printf("CLinkbotI Cons\n");
 }
 
 CLinkbotI::~CLinkbotI() 
