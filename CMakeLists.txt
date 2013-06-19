@@ -163,6 +163,7 @@ elseif(CMAKE_HOST_APPLE)
       mobotl_set_functions++.cpp
 	  )
 	target_link_libraries(barobo pthread baroboconfigfile)
+	target_link_libraries(baroboStatic pthread baroboconfigfile)
   set_target_properties(barobo PROPERTIES
     INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
   install(TARGETS barobo
