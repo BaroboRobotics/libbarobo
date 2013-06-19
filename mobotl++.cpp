@@ -37,7 +37,7 @@ int CLinkbotL::connect()
     return rc;
   }
   if(_comms->formFactor != MOBOTFORM_L) {
-    fprintf(stderr, "Error: Connected Mobot is not a Linkbot-L.\n");
+    fprintf(stderr, "Error: Connected robot is not a Linkbot-L.\n");
     Mobot_disconnect(_comms);
     return -1;
   }
