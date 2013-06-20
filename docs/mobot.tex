@@ -337,6 +337,71 @@ the ``safe'' version of the firmware has been flashed onto the Mobot, it is reco
 connect to the Mobot using BaroboLink and upgrade the firmware back to the most up-to-date
 version.
 
+\section{Controlling Linkbots Without a Computer}
+If you have access to more than one Linkbot, they can be used to control each other
+in several ways. To begin, the modules must be paired together using a process called
+BumpConnect.
+
+\subsection{BumpConnect}
+BumpConnect is a process that is used to pair modules together. The process can also be used
+to add additional slave robots to an existing group. All BumpConnected groups of Mobots
+contain a single master which can control one or more slaves.
+
+To BumpConnect two unpaired Linkbots:
+\begin{enumerate}
+\item Press and hold the 'B' button on the Linkbot you want to be the master.
+\item Press and hold the 'B' button on a second Linkbot.
+\item Gently bump the two modules together.
+\item Release the 'B' buttons.
+\item After a second or so, the LED colors on both robots should change. The Master 
+robot will blink, cycling between Blue and a randomly chosen group color. The Slave
+should display the randomly chosen group color. 
+\item If nothing happens after 5 seconds, try again starting from step 1.
+\end{enumerate}
+
+To BumpConnect a paired Linkbot with an unpaired Linkbot:
+\begin{enumerate}
+\item Press and hold the 'B' button on both robots.
+\item While holding the 'B' buttons, gently bump the two robots together.
+\item The unpaired robot should take on the color of the paired robot. If this
+does not happen after 5 seconds, try the process again starting from step 1.
+\end{enumerate}
+
+\subsection{Pose Teaching Mode}
+After robots have been paired with each other, they enter the default ``Pose Teaching'' Mode.
+Initially, there are zero recorded poses. In this mode, the buttons have the following functions:
+\begin{itemize}
+\item The Power or ``X'' button: If the robots are not playing poses, this button deletes all recorded poses.
+\item The 'A' button: If the robots are not playing poses, this button records a new pose. 
+\item The 'B' button: If there are no recorded poses, the 'B' button makes the
+robot switch into ``TiltDrive'' mode. If there are recorded poses, the 'B'
+button begins playing the poses. If the robot is currently playing poses, the 'B' button stops playing poses.
+\end{itemize}
+
+\subsection{TiltDrive Mode}
+While the group is in TiltDrive mode, the Master robot will flash its LED
+colors between green and the group color. In TiltDrive mode, the master 
+module can be tilted forward, backward, and side-to-side to drive the slave
+modules. 
+
+In this mode, the buttons have the following functions:
+\begin{itemize}
+\item The 'B' button: Changes the current mode from ``TiltDrive'' mode to ``CopyCat'' mode.
+\end{itemize}
+
+\subsection{CopyCat Mode}
+While the group is in CopyCat mode, the Master robot will flash its LED
+colors between light-blue and the group color. In CopyCat mode,
+all of the slave modules will move their joints to match the position
+of the joints on the Master module. If there are intermixed -I and -L
+Linkbot modules, joint 2 will match the angle on the Master's joint 3, and 
+vice versa. 
+
+In this mode, the buttons have the following functions:
+\begin{itemize}
+\item The 'B' button: Changes the current mode from ``CopyCat'' mode to ``Pose Teaching'' mode.
+\end{itemize}
+
 \section{Configuring the Linkbot-I/L for Remote Control}
 In order to control Linkbot-I/L modules, at least one Linkbot-I/L module must be directly 
 connected to the computer using a Micro-USB cable. The connected module acts as a 
