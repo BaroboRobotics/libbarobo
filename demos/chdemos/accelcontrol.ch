@@ -1,4 +1,4 @@
-#include <mobot.h>
+#include <linkbot.h>
 
 int main()
 {
@@ -7,6 +7,7 @@ int main()
   slave.connect();
   double accel_x, accel_y, accel_z;
   int motorPower, motorOffset;
+  slave.stop(); // Make the slave relax motors first
   while(1) {
     /* Get the accelerometer values */
     master.getAccelerometerData(accel_x, accel_y, accel_z);

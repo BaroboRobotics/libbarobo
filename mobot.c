@@ -649,6 +649,70 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   return 0;
 }
 
+int Mobot_connectWithTTY_500kbaud(mobot_t* comms, const char* ttyfilename)
+{
+  int rc;
+  /* Check the file name. If we receive something like "COM45", we want to
+   * change it to "\\.\COM45" */
+  char *tty;
+  tty = (char*)malloc((sizeof(char)*strlen(ttyfilename))+20);
+  tty[0] = '\0';
+  if(ttyfilename[0] != '\\') {
+    strcpy(tty, "\\\\.\\");
+  }
+  strcat(tty, ttyfilename);
+  /* For windows, we should connect to a com port */
+  comms->commHandle = CreateFile(
+      tty, 
+      GENERIC_READ | GENERIC_WRITE,
+      0,
+      0,
+      OPEN_EXISTING,
+      FILE_FLAG_OVERLAPPED,
+      0 );
+  free(tty);
+  if(comms->commHandle == INVALID_HANDLE_VALUE) {
+    //fprintf(stderr, "Error connecting to COM port: %s\n", ttyfilename);
+    return -1;
+  }
+  /* Adjust settings */
+  DCB dcb;
+  FillMemory(&dcb, sizeof(dcb), 0);
+  dcb.DCBlength = sizeof(dcb);
+  if (!BuildCommDCB("500000,n,8,1", &dcb)) {
+    fprintf(stderr, "Could not build DCB.\n");
+    return -1;
+  }
+  dcb.BaudRate = 500000;
+
+  if (!SetCommState(comms->commHandle, &dcb)) {
+    fprintf(stderr, "Could not set Comm State to new DCB settings.\n");
+    return -1;
+  }
+  
+  comms->connected = 1;
+  comms->connectionMode = MOBOTCONNECT_TTY;
+
+  rc = finishConnect(comms);
+  if(rc) {
+    //comms->connected = 0;
+    //comms->connectionMode = MOBOTCONNECT_NONE;
+    //CloseHandle(comms->commHandle);
+    Mobot_disconnect(comms);
+    return rc;
+  }
+  if(
+      (comms->formFactor == MOBOTFORM_I) ||
+      (comms->formFactor == MOBOTFORM_L) 
+    )
+  {
+    comms->zigbeeAddr = Mobot_getAddress(comms);
+    /* See if we can get the serial id */
+    Mobot_getID(comms);
+  }
+  return 0;
+}
+
 #endif
 
 int getFormFactor(mobot_t* comms, int* form)

@@ -1,5 +1,5 @@
 #!/bin/sh
-PACKAGE=chmobot
+PACKAGE=chbarobo
 VERSION=0.1
 PKGDIR=$PACKAGE-$VERSION/$PACKAGE
 

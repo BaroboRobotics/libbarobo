@@ -1,4 +1,4 @@
-PACKAGE=chmobot
+PACKAGE=chbarobo
 VERSION=0.1
 HEADERS=../mobot.h
 PKGDIR=$(PACKAGE)-$(VERSION)/$(PACKAGE)
