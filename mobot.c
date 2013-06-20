@@ -583,6 +583,149 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   return 0;
 }
 
+int Mobot_connectWithTTY_500kbaud(mobot_t* comms, const char* ttyfilename)
+{
+  FILE *lockfile;
+  char *filename = strdup(ttyfilename);
+  char lockfileName[MAX_PATH];
+  int pid;
+  int status;
+  /* Open the lock file, if it exists */
+  sprintf(lockfileName, "/tmp/%s.lock", basename(filename));
+  lockfile = fopen(lockfileName, "r");
+  if(lockfile == NULL) {
+    /* Lock file does not exist. Proceed. */
+  } else {
+    /* Lockfile exists. Need to check PID in the lock file and see if that
+     * process is still running. */
+    fscanf(lockfile, "%d", &pid);
+    if(pid > 0 && kill(pid,0) < 0 && errno == ESRCH) {
+      /* Lock file is stale. Delete it */
+      unlink(lockfileName);
+    } else {
+      /* The tty device is locked. Return error code. */
+      fprintf(stderr, "Error: Another application is already connected to the Mobot.\n");
+      free(filename);
+      fclose(lockfile);
+      return -2;
+    }
+  }
+  comms->lockfileName = strdup(lockfileName);
+  if(lockfile != NULL) {
+    fclose(lockfile);
+  }
+  comms->socket = open(ttyfilename, O_RDWR | O_NOCTTY | O_ASYNC);
+  if(comms->socket < 0) {
+    //perror("Unable to open tty port.");
+    return -1;
+  }
+  /* Change the baud rate to 57600 */
+  struct termios term;
+  tcgetattr(comms->socket, &term);
+
+  // Input flags - Turn off input processing
+  // convert break to null byte, no CR to NL translation,
+  // no NL to CR translation, don't mark parity errors or breaks
+  // no input parity check, don't strip high bit off,
+  // no XON/XOFF software flow control
+  //
+  term.c_iflag &= ~(IGNBRK | BRKINT | ICRNL |
+      INLCR | PARMRK | INPCK | ISTRIP | IXON);
+  //
+  // Output flags - Turn off output processing
+  // no CR to NL translation, no NL to CR-NL translation,
+  // no NL to CR translation, no column 0 CR suppression,
+  // no Ctrl-D suppression, no fill characters, no case mapping,
+  // no local output processing
+  //
+  // term.c_oflag &= ~(OCRNL | ONLCR | ONLRET |
+  //                     ONOCR | ONOEOT| OFILL | OLCUC | OPOST);
+  term.c_oflag = 0;
+  //
+  // No line processing:
+  // echo off, echo newline off, canonical mode off, 
+  // extended input processing off, signal chars off
+  //
+  term.c_lflag &= ~(ECHO | ECHONL | ICANON | IEXTEN | ISIG);
+  //
+  // Turn off character processing
+  // clear current char size mask, no parity checking,
+  // no output processing, force 8 bit input
+  //
+  term.c_cflag &= ~(CSIZE | PARENB);
+  term.c_cflag |= CS8;
+  //
+  // One input byte is enough to return from read()
+  // Inter-character timer off
+  //
+  term.c_cc[VMIN]  = 1;
+  term.c_cc[VTIME] = 0;
+  //
+  // Communication speed (simple version, using the predefined
+  // constants)
+  //
+
+#ifdef __MACH__
+  cfsetspeed(&term, 500000);
+  cfsetispeed(&term, 500000);
+  cfsetospeed(&term, 500000);
+  if(status = tcsetattr(comms->socket, TCSANOW, &term)) {
+    fprintf(stderr, "Error setting tty settings. %d\n", errno);
+  }
+  tcgetattr(comms->socket, &term);
+  if(cfgetispeed(&term) != 500000) {
+    fprintf(stderr, "Error setting input speed.\n");
+    exit(0);
+  }
+  if(cfgetospeed(&term) != 500000) {
+    fprintf(stderr, "Error setting output speed.\n");
+    exit(0);
+  }
+#else
+  cfsetspeed(&term, B500000);
+  cfsetispeed(&term, B500000);
+  cfsetospeed(&term, B500000);
+  if(status = tcsetattr(comms->socket, TCSANOW, &term)) {
+    fprintf(stderr, "Error setting tty settings. %d\n", errno);
+  }
+  tcgetattr(comms->socket, &term);
+  if(cfgetispeed(&term) != B500000) {
+    fprintf(stderr, "Error setting input speed.\n");
+    exit(0);
+  }
+  if(cfgetospeed(&term) != B500000) {
+    fprintf(stderr, "Error setting output speed.\n");
+    exit(0);
+  }
+#endif
+  comms->connected = 1;
+  comms->connectionMode = MOBOTCONNECT_TTY;
+  tcflush(comms->socket, TCIOFLUSH);
+  status = finishConnect(comms);
+  if(status) {
+    return status;
+  }
+  if(
+      (comms->formFactor == MOBOTFORM_I) ||
+      (comms->formFactor == MOBOTFORM_L) 
+    )
+  {
+    comms->zigbeeAddr = Mobot_getAddress(comms);
+    /* See if we can get the serial id */
+    Mobot_getID(comms);
+  }
+  if(status) return status;
+  /* Finished connecting. Create the lockfile. */
+  lockfile = fopen(lockfileName, "w");
+  if(lockfile == NULL) {
+    fprintf(stderr, "Fatal error. %s:%d\n", __FILE__, __LINE__);
+    return -1;
+  }
+  fprintf(lockfile, "%d", getpid());
+  fclose(lockfile);
+  return 0;
+}
+
 #else
 
 int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
