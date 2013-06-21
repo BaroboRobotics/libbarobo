@@ -1,12 +1,12 @@
 /* Filename: tumble.ch 
  * Tumbling mobot */
 #include <mobot.h>
-CMobot mobot;
+CMobot robot;
 
 /* Connect to the paired Mobot */
-mobot.connect();
-/* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot.resetToZero();
+robot.connect();
+/* Set the robot to "home" position, where all joint angles are 0 degrees. */
+robot.resetToZero();
 
 /* Tumble two times */
-mobot.motionTumbleLeft(2);
+robot.motionTumbleLeft(2);

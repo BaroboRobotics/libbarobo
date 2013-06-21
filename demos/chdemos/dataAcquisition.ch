@@ -4,10 +4,10 @@
 #include <mobot.h>
 #include <chplot.h>
 #include <numeric.h>
-CMobot mobot;
+CMobot robot;
 
-/* Connect to the mobot */
-mobot.connect();
+/* Connect to the robot */
+robot.connect();
 
 double speed = 45; /* Degrees/second */
 double angle = 720; /* Degrees */
@@ -28,20 +28,20 @@ array double angles1[numDataPoints];
 /* Declare plotting variables */
 CPlot plot1, plot2, plot3;
 
-/* Start the motion. First, move mobot to zero position */
-mobot.resetToZero();
+/* Start the motion. First, move robot to zero position */
+robot.resetToZero();
 /* Set the joint 1 speed to 45 degrees/second */
-mobot.setJointSpeed(ROBOT_JOINT1, speed);
-mobot.setJointSpeed(ROBOT_JOINT4, speed);
+robot.setJointSpeed(ROBOT_JOINT1, speed);
+robot.setJointSpeed(ROBOT_JOINT4, speed);
 
 /* Start capturing data */
-mobot.recordAngle(ROBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
+robot.recordAngle(ROBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
 
 /* Move the joint 720 degrees */
-mobot.move(angle, 0, 0, angle);
+robot.move(angle, 0, 0, angle);
 
 /* Wait for recording to finish */
-mobot.recordWait();
+robot.recordWait();
 
 /* Plot the data */
 plot1.title("Data for Joint Angle 1 versus Time");

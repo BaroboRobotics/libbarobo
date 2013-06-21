@@ -1,18 +1,18 @@
 /* File: inchworm.ch 
  * Perform the "inchworm" motion four times */
 #include <mobot.h>
-CMobot mobot;
+CMobot robot;
 
 /* Connect to the paired Mobot */
-mobot.connect();
+robot.connect();
 
-/* Set mobot motors to speed of 0.50 */
-mobot.setJointSpeedRatio(ROBOT_JOINT2, 0.50);
-mobot.setJointSpeedRatio(ROBOT_JOINT3, 0.50);
+/* Set robot motors to speed of 0.50 */
+robot.setJointSpeedRatio(ROBOT_JOINT2, 0.50);
+robot.setJointSpeedRatio(ROBOT_JOINT3, 0.50);
 
-/* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot.resetToZero();
+/* Set the robot to "home" position, where all joint angles are 0 degrees. */
+robot.resetToZero();
 
 /* Do the inchworm motion four times */
-mobot.motionInchwormLeft(4);
+robot.motionInchwormLeft(4);
 

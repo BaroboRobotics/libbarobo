@@ -3,28 +3,28 @@
 #include <mobot.h>
 #include <chplot.h>
 
-CMobot mobot;
+CMobot robot;
 double timeInterval = 0.1; // time interval in 0.1 second 
 int numDataPoints;         // number of data points recorded
 robotRecordData_t time, angle1;     // location for recorded time and angles for joint 1
 CPlot plot;                        // plotting class
 
 /* connect to the paired Mobot and move to the zero position */
-mobot.connect();
-mobot.resetToZero();
+robot.connect();
+robot.resetToZero();
 
 /* set the joints 1 and 4 speed to 45 degrees/second */
-mobot.setJointSpeed(ROBOT_JOINT1, 45);
-mobot.setJointSpeed(ROBOT_JOINT4, 45);
+robot.setJointSpeed(ROBOT_JOINT1, 45);
+robot.setJointSpeed(ROBOT_JOINT4, 45);
 
 /* begin recording data */
-mobot.recordAngleBegin(ROBOT_JOINT1, time, angle1, timeInterval);
+robot.recordAngleBegin(ROBOT_JOINT1, time, angle1, timeInterval);
 
 /* move the joints 1 and 4 720 degrees */
-mobot.move(720, 0, 0, 720);
+robot.move(720, 0, 0, 720);
 
 /* end  recording data  */
-mobot.recordAngleEnd(ROBOT_JOINT1, numDataPoints);
+robot.recordAngleEnd(ROBOT_JOINT1, numDataPoints);
 printf("Captured %d data points.\n", numDataPoints);
 
 /* plot the data */

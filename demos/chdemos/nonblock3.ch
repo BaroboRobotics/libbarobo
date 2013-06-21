@@ -1,16 +1,16 @@
 /* File: nonblock3.ch
    Roll and arch simultaneously. */
 #include <mobot.h>
-CMobot mobot;
+CMobot robot;
 
 /* Connect to the paired Mobot */
-mobot.connect();
+robot.connect();
 
-mobot.resetToZero();
+robot.resetToZero();
 
 printf("Rolling 360 degrees.\n");
-mobot.moveForward(360);
+robot.moveForward(360);
 printf("Rolling 360 degrees while arching.\n");
-mobot.motionArchNB(15);
-mobot.moveForwardNB(360);
-mobot.moveWait();
+robot.motionArchNB(15);
+robot.moveForwardNB(360);
+robot.moveWait();

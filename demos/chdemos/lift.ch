@@ -8,36 +8,36 @@
   |---------|--------|      |---------|--------|
 */
 #include <mobot.h>
-CMobot mobot1;
-CMobot mobot2;
+CMobot robot1;
+CMobot robot2;
 
-/* Connect mobot variables to the mobot modules. */
-mobot1.connect();
-mobot2.connect();
+/* Connect robot variables to the robot modules. */
+robot1.connect();
+robot2.connect();
 
-/* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot1.resetToZeroNB();
-mobot2.resetToZeroNB();
+/* Set the robot to "home" position, where all joint angles are 0 degrees. */
+robot1.resetToZeroNB();
+robot2.resetToZeroNB();
 
-mobot1.moveWait();
-mobot2.moveWait();
+robot1.moveWait();
+robot2.moveWait();
 
 /* First lift */
-mobot1.moveToNB(0, -90,  0, 0);
-mobot2.moveToNB(0, 0, 90, 0);
-mobot1.moveWait();
-mobot2.moveWait();
+robot1.moveToNB(0, -90,  0, 0);
+robot2.moveToNB(0, 0, 90, 0);
+robot1.moveWait();
+robot2.moveWait();
 delay(1);
 
 /* Second lift */
-mobot1.moveToNB(0, 0, 90,  0);
-mobot2.moveToNB(0,  -90, 0, 0);
-mobot1.moveWait();
-mobot2.moveWait();
+robot1.moveToNB(0, 0, 90,  0);
+robot2.moveToNB(0,  -90, 0, 0);
+robot1.moveWait();
+robot2.moveWait();
 delay(1);
 
 /* Move to zero position */
-mobot1.resetToZeroNB(); 
-mobot2.resetToZeroNB();
-mobot1.moveWait();
-mobot2.moveWait();
+robot1.resetToZeroNB(); 
+robot2.resetToZeroNB();
+robot1.moveWait();
+robot2.moveWait();

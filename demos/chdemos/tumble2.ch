@@ -1,37 +1,37 @@
 /* Filename: tumble2.ch 
  * Tumbling mobot */
 #include <mobot.h>
-CMobot mobot;
+CMobot robot;
 
 /* Connect to the paired Mobot */
-mobot.connect();
+robot.connect();
 
-/* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot.resetToZero();
+/* Set the robot to "home" position, where all joint angles are 0 degrees. */
+robot.resetToZero();
 
 /* Begin tumbling for "num" times */
 int i, num = 2;
 for(i = 0; i < num; i++) {
     /* First lift and tumble */
-    mobot.moveJointTo(ROBOT_JOINT2, -85);
-    mobot.moveJointTo(ROBOT_JOINT3, 80);
-    mobot.moveJointTo(ROBOT_JOINT2, 0);
-    mobot.moveJointTo(ROBOT_JOINT3, 0);
-    mobot.moveJointTo(ROBOT_JOINT2, 80);
-    mobot.moveJointTo(ROBOT_JOINT2, 45);
+    robot.moveJointTo(ROBOT_JOINT2, -85);
+    robot.moveJointTo(ROBOT_JOINT3, 80);
+    robot.moveJointTo(ROBOT_JOINT2, 0);
+    robot.moveJointTo(ROBOT_JOINT3, 0);
+    robot.moveJointTo(ROBOT_JOINT2, 80);
+    robot.moveJointTo(ROBOT_JOINT2, 45);
     /* Second lift and tumble */
-    mobot.moveJointTo(ROBOT_JOINT3, -85);
-    mobot.moveJointTo(ROBOT_JOINT2, 80);
-    mobot.moveJointTo(ROBOT_JOINT3, 0);
-    mobot.moveJointTo(ROBOT_JOINT2, 0);
-    mobot.moveJointTo(ROBOT_JOINT3, 80);
+    robot.moveJointTo(ROBOT_JOINT3, -85);
+    robot.moveJointTo(ROBOT_JOINT2, 80);
+    robot.moveJointTo(ROBOT_JOINT3, 0);
+    robot.moveJointTo(ROBOT_JOINT2, 0);
+    robot.moveJointTo(ROBOT_JOINT3, 80);
     if(i != (num-1)) { /* Do not perform this motion on the last tumble */
-        mobot.moveJointTo(ROBOT_JOINT3, 45);
+        robot.moveJointTo(ROBOT_JOINT3, 45);
     }
 }
 
-/* Unstand the mobot */
-mobot.moveJointToNB(ROBOT_JOINT2, 0);
-mobot.moveJointToNB(ROBOT_JOINT3, 0);
-mobot.moveWait();
-mobot.resetToZero();
+/* Unstand the robot */
+robot.moveJointToNB(ROBOT_JOINT2, 0);
+robot.moveJointToNB(ROBOT_JOINT3, 0);
+robot.moveWait();
+robot.resetToZero();

@@ -1,31 +1,31 @@
 /* Filename: stand2.ch 
  * Make a Mobot stand up on a faceplate */
 #include <mobot.h>
-CMobot mobot;
+CMobot robot;
 
 /* Connect to the paired Mobot */
-mobot.connect();
+robot.connect();
 
-/* Set mobot motors to speed of 90 degrees per second */
-mobot.setJointSpeed(ROBOT_JOINT2, 90);
-mobot.setJointSpeed(ROBOT_JOINT3, 90);
-/* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot.resetToZero();
+/* Set robot motors to speed of 90 degrees per second */
+robot.setJointSpeed(ROBOT_JOINT2, 90);
+robot.setJointSpeed(ROBOT_JOINT3, 90);
+/* Set the robot to "home" position, where all joint angles are 0 degrees. */
+robot.resetToZero();
 
-/* Move the mobot into a fetal position */
-mobot.moveJointTo(ROBOT_JOINT2, -85);
-mobot.moveJointTo(ROBOT_JOINT3, 70);
+/* Move the robot into a fetal position */
+robot.moveJointTo(ROBOT_JOINT2, -85);
+robot.moveJointTo(ROBOT_JOINT3, 70);
 
-/* Wait a second for the mobot to settle down */
+/* Wait a second for the robot to settle down */
 delay(1);
 
 /* Rotate the bottom faceplate by 45 degrees */
-mobot.moveJointTo(ROBOT_JOINT1, 45);
+robot.moveJointTo(ROBOT_JOINT1, 45);
 
 /* Lift the body up */
-mobot.moveJointTo(ROBOT_JOINT2, 20);
+robot.moveJointTo(ROBOT_JOINT2, 20);
 
-/* Pan the mobot around for 3 seconds at 45 degrees per second*/
-mobot.setJointSpeed(ROBOT_JOINT1, 45);
-mobot.setMovementStateTime(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_HOLD, 3);
+/* Pan the robot around for 3 seconds at 45 degrees per second*/
+robot.setJointSpeed(ROBOT_JOINT1, 45);
+robot.setMovementStateTime(ROBOT_FORWARD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_HOLD, 3);
 

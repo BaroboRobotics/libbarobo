@@ -1,14 +1,14 @@
 /* Filename: stand.ch 
  * Make a Mobot stand up on a faceplate */
 #include <mobot.h>
-CMobot mobot;
+CMobot robot;
 
 /* Connect to the Mobot */
-mobot.connect();
+robot.connect();
 /* Run the built-in motionStand function */
-mobot.motionStand();
+robot.motionStand();
 delay(3); // Stand still for three seconds
-/* Spin the mobot around two revolutions while spinning the top faceplate*/
-mobot.move(2*360, 0, 0, 2*360);
-/* Lay the mobot back down */
-mobot.motionUnstand();
+/* Spin the robot around two revolutions while spinning the top faceplate*/
+robot.move(2*360, 0, 0, 2*360);
+/* Lay the robot back down */
+robot.motionUnstand();

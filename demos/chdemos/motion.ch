@@ -1,29 +1,29 @@
 /* Filename: motion.ch 
  * Move the two wheeled mobot. */
 #include <mobot.h>
-CMobot mobot;
+CMobot robot;
 
 /* Connect to the paired Mobot */
-mobot.connect();
+robot.connect();
 
-/* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot.resetToZero();
+/* Set the robot to "home" position, where all joint angles are 0 degrees. */
+robot.resetToZero();
 
-mobot.moveTo(90, 0, 0, 90);
+robot.moveTo(90, 0, 0, 90);
 
-mobot.moveTo(180, 0, 0, 180);
+robot.moveTo(180, 0, 0, 180);
 
-mobot.moveTo(0, 0, 0, 0);
+robot.moveTo(0, 0, 0, 0);
 
 /* test all pre-programmed motions */
-mobot.motionArch(90);
-mobot.motionInchwormLeft(4);
-mobot.motionInchwormRight(4);
-mobot.moveBackward(360);
-mobot.moveForward(360);
-mobot.turnLeft(360);
-mobot.turnRight(360);
-mobot.motionStand();
-mobot.move(360, 0, 0, 360);
-mobot.motionUnstand();
-mobot.motionTumbleLeft(2);
+robot.motionArch(90);
+robot.motionInchwormLeft(4);
+robot.motionInchwormRight(4);
+robot.moveBackward(360);
+robot.moveForward(360);
+robot.turnLeft(360);
+robot.turnRight(360);
+robot.motionStand();
+robot.move(360, 0, 0, 360);
+robot.motionUnstand();
+robot.motionTumbleLeft(2);

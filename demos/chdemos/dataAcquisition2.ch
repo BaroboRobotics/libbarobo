@@ -3,10 +3,10 @@
 
 #include <mobot.h>
 #include <chplot.h>
-CMobot mobot;
+CMobot robot;
 
-/* Connect to the mobot */
-mobot.connect();
+/* Connect to the robot */
+robot.connect();
 
 double timeInterval = 0.1; /* Seconds */
 
@@ -25,21 +25,21 @@ array double angles4[numDataPoints];
 CPlot plot;
 
 /* Set all joint speeds to 45 degrees/second */
-mobot.setJointSpeeds(45, 45, 45, 45);
+robot.setJointSpeeds(45, 45, 45, 45);
 
-/* Start the motion. First, move mobot to zero position */
-mobot.resetToZero();
+/* Start the motion. First, move robot to zero position */
+robot.resetToZero();
 
 /* Start capturing data */
-mobot.recordAngles( time, angles1, angles2, angles3, angles4, 
+robot.recordAngles( time, angles1, angles2, angles3, angles4, 
                     numDataPoints, timeInterval, 1);
 
 /* Perform the standing and unstanding motions */
-mobot.motionTurnRight(360);
-mobot.motionInchwormLeft(2);
+robot.motionTurnRight(360);
+robot.motionInchwormLeft(2);
 
 /* Wait for recording to finish */
-mobot.recordWait();
+robot.recordWait();
 
 plot.title("Unwrapped Data for Joint Angles versus Time");
 plot.label(PLOT_AXIS_X, "Time (seconds)");

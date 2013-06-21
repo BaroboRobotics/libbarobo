@@ -3,10 +3,10 @@
 
 #include <mobot.h>
 #include <chplot.h>
-CMobot mobot;
+CMobot robot;
 
-/* Connect to the mobot */
-mobot.connect();
+/* Connect to the robot */
+robot.connect();
 
 double speed = 2.5; /* inches / second */
 double distance = 12; /* inches */
@@ -30,19 +30,19 @@ array double distances[numDataPoints];
 /* Declare plotting variables */
 CPlot plot;
 
-/* Start the motion. First, move mobot to zero position */
-mobot.resetToZero();
-/* Set mobot wheel speed */
-mobot.setTwoWheelRobotSpeed(speed, radius);
+/* Start the motion. First, move robot to zero position */
+robot.resetToZero();
+/* Set robot wheel speed */
+robot.setTwoWheelRobotSpeed(speed, radius);
 
 /* Start capturing data */
-mobot.recordAngle(ROBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
+robot.recordAngle(ROBOT_JOINT1, time, angles1, numDataPoints, timeInterval);
 
-/* Roll the mobot the calculated distance */
-mobot.motionRollForward(angle);
+/* Roll the robot the calculated distance */
+robot.motionRollForward(angle);
 
 /* Wait for recording to finish */
-mobot.recordWait();
+robot.recordWait();
 
 /* Convert angles to displacement */
 distances = angle2distance(radius, angles1);
