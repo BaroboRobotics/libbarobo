@@ -3415,3 +3415,7 @@ EXPORTCH int CMG_motionWait_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH double systemTime_chdl()
+{
+  return systemTime();
+}

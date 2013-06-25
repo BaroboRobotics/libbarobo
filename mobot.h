@@ -378,6 +378,7 @@ typedef struct recordAngleArg_s
 #ifndef C_ONLY
 #if defined (__cplusplus) || defined (_CH_) || defined (SWIG)
 #ifdef _CH_
+double systemTime();
 class CMobot 
 {
   public:
@@ -1319,6 +1320,7 @@ DLLIMPORT int Mobot_motionTurnLeftNB(mobot_t* comms, double angle);
 DLLIMPORT int Mobot_motionTurnRightNB(mobot_t* comms, double angle);
 DLLIMPORT int Mobot_motionUnstandNB(mobot_t* comms);
 DLLIMPORT int Mobot_motionWait(mobot_t* comms);
+DLLIMPORT double systemTime();
 #ifdef __cplusplus
 }
 #endif

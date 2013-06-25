@@ -2691,3 +2691,27 @@ void* callbackThread(void* arg)
   return NULL;
 }
 
+double systemTime()
+{
+#ifdef _WIN32
+  return GetTickCount();
+#elif defined __MACH__
+  double t;
+  clock_serv_t cclock;
+  mach_timespec_t mts;
+  host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+  clock_get_time(cclock, &mts);
+  mach_port_deallocate(mach_task_self(), cclock);
+  cur_time.tv_nsec = mts.tv_nsec;
+  t = mts.tv_sec;
+  t += (mts.tv_nsec / 1000000000.0);
+  return t;
+#else
+  double t;
+  struct timespec cur_time;
+  clock_gettime(CLOCK_REALTIME, &cur_time);
+  t = cur_time.tv_sec;
+  t += (cur_time.tv_nsec/1000000000.0);
+  return t;
+#endif
+}
