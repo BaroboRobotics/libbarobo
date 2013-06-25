@@ -2694,7 +2694,7 @@ void* callbackThread(void* arg)
 double systemTime()
 {
 #ifdef _WIN32
-  return GetTickCount();
+  return (GetTickCount()/1000.0);
 #elif defined __MACH__
   double t;
   clock_serv_t cclock;
