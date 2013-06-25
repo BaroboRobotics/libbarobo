@@ -288,16 +288,17 @@ class _LinkbotRecordThread(threading.Thread):
       self.runflag_lock.release()
       # Get the joint angles and stick them into our data struct
       try:
+        numtries = 0
         data = self.linkbot.getJointAnglesTime()
         self.time.append(data[0])
         self.angles[0].append(data[1])
         self.angles[1].append(data[2])
         self.angles[2].append(data[3])
         time.sleep(self.delay)
-        numtries = 0
       except IOError:
         numtries += 1
         if numtries >= 3:
           raise
+          break
         continue
     self.isRunning = False

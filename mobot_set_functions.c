@@ -343,8 +343,10 @@ int Mobot_setMovementStateTime(mobot_t* comms,
   if(rc) return rc;
 #ifdef _WIN32
   Sleep(msecs);
+  Sleep(250);
 #else
   usleep(msecs * 1000);
+  usleep(250000);
 #endif
   return 0;
 }
