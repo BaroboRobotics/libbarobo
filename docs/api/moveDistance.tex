@@ -2,19 +2,19 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CMobot::motionDistance()}\index{CMobot::motionDistance()}}\\
-{\LARGE \texttt{CMobot::motionDistanceNB()}\index{CMobot::motionDistanceNB()}}\\
+{\LARGE \texttt{CMobot::moveDistance()}\index{CMobot::moveDistance()}}\\
+{\LARGE \texttt{CMobot::moveDistanceNB()}\index{CMobot::moveDistanceNB()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{motionDistance()}
-\addcontentsline{toc}{section}{motionDistanceNB()}
+\addcontentsline{toc}{section}{moveDistance()}
+\addcontentsline{toc}{section}{moveDistanceNB()}
 
 \noindent
 {\bf Synopsis}
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::motionDistance(double distance, double radius);
-int CMobot::motionDistanceNB(double distance, double radius);
+int CMobot::moveDistance(double distance, double radius);
+int CMobot::moveDistanceNB(double distance, double radius);
 \end{verbatim}
 
 \noindent
@@ -40,7 +40,7 @@ The function returns 0 on success and non-zero otherwise.\\
 {\bf Description}\\
 \vspace{-12pt}
 \begin{quote}
-{\bf CMobot::motionDistance()}\\
+{\bf CMobot::moveDistance()}\\
 This function causes each of the faceplates to rotate to roll the
 mobot forward. The distance to roll the wheels is specified by the argument,
 \texttt{distance}. The \texttt{radius} argument specifies the radius of the wheel.
@@ -48,13 +48,13 @@ Note that the unit of measurement for \texttt{radius} must match that of
 \texttt{distance}. 
 
 This function has both a blocking and non-blocking version.
-The blocking version, \texttt{motionDistance()}, will block until the
-mobot motion has completed. The non-blocking version, \texttt{motionDistanceNB()},
+The blocking version, \texttt{moveDistance()}, will block until the
+mobot motion has completed. The non-blocking version, \texttt{moveDistanceNB()},
 will return immediately, and the motion will be performed asynchronously.\\
 \end{quote}
 
 \noindent
 {\bf See Also}\\
-\texttt{motionRollBackward()}
+\texttt{moveBackward()}
 
 %\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

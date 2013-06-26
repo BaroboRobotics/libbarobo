@@ -2,19 +2,19 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CMobotGroup::motionDistance()}\index{CMobotGroup::motionDistance()}}\\
-{\LARGE \texttt{CMobotGroup::motionDistanceNB()}\index{CMobotGroup::motionDistanceNB()}}\\
+{\LARGE \texttt{CMobotGroup::moveDistance()}\index{CMobotGroup::moveDistance()}}\\
+{\LARGE \texttt{CMobotGroup::moveDistanceNB()}\index{CMobotGroup::moveDistanceNB()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{motionDistance()}
-\addcontentsline{toc}{section}{motionDistanceNB()}
+\addcontentsline{toc}{section}{moveDistance()}
+\addcontentsline{toc}{section}{moveDistanceNB()}
 
 \noindent
 {\bf Synopsis}
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobotGroup::motionDistance(double distance, double radius);
-int CMobotGroup::motionDistanceNB(double distance, double radius);
+int CMobotGroup::moveDistance(double distance, double radius);
+int CMobotGroup::moveDistanceNB(double distance, double radius);
 \end{verbatim}
 
 \noindent
@@ -40,14 +40,14 @@ The function returns 0 on success and non-zero otherwise.\\
 {\bf Description}\\
 \vspace{-12pt}
 \begin{quote}
-{\bf CMobot::motionDistance()}\\
+{\bf CMobot::moveDistance()}\\
 This function is used to roll a group of wheeled Mobots forward a certain distance. 
 Note that the unit of measurement for the radius of the wheels much match the units 
 used for distance.
 
 This function has both a blocking and non-blocking version.
-The blocking version, \texttt{motionDistance()}, will block until the
-mobot motion has completed. The non-blocking version, \texttt{motionDistanceNB()},
+The blocking version, \texttt{moveDistance()}, will block until the
+mobot motion has completed. The non-blocking version, \texttt{moveDistanceNB()},
 will return immediately, and the motion will be performed asynchronously.\\
 \end{quote}
 

@@ -2,19 +2,19 @@
 \vspace{5pt}
 \rule{4.5in}{0.015in}\\
 \noindent
-{\LARGE \texttt{CMobot::motionRollForward()}\index{CMobot::motionRollForward()}}\\
-{\LARGE \texttt{CMobot::motionRollForwardNB()}\index{CMobot::motionRollForwardNB()}}\\
+{\LARGE \texttt{CMobot::moveForward()}\index{CMobot::moveForward()}}\\
+{\LARGE \texttt{CMobot::moveForwardNB()}\index{CMobot::moveForwardNB()}}\\
 %\phantomsection
-\addcontentsline{toc}{section}{motionRollForward()}
-\addcontentsline{toc}{section}{motionRollForwardNB()}
+\addcontentsline{toc}{section}{moveForward()}
+\addcontentsline{toc}{section}{moveForwardNB()}
 
 \noindent
 {\bf Synopsis}
 \vspace{-8pt}
 \begin{verbatim}
 #include <mobot.h>
-int CMobot::motionRollForward(double angle);
-int CMobot::motionRollForwardNB(double angle);
+int CMobot::moveForward(double angle);
+int CMobot::moveForwardNB(double angle);
 \end{verbatim}
 
 \noindent
@@ -39,24 +39,24 @@ The function returns 0 on success and non-zero otherwise.\\
 {\bf Description}\\
 \vspace{-12pt}
 \begin{quote}
-{\bf CMobot::motionRollForward()}\\
+{\bf CMobot::moveForward()}\\
 This function causes each of the faceplates to rotate to roll the
 mobot forward. The amount to roll the wheels is specified by the argument,
 \texttt{angle}.
 
-{\bf CMobot::motionRollForwardNB()}\\
+{\bf CMobot::moveForwardNB()}\\
 This function causes each of the faceplates to rotate to roll the
 mobot forward. The amount to roll the wheels is specified by the argument,
 \texttt{angle}.
 
 This function has both a blocking and non-blocking version.
-The blocking version, \texttt{motionRollForward()}, will block until the
-mobot motion has completed. The non-blocking version, \texttt{motionRollForwardNB()},
+The blocking version, \texttt{moveForward()}, will block until the
+mobot motion has completed. The non-blocking version, \texttt{moveForwardNB()},
 will return immediately, and the motion will be performed asynchronously.\\
 \end{quote}
 
 \noindent
 {\bf See Also}\\
-\texttt{motionRollBackward()}
+\texttt{moveBackward()}
 
 %\CPlot::\DataThreeD(), \CPlot::\DataFile(), \CPlot::\Plotting(), \plotxy().\\

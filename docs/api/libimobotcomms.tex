@@ -49,6 +49,10 @@ and select the menu item ``Mobot $\rightarrow$ Configure Mobot Bluetooth''. \\
 \texttt{isMoving()} & This function is used to check if any joints are currently in motion. \\
 \texttt{move()} & Move all four joints of the mobot by specified angles. \\
 \texttt{moveNB()} & Identical to \texttt{move()} but non-blocking. \\
+\texttt{moveBackward()} & Roll on the faceplates toward the backward direction. \\
+\texttt{moveBackwardNB()} & Identical to \texttt{moveBackward()} but non-blocking. \\
+\texttt{moveForward()} & Roll on the faceplates forwards. \\
+\texttt{moveForwardNB()} & Identical to \texttt{moveForward()} but non-blocking. \\
 \texttt{moveJoint()} & Move a joint. \\
 \texttt{moveJointNB()} & Move a joint. \\
 \texttt{moveJointTo()} & Set the desired motor position for a joint. \\
@@ -106,6 +110,10 @@ maximum speed, expressed as a value from 0 to 1. \\
 \texttt{stopOneJoint()} & Stop a joint on the mobot. \\
 \texttt{stopTwoJoints()} & Stop two joints on the mobot. \\
 \texttt{stopThreeJoints()} & Stop three joints on the mobot. \\
+\texttt{turnLeft()} & Rotate the mobot counterclockwise. \\
+\texttt{turnLeftNB()} & Identical to \texttt{turnLeft()} but non-blocking. \\
+\texttt{turnRight()} & Rotate the mobot clockwise. \\
+\texttt{turnRightNB()} & Identical to \texttt{turnRight()} but non-blocking. \\
 \hline
 \end{tabular}
 \end{center}
@@ -121,16 +129,12 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \hline
 \texttt{motionArch()} \dotfill & Arch the mobot for better ground clearance. \\
 \texttt{motionArchNB()} \dotfill & Identical to \texttt{motionArch} but non-blocking. \\
-\texttt{motionDistance()} \dotfill & Roll a wheeled Mobot a certain distance. \\
-\texttt{motionDistanceNB()} \dotfill & Identical to \texttt{motionDistance} but non-blocking. \\
+\texttt{moveDistance()} \dotfill & Roll a wheeled Mobot a certain distance. \\
+\texttt{moveDistanceNB()} \dotfill & Identical to \texttt{moveDistance} but non-blocking. \\
 \texttt{motionInchwormLeft()} \dotfill & Inchworm motion towards the left. \\
 \texttt{motionInchwormLeftNB()} \dotfill & Identical to \texttt{motionInchwormLeft} but non-blocking. \\
 \texttt{motionInchwormRight()} \dotfill & Inchworm motion towards the right. \\
 \texttt{motionInchwormRightNB()} \dotfill & Identical to \texttt{motionInchwormRight} but non-blocking. \\
-\texttt{motionRollBackward()} \dotfill & Roll on the faceplates toward the backward direction. \\
-\texttt{motionRollBackwardNB()} \dotfill & Identical to \texttt{motionRollBackward()} but non-blocking. \\
-\texttt{motionRollForward()} \dotfill & Roll on the faceplates forwards. \\
-\texttt{motionRollForwardNB()} \dotfill & Identical to \texttt{motionRollForward()} but non-blocking. \\
 \texttt{motionSkinny()} \dotfill & Move the mobot into a skinny profile. \\
 \texttt{motionSkinnyNB()} \dotfill & Identical to \texttt{motionSkinny()} but non-blocking. \\
 \texttt{motionStand()} \dotfill & Stand the mobot up on its end. \\
@@ -139,10 +143,6 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \texttt{motionTumbleLeftNB()} \dotfill & Identical to \texttt{motionTumbleLeft()} but non-blocking. \\
 \texttt{motionTumbleRight()} \dotfill & Perform the tumbling motion in the opposite direction of ``motionTumbleLeft''. \\
 \texttt{motionTumbleRightNB()} \dotfill & Identical to \texttt{motionTumbleRight()} but non-blocking. \\
-\texttt{motionTurnLeft()} \dotfill & Rotate the mobot counterclockwise. \\
-\texttt{motionTurnLeftNB()} \dotfill & Identical to \texttt{motionTurnLeft()} but non-blocking. \\
-\texttt{motionTurnRight()} \dotfill & Rotate the mobot clockwise. \\
-\texttt{motionTurnRightNB()} \dotfill & Identical to \texttt{motionTurnRight()} but non-blocking. \\
 \texttt{motionWait()} \dotfill & Wait for a motion to finish. \\
 \hline
 \end{tabular}
@@ -175,20 +175,18 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \input{api/isConnected}
 \input{api/isMoving}
 \input{api/motionArch}
-\input{api/motionDistance}
+\input{api/moveDistance}
 \input{api/motionInchwormLeft}
 \input{api/motionInchwormRight}
-\input{api/motionRollBackward}
-\input{api/motionRollForward}
 \input{api/motionSkinny}
 \input{api/motionStand}
 \input{api/motionTumbleLeft}
 \input{api/motionTumbleRight}
-\input{api/motionTurnLeft}
-\input{api/motionTurnRight}
 \input{api/motionUnstand}
 \input{api/motionWait}
 \input{api/move}
+\input{api/moveBackward}
+\input{api/moveForward}
 \input{api/moveJoint}
 \input{api/moveJointTo}
 \input{api/moveJointWait}
@@ -219,3 +217,5 @@ Compound Motions & These are convenience functions of commonly used compound mot
 \input{api/setMovementStateTime}
 \input{api/setTwoWheelRobotSpeed}
 \input{api/stop}
+\input{api/turnLeft}
+\input{api/turnRight}

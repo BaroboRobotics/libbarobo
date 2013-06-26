@@ -11,6 +11,12 @@ is called automatically and should not be called explicitly. \\
 & \\
 \texttt{addRobot()} & Add a mobot to be a member of the mobot group. \\
 \texttt{move()} & Move all four joints of the mobots by specified angles. \\
+\texttt{moveDistance()}  & Move each wheeled mobot in the group a certain distance. \\
+\texttt{moveDistanceNB()}  & Identical to \texttt{moveDistance()} but non-blocking. \\
+\texttt{moveBackward()}  & Roll on the faceplates toward the backward direction. \\
+\texttt{moveBackwardNB()}  & Identical to \texttt{moveBackward()} but non-blocking. \\
+\texttt{moveForward()}  & Roll on the faceplates forwards. \\
+\texttt{moveForwardNB()}  & Identical to \texttt{moveForward()} but non-blocking. \\
 \texttt{moveNB()} & Identical to \texttt{move()} but non-blocking. \\
 \texttt{moveJoint()} & Move a motor from its current position by an angle. \\
 \texttt{moveJointNB()} & Identical to \texttt{moveJoint()} but non-blocking. \\
@@ -38,6 +44,10 @@ maximum speed, expressed as a value from 0 to 1. \\
 \texttt{setMovementStateTimeNB()} & Move joints continuously for a certain amount of time.\\
 \texttt{setTwoWheelRobotSpeed()} & Move the mobots at a constant forward velocity. \\
 \texttt{stop()} & Stop all currently executing motions of the mobot. \\
+\texttt{turnLeft()}  & Rotate the mobots counterclockwise. \\
+\texttt{turnLeftNB()}  & Identical to \texttt{turnLeft()} but non-blocking. \\
+\texttt{turnRight()}  & Rotate the mobots clockwise. \\
+\texttt{turnRightNB()}  & Identical to \texttt{turnRight()} but non-blocking. \\
 \hline
 \end{tabular}
 
@@ -64,8 +74,8 @@ Function Name & Description \\
 \texttt{motionInchwormLeftNB()} & Cause all mobots in the group to inchworm. \\
 \texttt{motionInchwormRight()} & Cause all mobots in the group to inchworm. \\
 \texttt{motionInchwormRightNB()} & Cause all mobots in the group to inchworm. \\
-\texttt{motionRollBackward()} & Makes all mobots in the group roll backward. \\
-\texttt{motionRollForwardNB()} & Makes all mobots in the group roll forward. \\
+\texttt{moveBackward()} & Makes all mobots in the group roll backward. \\
+\texttt{moveForwardNB()} & Makes all mobots in the group roll forward. \\
 \texttt{motionSkinny()} & Make all mobots in the group assume a skinny rolling profile. \\
 \texttt{motionSkinnyNB()} & Make all mobots in the group assume a skinny rolling profile. \\
 \texttt{motionStand()} & Make all mobots in the group stand. \\
@@ -74,10 +84,10 @@ Function Name & Description \\
 \texttt{motionTumbleLeftNB()} & Make all the mobots in the group perform the tumbling motion. \\
 \texttt{motionTumbleRight()} & Make all the mobots in the group perform the tumbling motion. \\
 \texttt{motionTumbleRightNB()} & Make all the mobots in the group perform the tumbling motion. \\
-\texttt{motionTurnLeft()} & Make all mobots in the group turn left. \\
-\texttt{motionTurnLeftNB()} & Make all mobots in the group turn left. \\
-\texttt{motionTurnRight()} & Make all mobots in the group turn right. \\
-\texttt{motionTurnRightNB()} & Make all mobots in the group turn right.\\
+\texttt{turnLeft()} & Make all mobots in the group turn left. \\
+\texttt{turnLeftNB()} & Make all mobots in the group turn left. \\
+\texttt{turnRight()} & Make all mobots in the group turn right. \\
+\texttt{turnRightNB()} & Make all mobots in the group turn right.\\
 \texttt{motionUnstand()} & Make all mobots in the group drop down from a standing position. \\
 \texttt{motionUnstandNB()} & Make all mobots in the group drop down from a standing position. \\
 \texttt{motionWait()} & Wait for the mobots to complete all currently executing compound motions.\\
