@@ -90,6 +90,7 @@ typedef enum mobot_motor_direction_e
 
 #define DEF_MOTOR_SPEED 45
 #define DEF_MOTOR_MAXSPEED 120
+#define LINKBOT_MAX_SPEED DEG2RAD(240)
 
 #ifndef C_ONLY
 #ifdef __cplusplus

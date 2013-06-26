@@ -965,6 +965,9 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
     child->connected = 1;
     child->connectionMode = MOBOTCONNECT_ZIGBEE;
     child->zigbeeAddr = Mobot_getAddress(parent);
+    for(i = 0; i < 3; i++) {
+      child->maxSpeed[i] = LINKBOT_MAX_SPEED;
+    }
     parent->child = child;
     rc = Mobot_pair(child);
     if(rc) {return rc;}
@@ -1030,6 +1033,9 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
           DEG2RAD(45), 
           DEG2RAD(45), 
           DEG2RAD(45) );
+      for(i = 0; i < 3; i++) {
+        child->maxSpeed[i] = LINKBOT_MAX_SPEED;
+      }
       MUTEX_UNLOCK(parent->mobotTree_lock);
       free(_childSerialID);
       return 0;
@@ -1113,7 +1119,11 @@ int finishConnect(mobot_t* comms)
   }
   */
   for(i = 0; i < 4; i++) {
-    comms->maxSpeed[i] = DEG2RAD(120);
+    if(comms->formFactor == MOBOTFORM_ORIGINAL) {
+      comms->maxSpeed[i] = DEG2RAD(120);
+    } else {
+      comms->maxSpeed[i] = DEG2RAD(240);
+    }
   }
   Mobot_setJointSpeeds( comms, 
       DEG2RAD(45), 
