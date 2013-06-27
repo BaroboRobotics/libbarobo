@@ -1346,17 +1346,17 @@ This demo gives an example of how non blocking functions operate.
 After the initial setup and initialization similar to the previous
 demos, the following line is executed:
 \begin{verbatim}
-mobot.moveNB(720, 0, 0, 720); // Non-Blocking version
+robot.moveNB(720, 0, 0, 720); // Non-Blocking version
 \end{verbatim}
 The function \texttt{moveNB()} is a non-blocking function, which means
 that the program will continue executing even before the movement
 has completed. The next lines of code appear as such:
 \begin{verbatim}
-while(mobot.isMoving()) {
+while(robot.isMoving()) {
     printf("mobot is moving ...\n");
 }
 \end{verbatim}
-The previous lines of code basically loops as long as the \texttt{mobot.isMoving()} function
+The previous lines of code basically loops as long as the \texttt{robot.isMoving()} function
 is returning true. In other words, in plain English, as long as the mobot is moving,
 the program will print the message ``mobot is moving...''. As soon as the mobot completes
 its motion, the loop will break and the message ``move finished!'' is printed.
@@ -1364,7 +1364,7 @@ its motion, the loop will break and the message ``move finished!'' is printed.
 Alternatively, there is a commented line of code that appears in the program, which
 appears as
 \begin{verbatim}
-mobot.move(720, 0, 0, 720); // Non-Blocking version
+robot.move(720, 0, 0, 720); // Non-Blocking version
 \end{verbatim}
 If the \texttt{moveNB()} function is replaced with the \texttt{move()} function in this program,
 the message ``mobot is moving...'' is never printed to the screen. This is due to the
@@ -1377,8 +1377,8 @@ the \texttt{move()} statement, the mobot has already stopped moving.
 The first block of the source code initialized and sets up the remote mobot 
 similar to previous demos. The last two lines in the program appear like so:
 \begin{verbatim}
-mobot.moveJointNB(ROBOT_JOINT1, 360); // Non-Blocking version
-mobot.moveJoint(ROBOT_JOINT4, 360);
+robot.moveJointNB(ROBOT_JOINT1, 360); // Non-Blocking version
+robot.moveJoint(ROBOT_JOINT4, 360);
 \end{verbatim}
 The first line turns joint 1 for 360 degrees. However, since it is moved with a non-blocking function,
 the program immediately continues to the next line. The second line turns joint 4 for
@@ -1395,12 +1395,12 @@ mobots as seen in previous demos. Next, we print a message on the screen and
 roll the mobot forward with the following two lines of code.
 \begin{verbatim}
 printf("Rolling 360 degrees.\n");
-mobot.moveForward(360);
+robot.moveForward(360);
 \end{verbatim}
 Next, we make two calls to non-blocking functions.
 \begin{verbatim}
-mobot.motionArchNB(15);
-mobot.moveForwardNB(360);
+robot.motionArchNB(15);
+robot.moveForwardNB(360);
 \end{verbatim}
 The first call is to the function \texttt{motionArchNB()}, which arches the mobot
 up by moving joints 2 and 3. Since it is a non-blocking function, the program
@@ -1413,7 +1413,7 @@ no conflicting motor commands.
 
 In order to wait for all motions to finish, the last line of the program is
 \begin{verbatim}
-mobot.motionWait();
+robot.motionWait();
 \end{verbatim}
 The \texttt{motionWait()} function will wait until all mobot motions are finished.
 
@@ -1436,25 +1436,25 @@ The first block of code,
 CMobot mobot;
 
 /* Connect to the paired Mobot */
-mobot.connect();
+robot.connect();
 \end{verbatim}
-initialize the program and connect to the remote mobot. Next, a series of
+initialize the program and connect to the remote robot. Next, a series of
 non-blocking movements are performed:
 \begin{verbatim}
-mobot.moveJointToNB(ROBOT_JOINT2, -85);
-mobot.moveJointToNB(ROBOT_JOINT3, 45);
+robot.moveJointToNB(ROBOT_JOINT2, -85);
+robot.moveJointToNB(ROBOT_JOINT3, 45);
 \end{verbatim}
 Because both of these function calls are non-blocking, this function will
 effectively move joints 2 and 3 simultaneously. Since these are both
 non-blocking functions, a call to \texttt{moveWait()} is necessary to
 wait for the mobot to complete its motions, as done in the next line:
 \begin{verbatim}
-mobot.moveWait();
+robot.moveWait();
 \end{verbatim}
 
 Finally, we move the mobot into a flat zero position with the following line:
 \begin{verbatim}
-mobot.resetToZero();
+robot.resetToZero();
 \end{verbatim}
 
 \subsubsection{\texttt{tumble2.ch} Source Code}
@@ -1466,10 +1466,10 @@ The first lines of the program,
 CMobot mobot;
 
 /* Connect to the paired Mobot */
-mobot.connect();
+robot.connect();
 
 /* Set the mobot to "home" position, where all joint angles are 0 degrees. */
-mobot.resetToZero();
+robot.resetToZero();
 \end{verbatim}
 initialize the proper variables and connections as seen in previous demos.
 
@@ -1488,12 +1488,12 @@ Inside the loop, two tumbling motions are performed. The first tumbling
 motion appears as such:
 \begin{verbatim}
     /* First lift and tumble */
-    mobot.moveJointTo(ROBOT_JOINT2, -85);
-    mobot.moveJointTo(ROBOT_JOINT3, 80);
-    mobot.moveJointTo(ROBOT_JOINT2, 0);
-    mobot.moveJointTo(ROBOT_JOINT3, 0);
-    mobot.moveJointTo(ROBOT_JOINT2, 80);
-    mobot.moveJointTo(ROBOT_JOINT2, 45);
+    robot.moveJointTo(ROBOT_JOINT2, -85);
+    robot.moveJointTo(ROBOT_JOINT3, 80);
+    robot.moveJointTo(ROBOT_JOINT2, 0);
+    robot.moveJointTo(ROBOT_JOINT3, 0);
+    robot.moveJointTo(ROBOT_JOINT2, 80);
+    robot.moveJointTo(ROBOT_JOINT2, 45);
 \end{verbatim}
 This movement is similar to the \texttt{motionStand()} motion, except that the
 mobot flips all the way over after standing up. After this motion is done,
@@ -1501,13 +1501,13 @@ the mobot is balancing on joint 4. Next, we flip again so that the mobot
 is balancing on joint 1.
 \begin{verbatim}
     /* Second lift and tumble */
-    mobot.moveJointTo(ROBOT_JOINT3, -85);
-    mobot.moveJointTo(ROBOT_JOINT2, 80);
-    mobot.moveJointTo(ROBOT_JOINT3, 0);
-    mobot.moveJointTo(ROBOT_JOINT2, 0);
-    mobot.moveJointTo(ROBOT_JOINT3, 80);
+    robot.moveJointTo(ROBOT_JOINT3, -85);
+    robot.moveJointTo(ROBOT_JOINT2, 80);
+    robot.moveJointTo(ROBOT_JOINT3, 0);
+    robot.moveJointTo(ROBOT_JOINT2, 0);
+    robot.moveJointTo(ROBOT_JOINT3, 80);
     if(i != (num-1)) { /* Do not perform this motion on the last tumble */
-        mobot.moveJointTo(ROBOT_JOINT3, 45);
+        robot.moveJointTo(ROBOT_JOINT3, 45);
     }
 }
 \end{verbatim}
@@ -1521,10 +1521,10 @@ the loop is completed, the mobot is made to fall back down into a prone
 positions with the following lines of code:
 \begin{verbatim}
 /* Unstand the mobot */
-mobot.moveJointToNB(ROBOT_JOINT2, 0);
-mobot.moveJointToNB(ROBOT_JOINT3, 0);
-mobot.moveWait();
-mobot.resetToZero();
+robot.moveJointToNB(ROBOT_JOINT2, 0);
+robot.moveJointToNB(ROBOT_JOINT3, 0);
+robot.moveWait();
+robot.resetToZero();
 \end{verbatim}
 
 
@@ -1638,7 +1638,7 @@ to \texttt{mobot2.motionWait()}, \texttt{mobot1} will begin tumbling even if
 This demo is designed to lift two connected modules up into
 a two-legged standing configuration. The mobots are connected such that the fourth
 joint of mobot one is connected to the first joint of mobot two. The two connect mobots
-act as one long mobot.
+act as one long robot.
 
 The first portion of the program initialize two variables called \texttt{mobot1} 
 and \texttt{mobot2}, which will be used to control the two connected modules.
