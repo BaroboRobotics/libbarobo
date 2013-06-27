@@ -448,30 +448,32 @@ enum protocol_commands_e {
    Expected Response: [0x10] [0x04] [1 byte truth value] [0x11] */
   CMD_IS_MOVING,
 
-/* 0x80 CMD_GET_MOTOR_ERRORS: How far are the motors away from their goal? [74]
+/* 0x7A CMD_GET_MOTOR_ERRORS: How far are the motors away from their goal? [74]
    Command Format: [CMD] [3] [0x00]
    Expected Response: [0x10] [19] [4x4 byte floats] [0x00] */
   CMD_GET_MOTOR_ERRORS,
 
-/* 0x81 CMD_MOVE_MOTORS: Move motors from their current positions [75]
+/* 0x7B CMD_MOVE_MOTORS: Move motors from their current positions [75]
    Command Format: [CMD] [19] [4*4 bytes floats, motor displacement angles] [0x00]
    Expected Response: [0x10] [0x03] [0x11] */
   CMD_MOVE_MOTORS,
 
-/* 0x82 CMD_TWI_SEND: Send data to a TWI slave [76]
+/* 0x7C CMD_TWI_SEND: Send data to a TWI slave [76]
    Command Format: [CMD] [size] [TWI addr] [data send size] [data] [0x00]
    Expected Response: [0x10] [0x03] [0x11] */
   CMD_TWI_SEND,
 
-/* 0x83 CMD_TWI_RECV: Receive data from a TWI slave [77]
+/* 0x7D CMD_TWI_RECV: Receive data from a TWI slave [77]
    Command Format: [CMD] [size] [TWI addr] [recv size] [0x00]
    Expected Response: [0x10] [size] [data] [0x11] */
   CMD_TWI_RECV,
 
-/* 0x84 CMD_TWI_SENDRECV: Send and receive data from a TWI slave [78]
+/* 0x7E CMD_TWI_SENDRECV: Send and receive data from a TWI slave [78]
    Command Format: [CMD] [size] [TWI addr] [send size] [send data] [recv size] [0x00]
    Expected Response: [0x10] [size] [data] [0x11] */
   CMD_TWI_SENDRECV,
+
+  CMD_PLACEHOLDER201306271044,
 
   CMD_NUMCOMMANDS
 };
