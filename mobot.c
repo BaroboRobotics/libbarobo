@@ -2068,7 +2068,7 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
     ts.tv_nsec = mts.tv_nsec;
 #endif
     /* Add a timeout */
-    ts.tv_nsec += 500000000; // 100 ms
+    ts.tv_nsec += 700000000; // 100 ms
     if(ts.tv_nsec > 1000000000) {
       ts.tv_nsec -= 1000000000;
       ts.tv_sec += 1;
@@ -2094,7 +2094,7 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
 #else
     ResetEvent(*comms->recvBuf_cond);
     ReleaseMutex(*comms->recvBuf_lock);
-    rc = WaitForSingleObject(*comms->recvBuf_cond, 500);
+    rc = WaitForSingleObject(*comms->recvBuf_cond, 700);
     if(rc == WAIT_TIMEOUT) {
       MUTEX_UNLOCK(comms->recvBuf_lock);
       MUTEX_UNLOCK(comms->commsLock);
