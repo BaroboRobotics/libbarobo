@@ -1541,15 +1541,15 @@ a detailed explanation of the program elements.
 \subsection{Demo Explanation}
 The first two lines of interest appear as such:
 \begin{verbatim}
-  CMobot mobot1;
-  CMobot mobot2;
+  CMobot robot1;
+  CMobot robot2;
 \end{verbatim}
 These two lines declare two separate variables which will represent the
 two separate Mobot modules. Next, we need to connect each variable to
 a physically separate Mobot. This is done with the following lines.
 \begin{verbatim}
-  mobot1.connect();
-  mobot2.connect();
+  robot1.connect();
+  robot2.connect();
 \end{verbatim}
 These two lines connect the mobots to the first two addresses
 of the known mobot addresses. The list of the computer's known
@@ -1564,8 +1564,8 @@ The order in which they are connected may be modified using the
 \ref{sec:pairing}.
 
 \begin{verbatim}
-  mobot1.resetToZeroNB();
-  mobot2.resetToZeroNB();
+  robot1.resetToZeroNB();
+  robot2.resetToZeroNB();
 \end{verbatim}
 These two lines command the two mobots to move to their zero positions.
 Note that these functions are non-blocking. This means that the
@@ -1575,8 +1575,8 @@ commanding the second mobot to begin. In a normal program, this effectively
 causes both mobots to move to their zero positions simultaneously.
 
 \begin{verbatim}
-  mobot1.moveWait();
-  mobot2.moveWait();
+  robot1.moveWait();
+  robot2.moveWait();
 \end{verbatim}
 Since the \texttt{resetToZeroNB()} functions are non-blocking, we would like
 the program to wait until the motions are complete before continuing. By
@@ -1584,8 +1584,8 @@ calling \texttt{moveWait()} on both of the mobots, we can be assured that
 the mobots have finished moving before the program continues.
 
 \begin{verbatim}
-  mobot1.motionStandNB();
-  mobot2.motionInchwormLeftNB(4);
+  robot1.motionStandNB();
+  robot2.motionInchwormLeftNB(4);
 \end{verbatim}
 Similar to the calls to \texttt{resetToZeroNB()}, this block of code instructs 
 the first Mobot to stand and the second Mobot to perform the inchworm motion four times.
@@ -1598,38 +1598,38 @@ while the second mobot is still inchworming. We can accomplish this by first
 waiting for the standing motion to finish, and then moving the faceplate joints
 of the first mobot, as in the following lines of code.
 \begin{verbatim}
-  mobot1.motionWait();
-  mobot1.moveNB(360, 0, 0, 360);
+  robot1.motionWait();
+  robot1.moveNB(360, 0, 0, 360);
 \end{verbatim}
 
 Before we continue with the program, we wish to ensure that motion has stopped on both
-mobots. Since the the last command sent to \texttt{mobot1} was a \texttt{moveNB()}
+mobots. Since the the last command sent to \texttt{robot1} was a \texttt{moveNB()}
 command, we use the \texttt{moveWait()} function to wait for that movement to finish.
-Similarly, the last command sent to \texttt{mobot2} was a motion command, and so we
+Similarly, the last command sent to \texttt{robot2} was a motion command, and so we
 use \texttt{motionWait()} to wait for the motion to finish. The two lines of code
 are seen in the program as follows:
 \begin{verbatim}
-  mobot1.moveWait();
-  mobot2.motionWait();
+  robot1.moveWait();
+  robot2.motionWait();
 \end{verbatim}
 
 Finally, the following lines,
 \begin{verbatim}
-mobot1.motionUnstandNB();
-mobot2.motionInchwormRightNB(4);
-mobot1.motionWait();
-mobot1.motionTumbleLeft(1);
-mobot2.motionWait();
+robot1.motionUnstandNB();
+robot2.motionInchwormRightNB(4);
+robot1.motionWait();
+robot1.motionTumbleLeft(1);
+robot2.motionWait();
 \end{verbatim}
 make the first mobot come back down from its standing position and the second mobot
 inchworm to the right four times simultaneously. Note that the function 
 \texttt{motionWait()} is used to wait for motions, which are compound
 movements, to finish. This is similar to how
 the function \texttt{moveWait()} is used to wait for individual movements
-to finish. After \texttt{mobot1} finishes unstanding, it will begin 
+to finish. After \texttt{robot1} finishes unstanding, it will begin 
 a tumbling motion. Since the tumbling motion function is called before the call
-to \texttt{mobot2.motionWait()}, \texttt{mobot1} will begin tumbling even if
-\texttt{mobot2} has finished its previous motion, which was inchworming 4 times.
+to \texttt{robot2.motionWait()}, \texttt{robot1} will begin tumbling even if
+\texttt{robot2} has finished its previous motion, which was inchworming 4 times.
 
 \subsection{Controlling Multiple Connected Modules}
 \subsubsection{\texttt{lift.ch}, Lifting Demo}
@@ -1640,17 +1640,17 @@ a two-legged standing configuration. The mobots are connected such that the four
 joint of mobot one is connected to the first joint of mobot two. The two connect mobots
 act as one long robot.
 
-The first portion of the program initialize two variables called \texttt{mobot1} 
-and \texttt{mobot2}, which will be used to control the two connected modules.
+The first portion of the program initialize two variables called \texttt{robot1} 
+and \texttt{robot2}, which will be used to control the two connected modules.
 Once the mobots are initialized, they are both moved into a flat zero position.
 
 The next lines,
 \begin{verbatim}
 /* First lift */
-mobot1.moveNB(0, -90,  0, 0);
-mobot2.moveNB(0, 0, 90, 0);
-mobot1.moveWait();
-mobot2.moveWait();
+robot1.moveNB(0, -90,  0, 0);
+robot2.moveNB(0, 0, 90, 0);
+robot1.moveWait();
+robot2.moveWait();
 \end{verbatim}
 rotate the joints on either end of the compound mobot to perform the 
 first portion of the lift, as shown in Figure \ref{fig:lift1}. The motion is performed as two non-blocking
@@ -1668,10 +1668,10 @@ The next lines rotate the inner joints of the compound mobot to lift the mobot
 one step higher, as shown is Figure \ref{fig:lift2}.
 \begin{verbatim}
 /* Second lift */
-mobot1.moveToNB(0, 0, 90,  0);
-mobot2.moveToNB(0,  -90, 0, 0);
-mobot1.moveWait();
-mobot2.moveWait();
+robot1.moveToNB(0, 0, 90,  0);
+robot2.moveToNB(0,  -90, 0, 0);
+robot1.moveWait();
+robot2.moveWait();
 \end{verbatim}
 Again, these lines perform two calls to the non-blocking function
 \texttt{moveNB()} and then wait for the movements to finish.
@@ -1679,10 +1679,10 @@ Again, these lines perform two calls to the non-blocking function
 Finally, we move both mobots back to their zero positions, which drops 
 the compound mobot back onto the ground.
 \begin{verbatim}
-mobot1.resetToZeroNB();
-mobot2.resetToZeroNB();
-mobot1.moveWait();
-mobot2.moveWait();
+robot1.resetToZeroNB();
+robot2.resetToZeroNB();
+robot1.moveWait();
+robot2.moveWait();
 \end{verbatim}
 
 \section{Commanding Multiple Mobots to Perform Identical Tasks}

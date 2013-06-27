@@ -9,7 +9,7 @@ CLinkbotIGroup group;
 group.addRobots(robots);
 group.connect();
 
-/* Now, any commands given to "group" will cause both mobot1 and mobot2 to
+/* Now, any commands given to "group" will cause both robot1 and robot2 to
  * execute the command. */
 group.move(360, 0, 360);   /* Joints 1 and 4 rotate 360 degrees */
 delay(3);                     /* Mobots stand still for 3 seconds */
