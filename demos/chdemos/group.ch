@@ -1,6 +1,6 @@
 /* Filename: group.ch
  * Control multiple Mobot modules simultaneously using the CMobotGroup class */
-#include <mobot.h>
+#include <linkbot.h>
 #define NUM_ROBOTS 13
 CLinkbotI robots[NUM_ROBOTS];
 CLinkbotIGroup group;

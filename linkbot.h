@@ -236,11 +236,9 @@ class CLinkbotI
 
     /* Linkbot Only Functions */
     int connectWithSerialID(const char serialID[]);
-#ifndef _CH_
   private:
-    mobot_t *_comms;
-    void (*buttonCallback)(CMobot *mobot, int button, int buttonDown);
-#endif /* Not _CH_*/
+    void* memholder1;
+    int memholder2;
 };
 #else
 class CLinkbotI : public CMobot 
@@ -506,15 +504,9 @@ class CLinkbotL
     int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
     int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
     int stopAllJoints();
-
-#ifndef _CH_
   private:
-    int getJointDirection(robotJointId_t id, robotJointState_t &dir);
-    int setJointDirection(robotJointId_t id, robotJointState_t dir);
-    mobot_t *_comms;
-    void (*buttonCallback)(CMobot *mobot, int button, int buttonDown);
-#else
-#endif /* Not _CH_*/
+    void* memholder1;
+    int memholder2;
 };
 #else
 class CLinkbotL : public CMobot
