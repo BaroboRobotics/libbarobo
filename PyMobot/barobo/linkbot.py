@@ -33,9 +33,33 @@ class Linkbot():
     if mobot.Mobot_connectWithBluetoothAddress(self._mobot, address, channel) != 0:
       raise IOError("Error connecting to robot.")
 
+  def connectWithSerialID(idstring):
+    """Connect to a Linkbot by specifying its Serial ID string"""
+    if mobot.Mobot_connectWithSerialID(self._mobot, idstring):
+      raise IOError("Error connecting to robot.")
+
   def disconnect(self):
     """Disconnect from a Linkbot"""
     mobot.Mobot_disconnect(self._mobot)
+
+  def driveJointTo(self, joint, angle):
+    """Drive joint 'joint' to 'angle' (degrees) using PID controller"""
+    rc = mobot.Mobot_driveJointTo(self._mobot, joint, deg2rad(angle))
+    if rc < 0:
+      raise IOError("Error communicating with robot. Return code {0}".format(rc))
+
+  def driveJointToNB(self, joint, angle):
+    """Drive joint 'joint' to 'angle' (degrees) using PID controller"""
+    rc = mobot.Mobot_driveJointToNB(self._mobot, joint, deg2rad(angle))
+    if rc < 0:
+      raise IOError("Error communicating with robot. Return code {0}".format(rc))
+
+  def getBatteryVoltage(self):
+    """Return the voltage of the battery."""
+    rc, voltage = mobot.Mobot_getBatteryVoltage(self._mobot)
+    if rc:
+      raise IOError("Error communicating with robot. Return code {0}".format(rc))
+    return voltage
 
   def getBreakoutADC(self, adc):
     """Return ADC reading from the breakout board."""
@@ -43,6 +67,12 @@ class Linkbot():
     if rc:
       raise IOError("Error communicating with robot. Return code {0}".format(rc))
     return value
+
+  def getColorRGB(self):
+    rc, r, g, b = mobot.Mobot_getColorRGB(self._mobot)
+    if rc:
+      raise IOError("Error communicating with robot. Return code {0}".format(rc))
+    return [r, g, b]
   
   def getJointAngle(self, joint):
     rc, value = mobot.Mobot_getJointAngle(self._mobot, joint)
@@ -67,18 +97,6 @@ class Linkbot():
       ret = [r[1]]
       ret.extend( map(lambda x: rad2deg(x), r[2:5]) )
       return ret
-
-  def driveJointTo(self, joint, angle):
-    """Drive joint 'joint' to 'angle' (degrees) using PID controller"""
-    rc = mobot.Mobot_driveJointTo(self._mobot, joint, deg2rad(angle))
-    if rc < 0:
-      raise IOError("Error communicating with robot. Return code {0}".format(rc))
-
-  def driveJointToNB(self, joint, angle):
-    """Drive joint 'joint' to 'angle' (degrees) using PID controller"""
-    rc = mobot.Mobot_driveJointToNB(self._mobot, joint, deg2rad(angle))
-    if rc < 0:
-      raise IOError("Error communicating with robot. Return code {0}".format(rc))
 
   def isMoving(self):
     """Return True if moving."""
@@ -158,6 +176,11 @@ class Linkbot():
     """
     self.recordThread = _LinkbotRecordThread(self, delay)
     self.recordThread.start()
+
+  def reboot(self):
+    """Reboot the robot."""
+    if mobot.Mobot_reboot(self._mobot):
+      raise IOError("Error communicating with robot. Return code {0}".format(rc))
 
   def recordAnglesEnd(self):
     """ End recording angles and return a list consisting of [time_values,
