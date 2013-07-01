@@ -2415,7 +2415,8 @@ void* commsEngine(void* arg)
     } else {
       if(
           (comms->recvBuf[0] == EVENT_BUTTON) ||
-          (comms->recvBuf[0] == EVENT_REPORTADDRESS)
+          (comms->recvBuf[0] == EVENT_REPORTADDRESS) ||
+          (comms->recvBuf[0] == EVENT_DEBUG_MSG)
         )
       { /* It is a valid event */ }
       else
@@ -2556,6 +2557,14 @@ void* commsEngine(void* arg)
           COND_SIGNAL(comms->mobotTree_cond);
           MUTEX_UNLOCK(comms->mobotTree_lock);
 
+          /* Reset state vars */
+          comms->commsEngine_bytes = 0;
+          MUTEX_LOCK(comms->commsBusy_lock);
+          comms->commsBusy = 0;
+          COND_SIGNAL(comms->commsBusy_cond);
+          MUTEX_UNLOCK(comms->commsBusy_lock);
+        } else if (comms->recvBuf[0] == EVENT_DEBUG_MSG) {
+          printf("Received Message from %s: %s\n", comms->serialID, (const char*)&comms->recvBuf[2]);
           /* Reset state vars */
           comms->commsEngine_bytes = 0;
           MUTEX_LOCK(comms->commsBusy_lock);

@@ -41,6 +41,12 @@
  */
 #define MSG_REGACCESS 0x22
 
+/* General message to cause a debugging message to be printed on the PC side 
+Format:
+  [0x23] [size] [message] [0x00]
+  */
+#define EVENT_DEBUG_MSG 0x23
+
 #define CMD_START 0x30
 #define CMD_IDLE  0x01
 

@@ -33,7 +33,7 @@ class Linkbot():
     if mobot.Mobot_connectWithBluetoothAddress(self._mobot, address, channel) != 0:
       raise IOError("Error connecting to robot.")
 
-  def connectWithSerialID(idstring):
+  def connectWithSerialID(self, idstring):
     """Connect to a Linkbot by specifying its Serial ID string"""
     if mobot.Mobot_connectWithSerialID(self._mobot, idstring):
       raise IOError("Error connecting to robot.")
