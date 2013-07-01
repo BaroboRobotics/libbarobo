@@ -20,6 +20,11 @@ class Linkbot():
     self._mobot = mobot.mobot_t()
     mobot.Mobot_init(self._mobot)
 
+  def accelerate(self, joint, acceleration):
+    rc = mobot.Mobot_accelerate(self._mobot, joint, acceleration)
+    if rc < 0:
+      raise IOError("Error communicating with robot. Return code {0}".format(rc))
+
   def connect(self):
     """Connect to a Linkbot
   

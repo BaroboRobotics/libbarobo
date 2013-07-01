@@ -118,6 +118,25 @@ void *get_in_addr(struct sockaddr *sa)
     return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
+int Mobot_accelerate(mobot_t* comms, robotJointId_t id, double acceleration)
+{
+  uint8_t buf[32];
+  float a;
+  int status;
+  a = acceleration;
+  buf[0] = (uint8_t)id-1;
+  memcpy(&buf[1], &a, 4);
+  a = DEG2RAD(240);
+  memcpy(&buf[5], &a, 4);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SET_ACCEL), buf, 9);
+  if(status < 0) return status;
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
+  return 0;
+}
+
 /* Return Error Codes:
    -1 : General Error
    -2 : Lockfile Exists

@@ -481,6 +481,11 @@ enum protocol_commands_e {
 
   CMD_PLACEHOLDER201306271044,
 
+/* 0x7F CMD_SET_ACCEL: Set a joint to move at a constant acceleration. Stops
+ * accelerating at specified speed or the max speed. (all units in rads/sec)
+ * Command Format: [CMD] [size] [1 byte id] [4 byte accel] [4 byte max speed] [0x00] */
+  CMD_SET_ACCEL,
+
   CMD_NUMCOMMANDS
 };
 
