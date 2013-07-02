@@ -18,6 +18,7 @@
 */
 
 #include <stdlib.h>
+#include <string.h>
 #include "mobot.h"
 #include "mobot_internal.h"
 
