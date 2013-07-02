@@ -118,9 +118,10 @@ void *get_in_addr(struct sockaddr *sa)
     return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
-int Mobot_accelerate(mobot_t* comms, robotJointId_t id, double acceleration)
+int Mobot_accelerate(mobot_t* comms, robotJointId_t id, double acceleration, double time)
 {
   uint8_t buf[32];
+  uint32_t millis;
   float a;
   int status;
   a = acceleration;
@@ -128,7 +129,9 @@ int Mobot_accelerate(mobot_t* comms, robotJointId_t id, double acceleration)
   memcpy(&buf[1], &a, 4);
   a = DEG2RAD(240);
   memcpy(&buf[5], &a, 4);
-  status = MobotMsgTransaction(comms, BTCMD(CMD_SET_ACCEL), buf, 9);
+  millis = htonl(time * 1000);
+  memcpy(&buf[9], &millis, 4);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SET_ACCEL), buf, 13);
   if(status < 0) return status;
   /* Make sure the data size is correct */
   if(buf[1] != 3) {

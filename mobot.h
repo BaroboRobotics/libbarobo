@@ -966,7 +966,7 @@ extern "C" {
 
 extern int g_numConnected;
 
-DLLIMPORT int Mobot_accelerate(mobot_t* comms, robotJointId_t id, double acceleration);
+DLLIMPORT int Mobot_accelerate(mobot_t* comms, robotJointId_t id, double acceleration, double time);
 DLLIMPORT int Mobot_blinkLED(mobot_t* comms, double delay, int numBlinks);
 DLLIMPORT int Mobot_connect(mobot_t* comms);
 DLLIMPORT int Mobot_connectWithTCP(mobot_t* comms);
