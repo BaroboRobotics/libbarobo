@@ -46,6 +46,91 @@ CLinkbotI::~CLinkbotI() {
   }
 }
 
+int CLinkbotI::accelTimeNB(double radius, double acceleration, double time) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_accelTimeNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, radius, acceleration, time);
+    return retval;
+}
+int CLinkbotI::accelToVelocityNB(double radius, double acceleration, double velocity) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_accelToVelocityNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, radius, acceleration, velocity);
+    return retval;
+}
+int CLinkbotI::accelToMaxSpeedNB(double radius, double acceleration) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_accelToMaxSpeedNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, radius, acceleration);
+    return retval;
+}
+int CLinkbotI::accelAngularTimeNB(int id, double acceleration, double time) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_accelAngularTimeNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, radius, acceleration, time);
+    return retval;
+}
+int CLinkbotI::accelAngularToVelocityNB(int id, double acceleration, double speed) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_accelAngularToVelocityNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, radius, acceleration, speed);
+    return retval;
+}
+int CLinkbotI::accelAngularAngleNB(int id, double acceleration, double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_accelAngularAngleNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, radius, acceleration, angle);
+    return retval;
+}
+int CLinkbotI::smoothMoveToNB(int id, double accel0, double accelf, double vmax, double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_smoothMoveToNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, accel0, accelf, vmax, angle);
+    return retval;
+}
+
 int CLinkbotI::blinkLED(double delay, int numBlinks) {
     void *fptr;
     int retval;

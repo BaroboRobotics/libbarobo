@@ -118,7 +118,45 @@ void *get_in_addr(struct sockaddr *sa)
     return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
-int Mobot_accelerate(mobot_t* comms, robotJointId_t id, double acceleration, double time)
+int Mobot_accelTimeNB(mobot_t* comms, double radius, double acceleration, double timeout)
+{
+  double alpha = acceleration/radius;
+  int i;
+  int rc;
+  for(i = 1; i < 4; i++) {
+    rc = Mobot_accelAngularTimeNB(comms, i, alpha, timeout);
+    if(rc) return rc;
+  }
+  return 0;
+}
+
+int Mobot_accelToVelocityNB(mobot_t* comms, double radius, double acceleration, double velocity)
+{
+  double timeout;
+  timeout = velocity/acceleration;
+  double alpha = acceleration/radius;
+  int i;
+  int rc = 0;
+  for(i = 1; i < 4; i++) {
+    rc = Mobot_accelAngularTimeNB(comms, i, alpha, timeout);
+    if(rc) return rc;
+  }
+  return 0;
+}
+
+int Mobot_accelToMaxSpeedNB(mobot_t* comms, double radius, double acceleration)
+{
+  double alpha = acceleration/radius;
+  int i;
+  int rc;
+  for(i = 1; i < 4; i++) {
+    rc = Mobot_accelAngularTimeNB(comms, i, alpha, 0);
+    if(rc) return rc;
+  }
+  return 0;
+}
+
+int Mobot_accelAngularTimeNB(mobot_t* comms, robotJointId_t id, double acceleration, double time)
 {
   uint8_t buf[32];
   uint32_t millis;
@@ -132,6 +170,44 @@ int Mobot_accelerate(mobot_t* comms, robotJointId_t id, double acceleration, dou
   millis = htonl(millis);
   memcpy(&buf[5], &millis, 4);
   status = MobotMsgTransaction(comms, BTCMD(CMD_SET_ACCEL), buf, 13);
+  if(status < 0) return status;
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
+  return 0;
+}
+
+int Mobot_accelAngularToVelocityNB(mobot_t* comms, robotJointId_t id, double acceleration, double speed)
+{
+  double timeout = speed/acceleration;
+  return Mobot_accelAngularTimeNB(comms, id, acceleration, timeout);
+}
+
+int Mobot_accelAngularAngleNB(mobot_t* comms, robotJointId_t id, double acceleration, double angle)
+{
+  double timeout = sqrt(2*angle/acceleration);
+  return Mobot_accelAngularTimeNB(comms, id, acceleration, timeout);
+}
+
+int Mobot_smoothMoveToNB(
+    mobot_t* comms, 
+    robotJointId_t id, 
+    double accel0, 
+    double accelf, 
+    double vmax, 
+    double angle)
+{
+  uint8_t buf[32];
+  float f[4];
+  int status;
+  f[0] = accel0;
+  f[1] = accelf;
+  f[2] = vmax;
+  f[3] = angle;
+  buf[0] = (uint8_t)id-1;
+  memcpy(&buf[1], &f, 16);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SMOOTHMOVE), buf, 17);
   if(status < 0) return status;
   /* Make sure the data size is correct */
   if(buf[1] != 3) {

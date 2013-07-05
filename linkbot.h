@@ -28,6 +28,18 @@ class CLinkbotI
   public:
     CLinkbotI();
     ~CLinkbotI();
+    int accelTimeNB(double radius, double acceleration, double time);
+    int accelToVelocityNB(double radius, double acceleration, double velocity);
+    int accelToMaxSpeedNB(double radius, double acceleration);
+    int accelAngularTimeNB(robotJoint_t id, double acceleration, double time);
+    int accelAngularToVelocityNB(robotJointId_t id, double acceleration, double speed);
+    int accelAngularAngleNB(robotJointId_t id, double acceleration, double angle);
+    int smoothMoveToNB(
+        robotJointId_t id,
+        double accel0,
+        double accelf,
+        double vmax,
+        double angle);
     int blinkLED(double delay, int numBlinks);
 /* connect() Return Error Codes:
    -1 : General Error
@@ -324,6 +336,18 @@ class CLinkbotL
   public:
     CLinkbotL();
     ~CLinkbotL();
+    int accelTimeNB(double radius, double acceleration, double time);
+    int accelToVelocityNB(double radius, double acceleration, double velocity);
+    int accelToMaxSpeedNB(double radius, double acceleration);
+    int accelAngularTimeNB(robotJoint_t id, double acceleration, double time);
+    int accelAngularToVelocityNB(robotJointId_t id, double acceleration, double speed);
+    int accelAngularAngleNB(robotJointId_t id, double acceleration, double angle);
+    int smoothMoveToNB(
+        robotJointId_t id,
+        double accel0,
+        double accelf,
+        double vmax,
+        double angle);
     int blinkLED(double delay, int numBlinks);
 /* connect() Return Error Codes:
    -1 : General Error
