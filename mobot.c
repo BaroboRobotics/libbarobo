@@ -162,7 +162,6 @@ int Mobot_accelAngularTimeNB(mobot_t* comms, robotJointId_t id, double accelerat
   uint32_t millis;
   float a;
   int status;
-  a = acceleration;
   buf[0] = (uint8_t)id-1;
   a = acceleration;
   memcpy(&buf[1], &a, 4);

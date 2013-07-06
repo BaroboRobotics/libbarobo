@@ -91,7 +91,7 @@ int CLinkbotI::accelAngularTimeNB(int id, double acceleration, double time) {
         fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, NULL, this, radius, acceleration, time);
+    dlrunfun(fptr, &retval, NULL, this, id, acceleration, time);
     return retval;
 }
 int CLinkbotI::accelAngularToVelocityNB(int id, double acceleration, double speed) {
@@ -103,7 +103,7 @@ int CLinkbotI::accelAngularToVelocityNB(int id, double acceleration, double spee
         fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, NULL, this, radius, acceleration, speed);
+    dlrunfun(fptr, &retval, NULL, this, id, acceleration, speed);
     return retval;
 }
 int CLinkbotI::accelAngularAngleNB(int id, double acceleration, double angle) {
@@ -115,7 +115,7 @@ int CLinkbotI::accelAngularAngleNB(int id, double acceleration, double angle) {
         fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, NULL, this, radius, acceleration, angle);
+    dlrunfun(fptr, &retval, NULL, this, id, acceleration, angle);
     return retval;
 }
 int CLinkbotI::smoothMoveToNB(int id, double accel0, double accelf, double vmax, double angle) {
