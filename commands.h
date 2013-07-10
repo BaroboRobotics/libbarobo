@@ -546,6 +546,8 @@ enum group_protocol_commands_e {
    Expected Response: None */
   GRP_CMD_PLAY_POSES,
 
+  CMD_PLACEHOLDER_201307101241,
+
   GRP_CMD_NUMCOMMANDS
 };
 
