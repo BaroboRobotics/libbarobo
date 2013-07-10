@@ -170,7 +170,7 @@ elseif(CMAKE_HOST_APPLE)
           LIBRARY DESTINATION lib)
   install(FILES mobot.h DESTINATION include)
   add_subdirectory(demos)
-else(CMAKE_HOST_WIN32)
+else(CMAKE_HOST_WIN32) #Linux
   add_subdirectory(chmobot_src)
   add_definitions(-DENABLE_BLUETOOTH)
 	add_library(baroboStatic STATIC
@@ -234,10 +234,10 @@ else(CMAKE_HOST_WIN32)
   set_target_properties(baroboStatic PROPERTIES COMPILE_FLAGS "-fPIC")
 	target_link_libraries(barobo bluetooth pthread rt baroboconfigfile mxml)
 	target_link_libraries(baroboStatic bluetooth pthread rt baroboconfigfile mxml)
-  install(TARGETS barobo baroboStatic
-          LIBRARY DESTINATION lib
-          ARCHIVE DESTINATION lib)
-  install(FILES mobot.h DESTINATION include)
+#  install(TARGETS barobo 
+#          LIBRARY DESTINATION lib
+#          ARCHIVE DESTINATION lib)
+#install(FILES mobot.h DESTINATION include)
   add_subdirectory(demos)
 endif(CMAKE_HOST_WIN32)
 
