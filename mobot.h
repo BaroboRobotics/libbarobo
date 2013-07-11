@@ -240,12 +240,16 @@ typedef struct mobot_s
   COND_T*  recvBuf_cond;
   int recvBuf_bytes;
   int commsEngine_bytes;
-  int commsBusy;
   int commsWaitingForMessage;
   MUTEX_T* commsWaitingForMessage_lock;
-  MUTEX_T* commsBusy_lock;
-  COND_T* commsBusy_cond;
-  MUTEX_T* socket_lock;
+  //MUTEX_T* socket_lock;
+
+  /* libsfp stuff */
+  MUTEX_T* sfp_tx_lock;
+  SFPcontext *sfp_ctx;
+
+#if 0
+  /* deprecated by libsfp */
 
   THREAD_T* commsOutThread;
   uint8_t *sendBuf;
@@ -253,6 +257,7 @@ typedef struct mobot_s
   int sendBuf_N;
   MUTEX_T* sendBuf_lock;
   COND_T* sendBuf_cond;
+#endif
 
   MUTEX_T* callback_lock;
   int callbackEnabled;
@@ -1302,7 +1307,7 @@ DLLIMPORT int Mobot_motionUnstand(mobot_t* comms);
 
 /* Mobot internal helper functions */
 DLLIMPORT int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize);
-DLLIMPORT int SendToMobotDirect(mobot_t* comms, const void* data, int datasize);
+//DLLIMPORT int SendToMobotDirect(mobot_t* comms, const void* data, int datasize);
 DLLIMPORT int MobotMsgTransaction(mobot_t* comms, uint8_t cmd, /*IN&OUT*/ void* buf, int sendsize);
 DLLIMPORT int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size);
 
