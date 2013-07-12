@@ -39,6 +39,8 @@
 %apply double & OUTPUT {robotJointState_t &state};
 #endif
 
+typedef struct SFPcontext SFPcontext;
+
 #include <math.h>
 
 #ifdef _CH_
