@@ -3,6 +3,8 @@
 cmake_minimum_required(VERSION 2.6)
 #include_directories(../opende/sys/include)
 
+set(CMAKE_C_FLAGS --std=gnu99)
+
 project(LIBIMOBOTCOMMS)
 
 add_definitions(-DNONRELEASE)
@@ -47,6 +49,8 @@ if(CMAKE_HOST_WIN32)
       mobotl_movement_functions++.cpp
       mobotl_record_functions++.cpp
       mobotl_set_functions++.cpp
+      libsfp/serial_framing_protocol.c
+      libsfp/net_byte_order.c
 	  )
 	add_library(baroboStatic STATIC
       mobot.c
@@ -76,6 +80,8 @@ if(CMAKE_HOST_WIN32)
       mobotl_movement_functions++.cpp
       mobotl_record_functions++.cpp
       mobotl_set_functions++.cpp
+      libsfp/serial_framing_protocol.c
+      libsfp/net_byte_order.c
 	  )
   if( 
       (CMAKE_GENERATOR MATCHES "Visual Studio") OR
@@ -132,6 +138,8 @@ elseif(CMAKE_HOST_APPLE)
       mobotl_movement_functions++.cpp
       mobotl_record_functions++.cpp
       mobotl_set_functions++.cpp
+      libsfp/serial_framing_protocol.c
+      libsfp/net_byte_order.c
 	  )
 	add_library(baroboStatic STATIC 
       mobot.c
@@ -161,6 +169,8 @@ elseif(CMAKE_HOST_APPLE)
       mobotl_movement_functions++.cpp
       mobotl_record_functions++.cpp
       mobotl_set_functions++.cpp
+      libsfp/serial_framing_protocol.c
+      libsfp/net_byte_order.c
 	  )
 	target_link_libraries(barobo pthread baroboconfigfile)
 	target_link_libraries(baroboStatic pthread baroboconfigfile)
@@ -171,7 +181,7 @@ elseif(CMAKE_HOST_APPLE)
   install(FILES mobot.h DESTINATION include)
   add_subdirectory(demos)
 else(CMAKE_HOST_WIN32)
-  add_subdirectory(chmobot_src)
+  #add_subdirectory(chmobot_src)
   add_definitions(-DENABLE_BLUETOOTH)
 	add_library(baroboStatic STATIC
       mobot.c
@@ -201,6 +211,8 @@ else(CMAKE_HOST_WIN32)
       mobotl_movement_functions++.cpp
       mobotl_record_functions++.cpp
       mobotl_set_functions++.cpp
+      libsfp/serial_framing_protocol.c
+      libsfp/net_byte_order.c
 	  )
 	add_library(barobo SHARED 
       mobot.c
@@ -230,6 +242,8 @@ else(CMAKE_HOST_WIN32)
       mobotl_movement_functions++.cpp
       mobotl_record_functions++.cpp
       mobotl_set_functions++.cpp
+      libsfp/serial_framing_protocol.c
+      libsfp/net_byte_order.c
 	  )
   set_target_properties(baroboStatic PROPERTIES COMPILE_FLAGS "-fPIC")
 	target_link_libraries(barobo bluetooth pthread rt baroboconfigfile mxml)
