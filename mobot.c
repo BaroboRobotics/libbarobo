@@ -2457,13 +2457,6 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
           /* Address of 0 means the connected TTY mobot */
           MUTEX_LOCK(comms->recvBuf_lock);
           memmove(comms->recvBuf, &buf[5], buf[6]);
-
-#if 0
-          tmpbuf = (uint8_t*)malloc(buf[6]);
-          memcpy(tmpbuf, &buf[5], buf[6]);
-          memcpy(comms->recvBuf, tmpbuf, tmpbuf[1]);
-          free(tmpbuf);
-#endif
           comms->recvBuf_ready = 1;
           comms->recvBuf_bytes = comms->recvBuf[1];
           COND_BROADCAST(comms->recvBuf_cond);
