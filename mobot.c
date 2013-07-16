@@ -157,6 +157,11 @@ static void sfp_write (uint8_t *octets, size_t len, void *data) {
   ResetEvent(comms->ovOutgoing->hEvent);
 #else
   int err = write(comms->socket, octets, len);
+  if (-1 == err) {
+    char barf[256];
+    strerror_r(errno, barf, 256);
+    fprintf(stderr, "(barobo) ERROR: write(): %s\n", barf);
+  }
 #endif
 }
 
@@ -2321,12 +2326,22 @@ void* commsEngine(void* arg)
 #ifndef _WIN32
     err = read(comms->socket, &byte, 1);
     /* Check to see if we were interrupted */
-    if(err) {
+    if(-1 == err) {
       if(errno == EINTR) {
         if(comms->connected == 0) {
           break;
         }
       }
+      else {
+        char barf[256];
+        strerror_r(errno, barf, 256);
+        fprintf(stderr, "(barobo) ERROR: read(): %s\n", barf);
+      }
+      fprintf(stderr, "(barobo) INFO: read() a byte: %d (0x%02x)", byte, byte);
+      if (isprint(byte)) {
+        fprintf(stderr, " (%c)", byte);
+      }
+      fprintf(stderr, "\n");
     }
 #else
     if(comms->connectionMode == MOBOTCONNECT_TTY) {
@@ -2498,7 +2513,8 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
     }
   }
   else if (EVENT_BUTTON == buf[0]
-      || EVENT_REPORTADDRESS == buf[0]) {
+      || EVENT_REPORTADDRESS == buf[0]
+      || EVENT_DEBUG_MSG == buf[0]) {
 
     /* It was a user triggered event */
     uint16_t address;
@@ -2622,6 +2638,9 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
       }
       COND_SIGNAL(comms->mobotTree_cond);
       MUTEX_UNLOCK(comms->mobotTree_lock);
+    }
+    else if (EVENT_DEBUG_MSG == buf[0]) {
+      printf("Received Message from %s: %s\n", comms->serialID, (const char*)&buf[2]);
     }
   }
 }
