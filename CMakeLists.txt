@@ -88,6 +88,7 @@ if(CMAKE_HOST_WIN32)
     target_link_libraries(baroboStatic Ws2_32 baroboconfigfile mxml)
     add_subdirectory(demos)
   else()
+    set_target_properties(baroboStatic PROPERTIES COMPILE_FLAGS "-static-libgcc")
     add_subdirectory(demos)
     add_definitions(-DMSYS)
     target_link_libraries(barobo 

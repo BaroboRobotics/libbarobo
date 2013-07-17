@@ -423,7 +423,6 @@ int Mobot_connectWithBluetoothAddress(mobot_t* comms, const char* address, int c
 #endif
 }
 
-#ifndef _WIN32
 int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address)
 {
   char buf[80];
@@ -440,7 +439,6 @@ int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address)
 
 #ifndef _WIN32
 #define MAX_PATH 512
-#endif
 
 int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
 {
