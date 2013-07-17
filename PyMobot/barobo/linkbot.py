@@ -38,6 +38,10 @@ class Linkbot():
     if mobot.Mobot_connectWithSerialID(self._mobot, idstring):
       raise IOError("Error connecting to robot.")
 
+  def connectWithTTY(self, ttyfile):
+    if mobot.Mobot_connectWithTTY(self._mobot, ttyfile) != 0:
+      raise IOError("Error connecting to robot.")
+
   def disconnect(self):
     """Disconnect from a Linkbot"""
     mobot.Mobot_disconnect(self._mobot)
@@ -239,6 +243,17 @@ class Linkbot():
     Arguments should be in the range [0, 255].
     """
     rc = mobot.Mobot_setColorRGB(self._mobot, int(r), int(g), int(b))
+    if rc < 0:
+      raise IOError("Error communicating with robot. Return code {0}".format(rc))
+
+  def _setDongle(self):
+    rc = mobot.Mobot_setDongleMobot(self._mobot)
+    if rc < 0:
+      raise IOError("Error communicating with robot. Return code {0}".format(rc))
+
+  def _setID(self, newid):
+    assert len(newid) == 4, "ID length must be 4."
+    rc = mobot.Mobot_setID(newid)
     if rc < 0:
       raise IOError("Error communicating with robot. Return code {0}".format(rc))
 
