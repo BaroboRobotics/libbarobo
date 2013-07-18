@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# Build with 'python ./setup_win32.py build -c mingw32'
+
 from distutils.core import setup,Extension
 from distutils.command.build_py import build_py
 
@@ -17,7 +19,7 @@ dist = setup(name='PyMobot',
       define_macros=[('NONRELEASE','1')],
       extra_compile_args=['-fpermissive'],
       library_dirs=['../', '../BaroboConfigFile', '../BaroboConfigFile/mxml-2.7', 'libs'],
-      libraries=['baroboStatic_nocpp', 'baroboconfigfile', 'mxml', 'pthread', 'ws2_32', 'shell32', 'gcc', 'msvcrt'],
+      libraries=['baroboStatic_nocpp', 'baroboconfigfile', 'mxml', 'pthread', 'ws2_32'],
       )],
     )
 
