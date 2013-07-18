@@ -668,6 +668,7 @@ int Mobot_getStatus(mobot_t* comms)
   uint8_t buf[64];
   int rc;
   rc = MobotMsgTransaction(comms, BTCMD(CMD_STATUS), buf, 0);
+  //printf("(barobo) INFO: %d == MobotMsgTransaction(): %02x %02x %02x\n", rc, buf[0], buf[1], buf[2]);
   if(rc) {return rc;}
   if(buf[0] != RESP_OK) {
     return -1;

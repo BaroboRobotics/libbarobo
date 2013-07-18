@@ -505,6 +505,7 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   char lockfileName[MAX_PATH];
   int pid;
   int status;
+  printf("(barobo) INFO: Connecting to %s\n", ttyfilename);
   /* Open the lock file, if it exists */
   sprintf(lockfileName, "/tmp/%s.lock", basename(filename));
   lockfile = fopen(lockfileName, "r");
@@ -530,7 +531,10 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
     fclose(lockfile);
   }
   comms->socket = open(ttyfilename, O_RDWR | O_NOCTTY | O_ASYNC);
-  if(comms->socket < 0) {
+  if(-1 == comms->socket) {
+    char barf[256];
+    strerror_r(errno, barf, 256);
+    fprintf(stderr, "(barobo) ERROR: open(): %s\n", barf);
     //perror("Unable to open tty port.");
     return -1;
   }
@@ -1151,6 +1155,7 @@ int finishConnect(mobot_t* comms)
 
   /* Make sure we are connected to a Mobot */
   if(Mobot_getStatus(comms)) {
+    fprintf(stderr, "(barobo) ERROR: Mobot_getStatus() returned something not good.\n");
     Mobot_disconnect(comms);
     return -1;
   }
@@ -1477,6 +1482,7 @@ int Mobot_disconnect(mobot_t* comms)
     MUTEX_UNLOCK(&lock);
     return 0;
   }
+  printf("(barobo) INFO: disconnecting %s\n", comms->serialID);
 #ifndef _WIN32
   switch(comms->connectionMode) {
     case MOBOTCONNECT_BLUETOOTH:
@@ -1512,8 +1518,11 @@ int Mobot_disconnect(mobot_t* comms)
       g_disconnectSignal = 1;
       pthread_kill(*comms->commsThread, SIGINT);
       //while(g_disconnectSignal);
-      if(close(comms->socket)) {
+      if(-1 == close(comms->socket)) {
         rc = -1;
+        char barf[256];
+        strerror_r(errno, barf, 256);
+        fprintf(stderr, "(barobo) ERROR: close(): %s\n", barf);
       }
       break;
     case MOBOTCONNECT_ZIGBEE:
@@ -2336,12 +2345,15 @@ void* commsEngine(void* arg)
         char barf[256];
         strerror_r(errno, barf, 256);
         fprintf(stderr, "(barobo) ERROR: read(): %s\n", barf);
+        break;
       }
+#if 0
       fprintf(stderr, "(barobo) INFO: read() a byte: %d (0x%02x)", byte, byte);
       if (isprint(byte)) {
         fprintf(stderr, " (%c)", byte);
       }
       fprintf(stderr, "\n");
+#endif
     }
 #else
     if(comms->connectionMode == MOBOTCONNECT_TTY) {
