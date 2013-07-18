@@ -21,3 +21,8 @@ add_library(baroboconfigfile STATIC
     BaroboConfigFile.c)
 
 target_link_libraries(baroboconfigfile mxml)
+if(CMAKE_HOST_WIN32)
+    add_custom_command(TARGET baroboconfigfile
+        POST_BUILD
+        COMMAND cp libbaroboconfigfile.a baroboconfigfile.lib)
+endif()

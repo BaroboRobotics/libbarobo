@@ -77,6 +77,14 @@ if(CMAKE_HOST_WIN32)
       mobotl_record_functions++.cpp
       mobotl_set_functions++.cpp
 	  )
+	add_library(baroboStatic_nocpp STATIC
+      mobot.c
+      mobot_get_functions.c
+      mobot_motion_functions.c
+      mobot_movement_functions.c
+      mobot_record_functions.c
+      mobot_set_functions.c
+	  )
   if( 
       (CMAKE_GENERATOR MATCHES "Visual Studio") OR
       (CMAKE_GENERATOR MATCHES "NMake")
@@ -88,7 +96,7 @@ if(CMAKE_HOST_WIN32)
     target_link_libraries(baroboStatic Ws2_32 baroboconfigfile mxml)
     add_subdirectory(demos)
   else()
-    set_target_properties(baroboStatic PROPERTIES COMPILE_FLAGS "-static-libgcc")
+    set_target_properties(baroboStatic PROPERTIES COMPILE_FLAGS "-static-libgcc -fPIC")
     add_subdirectory(demos)
     add_definitions(-DMSYS)
     target_link_libraries(barobo 
@@ -99,6 +107,17 @@ if(CMAKE_HOST_WIN32)
         Ws2_32 
         baroboconfigfile 
         mxml)
+    add_custom_command(TARGET baroboStatic
+        POST_BUILD
+        COMMAND cp libbaroboStatic.a baroboStatic.lib)
+        
+    target_link_libraries(baroboStatic_nocpp
+        Ws2_32 
+        baroboconfigfile 
+        mxml)
+    add_custom_command(TARGET baroboStatic_nocpp
+        POST_BUILD
+        COMMAND cp libbaroboStatic_nocpp.a baroboStatic_nocpp.lib)
   endif()
   install(TARGETS barobo
           ARCHIVE DESTINATION lib)

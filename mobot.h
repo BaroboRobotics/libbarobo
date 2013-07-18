@@ -280,6 +280,7 @@ typedef struct mobot_s
    * instance associated with the dongle in order to control it as a robot. */
   struct mobot_s* child; 
   struct mobotInfo_s* children;
+  char extra_space[128];
 
 } mobot_t;
 #endif
