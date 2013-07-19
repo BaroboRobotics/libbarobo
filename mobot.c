@@ -19,6 +19,9 @@
 
 //#define COMMSDEBUG
 
+#define SFP_CONFIG_WARN
+#define SFP_CONFIG_ERROR
+#undef SFP_CONFIG_DEBUG
 #include "libsfp/serial_framing_protocol.h"
 
 #include <stdio.h>
@@ -857,6 +860,7 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
     //comms->connected = 0;
     //comms->connectionMode = MOBOTCONNECT_NONE;
     //CloseHandle(comms->commHandle);
+    fprintf(stderr, "(barobo) ERROR: finishConnect() returned something not good.\n");
     Mobot_disconnect(comms);
     return rc;
   }
@@ -921,6 +925,7 @@ int Mobot_connectWithTTY_500kbaud(mobot_t* comms, const char* ttyfilename)
     //comms->connected = 0;
     //comms->connectionMode = MOBOTCONNECT_NONE;
     //CloseHandle(comms->commHandle);
+    fprintf(stderr, "(barobo) ERROR: finishConnect() returned something not good.\n");
     Mobot_disconnect(comms);
     return rc;
   }
@@ -1153,6 +1158,10 @@ int finishConnect(mobot_t* comms)
   }
 #endif
 
+  sfpConnect(comms->sfp_ctx);
+  /* FIXME abort after a timeout */
+  while (!sfpIsConnected(comms->sfp_ctx));
+
   /* Make sure we are connected to a Mobot */
   if(Mobot_getStatus(comms)) {
     fprintf(stderr, "(barobo) ERROR: Mobot_getStatus() returned something not good.\n");
@@ -1165,6 +1174,7 @@ int finishConnect(mobot_t* comms)
   if(rc == -1) {
     form = MOBOTFORM_ORIGINAL;
   } else if (rc == -2) {
+    fprintf(stderr, "(barobo) ERROR: getFormFactor() returned something not good.\n");
     Mobot_disconnect(comms);
     return rc;
   }
@@ -1185,6 +1195,7 @@ int finishConnect(mobot_t* comms)
   int version;
   version = Mobot_getVersion(comms); 
   if(version < 0) {
+    fprintf(stderr, "(barobo) ERROR: Mobot_getVersion() returned something not good.\n");
     Mobot_disconnect(comms);
     return rc;
   }
@@ -1507,6 +1518,7 @@ int Mobot_disconnect(mobot_t* comms)
       /* Unpair all children */
       for(iter = comms->children; iter != NULL; iter = iter->next) {
         if(iter->mobot) {
+          fprintf(stderr, "(barobo) INFO: Disconnecting child %s.\n", iter->mobot->serialID);
           Mobot_disconnect(iter->mobot);
         }
       }
@@ -1580,6 +1592,7 @@ int Mobot_disconnect(mobot_t* comms)
       /* Unpair all children */
       for(iter = comms->children; iter != NULL; iter = iter->next) {
         if(iter->mobot) {
+          fprintf(stderr, "(barobo) INFO: Disconnecting child %s.\n", iter->mobot->serialID);
           Mobot_disconnect(iter->mobot);
         }
       }
