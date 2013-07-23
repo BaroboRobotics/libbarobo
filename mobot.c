@@ -19,9 +19,6 @@
 
 //#define COMMSDEBUG
 
-#define SFP_CONFIG_WARN
-#define SFP_CONFIG_ERROR
-#undef SFP_CONFIG_DEBUG
 #include "libsfp/serial_framing_protocol.h"
 
 #include <stdio.h>
@@ -501,6 +498,23 @@ int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address)
 #define MAX_PATH 512
 #endif
 
+static int setupLinkProtocol (mobot_t *comms) {
+  MUTEX_NEW(comms->sfp_tx_lock);
+  MUTEX_INIT(comms->sfp_tx_lock);
+
+  comms->sfp_ctx = malloc(sizeof(SFPcontext));
+  assert(comms->sfp_ctx);
+
+  sfpInit(comms->sfp_ctx);
+  
+  sfpSetDeliverCallback(comms->sfp_ctx, sfp_deliver, comms);
+  sfpSetWriteCallback(comms->sfp_ctx, SFP_WRITE_MULTIPLE, sfp_write, comms);
+  sfpSetLockCallback(comms->sfp_ctx, sfp_lock, comms->sfp_tx_lock);
+  sfpSetUnlockCallback(comms->sfp_ctx, sfp_unlock, comms->sfp_tx_lock);
+
+  return 0;
+}
+
 int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
 {
   FILE *lockfile;
@@ -624,20 +638,9 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   comms->connectionMode = MOBOTCONNECT_TTY;
   tcflush(comms->socket, TCIOFLUSH);
 
-  {
-    /* libsfp stuff */
-    MUTEX_NEW(comms->sfp_tx_lock);
-    MUTEX_INIT(comms->sfp_tx_lock);
-
-    comms->sfp_ctx = malloc(sizeof(SFPcontext));
-    assert(comms->sfp_ctx);
-
-    sfpInit(comms->sfp_ctx);
-    
-    sfpSetDeliverCallback(comms->sfp_ctx, sfp_deliver, comms);
-    sfpSetWriteCallback(comms->sfp_ctx, SFP_WRITE_MULTIPLE, sfp_write, comms);
-    sfpSetLockCallback(comms->sfp_ctx, sfp_lock, comms->sfp_tx_lock);
-    sfpSetUnlockCallback(comms->sfp_ctx, sfp_unlock, comms->sfp_tx_lock);
+  status = setupLinkProtocol(comms);
+  if (status) {
+    return status;
   }
 
   status = finishConnect(comms);
@@ -1147,20 +1150,23 @@ int finishConnect(mobot_t* comms)
   g_mobotThreadInitializing = 1;
   THREAD_CREATE(comms->commsThread, commsEngine, comms);
   while(g_mobotThreadInitializing);
+
+  if(comms->connectionMode == MOBOTCONNECT_TTY) {
 #if 0
   /* deprecated by libsfp */
 
-  if(comms->connectionMode == MOBOTCONNECT_TTY) {
     g_mobotThreadInitializing = 1;
 
     THREAD_CREATE(comms->commsOutThread, commsOutEngine, comms);
     while(g_mobotThreadInitializing);
-  }
 #endif
 
-  sfpConnect(comms->sfp_ctx);
-  /* FIXME abort after a timeout */
-  while (!sfpIsConnected(comms->sfp_ctx));
+    /* hlh: I wish this didn't have to go here, but we need the commsEngine
+     * thread to be running before sfpConnect() can really do anything. */
+    sfpConnect(comms->sfp_ctx);
+    /* FIXME abort after a timeout */
+    while (!sfpIsConnected(comms->sfp_ctx));
+  }
 
   /* Make sure we are connected to a Mobot */
   if(Mobot_getStatus(comms)) {
