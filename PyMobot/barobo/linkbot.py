@@ -64,6 +64,12 @@ class Linkbot():
     if rc < 0:
       raise IOError("Error communicating with robot. Return code {0}".format(rc))
 
+  def getAccelerometerData(self):
+    rc,x,y,z = mobot.Mobot_getAccelerometerData(self._mobot)
+    if rc < 0:
+      raise IOError("Error communicating with robot. Return code {0}".format(rc))
+    return [x, y, z]
+
   def getBatteryVoltage(self):
     """Return the voltage of the battery."""
     rc, voltage = mobot.Mobot_getBatteryVoltage(self._mobot)
