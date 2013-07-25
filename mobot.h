@@ -39,7 +39,7 @@
 %apply double & OUTPUT {robotJointState_t &state};
 #endif
 
-typedef struct SFPcontext SFPcontext;
+typedef struct MOBOTdongle MOBOTdongle;
 
 #include <math.h>
 
@@ -246,9 +246,7 @@ typedef struct mobot_s
   MUTEX_T* commsWaitingForMessage_lock;
   //MUTEX_T* socket_lock;
 
-  /* libsfp stuff */
-  MUTEX_T* sfp_tx_lock;
-  SFPcontext *sfp_ctx;
+  MOBOTdongle *dongle;
 
 #if 0
   /* deprecated by libsfp */

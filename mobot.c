@@ -124,56 +124,6 @@ void *get_in_addr(struct sockaddr *sa)
     return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
-/* Some callbacks for libsfp */
-
-static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len);
-
-static void sfp_deliver (SFPpacket *packet, void *data) {
-  mobot_t *comms = (mobot_t *)data;
-
-  Mobot_processMessage(comms, packet->buf, packet->len);
-}
-
-static void sfp_write (uint8_t *octets, size_t len, void *data) {
-  mobot_t *comms = (mobot_t *)data;
-
-#if _WIN32
-  /* hlh: note that the original incarnation of this code segment in commsOutEngine
-   * included the comment, "Write one whole message at a time". While libsfp
-   * by default tries to call the write callback (i.e., this function) with
-   * exactly one frame's worth of data, if the frames exceed its writebuffer
-   * limit (SFP_CONFIG_WRITEBUF_SIZE), it will call the write callback more
-   * frequently. I don't know if this is an issue or not. */
-  if(!WriteFile(
-        comms->commHandle, 
-        octets, 
-        len,
-        NULL,
-        comms->ovOutgoing)) {
-    //printf("Error writing. %d \n", GetLastError());
-  }
-  DWORD bytesWritten;
-  GetOverlappedResult(comms->commHandle, comms->ovOutgoing, &bytesWritten, TRUE);
-  ResetEvent(comms->ovOutgoing->hEvent);
-#else
-  int err = write(comms->socket, octets, len);
-  if (-1 == err) {
-    char barf[256];
-    strerror_r(errno, barf, 256);
-    fprintf(stderr, "(barobo) ERROR: write(): %s\n", barf);
-  }
-#endif
-}
-
-static void sfp_lock (void *data) {
-  MUTEX_LOCK((MUTEX_T *)data);
-}
-
-static void sfp_unlock (void *data) {
-  MUTEX_UNLOCK((MUTEX_T *)data);
-}
-
-
 /* Return Error Codes:
    -1 : General Error
    -2 : Lockfile Exists
@@ -498,22 +448,7 @@ int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address)
 #define MAX_PATH 512
 #endif
 
-static int setupLinkProtocol (mobot_t *comms) {
-  MUTEX_NEW(comms->sfp_tx_lock);
-  MUTEX_INIT(comms->sfp_tx_lock);
-
-  comms->sfp_ctx = malloc(sizeof(SFPcontext));
-  assert(comms->sfp_ctx);
-
-  sfpInit(comms->sfp_ctx);
-  
-  sfpSetDeliverCallback(comms->sfp_ctx, sfp_deliver, comms);
-  sfpSetWriteCallback(comms->sfp_ctx, SFP_WRITE_MULTIPLE, sfp_write, comms);
-  sfpSetLockCallback(comms->sfp_ctx, sfp_lock, comms->sfp_tx_lock);
-  sfpSetUnlockCallback(comms->sfp_ctx, sfp_unlock, comms->sfp_tx_lock);
-
-  return 0;
-}
+#include "dongle.h"
 
 int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
 {
@@ -547,101 +482,17 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   if(lockfile != NULL) {
     fclose(lockfile);
   }
-  comms->socket = open(ttyfilename, O_RDWR | O_NOCTTY | O_ASYNC);
-  if(-1 == comms->socket) {
-    char barf[256];
-    strerror_r(errno, barf, 256);
-    fprintf(stderr, "(barobo) ERROR: open(): %s\n", barf);
-    //perror("Unable to open tty port.");
-    return -1;
-  }
-  /* Change the baud rate to 57600 */
-  struct termios term;
-  tcgetattr(comms->socket, &term);
 
-  // Input flags - Turn off input processing
-  // convert break to null byte, no CR to NL translation,
-  // no NL to CR translation, don't mark parity errors or breaks
-  // no input parity check, don't strip high bit off,
-  // no XON/XOFF software flow control
-  //
-  term.c_iflag &= ~(IGNBRK | BRKINT | ICRNL |
-      INLCR | PARMRK | INPCK | ISTRIP | IXON);
-  //
-  // Output flags - Turn off output processing
-  // no CR to NL translation, no NL to CR-NL translation,
-  // no NL to CR translation, no column 0 CR suppression,
-  // no Ctrl-D suppression, no fill characters, no case mapping,
-  // no local output processing
-  //
-  // term.c_oflag &= ~(OCRNL | ONLCR | ONLRET |
-  //                     ONOCR | ONOEOT| OFILL | OLCUC | OPOST);
-  term.c_oflag = 0;
-  //
-  // No line processing:
-  // echo off, echo newline off, canonical mode off, 
-  // extended input processing off, signal chars off
-  //
-  term.c_lflag &= ~(ECHO | ECHONL | ICANON | IEXTEN | ISIG);
-  //
-  // Turn off character processing
-  // clear current char size mask, no parity checking,
-  // no output processing, force 8 bit input
-  //
-  term.c_cflag &= ~(CSIZE | PARENB);
-  term.c_cflag |= CS8;
-  //
-  // One input byte is enough to return from read()
-  // Inter-character timer off
-  //
-  term.c_cc[VMIN]  = 1;
-  term.c_cc[VTIME] = 0;
-  //
-  // Communication speed (simple version, using the predefined
-  // constants)
-  //
+  comms->dongle = malloc(sizeof(MOBOTdongle));
+  assert(comms->dongle);
 
-#ifdef __MACH__
-  cfsetspeed(&term, 500000);
-  cfsetispeed(&term, 500000);
-  cfsetospeed(&term, 500000);
-  if(status = tcsetattr(comms->socket, TCSANOW, &term)) {
-    fprintf(stderr, "Error setting tty settings. %d\n", errno);
+  int err = dongleConnect(comms->dongle, ttyfilename);
+  if (err) {
+    return err;
   }
-  tcgetattr(comms->socket, &term);
-  if(cfgetispeed(&term) != 500000) {
-    fprintf(stderr, "Error setting input speed.\n");
-    exit(0);
-  }
-  if(cfgetospeed(&term) != 500000) {
-    fprintf(stderr, "Error setting output speed.\n");
-    exit(0);
-  }
-#else
-  cfsetspeed(&term, B230400);
-  cfsetispeed(&term, B230400);
-  cfsetospeed(&term, B230400);
-  if(status = tcsetattr(comms->socket, TCSANOW, &term)) {
-    fprintf(stderr, "Error setting tty settings. %d\n", errno);
-  }
-  tcgetattr(comms->socket, &term);
-  if(cfgetispeed(&term) != B230400) {
-    fprintf(stderr, "Error setting input speed.\n");
-    exit(0);
-  }
-  if(cfgetospeed(&term) != B230400) {
-    fprintf(stderr, "Error setting output speed.\n");
-    exit(0);
-  }
-#endif
+
   comms->connected = 1;
   comms->connectionMode = MOBOTCONNECT_TTY;
-  tcflush(comms->socket, TCIOFLUSH);
-
-  status = setupLinkProtocol(comms);
-  if (status) {
-    return status;
-  }
 
   status = finishConnect(comms);
   if(status) {
@@ -1151,15 +1002,14 @@ int finishConnect(mobot_t* comms)
   THREAD_CREATE(comms->commsThread, commsEngine, comms);
   while(g_mobotThreadInitializing);
 
-  if(comms->connectionMode == MOBOTCONNECT_TTY) {
 #if 0
+  if(comms->connectionMode == MOBOTCONNECT_TTY) {
   /* deprecated by libsfp */
 
     g_mobotThreadInitializing = 1;
 
     THREAD_CREATE(comms->commsOutThread, commsOutEngine, comms);
     while(g_mobotThreadInitializing);
-#endif
 
     /* hlh: I wish this didn't have to go here, but we need the commsEngine
      * thread to be running before sfpConnect() can really do anything. */
@@ -1167,6 +1017,7 @@ int finishConnect(mobot_t* comms)
     /* FIXME abort after a timeout */
     while (!sfpIsConnected(comms->sfp_ctx));
   }
+#endif
 
   /* Make sure we are connected to a Mobot */
   if(Mobot_getStatus(comms)) {
@@ -1536,12 +1387,16 @@ int Mobot_disconnect(mobot_t* comms)
       g_disconnectSignal = 1;
       pthread_kill(*comms->commsThread, SIGINT);
       //while(g_disconnectSignal);
+#if 0
       if(-1 == close(comms->socket)) {
         rc = -1;
         char barf[256];
         strerror_r(errno, barf, 256);
         fprintf(stderr, "(barobo) ERROR: close(): %s\n", barf);
       }
+#endif
+      dongleDisconnect(comms->dongle);
+      free(comms->dongle);
       break;
     case MOBOTCONNECT_ZIGBEE:
       Mobot_unpair(comms);
@@ -1580,10 +1435,7 @@ int Mobot_disconnect(mobot_t* comms)
       /* Cancel IO, stop threads */
       comms->connected = 0;
       //sendBufAppend(comms, (uint8_t*)&rc, 1);
-      SFPpacket pkt;
-      pkt.buf[0] = rc;
-      pkt.len = 1;
-      sfpWritePacket(comms->sfp_ctx, &pkt);
+      dongleWrite(comms->dongle, (uint8_t *)&rc, 1);
 
       SetEvent(comms->cancelEvent);
       CloseHandle(comms->commHandle);
@@ -1780,8 +1632,8 @@ int Mobot_init(mobot_t* comms)
   comms->parent = NULL;
   comms->children = NULL;
 
-  comms->sfp_tx_lock = NULL;
-  comms->sfp_ctx = NULL;
+  /* FIXME properly abstract links */
+  comms->dongle = NULL;
 
   return 0;
 }
@@ -2329,6 +2181,8 @@ void sigint_handler(int sig)
   g_disconnectSignal = 0;
 }
 
+static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len);
+
 /* The comms engine will watch the incoming comm channel for any message. If a
  * message is expected, it will get the data to RecvFromIMobot(). If it was
  * triggered by an event, then the appropriate callback will be called. */
@@ -2342,85 +2196,46 @@ void* commsEngine(void* arg)
   int_handler.sa_handler = sigint_handler;
   sigaction(SIGINT, &int_handler, 0);
 #else
+#if 0
   DWORD readbytes = 0;
   DWORD mask;
   HANDLE events[2];
   events[0] = comms->ovIncoming->hEvent;
   events[1] = comms->cancelEvent;
 #endif
+#endif
   g_mobotThreadInitializing = 0;
   while(1) {
-    /* Try and receive a byte */
-#ifndef _WIN32
-    err = read(comms->socket, &byte, 1);
-    /* Check to see if we were interrupted */
-    if(-1 == err) {
-      if(errno == EINTR) {
-        if(comms->connected == 0) {
-          break;
-        }
-      }
-      else {
-        char barf[256];
-        strerror_r(errno, barf, 256);
-        fprintf(stderr, "(barobo) ERROR: read(): %s\n", barf);
+    if (MOBOTCONNECT_TTY == comms->connectionMode) {
+      uint8_t buf[256];
+      ssize_t len = dongleRead(comms->dongle, buf, sizeof(buf));
+      if (-1 == len) {
         break;
       }
-#if 0
-      fprintf(stderr, "(barobo) INFO: read() a byte: %d (0x%02x)", byte, byte);
-      if (isprint(byte)) {
-        fprintf(stderr, " (%c)", byte);
-      }
-      fprintf(stderr, "\n");
-#endif
+      Mobot_processMessage(comms, buf, len);
     }
+    else {
+      /* Try and receive a byte */
+#ifndef _WIN32
+      err = read(comms->socket, &byte, 1);
+      /* Check to see if we were interrupted */
+      if(-1 == err) {
+        if(errno == EINTR) {
+          if(comms->connected == 0) {
+            break;
+          }
+        }
+        else {
+          char barf[256];
+          strerror_r(errno, barf, 256);
+          fprintf(stderr, "(barobo) ERROR: read(): %s\n", barf);
+          break;
+        }
 #else
-    if(comms->connectionMode == MOBOTCONNECT_TTY) {
-#if 0
-      /* DEBUG */
-        if(!SetCommMask(comms->commHandle, EV_RXFLAG)) {
-          fprintf(stderr, "Could not set Comm flags to detect RX.\n");
-        }
-        if(WaitCommEvent(comms->commHandle, &mask, &comms->ovIncoming) == FALSE) {
-          WaitForSingleObject(comms->ovIncoming.hEvent, INFINITE);
-        }
-        printf("Byte received\n");
-        exit(0);
-#endif
-      /* Use CancelIOEx() to cancel this blocking read */
-       /* 
-      if(readbytes == 0) {
-        if(!SetCommMask(comms->commHandle, EV_RXFLAG)) {
-          fprintf(stderr, "Could not set Comm flags to detect RX.\n");
-        }
-        if(WaitCommEvent(comms->commHandle, &mask, &comms->ovIncoming) == FALSE) {
-          printf("Watiing...\n");
-          WaitForSingleObject(comms->ovIncoming.hEvent, INFINITE);
-        }
-      }
-      */
-      ReadFile(
-          comms->commHandle,
-          &byte,
-          1,
-          NULL,
-          comms->ovIncoming);
-      /*
-      WaitForMultipleObjects(
-          2,
-          events,
-          false,
-          INFINITE);
-          */
-      GetOverlappedResult(comms->commHandle, comms->ovIncoming, &readbytes, TRUE);
-      //ResetEvent(events[0]);
-      //ResetEvent(events[1]);
-      //CloseHandle(comms->ovIncoming.hEvent);
-      err = readbytes;
-    } else {
       err = recvfrom(comms->socket, (char*)&byte, 1, 0, (struct sockaddr*)0, 0);
-    }
 #endif
+      }
+    }
     /* If we are no longer connected, just return */
     if(comms->connected == 0) {
       return NULL;
@@ -2436,15 +2251,7 @@ void* commsEngine(void* arg)
     printf("%d RECV: 0x%0x\n", comms->commsEngine_bytes, byte);
 #endif
 
-    if (MOBOTCONNECT_TTY == comms->connectionMode) {
-      /* In this case, sfpDeliverOctet will continually buffer more and more
-       * bytes, until it recognizes one complete frame. At that point, it will
-       * verify its validity via a CRC, and calls Mobot_processMessage() for
-       * us. It implements a reliable(-ish) protocol that should deliver its
-       * messages in order. */
-      sfpDeliverOctet(comms->sfp_ctx, byte);
-    }
-    else {
+    if (MOBOTCONNECT_TTY != comms->connectionMode) {
       MUTEX_LOCK(comms->recvBuf_lock);
       comms->recvBuf[comms->commsEngine_bytes] = byte;
       comms->commsEngine_bytes++;
@@ -2683,10 +2490,7 @@ void sendBufAppend(mobot_t* comms, uint8_t* data, int len)
   assert(SFP_CONFIG_MAX_PACKET_SIZE >= len);
   assert(MOBOTCONNECT_TTY == comms->connectionMode);
 
-  /* FIXME could use some optimization here */
-  memcpy(pkt.buf, data, len);
-  pkt.len = len;
-  sfpWritePacket(comms->sfp_ctx, &pkt);
+  dongleWrite(comms->dongle, data, len);
 #if 0
   /* deprecated by libsfp */
 
