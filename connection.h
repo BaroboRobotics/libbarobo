@@ -9,11 +9,6 @@ typedef enum MOBOTconnectionType {
   MOBOT_CONNECTION_TYPE_ZIGBEE
 } MOBOTconnectionType;
 
-typedef enum MOBOTconnectionFraming {
-  MOBOT_CONNECTION_FRAMING_NONE,
-  MOBOT_CONNECTION_FRAMING_SFP
-} MOBOTconnectionFraming;
-
 typedef enum MOBOTconnectionStatus {
   MOBOT_CONNECTION_STATUS_DOWN,
   MOBOT_CONNECTION_STATUS_UP
