@@ -80,13 +80,6 @@ volatile int g_mobotThreadInitializing = 0;
 
 mobot_t* g_dongleMobot = NULL;
 
-void sendBufAppend(mobot_t* comms, uint8_t* data, int len);
-#if 0
-/* deprecated by libsfp */
-
-void* commsOutEngine(void* arg);
-#endif
-
 bcf_t* g_bcf;
 
 double deg2rad(double deg)
@@ -1434,7 +1427,6 @@ int Mobot_disconnect(mobot_t* comms)
     case MOBOTCONNECT_TTY:
       /* Cancel IO, stop threads */
       comms->connected = 0;
-      //sendBufAppend(comms, (uint8_t*)&rc, 1);
       dongleWrite(comms->dongle, (uint8_t *)&rc, 1);
 
       SetEvent(comms->cancelEvent);
@@ -1975,11 +1967,11 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
   if(comms->connectionMode == MOBOTCONNECT_ZIGBEE) {
     assert(MOBOTCONNECT_TTY == comms->parent->connectionMode);
 
-    /* Put the message on the parent's message queue */
-    sendBufAppend(comms->parent, str, len);
+    /* Send the message out on the parent's dongle. */
+    dongleWrite(comms->parent->dongle, str, len);
   } else if (comms->connectionMode == MOBOTCONNECT_TTY) {
-    /* Put the message on our message queue */
-    sendBufAppend(comms, str, len);
+    /* Send the message out on our dongle. */
+    dongleWrite(comms->dongle, str, len);
   } else {
     //MUTEX_LOCK(comms->socket_lock);
 #ifndef _WIN32
@@ -2481,28 +2473,6 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
       printf("Received Message from %s: %s\n", comms->serialID, (const char*)&buf[2]);
     }
   }
-}
-
-void sendBufAppend(mobot_t* comms, uint8_t* data, int len)
-{
-  SFPpacket pkt;
-
-  assert(SFP_CONFIG_MAX_PACKET_SIZE >= len);
-  assert(MOBOTCONNECT_TTY == comms->connectionMode);
-
-  dongleWrite(comms->dongle, data, len);
-#if 0
-  /* deprecated by libsfp */
-
-  int i;
-  MUTEX_LOCK(comms->sendBuf_lock);
-  for(i = 0; i < len; i++) {
-    comms->sendBuf[(comms->sendBuf_index + comms->sendBuf_N) % SENDBUF_SIZE] = data[i];
-    comms->sendBuf_N++;
-  }
-  COND_SIGNAL(comms->sendBuf_cond);
-  MUTEX_UNLOCK(comms->sendBuf_lock);
-#endif
 }
 
 #if 0
