@@ -138,6 +138,7 @@ elseif(CMAKE_HOST_APPLE)
       mobotl_movement_functions++.cpp
       mobotl_record_functions++.cpp
       mobotl_set_functions++.cpp
+      dongle.c
       libsfp/serial_framing_protocol.c
       libsfp/net_byte_order.c
 	  )
@@ -169,6 +170,7 @@ elseif(CMAKE_HOST_APPLE)
       mobotl_movement_functions++.cpp
       mobotl_record_functions++.cpp
       mobotl_set_functions++.cpp
+      dongle.c
       libsfp/serial_framing_protocol.c
       libsfp/net_byte_order.c
 	  )
@@ -211,6 +213,7 @@ else(CMAKE_HOST_WIN32)
       mobotl_movement_functions++.cpp
       mobotl_record_functions++.cpp
       mobotl_set_functions++.cpp
+      dongle.c
       libsfp/serial_framing_protocol.c
       libsfp/net_byte_order.c
 	  )
@@ -242,6 +245,7 @@ else(CMAKE_HOST_WIN32)
       mobotl_movement_functions++.cpp
       mobotl_record_functions++.cpp
       mobotl_set_functions++.cpp
+      dongle.c
       libsfp/serial_framing_protocol.c
       libsfp/net_byte_order.c
 	  )
