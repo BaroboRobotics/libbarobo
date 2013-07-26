@@ -31,7 +31,7 @@ static ssize_t dongleWriteRaw (MOBOTdongle *dongle, const uint8_t *buf, size_t l
   }
   DWORD bytesWritten;
   GetOverlappedResult(dongle->handle, dongle->ovOutgoing, &bytesWritten, TRUE);
-  ResetEvent(comms->ovOutgoing->hEvent);
+  ResetEvent(comms->ovOutgoing.hEvent);
 #else
   err = write(dongle->fd, buf, len);
 
@@ -372,11 +372,16 @@ void dongleDisconnect (MOBOTdongle *dongle) {
     fprintf(stderr, "(barobo) ERROR: in dongleDisconnect, close(): %s\n", errbuf);
   }
 #endif
+
+  dongleFini(dongle);
 }
 
-void dongleInit (MOBOTdongle *dongle) {
+static void dongleInit (MOBOTdongle *dongle) {
   dongle->framing = MOBOT_DONGLE_FRAMING_UNKNOWN;
+  /* We don't malloc() sfpContext yet, because we don't know if we'll actually
+   * need it until we detect the framing used by the firmware. */
   dongle->sfpContext = NULL;
+
 #ifdef _WIN32
   /* Halp! Is this right? */
   dongle->handle = NULL;
@@ -385,16 +390,34 @@ void dongleInit (MOBOTdongle *dongle) {
   if (!dongle->ovIncoming) {
     comms->ovIncoming = (LPOVERLAPPED)malloc(sizeof(OVERLAPPED));
     memset(comms->ovIncoming, 0, sizeof(OVERLAPPED));
-    comms->ovIncoming->hEvent = CreateEvent(0, 1, 0, 0);
+    comms->ovIncoming.hEvent = CreateEvent(0, 1, 0, 0);
   }
   if (!dongle->ovOutgoing) {
     comms->ovOutgoing = (LPOVERLAPPED)malloc(sizeof(OVERLAPPED));
     memset(comms->ovOutgoing, 0, sizeof(OVERLAPPED));
-    comms->ovOutgoing->hEvent = CreateEvent(0, 1, 0, 0);
+    comms->ovOutgoing.hEvent = CreateEvent(0, 1, 0, 0);
   }
 
 #else
   dongle->fd = -1;
+#endif
+}
+
+static void dongleFini (MOBOTdongle *dongle) {
+  dongle->framing = MOBOT_DONGLE_FRAMING_UNKNOWN;
+  if (dongle->sfpContext) {
+    free(dongle->sfpContext);
+  }
+
+#ifdef _WIN32
+  if (dongle->ovIncoming) {
+    CloseHandle(dongle->ovIncoming.hEvent);
+    free(dongle->ovIncoming);
+  }
+  if (dongle->ovOutgoing) {
+    CloseHandle(dongle->ovOutgoing.hEvent);
+    free(dongle->ovOutgoing);
+  }
 #endif
 }
 
@@ -406,8 +429,7 @@ int dongleConnect (MOBOTdongle *dongle, const char *ttyfilename) {
   assert(dongle);
   assert(ttyfilename);
 
-  dongle->framing = MOBOT_DONGLE_FRAMING_UNKNOWN;
-  dongle->sfpContext = NULL;
+  dongleInit(dongle);
 
   /* Check the file name. If we receive something like "COM45", we want to
    * change it to "\\.\COM45" */
@@ -465,9 +487,7 @@ int dongleConnect (MOBOTdongle *dongle, const char *ttyfilename) {
   assert(dongle);
   assert(ttyfilename);
 
-  dongle->framing = MOBOT_DONGLE_FRAMING_UNKNOWN;
-  dongle->sfpContext = NULL;
-  dongle->fd = -1;
+  dongleInit(dongle);
 
   /* We use non-blocking I/O here so we can support the POSIX implementation
    * of dongleTimedReadRaw. dongleTimedReadRaw uses select, which can, per the
