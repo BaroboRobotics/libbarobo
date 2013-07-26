@@ -19,6 +19,7 @@
 
 //#define COMMSDEBUG
 
+#include "dongle.h"
 #include "libsfp/serial_framing_protocol.h"
 
 #include <stdio.h>
@@ -436,15 +437,11 @@ int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address)
   sprintf(buf, "/dev/tty.MOBOT-%s%s-SPP", chunk1, chunk2);
   return Mobot_connectWithTTY(comms, buf);
 }
-
-#ifndef _WIN32
-#define MAX_PATH 512
 #endif
-
-#include "dongle.h"
 
 int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
 {
+#ifndef _WIN32
   FILE *lockfile;
   char *filename = strdup(ttyfilename);
   char lockfileName[MAX_PATH];
@@ -475,9 +472,12 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   if(lockfile != NULL) {
     fclose(lockfile);
   }
+#endif
 
   comms->dongle = malloc(sizeof(MOBOTdongle));
   assert(comms->dongle);
+
+  dongleInit(&comms->dongle);
 
   int err = dongleConnect(comms->dongle, ttyfilename);
   if (err) {
@@ -489,6 +489,8 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
 
   status = finishConnect(comms);
   if(status) {
+    fprintf(stderr, "(barobo) ERROR: finishConnect() returned something not good.\n");
+    Mobot_disconnect(comms);
     return status;
   }
   if(
@@ -500,7 +502,8 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
     /* See if we can get the serial id */
     Mobot_getID(comms);
   }
-  if(status) return status;
+
+#ifndef _WIN32
   /* Finished connecting. Create the lockfile. */
   lockfile = fopen(lockfileName, "w");
   if(lockfile == NULL) {
@@ -509,286 +512,10 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   }
   fprintf(lockfile, "%d", getpid());
   fclose(lockfile);
-
-  return 0;
-}
-
-int Mobot_connectWithTTY_500kbaud(mobot_t* comms, const char* ttyfilename)
-{
-  FILE *lockfile;
-  char *filename = strdup(ttyfilename);
-  char lockfileName[MAX_PATH];
-  int pid;
-  int status;
-  /* Open the lock file, if it exists */
-  sprintf(lockfileName, "/tmp/%s.lock", basename(filename));
-  lockfile = fopen(lockfileName, "r");
-  if(lockfile == NULL) {
-    /* Lock file does not exist. Proceed. */
-  } else {
-    /* Lockfile exists. Need to check PID in the lock file and see if that
-     * process is still running. */
-    fscanf(lockfile, "%d", &pid);
-    if(pid > 0 && kill(pid,0) < 0 && errno == ESRCH) {
-      /* Lock file is stale. Delete it */
-      unlink(lockfileName);
-    } else {
-      /* The tty device is locked. Return error code. */
-      fprintf(stderr, "Error: Another application is already connected to the Mobot.\n");
-      free(filename);
-      fclose(lockfile);
-      return -2;
-    }
-  }
-  comms->lockfileName = strdup(lockfileName);
-  if(lockfile != NULL) {
-    fclose(lockfile);
-  }
-  comms->socket = open(ttyfilename, O_RDWR | O_NOCTTY | O_ASYNC);
-  if(comms->socket < 0) {
-    //perror("Unable to open tty port.");
-    return -1;
-  }
-  /* Change the baud rate to 57600 */
-  struct termios term;
-  tcgetattr(comms->socket, &term);
-
-  // Input flags - Turn off input processing
-  // convert break to null byte, no CR to NL translation,
-  // no NL to CR translation, don't mark parity errors or breaks
-  // no input parity check, don't strip high bit off,
-  // no XON/XOFF software flow control
-  //
-  term.c_iflag &= ~(IGNBRK | BRKINT | ICRNL |
-      INLCR | PARMRK | INPCK | ISTRIP | IXON);
-  //
-  // Output flags - Turn off output processing
-  // no CR to NL translation, no NL to CR-NL translation,
-  // no NL to CR translation, no column 0 CR suppression,
-  // no Ctrl-D suppression, no fill characters, no case mapping,
-  // no local output processing
-  //
-  // term.c_oflag &= ~(OCRNL | ONLCR | ONLRET |
-  //                     ONOCR | ONOEOT| OFILL | OLCUC | OPOST);
-  term.c_oflag = 0;
-  //
-  // No line processing:
-  // echo off, echo newline off, canonical mode off, 
-  // extended input processing off, signal chars off
-  //
-  term.c_lflag &= ~(ECHO | ECHONL | ICANON | IEXTEN | ISIG);
-  //
-  // Turn off character processing
-  // clear current char size mask, no parity checking,
-  // no output processing, force 8 bit input
-  //
-  term.c_cflag &= ~(CSIZE | PARENB);
-  term.c_cflag |= CS8;
-  //
-  // One input byte is enough to return from read()
-  // Inter-character timer off
-  //
-  term.c_cc[VMIN]  = 1;
-  term.c_cc[VTIME] = 0;
-  //
-  // Communication speed (simple version, using the predefined
-  // constants)
-  //
-
-#ifdef __MACH__
-  cfsetspeed(&term, 500000);
-  cfsetispeed(&term, 500000);
-  cfsetospeed(&term, 500000);
-  if(status = tcsetattr(comms->socket, TCSANOW, &term)) {
-    fprintf(stderr, "Error setting tty settings. %d\n", errno);
-  }
-  tcgetattr(comms->socket, &term);
-  if(cfgetispeed(&term) != 500000) {
-    fprintf(stderr, "Error setting input speed.\n");
-    exit(0);
-  }
-  if(cfgetospeed(&term) != 500000) {
-    fprintf(stderr, "Error setting output speed.\n");
-    exit(0);
-  }
-#else
-  cfsetspeed(&term, B500000);
-  cfsetispeed(&term, B500000);
-  cfsetospeed(&term, B500000);
-  if(status = tcsetattr(comms->socket, TCSANOW, &term)) {
-    fprintf(stderr, "Error setting tty settings. %d\n", errno);
-  }
-  tcgetattr(comms->socket, &term);
-  if(cfgetispeed(&term) != B500000) {
-    fprintf(stderr, "Error setting input speed.\n");
-    exit(0);
-  }
-  if(cfgetospeed(&term) != B500000) {
-    fprintf(stderr, "Error setting output speed.\n");
-    exit(0);
-  }
 #endif
-  comms->connected = 1;
-  comms->connectionMode = MOBOTCONNECT_TTY;
-  tcflush(comms->socket, TCIOFLUSH);
-  status = finishConnect(comms);
-  if(status) {
-    return status;
-  }
-  if(
-      (comms->formFactor == MOBOTFORM_I) ||
-      (comms->formFactor == MOBOTFORM_L) 
-    )
-  {
-    comms->zigbeeAddr = Mobot_getAddress(comms);
-    /* See if we can get the serial id */
-    Mobot_getID(comms);
-  }
-  if(status) return status;
-  /* Finished connecting. Create the lockfile. */
-  lockfile = fopen(lockfileName, "w");
-  if(lockfile == NULL) {
-    fprintf(stderr, "Fatal error. %s:%d\n", __FILE__, __LINE__);
-    return -1;
-  }
-  fprintf(lockfile, "%d", getpid());
-  fclose(lockfile);
+
   return 0;
 }
-
-#else
-
-int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
-{
-  int rc;
-  /* Check the file name. If we receive something like "COM45", we want to
-   * change it to "\\.\COM45" */
-  char *tty;
-  tty = (char*)malloc((sizeof(char)*strlen(ttyfilename))+20);
-  tty[0] = '\0';
-  if(ttyfilename[0] != '\\') {
-    strcpy(tty, "\\\\.\\");
-  }
-  strcat(tty, ttyfilename);
-  /* For windows, we should connect to a com port */
-  comms->commHandle = CreateFile(
-      tty, 
-      GENERIC_READ | GENERIC_WRITE,
-      0,
-      0,
-      OPEN_EXISTING,
-      FILE_FLAG_OVERLAPPED,
-      0 );
-  free(tty);
-  if(comms->commHandle == INVALID_HANDLE_VALUE) {
-    //fprintf(stderr, "Error connecting to COM port: %s\n", ttyfilename);
-    return -1;
-  }
-  /* Adjust settings */
-  DCB dcb;
-  FillMemory(&dcb, sizeof(dcb), 0);
-  dcb.DCBlength = sizeof(dcb);
-  if (!BuildCommDCB("230400,n,8,1", &dcb)) {
-    fprintf(stderr, "Could not build DCB.\n");
-    return -1;
-  }
-  dcb.BaudRate = 230400;
-
-  if (!SetCommState(comms->commHandle, &dcb)) {
-    fprintf(stderr, "Could not set Comm State to new DCB settings.\n");
-    return -1;
-  }
-  
-  comms->connected = 1;
-  comms->connectionMode = MOBOTCONNECT_TTY;
-
-  rc = finishConnect(comms);
-  if(rc) {
-    //comms->connected = 0;
-    //comms->connectionMode = MOBOTCONNECT_NONE;
-    //CloseHandle(comms->commHandle);
-    fprintf(stderr, "(barobo) ERROR: finishConnect() returned something not good.\n");
-    Mobot_disconnect(comms);
-    return rc;
-  }
-  if(
-      (comms->formFactor == MOBOTFORM_I) ||
-      (comms->formFactor == MOBOTFORM_L) 
-    )
-  {
-    comms->zigbeeAddr = Mobot_getAddress(comms);
-    /* See if we can get the serial id */
-    Mobot_getID(comms);
-  }
-  return 0;
-}
-
-int Mobot_connectWithTTY_500kbaud(mobot_t* comms, const char* ttyfilename)
-{
-  int rc;
-  /* Check the file name. If we receive something like "COM45", we want to
-   * change it to "\\.\COM45" */
-  char *tty;
-  tty = (char*)malloc((sizeof(char)*strlen(ttyfilename))+20);
-  tty[0] = '\0';
-  if(ttyfilename[0] != '\\') {
-    strcpy(tty, "\\\\.\\");
-  }
-  strcat(tty, ttyfilename);
-  /* For windows, we should connect to a com port */
-  comms->commHandle = CreateFile(
-      tty, 
-      GENERIC_READ | GENERIC_WRITE,
-      0,
-      0,
-      OPEN_EXISTING,
-      FILE_FLAG_OVERLAPPED,
-      0 );
-  free(tty);
-  if(comms->commHandle == INVALID_HANDLE_VALUE) {
-    //fprintf(stderr, "Error connecting to COM port: %s\n", ttyfilename);
-    return -1;
-  }
-  /* Adjust settings */
-  DCB dcb;
-  FillMemory(&dcb, sizeof(dcb), 0);
-  dcb.DCBlength = sizeof(dcb);
-  if (!BuildCommDCB("500000,n,8,1", &dcb)) {
-    fprintf(stderr, "Could not build DCB.\n");
-    return -1;
-  }
-  dcb.BaudRate = 500000;
-
-  if (!SetCommState(comms->commHandle, &dcb)) {
-    fprintf(stderr, "Could not set Comm State to new DCB settings.\n");
-    return -1;
-  }
-  
-  comms->connected = 1;
-  comms->connectionMode = MOBOTCONNECT_TTY;
-
-  rc = finishConnect(comms);
-  if(rc) {
-    //comms->connected = 0;
-    //comms->connectionMode = MOBOTCONNECT_NONE;
-    //CloseHandle(comms->commHandle);
-    fprintf(stderr, "(barobo) ERROR: finishConnect() returned something not good.\n");
-    Mobot_disconnect(comms);
-    return rc;
-  }
-  if(
-      (comms->formFactor == MOBOTFORM_I) ||
-      (comms->formFactor == MOBOTFORM_L) 
-    )
-  {
-    comms->zigbeeAddr = Mobot_getAddress(comms);
-    /* See if we can get the serial id */
-    Mobot_getID(comms);
-  }
-  return 0;
-}
-
-#endif
 
 int getFormFactor(mobot_t* comms, int* form)
 {
@@ -1356,15 +1083,7 @@ int Mobot_disconnect(mobot_t* comms)
       } 
       break;
     case MOBOTCONNECT_TTY:
-#if 0
-      /* deprecated by libsfp */
-
-      MUTEX_LOCK(comms->sendBuf_lock);
       comms->connected = 0;
-      /* Signal the commsOut engine */
-      COND_SIGNAL(comms->sendBuf_cond);
-      MUTEX_UNLOCK(comms->sendBuf_lock);
-#endif
       /* Unpair all children */
       for(iter = comms->children; iter != NULL; iter = iter->next) {
         if(iter->mobot) {
@@ -1380,14 +1099,6 @@ int Mobot_disconnect(mobot_t* comms)
       g_disconnectSignal = 1;
       pthread_kill(*comms->commsThread, SIGINT);
       //while(g_disconnectSignal);
-#if 0
-      if(-1 == close(comms->socket)) {
-        rc = -1;
-        char barf[256];
-        strerror_r(errno, barf, 256);
-        fprintf(stderr, "(barobo) ERROR: close(): %s\n", barf);
-      }
-#endif
       dongleDisconnect(comms->dongle);
       free(comms->dongle);
       break;
@@ -1429,16 +1140,6 @@ int Mobot_disconnect(mobot_t* comms)
       comms->connected = 0;
       dongleWrite(comms->dongle, (uint8_t *)&rc, 1);
 
-      SetEvent(comms->cancelEvent);
-      CloseHandle(comms->commHandle);
-      THREAD_JOIN(*comms->commsThread);
-#if 0
-      /* deprecated by libsfp */
-
-      THREAD_JOIN(*comms->commsOutThread);
-#endif
-      Sleep(200);
-
       /* Unpair all children */
       for(iter = comms->children; iter != NULL; iter = iter->next) {
         if(iter->mobot) {
@@ -1446,6 +1147,17 @@ int Mobot_disconnect(mobot_t* comms)
           Mobot_disconnect(iter->mobot);
         }
       }
+      dongleDisconnect(comms->dongle);
+      // hlh: not used? Gonna have to figure out a better way of cancelling
+      // threads, anyway.
+      //SetEvent(comms->cancelEvent);
+      /* FIXME Once full link abstraction is accomplished, we can just do a
+       * linkTimedRead() or something like that in the commsEngine thread,
+       * which will enable us to periodically check a kill semaphore. Kind of
+       * a clunky way to do it, but nicely portable. */
+      THREAD_JOIN(*comms->commsThread);
+      Sleep(200);
+
       break;
     case MOBOTCONNECT_ZIGBEE:
       /* If we are the ghost-child of a TTY connected robot, we need to set
@@ -1599,14 +1311,6 @@ int Mobot_init(mobot_t* comms)
   strcat(path, "\\Barobo.config");
   comms->configFilePath = strdup(path);
 
-  /* Initialize overlapped communication shit */
-  comms->ovIncoming = (LPOVERLAPPED)malloc(sizeof(OVERLAPPED));
-  comms->ovOutgoing = (LPOVERLAPPED)malloc(sizeof(OVERLAPPED));
-  memset(comms->ovIncoming, 0, sizeof(OVERLAPPED));
-  memset(comms->ovOutgoing, 0, sizeof(OVERLAPPED));
-  comms->ovIncoming->hEvent = CreateEvent(0, 1, 0, 0);
-  comms->ovOutgoing->hEvent = CreateEvent(0, 1, 0, 0);
-  comms->cancelEvent = CreateEvent(0, 1, 0, 0);
 #else
   /* Try to open the barobo configuration file. */
 #define MAX_PATH 512
@@ -2187,14 +1891,6 @@ void* commsEngine(void* arg)
   struct sigaction int_handler;
   int_handler.sa_handler = sigint_handler;
   sigaction(SIGINT, &int_handler, 0);
-#else
-#if 0
-  DWORD readbytes = 0;
-  DWORD mask;
-  HANDLE events[2];
-  events[0] = comms->ovIncoming->hEvent;
-  events[1] = comms->cancelEvent;
-#endif
 #endif
   g_mobotThreadInitializing = 0;
   while(1) {
