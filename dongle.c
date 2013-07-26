@@ -473,7 +473,7 @@ int dongleConnect (MOBOTdongle *dongle, const char *ttyfilename) {
    * of dongleTimedReadRaw. dongleTimedReadRaw uses select, which can, per the
    * man page, return false positives. A false positive would then cause the
    * subsequent read call to block. */
-  dongle->fd = open(ttyfilename, O_NONBLOCK | O_RDWR | O_NOCTTY | O_ASYNC);
+  dongle->fd = open(ttyfilename, O_NONBLOCK | O_RDWR | O_NOCTTY);
   if(-1 == dongle->fd) {
     char errbuf[256];
     strerror_r(errno, errbuf, sizeof(errbuf));
