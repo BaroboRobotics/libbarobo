@@ -1650,12 +1650,16 @@ EXPORTCH int LinkbotI_turnLeft_chdl(void *varg) {
     ChVaList_t ap;
     class CLinkbotI *mobot;
     double angle;
+    double radius;
+    double tracklength;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     angle = Ch_VaArg(interp, ap, double);
-    retval = mobot->turnLeft(angle);
+    radius = Ch_VaArg(interp, ap, double);
+    tracklength = Ch_VaArg(interp, ap, double);
+    retval = mobot->turnLeft(angle, radius, tracklength);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -1665,12 +1669,16 @@ EXPORTCH int LinkbotI_turnLeftNB_chdl(void *varg) {
     ChVaList_t ap;
     class CLinkbotI *mobot;
     double angle;
+    double radius;
+    double tracklength;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     angle = Ch_VaArg(interp, ap, double);
-    retval = mobot->turnLeftNB(angle);
+    radius = Ch_VaArg(interp, ap, double);
+    tracklength = Ch_VaArg(interp, ap, double);
+    retval = mobot->turnLeftNB(angle, radius, tracklength);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -1680,12 +1688,16 @@ EXPORTCH int LinkbotI_turnRight_chdl(void *varg) {
     ChVaList_t ap;
     class CLinkbotI *mobot;
     double angle;
+    double radius;
+    double tracklength;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     angle = Ch_VaArg(interp, ap, double);
-    retval = mobot->turnRight(angle);
+    radius = Ch_VaArg(interp, ap, double);
+    tracklength = Ch_VaArg(interp, ap, double);
+    retval = mobot->turnRight(angle, radius, tracklength);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -1695,12 +1707,16 @@ EXPORTCH int LinkbotI_turnRightNB_chdl(void *varg) {
     ChVaList_t ap;
     class CLinkbotI *mobot;
     double angle;
+    double radius;
+    double tracklength;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     angle = Ch_VaArg(interp, ap, double);
-    retval = mobot->turnRightNB(angle);
+    radius = Ch_VaArg(interp, ap, double);
+    tracklength = Ch_VaArg(interp, ap, double);
+    retval = mobot->turnRightNB(angle, radius, tracklength);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -2784,12 +2800,16 @@ EXPORTCH int CMGI_turnLeft_chdl(void *varg) {
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
     double angle;
+    double radius;
+    double tracklength;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
     angle = Ch_VaArg(interp, ap, double);
-    retval = mobot->turnLeft(angle);
+    radius = Ch_VaArg(interp, ap, double);
+    tracklength = Ch_VaArg(interp, ap, double);
+    retval = mobot->turnLeft(angle, radius, tracklength);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -2799,12 +2819,16 @@ EXPORTCH int CMGI_turnLeftNB_chdl(void *varg) {
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
     double angle;
+    double radius;
+    double tracklength;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
     angle = Ch_VaArg(interp, ap, double);
-    retval = mobot->turnLeftNB(angle);
+    radius = Ch_VaArg(interp, ap, double);
+    tracklength = Ch_VaArg(interp, ap, double);
+    retval = mobot->turnLeftNB(angle, radius, tracklength);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -2814,12 +2838,16 @@ EXPORTCH int CMGI_turnRight_chdl(void *varg) {
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
     double angle;
+    double radius;
+    double tracklength;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
     angle = Ch_VaArg(interp, ap, double);
-    retval = mobot->turnRight(angle);
+    radius = Ch_VaArg(interp, ap, double);
+    tracklength= Ch_VaArg(interp, ap, double);
+    retval = mobot->turnRight(angle, radius, tracklength);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -2829,12 +2857,16 @@ EXPORTCH int CMGI_turnRightNB_chdl(void *varg) {
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
     double angle;
+    double radius;
+    double tracklength;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
     angle = Ch_VaArg(interp, ap, double);
-    retval = mobot->turnRightNB(angle);
+    radius = Ch_VaArg(interp, ap, double);
+    tracklength = Ch_VaArg(interp, ap, double);
+    retval = mobot->turnRightNB(angle, radius, tracklength);
     Ch_VaEnd(interp, ap);
     return retval;
 }
