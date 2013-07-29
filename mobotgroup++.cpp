@@ -928,34 +928,34 @@ int CMobotGroup::setTwoWheelRobotSpeed(double speed, double radius)
   return 0;
 }
 
-int CMobotGroup::turnLeft(double angle)
+int CMobotGroup::turnLeft(double angle, double radius, double tracklength)
 {
   int rc;
-  rc = turnLeftNB(angle);
+  rc = turnLeftNB(angle, radius, tracklength);
   if(rc) return rc;
   return moveWait();
 }
 
-int CMobotGroup::turnLeftNB(double angle)
+int CMobotGroup::turnLeftNB(double angle, double radius, double tracklength)
 {
   for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->turnLeftNB(angle);
+    _robots[i]->turnLeftNB(angle, radius, tracklength);
   }
   return 0;
 }
 
-int CMobotGroup::turnRight(double angle)
+int CMobotGroup::turnRight(double angle, double radius, double tracklength)
 {
   int rc;
-  rc = turnRightNB(angle);
+  rc = turnRightNB(angle, radius, tracklength);
   if(rc) return rc;
   return moveWait();
 }
 
-int CMobotGroup::turnRightNB(double angle)
+int CMobotGroup::turnRightNB(double angle, double radius, double tracklength)
 {
   for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->turnRightNB(angle);
+    _robots[i]->turnRightNB(angle, radius, tracklength);
   }
   return 0;
 }

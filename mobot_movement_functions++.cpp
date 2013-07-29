@@ -308,22 +308,22 @@ int CMobot::stopAllJoints()
   return Mobot_stopAllJoints(_comms);
 }
 
-int CMobot::turnLeft(double angle)
+int CMobot::turnLeft(double angle, double radius, double tracklength)
 {
-  return Mobot_turnLeft(_comms, DEG2RAD(angle));
+  return Mobot_turnLeft(_comms, DEG2RAD(angle), radius, tracklength);
 }
 
-int CMobot::turnLeftNB(double angle)
+int CMobot::turnLeftNB(double angle, double radius, double tracklength)
 {
-  return Mobot_turnLeftNB(_comms, DEG2RAD(angle));
+  return Mobot_turnLeftNB(_comms, DEG2RAD(angle), radius, tracklength);
 }
 
-int CMobot::turnRight(double angle)
+int CMobot::turnRight(double angle, double radius, double tracklength)
 {
-  return Mobot_turnRight(_comms, DEG2RAD(angle));
+  return Mobot_turnRight(_comms, DEG2RAD(angle), radius, tracklength);
 }
 
-int CMobot::turnRightNB(double angle)
+int CMobot::turnRightNB(double angle, double radius, double tracklength)
 {
-  return Mobot_turnRightNB(_comms, DEG2RAD(angle));
+  return Mobot_turnRightNB(_comms, DEG2RAD(angle), radius, tracklength);
 }
