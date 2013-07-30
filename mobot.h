@@ -979,7 +979,7 @@ DLLIMPORT int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], c
 DLLIMPORT int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address);
 #endif
 DLLIMPORT int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename);
-DLLIMPORT int Mobot_connectWithTTY_500kbaud(mobot_t* comms, const char* ttyfilename);
+DLLIMPORT int Mobot_connectWithTTYBaud(mobot_t* comms, const char* ttyfilename, unsigned long baud);
 DLLIMPORT int Mobot_connectWithSerialID(mobot_t* comms, const char* address);
 DLLIMPORT int Mobot_connectChild(mobot_t* parent, mobot_t* child);
 DLLIMPORT int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSerialID);

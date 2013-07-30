@@ -69,6 +69,14 @@
 #include "commands.h"
 #include <BaroboConfigFile.h>
 
+/* FIXME hlh: hacky, shouldn't be using statically-sized arrays for filenames
+ * if we can help it */
+#ifndef MAX_PATH
+#define MAX_PATH 512
+#endif
+
+#define MOBOT_BAUD 230400
+
 #define ABS(x) ((x)<0?-(x):(x))
 
 #define DEPRECATED(from, to) \
@@ -439,7 +447,11 @@ int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address)
 }
 #endif
 
-int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
+int Mobot_connectWithTTY(mobot_t *comms, const char *ttyfilename) {
+  return Mobot_connectWithTTYBaud(comms, ttyfilename, MOBOT_BAUD);
+}
+
+int Mobot_connectWithTTYBaud(mobot_t* comms, const char* ttyfilename, unsigned long baud)
 {
 #ifndef _WIN32
   FILE *lockfile;
@@ -477,9 +489,7 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   comms->dongle = malloc(sizeof(MOBOTdongle));
   assert(comms->dongle);
 
-  dongleInit(&comms->dongle);
-
-  int err = dongleConnect(comms->dongle, ttyfilename);
+  int err = dongleOpen(comms->dongle, ttyfilename, baud);
   if (err) {
     return err;
   }
@@ -1099,7 +1109,7 @@ int Mobot_disconnect(mobot_t* comms)
       g_disconnectSignal = 1;
       pthread_kill(*comms->commsThread, SIGINT);
       //while(g_disconnectSignal);
-      dongleDisconnect(comms->dongle);
+      dongleClose(comms->dongle);
       free(comms->dongle);
       break;
     case MOBOTCONNECT_ZIGBEE:
@@ -1147,7 +1157,7 @@ int Mobot_disconnect(mobot_t* comms)
           Mobot_disconnect(iter->mobot);
         }
       }
-      dongleDisconnect(comms->dongle);
+      dongleClose(comms->dongle);
       // hlh: not used? Gonna have to figure out a better way of cancelling
       // threads, anyway.
       //SetEvent(comms->cancelEvent);
@@ -1313,7 +1323,6 @@ int Mobot_init(mobot_t* comms)
 
 #else
   /* Try to open the barobo configuration file. */
-#define MAX_PATH 512
   char path[MAX_PATH];
   strcpy(path, getenv("HOME"));
   strcat(path, "/.Barobo.config");
