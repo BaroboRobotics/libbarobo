@@ -4,6 +4,38 @@ cmake_minimum_required(VERSION 2.6)
 #include_directories(../opende/sys/include)
 
 set(CMAKE_C_FLAGS --std=gnu99)
+set(SRCS
+      mobot.c
+      mobot++.cpp
+      mobot_get_functions.c
+      mobot_get_functions++.cpp
+      mobotgroup++.cpp
+      mobotigroup++.cpp
+      mobotlgroup++.cpp
+      mobot_motion_functions.c
+      mobot_motion_functions++.cpp
+      mobot_movement_functions.c
+      mobot_movement_functions++.cpp
+      mobot_record_functions.c
+      mobot_record_functions++.cpp
+      mobot_set_functions.c
+      mobot_set_functions++.cpp
+      moboti++.cpp
+      moboti_get_functions++.cpp
+      moboti_motion_functions++.cpp
+      moboti_movement_functions++.cpp
+      moboti_record_functions++.cpp
+      moboti_set_functions++.cpp
+      mobotl++.cpp
+      mobotl_get_functions++.cpp
+      mobotl_motion_functions++.cpp
+      mobotl_movement_functions++.cpp
+      mobotl_record_functions++.cpp
+      mobotl_set_functions++.cpp
+      dongle.c
+      libsfp/serial_framing_protocol.c
+      libsfp/net_byte_order.c
+      )
 
 project(LIBIMOBOTCOMMS)
 
@@ -21,68 +53,8 @@ if(CMAKE_HOST_WIN32)
   #include(FindPkgConfig)
   #pkg_check_modules(MXML REQUIRED mxml)
   add_definitions(-D_WIN32_WINNT=0x502 -DENABLE_BLUETOOTH)
-	add_library(barobo SHARED
-      mobot.c
-      mobot++.cpp
-      mobot_get_functions.c
-      mobot_get_functions++.cpp
-      mobotgroup++.cpp
-      mobotigroup++.cpp
-      mobotlgroup++.cpp
-      mobot_motion_functions.c
-      mobot_motion_functions++.cpp
-      mobot_movement_functions.c
-      mobot_movement_functions++.cpp
-      mobot_record_functions.c
-      mobot_record_functions++.cpp
-      mobot_set_functions.c
-      mobot_set_functions++.cpp
-      moboti++.cpp
-      moboti_get_functions++.cpp
-      moboti_motion_functions++.cpp
-      moboti_movement_functions++.cpp
-      moboti_record_functions++.cpp
-      moboti_set_functions++.cpp
-      mobotl++.cpp
-      mobotl_get_functions++.cpp
-      mobotl_motion_functions++.cpp
-      mobotl_movement_functions++.cpp
-      mobotl_record_functions++.cpp
-      mobotl_set_functions++.cpp
-      libsfp/serial_framing_protocol.c
-      libsfp/net_byte_order.c
-	  )
-	add_library(baroboStatic STATIC
-      mobot.c
-      mobot++.cpp
-      mobot_get_functions.c
-      mobot_get_functions++.cpp
-      mobotgroup++.cpp
-      mobotigroup++.cpp
-      mobotlgroup++.cpp
-      mobot_motion_functions.c
-      mobot_motion_functions++.cpp
-      mobot_movement_functions.c
-      mobot_movement_functions++.cpp
-      mobot_record_functions.c
-      mobot_record_functions++.cpp
-      mobot_set_functions.c
-      mobot_set_functions++.cpp
-      moboti++.cpp
-      moboti_get_functions++.cpp
-      moboti_motion_functions++.cpp
-      moboti_movement_functions++.cpp
-      moboti_record_functions++.cpp
-      moboti_set_functions++.cpp
-      mobotl++.cpp
-      mobotl_get_functions++.cpp
-      mobotl_motion_functions++.cpp
-      mobotl_movement_functions++.cpp
-      mobotl_record_functions++.cpp
-      mobotl_set_functions++.cpp
-      libsfp/serial_framing_protocol.c
-      libsfp/net_byte_order.c
-	  )
+  add_library(barobo SHARED ${SRCS})
+  add_library(baroboStatic STATIC ${SRCS})
   if( 
       (CMAKE_GENERATOR MATCHES "Visual Studio") OR
       (CMAKE_GENERATOR MATCHES "NMake")
@@ -110,70 +82,8 @@ if(CMAKE_HOST_WIN32)
   install(FILES mobot.h DESTINATION include)
 elseif(CMAKE_HOST_APPLE)
   set(CMAKE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib")
-	add_library(barobo SHARED
-      mobot.c
-      mobot++.cpp
-      mobot_get_functions.c
-      mobot_get_functions++.cpp
-      mobotgroup++.cpp
-      mobotigroup++.cpp
-      mobotlgroup++.cpp
-      mobot_motion_functions.c
-      mobot_motion_functions++.cpp
-      mobot_movement_functions.c
-      mobot_movement_functions++.cpp
-      mobot_record_functions.c
-      mobot_record_functions++.cpp
-      mobot_set_functions.c
-      mobot_set_functions++.cpp
-      moboti++.cpp
-      moboti_get_functions++.cpp
-      moboti_motion_functions++.cpp
-      moboti_movement_functions++.cpp
-      moboti_record_functions++.cpp
-      moboti_set_functions++.cpp
-      mobotl++.cpp
-      mobotl_get_functions++.cpp
-      mobotl_motion_functions++.cpp
-      mobotl_movement_functions++.cpp
-      mobotl_record_functions++.cpp
-      mobotl_set_functions++.cpp
-      dongle.c
-      libsfp/serial_framing_protocol.c
-      libsfp/net_byte_order.c
-	  )
-	add_library(baroboStatic STATIC 
-      mobot.c
-      mobot++.cpp
-      mobot_get_functions.c
-      mobot_get_functions++.cpp
-      mobotgroup++.cpp
-      mobotigroup++.cpp
-      mobotlgroup++.cpp
-      mobot_motion_functions.c
-      mobot_motion_functions++.cpp
-      mobot_movement_functions.c
-      mobot_movement_functions++.cpp
-      mobot_record_functions.c
-      mobot_record_functions++.cpp
-      mobot_set_functions.c
-      mobot_set_functions++.cpp
-      moboti++.cpp
-      moboti_get_functions++.cpp
-      moboti_motion_functions++.cpp
-      moboti_movement_functions++.cpp
-      moboti_record_functions++.cpp
-      moboti_set_functions++.cpp
-      mobotl++.cpp
-      mobotl_get_functions++.cpp
-      mobotl_motion_functions++.cpp
-      mobotl_movement_functions++.cpp
-      mobotl_record_functions++.cpp
-      mobotl_set_functions++.cpp
-      dongle.c
-      libsfp/serial_framing_protocol.c
-      libsfp/net_byte_order.c
-	  )
+  add_library(barobo SHARED ${SRCS})
+  add_library(baroboStatic STATIC ${SRCS})
 	target_link_libraries(barobo pthread baroboconfigfile)
 	target_link_libraries(baroboStatic pthread baroboconfigfile)
   set_target_properties(barobo PROPERTIES
@@ -183,72 +93,10 @@ elseif(CMAKE_HOST_APPLE)
   install(FILES mobot.h DESTINATION include)
   add_subdirectory(demos)
 else(CMAKE_HOST_WIN32)
-  #add_subdirectory(chmobot_src)
+  add_subdirectory(chmobot_src)
   add_definitions(-DENABLE_BLUETOOTH)
-	add_library(baroboStatic STATIC
-      mobot.c
-      mobot++.cpp
-      mobot_get_functions.c
-      mobot_get_functions++.cpp
-      mobotgroup++.cpp
-      mobotigroup++.cpp
-      mobotlgroup++.cpp
-      mobot_motion_functions.c
-      mobot_motion_functions++.cpp
-      mobot_movement_functions.c
-      mobot_movement_functions++.cpp
-      mobot_record_functions.c
-      mobot_record_functions++.cpp
-      mobot_set_functions.c
-      mobot_set_functions++.cpp
-      moboti++.cpp
-      moboti_get_functions++.cpp
-      moboti_motion_functions++.cpp
-      moboti_movement_functions++.cpp
-      moboti_record_functions++.cpp
-      moboti_set_functions++.cpp
-      mobotl++.cpp
-      mobotl_get_functions++.cpp
-      mobotl_motion_functions++.cpp
-      mobotl_movement_functions++.cpp
-      mobotl_record_functions++.cpp
-      mobotl_set_functions++.cpp
-      dongle.c
-      libsfp/serial_framing_protocol.c
-      libsfp/net_byte_order.c
-	  )
-	add_library(barobo SHARED 
-      mobot.c
-      mobot++.cpp
-      mobot_get_functions.c
-      mobot_get_functions++.cpp
-      mobotgroup++.cpp
-      mobotigroup++.cpp
-      mobotlgroup++.cpp
-      mobot_motion_functions.c
-      mobot_motion_functions++.cpp
-      mobot_movement_functions.c
-      mobot_movement_functions++.cpp
-      mobot_record_functions.c
-      mobot_record_functions++.cpp
-      mobot_set_functions.c
-      mobot_set_functions++.cpp
-      moboti++.cpp
-      moboti_get_functions++.cpp
-      moboti_motion_functions++.cpp
-      moboti_movement_functions++.cpp
-      moboti_record_functions++.cpp
-      moboti_set_functions++.cpp
-      mobotl++.cpp
-      mobotl_get_functions++.cpp
-      mobotl_motion_functions++.cpp
-      mobotl_movement_functions++.cpp
-      mobotl_record_functions++.cpp
-      mobotl_set_functions++.cpp
-      dongle.c
-      libsfp/serial_framing_protocol.c
-      libsfp/net_byte_order.c
-	  )
+  add_library(baroboStatic STATIC ${SRCS})
+  add_library(barobo SHARED ${SRCS})
   set_target_properties(baroboStatic PROPERTIES COMPILE_FLAGS "-fPIC")
 	target_link_libraries(barobo bluetooth pthread rt baroboconfigfile mxml)
 	target_link_libraries(baroboStatic bluetooth pthread rt baroboconfigfile mxml)
