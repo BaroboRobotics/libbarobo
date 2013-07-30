@@ -12,6 +12,9 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+static void dongleInit (MOBOTdongle *dongle);
+static void dongleFini (MOBOTdongle *dongle);
+
 static ssize_t dongleWriteRaw (MOBOTdongle *dongle, const uint8_t *buf, size_t len) {
   ssize_t err;
 #ifdef _WIN32
@@ -345,37 +348,6 @@ static int dongleSetupSFP (MOBOTdongle *dongle) {
   return 0;
 }
 
-void dongleDisconnect (MOBOTdongle *dongle) {
-  if (!dongle) {
-    return;
-  }
-
-  if (MOBOT_DONGLE_FRAMING_SFP == dongle->framing) {
-    /* sfpInit effectively disconnects */
-    sfpInit(dongle->sfpContext);
-    MUTEX_DESTROY(dongle->sfpTxLock);
-    free(dongle->sfpTxLock);
-    free(dongle->sfpContext);
-  }
-
-#ifdef _WIN32
-  BOOL b = CloseHandle(dongle->handle);
-  if (!b) {
-    fprintf(stderr, "(barobo) ERROR: in dongleDisconnect, "
-        "CloseHandle(): %d\n", GetLastError());
-  }
-#else
-  int err = close(dongle->fd);
-  if (-1 == err) {
-    char errbuf[256];
-    strerror_r(errno, errbuf, sizeof(errbuf));
-    fprintf(stderr, "(barobo) ERROR: in dongleDisconnect, close(): %s\n", errbuf);
-  }
-#endif
-
-  dongleFini(dongle);
-}
-
 static void dongleInit (MOBOTdongle *dongle) {
   dongle->framing = MOBOT_DONGLE_FRAMING_UNKNOWN;
   /* We don't malloc() sfpContext yet, because we don't know if we'll actually
@@ -425,7 +397,7 @@ static void dongleFini (MOBOTdongle *dongle) {
 
 /* WIN32 implementation of dongleConnect. */
 
-int dongleConnect (MOBOTdongle *dongle, const char *ttyfilename) {
+int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud) {
   assert(dongle);
   assert(ttyfilename);
 
@@ -458,11 +430,13 @@ int dongleConnect (MOBOTdongle *dongle, const char *ttyfilename) {
   DCB dcb;
   FillMemory(&dcb, sizeof(dcb), 0);
   dcb.DCBlength = sizeof(dcb);
-  if (!BuildCommDCB("230400,n,8,1", &dcb)) {
+  char dcbconf[64];
+  snprintf(dcbconf, sizeof(dcbconf), "%lu,n,8,1", baud);
+  if (!BuildCommDCB(dcbconf, &dcb)) {
     fprintf(stderr, "Could not build DCB.\n");
     return -1;
   }
-  dcb.BaudRate = 230400;
+  dcb.BaudRate = baud;
 
   if (!SetCommState(dongle->handle, &dcb)) {
     fprintf(stderr, "Could not set Comm State to new DCB settings.\n");
@@ -476,14 +450,19 @@ int dongleConnect (MOBOTdongle *dongle, const char *ttyfilename) {
 
 /* POSIX implementation of dongleConnect. */
 
-/* FIXME figure out what this is all about */
-#ifdef __MACH__
-#define BAUD 500000
-#else
-#define BAUD B230400
-#endif
+static speed_t baud_to_speed_t (unsigned long baud) {
+  /* Oh, the humanity */
+  switch (baud) {
+    case 230400:
+      return B230400;
+    case 500000:
+      return B500000;
+    default:
+      return B0;
+  }
+}
 
-int dongleConnect (MOBOTdongle *dongle, const char *ttyfilename) {
+int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud) {
   assert(dongle);
   assert(ttyfilename);
 
@@ -531,9 +510,12 @@ int dongleConnect (MOBOTdongle *dongle, const char *ttyfilename) {
 
   // Communication speed
 
-  cfsetspeed(&term, BAUD);
-  cfsetispeed(&term, BAUD);
-  cfsetospeed(&term, BAUD);
+  speed_t speed = baud_to_speed_t(baud);
+  assert(B0 != speed);
+
+  cfsetspeed(&term, speed);
+  cfsetispeed(&term, speed);
+  cfsetospeed(&term, speed);
   int status;
 
   if(status = tcsetattr(dongle->fd, TCSANOW, &term)) {
@@ -542,11 +524,11 @@ int dongleConnect (MOBOTdongle *dongle, const char *ttyfilename) {
     fprintf(stderr, "(barobo) ERROR: Configuring %s: %s.\n", ttyfilename, errbuf);
   }
   tcgetattr(dongle->fd, &term);
-  if(cfgetispeed(&term) != BAUD) {
+  if(cfgetispeed(&term) != speed) {
     fprintf(stderr, "(barobo) ERROR: Unable to set %s input speed.\n", ttyfilename);
     exit(0);
   }
-  if(cfgetospeed(&term) != BAUD) {
+  if(cfgetospeed(&term) != speed) {
     fprintf(stderr, "(barobo) ERROR: Unable to set %s output speed.\n", ttyfilename);
     exit(0);
   }
@@ -558,7 +540,7 @@ int dongleConnect (MOBOTdongle *dongle, const char *ttyfilename) {
   if (MOBOT_DONGLE_FRAMING_SFP == dongle->framing) {
     status = dongleSetupSFP(dongle);
     if (-1 == status) {
-      dongleDisconnect(dongle);
+      dongleClose(dongle);
       return -1;
     }
   }
@@ -566,4 +548,37 @@ int dongleConnect (MOBOTdongle *dongle, const char *ttyfilename) {
   //dongle->status = MOBOT_LINK_STATUS_UP;
 
   return 0;
+}
+
+#endif
+
+void dongleClose (MOBOTdongle *dongle) {
+  if (!dongle) {
+    return;
+  }
+
+  if (MOBOT_DONGLE_FRAMING_SFP == dongle->framing) {
+    /* sfpInit effectively disconnects */
+    sfpInit(dongle->sfpContext);
+    MUTEX_DESTROY(dongle->sfpTxLock);
+    free(dongle->sfpTxLock);
+    free(dongle->sfpContext);
+  }
+
+#ifdef _WIN32
+  BOOL b = CloseHandle(dongle->handle);
+  if (!b) {
+    fprintf(stderr, "(barobo) ERROR: in dongleClose, "
+        "CloseHandle(): %d\n", GetLastError());
+  }
+#else
+  int err = close(dongle->fd);
+  if (-1 == err) {
+    char errbuf[256];
+    strerror_r(errno, errbuf, sizeof(errbuf));
+    fprintf(stderr, "(barobo) ERROR: in dongleClose, close(): %s\n", errbuf);
+  }
+#endif
+
+  dongleFini(dongle);
 }
