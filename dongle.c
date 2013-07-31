@@ -27,7 +27,7 @@ static ssize_t dongleWriteRaw (MOBOTdongle *dongle, const uint8_t *buf, size_t l
    * frequently. I don't know if this is an issue or not. */
   if(!WriteFile(
         dongle->handle, 
-        octets, 
+        buf, 
         len,
         NULL,
         dongle->ovOutgoing)) {
@@ -35,7 +35,7 @@ static ssize_t dongleWriteRaw (MOBOTdongle *dongle, const uint8_t *buf, size_t l
   }
   DWORD bytesWritten;
   GetOverlappedResult(dongle->handle, dongle->ovOutgoing, &bytesWritten, TRUE);
-  ResetEvent(comms->ovOutgoing.hEvent);
+  ResetEvent(dongle->ovOutgoing.hEvent);
 #else
   err = write(dongle->fd, buf, len);
 
@@ -67,7 +67,7 @@ static DWORD dongleTimedReadRawWin32GetResult (MOBOTdongle *dongle) {
   BOOL b = GetOverlappedResult(dongle->handle, dongle->ovIncoming, &readbytes, FALSE);
 
   if (!b) {
-    err = GetLastError();
+    int err = GetLastError();
     if (ERROR_IO_INCOMPLETE == err) {
       /* I suppose this is analagous to the POSIX select() false positive
        * case. It may be an impossible state in Windows, but I'll treat it
@@ -372,14 +372,14 @@ static void dongleInit (MOBOTdongle *dongle) {
 
   /* Initialize overlapped communication shit */
   if (!dongle->ovIncoming) {
-    comms->ovIncoming = malloc(sizeof(OVERLAPPED));
-    memset(comms->ovIncoming, 0, sizeof(OVERLAPPED));
-    comms->ovIncoming.hEvent = CreateEvent(0, 1, 0, 0);
+    dongle->ovIncoming = malloc(sizeof(OVERLAPPED));
+    memset(dongle->ovIncoming, 0, sizeof(OVERLAPPED));
+    dongle->ovIncoming.hEvent = CreateEvent(0, 1, 0, 0);
   }
   if (!dongle->ovOutgoing) {
-    comms->ovOutgoing = malloc(sizeof(OVERLAPPED));
-    memset(comms->ovOutgoing, 0, sizeof(OVERLAPPED));
-    comms->ovOutgoing.hEvent = CreateEvent(0, 1, 0, 0);
+    dongle->ovOutgoing = malloc(sizeof(OVERLAPPED));
+    memset(dongle->ovOutgoing, 0, sizeof(OVERLAPPED));
+    dongle->ovOutgoing.hEvent = CreateEvent(0, 1, 0, 0);
   }
 
 #else
