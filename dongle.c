@@ -13,6 +13,26 @@
 #include <fcntl.h>
 #endif
 
+#ifdef _WIN32
+static void dongleErrorWin32 (LPCTSTR msg, DWORD err) {
+  LPVOID errorText;
+
+  FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM
+      | FORMAT_MESSAGE_ALLOCATE_BUFFER
+      | FORMAT_MESSAGE_IGNORE_INSERTS,
+      NULL,
+      err,
+      MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+      (LPTSTR)&errorText,
+      0,
+      NULL);
+
+  assert(errorText);
+  _ftprintf(stderr, _T("%s: %s\n"), msg, (LPCTSTR)errorText);
+  LocalFree(errorText);
+}
+#endif
+
 static void dongleInit (MOBOTdongle *dongle);
 static void dongleFini (MOBOTdongle *dongle);
 
@@ -31,10 +51,14 @@ static ssize_t dongleWriteRaw (MOBOTdongle *dongle, const uint8_t *buf, size_t l
         len,
         NULL,
         dongle->ovOutgoing)) {
-    //printf("Error writing. %d \n", GetLastError());
+    dongleErrorWin32(_T("(barobo) ERROR: in dongleWriteRaw, "
+          "WriteFile()"), GetLastError());
   }
   DWORD bytesWritten;
-  GetOverlappedResult(dongle->handle, dongle->ovOutgoing, &bytesWritten, TRUE);
+  if (!GetOverlappedResult(dongle->handle, dongle->ovOutgoing, &bytesWritten, TRUE)) {
+    dongleErrorWin32(_T("(barobo) ERROR: in dongleWriteRaw, "
+          "GetOverlappedResult()", GetLastError());
+  }
   ResetEvent(dongle->ovOutgoing->hEvent);
 #else
   err = write(dongle->fd, buf, len);
@@ -77,8 +101,8 @@ static DWORD dongleTimedReadRawWin32GetResult (MOBOTdongle *dongle) {
       readbytes = 0;
     }
     else {
-      fprintf(stderr, "(barobo) ERROR: in dongleTimedReadRaw, "
-          "GetOverlappedResult(): %d\n", GetLastError());
+      dongleErrorWin32(_T("(barobo) ERROR: in dongleTimedReadRaw, "
+          "GetOverlappedResult()\n"), err);
       readbytes = -1;
     }
   }
@@ -99,8 +123,8 @@ static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len
 
   DWORD err = GetLastError();
   if (ERROR_IO_PENDING != err) {
-    fprintf(stderr, "(barobo) ERROR: in dongleTimedReadRaw, "
-        "ReadFile(): %d\n", err);
+    dongleErrorWin32(_T("(barobo) ERROR: in dongleTimedReadRaw, "
+        "ReadFile()"), err);
     return -1;
   }
 
@@ -115,14 +139,14 @@ static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len
     case WAIT_TIMEOUT:
       b = CancelIo(dongle->handle);
       if (!b) {
-        fprintf(stderr, "(barobo) WARNING: in dongleTimedReadRaw, "
-            "CancelIo(): %d\n", GetLastError());
+        dongleErrorWin32(_T("(barobo) WARNING: in dongleTimedReadRaw, "
+            "CancelIo()"), GetLastError());
       }
       readbytes = 0;
       break;
     case WAIT_FAILED:
-      fprintf(stderr, "(barobo) ERROR: in dongleTimedReadraw, "
-          "MsgWaitForMultipleObjects(): %d\n", GetLastError());
+      dongleErrorWin32(_T("(barobo) ERROR: in dongleTimedReadraw, "
+          "MsgWaitForMultipleObjects()"), GetLastError());
       readbytes = -1;
       break;
     default:
@@ -433,11 +457,11 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
       OPEN_EXISTING,
       FILE_FLAG_OVERLAPPED,
       0 );
-  free(tty);
   if(dongle->handle == INVALID_HANDLE_VALUE) {
-    //fprintf(stderr, "Error connecting to COM port: %s\n", ttyfilename);
+    dongleErrorWin32(_T("(barobo) ERROR: in dongleOpen, CreateFile()"), GetLastError());
     return -1;
   }
+  free(tty);
   /* Adjust settings */
   DCB dcb;
   FillMemory(&dcb, sizeof(dcb), 0);
@@ -445,13 +469,12 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
   char dcbconf[64];
   snprintf(dcbconf, sizeof(dcbconf), "%lu,n,8,1", baud);
   if (!BuildCommDCB(dcbconf, &dcb)) {
-    fprintf(stderr, "Could not build DCB.\n");
+    dongleErrorWin32(_T("(barobo) ERROR: in dongleOpen, BuildCommDCB()"), GetLastError());
     return -1;
   }
   dcb.BaudRate = baud;
-
   if (!SetCommState(dongle->handle, &dcb)) {
-    fprintf(stderr, "Could not set Comm State to new DCB settings.\n");
+    dongleErrorWin32(_T("(barobo) ERROR: in dongleOpen, SetCommState()"), GetLastError());
     return -1;
   }
   
@@ -580,8 +603,7 @@ void dongleClose (MOBOTdongle *dongle) {
 #ifdef _WIN32
   BOOL b = CloseHandle(dongle->handle);
   if (!b) {
-    fprintf(stderr, "(barobo) ERROR: in dongleClose, "
-        "CloseHandle(): %d\n", GetLastError());
+    dongleErrorWin32(_T("(barobo) ERROR: in dongleClose, CloseHandle()"), GetLastError());
   }
 #else
   int err = close(dongle->fd);
