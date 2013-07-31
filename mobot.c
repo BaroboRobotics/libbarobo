@@ -453,12 +453,12 @@ int Mobot_connectWithTTY(mobot_t *comms, const char *ttyfilename) {
 
 int Mobot_connectWithTTYBaud(mobot_t* comms, const char* ttyfilename, unsigned long baud)
 {
+  int status;
 #ifndef _WIN32
   FILE *lockfile;
   char *filename = strdup(ttyfilename);
   char lockfileName[MAX_PATH];
   int pid;
-  int status;
   printf("(barobo) INFO: Connecting to %s\n", ttyfilename);
   /* Open the lock file, if it exists */
   sprintf(lockfileName, "/tmp/%s.lock", basename(filename));
@@ -1928,10 +1928,10 @@ void* commsEngine(void* arg)
           fprintf(stderr, "(barobo) ERROR: read(): %s\n", barf);
           break;
         }
+      }
 #else
       err = recvfrom(comms->socket, (char*)&byte, 1, 0, (struct sockaddr*)0, 0);
 #endif
-      }
     }
     /* If we are no longer connected, just return */
     if(comms->connected == 0) {
