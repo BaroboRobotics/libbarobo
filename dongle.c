@@ -6,11 +6,12 @@
 #include <string.h>
 #include <errno.h>
 
+#ifndef _WIN32
 #include <unistd.h>
 #include <termios.h>
-#include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#endif
 
 static void dongleInit (MOBOTdongle *dongle);
 static void dongleFini (MOBOTdongle *dongle);
@@ -371,12 +372,12 @@ static void dongleInit (MOBOTdongle *dongle) {
 
   /* Initialize overlapped communication shit */
   if (!dongle->ovIncoming) {
-    comms->ovIncoming = (LPOVERLAPPED)malloc(sizeof(OVERLAPPED));
+    comms->ovIncoming = malloc(sizeof(OVERLAPPED));
     memset(comms->ovIncoming, 0, sizeof(OVERLAPPED));
     comms->ovIncoming.hEvent = CreateEvent(0, 1, 0, 0);
   }
   if (!dongle->ovOutgoing) {
-    comms->ovOutgoing = (LPOVERLAPPED)malloc(sizeof(OVERLAPPED));
+    comms->ovOutgoing = malloc(sizeof(OVERLAPPED));
     memset(comms->ovOutgoing, 0, sizeof(OVERLAPPED));
     comms->ovOutgoing.hEvent = CreateEvent(0, 1, 0, 0);
   }

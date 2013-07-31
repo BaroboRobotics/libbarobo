@@ -4,9 +4,10 @@
 #include "thread_macros.h"
 #include "libsfp/serial_framing_protocol.h"
 
+#include <sys/types.h>
+
 #ifdef _WIN32
-#include <BaseTsd.h>
-typedef SSIZE_T ssize_t;
+#include <Windows.h>
 #endif
 
 typedef enum MOBOTdongleFraming {
@@ -16,7 +17,16 @@ typedef enum MOBOTdongleFraming {
 } MOBOTdongleFraming;
 
 typedef struct MOBOTdongle {
+#ifdef _WIN32
+  /* XXX hlh: there was some !defined(CH) bullshit here in this code's
+   * original incarnation in mobot.h. The else case declared these identifiers
+   * as void pointers. */
+  HANDLE handle;
+  LPOVERLAPPED ovIncoming;
+  LPOVERLAPPED ovOutgoing;
+#else
   int fd;
+#endif
   MOBOTdongleFraming framing;
   SFPcontext *sfpContext;
   MUTEX_T *sfpTxLock;

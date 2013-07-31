@@ -202,17 +202,6 @@ typedef struct mobotInfo_s
 typedef struct mobot_s
 {
   int socket;
-#if defined (_WIN32) && !defined(_CH_)
-  HANDLE commHandle;
-  OVERLAPPED *ovIncoming;
-  OVERLAPPED *ovOutgoing;
-  HANDLE cancelEvent;
-#else
-  void* commHandle;
-  void* ovIncoming;
-  void* ovOutgoing;
-  void* cancelComms;
-#endif
   int connected;
   mobotConnectionMode_t connectionMode;
 #ifndef __MACH__
