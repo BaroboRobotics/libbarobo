@@ -83,6 +83,14 @@ void* commsOutEngine(void* arg);
 
 bcf_t* g_bcf;
 
+char* mc_strdup(const char* str)
+{
+  char* s;
+  s = (char*)malloc(sizeof(char)*(strlen(str)+1));
+  strcpy(s, str);
+  return s;
+}
+
 double deg2rad(double deg)
 {
   return deg * M_PI / 180.0;

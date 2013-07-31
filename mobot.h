@@ -107,6 +107,8 @@ typedef unsigned short uint16_t;
 
 #ifdef _MSYS
 #undef _WIN32
+#define strdup(x) mc_strdup(x)
+char* mc_strdup(const char* str);
 #endif
 
 #ifndef _WIN32
