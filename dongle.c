@@ -264,9 +264,14 @@ static void sfp_unlock (void *data) {
   MUTEX_UNLOCK((MUTEX_T *)data);
 }
 
-static ssize_t sfp_write (uint8_t *octets, size_t len, void *data) {
+static int sfp_write (uint8_t *octets, size_t len, size_t *outlen, void *data) {
   MOBOTdongle *dongle = (MOBOTdongle *)data;
-  return dongleWriteRaw(dongle, octets, len);
+  ssize_t ret = dongleWriteRaw(dongle, octets, len);
+  if (outlen && ret >= 0) {
+    *outlen = ret;
+    ret = 0;
+  }
+  return ret;
 }
 
 ssize_t dongleWrite (MOBOTdongle *dongle, const uint8_t *buf, size_t len) {
@@ -274,7 +279,7 @@ ssize_t dongleWrite (MOBOTdongle *dongle, const uint8_t *buf, size_t len) {
   assert(buf);
 
   if (MOBOT_DONGLE_FRAMING_SFP == dongle->framing) {
-    sfpWritePacket(dongle->sfpContext, buf, len);
+    sfpWritePacket(dongle->sfpContext, buf, len, NULL);
     return len;
   }
   else {
@@ -296,8 +301,14 @@ ssize_t dongleRead (MOBOTdongle *dongle, uint8_t *buf, size_t len) {
     }
 
     if (MOBOT_DONGLE_FRAMING_SFP == dongle->framing) {
-      ssize_t ret = sfpDeliverOctet(dongle->sfpContext, byte, buf, len);
-      if (ret) {
+      size_t outlen = 0;
+      int ret = sfpDeliverOctet(dongle->sfpContext, byte, buf, len, &outlen);
+      if (ret > 0) {
+        /* We got a packet. :) */
+        return outlen;
+      }
+      else if (ret < 0) {
+        /* We got an error. :( */
         return ret;
       }
     }
@@ -342,7 +353,7 @@ static int dongleSetupSFP (MOBOTdongle *dongle) {
       return -1;
     }
     assert(1 == err);
-    sfpDeliverOctet(dongle->sfpContext, byte, NULL, 0);
+    sfpDeliverOctet(dongle->sfpContext, byte, NULL, 0, NULL);
   }
 
   return 0;

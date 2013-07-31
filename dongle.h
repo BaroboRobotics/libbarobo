@@ -4,6 +4,11 @@
 #include "thread_macros.h"
 #include "libsfp/serial_framing_protocol.h"
 
+#ifdef _WIN32
+#include <BaseTsd.h>
+typedef SSIZE_T ssize_t;
+#endif
+
 typedef enum MOBOTdongleFraming {
   MOBOT_DONGLE_FRAMING_UNKNOWN,
   MOBOT_DONGLE_FRAMING_NONE,
