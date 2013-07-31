@@ -35,7 +35,7 @@ static ssize_t dongleWriteRaw (MOBOTdongle *dongle, const uint8_t *buf, size_t l
   }
   DWORD bytesWritten;
   GetOverlappedResult(dongle->handle, dongle->ovOutgoing, &bytesWritten, TRUE);
-  ResetEvent(dongle->ovOutgoing.hEvent);
+  ResetEvent(dongle->ovOutgoing->hEvent);
 #else
   err = write(dongle->fd, buf, len);
 
@@ -104,7 +104,7 @@ static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len
     return -1;
   }
 
-  DWORD code = MsgWaitForMultipleObjects(1, &dongle->ovIncoming.hEvent, FALSE,
+  DWORD code = MsgWaitForMultipleObjects(1, &dongle->ovIncoming->hEvent, FALSE,
       delay, QS_ALLINPUT);
 
   switch (code) {
@@ -374,12 +374,12 @@ static void dongleInit (MOBOTdongle *dongle) {
   if (!dongle->ovIncoming) {
     dongle->ovIncoming = malloc(sizeof(OVERLAPPED));
     memset(dongle->ovIncoming, 0, sizeof(OVERLAPPED));
-    dongle->ovIncoming.hEvent = CreateEvent(0, 1, 0, 0);
+    dongle->ovIncoming->hEvent = CreateEvent(0, 1, 0, 0);
   }
   if (!dongle->ovOutgoing) {
     dongle->ovOutgoing = malloc(sizeof(OVERLAPPED));
     memset(dongle->ovOutgoing, 0, sizeof(OVERLAPPED));
-    dongle->ovOutgoing.hEvent = CreateEvent(0, 1, 0, 0);
+    dongle->ovOutgoing->hEvent = CreateEvent(0, 1, 0, 0);
   }
 
 #else
@@ -395,11 +395,11 @@ static void dongleFini (MOBOTdongle *dongle) {
 
 #ifdef _WIN32
   if (dongle->ovIncoming) {
-    CloseHandle(dongle->ovIncoming.hEvent);
+    CloseHandle(dongle->ovIncoming->hEvent);
     free(dongle->ovIncoming);
   }
   if (dongle->ovOutgoing) {
-    CloseHandle(dongle->ovOutgoing.hEvent);
+    CloseHandle(dongle->ovOutgoing->hEvent);
     free(dongle->ovOutgoing);
   }
 #endif
