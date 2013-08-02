@@ -11,7 +11,10 @@
 #include <termios.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#else
+#include <tchar.h>
 #endif
+
 
 #ifdef _WIN32
 static void dongleErrorWin32 (LPCTSTR msg, DWORD err) {
@@ -37,7 +40,8 @@ static void dongleInit (MOBOTdongle *dongle);
 static void dongleFini (MOBOTdongle *dongle);
 
 static ssize_t dongleWriteRaw (MOBOTdongle *dongle, const uint8_t *buf, size_t len) {
-  ssize_t err;
+  assert(dongle && buf);
+  ssize_t ret;
 #ifdef _WIN32
   /* hlh: note that the original incarnation of this code segment in commsOutEngine
    * included the comment, "Write one whole message at a time". While libsfp
@@ -45,32 +49,46 @@ static ssize_t dongleWriteRaw (MOBOTdongle *dongle, const uint8_t *buf, size_t l
    * exactly one frame's worth of data, if the frames exceed its writebuffer
    * limit (SFP_CONFIG_WRITEBUF_SIZE), it will call the write callback more
    * frequently. I don't know if this is an issue or not. */
-  if(!WriteFile(
+  fprintf(stderr, "Calling WriteFile\n");
+  DWORD bytesWritten;
+  BOOL b = WriteFile(
         dongle->handle, 
         buf, 
         len,
-        NULL,
-        dongle->ovOutgoing)) {
-    dongleErrorWin32(_T("(barobo) ERROR: in dongleWriteRaw, "
-          "WriteFile()"), GetLastError());
+        &bytesWritten,
+        dongle->ovOutgoing);
+  if (b) {
+    fprintf(stderr, "WriteFile completed synchronously\n");
+    return bytesWritten;
   }
-  DWORD bytesWritten;
+
+  DWORD err = GetLastError();
+  if (ERROR_IO_PENDING != err) {
+    dongleErrorWin32(_T("(barobo) ERROR: in dongleWriteRaw, "
+        "WriteFile()"), err);
+    return -1;
+  }
+
+  fprintf(stderr, "Calling GetOverlappedResult\n");
   if (!GetOverlappedResult(dongle->handle, dongle->ovOutgoing, &bytesWritten, TRUE)) {
     dongleErrorWin32(_T("(barobo) ERROR: in dongleWriteRaw, "
-          "GetOverlappedResult()", GetLastError());
+          "GetOverlappedResult()"), GetLastError());
+    return -1;
   }
+  fprintf(stderr, "GetOverlappedResult completed\n");
   ResetEvent(dongle->ovOutgoing->hEvent);
+  ret = bytesWritten;
 #else
-  err = write(dongle->fd, buf, len);
+  ret = write(dongle->fd, buf, len);
 
-  if (-1 == err) {
+  if (-1 == ret) {
     char errbuf[256];
     strerror_r(errno, errbuf, sizeof(errbuf));
     fprintf(stderr, "(barobo) ERROR: in dongleWriteRaw, write(): %s\n", errbuf);
   }
 #endif
 
-  return err;
+  return ret;
 }
 
 /* NULL ms_delay means wait forever, otherwise it is a pointer to the number
@@ -111,13 +129,17 @@ static DWORD dongleTimedReadRawWin32GetResult (MOBOTdongle *dongle) {
 }
 
 static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, const long *ms_delay) {
+  assert(dongle && buf);
   DWORD delay = ms_delay ? *ms_delay : INFINITE;
 
+  fprintf(stderr, "dongleTimedReadRaw called\n");
   DWORD readbytes = 0;
   BOOL b = ReadFile(dongle->handle, buf, len, &readbytes, dongle->ovIncoming);
+  fprintf(stderr, "called ReadFile\n");
 
   if (b) {
     /* ReadFile completed synchronously. */
+    fprintf(stderr, "ReadFile returned true immediately\n");
     return readbytes;
   }
 
@@ -128,15 +150,21 @@ static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len
     return -1;
   }
 
+  fprintf(stderr, "The IO operation is pending--waiting...\n");
+
   DWORD code = MsgWaitForMultipleObjects(1, &dongle->ovIncoming->hEvent, FALSE,
       delay, QS_ALLINPUT);
+
+  fprintf(stderr, "MsgWaitForMultipleObjects returned\n");
 
   switch (code) {
     case WAIT_OBJECT_0:
       /* Success! */
+      fprintf(stderr, "We got the result\n");
       readbytes = dongleTimedReadRawWin32GetResult(dongle);
       break;
     case WAIT_TIMEOUT:
+      fprintf(stderr, "We timed out\n");
       b = CancelIo(dongle->handle);
       if (!b) {
         dongleErrorWin32(_T("(barobo) WARNING: in dongleTimedReadRaw, "
@@ -395,16 +423,13 @@ static void dongleInit (MOBOTdongle *dongle) {
   dongle->handle = NULL;
 
   /* Initialize overlapped communication shit */
-  if (!dongle->ovIncoming) {
-    dongle->ovIncoming = malloc(sizeof(OVERLAPPED));
-    memset(dongle->ovIncoming, 0, sizeof(OVERLAPPED));
-    dongle->ovIncoming->hEvent = CreateEvent(0, 1, 0, 0);
-  }
-  if (!dongle->ovOutgoing) {
-    dongle->ovOutgoing = malloc(sizeof(OVERLAPPED));
-    memset(dongle->ovOutgoing, 0, sizeof(OVERLAPPED));
-    dongle->ovOutgoing->hEvent = CreateEvent(0, 1, 0, 0);
-  }
+  dongle->ovIncoming = malloc(sizeof(OVERLAPPED));
+  memset(dongle->ovIncoming, 0, sizeof(OVERLAPPED));
+  dongle->ovIncoming->hEvent = CreateEvent(0, 1, 0, 0);
+
+  dongle->ovOutgoing = malloc(sizeof(OVERLAPPED));
+  memset(dongle->ovOutgoing, 0, sizeof(OVERLAPPED));
+  dongle->ovOutgoing->hEvent = CreateEvent(0, 1, 0, 0);
 
 #else
   dongle->fd = -1;
@@ -415,29 +440,36 @@ static void dongleFini (MOBOTdongle *dongle) {
   dongle->framing = MOBOT_DONGLE_FRAMING_UNKNOWN;
   if (dongle->sfpContext) {
     free(dongle->sfpContext);
+    dongle->sfpContext = NULL;
   }
 
 #ifdef _WIN32
   if (dongle->ovIncoming) {
     CloseHandle(dongle->ovIncoming->hEvent);
     free(dongle->ovIncoming);
+    dongle->ovIncoming = NULL;
   }
   if (dongle->ovOutgoing) {
     CloseHandle(dongle->ovOutgoing->hEvent);
     free(dongle->ovOutgoing);
+    dongle->ovOutgoing = NULL;
   }
 #endif
 }
 
 #ifdef _WIN32
 
-/* WIN32 implementation of dongleConnect. */
+/* WIN32 implementation of dongleOpen. */
 
 int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud) {
   assert(dongle);
   assert(ttyfilename);
 
   dongleInit(dongle);
+
+  /* hlh: for some reason, when I print to stdout and then to stderr, there
+   * unicode issues */
+  _ftprintf(stderr, _T("(barobo) INFO: opening %s with baud<%d>\n"), ttyfilename, baud);
 
   /* Check the file name. If we receive something like "COM45", we want to
    * change it to "\\.\COM45" */
@@ -462,6 +494,7 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
     return -1;
   }
   free(tty);
+  _ftprintf(stderr, _T("(barobo) INFO: opened %s\n"), ttyfilename);
   /* Adjust settings */
   DCB dcb;
   FillMemory(&dcb, sizeof(dcb), 0);
@@ -477,13 +510,23 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
     dongleErrorWin32(_T("(barobo) ERROR: in dongleOpen, SetCommState()"), GetLastError());
     return -1;
   }
-  
+
+  dongleDetectFraming(dongle);
+
+  if (MOBOT_DONGLE_FRAMING_SFP == dongle->framing) {
+    int status = dongleSetupSFP(dongle);
+    if (-1 == status) {
+      dongleClose(dongle);
+      return -1;
+    }
+  }
+
   return 0;
 }
 
 #else /* WIN32 */
 
-/* POSIX implementation of dongleConnect. */
+/* POSIX implementation of dongleOpen. */
 
 static speed_t baud_to_speed_t (unsigned long baud) {
   /* Oh, the humanity */
@@ -502,6 +545,8 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
   assert(ttyfilename);
 
   dongleInit(dongle);
+
+  printf("(barobo) INFO: opening %s with baud<%d>\n", ttyfilename, baud);
 
   /* We use non-blocking I/O here so we can support the POSIX implementation
    * of dongleTimedReadRaw. dongleTimedReadRaw uses select, which can, per the

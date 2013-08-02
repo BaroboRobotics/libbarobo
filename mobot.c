@@ -489,10 +489,13 @@ int Mobot_connectWithTTYBaud(mobot_t* comms, const char* ttyfilename, unsigned l
   comms->dongle = malloc(sizeof(MOBOTdongle));
   assert(comms->dongle);
 
+  fprintf(stderr, "(barobo) INFO: calling dongleOpen()\n");
   int err = dongleOpen(comms->dongle, ttyfilename, baud);
   if (err) {
+    fprintf(stderr, "(barobo) INFO: dongleOpen() failed\n");
     return err;
   }
+  fprintf(stderr, "(barobo) INFO: dongleOpen() succeeded!\n");
 
   comms->connected = 1;
   comms->connectionMode = MOBOTCONNECT_TTY;
@@ -1902,10 +1905,13 @@ void* commsEngine(void* arg)
   sigaction(SIGINT, &int_handler, 0);
 #endif
   g_mobotThreadInitializing = 0;
+  fprintf(stderr, "commsEngine reporting for duty, motherfucker!\n");
   while(1) {
     if (MOBOTCONNECT_TTY == comms->connectionMode) {
       uint8_t buf[256];
+      fprintf(stderr, "calling dongleRead...\n");
       ssize_t len = dongleRead(comms->dongle, buf, sizeof(buf));
+      fprintf(stderr, "dongleRead gave me this: %ld\n", len);
       if (-1 == len) {
         break;
       }
