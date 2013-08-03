@@ -486,6 +486,9 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
     //perror("Unable to open tty port.");
     return -1;
   }
+#ifdef __MACH__
+  sleep(1);
+#endif
   /* Change the baud rate to 57600 */
   struct termios term;
   tcgetattr(comms->socket, &term);
@@ -531,24 +534,6 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   // Communication speed (simple version, using the predefined
   // constants)
   //
-
-#ifdef __MACH__
-  cfsetspeed(&term, 500000);
-  cfsetispeed(&term, 500000);
-  cfsetospeed(&term, 500000);
-  if(status = tcsetattr(comms->socket, TCSANOW, &term)) {
-    fprintf(stderr, "Error setting tty settings. %d\n", errno);
-  }
-  tcgetattr(comms->socket, &term);
-  if(cfgetispeed(&term) != 500000) {
-    fprintf(stderr, "Error setting input speed.\n");
-    exit(0);
-  }
-  if(cfgetospeed(&term) != 500000) {
-    fprintf(stderr, "Error setting output speed.\n");
-    exit(0);
-  }
-#else
   cfsetspeed(&term, B230400);
   cfsetispeed(&term, B230400);
   cfsetospeed(&term, B230400);
@@ -564,6 +549,9 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
     fprintf(stderr, "Error setting output speed.\n");
     exit(0);
   }
+#ifdef __MACH__
+	write(comms->socket, NULL, 0);
+	sleep(1);
 #endif
   comms->connected = 1;
   comms->connectionMode = MOBOTCONNECT_TTY;
@@ -2726,7 +2714,8 @@ double systemTime()
   double t;
   clock_serv_t cclock;
   mach_timespec_t mts;
-  host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+  mach_timespec_t cur_time;
+	host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
   clock_get_time(cclock, &mts);
   mach_port_deallocate(mach_task_self(), cclock);
   cur_time.tv_nsec = mts.tv_nsec;
