@@ -163,6 +163,10 @@ static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len
       fprintf(stderr, "We got the result\n");
       readbytes = dongleTimedReadRawWin32GetResult(dongle);
       break;
+    case WAIT_ABANDONED_0:
+      fprintf(stderr, "(barobo) ERROR: MsgWaitForMultipleObjects returned "
+		      "WAIT_ABANDONED_0\n");
+      break;
     case WAIT_TIMEOUT:
       fprintf(stderr, "We timed out\n");
       b = CancelIo(dongle->handle);
@@ -183,6 +187,7 @@ static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len
        * deadlock in a windowed environment. So I'm using the safer (apparently)
        * MsgWaitForMultipleObjects, and just forcing a crash if something
        * unexpected happens. */
+      fprintf(stderr, "(barobo) ERROR: MsgWaitForMultipleObjects returned code<0x%08x>\n", code);
       assert(0);
       break;
   }
