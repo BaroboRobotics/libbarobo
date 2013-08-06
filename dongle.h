@@ -24,6 +24,7 @@ typedef struct MOBOTdongle {
   HANDLE handle;
   LPOVERLAPPED ovIncoming;
   LPOVERLAPPED ovOutgoing;
+  COMMTIMEOUTS oldCommTimeouts;
 #else
   int fd;
 #endif

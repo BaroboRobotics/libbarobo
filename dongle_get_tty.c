@@ -23,7 +23,7 @@
 #define __deref_out_range(a,b)
 #include <setupapi.h>
 
-void printPropUnicodeStringList (PBYTE buf, DWORD bufsize) {
+static void printPropUnicodeStringList (PBYTE buf, DWORD bufsize) {
     assert(!(bufsize & 1));
 
     wchar_t *s = (wchar_t *)buf;
@@ -41,7 +41,7 @@ void printPropUnicodeStringList (PBYTE buf, DWORD bufsize) {
     wprintf(L" }");
 }
 
-void printPropStringList (PTCHAR s) {
+static void printPropStringList (PTCHAR s) {
     _tprintf(_T("%s"), s);
     s += _tcslen(s) + 1;
     while (_tcslen(s)) {
@@ -131,7 +131,7 @@ static void dumpProperty (HDEVINFO devices, PSP_DEVINFO_DATA dev, DWORD key,
     free(buf);
 }
 
-void dumpProperties (HDEVINFO devices, PSP_DEVINFO_DATA dev) {
+static void dumpProperties (HDEVINFO devices, PSP_DEVINFO_DATA dev) {
     dumpProperty(devices, dev, SPDRP_FRIENDLYNAME, _T("Friendly Name"));
     dumpProperty(devices, dev, SPDRP_ADDRESS, _T("Address"));
     dumpProperty(devices, dev, SPDRP_BUSNUMBER, _T("Bus Number"));
@@ -175,7 +175,7 @@ typedef struct usb_device_id {
 /* TODO: move this to a platform-independent place so that each platform can
  * process these values as they wish. */
 /* Can add to this list as more devices are made. */
-static const usb_device_id g_barobo_dongle_usb_ids[] = {
+const usb_device_id g_barobo_dongle_usb_ids[] = {
     { 0x03eb, 0x204b }  // Linkbot
 };
 
@@ -323,7 +323,7 @@ static int getCOMPort (HDEVINFO devices, PSP_DEVINFO_DATA dev, char *comport, si
 /* Find an attached dongle device and return the COM port name via the output
  * parameter tty. tty is a user-supplied buffer of size len. Return the COM
  * port number, if anyone cares. On error, return -1. */
-int getDongleTTY (char *tty, size_t len) {
+int Mobot_dongleGetTTY (char *tty, size_t len) {
     /* Get all USB devices that provide a serial or parallel port interface. */
     HDEVINFO devices = SetupDiGetClassDevs(
             &GUID_DEVCLASS_PORTS,
@@ -373,6 +373,7 @@ int getDongleTTY (char *tty, size_t len) {
     return ret;
 }
 
+#if 0
 int main (int argc, char **argv) {
     char tty[32];
     int ret = getDongleTTY(tty, sizeof(tty));
@@ -384,3 +385,4 @@ int main (int argc, char **argv) {
     }
     return 0;
 }
+#endif

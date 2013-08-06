@@ -1905,13 +1905,10 @@ void* commsEngine(void* arg)
   sigaction(SIGINT, &int_handler, 0);
 #endif
   g_mobotThreadInitializing = 0;
-  fprintf(stderr, "commsEngine reporting for duty, motherfucker!\n");
   while(1) {
     if (MOBOTCONNECT_TTY == comms->connectionMode) {
       uint8_t buf[256];
-      fprintf(stderr, "calling dongleRead...\n");
       ssize_t len = dongleRead(comms->dongle, buf, sizeof(buf));
-      fprintf(stderr, "dongleRead gave me this: %ld\n", len);
       if (-1 == len) {
         break;
       }

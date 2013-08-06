@@ -34,6 +34,7 @@ static void dongleErrorWin32 (LPCTSTR msg, DWORD err) {
   _ftprintf(stderr, _T("%s: %s\n"), msg, (LPCTSTR)errorText);
   LocalFree(errorText);
 }
+
 #endif
 
 static void dongleInit (MOBOTdongle *dongle);
@@ -49,7 +50,7 @@ static ssize_t dongleWriteRaw (MOBOTdongle *dongle, const uint8_t *buf, size_t l
    * exactly one frame's worth of data, if the frames exceed its writebuffer
    * limit (SFP_CONFIG_WRITEBUF_SIZE), it will call the write callback more
    * frequently. I don't know if this is an issue or not. */
-  fprintf(stderr, "Calling WriteFile\n");
+
   DWORD bytesWritten;
   BOOL b = WriteFile(
         dongle->handle, 
@@ -58,7 +59,6 @@ static ssize_t dongleWriteRaw (MOBOTdongle *dongle, const uint8_t *buf, size_t l
         &bytesWritten,
         dongle->ovOutgoing);
   if (b) {
-    fprintf(stderr, "WriteFile completed synchronously\n");
     return bytesWritten;
   }
 
@@ -69,14 +69,18 @@ static ssize_t dongleWriteRaw (MOBOTdongle *dongle, const uint8_t *buf, size_t l
     return -1;
   }
 
-  fprintf(stderr, "Calling GetOverlappedResult\n");
   if (!GetOverlappedResult(dongle->handle, dongle->ovOutgoing, &bytesWritten, TRUE)) {
     dongleErrorWin32(_T("(barobo) ERROR: in dongleWriteRaw, "
           "GetOverlappedResult()"), GetLastError());
     return -1;
   }
-  fprintf(stderr, "GetOverlappedResult completed\n");
-  ResetEvent(dongle->ovOutgoing->hEvent);
+
+  if (!ResetEvent(dongle->ovOutgoing->hEvent)) {
+    dongleErrorWin32(_T("(barobo) ERROR: in dongleWriteRaw, "
+          "ResetEvent()"), GetLastError());
+    return -1;
+  }
+
   ret = bytesWritten;
 #else
   ret = write(dongle->fd, buf, len);
@@ -106,7 +110,7 @@ static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf,
 /* A Win32-only auxiliary function for dongleTimedReadRaw. */
 static DWORD dongleTimedReadRawWin32GetResult (MOBOTdongle *dongle) {
   DWORD readbytes = 0;
-  BOOL b = GetOverlappedResult(dongle->handle, dongle->ovIncoming, &readbytes, FALSE);
+  BOOL b = GetOverlappedResult(dongle->handle, dongle->ovIncoming, &readbytes, TRUE);
 
   if (!b) {
     int err = GetLastError();
@@ -125,21 +129,112 @@ static DWORD dongleTimedReadRawWin32GetResult (MOBOTdongle *dongle) {
     }
   }
 
+  if (!ResetEvent(dongle->ovIncoming->hEvent)) {
+    dongleErrorWin32(_T("(barobo) ERROR: in dongleTimedReadRaw, "
+          "ResetEvent()\n"), GetLastError());
+    readbytes = -1;
+  }
+
   return readbytes;
+}
+
+/* Returns -1 on error, 0 on timeout, otherwise the number of bytes that are
+ * ready to be read. */
+static int dongleTimedReadRawWin32WaitForInput (MOBOTdongle* dongle, const long *ms_delay) {
+  DWORD errmask = 0;
+  COMSTAT comstat;
+  if (!ClearCommError(dongle->handle, &errmask, &comstat)) {
+    dongleErrorWin32(_T("(barobo) ERROR: in dongleTimedReadRaw, "
+          "ClearCommError()"), GetLastError());
+    return -1;
+  }
+
+  if (errmask) {
+    fprintf(stderr, "(barobo) ERROR: Communications error: 0x%04x\n", errmask);
+  }
+
+  if (comstat.cbInQue) {
+    return comstat.cbInQue;
+  }
+
+  fprintf(stderr, "Waiting for a communications event...\n");
+
+  /* Nothing in the buffer yet, so wait for it... */
+  DWORD commEvent = 0;
+  if (!WaitCommEvent(dongle->handle, &commEvent, dongle->ovIncoming)) {
+    DWORD err = GetLastError();
+    if (ERROR_IO_PENDING != err) {
+      dongleErrorWin32(_T("(barobo) ERROR: in dongleTimedReadRaw, "
+            "WaitCommEvent()"), err);
+      return -1;
+    }
+
+    DWORD code = WaitForSingleObject(dongle->ovIncoming->hEvent,
+        ms_delay ? *ms_delay : INFINITE);
+
+    switch (code) {
+      case WAIT_OBJECT_0:
+        break;
+      case WAIT_ABANDONED:
+        assert(0);
+      case WAIT_TIMEOUT:
+        fprintf(stderr, "Timed out (for real)\n");
+        return 0;
+      case WAIT_FAILED:
+        dongleErrorWin32(_T("(barobo) ERROR: in dongleTimedReadRaw, "
+              "WaitForSingleObject()"), GetLastError());
+        return -1;
+    }
+
+    DWORD unused;
+    if (!GetOverlappedResult(dongle->handle, dongle->ovIncoming, &unused, TRUE)) {
+      dongleErrorWin32(_T("(barobo) ERROR: in dongleTimedReadRaw, "
+            "GetOverlappedResult()"), GetLastError());
+      return -1;
+    }
+
+    if (!ResetEvent(dongle->ovIncoming->hEvent)) {
+      dongleErrorWin32(_T("(barobo) ERROR: in dongleTimedReadRaw, "
+            "ResetEvent()"), GetLastError());
+      return -1;
+    }
+  }
+
+  /* Even though dongleOpen calls SetCommMask with only EV_RXCHAR, Windows
+   * sometimes spits other events at us. For now, ignore them and pretend it
+   * was a timeout. They don't happen that often. */
+  if (!(EV_RXCHAR & commEvent)) {
+    fprintf(stderr, "Received unwanted comm event: 0x%04x\n", commEvent);
+    return 0;
+  }
+
+  /* Get the number of bytes that are in the buffer so far. */
+  if (!ClearCommError(dongle->handle, NULL, &comstat)) {
+    dongleErrorWin32(_T("(barobo) ERROR: in dongleTimedReadRaw, "
+          "ClearCommError()"), GetLastError());
+    return -1;
+  }
+
+  fprintf(stderr, "Returning buffer size: %d\n", comstat.cbInQue);
+
+  return comstat.cbInQue;
 }
 
 static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, const long *ms_delay) {
   assert(dongle && buf);
-  DWORD delay = ms_delay ? *ms_delay : INFINITE;
 
-  fprintf(stderr, "dongleTimedReadRaw called\n");
+  int bytesToBeRead = dongleTimedReadRawWin32WaitForInput(dongle, ms_delay);
+  if (bytesToBeRead < 1) {
+    /* Either timed out, or error. */
+    fprintf(stderr, "dongleTimedReadRawWin32WaitForInput returned %d\n", bytesToBeRead);
+    return bytesToBeRead;
+  }
+
   DWORD readbytes = 0;
   BOOL b = ReadFile(dongle->handle, buf, len, &readbytes, dongle->ovIncoming);
-  fprintf(stderr, "called ReadFile\n");
 
   if (b) {
     /* ReadFile completed synchronously. */
-    fprintf(stderr, "ReadFile returned true immediately\n");
     return readbytes;
   }
 
@@ -150,49 +245,7 @@ static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len
     return -1;
   }
 
-  fprintf(stderr, "The IO operation is pending--waiting...\n");
-
-  DWORD code = MsgWaitForMultipleObjects(1, &dongle->ovIncoming->hEvent, FALSE,
-      delay, QS_ALLINPUT);
-
-  fprintf(stderr, "MsgWaitForMultipleObjects returned\n");
-
-  switch (code) {
-    case WAIT_OBJECT_0:
-      /* Success! */
-      fprintf(stderr, "We got the result\n");
-      readbytes = dongleTimedReadRawWin32GetResult(dongle);
-      break;
-    case WAIT_ABANDONED_0:
-      fprintf(stderr, "(barobo) ERROR: MsgWaitForMultipleObjects returned "
-		      "WAIT_ABANDONED_0\n");
-      break;
-    case WAIT_TIMEOUT:
-      fprintf(stderr, "We timed out\n");
-      b = CancelIo(dongle->handle);
-      if (!b) {
-        dongleErrorWin32(_T("(barobo) WARNING: in dongleTimedReadRaw, "
-            "CancelIo()"), GetLastError());
-      }
-      readbytes = 0;
-      break;
-    case WAIT_FAILED:
-      dongleErrorWin32(_T("(barobo) ERROR: in dongleTimedReadraw, "
-          "MsgWaitForMultipleObjects()"), GetLastError());
-      readbytes = -1;
-      break;
-    default:
-      /* Here's the deal: I do not grok the semantics of MsgWaitForMultipleObjects,
-       * but I gather that it's safer to use than WaitFor*Object(s), which can
-       * deadlock in a windowed environment. So I'm using the safer (apparently)
-       * MsgWaitForMultipleObjects, and just forcing a crash if something
-       * unexpected happens. */
-      fprintf(stderr, "(barobo) ERROR: MsgWaitForMultipleObjects returned code<0x%08x>\n", code);
-      assert(0);
-      break;
-  }
-
-  return readbytes;
+  return dongleTimedReadRawWin32GetResult(dongle);
 }
 
 #else /* _WIN32 */
@@ -281,7 +334,7 @@ static int dongleDetectFraming (MOBOTdongle *dongle) {
   }
 
   /* Give the dongle a little time to think about it. */
-  long ms_delay = 500; // half a second
+  long ms_delay = 1000;
   uint8_t response[256];
   ssize_t bytesread = dongleTimedReadRaw(dongle, response, sizeof(response), &ms_delay);
   if (!bytesread) {
@@ -354,8 +407,11 @@ ssize_t dongleRead (MOBOTdongle *dongle, uint8_t *buf, size_t len) {
   while (1) {
     uint8_t byte;
     int err = dongleReadRaw(dongle, &byte, 1);
-    if (1 != err) {
+    if (-1 == err) {
       return -1;
+    }
+    if (1 != err) {
+      continue;
     }
 
     if (MOBOT_DONGLE_FRAMING_SFP == dongle->framing) {
@@ -508,15 +564,60 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
   snprintf(dcbconf, sizeof(dcbconf), "%lu,n,8,1", baud);
   if (!BuildCommDCB(dcbconf, &dcb)) {
     dongleErrorWin32(_T("(barobo) ERROR: in dongleOpen, BuildCommDCB()"), GetLastError());
+    dongleClose(dongle);
     return -1;
   }
   dcb.BaudRate = baud;
   if (!SetCommState(dongle->handle, &dcb)) {
     dongleErrorWin32(_T("(barobo) ERROR: in dongleOpen, SetCommState()"), GetLastError());
+    dongleClose(dongle);
     return -1;
   }
 
-  dongleDetectFraming(dongle);
+  if (!GetCommTimeouts(dongle->handle, &dongle->oldCommTimeouts)) {
+    dongleErrorWin32(_T("(barobo) ERROR: in dongleOpen, GetCommTimeouts()"),
+        GetLastError());
+    dongleClose(dongle);
+    return -1;
+  }
+
+  COMMTIMEOUTS timeouts;
+  memcpy(&timeouts, &dongle->oldCommTimeouts, sizeof(timeouts));
+  /* This should make ReadFile() return immediately, even when using non-
+   * overlapped (synchronous) I/O. We still have to use asynchronous I/O for
+   * WaitCommEvent(), however. The reason I'm doing this is so that I can
+   * implement a Win32 version of dongleTimedReadRaw() that closely mimics the
+   * behavior of the POSIX version, specifically: if dongleTimedReadRaw() is
+   * called with a large buffer of size n bytes, and a timeout of t
+   * milliseconds, and the kernel receives k bytes, where k < n, within the
+   * timeout interval t, the function should return those k bytes in the
+   * caller's buffer. Without setting the timeouts as follows, the Win32
+   * behavior would be to claim to be unable to fulfill the request, and
+   * return zero bytes, which is not the answer we want. */
+  timeouts.ReadIntervalTimeout = MAXDWORD;
+  timeouts.ReadTotalTimeoutMultiplier = 0;
+  timeouts.ReadTotalTimeoutConstant = 0;
+
+  if (!SetCommTimeouts(dongle->handle, &timeouts)) {
+    dongleErrorWin32(_T("(barobo) ERROR: in dongleOpen, SetCommTimeouts()"),
+        GetLastError());
+    dongleClose(dongle);
+    return -1;
+  }
+
+  SetCommMask(dongle->handle, 0);
+  if (!SetCommMask(dongle->handle, EV_RXCHAR)) {
+    dongleErrorWin32(_T("(barobo) ERROR: in dongleOpen, SetCommMask()"),
+        GetLastError());
+    dongleClose(dongle);
+    return -1;
+  }
+
+  if (-1 == dongleDetectFraming(dongle)) {
+    fprintf(stderr, "(barobo) INFO: could not detect dongle framing, giving up\n");
+    dongleClose(dongle);
+    return -1;
+  }
 
   if (MOBOT_DONGLE_FRAMING_SFP == dongle->framing) {
     int status = dongleSetupSFP(dongle);
@@ -651,6 +752,13 @@ void dongleClose (MOBOTdongle *dongle) {
   }
 
 #ifdef _WIN32
+  /* I dunno, MSDN said you're supposed to reset these to the way you found
+   * them. Whatever. */
+  if (!SetCommTimeouts(dongle->handle, &dongle->oldCommTimeouts)) {
+    dongleErrorWin32(_T("(barobo) ERROR: in dongleClose, SetCommTimeouts()"),
+        GetLastError());
+  }
+
   BOOL b = CloseHandle(dongle->handle);
   if (!b) {
     dongleErrorWin32(_T("(barobo) ERROR: in dongleClose, CloseHandle()"), GetLastError());

@@ -3,6 +3,9 @@
 cmake_minimum_required(VERSION 2.6)
 #include_directories(../opende/sys/include)
 
+set(WINSDK_INCLUDE_PATH "C:/Program Files/Microsoft SDKs/Windows/v6.0/Include")
+set(MSVC_INCLUDE_PATH "C:/Program Files (x86)/Microsoft Visual Studio 9.0/VC/include")
+
 set(CMAKE_C_FLAGS --std=gnu99)
 set(SRCS
       mobot.c
@@ -33,6 +36,7 @@ set(SRCS
       mobotl_record_functions++.cpp
       mobotl_set_functions++.cpp
       dongle.c
+      dongle_get_tty.c
       libsfp/serial_framing_protocol.c
       libsfp/net_byte_order.c
       )
@@ -53,8 +57,6 @@ if(CMAKE_HOST_WIN32)
   #include(FindPkgConfig)
   #pkg_check_modules(MXML REQUIRED mxml)
   add_definitions(-D_WIN32_WINNT=0x502 -DENABLE_BLUETOOTH)
-  add_library(barobo SHARED ${SRCS})
-  add_library(baroboStatic STATIC ${SRCS})
   if( 
       (CMAKE_GENERATOR MATCHES "Visual Studio") OR
       (CMAKE_GENERATOR MATCHES "NMake")
@@ -62,21 +64,20 @@ if(CMAKE_HOST_WIN32)
     message(STATUS "Compiling for Visual Studio detected")
     set_target_properties(barobo PROPERTIES COMPILE_FLAGS "/GS- /QIfist /TP")
     set_target_properties(baroboStatic PROPERTIES COMPILE_FLAGS "/GS- /QIfist /TP")
-    target_link_libraries(barobo Ws2_32 baroboconfigfile mxml)
-    target_link_libraries(baroboStatic Ws2_32 baroboconfigfile mxml)
-    #add_subdirectory(demos)
   else()
-    #add_subdirectory(demos)
+    message(STATUS "Compiling for MinGW detected")
     add_definitions(-DMSYS)
-    target_link_libraries(barobo 
-        Ws2_32 
-        baroboconfigfile 
-        mxml )
-    target_link_libraries(baroboStatic 
-        Ws2_32 
-        baroboconfigfile 
-        mxml)
+    # include_directories() only seems to be able to generate -I and -isystem
+    # gcc flags. That won't do--we need -idirafter to avoid picking up all of
+    # the Windows SDK and MSVC headers, only the ones we need.
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -idirafter \"${WINSDK_INCLUDE_PATH}\" -idirafter \"${MSVC_INCLUDE_PATH}\"")
+    #include_directories(AFTER SYSTEM "${WINSDK_INCLUDE_PATH}" "${MSVC_INCLUDE_PATH}")
   endif()
+  add_library(barobo SHARED ${SRCS})
+  add_library(baroboStatic STATIC ${SRCS})
+  target_link_libraries(barobo Ws2_32 baroboconfigfile mxml setupapi)
+  target_link_libraries(baroboStatic Ws2_32 baroboconfigfile mxml setupapi)
+  #add_subdirectory(demos)
   install(TARGETS barobo
           ARCHIVE DESTINATION lib)
   install(FILES mobot.h DESTINATION include)
