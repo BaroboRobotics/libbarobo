@@ -349,10 +349,12 @@ static int dongleSetupSFP (MOBOTdongle *dongle) {
     long delay = 1000;
     int err = dongleTimedReadRaw(dongle, &byte, 1, &delay);
     if (1 != err) {
+      fprintf(stderr, "could not read a byte\n");
       /* Either we hit an error, or there's nothing to read. If there's
        * nothing to read, the remote end is probably not actually using SFP. */
       return -1;
     }
+    printf("read 0x%02x\n", byte);
     sfpDeliverOctet(dongle->sfpContext, byte, NULL, 0, NULL);
   }
 
@@ -384,9 +386,13 @@ static void dongleInit (MOBOTdongle *dongle) {
 }
 
 static void dongleFini (MOBOTdongle *dongle) {
-  dongle->framing = MOBOT_DONGLE_FRAMING_UNKNOWN;
-  if (dongle->sfpContext) {
+  if (MOBOT_DONGLE_FRAMING_SFP == dongle->framing) {
+    /* sfpInit effectively "disconnects" SFP */
+    sfpInit(dongle->sfpContext);
+    MUTEX_DESTROY(dongle->sfpTxLock);
+    free(dongle->sfpTxLock);
     free(dongle->sfpContext);
+    dongle->sfpTxLock = NULL;
     dongle->sfpContext = NULL;
   }
 
@@ -645,8 +651,8 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
 
 #ifdef __MACH__
   write(dongle->fd, NULL, 0);
-  sleep(1);
 #endif
+  sleep(1);
 
   if (-1 == tcflush(dongle->fd, TCIOFLUSH)) {
     char errbuf[256];
@@ -676,14 +682,6 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
 void dongleClose (MOBOTdongle *dongle) {
   if (!dongle) {
     return;
-  }
-
-  if (MOBOT_DONGLE_FRAMING_SFP == dongle->framing) {
-    /* sfpInit effectively disconnects */
-    sfpInit(dongle->sfpContext);
-    MUTEX_DESTROY(dongle->sfpTxLock);
-    free(dongle->sfpTxLock);
-    free(dongle->sfpContext);
   }
 
 #ifdef _WIN32
