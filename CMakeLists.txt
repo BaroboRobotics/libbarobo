@@ -96,6 +96,8 @@ elseif(CMAKE_HOST_APPLE)
 else(CMAKE_HOST_WIN32) #Linux
   if(CHHOME)
     add_subdirectory(chmobot_src)
+  else(CHHOME)
+    message(WARNING "CHHOME environment variable not found -- CH support disabled")
   endif(CHHOME)
   add_definitions(-DENABLE_BLUETOOTH)
   add_library(baroboStatic STATIC ${SRCS})
