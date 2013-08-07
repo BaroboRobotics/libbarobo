@@ -542,7 +542,7 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
 
   dongleInit(dongle);
 
-  printf("(barobo) INFO: opening %s with baud<%d>\n", ttyfilename, baud);
+  printf("(barobo) INFO: opening %s with baud<%lu>\n", ttyfilename, baud);
 
   /* We use non-blocking I/O here so we can support the POSIX implementation
    * of dongleTimedReadRaw. dongleTimedReadRaw uses select, which can, per the
@@ -555,6 +555,10 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
     fprintf(stderr, "(barobo) ERROR: in dongleConnect, open(): %s\n", errbuf);
     return -1;
   }
+
+#ifdef __MACH__
+  sleep(1);
+#endif
 
   struct termios term;
   int status = tcgetattr(dongle->fd, &term);
@@ -638,6 +642,11 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
     dongleClose(dongle);
     return -1;
   }
+
+#ifdef __MACH__
+  write(dongle->fd, NULL, 0);
+  sleep(1);
+#endif
 
   if (-1 == tcflush(dongle->fd, TCIOFLUSH)) {
     char errbuf[256];
