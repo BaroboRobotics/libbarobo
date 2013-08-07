@@ -621,43 +621,47 @@ int Mobot_stopAllJoints(mobot_t* comms)
   return Mobot_stop(comms);
 }
 
-int Mobot_turnLeft(mobot_t* comms, double angle)
+int Mobot_turnLeft(mobot_t* comms, double angle, double radius, double tracklength)
 {
   int rc;
-  if(rc = Mobot_turnLeftNB(comms, angle)) {
+  if(rc = Mobot_turnLeftNB(comms, angle, radius, tracklength)) {
     return rc;
   }
   return Mobot_moveWait(comms);
 }
 
-int Mobot_turnLeftNB(mobot_t* comms, double angle)
+int Mobot_turnLeftNB(mobot_t* comms, double angle, double radius, double tracklength)
 {
+  double theta;
+  theta = (angle*tracklength)/(2*radius);
   switch(comms->formFactor) {
     case MOBOTFORM_ORIGINAL:
-      return Mobot_moveNB(comms, -angle, 0, 0, angle);
+      return Mobot_moveNB(comms, -theta, 0, 0, theta);
     case MOBOTFORM_I:
-      return Mobot_moveNB(comms, -angle, 0, -angle, 0);
+      return Mobot_moveNB(comms, -theta, 0, -theta, 0);
     default:
       return -1;
   }
 }
 
-int Mobot_turnRight(mobot_t* comms, double angle)
+int Mobot_turnRight(mobot_t* comms, double angle, double radius, double tracklength)
 {
   int rc;
-  if(rc = Mobot_turnRightNB(comms, angle)) {
+  if(rc = Mobot_turnRightNB(comms, angle, radius, tracklength)) {
     return rc;
   }
   return Mobot_moveWait(comms);
 }
 
-int Mobot_turnRightNB(mobot_t* comms, double angle)
+int Mobot_turnRightNB(mobot_t* comms, double angle, double radius, double tracklength)
 {
+  double theta;
+  theta = (angle*tracklength)/(2*radius);
   switch(comms->formFactor) {
     case MOBOTFORM_ORIGINAL:
-      return Mobot_moveNB(comms, angle, 0, 0, -angle);
+      return Mobot_moveNB(comms, theta, 0, 0, -theta);
     case MOBOTFORM_I:
-      return Mobot_moveNB(comms, angle, 0, angle, 0);
+      return Mobot_moveNB(comms, theta, 0, theta, 0);
     default:
       return -1;
   }

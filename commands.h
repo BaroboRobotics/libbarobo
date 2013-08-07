@@ -480,6 +480,7 @@ enum protocol_commands_e {
   CMD_TWI_SENDRECV,
 
   CMD_PLACEHOLDER201306271044,
+  CMD_PLACEHOLDER201307101241,
 
   CMD_NUMCOMMANDS
 };
@@ -545,6 +546,7 @@ enum group_protocol_commands_e {
    Command Format: [CMD] [0x05] [group higb byte] [group low byte] [0x12]
    Expected Response: None */
   GRP_CMD_PLAY_POSES,
+
 
   GRP_CMD_NUMCOMMANDS
 };

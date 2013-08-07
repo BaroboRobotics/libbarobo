@@ -109,6 +109,8 @@ typedef unsigned short uint16_t;
 
 #ifdef _MSYS
 #undef _WIN32
+#define strdup(x) mc_strdup(x)
+char* mc_strdup(const char* str);
 #endif
 
 #ifndef _WIN32
@@ -568,10 +570,10 @@ class CMobot
     int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
     int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
     int stopAllJoints();
-    int turnLeft(double angle);
-    int turnLeftNB(double angle);
-    int turnRight(double angle);
-    int turnRightNB(double angle);
+    int turnLeft(double angle, double radius, double tracklength);
+    int turnLeftNB(double angle, double radius, double tracklength);
+    int turnRight(double angle, double radius, double tracklength);
+    int turnRightNB(double angle, double radius, double tracklength);
 
     int motionArch(double angle);
     int motionDistance(double distance, double radius);
@@ -765,10 +767,10 @@ class CMobot
     int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
     int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
     int stopAllJoints();
-    int turnLeft(double angle);
-    int turnLeftNB(double angle);
-    int turnRight(double angle);
-    int turnRightNB(double angle);
+    int turnLeft(double angle, double radius, double tracklength);
+    int turnLeftNB(double angle, double radius, double tracklength);
+    int turnRight(double angle, double radius, double tracklength);
+    int turnRightNB(double angle, double radius, double tracklength);
 
     int motionArch(double angle);
     int motionDistance(double distance, double radius);
@@ -891,10 +893,10 @@ class CMobotGroup
     int stopOneJoint(robotJointId_t id);
     int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
     int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
-    int turnLeft(double angle);
-    int turnLeftNB(double angle);
-    int turnRight(double angle);
-    int turnRightNB(double angle);
+    int turnLeft(double angle, double radius, double tracklength);
+    int turnLeftNB(double angle, double radius, double tracklength);
+    int turnRight(double angle, double radius, double tracklength);
+    int turnRightNB(double angle, double radius, double tracklength);
 
     int motionArch(double angle);
     int motionArchNB(double angle);
@@ -969,7 +971,7 @@ DLLIMPORT int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address);
 #endif
 DLLIMPORT int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename);
 DLLIMPORT int Mobot_connectWithTTYBaud(mobot_t* comms, const char* ttyfilename, unsigned long baud);
-DLLIMPORT int Mobot_connectWithSerialID(mobot_t* comms, const char* address);
+DLLIMPORT int Mobot_connectWithSerialID(mobot_t* comms, const char address[]);
 DLLIMPORT int Mobot_connectChild(mobot_t* parent, mobot_t* child);
 DLLIMPORT int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSerialID);
 DLLIMPORT int Mobot_connectWithAddress(
@@ -1270,10 +1272,10 @@ DLLIMPORT int Mobot_stopOneJoint(mobot_t* comms, robotJointId_t id);
 DLLIMPORT int Mobot_stopTwoJoints(mobot_t* comms, robotJointId_t id1, robotJointId_t id2);
 DLLIMPORT int Mobot_stopThreeJoints(mobot_t* comms, robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
 DLLIMPORT int Mobot_stopAllJoints(mobot_t* comms);
-DLLIMPORT int Mobot_turnLeft(mobot_t* comms, double angle);
-DLLIMPORT int Mobot_turnLeftNB(mobot_t* comms, double angle);
-DLLIMPORT int Mobot_turnRight(mobot_t* comms, double angle);
-DLLIMPORT int Mobot_turnRightNB(mobot_t* comms, double angle);
+DLLIMPORT int Mobot_turnLeft(mobot_t* comms, double angle, double radius, double tracklength);
+DLLIMPORT int Mobot_turnLeftNB(mobot_t* comms, double angle, double radius, double tracklength);
+DLLIMPORT int Mobot_turnRight(mobot_t* comms, double angle, double radius, double tracklength);
+DLLIMPORT int Mobot_turnRightNB(mobot_t* comms, double angle, double radius, double tracklength);
 DLLIMPORT int Mobot_twiRecv(mobot_t* comms, uint8_t addr, void* recvbuf, int size);
 DLLIMPORT int Mobot_twiSend(mobot_t* comms, uint8_t addr, uint8_t* buf, int size);
 DLLIMPORT int Mobot_twiSendRecv(mobot_t* comms, uint8_t addr, 

@@ -1509,7 +1509,7 @@ int CMobot::stopThreeJoints(int id1, int id2, int id3) {
     return retval;
 }
 
-int CMobot::turnLeft(double angle) {
+int CMobot::turnLeft(double angle, double radius, double tracklength) {
     void *fptr;
     int retval;
 
@@ -1518,10 +1518,10 @@ int CMobot::turnLeft(double angle) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, turnLeft, this, angle);
+    dlrunfun(fptr, &retval, turnLeft, this, angle, radius, tracklength);
     return retval;
 }
-int CMobot::turnLeftNB(double angle) {
+int CMobot::turnLeftNB(double angle, double radius, double tracklength) {
     void *fptr;
     int retval;
 
@@ -1530,10 +1530,10 @@ int CMobot::turnLeftNB(double angle) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, turnLeftNB, this, angle);
+    dlrunfun(fptr, &retval, turnLeftNB, this, angle, radius, tracklength);
     return retval;
 }
-int CMobot::turnRight(double angle) {
+int CMobot::turnRight(double angle, double radius, double tracklength) {
     void *fptr;
     int retval;
 
@@ -1542,10 +1542,10 @@ int CMobot::turnRight(double angle) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, turnRight, this, angle);
+    dlrunfun(fptr, &retval, turnRight, this, angle, radius, tracklength);
     return retval;
 }
-int CMobot::turnRightNB(double angle) {
+int CMobot::turnRightNB(double angle, double radius, double tracklength) {
     void *fptr;
     int retval;
 
@@ -1554,7 +1554,7 @@ int CMobot::turnRightNB(double angle) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, turnRightNB, this, angle);
+    dlrunfun(fptr, &retval, turnRightNB, this, angle, radius, tracklength);
     return retval;
 }
 /* CMobotGroup */
@@ -2594,7 +2594,7 @@ int CMobotGroup::stopThreeJoints(int id1, int id2, int id3) {
     dlrunfun(fptr, &retval, stopThreeJoints, this, id1, id2, id3);
     return retval;
 }
-int CMobotGroup::turnLeft(double angle) {
+int CMobotGroup::turnLeft(double angle, double radius, double tracklength) {
     void *fptr;
     int retval;
 
@@ -2603,10 +2603,10 @@ int CMobotGroup::turnLeft(double angle) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, turnLeft, this, angle);
+    dlrunfun(fptr, &retval, turnLeft, this, angle, radius, tracklength);
     return retval;
 }
-int CMobotGroup::turnLeftNB(double angle) {
+int CMobotGroup::turnLeftNB(double angle, double radius, double tracklength) {
     void *fptr;
     int retval;
 
@@ -2615,10 +2615,10 @@ int CMobotGroup::turnLeftNB(double angle) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, turnLeftNB, this, angle);
+    dlrunfun(fptr, &retval, turnLeftNB, this, angle, radius, tracklength);
     return retval;
 }
-int CMobotGroup::turnRight(double angle) {
+int CMobotGroup::turnRight(double angle, double radius, double tracklength) {
     void *fptr;
     int retval;
 
@@ -2627,10 +2627,10 @@ int CMobotGroup::turnRight(double angle) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, turnRight, this, angle);
+    dlrunfun(fptr, &retval, turnRight, this, angle, radius, tracklength);
     return retval;
 }
-int CMobotGroup::turnRightNB(double angle) {
+int CMobotGroup::turnRightNB(double angle, double radius, double tracklength) {
     void *fptr;
     int retval;
 
@@ -2639,6 +2639,6 @@ int CMobotGroup::turnRightNB(double angle) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, turnRightNB, this, angle);
+    dlrunfun(fptr, &retval, turnRightNB, this, angle, radius, tracklength);
     return retval;
 }

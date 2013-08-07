@@ -91,6 +91,14 @@ mobot_t* g_dongleMobot = NULL;
 
 bcf_t* g_bcf;
 
+char* mc_strdup(const char* str)
+{
+  char* s;
+  s = (char*)malloc(sizeof(char)*(strlen(str)+1));
+  strcpy(s, str);
+  return s;
+}
+
 double deg2rad(double deg)
 {
   return deg * M_PI / 180.0;
@@ -322,7 +330,7 @@ int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
   }
 }
 
-int Mobot_connectWithSerialID(mobot_t* comms, const char* address)
+int Mobot_connectWithSerialID(mobot_t* comms, const char address[])
 {
   return Mobot_connectChildID(g_dongleMobot, comms, address);
 }
@@ -2317,7 +2325,8 @@ double systemTime()
   double t;
   clock_serv_t cclock;
   mach_timespec_t mts;
-  host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+  mach_timespec_t cur_time;
+	host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
   clock_get_time(cclock, &mts);
   mach_port_deallocate(mach_task_self(), cclock);
   cur_time.tv_nsec = mts.tv_nsec;

@@ -215,10 +215,10 @@ class CLinkbotI
     int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
     int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
     int stopAllJoints();
-    int turnLeft(double angle);
-    int turnLeftNB(double angle);
-    int turnRight(double angle);
-    int turnRightNB(double angle);
+    int turnLeft(double angle, double radius, double tracklength);
+    int turnLeftNB(double angle, double radius, double tracklength);
+    int turnRight(double angle, double radius, double tracklength);
+    int turnRightNB(double angle, double radius, double tracklength);
 
     int motionDistance(double distance, double radius);
     int motionRollBackward(double angle);
@@ -655,10 +655,10 @@ class CLinkbotIGroup
     int setTwoWheelRobotSpeed(double speed, double radius);
     int stopAllJoints();
     int stopOneJoint(robotJointId_t id);
-    int turnLeft(double angle);
-    int turnLeftNB(double angle);
-    int turnRight(double angle);
-    int turnRightNB(double angle);
+    int turnLeft(double angle, double radius, double tracklength);
+    int turnLeftNB(double angle, double radius, double tracklength);
+    int turnRight(double angle, double radius, double tracklength);
+    int turnRightNB(double angle, double radius, double tracklength);
 
     int motionDistance(double distance, double radius);
     int motionDistanceNB(double distance, double radius);

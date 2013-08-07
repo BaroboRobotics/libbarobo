@@ -1,6 +1,14 @@
 #include <stdio.h>
 #include "BaroboConfigFile.h"
 
+char* BCF_strdup(const char* str)
+{
+  char* s;
+  s = (char*)malloc(sizeof(char)*(strlen(str)+1));
+  strcpy(s, str);
+  return s;
+}
+
 bcf_t* BCF_New()
 {
   bcf_t* bcf = (bcf_t*)malloc(sizeof(bcf_t));
