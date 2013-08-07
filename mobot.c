@@ -1684,10 +1684,14 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
     assert(MOBOTCONNECT_TTY == comms->parent->connectionMode);
 
     /* Send the message out on the parent's dongle. */
-    dongleWrite(comms->parent->dongle, str, len);
+    if (-1 == dongleWrite(comms->parent->dongle, str, len)) {
+      return -1;
+    }
   } else if (comms->connectionMode == MOBOTCONNECT_TTY) {
     /* Send the message out on our dongle. */
-    dongleWrite(comms->dongle, str, len);
+    if (-1 == dongleWrite(comms->dongle, str, len)) {
+      return -1;
+    }
   } else {
     //MUTEX_LOCK(comms->socket_lock);
 #ifndef _WIN32
