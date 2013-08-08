@@ -553,8 +553,8 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
   /* We use non-blocking I/O here so we can support the POSIX implementation
    * of dongleTimedReadRaw. dongleTimedReadRaw uses select, which can, per the
    * man page, return false positives. A false positive would then cause the
-   * subsequent read call to block. */
-  dongle->fd = open(ttyfilename, O_NONBLOCK | O_RDWR | O_NOCTTY);
+   * subsequent read call to block. XXX: no longer true ... experimenting */
+  dongle->fd = open(ttyfilename, /*O_NONBLOCK |*/ O_RDWR | O_NOCTTY);
   if(-1 == dongle->fd) {
     char errbuf[256];
     strerror_r(errno, errbuf, sizeof(errbuf));
@@ -595,10 +595,11 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
   term.c_cflag &= ~(CSIZE | PARENB);
   term.c_cflag |= CS8;
 
-  // One input byte is enough to return from read()
-  // Inter-character timer off
-  term.c_cc[VMIN]  = 1;
-  term.c_cc[VTIME] = 0;
+  // hlh: I turned the inter-character timer back on--I think it's pretty
+  // reasonable, and makes the tuning of the actual read() calls make more
+  // intuitive sense.
+  term.c_cc[VMIN]  = 10;
+  term.c_cc[VTIME] = 1;
 
   // Communication speed
 
