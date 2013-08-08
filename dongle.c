@@ -349,12 +349,10 @@ static int dongleSetupSFP (MOBOTdongle *dongle) {
     long delay = 1000;
     int err = dongleTimedReadRaw(dongle, &byte, 1, &delay);
     if (1 != err) {
-      fprintf(stderr, "could not read a byte\n");
       /* Either we hit an error, or there's nothing to read. If there's
        * nothing to read, the remote end is probably not actually using SFP. */
       return -1;
     }
-    printf("read 0x%02x\n", byte);
     sfpDeliverOctet(dongle->sfpContext, byte, NULL, 0, NULL);
   }
 
