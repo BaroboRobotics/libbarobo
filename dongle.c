@@ -226,7 +226,8 @@ static int dongleDetectFraming (MOBOTdongle *dongle) {
   assert(bytesread <= sizeof(response));
 
   fprintf(stderr, "(barobo) DEBUG: dongleDetectFraming received:");
-  for (size_t i = 0; i < bytesread; ++i) {
+  size_t i;
+  for (i = 0; i < bytesread; ++i) {
     fprintf(stderr, " %02x", response[i]);
   }
   fprintf(stderr, "\n");

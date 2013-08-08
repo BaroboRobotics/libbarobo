@@ -12,7 +12,8 @@ int Mobot_dongleGetTTY (char *buf, size_t len) {
   char manufacturer[64];
   char product[64];
 
-  for (size_t i = 0; i < NUM_BAROBO_USB_DONGLE_IDS; ++i) {
+  size_t i;
+  for (i = 0; i < NUM_BAROBO_USB_DONGLE_IDS; ++i) {
     const char *m = g_barobo_usb_dongle_ids[i].manufacturer;
     const char *p = g_barobo_usb_dongle_ids[i].product;
 

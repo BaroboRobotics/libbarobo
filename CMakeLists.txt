@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 2.6)
 set(WINSDK_INCLUDE_PATH "C:/Program Files/Microsoft SDKs/Windows/v6.0/Include")
 set(MSVC_INCLUDE_PATH "C:/Program Files (x86)/Microsoft Visual Studio 9.0/VC/include")
 
-set(CMAKE_C_FLAGS --std=gnu99)
+#set(CMAKE_C_FLAGS --std=gnu99)
 set(SRCS
       mobot.c
       mobot++.cpp
