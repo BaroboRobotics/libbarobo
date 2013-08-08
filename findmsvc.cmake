@@ -13,7 +13,7 @@ if(NOT EXISTS ${MSVCDIR})
 endif(NOT EXISTS ${MSVCDIR})
 
 if(NOT EXISTS ${MSVCDIR})
-  get_filename_component(MSVCDIR "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\VisualStudio\\SxS\\VC7;8.0]" ABSOLUTE CACHE)
+  get_filename_component(MSVCDIR "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\VisualStudio\\SxS\\VC7;8.0]" ABSOLUTE)
   set(MSVCVER "8.0")
 endif(NOT EXISTS ${MSVCDIR})
 
