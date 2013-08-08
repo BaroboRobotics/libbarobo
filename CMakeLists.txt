@@ -3,10 +3,11 @@
 cmake_minimum_required(VERSION 2.6)
 #include_directories(../opende/sys/include)
 
-set(WINSDK_INCLUDE_PATH "C:/Program Files/Microsoft SDKs/Windows/v6.0/Include")
-set(MSVC_INCLUDE_PATH "C:/Program Files (x86)/Microsoft Visual Studio 9.0/VC/include")
+# If you're on Windows, you can set the following paths to override the auto
+# detection scripts for the Windows SDK and Visual Studio include paths.
+#set(WINSDK_INCLUDE_PATH "C:/Program Files/Microsoft SDKs/Windows/v6.0/Include")
+#set(MSVC_INCLUDE_PATH "C:/Program Files (x86)/Microsoft Visual Studio 9.0/VC/include")
 
-#set(CMAKE_C_FLAGS --std=gnu99)
 set(SRCS
       mobot.c
       mobot++.cpp
