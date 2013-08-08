@@ -56,6 +56,18 @@ link_directories(${MXML_BINARY_DIR})
 if(CMAKE_HOST_WIN32)
   #include(FindPkgConfig)
   #pkg_check_modules(MXML REQUIRED mxml)
+  # hlh: FIXME there should be a more official CMake way of doing this... they
+  # have a concept of packages, but that part of their web site was down all
+  # day, so I don't know if it would help us. At any rate, we definitely need
+  # to figure out if finding the Windows SDK and MSVC include paths is only
+  # necessary for MinGW or for MSVC as well.
+  if(NOT WINSDK_INCLUDE_PATH)
+    include("findwindowssdk.cmake")
+  endif(NOT WINSDK_INCLUDE_PATH)
+  if(NOT MSVC_INCLUDE_PATH)
+    include("findmsvc.cmake")
+  endif(NOT MSVC_INCLUDE_PATH)
+
   add_definitions(-D_WIN32_WINNT=0x502 -DENABLE_BLUETOOTH)
   if( 
       (CMAKE_GENERATOR MATCHES "Visual Studio") OR
