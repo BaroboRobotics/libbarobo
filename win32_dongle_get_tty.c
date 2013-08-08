@@ -167,6 +167,7 @@ static void dumpProperties (HDEVINFO devices, PSP_DEVINFO_DATA dev) {
     printf("\n");
 }
 
+#if 0
 typedef struct usb_device_id {
     uint16_t vid;
     uint16_t pid;
@@ -178,6 +179,7 @@ typedef struct usb_device_id {
 const usb_device_id g_barobo_dongle_usb_ids[] = {
     { 0x03eb, 0x204b }  // Linkbot
 };
+#endif
 
 /* TODO and move this too */
 #define NUM_BAROBO_DONGLE_USB_IDS \
@@ -234,30 +236,59 @@ static int ci_tcsncmp (const TCHAR *lhs, const TCHAR *rhs, size_t n) {
 }
 
 static int isDongle (HDEVINFO devices, PSP_DEVINFO_DATA dev) {
-    TCHAR **hardware_ids = getHardwareIDStrings();
-    DWORD size = 0;
-    DWORD type = 0;
-    TCHAR *cur_id = (TCHAR *)getPropertyBuf(devices, dev, SPDRP_HARDWAREID, &size, &type);
-    if (!cur_id) {
-        return 0;
-    }
+  char manufacturer[64];
+  char product[64];
 
-    assert(REG_MULTI_SZ == type);
+  DWORD size = 0;
+  DWORD type = 0;
 
-    size_t i;
-    for (i = 0; i < NUM_BAROBO_DONGLE_USB_IDS; ++i) {
-        /* Note that the length argument is actually very important: the first
-         * entry in the hardware ID registry property typically also has a
-         * revision number appended to it. We don't want to compare with that
-         * part of the string as well. */
-        if (!ci_tcsncmp(cur_id, hardware_ids[i], _tcslen(hardware_ids[i]))) {
-            free(cur_id);
-            return 1;
-        }
-    }
-
-    free(cur_id);
+  TCHAR *m = (TCHAR *)getPropertyBuf(devices, dev, SPDRP_MFG, &size, &type);
+  if (!m) {
     return 0;
+  }
+  assert(REG_SZ == type);
+
+  TCHAR *p= (TCHAR *)getPropertyBuf(devices, dev, SPDRP_DEVICEDESC, &size, &type);
+  if (!p) {
+    return 0;
+  }
+  assert(REG_SZ == type);
+
+#if defined(UNICODE) || defined(_UNICODE)
+  size_t retm = wcstombs(manufacturer, m, sizeof(manufacturer));
+  size_t retp = wcstombs(product, p, sizeof(product));
+#else
+  strncpy(manufacturer, m, sizeof(manufacturer));
+  strncpy(product, p, sizeof(product));
+#endif
+
+  free(m);
+  free(p);
+  m = NULL;
+  p = NULL;
+
+#if defined(UNICODE) || defined(_UNICODE)
+  if (sizeof(manufacturer) <= retm || sizeof(product) <= retp) {
+    fprintf(stderr, "(barobo) WARNING: buffer overflow or failed Unicode conversion in isDongle()\n");
+    return 0;
+  }
+#else
+  if (sizeof(manufacturer) == strnlen(manufacturer, sizeof(manufacturer))
+      || sizeof(product) == strnlen(product, sizeof(product))) {
+    fprintf(stderr, "(barobo) WARNING: buffer overflow in isDongle()\n");
+    return 0;
+  }
+#endif
+
+  size_t i;
+  for (i = 0; i < NUM_BAROBO_USB_DONGLE_IDS; ++i) {
+    if (!strcmp(manufacturer, g_barobo_usb_dongle_ids[i].manufacturer)
+        || !strcmp(product, g_barobo_usb_dongle_ids[i].product))
+      return 1;
+    }
+  }
+
+  return 0;
 }
 
 static int getCOMPort (HDEVINFO devices, PSP_DEVINFO_DATA dev, char *comport, size_t len) {
@@ -374,17 +405,3 @@ int Mobot_dongleGetTTY (char *tty, size_t len) {
 
     return ret;
 }
-
-#if 0
-int main (int argc, char **argv) {
-    char tty[32];
-    int ret = getDongleTTY(tty, sizeof(tty));
-    if (-1 == ret) {
-        printf("No dongle present\n");
-    }
-    else {
-        printf("Found dongle on %s (%d)\n", tty, ret);
-    }
-    return 0;
-}
-#endif
