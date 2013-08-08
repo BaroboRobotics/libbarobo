@@ -199,7 +199,8 @@ static TCHAR **getHardwareIDStrings (void) {
     if (!run_once) {
         /* Initialize our array of hardware ID strings from the
          * g_barobo_dongle_usb_ids array of vendor and product IDs. */
-        for (size_t i = 0; i < NUM_BAROBO_DONGLE_USB_IDS; ++i) {
+        size_t i;
+        for (i = 0; i < NUM_BAROBO_DONGLE_USB_IDS; ++i) {
             /* So ideally we'll be comparing these strings case-insensitively,
              * but just in case, render them in capitals, since that's how the
              * Windows registry seems to store hardware IDs. */
@@ -243,7 +244,8 @@ static int isDongle (HDEVINFO devices, PSP_DEVINFO_DATA dev) {
 
     assert(REG_MULTI_SZ == type);
 
-    for (size_t i = 0; i < NUM_BAROBO_DONGLE_USB_IDS; ++i) {
+    size_t i;
+    for (i = 0; i < NUM_BAROBO_DONGLE_USB_IDS; ++i) {
         /* Note that the length argument is actually very important: the first
          * entry in the hardware ID registry property typically also has a
          * revision number appended to it. We don't want to compare with that
