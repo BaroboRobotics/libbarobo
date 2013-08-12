@@ -984,6 +984,7 @@ DLLIMPORT int Mobot_connectWithAddress(
     mobot_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_connectWithBluetoothAddress(
     mobot_t* comms, const char* address, int channel);
+DLLIMPORT int Mobot_connectWithZigbeeAddress(mobot_t* comms, uint16_t addr);
 DLLIMPORT int Mobot_findMobot(mobot_t* parent, const char* childSerialID);
 DLLIMPORT mobotMelodyNote_t* Mobot_createMelody(int tempo);
 DLLIMPORT int Mobot_melodyAddNote(mobotMelodyNote_t* melody, const char* note, int divider);
@@ -1104,6 +1105,10 @@ DLLIMPORT int Mobot_getJointSpeedRatios(mobot_t* comms,
                                         double *ratio3, 
                                         double *ratio4);
 DLLIMPORT int Mobot_getJointState(mobot_t* comms, robotJointId_t id, robotJointState_t *state);
+DLLIMPORT int Mobot_getPoseData(mobot_t* comms, double *angle1, double *angle2, double *angle3, double *angle4);
+DLLIMPORT int Mobot_getNumPoses(mobot_t* comms, int* num);
+DLLIMPORT int Mobot_getNumSlaves(mobot_t* comms, int* num);
+DLLIMPORT int Mobot_getSlaveAddr(mobot_t* comms, uint8_t index, uint16_t* addr);
 DLLIMPORT int Mobot_getStatus(mobot_t* comms);
 DLLIMPORT int Mobot_getVersion(mobot_t* comms);
 DLLIMPORT int Mobot_move(mobot_t* comms,

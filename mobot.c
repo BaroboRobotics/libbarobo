@@ -327,6 +327,45 @@ int Mobot_connectWithSerialID(mobot_t* comms, const char address[])
   return Mobot_connectChildID(g_dongleMobot, comms, address);
 }
 
+int Mobot_connectWithZigbeeAddress(mobot_t* comms, uint16_t addr)
+{
+  int rc;
+  int form;
+  if(g_dongleMobot == NULL) {
+    if(g_bcf == NULL) {
+      g_bcf = BCF_New();
+      if(BCF_Read(g_bcf, comms->configFilePath)) {
+        fprintf(stderr, 
+            "ERROR: Your Barobo configuration file does not exist.\n"
+            "Please create one by opening the MoBot remote control, clicking on\n"
+            "the 'Robot' menu entry, and selecting 'Configure Robot Bluetooth'.\n");
+        BCF_Destroy(g_bcf);
+        g_bcf = NULL;
+        return -1;
+      }
+    }
+    Mobot_initDongle();
+  }
+  if(
+      (g_dongleMobot == NULL) || 
+      (g_dongleMobot->connected == 0)
+    )
+  {
+    return -1;
+  }
+  comms->connected = 1;
+  comms->connectionMode = MOBOTCONNECT_ZIGBEE;
+  comms->parent = g_dongleMobot;
+  comms->zigbeeAddr = addr;
+  rc = getFormFactor(comms, &form);
+  if(rc < 0) {
+    comms->connected = 0;
+    return rc;
+  }
+  comms->formFactor = (mobotFormFactor_t)form;
+  return Mobot_getID(comms);
+}
+
 int Mobot_connectWithBluetoothAddress(mobot_t* comms, const char* address, int channel)
 {
   int err = -1;

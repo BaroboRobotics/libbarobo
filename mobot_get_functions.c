@@ -645,6 +645,63 @@ int Mobot_getJointSpeeds(mobot_t* comms, double *speed1, double *speed2, double 
   return 0;
 }
 
+int Mobot_getNumSlaves(mobot_t* comms, int* num)
+{
+  uint8_t buf[32];
+  int status;
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GET_NUM_SLAVES), buf, 0);
+  if(status < 0) return status;
+  if(buf[0] != RESP_OK) {
+    return -1;
+  }
+  *num = buf[2];
+  return 0;
+}
+
+int Mobot_getSlaveAddr(mobot_t* comms, uint8_t index, uint16_t* addr)
+{
+  uint8_t buf[32];
+  int status;
+  buf[0] = index;
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GET_SLAVE_ADDR), buf, 1);
+  if(status < 0) return status;
+  if(buf[0] != RESP_OK) {
+    return -1;
+  }
+  *addr = buf[2]<<8;
+  *addr |= buf[3];
+  return 0;
+}
+
+int Mobot_getNumPoses(mobot_t* comms, int* num)
+{
+  uint8_t buf[32];
+  int status;
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GET_NUM_POSES), buf, 0);
+  if(status < 0) return status;
+  if(buf[0] != RESP_OK) {
+    return -1;
+  }
+  *num = buf[2];
+  return 0;
+}
+
+int Mobot_getPoseData(mobot_t* comms, double *angle1, double *angle2, double *angle3, double *angle4)
+{
+  uint8_t buf[32];
+  int status;
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GET_NUM_POSES), buf, 0);
+  if(status < 0) return status;
+  if(buf[0] != RESP_OK) {
+    return -1;
+  }
+  memcpy(angle1, &buf[2], 4);
+  memcpy(angle2, &buf[6], 4);
+  memcpy(angle3, &buf[10], 4);
+  memcpy(angle4, &buf[14], 4);
+  return 0;
+}
+
 int Mobot_getColorRGB(mobot_t* comms, int *r, int *g, int *b)
 {
   uint8_t buf[32];
