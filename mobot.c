@@ -357,13 +357,39 @@ int Mobot_connectWithZigbeeAddress(mobot_t* comms, uint16_t addr)
   comms->connectionMode = MOBOTCONNECT_ZIGBEE;
   comms->parent = g_dongleMobot;
   comms->zigbeeAddr = addr;
+
+  /* Need to add this mobot to the parent's list of children */
+  mobotInfo_t* iter;
+  int idFound = 0;
+  for(iter = g_dongleMobot->children; iter!=NULL; iter = iter->next) {
+    if(iter->zigbeeAddr == comms->zigbeeAddr) {
+      idFound = 1;
+      iter->mobot = comms;
+      break;
+    }
+  }
+  if(!idFound) {
+    iter = (mobotInfo_t*)malloc(sizeof(mobotInfo_t));
+    iter->zigbeeAddr = comms->zigbeeAddr;
+    strcpy(iter->serialID, comms->serialID);
+    iter->parent = g_dongleMobot;
+    iter->mobot = comms;
+    iter->next = g_dongleMobot->children;
+    g_dongleMobot->children = iter;
+  }
+
   rc = getFormFactor(comms, &form);
   if(rc < 0) {
     comms->connected = 0;
     return rc;
   }
   comms->formFactor = (mobotFormFactor_t)form;
-  return Mobot_getID(comms);
+  rc = Mobot_getID(comms);
+
+  if(rc){
+    return rc;
+  }
+  return 0;
 }
 
 int Mobot_connectWithBluetoothAddress(mobot_t* comms, const char* address, int channel)

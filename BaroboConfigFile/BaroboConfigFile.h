@@ -53,6 +53,7 @@ int BCF_Destroy(bcf_t* bcf);
 
 int BCF_Read(bcf_t* bcf, const char* filename);
 int BCF_Write(bcf_t* bcf, /* OPT */ const char* filename);
+int BCF_GetEntryIndex(bcf_t* bcf, const char* entry);
 const char* BCF_GetIndex(bcf_t* bcf, int index);
 int BCF_GetNum(bcf_t* bcf);
 const char* BCF_GetDongle(bcf_t* bcf, int index);

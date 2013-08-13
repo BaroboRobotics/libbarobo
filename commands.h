@@ -482,22 +482,27 @@ enum protocol_commands_e {
   CMD_PLACEHOLDER201306271044,
   CMD_PLACEHOLDER201307101241,
 
-/* 0x7F CMD_GET_NUM_SLAVES: Get the number of slaves in a group [79]
+/* 0x7F CMD_GET_MASTER_ADDRESS: Get the zigbee address of the master [79]
+   Command Format: [CMD] [size] [0x00]
+   Expected Response: [0x10] [size] [addr high byte] [addr low byte] [0x11] */
+  CMD_GET_MASTER_ADDRESS,
+
+/* 0x80 CMD_GET_NUM_SLAVES: Get the number of slaves in a group [80]
    Command Format: [CMD] [size] [0x00]
    Expected Response [0x10] [size] [1 byte size] [0x11] */
   CMD_GET_NUM_SLAVES,
 
-/* 0x80 CMD_GET_SLAVE_ADDR: Get the address of a group slave [80]
+/* 0x81 CMD_GET_SLAVE_ADDR: Get the address of a group slave [81]
    Command Format: [CMD] [size] [1 byte index] [0x00]
    Expected Response [0x10] [size] [2 byte address, msb first] [0x11] */
   CMD_GET_SLAVE_ADDR,
 
-/* 0x81 CMD_GET_NUM_POSES: Get the number of poses currently recorded [81]
+/* 0x82 CMD_GET_NUM_POSES: Get the number of poses currently recorded [82]
    Command Format: [CMD] [size] [0x00]
    Expected Response [0x10] [size] [1 byte num] [0x00] */
   CMD_GET_NUM_POSES,
 
-/* 0x82 CMD_GET_POSE_DATA: Get the angles for a certain pose [82]
+/* 0x83 CMD_GET_POSE_DATA: Get the angles for a certain pose [83]
    Command Format: [CMD] [size] [1 byte index] [0x00]
    Expected Response [0x10] [size] [4*4 byte float values] [0x00] */
   CMD_GET_POSE_DATA,

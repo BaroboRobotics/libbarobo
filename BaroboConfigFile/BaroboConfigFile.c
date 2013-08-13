@@ -153,6 +153,17 @@ const char* BCF_GetIndex(bcf_t* bcf, int index)
   return bcf->entries[index];
 }
 
+int BCF_GetEntryIndex(bcf_t* bcf, const char* entry)
+{
+  int i;
+  for(i = 0; i < bcf->num; i++) {
+    if(!strcmp(entry, bcf->entries[i])) {
+      return i;
+    }
+  }
+  return -1;
+}
+
 int BCF_GetNum(bcf_t* bcf)
 {
   return bcf->num;

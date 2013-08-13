@@ -645,6 +645,21 @@ int Mobot_getJointSpeeds(mobot_t* comms, double *speed1, double *speed2, double 
   return 0;
 }
 
+int Mobot_getMasterAddress(mobot_t* comms, uint16_t* addr)
+{
+  uint8_t buf[32];
+  int status;
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GET_MASTER_ADDRESS), buf, 0);
+  if(status < 0) return status;
+  if(buf[0] != RESP_OK) {
+    return -1;
+  }
+  *addr = buf[2]<<8;
+  *addr |= buf[3];
+
+  return 0;
+}
+
 int Mobot_getNumSlaves(mobot_t* comms, int* num)
 {
   uint8_t buf[32];
