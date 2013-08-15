@@ -43,7 +43,7 @@ typedef struct bcf_s
 extern "C" {
 #endif
 
-#ifdef _MSYS
+#ifdef _WIN32
 #define strdup(x) BCF_strdup(x)
 char* BCF_strdup(const char* str);
 #endif
