@@ -104,6 +104,7 @@ if(CMAKE_HOST_WIN32)
           ARCHIVE DESTINATION lib)
   install(FILES mobot.h DESTINATION include)
 elseif(CMAKE_HOST_APPLE)
+  add_subdirectory(chmobot_src)
   set(CMAKE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 	add_library(barobo SHARED
       mobot.c
