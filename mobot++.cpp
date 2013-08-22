@@ -79,12 +79,10 @@ int CMobot::connectWithIPAddress(const char* address, const char port[])
   return Mobot_connectWithIPAddress(_comms, address, port);
 }
 
-#ifndef _WIN32
 int CMobot::connectWithTTY(const char* ttyfilename)
 {
   return Mobot_connectWithTTY(_comms, ttyfilename);
 }
-#endif
 
 int CMobot::disconnect()
 {

@@ -108,7 +108,7 @@ typedef unsigned short uint16_t;
 #ifdef _MSYS
 #undef _WIN32
 #define strdup(x) mc_strdup(x)
-char* mc_strdup(const char* str);
+extern "C" char* mc_strdup(const char* str);
 #endif
 
 #ifndef _WIN32
@@ -202,7 +202,12 @@ typedef struct mobotInfo_s
 typedef struct mobot_s
 {
   int socket;
-#if defined (_WIN32) && !defined(_CH_)
+#if defined (SWIG)
+  HANDLE commHandle;
+  OVERLAPPED *ovIncoming;
+  OVERLAPPED *ovOutgoing;
+  HANDLE cancelEvent;
+#elif defined (_WIN32) && !defined(_CH_) 
   HANDLE commHandle;
   OVERLAPPED *ovIncoming;
   OVERLAPPED *ovOutgoing;
@@ -377,8 +382,9 @@ typedef struct recordAngleArg_s
 } recordAngleArg_t;
 #endif
 
+#ifndef SWIG
 #ifndef C_ONLY
-#if defined (__cplusplus) || defined (_CH_) || defined (SWIG)
+#if defined (__cplusplus) || defined (_CH_) 
 #ifdef _CH_
 double systemTime();
 class CMobot 
@@ -641,9 +647,7 @@ class CMobot
     int connectWithAddress(const char address[], int channel = 1);
     int connectWithBluetoothAddress(const char address[], int channel = 1);
     int connectWithIPAddress(const char address[], const char port[] = "5768");
-#ifndef _WIN32
     int connectWithTTY(const char ttyfilename[]);
-#endif
     int disconnect();
     int driveJointToDirect(robotJointId_t id, double angle);
     int driveJointTo(robotJointId_t id, double angle);
@@ -961,6 +965,7 @@ class CMobotGroup
 
 #endif /* If C++ or CH */
 #endif /* C_ONLY */
+#endif /* SWIG */
 
 #ifdef __cplusplus
 extern "C" {
@@ -972,9 +977,7 @@ DLLIMPORT int Mobot_blinkLED(mobot_t* comms, double delay, int numBlinks);
 DLLIMPORT int Mobot_connect(mobot_t* comms);
 DLLIMPORT int Mobot_connectWithTCP(mobot_t* comms);
 DLLIMPORT int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], const char port[]);
-#ifndef _WIN32
 DLLIMPORT int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address);
-#endif
 DLLIMPORT int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename);
 DLLIMPORT int Mobot_connectWithTTY_500kbaud(mobot_t* comms, const char* ttyfilename);
 DLLIMPORT int Mobot_connectWithSerialID(mobot_t* comms, const char address[]);
