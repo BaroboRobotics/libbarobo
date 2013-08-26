@@ -17,7 +17,7 @@
    along with BaroboLink.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//#define COMMSDEBUG
+#define COMMSDEBUG
 
 #include <stdio.h>
 #include <string.h>
@@ -369,13 +369,25 @@ int Mobot_connectWithZigbeeAddress(mobot_t* comms, uint16_t addr)
     }
   }
   if(!idFound) {
+    MUTEX_LOCK(g_dongleMobot->mobotTree_lock);
     iter = (mobotInfo_t*)malloc(sizeof(mobotInfo_t));
     iter->zigbeeAddr = comms->zigbeeAddr;
-    strcpy(iter->serialID, comms->serialID);
     iter->parent = g_dongleMobot;
     iter->mobot = comms;
     iter->next = g_dongleMobot->children;
     g_dongleMobot->children = iter;
+    rc = Mobot_getID(comms);
+    strcpy(iter->serialID, comms->serialID);
+    if(Mobot_pair(comms)) {
+      /* The child is already paired. Disconnect and return error... */
+      comms->connected = 0;
+      comms->connectionMode = MOBOTCONNECT_NONE;
+      comms->parent = NULL;
+      //iter->mobot = NULL;
+      MUTEX_UNLOCK(g_dongleMobot->mobotTree_lock);
+      return -1;
+    }
+    MUTEX_UNLOCK(g_dongleMobot->mobotTree_lock);
   }
 
   rc = getFormFactor(comms, &form);
@@ -384,7 +396,6 @@ int Mobot_connectWithZigbeeAddress(mobot_t* comms, uint16_t addr)
     return rc;
   }
   comms->formFactor = (mobotFormFactor_t)form;
-  rc = Mobot_getID(comms);
 
   if(rc){
     return rc;

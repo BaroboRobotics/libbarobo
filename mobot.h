@@ -1105,7 +1105,7 @@ DLLIMPORT int Mobot_getJointSpeedRatios(mobot_t* comms,
                                         double *ratio3, 
                                         double *ratio4);
 DLLIMPORT int Mobot_getJointState(mobot_t* comms, robotJointId_t id, robotJointState_t *state);
-DLLIMPORT int Mobot_getPoseData(mobot_t* comms, double *angle1, double *angle2, double *angle3, double *angle4);
+DLLIMPORT int Mobot_getPoseData(mobot_t* comms, uint8_t index, double *angle1, double *angle2, double *angle3, double *angle4);
 DLLIMPORT int Mobot_getMasterAddress(mobot_t* comms, uint16_t* addr);
 DLLIMPORT int Mobot_getNumPoses(mobot_t* comms, int* num);
 DLLIMPORT int Mobot_getNumSlaves(mobot_t* comms, int* num);

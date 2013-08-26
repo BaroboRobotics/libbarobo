@@ -701,19 +701,25 @@ int Mobot_getNumPoses(mobot_t* comms, int* num)
   return 0;
 }
 
-int Mobot_getPoseData(mobot_t* comms, double *angle1, double *angle2, double *angle3, double *angle4)
+int Mobot_getPoseData(mobot_t* comms, uint8_t index, double *angle1, double *angle2, double *angle3, double *angle4)
 {
   uint8_t buf[32];
   int status;
-  status = MobotMsgTransaction(comms, BTCMD(CMD_GET_NUM_POSES), buf, 0);
+  float f[4];
+  buf[0] = index;
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GET_POSE_DATA), buf, 1);
   if(status < 0) return status;
   if(buf[0] != RESP_OK) {
     return -1;
   }
-  memcpy(angle1, &buf[2], 4);
-  memcpy(angle2, &buf[6], 4);
-  memcpy(angle3, &buf[10], 4);
-  memcpy(angle4, &buf[14], 4);
+  memcpy(&f[0], &buf[2], 4);
+  memcpy(&f[1], &buf[6], 4);
+  memcpy(&f[2], &buf[10], 4);
+  memcpy(&f[3], &buf[14], 4);
+  *angle1 = f[0];
+  *angle2 = f[1];
+  *angle3 = f[2];
+  *angle4 = f[3];
   return 0;
 }
 
