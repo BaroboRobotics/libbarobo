@@ -157,7 +157,7 @@ int BCF_GetEntryIndex(bcf_t* bcf, const char* entry)
 {
   int i;
   for(i = 0; i < bcf->num; i++) {
-    if(!strcmp(entry, bcf->entries[i])) {
+    if(!strcasecmp(entry, bcf->entries[i])) {
       return i;
     }
   }
