@@ -16,9 +16,9 @@ cp chmobot.chf $PKGDIR/lib
 cp chlinkboti.chf $PKGDIR/lib
 cp chlinkbotl.chf $PKGDIR/lib
 cp shiftTime.chf $PKGDIR/lib
-cp systemTime.chf $PKGDIR/lib
+#cp systemTime.chf $PKGDIR/lib
 cp delay.chf $PKGDIR/lib
-cp libchmobot.dl $PKGDIR/dl/libmobot.dl
+cp libmobot.dl $PKGDIR/dl/libmobot.dl
 cp ../mobot.h $PKGDIR/include
 cp ../linkbot.h $PKGDIR/include
 cp ../docs/mobot.pdf $PKGDIR/docs
