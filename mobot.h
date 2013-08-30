@@ -202,7 +202,7 @@ typedef struct mobotInfo_s
 typedef struct mobot_s
 {
   int socket;
-#if defined (SWIG)
+#if defined (SWIG) && defined (_WIN32)
   HANDLE commHandle;
   OVERLAPPED *ovIncoming;
   OVERLAPPED *ovOutgoing;
