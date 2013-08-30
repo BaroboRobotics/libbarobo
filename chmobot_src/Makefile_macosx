@@ -3,16 +3,24 @@ VERSION=0.1
 HEADERS=../mobot.h
 PKGDIR=$(PACKAGE)-$(VERSION)/$(PACKAGE)
 
+OBJS= chmobot_chdl.o \
+      chmoboti_chdl.o \
+      chmobotl_chdl.o 
+
+CFLAGS="-I/usr/local/ch/extern/include"
+
+LFLAGS=-L../ -L../BaroboConfigFile -L../BaroboConfigFile/mxml-2.7
+
+LIBS=-lbaroboStatic -lpthread -lbaroboconfigfile -lmxml -lchsdk
+
+
 target: libmobot.dl
 
-libmobot.dl: mobot.o chmobot_chdl.o
-	ch dllink libmobot.dl cplusplus mobot.o chmobot_chdl.o -lpthread 
+libmobot.dl: $(OBJS)
+	ch dllink libmobot.dl cplusplus $(OBJS) $(LFLAGS) $(LIBS)
 
-mobot.o: ../mobot.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus -DNONRELEASE ../mobot.cpp
-
-chmobot_chdl.o: chmobot_chdl.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus -DNONRELEASE chmobot_chdl.cpp
+%.o : %.cpp
+	ch dlcomp libmobot.dl cplusplus -DNONRELEASE $(CFLAGS) $<
 
 install:
 	ch pkginstall.ch $(PACKAGE)

@@ -43,9 +43,19 @@ class Linkbot():
     if mobot.Mobot_connectWithSerialID(self._mobot, idstring):
       raise IOError("Error connecting to robot.")
 
+  def connectWithTTY(self, ttyfile):
+    if mobot.Mobot_connectWithTTY(self._mobot, ttyfile) != 0:
+      raise IOError("Error connecting to robot.")
+
   def disconnect(self):
     """Disconnect from a Linkbot"""
     mobot.Mobot_disconnect(self._mobot)
+
+  def driveTo(self, angle1, angle2, angle3):
+    mobot.Mobot_driveTo(self._mobot, deg2rad(angle1), deg2rad(angle2), deg2rad(angle3), 0)
+
+  def driveToNB(self, angle1, angle2, angle3):
+    mobot.Mobot_driveToNB(self._mobot, deg2rad(angle1), deg2rad(angle2), deg2rad(angle3), 0)
 
   def driveJointTo(self, joint, angle):
     """Drive joint 'joint' to 'angle' (degrees) using PID controller"""
@@ -58,6 +68,12 @@ class Linkbot():
     rc = mobot.Mobot_driveJointToNB(self._mobot, joint, deg2rad(angle))
     if rc < 0:
       raise IOError("Error communicating with robot. Return code {0}".format(rc))
+
+  def getAccelerometerData(self):
+    rc,x,y,z = mobot.Mobot_getAccelerometerData(self._mobot)
+    if rc < 0:
+      raise IOError("Error communicating with robot. Return code {0}".format(rc))
+    return [x, y, z]
 
   def getBatteryVoltage(self):
     """Return the voltage of the battery."""
@@ -240,6 +256,17 @@ class Linkbot():
     Arguments should be in the range [0, 255].
     """
     rc = mobot.Mobot_setColorRGB(self._mobot, int(r), int(g), int(b))
+    if rc < 0:
+      raise IOError("Error communicating with robot. Return code {0}".format(rc))
+
+  def _setDongle(self):
+    rc = mobot.Mobot_setDongleMobot(self._mobot)
+    if rc < 0:
+      raise IOError("Error communicating with robot. Return code {0}".format(rc))
+
+  def _setID(self, newid):
+    assert len(newid) == 4, "ID length must be 4."
+    rc = mobot.Mobot_setID(self._mobot, newid)
     if rc < 0:
       raise IOError("Error communicating with robot. Return code {0}".format(rc))
 

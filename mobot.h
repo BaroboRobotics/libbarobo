@@ -107,6 +107,8 @@ typedef unsigned short uint16_t;
 
 #ifdef _MSYS
 #undef _WIN32
+#define strdup(x) mc_strdup(x)
+extern "C" char* mc_strdup(const char* str);
 #endif
 
 #ifndef _WIN32
@@ -201,7 +203,12 @@ typedef struct mobotInfo_s
 typedef struct mobot_s
 {
   int socket;
-#if defined (_WIN32) && !defined(_CH_)
+#if defined (SWIG) && defined (_WIN32)
+  HANDLE commHandle;
+  OVERLAPPED *ovIncoming;
+  OVERLAPPED *ovOutgoing;
+  HANDLE cancelEvent;
+#elif defined (_WIN32) && !defined(_CH_) 
   HANDLE commHandle;
   OVERLAPPED *ovIncoming;
   OVERLAPPED *ovOutgoing;
@@ -376,8 +383,9 @@ typedef struct recordAngleArg_s
 } recordAngleArg_t;
 #endif
 
+#ifndef SWIG
 #ifndef C_ONLY
-#if defined (__cplusplus) || defined (_CH_) || defined (SWIG)
+#if defined (__cplusplus) || defined (_CH_) 
 #ifdef _CH_
 double systemTime();
 class CMobot 
@@ -575,10 +583,10 @@ class CMobot
     int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
     int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
     int stopAllJoints();
-    int turnLeft(double angle);
-    int turnLeftNB(double angle);
-    int turnRight(double angle);
-    int turnRightNB(double angle);
+    int turnLeft(double angle, double radius, double tracklength);
+    int turnLeftNB(double angle, double radius, double tracklength);
+    int turnRight(double angle, double radius, double tracklength);
+    int turnRightNB(double angle, double radius, double tracklength);
 
     int motionArch(double angle);
     int motionDistance(double distance, double radius);
@@ -652,9 +660,7 @@ class CMobot
     int connectWithAddress(const char address[], int channel = 1);
     int connectWithBluetoothAddress(const char address[], int channel = 1);
     int connectWithIPAddress(const char address[], const char port[] = "5768");
-#ifndef _WIN32
     int connectWithTTY(const char ttyfilename[]);
-#endif
     int disconnect();
     int driveJointToDirect(robotJointId_t id, double angle);
     int driveJointTo(robotJointId_t id, double angle);
@@ -784,10 +790,10 @@ class CMobot
     int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
     int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
     int stopAllJoints();
-    int turnLeft(double angle);
-    int turnLeftNB(double angle);
-    int turnRight(double angle);
-    int turnRightNB(double angle);
+    int turnLeft(double angle, double radius, double tracklength);
+    int turnLeftNB(double angle, double radius, double tracklength);
+    int turnRight(double angle, double radius, double tracklength);
+    int turnRightNB(double angle, double radius, double tracklength);
 
     int motionArch(double angle);
     int motionDistance(double distance, double radius);
@@ -910,10 +916,10 @@ class CMobotGroup
     int stopOneJoint(robotJointId_t id);
     int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
     int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
-    int turnLeft(double angle);
-    int turnLeftNB(double angle);
-    int turnRight(double angle);
-    int turnRightNB(double angle);
+    int turnLeft(double angle, double radius, double tracklength);
+    int turnLeftNB(double angle, double radius, double tracklength);
+    int turnRight(double angle, double radius, double tracklength);
+    int turnRightNB(double angle, double radius, double tracklength);
 
     int motionArch(double angle);
     int motionArchNB(double angle);
@@ -972,6 +978,7 @@ class CMobotGroup
 
 #endif /* If C++ or CH */
 #endif /* C_ONLY */
+#endif /* SWIG */
 
 #ifdef __cplusplus
 extern "C" {
@@ -989,12 +996,10 @@ DLLIMPORT int Mobot_blinkLED(mobot_t* comms, double delay, int numBlinks);
 DLLIMPORT int Mobot_connect(mobot_t* comms);
 DLLIMPORT int Mobot_connectWithTCP(mobot_t* comms);
 DLLIMPORT int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], const char port[]);
-#ifndef _WIN32
 DLLIMPORT int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address);
-#endif
 DLLIMPORT int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename);
 DLLIMPORT int Mobot_connectWithTTY_500kbaud(mobot_t* comms, const char* ttyfilename);
-DLLIMPORT int Mobot_connectWithSerialID(mobot_t* comms, const char* address);
+DLLIMPORT int Mobot_connectWithSerialID(mobot_t* comms, const char address[]);
 DLLIMPORT int Mobot_connectChild(mobot_t* parent, mobot_t* child);
 DLLIMPORT int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSerialID);
 DLLIMPORT int Mobot_connectWithAddress(
@@ -1301,10 +1306,10 @@ DLLIMPORT int Mobot_stopOneJoint(mobot_t* comms, robotJointId_t id);
 DLLIMPORT int Mobot_stopTwoJoints(mobot_t* comms, robotJointId_t id1, robotJointId_t id2);
 DLLIMPORT int Mobot_stopThreeJoints(mobot_t* comms, robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
 DLLIMPORT int Mobot_stopAllJoints(mobot_t* comms);
-DLLIMPORT int Mobot_turnLeft(mobot_t* comms, double angle);
-DLLIMPORT int Mobot_turnLeftNB(mobot_t* comms, double angle);
-DLLIMPORT int Mobot_turnRight(mobot_t* comms, double angle);
-DLLIMPORT int Mobot_turnRightNB(mobot_t* comms, double angle);
+DLLIMPORT int Mobot_turnLeft(mobot_t* comms, double angle, double radius, double tracklength);
+DLLIMPORT int Mobot_turnLeftNB(mobot_t* comms, double angle, double radius, double tracklength);
+DLLIMPORT int Mobot_turnRight(mobot_t* comms, double angle, double radius, double tracklength);
+DLLIMPORT int Mobot_turnRightNB(mobot_t* comms, double angle, double radius, double tracklength);
 DLLIMPORT int Mobot_twiRecv(mobot_t* comms, uint8_t addr, void* recvbuf, int size);
 DLLIMPORT int Mobot_twiSend(mobot_t* comms, uint8_t addr, uint8_t* buf, int size);
 DLLIMPORT int Mobot_twiSendRecv(mobot_t* comms, uint8_t addr, 

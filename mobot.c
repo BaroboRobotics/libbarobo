@@ -83,6 +83,14 @@ void* commsOutEngine(void* arg);
 
 bcf_t* g_bcf;
 
+char* mc_strdup(const char* str)
+{
+  char* s;
+  s = (char*)malloc(sizeof(char)*(strlen(str)+1));
+  strcpy(s, str);
+  return s;
+}
+
 double deg2rad(double deg)
 {
   return deg * M_PI / 180.0;
@@ -411,7 +419,7 @@ int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
   }
 }
 
-int Mobot_connectWithSerialID(mobot_t* comms, const char* address)
+int Mobot_connectWithSerialID(mobot_t* comms, const char address[])
 {
   return Mobot_connectChildID(g_dongleMobot, comms, address);
 }
@@ -520,7 +528,6 @@ int Mobot_connectWithBluetoothAddress(mobot_t* comms, const char* address, int c
 #endif
 }
 
-#ifndef _WIN32
 int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address)
 {
   char buf[80];
@@ -537,7 +544,6 @@ int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address)
 
 #ifndef _WIN32
 #define MAX_PATH 512
-#endif
 
 int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
 {
@@ -575,6 +581,9 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
     //perror("Unable to open tty port.");
     return -1;
   }
+#ifdef __MACH__
+  sleep(1);
+#endif
   /* Change the baud rate to 57600 */
   struct termios term;
   tcgetattr(comms->socket, &term);
@@ -620,24 +629,6 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   // Communication speed (simple version, using the predefined
   // constants)
   //
-
-#ifdef __MACH__
-  cfsetspeed(&term, 500000);
-  cfsetispeed(&term, 500000);
-  cfsetospeed(&term, 500000);
-  if(status = tcsetattr(comms->socket, TCSANOW, &term)) {
-    fprintf(stderr, "Error setting tty settings. %d\n", errno);
-  }
-  tcgetattr(comms->socket, &term);
-  if(cfgetispeed(&term) != 500000) {
-    fprintf(stderr, "Error setting input speed.\n");
-    exit(0);
-  }
-  if(cfgetospeed(&term) != 500000) {
-    fprintf(stderr, "Error setting output speed.\n");
-    exit(0);
-  }
-#else
   cfsetspeed(&term, B230400);
   cfsetispeed(&term, B230400);
   cfsetospeed(&term, B230400);
@@ -653,6 +644,9 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
     fprintf(stderr, "Error setting output speed.\n");
     exit(0);
   }
+#ifdef __MACH__
+	write(comms->socket, NULL, 0);
+	sleep(1);
 #endif
   comms->connected = 1;
   comms->connectionMode = MOBOTCONNECT_TTY;
@@ -2815,7 +2809,8 @@ double systemTime()
   double t;
   clock_serv_t cclock;
   mach_timespec_t mts;
-  host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+  mach_timespec_t cur_time;
+	host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
   clock_get_time(cclock, &mts);
   mach_port_deallocate(mach_task_self(), cclock);
   cur_time.tv_nsec = mts.tv_nsec;

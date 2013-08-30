@@ -88,6 +88,7 @@ if(CMAKE_HOST_WIN32)
     target_link_libraries(baroboStatic Ws2_32 baroboconfigfile mxml)
     add_subdirectory(demos)
   else()
+    set_target_properties(baroboStatic PROPERTIES COMPILE_FLAGS "-static-libgcc")
     add_subdirectory(demos)
     add_definitions(-DMSYS)
     target_link_libraries(barobo 
@@ -103,6 +104,7 @@ if(CMAKE_HOST_WIN32)
           ARCHIVE DESTINATION lib)
   install(FILES mobot.h DESTINATION include)
 elseif(CMAKE_HOST_APPLE)
+  add_subdirectory(chmobot_src)
   set(CMAKE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 	add_library(barobo SHARED
       mobot.c
@@ -170,7 +172,7 @@ elseif(CMAKE_HOST_APPLE)
           LIBRARY DESTINATION lib)
   install(FILES mobot.h DESTINATION include)
   add_subdirectory(demos)
-else(CMAKE_HOST_WIN32)
+else(CMAKE_HOST_WIN32) #Linux
   add_subdirectory(chmobot_src)
   add_definitions(-DENABLE_BLUETOOTH)
 	add_library(baroboStatic STATIC
@@ -234,10 +236,10 @@ else(CMAKE_HOST_WIN32)
   set_target_properties(baroboStatic PROPERTIES COMPILE_FLAGS "-fPIC")
 	target_link_libraries(barobo bluetooth pthread rt baroboconfigfile mxml)
 	target_link_libraries(baroboStatic bluetooth pthread rt baroboconfigfile mxml)
-  install(TARGETS barobo baroboStatic
-          LIBRARY DESTINATION lib
-          ARCHIVE DESTINATION lib)
-  install(FILES mobot.h DESTINATION include)
+#  install(TARGETS barobo 
+#          LIBRARY DESTINATION lib
+#          ARCHIVE DESTINATION lib)
+#install(FILES mobot.h DESTINATION include)
   add_subdirectory(demos)
 endif(CMAKE_HOST_WIN32)
 
