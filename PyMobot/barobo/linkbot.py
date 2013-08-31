@@ -311,13 +311,13 @@ class Linkbot():
       raise IOError("Error communicating with robot. Return code {0}".format(rc))
 
   def smoothMoveNB(self, joint, accel0, accelf, vmax, angle):
-    rc = mobot.Mobot_smoothMoveNB(
+    rc = mobot.Mobot_smoothMoveToNB(
         self._mobot,
         joint,
-        accel0,
-        accelf,
-        vmax,
-        angle)
+        deg2rad(accel0),
+        deg2rad(accelf),
+        deg2rad(vmax),
+        deg2rad(angle))
     if rc < 0:
       raise IOError("Error communicating with robot. Return code {0}".format(rc))
    
