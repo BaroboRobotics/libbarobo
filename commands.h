@@ -479,8 +479,9 @@ enum protocol_commands_e {
    Expected Response: [0x10] [size] [data] [0x11] */
   CMD_TWI_SENDRECV,
 
-  CMD_PLACEHOLDER201306271044,
-  CMD_PLACEHOLDER201307101241,
+  CMD_PLACEHOLDER201306271044, //0x7F 79
+  CMD_PLACEHOLDER201307101241, //0x80 80
+  CMD_PLACEHOLDER201308300852, //0x81 81
 
 /* 0x7F CMD_GET_MASTER_ADDRESS: Get the zigbee address of the master [79]
    Command Format: [CMD] [size] [0x00]

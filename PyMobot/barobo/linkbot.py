@@ -261,7 +261,7 @@ class Linkbot():
 
   def _setID(self, newid):
     assert len(newid) == 4, "ID length must be 4."
-    rc = mobot.Mobot_setID(newid)
+    rc = mobot.Mobot_setID(self._mobot, newid)
     if rc < 0:
       raise IOError("Error communicating with robot. Return code {0}".format(rc))
 

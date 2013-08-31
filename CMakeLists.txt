@@ -88,6 +88,7 @@ if(CMAKE_HOST_WIN32)
     target_link_libraries(baroboStatic Ws2_32 baroboconfigfile mxml)
     add_subdirectory(demos)
   else()
+    set_target_properties(baroboStatic PROPERTIES COMPILE_FLAGS "-static-libgcc")
     add_subdirectory(demos)
     add_definitions(-DMSYS)
     target_link_libraries(barobo 
@@ -103,6 +104,7 @@ if(CMAKE_HOST_WIN32)
           ARCHIVE DESTINATION lib)
   install(FILES mobot.h DESTINATION include)
 elseif(CMAKE_HOST_APPLE)
+  add_subdirectory(chmobot_src)
   set(CMAKE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 	add_library(barobo SHARED
       mobot.c
