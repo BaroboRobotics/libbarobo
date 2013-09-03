@@ -22,6 +22,11 @@ CHECK_FUNCTION_EXISTS(vsnprintf HAVE_VSNPRINTF)
 CHECK_INCLUDE_FILES(pthread.h HAVE_PTHREAD_H)
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
+if(APPLE)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -arch i386")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -arch i386")
+endif()
+
 add_library(mxml STATIC 
     mxml-attr.c
     mxmldoc.c
