@@ -17,6 +17,11 @@ include_directories(${MXML_SOURCE_DIR})
 #link_directories(${MXML_LIBRARY_DIRS})
 link_directories(${MXML_BINARY_DIR})
 
+if(CMAKE_HOST_APPLE)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -arch i386")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -arch i386")
+endif()
+
 add_library(baroboconfigfile STATIC 
     BaroboConfigFile.c)
 
