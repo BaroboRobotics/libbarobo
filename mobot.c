@@ -2335,10 +2335,15 @@ void* commsEngine(void* arg)
           ) 
         {
             MUTEX_LOCK(comms->recvBuf_lock);
-            comms->recvBuf_ready = 1;
-            comms->recvBuf_bytes = comms->recvBuf[1];
-            COND_BROADCAST(comms->recvBuf_cond);
-            MUTEX_UNLOCK(comms->recvBuf_lock);
+            if(comms->recvBuf_ready == 1) {
+              /* Receiver is not ready for this message. Just discard it. */
+              MUTEX_UNLOCK(comms->recvBuf_lock);
+            } else {
+              comms->recvBuf_ready = 1;
+              comms->recvBuf_bytes = comms->recvBuf[1];
+              COND_BROADCAST(comms->recvBuf_cond);
+              MUTEX_UNLOCK(comms->recvBuf_lock);
+            }
         } else {
           /* Check to see if it matches our address */
           uint16 = 0;
