@@ -90,7 +90,7 @@ int Mobot_recordAngle(mobot_t* comms, robotJointId_t id, double* time, double* a
 unsigned int diff_msecs(struct timespec t1, struct timespec t2)
 {
   unsigned int t;
-  t = (t2.tv_sec - t1.tv_sec) * 1000;
+  t = (unsigned int)(t2.tv_sec - t1.tv_sec) * 1000;
   t += (t2.tv_nsec - t1.tv_nsec) / 1000000;
   return t;
 }
@@ -406,9 +406,6 @@ int Mobot_recordAngleBegin(mobot_t* comms,
 
 int Mobot_recordAngleEnd(mobot_t* comms, robotJointId_t id, int *num)
 {
-  int i;
-  double timeShift = 0;
-  int timeShiftIndex;
   /* Make sure it was recording in the first place */
   if(comms->recordingEnabled[id-1] == 0) {
     return -1;
@@ -594,7 +591,6 @@ void* recordAnglesThread(void* arg)
   double shiftTime;
   int shiftTimeIndex;
   int j;
-  int done = 0;
   if(rArg->comms->shiftData) {
     rArg->comms->recordedAngles[0] = &rArg->angle;
     rArg->comms->recordedAngles[1] = &rArg->angle2;
@@ -687,7 +683,7 @@ void* Mobot_recordAnglesBeginThread(void* arg)
     cur_time.tv_sec = mts.tv_sec;
     cur_time.tv_nsec = mts.tv_nsec;
 #endif
-    while(rc = Mobot_getJointAnglesTime(
+    while((rc = Mobot_getJointAnglesTime(
         rArg->comms, 
         &((*rArg->time_p)[i]), 
         &((*rArg->angle_p)[i]),
@@ -695,7 +691,7 @@ void* Mobot_recordAnglesBeginThread(void* arg)
         &((*rArg->angle3_p)[i]),
         &((*rArg->angle4_p)[i])
         ) &&
-        (retries <= MAX_RETRIES)
+        (retries <= MAX_RETRIES))
         )
     {
       retries++;
@@ -870,9 +866,7 @@ int Mobot_recordAnglesBegin(mobot_t* comms,
 int Mobot_recordAnglesEnd(mobot_t* comms, int* num)
 {
   /* Make sure it was recording in the first place */
-  int i, j, done = 0;
-  double timeShift = 0;
-  int timeShiftIndex;
+  int i = 0;
   for(i = 0; i < 4; i++) {
     if(comms->recordingEnabled[i] == 0) {
       return -1;

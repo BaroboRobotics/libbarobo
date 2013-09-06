@@ -587,7 +587,6 @@ int Mobot_beginFourierControl(mobot_t* comms, uint8_t motorMask)
 int Mobot_stop(mobot_t* comms)
 {
   uint8_t buf[32];
-  float f;
   int status;
   status = MobotMsgTransaction(comms, BTCMD(CMD_STOP), buf, 0);
   if(status < 0) return status;
@@ -624,7 +623,7 @@ int Mobot_stopAllJoints(mobot_t* comms)
 int Mobot_turnLeft(mobot_t* comms, double angle, double radius, double tracklength)
 {
   int rc;
-  if(rc = Mobot_turnLeftNB(comms, angle, radius, tracklength)) {
+  if((rc = Mobot_turnLeftNB(comms, angle, radius, tracklength))) {
     return rc;
   }
   return Mobot_moveWait(comms);
@@ -647,7 +646,7 @@ int Mobot_turnLeftNB(mobot_t* comms, double angle, double radius, double trackle
 int Mobot_turnRight(mobot_t* comms, double angle, double radius, double tracklength)
 {
   int rc;
-  if(rc = Mobot_turnRightNB(comms, angle, radius, tracklength)) {
+  if((rc = Mobot_turnRightNB(comms, angle, radius, tracklength))) {
     return rc;
   }
   return Mobot_moveWait(comms);

@@ -116,7 +116,6 @@ int Mobot_getID(mobot_t* comms)
 {
   int status;
   uint8_t buf[8];
-  int addr;
   status = MobotMsgTransaction(comms, BTCMD(CMD_GETSERIALID), buf, 0);
   if(status < 0) return status;
   /* Make sure the buf size is correct */
@@ -130,7 +129,6 @@ int Mobot_getID(mobot_t* comms)
 int Mobot_getAccelerometerData(mobot_t* comms, double *accel_x, double *accel_y, double *accel_z)
 {
   uint8_t buf[32];
-  float f;
   int status;
   int16_t i;
   status = MobotMsgTransaction(comms, BTCMD(CMD_GETACCEL), buf, 0);
@@ -259,7 +257,7 @@ int Mobot_getHWRev(mobot_t* comms, int* rev)
 {
   uint8_t buf[20];
   int status;
-  if(status = MobotMsgTransaction(comms, BTCMD(CMD_GETHWREV), buf, 0)) {
+  if((status = MobotMsgTransaction(comms, BTCMD(CMD_GETHWREV), buf, 0))) {
     return status;
   }
   if(buf[0] != RESP_OK) {
@@ -310,7 +308,6 @@ int Mobot_getJointAngles(mobot_t* comms,
 {
   uint8_t buf[32];
   float f;
-  uint32_t millis;
   int status;
   status = MobotMsgTransaction(comms, BTCMD(CMD_GETMOTORANGLESTIMESTAMPABS), buf, 0);
   if(status < 0) return status;
@@ -518,7 +515,6 @@ int Mobot_getJointMaxSpeed(mobot_t* comms, robotJointId_t id, double *maxSpeed)
   float f;
   uint8_t buf[64];
   int status;
-  int bytes_read;
   buf[0] = (uint8_t) id-1;
   status = MobotMsgTransaction(comms, BTCMD(CMD_GETMOTORMAXSPEED), &buf[0], 1);
   if(status < 0) return status;
@@ -726,7 +722,6 @@ int Mobot_getPoseData(mobot_t* comms, uint8_t index, double *angle1, double *ang
 int Mobot_getColorRGB(mobot_t* comms, int *r, int *g, int *b)
 {
   uint8_t buf[32];
-  float f;
   int status;
 
   status = MobotMsgTransaction(comms, BTCMD(CMD_GETRGB), buf, 0);

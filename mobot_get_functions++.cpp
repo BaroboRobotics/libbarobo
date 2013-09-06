@@ -21,6 +21,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "mobot.h"
+#include "mobot_internal.h"
 #define DEPRECATED(from, to) \
   fprintf(stderr, "Warning: The function \"%s()\" is deprecated. Please use \"%s()\"\n" , from, to)
 
@@ -137,7 +138,6 @@ int CMobot::getJointSpeedRatio(robotJointId_t id, double &ratio)
 
 int CMobot::getJointSpeeds(double &speed1, double &speed2, double &speed3, double &speed4)
 {
-  int i;
   int err = Mobot_getJointSpeeds(_comms, &speed1, &speed2, &speed3, &speed4);
   speed1 = RAD2DEG(speed1);
   speed2 = RAD2DEG(speed2);

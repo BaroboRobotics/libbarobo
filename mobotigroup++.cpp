@@ -18,6 +18,7 @@
 */
 
 #include <stdlib.h>
+#include <unistd.h>
 #include "mobot.h"
 #include "mobot_internal.h"
 #include "linkbot.h"
@@ -199,7 +200,6 @@ int CLinkbotIGroup::setMovementStateTimeNB(robotJointState_t dir1,
                            robotJointState_t dir3, 
                            double seconds)
 {
-  int msecs = seconds * 1000.0;
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->setMovementStateNB(dir1, dir2, dir3);
   }

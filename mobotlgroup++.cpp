@@ -40,7 +40,7 @@ CLinkbotLGroup::~CLinkbotLGroup()
 int CLinkbotLGroup::addRobot(CLinkbotL& robot)
 {
   int rc = CLinkbotIGroup::addRobot((CLinkbotI&)robot);
-  return 0;
+  return rc;
 }
 
 int CLinkbotLGroup::addRobots(CLinkbotL robots[], int numRobots)

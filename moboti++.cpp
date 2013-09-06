@@ -41,6 +41,7 @@ int CLinkbotI::connect()
     Mobot_disconnect(_comms);
     return -1;
   }
+  return 0;
 }
 
 int CLinkbotI::connectWithSerialID(const char* serialID)

@@ -19,6 +19,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "mobot.h"
 #include "mobot_internal.h"
 
@@ -109,7 +110,7 @@ int CMobotGroup::motionArchNB(double angle)
 {
   argDouble = angle;
   _motionInProgress++;
-  THREAD_CREATE(_thread, motionArchThread, this);
+  THREAD_CREATE((THREAD_T*)_thread, motionArchThread, this);
   return 0;
 }
 
@@ -136,7 +137,7 @@ int CMobotGroup::motionDistanceNB(double distance, double radius)
 {
   argDouble = distance / radius;
   _motionInProgress++;
-  THREAD_CREATE(_thread, motionDistanceThread, this);
+  THREAD_CREATE((THREAD_T*)_thread, motionDistanceThread, this);
   return 0;
 }
 
@@ -160,7 +161,7 @@ int CMobotGroup::motionInchwormLeftNB(int num)
 {
   argInt = num;
   _motionInProgress++;
-  THREAD_CREATE(_thread, motionInchwormLeftThread, this);
+  THREAD_CREATE((THREAD_T*)_thread, motionInchwormLeftThread, this);
   return 0;
 }
 
@@ -193,7 +194,7 @@ int CMobotGroup::motionInchwormRightNB(int num)
 {
   argInt = num;
   _motionInProgress++;
-  THREAD_CREATE(_thread, motionInchwormRightThread, this);
+  THREAD_CREATE((THREAD_T*)_thread, motionInchwormRightThread, this);
   return 0;
 }
 
@@ -227,7 +228,7 @@ int CMobotGroup::motionRollBackwardNB(double angle)
 {
   argDouble = angle;
   _motionInProgress++;
-  THREAD_CREATE(_thread, motionRollBackwardThread, this);
+  THREAD_CREATE((THREAD_T*)_thread, motionRollBackwardThread, this);
   return 0;
 }
 
@@ -251,7 +252,7 @@ int CMobotGroup::motionRollForwardNB(double angle)
 {
   argDouble = angle;
   _motionInProgress++;
-  THREAD_CREATE(_thread, motionRollForwardThread, this);
+  THREAD_CREATE((THREAD_T*)_thread, motionRollForwardThread, this);
   return 0;
 }
 
@@ -275,7 +276,7 @@ int CMobotGroup::motionSkinnyNB(double angle)
 {
   argDouble = angle;
   _motionInProgress++;
-  THREAD_CREATE(_thread, motionSkinnyThread, this);
+  THREAD_CREATE((THREAD_T*)_thread, motionSkinnyThread, this);
   return 0;
 }
 
@@ -298,7 +299,7 @@ int CMobotGroup::motionStand()
 int CMobotGroup::motionStandNB()
 {
   _motionInProgress++;
-  THREAD_CREATE(_thread, motionStandThread, NULL);
+  THREAD_CREATE((THREAD_T*)_thread, motionStandThread, NULL);
   return 0;
 }
 
@@ -327,7 +328,7 @@ int CMobotGroup::motionTurnLeftNB(double angle)
 {
   argDouble = angle;
   _motionInProgress++;
-  THREAD_CREATE(_thread, motionTurnLeftThread, this);
+  THREAD_CREATE((THREAD_T*)_thread, motionTurnLeftThread, this);
   return 0;
 }
 
@@ -351,7 +352,7 @@ int CMobotGroup::motionTurnRightNB(double angle)
 {
   argDouble = angle;
   _motionInProgress++;
-  THREAD_CREATE(_thread, motionTurnRightThread, this);
+  THREAD_CREATE((THREAD_T*)_thread, motionTurnRightThread, this);
   return 0;
 }
 
@@ -375,7 +376,7 @@ int CMobotGroup::motionTumbleRightNB(int num)
 {
   argInt = num;
   _motionInProgress++;
-  THREAD_CREATE(_thread, motionTumbleRightThread, this);
+  THREAD_CREATE((THREAD_T*)_thread, motionTumbleRightThread, this);
   return 0;
 }
 
@@ -428,7 +429,7 @@ int CMobotGroup::motionTumbleLeftNB(int num)
 {
   argInt = num;
   _motionInProgress++;
-  THREAD_CREATE(_thread, motionTumbleLeftThread, this);
+  THREAD_CREATE((THREAD_T*)_thread, motionTumbleLeftThread, this);
   return 0;
 }
 
@@ -478,7 +479,7 @@ int CMobotGroup::motionUnstand()
 int CMobotGroup::motionUnstandNB()
 {
   _motionInProgress++;
-  THREAD_CREATE(_thread, motionUnstandThread, NULL);
+  THREAD_CREATE((THREAD_T*)_thread, motionUnstandThread, NULL);
   return 0;
 }
 
@@ -819,7 +820,6 @@ int CMobotGroup::setJointMovementStateTime(robotJointId_t id, robotJointState_t 
 
 int CMobotGroup::setJointMovementStateTimeNB(robotJointId_t id, robotJointState_t dir, double seconds)
 {
-  int msecs = seconds * 1000.0;
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->setJointMovementStateNB(id, dir);
   }
@@ -913,7 +913,6 @@ int CMobotGroup::setMovementStateTimeNB(robotJointState_t dir1,
                            robotJointState_t dir4, 
                            double seconds)
 {
-  int msecs = seconds * 1000.0;
   for(int i = 0; i < _numRobots; i++) {
     _robots[i]->setMovementStateNB(dir1, dir2, dir3, dir4);
   }

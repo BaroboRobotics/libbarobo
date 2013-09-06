@@ -67,7 +67,7 @@
 int Mobot_setBuzzerFrequency(mobot_t* comms, unsigned int frequency, double time)
 {
   int rc;
-  if(rc = Mobot_setBuzzerFrequencyOn(comms, frequency)) {
+  if((rc = Mobot_setBuzzerFrequencyOn(comms, frequency))) {
     return rc;
   }
 #ifndef _WIN32
@@ -75,7 +75,7 @@ int Mobot_setBuzzerFrequency(mobot_t* comms, unsigned int frequency, double time
 #else
   Sleep(time*1000);
 #endif
-  if(rc = Mobot_setBuzzerFrequencyOff(comms)) {
+  if((rc = Mobot_setBuzzerFrequencyOff(comms))) {
     return rc;
   }
   return 0;
@@ -114,7 +114,7 @@ int Mobot_setHWRev(mobot_t* comms, uint8_t rev)
   uint8_t buf[20];
   int status;
   buf[0] = rev;
-  if(status = MobotMsgTransaction(comms, BTCMD(CMD_GETHWREV), buf, 1)) {
+  if((status = MobotMsgTransaction(comms, BTCMD(CMD_GETHWREV), buf, 1))) {
     return status;
   }
   if(buf[0] != RESP_OK) {
@@ -261,7 +261,6 @@ int Mobot_setJointSpeedRatios(mobot_t* comms, double ratio1, double ratio2, doub
 int Mobot_setMotorPower(mobot_t* comms, robotJointId_t id, int power)
 {
   uint8_t buf[32];
-  float f;
   int status;
   int16_t _power;
   memset(buf, 0, sizeof(uint8_t)*32);
@@ -398,7 +397,6 @@ int Mobot_setMovementStateTimeNB(mobot_t* comms,
 int Mobot_setColorRGB(mobot_t* comms, int r, int g, int b)
 {
   uint8_t buf[32];
-  float f;
   int status;
   buf[0] = 0xff;
   buf[1] = 0xff;

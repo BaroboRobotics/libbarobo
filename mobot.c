@@ -126,6 +126,21 @@ void *get_in_addr(struct sockaddr *sa)
     return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
+int getFormFactor(mobot_t* comms, int* form)
+{
+    uint8_t buf[32];
+    int status;
+    status = MobotMsgTransaction(comms, BTCMD(CMD_GETFORMFACTOR), buf, 0);
+    if(status < 0) return status;
+    /* Make sure the data size is correct */
+    if(buf[1] != 4) {
+        return -1;
+    }
+    /* Copy the data */
+    *form = buf[2];
+    return 0;
+}
+
 /* Return Error Codes:
    -1 : General Error
    -2 : Lockfile Exists
@@ -141,7 +156,6 @@ int Mobot_connect(mobot_t* comms)
   if(Mobot_connectWithTCP(comms) == 0) {
     return 0;
   }
-  FILE *fp;
   int i;
   const char* path = comms->configFilePath;
   char buf[512];
@@ -191,7 +205,7 @@ int Mobot_connect(mobot_t* comms)
   chunk2[2] = '\0';
   sprintf(buf, "/dev/tty.MOBOT-%s%s-SPP", chunk1, chunk2);
   //printf("Connecting to %s...\n", buf);
-  if(i = Mobot_connectWithTTY(comms, buf)) {
+  if((i = Mobot_connectWithTTY(comms, buf))) {
     return i;
   } else {
     g_numConnected++;
@@ -210,12 +224,10 @@ int Mobot_connectWithTCP(mobot_t* comms)
 
 int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], const char port[])
 {
-  int sockfd, numbytes;  
-  char buf[MAXDATASIZE];
+  int sockfd;
   struct addrinfo hints, *servinfo, *p;
   int rv;
   int rc;
-  char s[INET6_ADDRSTRLEN];
   memset(&hints, 0, sizeof hints);
   hints.ai_family = AF_UNSPEC;
   hints.ai_socktype = SOCK_STREAM;
@@ -330,7 +342,7 @@ int Mobot_connectWithSerialID(mobot_t* comms, const char address[])
 int Mobot_connectWithZigbeeAddress(mobot_t* comms, uint16_t addr)
 {
   int rc;
-  int form;
+  int form = 0;
   if(g_dongleMobot == NULL) {
     if(g_bcf == NULL) {
       g_bcf = BCF_New();
@@ -611,7 +623,7 @@ int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename)
   cfsetspeed(&term, B230400);
   cfsetispeed(&term, B230400);
   cfsetospeed(&term, B230400);
-  if(status = tcsetattr(comms->socket, TCSANOW, &term)) {
+  if((status = tcsetattr(comms->socket, TCSANOW, &term))) {
     fprintf(stderr, "Error setting tty settings. %d\n", errno);
   }
   tcgetattr(comms->socket, &term);
@@ -741,7 +753,7 @@ int Mobot_connectWithTTY_500kbaud(mobot_t* comms, const char* ttyfilename)
   cfsetspeed(&term, 500000);
   cfsetispeed(&term, 500000);
   cfsetospeed(&term, 500000);
-  if(status = tcsetattr(comms->socket, TCSANOW, &term)) {
+  if((status = tcsetattr(comms->socket, TCSANOW, &term))) {
     fprintf(stderr, "Error setting tty settings. %d\n", errno);
   }
   tcgetattr(comms->socket, &term);
@@ -930,27 +942,10 @@ int Mobot_connectWithTTY_500kbaud(mobot_t* comms, const char* ttyfilename)
 
 #endif
 
-int getFormFactor(mobot_t* comms, int* form)
-{
-  uint8_t buf[32];
-  int status;
-  status = MobotMsgTransaction(comms, BTCMD(CMD_GETFORMFACTOR), buf, 0);
-  if(status < 0) return status;
-  /* Make sure the data size is correct */
-  if(buf[1] != 4) {
-    return -1;
-  }
-  /* Copy the data */
-  *form = buf[2];
-  return 0;
-}
-
 int Mobot_connectChild(mobot_t* parent, mobot_t* child)
 {
   /* First check to see if the requested child is already in the list of knows
-   * Serial ID's */  
-  int idFound = 0;
-  mobotInfo_t* iter;
+   * Serial ID's */
   int i;
   int rc;
   Mobot_initDongle();
@@ -1129,7 +1124,6 @@ int finishConnect(mobot_t* comms)
   int i = 0, rc;
   int numJoints = 0;
   mobotFormFactor_t form;
-  uint8_t buf[256];
   /* Start the comms engine */
   g_mobotThreadInitializing = 1;
   THREAD_CREATE(comms->commsThread, commsEngine, comms);
@@ -1206,7 +1200,6 @@ int finishConnect(mobot_t* comms)
 int Mobot_blinkLED(mobot_t* comms, double delay, int numBlinks)
 {
   uint8_t buf[8];
-  float f;
   int status;
   uint32_t millis;
   millis = delay*1000.0;
@@ -1400,7 +1393,6 @@ int Mobot_setRFChannel(mobot_t* comms, uint8_t channel)
 {
   int status;
   uint8_t buf[8];
-  int addr;
   buf[0] = channel;
   status = MobotMsgTransaction(comms, BTCMD(CMD_SETRFCHANNEL), buf, 1);
   if(status < 0) return status;
@@ -1415,7 +1407,6 @@ int Mobot_setID(mobot_t* comms, const char* id)
 {
   int status;
   uint8_t buf[8];
-  int addr;
   int i = 0;
   while(id[i] != '\0') {
     buf[i] = id[i];
@@ -1432,10 +1423,7 @@ int Mobot_setID(mobot_t* comms, const char* id)
 
 int Mobot_reboot(mobot_t* comms)
 {
-  int status;
-  uint16_t addr;
-  int i;
-  uint8_t buf[8];
+  //int status;
   //status = MobotMsgTransaction(comms, BTCMD(CMD_REBOOT), buf, 3);
   SendToIMobot(comms, BTCMD(CMD_REBOOT), NULL, 0);
   MUTEX_UNLOCK(comms->commsLock);
@@ -1445,7 +1433,7 @@ int Mobot_reboot(mobot_t* comms)
     COND_WAIT(comms->sendBuf_cond, comms->sendBuf_lock);
   }
   MUTEX_UNLOCK(comms->sendBuf_lock);
-  if(status < 0) return status;
+  //if(status < 0) return status;
   return 0;
 }
 
@@ -1493,7 +1481,8 @@ int Mobot_disconnect(mobot_t* comms)
         comms->lockfileName = NULL;
       }
       g_disconnectSignal = 1;
-      pthread_kill(*comms->commsThread, SIGINT);
+      pthread_kill(comms->commsThread, SIGINT);
+      sleep(1);
       //while(g_disconnectSignal);
       if(close(comms->socket)) {
         rc = -1;
@@ -1728,7 +1717,6 @@ int Mobot_init(mobot_t* comms)
 
 int Mobot_isConnected(mobot_t* comms)
 {
-  int status;
   int rc;
   if(comms->connected == 0) {
     return 0;
@@ -2004,7 +1992,6 @@ int MobotMsgTransaction(mobot_t* comms, uint8_t cmd, /*IN&OUT*/ void* buf, int s
 int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
 {
   int err = 0;
-  int i;
   int len;
   uint8_t str[1024];
   if(comms->connected == 0) {
@@ -2069,7 +2056,7 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
     sendBufAppend(comms, str, len);
   } else {
     MUTEX_LOCK(comms->socket_lock);
-    err = write(comms->socket, str, len);
+    err = (int)write(comms->socket, str, len);
     MUTEX_UNLOCK(comms->socket_lock);
   }
 #else
@@ -2100,7 +2087,7 @@ int SendToMobotDirect(mobot_t* comms, const void* data, int datasize)
 #ifdef _WIN32
     err = send(comms->socket, (const char*)data, datasize, 0);
 #else
-    err = write(comms->socket, data, datasize);
+    err = (int)write(comms->socket, data, datasize);
 #endif
   } else if (comms->connected == 2) {
     err = -1;
@@ -2176,8 +2163,8 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
   memcpy(buf, comms->recvBuf, comms->recvBuf_bytes);
 
   /* Print out results */
-  int i;
   /*
+  int i;
   printf("RECV: ");
   for(i = 0; i < buf[1]; i++) {
     printf("0x%2x ", buf[i]);
@@ -2228,7 +2215,7 @@ int RecvFromIMobot2(mobot_t* comms, char* buf, int size)
       err = recvfrom(comms->socket, tmp, 256, 0, (struct sockaddr*)0, 0);
 #else
       while(tries >= 0) {
-        err = read(comms->socket, tmp, 255);
+        err = (int)read(comms->socket, tmp, 255);
         if(err < 0) {
           tries--;
           //printf("*");
@@ -2299,7 +2286,7 @@ void* commsEngine(void* arg)
   while(1) {
     /* Try and receive a byte */
 #ifndef _WIN32
-    err = read(comms->socket, &byte, 1);
+    err = (int)read(comms->socket, &byte, 1);
     /* Check to see if we were interrupted */
     if(err) {
       if(errno == EINTR) {
@@ -2720,9 +2707,7 @@ void* commsOutEngine(void* arg)
   mobot_t* comms = (mobot_t*)arg;
   int index;
   uint8_t* bytes = NULL;
-  int n;
   int bufsize = 0;
-  uint8_t b;
   int err;
   int i;
 
@@ -2757,7 +2742,7 @@ void* commsOutEngine(void* arg)
     }
     MUTEX_UNLOCK(comms->sendBuf_lock);
     MUTEX_LOCK(comms->socket_lock);
-    err = write(comms->socket, bytes, i);
+    err = (int)write(comms->socket, bytes, i);
     //printf("*** OUT: 0x%2x\n", *byte);
     MUTEX_UNLOCK(comms->socket_lock);
     MUTEX_LOCK(comms->sendBuf_lock);
