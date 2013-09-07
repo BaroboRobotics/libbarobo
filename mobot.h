@@ -91,7 +91,8 @@ typedef unsigned int uint32_t;
 #endif
 #else // Release
 #define DLLIMPORT
-#define THREAD_T void
+#include <pthread.h>
+#define THREAD_T pthread_t
 #define MUTEX_T void
 #define COND_T void
 #define sockaddr_t void

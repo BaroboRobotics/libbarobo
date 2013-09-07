@@ -110,7 +110,7 @@ int CMobotGroup::motionArchNB(double angle)
 {
   argDouble = angle;
   _motionInProgress++;
-  THREAD_CREATE((THREAD_T*)_thread, motionArchThread, this);
+  THREAD_CREATE(_thread, motionArchThread, this);
   return 0;
 }
 
@@ -137,7 +137,7 @@ int CMobotGroup::motionDistanceNB(double distance, double radius)
 {
   argDouble = distance / radius;
   _motionInProgress++;
-  THREAD_CREATE((THREAD_T*)_thread, motionDistanceThread, this);
+  THREAD_CREATE(_thread, motionDistanceThread, this);
   return 0;
 }
 
@@ -161,7 +161,7 @@ int CMobotGroup::motionInchwormLeftNB(int num)
 {
   argInt = num;
   _motionInProgress++;
-  THREAD_CREATE((THREAD_T*)_thread, motionInchwormLeftThread, this);
+  THREAD_CREATE(_thread, motionInchwormLeftThread, this);
   return 0;
 }
 
@@ -194,7 +194,7 @@ int CMobotGroup::motionInchwormRightNB(int num)
 {
   argInt = num;
   _motionInProgress++;
-  THREAD_CREATE((THREAD_T*)_thread, motionInchwormRightThread, this);
+  THREAD_CREATE(_thread, motionInchwormRightThread, this);
   return 0;
 }
 
@@ -276,7 +276,7 @@ int CMobotGroup::motionSkinnyNB(double angle)
 {
   argDouble = angle;
   _motionInProgress++;
-  THREAD_CREATE((THREAD_T*)_thread, motionSkinnyThread, this);
+  THREAD_CREATE(_thread, motionSkinnyThread, this);
   return 0;
 }
 

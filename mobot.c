@@ -1481,8 +1481,7 @@ int Mobot_disconnect(mobot_t* comms)
         comms->lockfileName = NULL;
       }
       g_disconnectSignal = 1;
-      pthread_kill(comms->commsThread, SIGINT);
-      sleep(1);
+      pthread_kill(*comms->commsThread, SIGINT);
       //while(g_disconnectSignal);
       if(close(comms->socket)) {
         rc = -1;
