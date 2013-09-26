@@ -66,6 +66,7 @@ class CLinkbotI
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int getBatteryVoltage(double &voltage);
     int getColorRGB(int &r, int &g, int &b);
+    int getDistance(double &distance, double radius);
     int getFormFactor(int &formFactor);
     static const char* getConfigFilePath();
     int getID();

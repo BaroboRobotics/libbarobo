@@ -246,6 +246,18 @@ int CLinkbotI::getColorRGB(int & r, int & g, int & b) {
     dlrunfun(fptr, &retval, NULL, this, &r, &g, &b);
     return retval;
 }
+int CLinkbotI::getDistance(double &distance, double radius) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_getDistance_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, &distance, radius);
+    return retval;
+}
 int CLinkbotI::getFormFactor(int & formFactor) {
     void *fptr;
     int retval;

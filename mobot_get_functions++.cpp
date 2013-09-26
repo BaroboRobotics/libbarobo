@@ -29,6 +29,11 @@ const char* CMobot::getConfigFilePath()
   return Mobot_getConfigFilePath();
 }
 
+int CMobot::getDistance(double &distance, double radius)
+{
+  return Mobot_getDistance(_comms, &distance, radius);
+}
+
 int CMobot::getFormFactor(int &formFactor)
 {
   return Mobot_getFormFactor(_comms, &formFactor);

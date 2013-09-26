@@ -427,6 +427,7 @@ class CMobot
     int disableButtonCallback();
     int isConnected();
     int isMoving();
+    int getDistance(double &distance, double radius);
     int getFormFactor(int &formFactor);
     static const char* getConfigFilePath();
     int getJointAngle(robotJointId_t id, double &angle);
@@ -663,6 +664,7 @@ class CMobot
     int isMoving();
     int getFormFactor(int &formFactor);
     static const char* getConfigFilePath();
+    int getDistance(double &distance, double radius);
 #ifndef SWIG
     int getJointAngle(robotJointId_t id, double &angle);
 #else
@@ -1056,6 +1058,7 @@ DLLIMPORT int Mobot_getButtonVoltage(mobot_t* comms, double *voltage);
 DLLIMPORT int Mobot_getChildrenInfo(mobot_t* comms, mobotInfo_t **mobotInfo, int *numChildren );
 DLLIMPORT int Mobot_getColorRGB(mobot_t* comms, int *r, int *g, int *b);
 DLLIMPORT const char* Mobot_getConfigFilePath();
+DLLIMPORT int Mobot_getDistance(mobot_t* comms, double *distance, double radius);
 DLLIMPORT int Mobot_getEncoderVoltage(mobot_t* comms, int pinNumber, double *voltage);
 DLLIMPORT int Mobot_getFormFactor(mobot_t* comms, int* form);
 DLLIMPORT int Mobot_getHWRev(mobot_t* comms, int* rev);

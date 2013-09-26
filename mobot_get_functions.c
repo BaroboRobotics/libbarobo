@@ -231,6 +231,16 @@ const char* Mobot_getConfigFilePath()
   return path;
 }
 
+int Mobot_getDistance(mobot_t* comms, double *distance, double radius)
+{
+  int rc;
+  double angle;
+  rc = Mobot_getJointAngleAverage(comms, 1, &angle, 10);
+  if(rc) return rc;
+  *distance = angle * radius;
+  return 0;
+}
+
 int Mobot_getEncoderVoltage(mobot_t* comms, int pinNumber, double *voltage)
 {
   uint8_t buf[32];
