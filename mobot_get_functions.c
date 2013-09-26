@@ -235,7 +235,7 @@ int Mobot_getDistance(mobot_t* comms, double *distance, double radius)
 {
   int rc;
   double angle;
-  rc = Mobot_getJointAngleAverage(comms, 1, &angle, 10);
+  rc = Mobot_getJointAngleAverage(comms, ROBOT_JOINT1, &angle, 10);
   if(rc) return rc;
   *distance = angle * radius;
   return 0;
