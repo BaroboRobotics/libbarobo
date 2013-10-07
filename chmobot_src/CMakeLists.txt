@@ -44,7 +44,7 @@ elseif(CMAKE_HOST_APPLE)
       chmoboti_chdl.cpp
       chmobotl_chdl.cpp
 	  )
-	target_link_libraries(chmobot baroboStatic bluetooth pthread rt baroboconfigfile mxml chsdk)
+	target_link_libraries(chmobot baroboStatic pthread baroboconfigfile mxml chsdk embedch)
   set_target_properties(chmobot PROPERTIES SUFFIX .dl)
 else()
   add_definitions(-DENABLE_BLUETOOTH -DLINUX -D_REENTRANT -DNeedFunctionPrototypes)

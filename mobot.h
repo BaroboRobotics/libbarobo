@@ -110,7 +110,7 @@ typedef unsigned short uint16_t;
 #ifdef _MSYS
 #undef _WIN32
 #define strdup(x) mc_strdup(x)
-char* mc_strdup(const char* str);
+extern "C" char* mc_strdup(const char* str);
 #endif
 
 #ifndef _WIN32
@@ -371,8 +371,9 @@ typedef struct recordAngleArg_s
 } recordAngleArg_t;
 #endif
 
+#ifndef SWIG
 #ifndef C_ONLY
-#if defined (__cplusplus) || defined (_CH_) || defined (SWIG)
+#if defined (__cplusplus) || defined (_CH_) 
 #ifdef _CH_
 double systemTime();
 class CMobot 
@@ -635,9 +636,7 @@ class CMobot
     int connectWithAddress(const char address[], int channel = 1);
     int connectWithBluetoothAddress(const char address[], int channel = 1);
     int connectWithIPAddress(const char address[], const char port[] = "5768");
-#ifndef _WIN32
     int connectWithTTY(const char ttyfilename[]);
-#endif
     int disconnect();
     int driveJointToDirect(robotJointId_t id, double angle);
     int driveJointTo(robotJointId_t id, double angle);
@@ -955,6 +954,7 @@ class CMobotGroup
 
 #endif /* If C++ or CH */
 #endif /* C_ONLY */
+#endif /* SWIG */
 
 #ifdef __cplusplus
 extern "C" {
@@ -966,9 +966,7 @@ DLLIMPORT int Mobot_blinkLED(mobot_t* comms, double delay, int numBlinks);
 DLLIMPORT int Mobot_connect(mobot_t* comms);
 DLLIMPORT int Mobot_connectWithTCP(mobot_t* comms);
 DLLIMPORT int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], const char port[]);
-#ifndef _WIN32
 DLLIMPORT int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address);
-#endif
 DLLIMPORT int Mobot_connectWithTTY(mobot_t* comms, const char* ttyfilename);
 DLLIMPORT int Mobot_connectWithTTYBaud(mobot_t* comms, const char* ttyfilename, unsigned long baud);
 DLLIMPORT int Mobot_connectWithSerialID(mobot_t* comms, const char address[]);
@@ -979,6 +977,7 @@ DLLIMPORT int Mobot_connectWithAddress(
 DLLIMPORT int Mobot_connectWithBluetoothAddress(
     mobot_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_dongleGetTTY(char* tty, size_t len);
+DLLIMPORT int Mobot_connectWithZigbeeAddress(mobot_t* comms, uint16_t addr);
 DLLIMPORT int Mobot_findMobot(mobot_t* parent, const char* childSerialID);
 DLLIMPORT mobotMelodyNote_t* Mobot_createMelody(int tempo);
 DLLIMPORT int Mobot_melodyAddNote(mobotMelodyNote_t* melody, const char* note, int divider);
@@ -1099,6 +1098,11 @@ DLLIMPORT int Mobot_getJointSpeedRatios(mobot_t* comms,
                                         double *ratio3, 
                                         double *ratio4);
 DLLIMPORT int Mobot_getJointState(mobot_t* comms, robotJointId_t id, robotJointState_t *state);
+DLLIMPORT int Mobot_getPoseData(mobot_t* comms, uint8_t index, double *angle1, double *angle2, double *angle3, double *angle4);
+DLLIMPORT int Mobot_getMasterAddress(mobot_t* comms, uint16_t* addr);
+DLLIMPORT int Mobot_getNumPoses(mobot_t* comms, int* num);
+DLLIMPORT int Mobot_getNumSlaves(mobot_t* comms, int* num);
+DLLIMPORT int Mobot_getSlaveAddr(mobot_t* comms, uint8_t index, uint16_t* addr);
 DLLIMPORT int Mobot_getStatus(mobot_t* comms);
 DLLIMPORT int Mobot_getVersion(mobot_t* comms);
 DLLIMPORT int Mobot_move(mobot_t* comms,

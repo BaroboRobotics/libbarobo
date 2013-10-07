@@ -335,6 +335,82 @@ int Mobot_connectWithSerialID(mobot_t* comms, const char address[])
   return Mobot_connectChildID(g_dongleMobot, comms, address);
 }
 
+int Mobot_connectWithZigbeeAddress(mobot_t* comms, uint16_t addr)
+{
+  int rc;
+  int form;
+  if(g_dongleMobot == NULL) {
+    if(g_bcf == NULL) {
+      g_bcf = BCF_New();
+      if(BCF_Read(g_bcf, comms->configFilePath)) {
+        fprintf(stderr, 
+            "ERROR: Your Barobo configuration file does not exist.\n"
+            "Please create one by opening the MoBot remote control, clicking on\n"
+            "the 'Robot' menu entry, and selecting 'Configure Robot Bluetooth'.\n");
+        BCF_Destroy(g_bcf);
+        g_bcf = NULL;
+        return -1;
+      }
+    }
+    Mobot_initDongle();
+  }
+  if(
+      (g_dongleMobot == NULL) || 
+      (g_dongleMobot->connected == 0)
+    )
+  {
+    return -1;
+  }
+  comms->connected = 1;
+  comms->connectionMode = MOBOTCONNECT_ZIGBEE;
+  comms->parent = g_dongleMobot;
+  comms->zigbeeAddr = addr;
+
+  /* Need to add this mobot to the parent's list of children */
+  mobotInfo_t* iter;
+  int idFound = 0;
+  for(iter = g_dongleMobot->children; iter!=NULL; iter = iter->next) {
+    if(iter->zigbeeAddr == comms->zigbeeAddr) {
+      idFound = 1;
+      iter->mobot = comms;
+      break;
+    }
+  }
+  if(!idFound) {
+    MUTEX_LOCK(g_dongleMobot->mobotTree_lock);
+    iter = (mobotInfo_t*)malloc(sizeof(mobotInfo_t));
+    iter->zigbeeAddr = comms->zigbeeAddr;
+    iter->parent = g_dongleMobot;
+    iter->mobot = comms;
+    iter->next = g_dongleMobot->children;
+    g_dongleMobot->children = iter;
+    rc = Mobot_getID(comms);
+    strcpy(iter->serialID, comms->serialID);
+    if(Mobot_pair(comms)) {
+      /* The child is already paired. Disconnect and return error... */
+      comms->connected = 0;
+      comms->connectionMode = MOBOTCONNECT_NONE;
+      comms->parent = NULL;
+      //iter->mobot = NULL;
+      MUTEX_UNLOCK(g_dongleMobot->mobotTree_lock);
+      return -1;
+    }
+    MUTEX_UNLOCK(g_dongleMobot->mobotTree_lock);
+  }
+
+  rc = getFormFactor(comms, &form);
+  if(rc < 0) {
+    comms->connected = 0;
+    return rc;
+  }
+  comms->formFactor = (mobotFormFactor_t)form;
+
+  if(rc){
+    return rc;
+  }
+  return 0;
+}
+
 int Mobot_connectWithBluetoothAddress(mobot_t* comms, const char* address, int channel)
 {
   int err = -1;
@@ -439,7 +515,6 @@ int Mobot_connectWithBluetoothAddress(mobot_t* comms, const char* address, int c
 #endif
 }
 
-#ifndef _WIN32
 int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address)
 {
   char buf[80];
@@ -453,7 +528,6 @@ int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address)
   sprintf(buf, "/dev/tty.MOBOT-%s%s-SPP", chunk1, chunk2);
   return Mobot_connectWithTTY(comms, buf);
 }
-#endif
 
 int Mobot_connectWithTTY(mobot_t *comms, const char *ttyfilename) {
   return Mobot_connectWithTTYBaud(comms, ttyfilename, MOBOT_BAUD);
