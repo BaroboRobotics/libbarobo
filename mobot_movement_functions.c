@@ -72,7 +72,9 @@ int Mobot_isMoving(mobot_t* comms)
   for(i = 1; i <= 4; i++) {
     Mobot_getJointState(comms, (robotJointId_t)i, &state);
     if( (state == ROBOT_FORWARD) ||
-        (state == ROBOT_BACKWARD) ) 
+        (state == ROBOT_BACKWARD) ||
+        (state == ROBOT_ACCEL) 
+     ) 
     {
       moving = 1;
       break;

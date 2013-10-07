@@ -169,7 +169,8 @@ typedef enum robotJointState_e
     ROBOT_BACKWARD,
     ROBOT_HOLD,
     ROBOT_POSITIVE,
-    ROBOT_NEGATIVE
+    ROBOT_NEGATIVE,
+    ROBOT_ACCEL,
 } robotJointState_t;
 #endif
 
@@ -635,6 +636,18 @@ class CMobot
   public:
     CMobot();
     virtual ~CMobot();
+    int accelTimeNB(double radius, double acceleration, double time);
+    int accelToVelocityNB(double radius, double acceleration, double velocity);
+    int accelToMaxSpeedNB(double radius, double acceleration);
+    int accelAngularTimeNB(robotJointId_t id, double acceleration, double time);
+    int accelAngularToVelocityNB(robotJointId_t id, double acceleration, double speed);
+    int accelAngularAngleNB(robotJointId_t id, double acceleration, double angle);
+    int smoothMoveToNB(
+        robotJointId_t id,
+        double accel0,
+        double accelf,
+        double vmax,
+        double angle);
     int blinkLED(double delay, int numBlinks);
 /* connect() Return Error Codes:
    -1 : General Error
@@ -975,6 +988,12 @@ extern "C" {
 
 extern int g_numConnected;
 
+DLLIMPORT int Mobot_accelTimeNB(mobot_t* comms, double radius, double acceleration, double time);
+DLLIMPORT int Mobot_accelToVelocityNB(mobot_t* comms, double radius, double acceleration, double velocity);
+DLLIMPORT int Mobot_accelToMaxSpeedNB(mobot_t* comms, double radius, double acceleration);
+DLLIMPORT int Mobot_accelAngularTimeNB(mobot_t* comms, robotJointId_t id, double acceleration, double time);
+DLLIMPORT int Mobot_accelAngularToVelocityNB(mobot_t* comms, robotJointId_t id, double acceleration, double speed);
+DLLIMPORT int Mobot_accelAngularAngleNB(mobot_t* comms, robotJointId_t id, double acceleration, double angle);
 DLLIMPORT int Mobot_blinkLED(mobot_t* comms, double delay, int numBlinks);
 DLLIMPORT int Mobot_connect(mobot_t* comms);
 DLLIMPORT int Mobot_connectWithTCP(mobot_t* comms);
@@ -1278,6 +1297,13 @@ DLLIMPORT int Mobot_setMovementStateTimeNB(mobot_t* comms,
                                   double seconds);
 DLLIMPORT int Mobot_setColorRGB(mobot_t* comms, int r, int g, int b);
 DLLIMPORT int Mobot_setTwoWheelRobotSpeed(mobot_t* comms, double speed, double radius);
+DLLIMPORT int Mobot_smoothMoveToNB(
+    mobot_t* comms, 
+    robotJointId_t id, 
+    double accel0, 
+    double accelf, 
+    double vmax, 
+    double angle);
 DLLIMPORT int Mobot_stop(mobot_t* comms);
 DLLIMPORT int Mobot_stopOneJoint(mobot_t* comms, robotJointId_t id);
 DLLIMPORT int Mobot_stopTwoJoints(mobot_t* comms, robotJointId_t id1, robotJointId_t id2);

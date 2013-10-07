@@ -479,9 +479,27 @@ enum protocol_commands_e {
    Expected Response: [0x10] [size] [data] [0x11] */
   CMD_TWI_SENDRECV,
 
-  CMD_PLACEHOLDER201306271044, //0x7F 79
-  CMD_PLACEHOLDER201307101241, //0x80 80
-  CMD_PLACEHOLDER201308300852, //0x81 81
+/* 0x7F CMD_SET_ACCEL: Set a joint to move at a constant acceleration. Stops [79]
+ * accelerating at specified speed or the max speed. (all units in rads/sec)
+ * Command Format: [CMD] [size] [1 byte id] [4 byte accel] [4 byte max speed] [4 bytes timeout millis MSB] [0x00] */
+  CMD_SET_ACCEL,
+
+/* 0x80 CMD_SMOOTHMOVE: move a joint smoothly from its current position to a new position. [80]
+   Command format: 
+      [CMD] 
+      [size] 
+      [1 byte id] 
+      [4 byte Accel0] 
+      [4 byte Accelf] 
+      [4 byte vmax] 
+      [4 byte joint angle] 
+      [0x00]
+      */
+  CMD_SMOOTHMOVE,
+
+  CMD_PLACEHOLDER201306271044, //0x81  [81]
+  CMD_PLACEHOLDER201307101241, //0x82  [82]
+  CMD_PLACEHOLDER201308300852, //0x83  [83]
 
   CMD_NUMCOMMANDS
 };
