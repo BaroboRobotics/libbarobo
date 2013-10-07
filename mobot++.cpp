@@ -45,6 +45,52 @@ CMobot::~CMobot()
   }
 }
 
+int CMobot::accelTimeNB(double radius, double acceleration, double time)
+{
+  return Mobot_accelTimeNB(_comms, radius, deg2rad(acceleration), time);
+}
+
+int CMobot::accelToVelocityNB(double radius, double acceleration, double velocity)
+{
+  return Mobot_accelToVelocityNB(_comms, radius, deg2rad(acceleration), deg2rad(velocity));
+}
+
+int CMobot::accelToMaxSpeedNB(double radius, double acceleration)
+{
+  return Mobot_accelToMaxSpeedNB(_comms, radius, deg2rad(acceleration));
+}
+
+int CMobot::accelAngularTimeNB(robotJointId_t id, double acceleration, double time)
+{
+  return Mobot_accelAngularTimeNB(_comms, id, deg2rad(acceleration), time);
+}
+
+int CMobot::accelAngularToVelocityNB(robotJointId_t id, double acceleration, double speed)
+{
+  return Mobot_accelAngularToVelocityNB(_comms, id, deg2rad(acceleration), deg2rad(speed));
+}
+
+int CMobot::accelAngularAngleNB(robotJointId_t id, double acceleration, double angle)
+{
+  return Mobot_accelAngularAngleNB(_comms, id, deg2rad(acceleration), deg2rad(angle));
+}
+
+int CMobot::smoothMoveToNB(
+    robotJointId_t id,
+    double accel0,
+    double accelf,
+    double vmax,
+    double angle)
+{
+  return Mobot_smoothMoveToNB(
+      _comms,
+      id,
+      deg2rad(accel0),
+      deg2rad(accelf),
+      deg2rad(vmax),
+      deg2rad(angle));
+}
+
 int CMobot::blinkLED(double delay, int numBlinks)
 {
   return Mobot_blinkLED(_comms, delay, numBlinks);

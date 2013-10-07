@@ -25,6 +25,141 @@ EXPORTCH void CLinkbotL_dCLinkbotL_chdl(void *varg) {
   return;
 }
 
+EXPORTCH int LinkbotL_accelTimeNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    double radius;
+    double acceleration;
+    double timeout;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    radius = Ch_VaArg(interp, ap, double);
+    acceleration = Ch_VaArg(interp, ap, double);
+    timeout = Ch_VaArg(interp, ap, double);
+    retval = mobot->accelTimeNB(radius, acceleration, timeout);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_accelToVelocityNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    double radius;
+    double acceleration;
+    double v;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    radius = Ch_VaArg(interp, ap, double);
+    acceleration = Ch_VaArg(interp, ap, double);
+    v = Ch_VaArg(interp, ap, double);
+    retval = mobot->accelToVelocityNB(radius, acceleration, v);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_accelToMaxSpeedNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    double radius;
+    double acceleration;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    radius = Ch_VaArg(interp, ap, double);
+    acceleration = Ch_VaArg(interp, ap, double);
+    retval = mobot->accelToMaxSpeedNB(radius, acceleration);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_accelAngularTimeNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    int id;
+    double acceleration;
+    double time;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    id = Ch_VaArg(interp, ap, int);
+    acceleration = Ch_VaArg(interp, ap, double);
+    time = Ch_VaArg(interp, ap, double);
+    retval = mobot->accelAngularTimeNB((robotJointId_t)id, acceleration, time);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_accelAngularToVelocityNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    int id;
+    double acceleration;
+    double v;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    id = Ch_VaArg(interp, ap, int);
+    acceleration = Ch_VaArg(interp, ap, double);
+    v = Ch_VaArg(interp, ap, double);
+    retval = mobot->accelAngularToVelocityNB((robotJointId_t)id, acceleration, v);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_accelAngularAngleNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    int id;
+    double acceleration;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    id = Ch_VaArg(interp, ap, int);
+    acceleration = Ch_VaArg(interp, ap, double);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->accelAngularAngleNB((robotJointId_t)id, acceleration, angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_smoothMoveToNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    int id;
+    double accel0;
+    double accelf;
+    double vmax;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    id = Ch_VaArg(interp, ap, int);
+    accel0 = Ch_VaArg(interp, ap, double);
+    accelf = Ch_VaArg(interp, ap, double);
+    vmax = Ch_VaArg(interp, ap, double);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->smoothMoveToNB((robotJointId_t)id, accel0, accelf, vmax, angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int LinkbotL_blinkLED_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
