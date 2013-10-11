@@ -20,6 +20,11 @@ class Linkbot():
     self._mobot = mobot.mobot_t()
     mobot.Mobot_init(self._mobot)
 
+  def accelerate(self, joint, acceleration, time=0):
+    rc = mobot.Mobot_accelerate(self._mobot, joint, acceleration, time)
+    if rc < 0:
+      raise IOError("Error communicating with robot. Return code {0}".format(rc))
+
   def connect(self):
     """Connect to a Linkbot
   
@@ -161,8 +166,8 @@ class Linkbot():
     """Move the joints on a Linkbot
 
     Move the joints on a Linkbot to absolute positions."""
-    rc = self.moveToNB(angle1, angle2, angle3)
-    rc = self.moveWait()
+    self.moveToNB(angle1, angle2, angle3)
+    self.moveWait()
 
   def moveToNB(self, angle1, angle2, angle3):
     """Nonblocking version of the moveTo() function"""
@@ -302,6 +307,17 @@ class Linkbot():
         state2,
         state3,
         0)
+    if rc < 0:
+      raise IOError("Error communicating with robot. Return code {0}".format(rc))
+
+  def smoothMoveNB(self, joint, accel0, accelf, vmax, angle):
+    rc = mobot.Mobot_smoothMoveToNB(
+        self._mobot,
+        joint,
+        deg2rad(accel0),
+        deg2rad(accelf),
+        deg2rad(vmax),
+        deg2rad(angle))
     if rc < 0:
       raise IOError("Error communicating with robot. Return code {0}".format(rc))
    

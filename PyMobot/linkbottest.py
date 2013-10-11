@@ -1,10 +1,10 @@
 from barobo.linkbot import *
 
-linkbot_6PV8 = LinkBot()
-linkbot_6PV8.connect()
+l = Linkbot()
+l.connectWithSerialID('2HNJ')
+l.setJointSpeeds(120, 120, 120)
 
-linkbot_6PV8.recordAnglesBegin()
-linkbot_6PV8.move(90, 90, 90)
-linkbot_6PV8.move(-90, -90, -90)
-linkbot_6PV8.recordAnglesEnd()
-linkbot_6PV8.recordAnglesPlot()
+while True:
+  l.move(180, 0, -180)
+  l.move(-180, 0, 180)
+
