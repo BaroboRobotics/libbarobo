@@ -17,6 +17,10 @@
 #include <fcntl.h>
 #endif
 
+#ifdef __MACH__
+#include <IOKit/serial/ioss.h>
+#endif
+
 static void dongleInit (MOBOTdongle *dongle);
 static void dongleFini (MOBOTdongle *dongle);
 
@@ -141,8 +145,11 @@ static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len
   struct timeval timeout;
 
   if (ms_delay) {
-    timeout.tv_sec = 0;
-    timeout.tv_usec = *ms_delay * 1000;
+    /* While you or I know that 1,000,000 microseconds is 1 second, Apple
+     * requires that you spell it out for them. */
+    ldiv_t delay = ldiv(*ms_delay, 1000);
+    timeout.tv_sec = delay.quot;
+    timeout.tv_usec = delay.rem * 1000;
     ptimeout = &timeout;
   }
 
@@ -151,7 +158,7 @@ static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len
   if (-1 == err) {
     char errbuf[256];
     strerror_r(errno, errbuf, sizeof(errbuf));
-    fprintf(stderr, "(barobo) ERROR: in dongleIsReadyToRead, select(): %s\n", errbuf);
+    fprintf(stderr, "(barobo) ERROR: in dongleTimedReadRaw, select(): %s\n", errbuf);
     return -1;
   }
 
@@ -605,9 +612,10 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
   // Communication speed
 
   speed_t speed = baud_to_speed_t(baud);
-  assert(B0 != speed);
 
-  if (-1 == cfsetispeed(&term, speed)) {
+  /* If we got B0, then this OS may have a different way of setting the baud.
+   * Deal with it later. */
+  if (-1 == cfsetispeed(&term, B0 == speed ? B230400 : speed)) {
     char errbuf[256];
     strerror_r(errno, errbuf, sizeof(errbuf));
     fprintf(stderr, "(barobo) ERROR: in dongleOpen, cfsetispeed(): %s\n", errbuf);
@@ -615,7 +623,7 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
     return -1;
   }
 
-  if (-1 == cfsetospeed(&term, speed)) {
+  if (-1 == cfsetospeed(&term, B0 == speed ? B230400 : speed)) {
     char errbuf[256];
     strerror_r(errno, errbuf, sizeof(errbuf));
     fprintf(stderr, "(barobo) ERROR: in dongleOpen, cfsetospeed(): %s\n", errbuf);
@@ -631,24 +639,45 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
     return -1;
   }
 
-  if (-1 == tcgetattr(dongle->fd, &term)) {
-    char errbuf[256];
-    strerror_r(errno, errbuf, sizeof(errbuf));
-    fprintf(stderr, "(barobo) ERROR: in dongleOpen, tcgetattr(): %s\n", errbuf);
+  if (B0 == speed) {
+#ifdef __MACH__
+    if (-1 == ioctl(dongle->fd, IOSSIOSPEED, &baud)) {
+      char errbuf[256];
+      strerror_r(errno, errbuf, sizeof(errbuf));
+      fprintf(stderr, "(barobo) ERROR: in dongleOpen, "
+          "ioctl(..., IOSSIOSPEED, ...): %s\n", errbuf);
+      dongleClose(dongle);
+      return -1;
+    }
+#else
+    fprintf(stderr, "(barobo) ERROR: in dongleOpen, could not convert baud "
+        "%ld to POSIX speed\n", baud);
     dongleClose(dongle);
     return -1;
+#endif
   }
+  else {
+    /* If we used the POSIX method of setting the baud rate, we can check to
+     * make sure it got set. */
+    if (-1 == tcgetattr(dongle->fd, &term)) {
+      char errbuf[256];
+      strerror_r(errno, errbuf, sizeof(errbuf));
+      fprintf(stderr, "(barobo) ERROR: in dongleOpen, tcgetattr(): %s\n", errbuf);
+      dongleClose(dongle);
+      return -1;
+    }
 
-  if (cfgetispeed(&term) != speed) {
-    fprintf(stderr, "(barobo) ERROR: Unable to set %s input speed.\n", ttyfilename);
-    dongleClose(dongle);
-    return -1;
-  }
+    if (cfgetispeed(&term) != speed) {
+      fprintf(stderr, "(barobo) ERROR: Unable to set %s input speed.\n", ttyfilename);
+      dongleClose(dongle);
+      return -1;
+    }
 
-  if (cfgetospeed(&term) != speed) {
-    fprintf(stderr, "(barobo) ERROR: Unable to set %s output speed.\n", ttyfilename);
-    dongleClose(dongle);
-    return -1;
+    if (cfgetospeed(&term) != speed) {
+      fprintf(stderr, "(barobo) ERROR: Unable to set %s output speed.\n", ttyfilename);
+      dongleClose(dongle);
+      return -1;
+    }
   }
 
 #ifdef __MACH__
@@ -664,7 +693,10 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
     return -1;
   }
 
-  dongleDetectFraming(dongle);
+  if (-1 == dongleDetectFraming(dongle)) {
+    dongleClose(dongle);
+    return -1;
+  }
 
   if (MOBOT_DONGLE_FRAMING_SFP == dongle->framing) {
     status = dongleSetupSFP(dongle);
