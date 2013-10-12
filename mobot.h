@@ -39,7 +39,10 @@
 %apply double & OUTPUT {robotJointState_t &state};
 #endif
 
-typedef struct MOBOTdongle MOBOTdongle;
+/* FIXME hack to get this to compile on gcc 4.2--would rather just forward
+ * declare MOBOTdongle */
+#include "dongle.h"
+//typedef struct MOBOTdongle MOBOTdongle;
 
 #include <math.h>
 
