@@ -534,8 +534,10 @@ static speed_t baud_to_speed_t (unsigned long baud) {
   switch (baud) {
     case 230400:
       return B230400;
+#ifdef B500000
     case 500000:
       return B500000;
+#endif
     default:
       return B0;
   }
