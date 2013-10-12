@@ -103,8 +103,10 @@ elseif(CMAKE_HOST_APPLE)
   set(CMAKE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib")
   add_library(barobo SHARED ${SRCS})
   add_library(baroboStatic STATIC ${SRCS})
-	target_link_libraries(barobo pthread baroboconfigfile)
-	target_link_libraries(baroboStatic pthread baroboconfigfile)
+  find_library(COREFOUNDATION_LIB CoreFoundation)
+  find_library(IOKIT_LIB IOKit)
+	target_link_libraries(barobo pthread baroboconfigfile ${IOKIT_LIB} ${COREFOUNDATION_LIB})
+	target_link_libraries(baroboStatic pthread baroboconfigfile ${IOKIT_LIB} ${COREFOUNDATION_LIB})
   set_target_properties(barobo PROPERTIES
     INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
   install(TARGETS barobo
