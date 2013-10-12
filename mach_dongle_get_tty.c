@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <unistd.h>
+
 #include <CoreFoundation/CoreFoundation.h>
 #include <IOKit/IOKitLib.h>
 #include <IOKit/IOBSD.h>
@@ -8,6 +10,7 @@
 #include <IOKit/IOReturn.h>
 
 static CFTypeRef get_string_prop (io_object_t device, const char *prop);
+static CFTypeRef get_string_prop_r (io_object_t device, const char *prop);
 
 int Mobot_dongleGetTTY (char *buf, size_t len) {
   kern_return_t result;
@@ -46,36 +49,60 @@ int Mobot_dongleGetTTY (char *buf, size_t len) {
     for (int i = 0; i < NUM_BAROBO_USB_DONGLE_IDS; ++i) {
       if (!strcmp(usb_vendor_name, g_barobo_usb_dongle_ids[i].manufacturer) &&
           !strcmp(usb_product_name, g_barobo_usb_dongle_ids[i].product)) {
+        /* Woohoo! */
         found_dongle = true;
         break;
       }
     }
 
-    printf("found %s : %s\n", usb_vendor_name, usb_product_name);
     CFRelease(prod_cont);
     CFRelease(vend_cont);
   }
 
-  if (found_dongle) {
-    /* Get the tty file path for this device */
-    CFStringRef key = CFStringCreateWithCString(kCFAllocatorDefault,
-        "IOCalloutDevice", kCFStringEncodingMacRoman);
-    CFTypeRef tty_cont = IORegistryEntrySearchCFProperty(device, kIOServicePlane, key,
-        kCFAllocatorDefault, kIORegistryIterateRecursively);
-    CFRelease(key);
-    if (!tty_cont) {
-      fprintf(stderr, "(barobo) ERROR: IORegistryEntrySearchCFProperty\n");
-      abort();
-    }
-    const char *ttyname
-      = CFStringGetCStringPtr(tty_cont, kCFStringEncodingMacRoman);
-    printf("%s\n", ttyname);
-    CFRelease(tty_cont); /* XXX does this invalidate ttyname? */
+  IOObjectRelease(it);
+
+  if (!found_dongle) {
+    return -1;
   }
 
+  /* Get the tty file path for this device */
+  CFTypeRef tty_cont = get_string_prop_r(device, "IOCalloutDevice");
+  if (!tty_cont) {
+    fprintf(stderr, "(barobo) ERROR: dongle has no IOCalloutDevice\n");
+    return -1;
+  }
 
-  IOObjectRelease(it);
-  return 0;
+  /* Put the device path into buf */
+  /* TODO figure out if CFStringGetLength() includes a null-terminator or not */
+  CFIndex ttylen = CFStringGetLength(tty_cont);
+  if (ttylen > len) {
+    fprintf(stderr, "(barobo) ERROR: buffer overflow in Mobot_dongleGetTTY()\n");
+    return -1;
+  }
+  CFStringGetBytes(tty_cont, CFRangeMake(0, ttylen),
+      kCFStringEncodingMacRoman, 0, false, buf, len, NULL);
+  buf[len-1] = 0;
+  CFRelease(tty_cont);
+
+  /* FIXME code duplication here with linux_dongle_get_tty.c */
+  if (!access(buf, R_OK | W_OK)) {
+    printf("(barobo) INFO: dongle found at %s\n", buf);
+    return 0;
+  }
+
+  /* access() must have failed */
+
+  if (EACCES == errno) {
+    fprintf(stderr, "(barobo) WARNING: dongle found at %s, but user does not have "
+        "sufficient read/write permissions.\n", buf);
+  }
+  else {
+    char errbuf[256];
+    strerror_r(errno, errbuf, sizeof(errbuf));
+    fprintf(stderr, "(barobo) WARNING: attempted to access %s: %s\n", buf, errbuf);
+  }
+
+  return -1;
 }
 
 static CFTypeRef get_string_prop (io_object_t device, const char *prop) {
@@ -87,9 +114,11 @@ static CFTypeRef get_string_prop (io_object_t device, const char *prop) {
   return ret;
 }
 
-#if 0
-int main () {
-  char buf[256];
-  Mobot_dongleGetTTY(buf, 256);
+static CFTypeRef get_string_prop_r (io_object_t device, const char *prop) {
+  CFStringRef key = CFStringCreateWithCString(kCFAllocatorDefault,
+      prop, kCFStringEncodingMacRoman);
+  CFTypeRef ret = IORegistryEntrySearchCFProperty(device, kIOServicePlane,
+      key, kCFAllocatorDefault, kIORegistryIterateRecursively);
+  CFRelease(key);
+  return ret;
 }
-#endif
