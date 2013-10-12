@@ -46,7 +46,8 @@ int Mobot_dongleGetTTY (char *buf, size_t len) {
     const char *usb_product_name
       = CFStringGetCStringPtr(prod_cont, kCFStringEncodingMacRoman);
 
-    for (int i = 0; i < NUM_BAROBO_USB_DONGLE_IDS; ++i) {
+    int i;
+    for (i = 0; i < NUM_BAROBO_USB_DONGLE_IDS; ++i) {
       if (!strcmp(usb_vendor_name, g_barobo_usb_dongle_ids[i].manufacturer) &&
           !strcmp(usb_product_name, g_barobo_usb_dongle_ids[i].product)) {
         /* Woohoo! */
