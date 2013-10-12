@@ -76,13 +76,13 @@ int Mobot_dongleGetTTY (char *buf, size_t len) {
   /* Put the device path into buf */
   /* TODO figure out if CFStringGetLength() includes a null-terminator or not */
   CFIndex ttylen = CFStringGetLength(tty_cont);
-  if (ttylen > len) {
+  if (ttylen >= len) {
     fprintf(stderr, "(barobo) ERROR: buffer overflow in Mobot_dongleGetTTY()\n");
     return -1;
   }
   CFStringGetBytes(tty_cont, CFRangeMake(0, ttylen),
       kCFStringEncodingMacRoman, 0, false, buf, len, NULL);
-  buf[len-1] = 0;
+  buf[ttylen] = 0;
   CFRelease(tty_cont);
 
   /* FIXME code duplication here with linux_dongle_get_tty.c */
