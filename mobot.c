@@ -1953,6 +1953,11 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
       comms->recvBuf_lock);
       */
     if(rc) {
+      char errbuf[256];
+      strerror_r(errno, errbuf, sizeof(errbuf));
+      fprintf(stderr, "(barobo) ERROR: in RecvFromIMobot, "
+          "pthread_cond_timedwait: %s\n", errbuf);
+
       /* Reset the incoming message queue */
       comms->commsEngine_bytes = 0;
       /* Disconnect and return error */
