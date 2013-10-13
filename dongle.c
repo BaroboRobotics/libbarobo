@@ -603,11 +603,12 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
   term.c_cflag &= ~(CSIZE | PARENB);
   term.c_cflag |= CS8;
 
-  // hlh: I turned the inter-character timer back on--I think it's pretty
-  // reasonable, and makes the tuning of the actual read() calls make more
-  // intuitive sense.
-  term.c_cc[VMIN]  = 10;
-  term.c_cc[VTIME] = 1;
+  // hlh: I tried turning the intercharacter timer back on (VMIN: 10,
+  // VTIME: 1), but the result was disastrously slow on OS X. I believe I
+  // tried this originally to eliminate timing issues in the detect framing
+  // routine.
+  term.c_cc[VMIN]  = 1;
+  term.c_cc[VTIME] = 0;
 
   // Communication speed
 
