@@ -70,6 +70,8 @@ if(CMAKE_HOST_WIN32)
   endif(NOT MSVC_INCLUDE_PATH)
 
   add_definitions(-D_WIN32_WINNT=0x502 -DENABLE_BLUETOOTH)
+  add_library(barobo SHARED ${SRCS})
+  add_library(baroboStatic STATIC ${SRCS})
   if( 
       (CMAKE_GENERATOR MATCHES "Visual Studio") OR
       (CMAKE_GENERATOR MATCHES "NMake")
@@ -88,8 +90,6 @@ if(CMAKE_HOST_WIN32)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -idirafter \"${WINSDK_INCLUDE_PATH}\" -idirafter \"${MSVC_INCLUDE_PATH}\"")
     #include_directories(AFTER SYSTEM "${WINSDK_INCLUDE_PATH}" "${MSVC_INCLUDE_PATH}")
   endif()
-  add_library(barobo SHARED ${SRCS})
-  add_library(baroboStatic STATIC ${SRCS})
   target_link_libraries(barobo Ws2_32 baroboconfigfile mxml setupapi)
   target_link_libraries(baroboStatic Ws2_32 baroboconfigfile mxml setupapi)
   #add_subdirectory(demos)

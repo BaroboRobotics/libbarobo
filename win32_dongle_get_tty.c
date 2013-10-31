@@ -167,74 +167,6 @@ static void dumpProperties (HDEVINFO devices, PSP_DEVINFO_DATA dev) {
     printf("\n");
 }
 
-#if 0
-typedef struct usb_device_id {
-    uint16_t vid;
-    uint16_t pid;
-} usb_device_id;
-
-/* TODO: move this to a platform-independent place so that each platform can
- * process these values as they wish. */
-/* Can add to this list as more devices are made. */
-const usb_device_id g_barobo_dongle_usb_ids[] = {
-    { 0x03eb, 0x204b }  // Linkbot
-};
-#endif
-
-/* TODO and move this too */
-#define NUM_BAROBO_DONGLE_USB_IDS \
-    (sizeof(g_barobo_dongle_usb_ids) / sizeof(g_barobo_dongle_usb_ids[0]))
-
-/* Return a static array of C-strings suitable for strcmp()ing against the
- * Hardware IDs returned by Windows' SetupAPI. */
-static TCHAR **getHardwareIDStrings (void) {
-    static TCHAR id_strings[NUM_BAROBO_DONGLE_USB_IDS][64];
-    /* We can't return an array, so we have to do some finagling. Don't feel
-     * like purposefully introducing a memory leak, even though I know it won't
-     * matter. */
-    static TCHAR *id_strings_ret[NUM_BAROBO_DONGLE_USB_IDS];
-
-    /* Okay, so this "run once" routine isn't technically thread-safe, but it
-     * ain't gonna hurt no one. */
-    static int run_once = 0;
-
-    if (!run_once) {
-        /* Initialize our array of hardware ID strings from the
-         * g_barobo_dongle_usb_ids array of vendor and product IDs. */
-        size_t i;
-        for (i = 0; i < NUM_BAROBO_DONGLE_USB_IDS; ++i) {
-            /* So ideally we'll be comparing these strings case-insensitively,
-             * but just in case, render them in capitals, since that's how the
-             * Windows registry seems to store hardware IDs. */
-            _sntprintf(id_strings[i], sizeof(id_strings[i]),
-                    _T("USB\\VID_%04X&PID_%04X"),
-                    g_barobo_dongle_usb_ids[i].vid,
-                    g_barobo_dongle_usb_ids[i].pid);
-            id_strings_ret[i] = &id_strings[i][0];
-        }
-        run_once = 1;
-    }
-
-    return id_strings_ret;
-}
-
-/* Case-insensitive TCHAR string compare */
-static int ci_tcsncmp (const TCHAR *lhs, const TCHAR *rhs, size_t n) {
-    assert(lhs && rhs);
-
-    while (n--) {
-        if (_totupper(*lhs) < _totupper(*rhs)) {
-            return -1;
-        }
-        if (_totupper(*lhs) > _totupper(*rhs)) {
-            return 1;
-        }
-        ++lhs;
-        ++rhs;
-    }
-    return 0;
-}
-
 static int isDongle (HDEVINFO devices, PSP_DEVINFO_DATA dev) {
   char manufacturer[64];
   char product[64];
@@ -273,8 +205,8 @@ static int isDongle (HDEVINFO devices, PSP_DEVINFO_DATA dev) {
     return 0;
   }
 #else
-  if (sizeof(manufacturer) == strnlen(manufacturer, sizeof(manufacturer))
-      || sizeof(product) == strnlen(product, sizeof(product))) {
+  if (sizeof(manufacturer) == strlen(manufacturer)
+      || sizeof(product) == strlen(product)) {
     fprintf(stderr, "(barobo) WARNING: buffer overflow in isDongle()\n");
     return 0;
   }
@@ -283,7 +215,7 @@ static int isDongle (HDEVINFO devices, PSP_DEVINFO_DATA dev) {
   size_t i;
   for (i = 0; i < NUM_BAROBO_USB_DONGLE_IDS; ++i) {
     if (!strcmp(manufacturer, g_barobo_usb_dongle_ids[i].manufacturer)
-        || !strcmp(product, g_barobo_usb_dongle_ids[i].product))
+        || !strcmp(product, g_barobo_usb_dongle_ids[i].product)) {
       return 1;
     }
   }
