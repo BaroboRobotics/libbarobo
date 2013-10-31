@@ -39,7 +39,7 @@
 %apply double & OUTPUT {robotJointState_t &state};
 #endif
 
-#include "dongle.h"
+typedef struct MOBOTdongle MOBOTdongle;
 
 #include <math.h>
 
@@ -131,7 +131,9 @@ typedef unsigned char uint8_t;
 #define AF_BLUETOOTH AF_BTH
 #define BTPROTO_RFCOMM BTHPROTO_RFCOMM
 #ifndef _CH_
+#ifdef NONRELEASE
 typedef SOCKADDR_BTH sockaddr_t;
+#endif
 #endif
 #endif
 
