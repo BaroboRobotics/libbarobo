@@ -83,11 +83,12 @@ if(CMAKE_HOST_WIN32)
     message(STATUS "Compiling for MinGW detected")
     set_target_properties(baroboStatic PROPERTIES COMPILE_FLAGS "-static-libgcc")
     add_subdirectory(demos)
-    add_definitions(-DMSYS)
+    #add_definitions(-DMSYS)
     # include_directories() only seems to be able to generate -I and -isystem
     # gcc flags. That won't do--we need -idirafter to avoid picking up all of
     # the Windows SDK and MSVC headers, only the ones we need.
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -idirafter \"${WINSDK_INCLUDE_PATH}\" -idirafter \"${MSVC_INCLUDE_PATH}\"")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -idirafter \"${WINSDK_INCLUDE_PATH}\" -idirafter \"${MSVC_INCLUDE_PATH}\"")
     #include_directories(AFTER SYSTEM "${WINSDK_INCLUDE_PATH}" "${MSVC_INCLUDE_PATH}")
   endif()
   target_link_libraries(barobo Ws2_32 baroboconfigfile mxml setupapi)
