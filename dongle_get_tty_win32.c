@@ -131,6 +131,7 @@ static void dumpProperty (HDEVINFO devices, PSP_DEVINFO_DATA dev, DWORD key,
     free(buf);
 }
 
+#if 0
 static void dumpProperties (HDEVINFO devices, PSP_DEVINFO_DATA dev) {
     dumpProperty(devices, dev, SPDRP_FRIENDLYNAME, _T("Friendly Name"));
     dumpProperty(devices, dev, SPDRP_ADDRESS, _T("Address"));
@@ -166,6 +167,7 @@ static void dumpProperties (HDEVINFO devices, PSP_DEVINFO_DATA dev) {
     dumpProperty(devices, dev, SPDRP_UPPERFILTERS, _T("Upper Filters"));
     printf("\n");
 }
+#endif
 
 static int isDongle (HDEVINFO devices, PSP_DEVINFO_DATA dev) {
   char manufacturer[64];
