@@ -39,7 +39,7 @@
 %apply double & OUTPUT {robotJointState_t &state};
 #endif
 
-typedef struct MOBOTdongle MOBOTdongle;
+#include "donglefwd.h"
 
 #include <math.h>
 

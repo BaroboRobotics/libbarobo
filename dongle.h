@@ -1,6 +1,7 @@
 #ifndef _BAROBO_DONGLE_H_
 #define _BAROBO_DONGLE_H_
 
+#include "donglefwd.h"
 #include "thread_macros.h"
 #include "libsfp/serial_framing_protocol.h"
 
@@ -16,7 +17,7 @@ typedef enum MOBOTdongleFraming {
   MOBOT_DONGLE_FRAMING_SFP
 } MOBOTdongleFraming;
 
-typedef struct MOBOTdongle {
+struct MOBOTdongle {
 #ifdef _WIN32
   /* XXX hlh: there was some !defined(CH) bullshit here in this code's
    * original incarnation in mobot.h. The else case declared these identifiers
@@ -31,7 +32,7 @@ typedef struct MOBOTdongle {
   MOBOTdongleFraming framing;
   SFPcontext *sfpContext;
   MUTEX_T *sfpTxLock;
-} MOBOTdongle;
+};
 
 int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud);
 void dongleClose (MOBOTdongle *dongle);
