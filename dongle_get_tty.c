@@ -21,8 +21,8 @@ static const usb_dongle_id g_barobo_usb_dongle_ids[] = {
 #include "dongle_get_tty_win32.c"
 #elif defined(__linux__)
 #include "dongle_get_tty_linux.c"
-#elif defined(__MACH__)
-#include "dongle_get_tty_mach.c"
+#elif defined(__APPLE__) && defined(__MACH__)
+#include "dongle_get_tty_osx.c"
 #else
 #error No dongle_get_tty.c available for this platform.
 #endif
