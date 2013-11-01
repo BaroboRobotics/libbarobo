@@ -999,6 +999,14 @@ DLLIMPORT int Mobot_connectWithAddress(
     mobot_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_connectWithBluetoothAddress(
     mobot_t* comms, const char* address, int channel);
+/* Find the serial device the robot is plugged into. The device's
+ * fully-qualified path is stored in the tty output parameter as a
+ * null-terminated string. Example device paths for various OSes are
+ *    \\.\COM3                Windows
+ *    /dev/ttyACM0            Linux
+ *    /dev/cu.usbmodem3d11    OS X
+ * Mobot_dongleGetTTY will write at most len bytes to tty, including the
+ * terminating null byte. Returns -1 on error, 0 on success. */
 DLLIMPORT int Mobot_dongleGetTTY(char* tty, size_t len);
 DLLIMPORT int Mobot_connectWithZigbeeAddress(mobot_t* comms, uint16_t addr);
 DLLIMPORT int Mobot_findMobot(mobot_t* parent, const char* childSerialID);
