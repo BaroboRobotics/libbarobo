@@ -271,20 +271,10 @@ static int getCOMPort (HDEVINFO devices, PSP_DEVINFO_DATA dev, char *comport, si
     *rparen = '\0';
 
     /* Finally got what we wanted. */
-    strncpy(comport, lparen, len);
-
-    /* Just for funsies, let's return the COM port number. */
-    while (*lparen && !isdigit(*lparen)) {
-        ++lparen;
-    }
-    int port = 0;
-    if (1 != sscanf(lparen, "%d", &port)) {
-        port = 0;
-        fprintf(stderr, "Found COM port string, but could not parse it\n");
-    }
+    snprintf(comport, len, "\\\\.\\%s", lparen);
 
     free(buf);
-    return port;
+    return 0;
 }
 
 /* Find an attached dongle device and return the COM port name via the output
