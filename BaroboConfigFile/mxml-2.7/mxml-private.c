@@ -153,7 +153,7 @@ mxml_real_cb(mxml_node_t *node)		/* I - Current node */
 #ifdef HAVE_PTHREAD_H			/**** POSIX threading ****/
 #  include <pthread.h>
 
-static pthread_key_t	_mxml_key = -1;	/* Thread local storage key */
+static pthread_key_t	_mxml_key = (pthread_key_t)-1;	/* Thread local storage key */
 static pthread_once_t	_mxml_key_once = PTHREAD_ONCE_INIT;
 					/* One-time initialization object */
 static void		_mxml_init(void);
@@ -181,13 +181,13 @@ _MXML_FINI(void)
   _mxml_global_t	*global;	/* Global data */
 
 
-  if (_mxml_key != -1)
+  if (_mxml_key != (pthread_key_t)-1)
   {
     if ((global = (_mxml_global_t *)pthread_getspecific(_mxml_key)) != NULL)
       _mxml_destructor(global);
 
     pthread_key_delete(_mxml_key);
-    _mxml_key = -1;
+    _mxml_key = (pthread_key_t)-1;
   }
 }
 
