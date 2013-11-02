@@ -685,15 +685,6 @@ int Mobot_connectWithTTYBaud(mobot_t* comms, const char* ttyfilename, unsigned l
     Mobot_disconnect(comms);
     return status;
   }
-  if(
-      (comms->formFactor == MOBOTFORM_I) ||
-      (comms->formFactor == MOBOTFORM_L) 
-    )
-  {
-    comms->zigbeeAddr = Mobot_getAddress(comms);
-    /* See if we can get the serial id */
-    Mobot_getID(comms);
-  }
 
 #ifndef _WIN32
   /* Finished connecting. Create the lockfile. */
@@ -813,25 +804,12 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
     child->parent = parent;
     child->connected = 1;
     child->connectionMode = MOBOTCONNECT_ZIGBEE;
-    child->zigbeeAddr = Mobot_getAddress(parent);
-    for(i = 0; i < 3; i++) {
-      child->maxSpeed[i] = LINKBOT_MAX_SPEED;
-    }
     parent->child = child;
     rc = Mobot_pair(child);
     if(rc) {return rc;}
-    /* Get the form factor */
-    rc = getFormFactor(child, &form);
-    if(rc == -2) {
-      return -2;
-    }
-    if(rc) {
-      child->formFactor = MOBOTFORM_ORIGINAL;
-    } else {
-      child->formFactor = (mobotFormFactor_t)form;
-    }
+
     free(_childSerialID);
-    return 0;
+    return finishConnectWithoutCommsThread(child);
   }
   /* Now check to see if the requested child is already in the list of known
    * Serial ID's */  
@@ -850,19 +828,10 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
       child->connected = 1;
       child->connectionMode = MOBOTCONNECT_ZIGBEE;
       child->parent = iter->parent;
-      child->zigbeeAddr = iter->zigbeeAddr;
       iter->mobot = child;
-      /* Get the form factor */
-      rc = getFormFactor(child, &form);
-      if(rc) {
-        child->formFactor = MOBOTFORM_ORIGINAL;
-      } else {
-        child->formFactor = (mobotFormFactor_t)form;
-      }
-      if(
-          (child->formFactor == MOBOTFORM_I) ||
-          (child->formFactor == MOBOTFORM_L)
-        )
+      /* This block used to be protected by an if (form == Mobot-L | Mobot-I)
+       * condition. Removed it to match the code above that executes when the
+       * child is the parent. */
       {
         /* Tell the Mobot it is now paired */
         if(Mobot_pair(child)) {
@@ -876,18 +845,10 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
           return -1;
         }
       }
-      /* Set initial speeds */
-      Mobot_setJointSpeeds( child, 
-          DEG2RAD(45), 
-          DEG2RAD(45), 
-          DEG2RAD(45), 
-          DEG2RAD(45) );
-      for(i = 0; i < 3; i++) {
-        child->maxSpeed[i] = LINKBOT_MAX_SPEED;
-      }
+      rc = finishConnectWithoutCommsThread(child);
       MUTEX_UNLOCK(parent->mobotTree_lock);
       free(_childSerialID);
-      return 0;
+      return rc;
     } else if (i == 0){
       MUTEX_UNLOCK(parent->mobotTree_lock);
       //Mobot_queryAddresses(parent);
@@ -901,14 +862,9 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
   return -1;
 }
 
-/* finishConnect():
- * Perform final connecting tasks common to all connection methods */
-int finishConnect(mobot_t* comms)
-{
-  int i = 0, rc;
-  int numJoints = 0;
-  mobotFormFactor_t form;
-  uint8_t buf[256];
+int finishConnectWithoutCommsThread (mobot_t* comms);
+
+int finishConnect (mobot_t* comms) {
   /* Start the comms engine */
   g_mobotThreadInitializing = 1;
   THREAD_CREATE(comms->commsThread, commsEngine, comms);
@@ -931,6 +887,18 @@ int finishConnect(mobot_t* comms)
   }
 #endif
 
+  return finishConnectWithoutCommsThread(comms);
+}
+
+/* finishConnectWithoutCommsThread():
+ * Perform final connecting tasks common to all connection methods */
+int finishConnectWithoutCommsThread(mobot_t* comms)
+{
+  int i = 0, rc;
+  int numJoints = 0;
+  mobotFormFactor_t form;
+  uint8_t buf[256];
+
   /* Make sure we are connected to a Mobot */
   if(Mobot_getStatus(comms)) {
     fprintf(stderr, "(barobo) ERROR: Mobot_getStatus() returned something not good.\n");
@@ -947,7 +915,9 @@ int finishConnect(mobot_t* comms)
     Mobot_disconnect(comms);
     return rc;
   }
-  comms->formFactor = form;
+  else {
+    comms->formFactor = form;
+  }
   switch(form) {
     case MOBOTFORM_ORIGINAL:
       numJoints = 4;
@@ -966,7 +936,7 @@ int finishConnect(mobot_t* comms)
   if(version < 0) {
     fprintf(stderr, "(barobo) ERROR: Mobot_getVersion() returned something not good.\n");
     Mobot_disconnect(comms);
-    return rc;
+    return version;
   }
   if(version < CMD_NUMCOMMANDS) {
     fprintf(stderr, "Warning. Communications protocol version mismatch.\n");
@@ -982,11 +952,13 @@ int finishConnect(mobot_t* comms)
     }
   }
   */
+  /* FIXME double check, should this be a 4 or a 3? Or should it be numJoints? */
   for(i = 0; i < 4; i++) {
     if(comms->formFactor == MOBOTFORM_ORIGINAL) {
+      /* FIXME should this be MOBOT_MAX_SPEED? */
       comms->maxSpeed[i] = DEG2RAD(120);
     } else {
-      comms->maxSpeed[i] = DEG2RAD(240);
+      comms->maxSpeed[i] = LINKBOT_MAX_SPEED;
     }
   }
   Mobot_setJointSpeeds( comms, 
@@ -994,6 +966,23 @@ int finishConnect(mobot_t* comms)
       DEG2RAD(45), 
       DEG2RAD(45), 
       DEG2RAD(45) );
+
+  if(
+      (comms->formFactor == MOBOTFORM_I) ||
+      (comms->formFactor == MOBOTFORM_L) 
+    )
+  {
+    comms->zigbeeAddr = Mobot_getAddress(comms);
+    /* See if we can get the serial id */
+    rc = Mobot_getID(comms);
+    if (-1 == rc) {
+      fprintf(stderr, "(barobo) WARNING: Unable to get robot serial ID.\n");
+    }
+    else {
+      printf("(barobo) INFO: %s finished connecting\n", comms->serialID);
+    }
+  }
+
   return 0;
 }
 

@@ -100,17 +100,20 @@ typedef unsigned int uint32_t;
 #ifdef _WIN32
 #ifndef _CH_
 typedef unsigned char uint8_t;
-#ifndef _MSYS
 typedef unsigned short uint16_t;
 #endif
 #endif
 #endif
-#endif
 
-#ifdef _MSYS
-#undef _WIN32
+#if defined(_WIN32) && defined(__GNUC__) && !defined(strdup)
 #define strdup(x) mc_strdup(x)
-extern "C" char* mc_strdup(const char* str);
+#ifdef __cplusplus
+extern "C" {
+#endif
+char* mc_strdup(const char* str);
+#ifdef __cplusplus
+}
+#endif
 #endif
 
 #ifndef _WIN32
