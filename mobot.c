@@ -801,14 +801,22 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
   }
   /* First, check to see if it is our ID */
   if(!strcmp(parent->serialID, _childSerialID)) {
-    child->parent = parent;
+    /* FIXME dammit, this and the code in the if(idFound) block below needs
+     * to be factored out into a finishConnectZigbee() function. */
+    free(_childSerialID);
+
+    strcpy(child->serialID, parent->serialID);
+    child->zigbeeAddr = parent->zigbeeAddr;
     child->connected = 1;
     child->connectionMode = MOBOTCONNECT_ZIGBEE;
+    child->parent = parent;
     parent->child = child;
-    rc = Mobot_pair(child);
-    if(rc) {return rc;}
 
-    free(_childSerialID);
+    rc = Mobot_pair(child);
+    if (rc) {
+        return rc;
+    }
+
     return finishConnectWithoutCommsThread(child);
   }
   /* Now check to see if the requested child is already in the list of known
@@ -825,10 +833,15 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
       }
     }
     if(idFound) {
+      free(_childSerialID);
+
+      strcpy(child->serialID, iter->serialID);
+      child->zigbeeAddr = iter->zigbeeAddr;
       child->connected = 1;
       child->connectionMode = MOBOTCONNECT_ZIGBEE;
       child->parent = iter->parent;
       iter->mobot = child;
+
       /* This block used to be protected by an if (form == Mobot-L | Mobot-I)
        * condition. Removed it to match the code above that executes when the
        * child is the parent. */
@@ -841,14 +854,11 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
           child->parent = NULL;
           //iter->mobot = NULL;
           MUTEX_UNLOCK(parent->mobotTree_lock);
-          free(_childSerialID);
           return -1;
         }
       }
-      rc = finishConnectWithoutCommsThread(child);
       MUTEX_UNLOCK(parent->mobotTree_lock);
-      free(_childSerialID);
-      return rc;
+      return finishConnectWithoutCommsThread(child);
     } else if (i == 0){
       MUTEX_UNLOCK(parent->mobotTree_lock);
       //Mobot_queryAddresses(parent);
@@ -1943,7 +1953,9 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
       */
     if(rc) {
       char errbuf[256];
-      strerror_r(errno, errbuf, sizeof(errbuf));
+      /* pthread_cond_timedwait returns the error code rather than setting
+       * errno. */
+      strerror_r(rc, errbuf, sizeof(errbuf));
       fprintf(stderr, "(barobo) ERROR: in RecvFromIMobot, "
           "pthread_cond_timedwait: %s\n", errbuf);
 
