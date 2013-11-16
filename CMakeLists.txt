@@ -1,6 +1,6 @@
 # The ODE Library
 
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8.8)
 #include_directories(../opende/sys/include)
 
 # If you're on Windows, you can set the following paths to override the auto
@@ -38,8 +38,8 @@ set(SRCS
       mobotl_set_functions++.cpp
       dongle.c
       dongle_get_tty.c
-      libsfp/serial_framing_protocol.c
-      libsfp/net_byte_order.c
+      #     libsfp/serial_framing_protocol.c
+      #      libsfp/net_byte_order.c
       )
 
 project(LIBIMOBOTCOMMS)
@@ -49,7 +49,8 @@ add_definitions(-DNONRELEASE)
 #include_directories(${CMAKE_SOURCE_DIR}/../../BaroboConfigFile)
 #link_directories(${CMAKE_SOURCE_DIR}/../../BaroboConfigFile)
 add_subdirectory(BaroboConfigFile)
-include_directories(${BAROBOCONFIGFILE_SOURCE_DIR})
+add_subdirectory(libsfp)
+include_directories(${BAROBOCONFIGFILE_SOURCE_DIR} ${LIBSFP_SOURCE_DIR})
 link_directories(${BAROBOCONFIGFILE_BINARY_DIR})
 
 include_directories(${MXML_SOURCE_DIR})
@@ -70,8 +71,8 @@ if(CMAKE_HOST_WIN32)
   endif(NOT MSVC_INCLUDE_PATH)
 
   add_definitions(-D_WIN32_WINNT=0x502 -DENABLE_BLUETOOTH)
-  add_library(barobo SHARED ${SRCS})
-  add_library(baroboStatic STATIC ${SRCS})
+  add_library(barobo SHARED ${SRCS} $<TARGET_OBJECTS:sfpObjects>)
+  add_library(baroboStatic STATIC ${SRCS} $<TARGET_OBJECTS:sfpObjects>)
   if( 
       (CMAKE_GENERATOR MATCHES "Visual Studio") OR
       (CMAKE_GENERATOR MATCHES "NMake")
@@ -102,12 +103,12 @@ elseif(CMAKE_HOST_APPLE)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -arch i386")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -arch i386")
   set(CMAKE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib")
-  add_library(barobo SHARED ${SRCS})
-  add_library(baroboStatic STATIC ${SRCS})
+  add_library(barobo SHARED ${SRCS} $<TARGET_OBJECTS:sfpObjects>)
+  add_library(baroboStatic STATIC ${SRCS} $<TARGET_OBJECTS:sfpObjects>)
   find_library(COREFOUNDATION_LIB CoreFoundation)
   find_library(IOKIT_LIB IOKit)
-	target_link_libraries(barobo pthread baroboconfigfile ${IOKIT_LIB} ${COREFOUNDATION_LIB})
-	target_link_libraries(baroboStatic pthread baroboconfigfile ${IOKIT_LIB} ${COREFOUNDATION_LIB})
+  target_link_libraries(barobo pthread baroboconfigfile ${IOKIT_LIB} ${COREFOUNDATION_LIB})
+  target_link_libraries(baroboStatic pthread baroboconfigfile ${IOKIT_LIB} ${COREFOUNDATION_LIB})
   set_target_properties(barobo PROPERTIES
     INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
   install(TARGETS barobo
@@ -121,11 +122,11 @@ else(CMAKE_HOST_WIN32) #Linux
     message(WARNING "CHHOME environment variable not found -- CH support disabled")
   endif(CHHOME)
   add_definitions(-DENABLE_BLUETOOTH)
-  add_library(baroboStatic STATIC ${SRCS})
-  add_library(barobo SHARED ${SRCS})
+  add_library(baroboStatic STATIC ${SRCS} $<TARGET_OBJECTS:sfpObjects>)
+  add_library(barobo SHARED ${SRCS} $<TARGET_OBJECTS:sfpObjects>)
   set_target_properties(baroboStatic PROPERTIES COMPILE_FLAGS "-fPIC")
-	target_link_libraries(barobo bluetooth pthread rt baroboconfigfile mxml)
-	target_link_libraries(baroboStatic bluetooth pthread rt baroboconfigfile mxml)
+  target_link_libraries(barobo bluetooth pthread rt baroboconfigfile mxml)
+  target_link_libraries(baroboStatic bluetooth pthread rt baroboconfigfile mxml)
 #  install(TARGETS barobo 
 #          LIBRARY DESTINATION lib
 #          ARCHIVE DESTINATION lib)
