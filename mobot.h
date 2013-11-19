@@ -86,6 +86,11 @@ typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;
 #endif
 #include <ws2tcpip.h>
+/* Order-dependent headers here: basetyps.h should be included before
+ * ws2bth.h. This is technically only necessary if WIN32_LEAN_AND_MEAN is
+ * defined, which is a reasonable thing to do (it resolves a different header
+ * issue, the conflict between winsock.h and winsock2.h). */
+#include <basetyps.h>
 #include <ws2bth.h>
 #endif
 #ifndef _CH_
