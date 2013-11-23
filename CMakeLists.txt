@@ -130,7 +130,7 @@ else(CMAKE_HOST_WIN32) #Linux
 #          LIBRARY DESTINATION lib
 #          ARCHIVE DESTINATION lib)
 #install(FILES mobot.h DESTINATION include)
-  add_subdirectory(demos EXCLUDE_FORM_ALL)
+  add_subdirectory(demos EXCLUDE_FROM_ALL)
 endif(CMAKE_HOST_WIN32)
 
 #install(TARGETS mobot LIBRARY DESTINATION lib)
