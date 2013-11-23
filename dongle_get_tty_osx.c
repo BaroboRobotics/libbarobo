@@ -31,7 +31,6 @@ int Mobot_dongleGetTTY (char *buf, size_t len) {
   while (!found_dongle && (device = IOIteratorNext(it))) {
     vend_cont = get_string_prop(device, "USB Vendor Name");
     if (!vend_cont) {
-      CFRelease(prod_cont);
       fprintf(stderr, "(barobo) ERROR: USB device has no vendor name\n");
       continue;
     }
