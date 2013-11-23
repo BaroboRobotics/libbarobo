@@ -55,6 +55,12 @@ link_directories(${BAROBOCONFIGFILE_BINARY_DIR})
 
 include_directories(${MXML_SOURCE_DIR})
 link_directories(${MXML_BINARY_DIR})
+
+if(NOT $ENV{NOBLUETOOTH})
+  message("enabling bluetooth")
+  add_definitions(-DENABLE_BLUETOOTH)
+endif()
+
 if(CMAKE_HOST_WIN32)
   #include(FindPkgConfig)
   #pkg_check_modules(MXML REQUIRED mxml)
@@ -120,10 +126,6 @@ else(CMAKE_HOST_WIN32) #Linux
   else(CHHOME)
     message(WARNING "CHHOME environment variable not found -- CH support disabled")
   endif(CHHOME)
-  if(NOT $ENV{NOBLUETOOTH})
-    message("enabling bluetooth")
-    add_definitions(-DENABLE_BLUETOOTH)
-  endif()
   add_library(baroboStatic STATIC ${SRCS} $<TARGET_OBJECTS:sfpObjects>)
   add_library(barobo SHARED ${SRCS} $<TARGET_OBJECTS:sfpObjects>)
   set_target_properties(baroboStatic PROPERTIES COMPILE_FLAGS "-fPIC")
