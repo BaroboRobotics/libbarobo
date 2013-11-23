@@ -115,10 +115,12 @@ int CMobot::connectWithAddress(const char* address, int channel)
   return Mobot_connectWithAddress(_comms, address, channel);
 }
 
+#ifdef ENABLE_BLUETOOTH
 int CMobot::connectWithBluetoothAddress(const char* address, int channel)
 {
   return Mobot_connectWithBluetoothAddress(_comms, address, channel);
 }
+#endif
 
 int CMobot::connectWithIPAddress(const char* address, const char port[])
 {
