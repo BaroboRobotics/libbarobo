@@ -420,7 +420,11 @@ int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
   }
 #endif
   if(rc == 0) {
+#ifdef ENABLE_BLUETOOTH
     return Mobot_connectWithBluetoothAddress(comms, address, channel);
+#else
+    assert(0);  // FIXME :(
+#endif
   } else {
     rc = Mobot_connectChildID(g_dongleMobot, comms, address);
     return rc;
@@ -508,6 +512,7 @@ int Mobot_connectWithZigbeeAddress(mobot_t* comms, uint16_t addr)
   return 0;
 }
 
+#ifdef ENABLE_BLUETOOTH
 int Mobot_connectWithBluetoothAddress(mobot_t* comms, const char* address, int channel)
 {
   int err = -1;
@@ -611,6 +616,7 @@ int Mobot_connectWithBluetoothAddress(mobot_t* comms, const char* address, int c
   return 0;
 #endif
 }
+#endif // ENABLE_BLUETOOTH
 
 int Mobot_connectWithAddressTTY(mobot_t* comms, const char* address)
 {
