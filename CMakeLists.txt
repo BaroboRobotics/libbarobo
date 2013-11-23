@@ -70,7 +70,7 @@ if(CMAKE_HOST_WIN32)
     include("findmsvc.cmake")
   endif(NOT MSVC_INCLUDE_PATH)
 
-  add_definitions(-D_WIN32_WINNT=0x502 -DENABLE_BLUETOOTH)
+  add_definitions(-D_WIN32_WINNT=0x502 -DWIN32_LEAN_AND_MEAN -DENABLE_BLUETOOTH)
   add_library(barobo SHARED ${SRCS} $<TARGET_OBJECTS:sfpObjects>)
   add_library(baroboStatic STATIC ${SRCS} $<TARGET_OBJECTS:sfpObjects>)
   if( 
@@ -83,7 +83,6 @@ if(CMAKE_HOST_WIN32)
   else()
     message(STATUS "Compiling for MinGW detected")
     set_target_properties(baroboStatic PROPERTIES COMPILE_FLAGS "-static-libgcc")
-    add_subdirectory(demos)
     #add_definitions(-DMSYS)
     # include_directories() only seems to be able to generate -I and -isystem
     # gcc flags. That won't do--we need -idirafter to avoid picking up all of
@@ -94,7 +93,7 @@ if(CMAKE_HOST_WIN32)
   endif()
   target_link_libraries(barobo Ws2_32 baroboconfigfile mxml setupapi)
   target_link_libraries(baroboStatic Ws2_32 baroboconfigfile mxml setupapi)
-  #add_subdirectory(demos)
+  add_subdirectory(demos EXCLUDE_FROM_ALL)
   install(TARGETS barobo
           ARCHIVE DESTINATION lib)
   install(FILES mobot.h DESTINATION include)
@@ -114,7 +113,7 @@ elseif(CMAKE_HOST_APPLE)
   install(TARGETS barobo
           LIBRARY DESTINATION lib)
   install(FILES mobot.h DESTINATION include)
-  #add_subdirectory(demos)
+  add_subdirectory(demos EXCLUDE_FROM_ALL)
 else(CMAKE_HOST_WIN32) #Linux
   if(CHHOME)
     add_subdirectory(chmobot_src)
@@ -134,7 +133,7 @@ else(CMAKE_HOST_WIN32) #Linux
 #          LIBRARY DESTINATION lib
 #          ARCHIVE DESTINATION lib)
 #install(FILES mobot.h DESTINATION include)
-  #add_subdirectory(demos)
+  add_subdirectory(demos EXCLUDE_FROM_ALL)
 endif(CMAKE_HOST_WIN32)
 
 #install(TARGETS mobot LIBRARY DESTINATION lib)
