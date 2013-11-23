@@ -27,8 +27,8 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DI
 include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 
 if(APPLE)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -arch i386")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -arch i386")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 endif()
 
 add_library(mxml STATIC 
