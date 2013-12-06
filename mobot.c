@@ -2182,6 +2182,7 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
     /* We need to copy it to the correct receive buffer */
     /* First, check to see if we are using the old Bluetooth protocol or
      * the new Zigbee protocol... */
+    int delivered_message = 0;  // boolean to see if we succeed in delivering
     if(
         (comms->connectionMode == MOBOTCONNECT_BLUETOOTH) ||
         (comms->connectionMode == MOBOTCONNECT_TCP)
@@ -2191,6 +2192,7 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
       memmove(comms->recvBuf, buf, len);
       comms->recvBuf_ready = 1;
       comms->recvBuf_bytes = comms->recvBuf[1];
+      delivered_message = 1;
       COND_BROADCAST(comms->recvBuf_cond);
       MUTEX_UNLOCK(comms->recvBuf_lock);
     } else {
@@ -2207,6 +2209,7 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
           memmove(comms->recvBuf, &buf[5], buf[6]);
           comms->recvBuf_ready = 1;
           comms->recvBuf_bytes = comms->recvBuf[1];
+          delivered_message = 1;
           COND_BROADCAST(comms->recvBuf_cond);
           MUTEX_UNLOCK(comms->recvBuf_lock);
         } else if (comms->child != NULL) {
@@ -2215,6 +2218,7 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
           memmove(comms->child->recvBuf, &buf[5], buf[6]);
           comms->child->recvBuf_ready = 1;
           comms->child->recvBuf_bytes = comms->child->recvBuf[1];
+          delivered_message = 1;
           COND_BROADCAST(comms->child->recvBuf_cond);
           MUTEX_UNLOCK(comms->child->recvBuf_lock);
           MUTEX_UNLOCK(comms->recvBuf_lock);
@@ -2226,6 +2230,7 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
         memmove(comms->child->recvBuf, &buf[5], buf[6]);
         comms->child->recvBuf_ready = 1;
         comms->child->recvBuf_bytes = comms->child->recvBuf[1];
+        delivered_message = 1;
         COND_BROADCAST(comms->child->recvBuf_cond);
         MUTEX_UNLOCK(comms->child->recvBuf_lock);
         MUTEX_UNLOCK(comms->recvBuf_lock);
@@ -2237,12 +2242,16 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
             memcpy(((mobot_t*)iter->mobot)->recvBuf, &buf[5], buf[6]);
             iter->mobot->recvBuf_ready = 1;
             iter->mobot->recvBuf_bytes = iter->mobot->recvBuf[1];
+            delivered_message = 1;
             COND_BROADCAST(iter->mobot->recvBuf_cond);
             MUTEX_UNLOCK(iter->mobot->recvBuf_lock);
             break;
           }
         }
       }
+    }
+    if (!delivered_message) {
+      fprintf(stderr, "(barobo) ERROR: message received from disconnected robot, ignoring\n");
     }
   }
   else if (EVENT_BUTTON == buf[0]
