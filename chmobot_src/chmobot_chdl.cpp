@@ -2081,6 +2081,21 @@ EXPORTCH int motionWait_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int cmobot_systemTime_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double* time;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    time = Ch_VaArg(interp, ap, double *);
+    retval = mobot->systemTime(*time);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 /* CMobotGroup functions */
 
 EXPORTCH void CMobotGroup_CMobotGroup_chdl(void *varg) {

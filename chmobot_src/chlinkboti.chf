@@ -1521,6 +1521,18 @@ int CLinkbotI::stopOneJoint(int id) {
     dlrunfun(fptr, &retval, stopOneJoint, this, id);
     return retval;
 }
+int CLinkbotI::systemTime(double &time) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "cmobot_systemTime_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, &time);
+    return retval;
+}
 int CLinkbotI::turnLeft(double angle, double radius, double tracklength) {
     void *fptr;
     int retval;

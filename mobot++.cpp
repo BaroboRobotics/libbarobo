@@ -170,6 +170,12 @@ int CMobot::resetToZeroNB()
   return Mobot_resetToZeroNB(_comms);
 }
 
+int CMobot::systemTime(double &time)
+{
+  time = ::systemTime();
+  return 0;
+}
+
 /* CMelody */
 CMelody::CMelody()
 {

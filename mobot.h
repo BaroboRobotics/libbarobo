@@ -619,6 +619,7 @@ class CMobot
     int motionTumbleLeftNB(int num);
     int motionUnstandNB();
     int motionWait();
+    int systemTime(double &time);
 #ifndef _CH_
   private:
     int getJointDirection(robotJointId_t id, robotJointState_t &dir);
@@ -829,6 +830,7 @@ class CMobot
     int motionTumbleLeftNB(int num);
     int motionUnstandNB();
     int motionWait();
+    int systemTime(double &time);
   protected:
     int getJointDirection(robotJointId_t id, robotJointState_t &dir);
     int setJointDirection(robotJointId_t id, robotJointState_t dir);

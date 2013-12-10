@@ -1581,6 +1581,19 @@ int CMobot::turnRightNB(double angle, double radius, double tracklength) {
     dlrunfun(fptr, &retval, turnRightNB, this, angle, radius, tracklength);
     return retval;
 }
+int CMobot::systemTime(double &time) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "cmobot_systemTime_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, &time);
+    return retval;
+}
+
 /* CMobotGroup */
 
 CMobotGroup::CMobotGroup() {

@@ -248,6 +248,7 @@ class CLinkbotI
     int motionTurnLeftNB(double angle);
     int motionTurnRightNB(double angle);
     int motionWait();
+    int systemTime(double &time);
 
     /* Linkbot Only Functions */
     int connectWithSerialID(const char serialID[]);
@@ -531,6 +532,7 @@ class CLinkbotL
     int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
     int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
     int stopAllJoints();
+    int systemTime(double &time);
   private:
     void* memholder1;
     int memholder2;
