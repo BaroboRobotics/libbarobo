@@ -484,6 +484,8 @@ class CMobot
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
+    int movexy(double x, double y, double radius, double trackwidth);
+    int movexyNB(double x, double y, double radius, double trackwidth);
 #ifdef _CH_
     int recordAngle(robotJointId_t id, double time[:], double angle[:], int num, double seconds, ...);
     int recordAngles(double time[:], 
@@ -727,6 +729,8 @@ class CMobot
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
+    int movexy(double x, double y, double radius, double trackwidth);
+    int movexyNB(double x, double y, double radius, double trackwidth);
     int recordAngle(robotJointId_t id, double time[], double angle[], int num, double seconds, int shiftData = 1);
     int recordAngles(double time[], 
                      double angle1[], 
@@ -1207,6 +1211,9 @@ DLLIMPORT int Mobot_moveToDirectNB(mobot_t* comms,
 DLLIMPORT int Mobot_moveToZero(mobot_t* comms);
 DLLIMPORT int Mobot_moveToZeroNB(mobot_t* comms);
 DLLIMPORT int Mobot_moveWait(mobot_t* comms);
+DLLIMPORT int Mobot_movexy(mobot_t* comms, double x, double y, double radius, double trackwidth);
+DLLIMPORT void* Mobot_movexyThread(void*);
+DLLIMPORT int Mobot_movexyNB(mobot_t* comms, double x, double y, double radius, double trackwidth);
 DLLIMPORT int Mobot_recordAngle(mobot_t* comms, 
                                 robotJointId_t id, 
                                 double* time, 

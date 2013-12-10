@@ -572,6 +572,50 @@ int Mobot_moveWait(mobot_t* comms)
   return 0;
 }
 
+int Mobot_movexy(mobot_t* comms, double x, double y, double radius, double trackwidth)
+{
+  /* First, turn the robot to face the goal position */
+  double angle;
+  angle = atan2(y, x);
+  if(angle > 0) {
+    Mobot_turnLeft(comms, angle, radius, trackwidth);
+  } else {
+    Mobot_turnRight(comms, -angle, radius, trackwidth);
+  }
+  /* Go forward the correct amount of distance */
+  double distance;
+  distance = sqrt( x*x + y*y );
+  Mobot_moveDistance(comms, distance, radius);
+  return 0;
+}
+
+void* Mobot_movexyThread(void* arg)
+{
+  mobot_t* comms = (mobot_t*)arg;
+  double* args = (double*)&arg[1];
+  Mobot_movexy(comms, args[0], args[1], args[2], args[3]);
+  comms->motionInProgress--;
+  return NULL;
+}
+
+int Mobot_movexyNB(mobot_t* comms, double x, double y, double radius, double trackwidth)
+{
+  static void* args[5];
+  static double _x, _y, _r, _t;
+  _x = x;
+  _y = y;
+  _r = radius;
+  _t = trackwidth;
+  args[0] = (void*)comms;
+  args[1] = (void*)&_x;
+  args[2] = (void*)&_y;
+  args[3] = (void*)&_r;
+  args[4] = (void*)&_t;
+  comms->motionInProgress++;
+  THREAD_CREATE(comms->thread, Mobot_movexyThread, args);
+  return 0;
+}
+
 int Mobot_beginFourierControl(mobot_t* comms, uint8_t motorMask)
 {
   uint8_t buf[32];

@@ -1014,6 +1014,30 @@ int CMobot::moveWait() {
     dlrunfun(fptr, &retval, moveWait, this);
     return retval;
 }
+int CMobot::movexy(double x, double y, double radius, double trackwidth) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "movexy_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, movexy, this, x, y, radius, trackwidth);
+    return retval;
+}
+int CMobot::movexyNB(double x, double y, double radius, double trackwidth) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "movexyNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, movexyNB, this, x, y, radius, trackwidth);
+    return retval;
+}
 int CMobot::recordAngle(int id, double time[:], double angle[:], int num, double seconds, ...) {
     void *fptr;
     int retval;

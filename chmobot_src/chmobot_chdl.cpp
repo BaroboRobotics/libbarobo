@@ -950,6 +950,42 @@ EXPORTCH int moveToZeroNB_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int movexy_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double x, y, radius, trackwidth;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    x = Ch_VaArg(interp, ap, double);
+    y = Ch_VaArg(interp, ap, double);
+    radius = Ch_VaArg(interp, ap, double);
+    trackwidth = Ch_VaArg(interp, ap, double);
+    retval = mobot->movexy(x, y, radius, trackwidth);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int movexyNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double x, y, radius, trackwidth;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    x = Ch_VaArg(interp, ap, double);
+    y = Ch_VaArg(interp, ap, double);
+    radius = Ch_VaArg(interp, ap, double);
+    trackwidth = Ch_VaArg(interp, ap, double);
+    retval = mobot->movexyNB(x, y, radius, trackwidth);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int recordAngle_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

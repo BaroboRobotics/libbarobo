@@ -134,6 +134,8 @@ class CLinkbotI
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
+    int movexy(double x, double y, double radius, double trackwidth);
+    int movexyNB(double x, double y, double radius, double trackwidth);
 #ifdef _CH_
     int recordAngle(robotJointId_t id, double time[:], double angle[:], int num, double seconds, ...);
     int recordAngles(double time[:], 
