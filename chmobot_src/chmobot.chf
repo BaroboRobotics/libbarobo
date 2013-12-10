@@ -132,6 +132,18 @@ int CMobot::connectWithIPAddress(char *address, ...) {
     va_end(ap);
     return retval;
 }
+int CMobot::delaySeconds(int seconds) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "delaySeconds_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, seconds);
+    return retval;
+}
 int CMobot::disconnect() {
     void *fptr;
     int retval;

@@ -211,6 +211,20 @@ int CLinkbotI::connectWithSerialID(char *address) {
     dlrunfun(fptr, &retval, connectWithSerialID, this, address);
     return retval;
 }
+int CLinkbotI::delaySeconds(int seconds) {
+    void *fptr;
+    int retval;
+    va_list ap;
+    char* port = NULL;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "delaySeconds_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, seconds);
+    return retval;
+}
 int CLinkbotI::disconnect() {
     void *fptr;
     int retval;

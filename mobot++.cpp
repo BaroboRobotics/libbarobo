@@ -137,6 +137,15 @@ int CMobot::disconnect()
   return Mobot_disconnect(_comms);
 }
 
+int CMobot::delaySeconds(int seconds)
+{
+#ifdef _WIN32
+  Sleep(seconds*1000);
+#else
+  sleep(seconds);
+#endif
+}
+
 int CMobot::enableButtonCallback(void (*buttonCallback)(CMobot* mobot, int button, int buttonDown))
 {
   return Mobot_enableButtonCallback(
