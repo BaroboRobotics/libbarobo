@@ -644,7 +644,7 @@ int Mobot_connectWithTTYBaud(mobot_t* comms, const char* ttyfilename, unsigned l
   char *filename = strdup(ttyfilename);
   char lockfileName[MAX_PATH];
   int pid;
-  printf("(barobo) INFO: Connecting to %s\n", ttyfilename);
+  bInfo(stderr, "(barobo) INFO: Connecting to %s\n", ttyfilename);
   /* Open the lock file, if it exists */
   sprintf(lockfileName, "/tmp/%s.lock", basename(filename));
   lockfile = fopen(lockfileName, "r");
@@ -674,13 +674,13 @@ int Mobot_connectWithTTYBaud(mobot_t* comms, const char* ttyfilename, unsigned l
   comms->dongle = malloc(sizeof(MOBOTdongle));
   assert(comms->dongle);
 
-  fprintf(stderr, "(barobo) INFO: calling dongleOpen()\n");
+  bInfo(stderr, "(barobo) INFO: calling dongleOpen()\n");
   int err = dongleOpen(comms->dongle, ttyfilename, baud);
   if (err) {
-    fprintf(stderr, "(barobo) INFO: dongleOpen() failed\n");
+    bInfo(stderr, "(barobo) INFO: dongleOpen() failed\n");
     return err;
   }
-  fprintf(stderr, "(barobo) INFO: dongleOpen() succeeded!\n");
+  bInfo(stderr, "(barobo) INFO: dongleOpen() succeeded!\n");
 
   comms->connected = 1;
   comms->connectionMode = MOBOTCONNECT_TTY;
@@ -931,9 +931,7 @@ int finishConnectWithoutCommsThread(mobot_t* comms)
     Mobot_disconnect(comms);
     return rc;
   }
-  else {
-    comms->formFactor = form;
-  }
+  comms->formFactor = form;
   switch(form) {
     case MOBOTFORM_ORIGINAL:
       numJoints = 4;
@@ -995,7 +993,7 @@ int finishConnectWithoutCommsThread(mobot_t* comms)
       fprintf(stderr, "(barobo) WARNING: Unable to get robot serial ID.\n");
     }
     else {
-      printf("(barobo) INFO: %s finished connecting\n", comms->serialID);
+      bInfo(stderr, "(barobo) INFO: %s finished connecting\n", comms->serialID);
     }
   }
 
@@ -1267,7 +1265,7 @@ int Mobot_disconnect(mobot_t* comms)
     MUTEX_UNLOCK(&lock);
     return 0;
   }
-  printf("(barobo) INFO: disconnecting %s\n", comms->serialID);
+  bInfo(stderr, "(barobo) INFO: disconnecting %s\n", comms->serialID);
 #ifndef _WIN32
   switch(comms->connectionMode) {
     case MOBOTCONNECT_BLUETOOTH:
@@ -1284,7 +1282,7 @@ int Mobot_disconnect(mobot_t* comms)
       /* Unpair all children */
       for(iter = comms->children; iter != NULL; iter = iter->next) {
         if(iter->mobot) {
-          fprintf(stderr, "(barobo) INFO: Disconnecting child %s.\n", iter->mobot->serialID);
+          bInfo(stderr, "(barobo) INFO: Disconnecting child %s.\n", iter->mobot->serialID);
           Mobot_disconnect(iter->mobot);
         }
       }
@@ -1340,7 +1338,7 @@ int Mobot_disconnect(mobot_t* comms)
       /* Unpair all children */
       for(iter = comms->children; iter != NULL; iter = iter->next) {
         if(iter->mobot) {
-          fprintf(stderr, "(barobo) INFO: Disconnecting child %s.\n", iter->mobot->serialID);
+          bInfo(stderr, "(barobo) INFO: Disconnecting child %s.\n", iter->mobot->serialID);
           Mobot_disconnect(iter->mobot);
         }
       }

@@ -55,8 +55,7 @@ link_directories(${BAROBOCONFIGFILE_BINARY_DIR})
 
 include_directories(${MXML_SOURCE_DIR})
 link_directories(${MXML_BINARY_DIR})
-
-if(NOT $ENV{NOBLUETOOTH})
+if(NOT DEFINED ENV{NOBLUETOOTH})
   message("enabling bluetooth")
   add_definitions(-DENABLE_BLUETOOTH)
 endif()

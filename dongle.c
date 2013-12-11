@@ -24,6 +24,35 @@
 static void dongleInit (MOBOTdongle *dongle);
 static void dongleFini (MOBOTdongle *dongle);
 
+int bDebug(FILE *stream, const char* format, ...)
+{
+#ifdef DEBUG
+  va_list l;
+#ifndef _WIN32
+  return vfprintf(stream, format, l);
+#else
+  return _vftprintf(stream, format, l);
+#endif
+#else
+  return 0;
+#endif
+}
+
+int bInfo(FILE *stream, const char* format, ...)
+{
+#ifdef VERBOSE
+  va_list l;
+#ifndef _WIN32
+  return vfprintf(stream, format, l);
+#else
+  return _vftprintf(stream, format, l);
+#endif
+#else
+  return 0;
+#endif
+}
+
+
 /* NULL ms_delay means wait forever, otherwise it is a pointer to the number
  * of milliseconds to wait.
  *
@@ -244,11 +273,11 @@ static int dongleDetectFraming (MOBOTdongle *dongle) {
 
   if (sizeof(old_response) <= bytesread
       && !memcmp(response, old_response, sizeof(old_response))) {
-    fprintf(stderr, "(barobo) INFO: old (unframed serial protocol) firmware detected.\n");
+    bInfo(stderr, "(barobo) INFO: old (unframed serial protocol) firmware detected.\n");
     dongle->framing = MOBOT_DONGLE_FRAMING_NONE;
   }
   else {
-    fprintf(stderr, "(barobo) INFO: new (framed serial protocol) firmware detected.\n");
+    bInfo(stderr, "(barobo) INFO: new (framed serial protocol) firmware detected.\n");
     dongle->framing = MOBOT_DONGLE_FRAMING_SFP;
   }
 
@@ -428,7 +457,7 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
 
   /* hlh: for some reason, when I print to stdout and then to stderr, there
    * unicode issues */
-  _ftprintf(stderr, _T("(barobo) INFO: opening %s with baud<%d>\n"), ttyfilename, baud);
+  bInfo(stderr, _T("(barobo) INFO: opening %s with baud<%d>\n"), ttyfilename, baud);
 
   /* Check the file name. If we receive something like "COM45", we want to
    * change it to "\\.\COM45" */
@@ -453,7 +482,7 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
     return -1;
   }
   free(tty);
-  _ftprintf(stderr, _T("(barobo) INFO: opened %s\n"), ttyfilename);
+  bInfo(stderr, _T("(barobo) INFO: opened %s\n"), ttyfilename);
   /* Adjust settings */
   DCB dcb;
   FillMemory(&dcb, sizeof(dcb), 0);
@@ -515,7 +544,7 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
   }
 
   if (-1 == dongleDetectFraming(dongle)) {
-    fprintf(stderr, "(barobo) INFO: unable to detect dongle framing\n");
+    bInfo(stderr, "(barobo) INFO: unable to detect dongle framing\n");
     dongleClose(dongle);
     return -1;
   }
@@ -556,7 +585,7 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
 
   dongleInit(dongle);
 
-  printf("(barobo) INFO: opening %s with baud<%lu>\n", ttyfilename, baud);
+  bInfo(stderr, "(barobo) INFO: opening %s with baud<%lu>\n", ttyfilename, baud);
 
   /* We use non-blocking I/O here so we can support the POSIX implementation
    * of dongleTimedReadRaw. dongleTimedReadRaw uses select, which can, per the

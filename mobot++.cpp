@@ -103,7 +103,7 @@ int CMobot::connect()
     return rc;
   }
   if(_comms->formFactor != MOBOTFORM_ORIGINAL) {
-    fprintf(stderr, "Error: Connected robot is not a Mobot-A.\n");
+    fprintf(stderr, "Error: Connected robot is not a Mobot-A. %d\n", _comms->formFactor);
     Mobot_disconnect(_comms);
     return -1;
   }

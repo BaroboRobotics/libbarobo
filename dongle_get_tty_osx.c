@@ -86,7 +86,7 @@ int Mobot_dongleGetTTY (char *buf, size_t len) {
 
   /* FIXME code duplication here with linux_dongle_get_tty.c */
   if (!access(buf, R_OK | W_OK)) {
-    printf("(barobo) INFO: dongle found at %s\n", buf);
+    bInfo(stderr, "(barobo) INFO: dongle found at %s\n", buf);
     return 0;
   }
 

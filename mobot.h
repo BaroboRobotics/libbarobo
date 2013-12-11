@@ -39,7 +39,9 @@
 %apply double & OUTPUT {robotJointState_t &state};
 #endif
 
+#ifndef _CH_
 #include "donglefwd.h"
+#endif
 
 #include <math.h>
 
@@ -248,7 +250,11 @@ typedef struct mobot_s
   MUTEX_T* commsWaitingForMessage_lock;
   //MUTEX_T* socket_lock;
 
+#ifndef _CH_
   MOBOTdongle *dongle;
+#else 
+  void *dongle;
+#endif
 
 #if 0
   /* deprecated by libsfp */
