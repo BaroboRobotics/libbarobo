@@ -592,7 +592,7 @@ int Mobot_movexy(mobot_t* comms, double x, double y, double radius, double track
 void* Mobot_movexyThread(void* arg)
 {
   mobot_t* comms = (mobot_t*)arg;
-  double* args = (double*)&arg[1];
+  double* args = &(((double*)arg)[1]);
   Mobot_movexy(comms, args[0], args[1], args[2], args[3]);
   comms->motionInProgress--;
   return NULL;

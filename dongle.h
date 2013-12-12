@@ -9,6 +9,7 @@
 
 #ifdef _WIN32
 #include <Windows.h>
+#include <BaseTsd.h>
 #endif
 
 typedef enum MOBOTdongleFraming {
@@ -37,7 +38,7 @@ struct MOBOTdongle {
 int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud);
 void dongleClose (MOBOTdongle *dongle);
 
-ssize_t dongleRead (MOBOTdongle *dongle, uint8_t *buf, size_t len);
-ssize_t dongleWrite (MOBOTdongle *dongle, const uint8_t *buf, size_t len);
+long dongleRead (MOBOTdongle *dongle, uint8_t *buf, size_t len);
+long dongleWrite (MOBOTdongle *dongle, const uint8_t *buf, size_t len);
 
 #endif

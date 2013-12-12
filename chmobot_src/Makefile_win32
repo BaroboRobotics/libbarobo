@@ -4,7 +4,7 @@ HEADERS=../mobot.h
 PKGDIR=$(PACKAGE)-$(VERSION)/$(PACKAGE)
 LIBDIR=lib32
 
-CFLAGS= -DNONRELEASE -I./ -I../BaroboConfigFile/ -I../BaroboConfigFile/mxml-2.7/ /TP
+CFLAGS= -DNONRELEASE -DWIN32_LEAN_AND_MEAN -DWINVER=0x0502 -I./ -I../BaroboConfigFile/ -I../BaroboConfigFile/mxml-2.7/ /TP
 
 target: libmobot.dl
 
@@ -37,10 +37,12 @@ OBJS= mobotgroup++.obj \
       mobot_motion_functions.obj \
       mobot_movement_functions.obj \
       mobot_record_functions.obj \
-      mobot_set_functions.obj 
+      mobot_set_functions.obj \
+      dongle.obj \
+      dongle_get_tty.obj 
 
 libmobot.dl: $(OBJS)
-	ch dllink libmobot.dl cplusplus $(OBJS) ws2_32.lib shell32.lib lib32/baroboconfigfile.lib lib32/mxml.lib
+	ch dllink libmobot.dl cplusplus $(OBJS) ws2_32.lib shell32.lib setupapi.lib lib32/baroboconfigfile.lib lib32/mxml.lib lib32/sfp.lib
 
 mobotgroup++.obj: ../mobotgroup++.cpp $(HEADERS)
 	ch dlcomp libmobotgroup.dl cplusplus $(CFLAGS) ../mobotgroup++.cpp
@@ -50,6 +52,13 @@ mobotigroup++.obj: ../mobotigroup++.cpp $(HEADERS)
 
 mobotlgroup++.obj: ../mobotlgroup++.cpp $(HEADERS)
 	ch dlcomp libmobotlgroup.dl cplusplus $(CFLAGS) ../mobotlgroup++.cpp
+
+# dongle files
+
+dongle.obj: ../dongle.c $(HEADERS)
+	ch dlcomp libdongle.dl cplusplus $(CFLAGS) ../dongle.c
+dongle_get_tty.obj: ../dongle_get_tty.c $(HEADERS)
+	ch dlcomp libdongle_get_tty.dl cplusplus $(CFLAGS) ../dongle_get_tty.c
 
 # Mobot Files
 mobot.obj: ../mobot.c $(HEADERS)
