@@ -4,7 +4,7 @@
 #include "win32_error.h"
 #endif
 
-#include <stdint.h>
+//#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

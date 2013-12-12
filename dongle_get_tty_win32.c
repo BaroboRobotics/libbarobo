@@ -11,7 +11,8 @@
 
 #include <assert.h>
 #include <stdio.h>
-#include <stdint.h>
+//#include <stdint.h>
+#include "libsfp/net_byte_order.h"
 #include <stdlib.h>
 #include <ctype.h>
 
