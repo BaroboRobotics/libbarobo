@@ -283,6 +283,16 @@ int CMobot::moveToZeroNB()
   return Mobot_moveToZeroNB(_comms);
 }
 
+int CMobot::movexy(double x, double y, double radius, double trackwidth)
+{
+  return Mobot_movexy(_comms, x, y, radius, trackwidth);
+}
+
+int CMobot::movexyNB(double x, double y, double radius, double trackwidth)
+{
+  return Mobot_movexyNB(_comms, x, y, radius, trackwidth);
+}
+
 int CMobot::stop()
 {
   return Mobot_stop(_comms);

@@ -26,7 +26,7 @@ link_directories(${MXML_BINARY_DIR})
 
 add_definitions(-DNONRELEASE)
 
-if(NOT $ENV{NOBLUETOOTH})
+if(NOT DEFINED $ENV{NOBLUETOOTH})
   message("enabling bluetooth")
   add_definitions(-DENABLE_BLUETOOTH)
 endif()
@@ -108,11 +108,11 @@ if(CMAKE_HOST_WIN32)
 else(CMAKE_HOST_WIN32)
   # Non-Win32
 
-  if(CHHOME)
+  if(DEFINED $ENV{CHHOME})
     add_subdirectory(chmobot_src)
-  else(CHHOME)
+  else()
     message(WARNING "CHHOME environment variable not found -- CH support disabled")
-  endif(CHHOME)
+  endif()
 
   if(CMAKE_HOST_APPLE)
     # OSX

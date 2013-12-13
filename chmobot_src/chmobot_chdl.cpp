@@ -117,6 +117,21 @@ EXPORTCH int connectWithIPAddress_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int delaySeconds_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    int seconds;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    seconds = Ch_VaArg(interp, ap, int);
+    retval = mobot->delaySeconds(seconds);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int disconnect_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -946,6 +961,42 @@ EXPORTCH int moveToZeroNB_chdl(void *varg) {
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobot *);
     retval = mobot->moveToZeroNB();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int movexy_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double x, y, radius, trackwidth;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    x = Ch_VaArg(interp, ap, double);
+    y = Ch_VaArg(interp, ap, double);
+    radius = Ch_VaArg(interp, ap, double);
+    trackwidth = Ch_VaArg(interp, ap, double);
+    retval = mobot->movexy(x, y, radius, trackwidth);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int movexyNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double x, y, radius, trackwidth;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    x = Ch_VaArg(interp, ap, double);
+    y = Ch_VaArg(interp, ap, double);
+    radius = Ch_VaArg(interp, ap, double);
+    trackwidth = Ch_VaArg(interp, ap, double);
+    retval = mobot->movexyNB(x, y, radius, trackwidth);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -2041,6 +2092,21 @@ EXPORTCH int motionWait_chdl(void *varg) {
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CMobot *);
     retval = mobot->motionWait();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int cmobot_systemTime_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double* time;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    time = Ch_VaArg(interp, ap, double *);
+    retval = mobot->systemTime(*time);
     Ch_VaEnd(interp, ap);
     return retval;
 }

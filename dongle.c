@@ -4,7 +4,7 @@
 #include "win32_error.h"
 #endif
 
-#include <stdint.h>
+//#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,17 +24,46 @@
 static void dongleInit (MOBOTdongle *dongle);
 static void dongleFini (MOBOTdongle *dongle);
 
+int bDebug(FILE *stream, const char* format, ...)
+{
+#ifdef DEBUG
+  va_list l;
+#ifndef _WIN32
+  return vfprintf(stream, format, l);
+#else
+  return _vftprintf(stream, format, l);
+#endif
+#else
+  return 0;
+#endif
+}
+
+int bInfo(FILE *stream, const char* format, ...)
+{
+#ifdef VERBOSE
+  va_list l;
+#ifndef _WIN32
+  return vfprintf(stream, format, l);
+#else
+  return _vftprintf(stream, format, l);
+#endif
+#else
+  return 0;
+#endif
+}
+
+
 /* NULL ms_delay means wait forever, otherwise it is a pointer to the number
  * of milliseconds to wait.
  *
  * Returns 0 on timeout (or read() returning zero), -1 on error, number of
  * bytes read otherwise. */
-static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf,
+static long dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf,
     size_t len, const long *ms_delay);
 
-static ssize_t dongleWriteRaw (MOBOTdongle *dongle, const uint8_t *buf, size_t len) {
+static long dongleWriteRaw (MOBOTdongle *dongle, const uint8_t *buf, size_t len) {
   assert(dongle && buf);
-  ssize_t ret;
+  long ret;
 #ifdef _WIN32
   DWORD bytesWritten;
   BOOL b = WriteFile(dongle->handle, buf, len, &bytesWritten, dongle->ovOutgoing);
@@ -80,7 +109,7 @@ static ssize_t dongleWriteRaw (MOBOTdongle *dongle, const uint8_t *buf, size_t l
 
 /* WIN32 implementation of dongleTimedReadRaw. */
 
-static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, const long *ms_delay) {
+static long dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, const long *ms_delay) {
   assert(dongle && buf);
 
   DWORD readbytes = 0;
@@ -136,7 +165,7 @@ static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len
 
 /* POSIX implementation of dongleTimedReadRaw. */
 
-static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, const long *ms_delay) {
+static long dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, const long *ms_delay) {
   fd_set rfds;
   FD_ZERO(&rfds);
   FD_SET(dongle->fd, &rfds);
@@ -194,7 +223,7 @@ static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len
 
 #endif
 
-static ssize_t dongleReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len) {
+static long dongleReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len) {
   return dongleTimedReadRaw(dongle, buf, len, NULL);
 }
 
@@ -210,7 +239,7 @@ static int dongleDetectFraming (MOBOTdongle *dongle) {
     0x7e  // flag--the old firmware never asserts that this has to be 0x00
   };
 
-  ssize_t err = dongleWriteRaw(dongle, detection, sizeof(detection));
+  long err = dongleWriteRaw(dongle, detection, sizeof(detection));
   if (-1 == err) {
     return -1;
   }
@@ -223,7 +252,7 @@ static int dongleDetectFraming (MOBOTdongle *dongle) {
   /* Give the dongle a little time to think about it. */
   long ms_delay = 1000;
   uint8_t response[256];
-  ssize_t bytesread = dongleTimedReadRaw(dongle, response, sizeof(response), &ms_delay);
+  long bytesread = dongleTimedReadRaw(dongle, response, sizeof(response), &ms_delay);
   if (!bytesread) {
     fprintf(stderr, "(barobo) ERROR: in dongleDetectFraming, timed out "
         "waiting for response.\n");
@@ -244,11 +273,11 @@ static int dongleDetectFraming (MOBOTdongle *dongle) {
 
   if (sizeof(old_response) <= bytesread
       && !memcmp(response, old_response, sizeof(old_response))) {
-    fprintf(stderr, "(barobo) INFO: old (unframed serial protocol) firmware detected.\n");
+    bInfo(stderr, "(barobo) INFO: old (unframed serial protocol) firmware detected.\n");
     dongle->framing = MOBOT_DONGLE_FRAMING_NONE;
   }
   else {
-    fprintf(stderr, "(barobo) INFO: new (framed serial protocol) firmware detected.\n");
+    bInfo(stderr, "(barobo) INFO: new (framed serial protocol) firmware detected.\n");
     dongle->framing = MOBOT_DONGLE_FRAMING_SFP;
   }
 
@@ -266,7 +295,7 @@ static void sfp_unlock (void *data) {
 /* Callback to be provided to libsfp. */
 static int sfp_write (uint8_t *octets, size_t len, size_t *outlen, void *data) {
   MOBOTdongle *dongle = (MOBOTdongle *)data;
-  ssize_t ret = dongleWriteRaw(dongle, octets, len);
+  long ret = dongleWriteRaw(dongle, octets, len);
   if (outlen && ret >= 0) {
     *outlen = ret;
     ret = 0;
@@ -274,7 +303,7 @@ static int sfp_write (uint8_t *octets, size_t len, size_t *outlen, void *data) {
   return ret;
 }
 
-ssize_t dongleWrite (MOBOTdongle *dongle, const uint8_t *buf, size_t len) {
+long dongleWrite (MOBOTdongle *dongle, const uint8_t *buf, size_t len) {
   assert(dongle);
   assert(buf);
 
@@ -290,7 +319,7 @@ ssize_t dongleWrite (MOBOTdongle *dongle, const uint8_t *buf, size_t len) {
 /* Block until a complete message from the dongle is received. Return the
  * message in the output parameter buf, bounded by size len. Returns -1 on
  * error, otherwise the number of bytes read. */
-ssize_t dongleRead (MOBOTdongle *dongle, uint8_t *buf, size_t len) {
+long dongleRead (MOBOTdongle *dongle, uint8_t *buf, size_t len) {
   assert(dongle);
   assert(buf);
 
@@ -337,7 +366,7 @@ static int dongleSetupSFP (MOBOTdongle *dongle) {
   MUTEX_NEW(dongle->sfpTxLock);
   MUTEX_INIT(dongle->sfpTxLock);
 
-  dongle->sfpContext = malloc(sizeof(SFPcontext));
+  dongle->sfpContext = (SFPcontext*)malloc(sizeof(SFPcontext));
   assert(dongle->sfpContext);
 
   sfpInit(dongle->sfpContext);
@@ -378,11 +407,11 @@ static void dongleInit (MOBOTdongle *dongle) {
   dongle->handle = NULL;
 
   /* Initialize overlapped communication shit */
-  dongle->ovIncoming = malloc(sizeof(OVERLAPPED));
+  dongle->ovIncoming = (OVERLAPPED*)malloc(sizeof(OVERLAPPED));
   memset(dongle->ovIncoming, 0, sizeof(OVERLAPPED));
   dongle->ovIncoming->hEvent = CreateEvent(0, 1, 0, 0);
 
-  dongle->ovOutgoing = malloc(sizeof(OVERLAPPED));
+  dongle->ovOutgoing = (OVERLAPPED*)malloc(sizeof(OVERLAPPED));
   memset(dongle->ovOutgoing, 0, sizeof(OVERLAPPED));
   dongle->ovOutgoing->hEvent = CreateEvent(0, 1, 0, 0);
 
@@ -428,12 +457,12 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
 
   /* hlh: for some reason, when I print to stdout and then to stderr, there
    * unicode issues */
-  _ftprintf(stderr, _T("(barobo) INFO: opening %s with baud<%d>\n"), ttyfilename, baud);
+  bInfo(stderr, _T("(barobo) INFO: opening %s with baud<%d>\n"), ttyfilename, baud);
 
   /* Check the file name. If we receive something like "COM45", we want to
    * change it to "\\.\COM45" */
   char *tty;
-  tty = malloc((sizeof(char)*strlen(ttyfilename))+20);
+  tty = (char*)malloc((sizeof(char)*strlen(ttyfilename))+20);
   tty[0] = '\0';
   if(ttyfilename[0] != '\\') {
     strcpy(tty, "\\\\.\\");
@@ -453,13 +482,17 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
     return -1;
   }
   free(tty);
-  _ftprintf(stderr, _T("(barobo) INFO: opened %s\n"), ttyfilename);
+  bInfo(stderr, _T("(barobo) INFO: opened %s\n"), ttyfilename);
   /* Adjust settings */
   DCB dcb;
   FillMemory(&dcb, sizeof(dcb), 0);
   dcb.DCBlength = sizeof(dcb);
   char dcbconf[64];
+#if _MSC_VER
+  _snprintf(dcbconf, sizeof(dcbconf), "%lu,n,8,1", baud);
+#else
   snprintf(dcbconf, sizeof(dcbconf), "%lu,n,8,1", baud);
+#endif
   if (!BuildCommDCB(dcbconf, &dcb)) {
     win32_error(_T("(barobo) ERROR: in dongleOpen, BuildCommDCB()"), GetLastError());
     dongleClose(dongle);
@@ -515,7 +548,7 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
   }
 
   if (-1 == dongleDetectFraming(dongle)) {
-    fprintf(stderr, "(barobo) INFO: unable to detect dongle framing\n");
+    bInfo(stderr, "(barobo) INFO: unable to detect dongle framing\n");
     dongleClose(dongle);
     return -1;
   }
@@ -556,7 +589,7 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
 
   dongleInit(dongle);
 
-  printf("(barobo) INFO: opening %s with baud<%lu>\n", ttyfilename, baud);
+  bInfo(stderr, "(barobo) INFO: opening %s with baud<%lu>\n", ttyfilename, baud);
 
   /* We use non-blocking I/O here so we can support the POSIX implementation
    * of dongleTimedReadRaw. dongleTimedReadRaw uses select, which can, per the

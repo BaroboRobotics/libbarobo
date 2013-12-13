@@ -103,7 +103,7 @@ int CMobot::connect()
     return rc;
   }
   if(_comms->formFactor != MOBOTFORM_ORIGINAL) {
-    fprintf(stderr, "Error: Connected robot is not a Mobot-A.\n");
+    fprintf(stderr, "Error: Connected robot is not a Mobot-A. %d\n", _comms->formFactor);
     Mobot_disconnect(_comms);
     return -1;
   }
@@ -137,6 +137,16 @@ int CMobot::disconnect()
   return Mobot_disconnect(_comms);
 }
 
+int CMobot::delaySeconds(int seconds)
+{
+#ifdef _WIN32
+  Sleep(seconds*1000);
+#else
+  sleep(seconds);
+#endif
+  return 0;
+}
+
 int CMobot::enableButtonCallback(void (*buttonCallback)(CMobot* mobot, int button, int buttonDown))
 {
   return Mobot_enableButtonCallback(
@@ -168,6 +178,12 @@ int CMobot::resetToZero()
 int CMobot::resetToZeroNB()
 {
   return Mobot_resetToZeroNB(_comms);
+}
+
+int CMobot::systemTime(double &time)
+{
+  time = ::systemTime();
+  return 0;
 }
 
 /* CMelody */

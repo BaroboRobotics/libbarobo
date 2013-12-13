@@ -39,7 +39,9 @@
 %apply double & OUTPUT {robotJointState_t &state};
 #endif
 
+#ifndef _CH_
 #include "donglefwd.h"
+#endif
 
 #include <math.h>
 
@@ -248,7 +250,11 @@ typedef struct mobot_s
   MUTEX_T* commsWaitingForMessage_lock;
   //MUTEX_T* socket_lock;
 
+#ifndef _CH_
   MOBOTdongle *dongle;
+#else 
+  void *dongle;
+#endif
 
 #if 0
   /* deprecated by libsfp */
@@ -402,18 +408,13 @@ class CMobot
    -6 : Protocol version mismatch
    */
     int connect();
-#ifndef _CH_
-    int connectWithAddress(const char address[], int channel = 1);
-    int connectWithBluetoothAddress(const char address[], int channel = 1);
-    int connectWithIPAddress(const char address[], const char port[] = "5768");
-#else
     int connectWithAddress(const char address[], ...);
     int connectWithBluetoothAddress(const char address[], ...);
     int connectWithIPAddress(const char address[], ...);
-#endif
 #ifndef _WIN32
     int connectWithTTY(const char ttyfilename[]);
 #endif
+    int delaySeconds(int seconds);
     int disconnect();
     int driveJointToDirect(robotJointId_t id, double angle);
     int driveJointTo(robotJointId_t id, double angle);
@@ -431,17 +432,9 @@ class CMobot
     int getFormFactor(int &formFactor);
     static const char* getConfigFilePath();
     int getJointAngle(robotJointId_t id, double &angle);
-#ifdef _CH_
     int getJointAngleAverage(robotJointId_t id, double &angle, ... );
-#else
-    int getJointAngleAverage(robotJointId_t id, double &angle, int numReadings=10);
-#endif
     int getJointAngles(double &angle1, double &angle2, double &angle3, double &angle4);
-#ifdef _CH_
     int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, double &angle4, ...);
-#else
-    int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, double &angle4, int numReadings=10);
-#endif
     int getJointMaxSpeed(robotJointId_t id, double &maxSpeed);
     int getJointSafetyAngle(double &angle);
     int getJointSafetyAngleTimeout(double &seconds);
@@ -484,7 +477,8 @@ class CMobot
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
-#ifdef _CH_
+    int movexy(double x, double y, double radius, double trackwidth);
+    int movexyNB(double x, double y, double radius, double trackwidth);
     int recordAngle(robotJointId_t id, double time[:], double angle[:], int num, double seconds, ...);
     int recordAngles(double time[:], 
                      double angle1[:], 
@@ -494,43 +488,10 @@ class CMobot
                      int num, 
                      double seconds,
                      ...);
-#else
-    int recordAngle(robotJointId_t id, double time[], double angle[], int num, double seconds, int shiftData = 1);
-    int recordAngles(double time[], 
-                     double angle1[], 
-                     double angle2[], 
-                     double angle3[], 
-                     double angle4[], 
-                     int num, 
-                     double seconds,
-                     int shiftData = 1);
-#endif
-#ifndef _CH_
-    int recordAngleBegin(robotJointId_t id, robotRecordData_t &time, robotRecordData_t &angle, double seconds, int shiftData = 1);
-    int recordDistanceBegin(robotJointId_t id, robotRecordData_t &time, robotRecordData_t &distance, double radius, double seconds, int shiftData = 1);
-#else
     int recordAngleBegin(robotJointId_t id, robotRecordData_t &time, robotRecordData_t &angle, double seconds, ...);
     int recordDistanceBegin(robotJointId_t id, robotRecordData_t &time, robotRecordData_t &distance, double radius, double seconds, ...);
-#endif
     int recordAngleEnd(robotJointId_t id, int &num);
     int recordDistanceEnd(robotJointId_t id, int &num);
-#ifndef _CH_
-    int recordAnglesBegin(robotRecordData_t &time, 
-                          robotRecordData_t &angle1, 
-                          robotRecordData_t &angle2, 
-                          robotRecordData_t &angle3, 
-                          robotRecordData_t &angle4, 
-                          double seconds,
-                          int shiftData = 1);
-    int recordDistancesBegin(robotRecordData_t &time, 
-                          robotRecordData_t &distance1, 
-                          robotRecordData_t &distance2, 
-                          robotRecordData_t &distance3, 
-                          robotRecordData_t &distance4, 
-                          double radius,
-                          double seconds,
-                          int shiftData = 1);
-#else
     int recordAnglesBegin(robotRecordData_t &time, 
                           robotRecordData_t &angle1, 
                           robotRecordData_t &angle2, 
@@ -546,7 +507,6 @@ class CMobot
                           double radius,
                           double seconds,
                           ...);
-#endif
     int recordAnglesEnd(int &num);
     int recordDistancesEnd(int &num);
     int recordWait();
@@ -617,17 +577,10 @@ class CMobot
     int motionTumbleLeftNB(int num);
     int motionUnstandNB();
     int motionWait();
-#ifndef _CH_
-  private:
-    int getJointDirection(robotJointId_t id, robotJointState_t &dir);
-    int setJointDirection(robotJointId_t id, robotJointState_t dir);
-    mobot_t *_comms;
-    void (*buttonCallback)(CMobot *mobot, int button, int buttonDown);
-#else
+    int systemTime(double &time);
   public:
     static void *g_chmobot_dlhandle;
     static int g_chmobot_dlcount;
-#endif /* Not _CH_*/
 };
 #else
 class CMobot 
@@ -661,6 +614,7 @@ class CMobot
     int connectWithBluetoothAddress(const char address[], int channel = 1);
     int connectWithIPAddress(const char address[], const char port[] = "5768");
     int connectWithTTY(const char ttyfilename[]);
+    int delaySeconds(int seconds);
     int disconnect();
     int driveJointToDirect(robotJointId_t id, double angle);
     int driveJointTo(robotJointId_t id, double angle);
@@ -727,6 +681,8 @@ class CMobot
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
+    int movexy(double x, double y, double radius, double trackwidth);
+    int movexyNB(double x, double y, double radius, double trackwidth);
     int recordAngle(robotJointId_t id, double time[], double angle[], int num, double seconds, int shiftData = 1);
     int recordAngles(double time[], 
                      double angle1[], 
@@ -825,6 +781,7 @@ class CMobot
     int motionTumbleLeftNB(int num);
     int motionUnstandNB();
     int motionWait();
+    int systemTime(double &time);
   protected:
     int getJointDirection(robotJointId_t id, robotJointState_t &dir);
     int setJointDirection(robotJointId_t id, robotJointState_t dir);
@@ -1207,6 +1164,9 @@ DLLIMPORT int Mobot_moveToDirectNB(mobot_t* comms,
 DLLIMPORT int Mobot_moveToZero(mobot_t* comms);
 DLLIMPORT int Mobot_moveToZeroNB(mobot_t* comms);
 DLLIMPORT int Mobot_moveWait(mobot_t* comms);
+DLLIMPORT int Mobot_movexy(mobot_t* comms, double x, double y, double radius, double trackwidth);
+DLLIMPORT void* Mobot_movexyThread(void*);
+DLLIMPORT int Mobot_movexyNB(mobot_t* comms, double x, double y, double radius, double trackwidth);
 DLLIMPORT int Mobot_recordAngle(mobot_t* comms, 
                                 robotJointId_t id, 
                                 double* time, 

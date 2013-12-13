@@ -40,13 +40,13 @@ int Mobot_dongleGetTTY (char *buf, size_t len) {
 
     char* line = NULL;
     size_t n = 0;
-    ssize_t read;
+    long read;
 
     while (-1 != (read = getline(&line, &n, cmdstdout))) {
       line[read - 1] = '\0';  /* Overwrite newline */
       snprintf(buf, len, "/dev/%s", line);
       if (!access(buf, R_OK | W_OK)) {
-        printf("(barobo) INFO: dongle found at %s\n", buf);
+        bInfo(stderr, "(barobo) INFO: dongle found at %s\n", buf);
         dongle_found = 1;
         break;
       }
@@ -100,7 +100,7 @@ int Mobot_dongleGetTTY (char *buf, size_t len) {
     }
 
     if (!access(buf, R_OK | W_OK)) {
-      printf("(barobo) INFO: dongle found at %s\n", buf);
+      bInfo(stderr, "(barobo) INFO: dongle found at %s\n", buf);
       return 0;
     }
 

@@ -140,7 +140,7 @@ int Mobot_accelTimeNB(mobot_t* comms, double radius, double acceleration, double
   int i;
   int rc;
   for(i = 1; i < 4; i++) {
-    rc = Mobot_accelAngularTimeNB(comms, i, alpha, timeout);
+    rc = Mobot_accelAngularTimeNB(comms, (robotJointId_t)i, alpha, timeout);
     if(rc) return rc;
   }
   return 0;
@@ -154,7 +154,7 @@ int Mobot_accelToVelocityNB(mobot_t* comms, double radius, double acceleration, 
   int i;
   int rc = 0;
   for(i = 1; i < 4; i++) {
-    rc = Mobot_accelAngularTimeNB(comms, i, alpha, timeout);
+    rc = Mobot_accelAngularTimeNB(comms, (robotJointId_t)i, alpha, timeout);
     if(rc) return rc;
   }
   return 0;
@@ -166,7 +166,7 @@ int Mobot_accelToMaxSpeedNB(mobot_t* comms, double radius, double acceleration)
   int i;
   int rc;
   for(i = 1; i < 4; i++) {
-    rc = Mobot_accelAngularTimeNB(comms, i, alpha, 0);
+    rc = Mobot_accelAngularTimeNB(comms, (robotJointId_t)i, alpha, 0);
     if(rc) return rc;
   }
   return 0;
@@ -644,7 +644,7 @@ int Mobot_connectWithTTYBaud(mobot_t* comms, const char* ttyfilename, unsigned l
   char *filename = strdup(ttyfilename);
   char lockfileName[MAX_PATH];
   int pid;
-  printf("(barobo) INFO: Connecting to %s\n", ttyfilename);
+  bInfo(stderr, "(barobo) INFO: Connecting to %s\n", ttyfilename);
   /* Open the lock file, if it exists */
   sprintf(lockfileName, "/tmp/%s.lock", basename(filename));
   lockfile = fopen(lockfileName, "r");
@@ -671,16 +671,16 @@ int Mobot_connectWithTTYBaud(mobot_t* comms, const char* ttyfilename, unsigned l
   }
 #endif
 
-  comms->dongle = malloc(sizeof(MOBOTdongle));
+  comms->dongle = (MOBOTdongle*)malloc(sizeof(MOBOTdongle));
   assert(comms->dongle);
 
-  fprintf(stderr, "(barobo) INFO: calling dongleOpen()\n");
+  bInfo(stderr, "(barobo) INFO: calling dongleOpen()\n");
   int err = dongleOpen(comms->dongle, ttyfilename, baud);
   if (err) {
-    fprintf(stderr, "(barobo) INFO: dongleOpen() failed\n");
+    bInfo(stderr, "(barobo) INFO: dongleOpen() failed\n");
     return err;
   }
-  fprintf(stderr, "(barobo) INFO: dongleOpen() succeeded!\n");
+  bInfo(stderr, "(barobo) INFO: dongleOpen() succeeded!\n");
 
   comms->connected = 1;
   comms->connectionMode = MOBOTCONNECT_TTY;
@@ -931,9 +931,7 @@ int finishConnectWithoutCommsThread(mobot_t* comms)
     Mobot_disconnect(comms);
     return rc;
   }
-  else {
-    comms->formFactor = form;
-  }
+  comms->formFactor = form;
   switch(form) {
     case MOBOTFORM_ORIGINAL:
       numJoints = 4;
@@ -995,7 +993,7 @@ int finishConnectWithoutCommsThread(mobot_t* comms)
       fprintf(stderr, "(barobo) WARNING: Unable to get robot serial ID.\n");
     }
     else {
-      printf("(barobo) INFO: %s finished connecting\n", comms->serialID);
+      bInfo(stderr, "(barobo) INFO: %s finished connecting\n", comms->serialID);
     }
   }
 
@@ -1267,7 +1265,7 @@ int Mobot_disconnect(mobot_t* comms)
     MUTEX_UNLOCK(&lock);
     return 0;
   }
-  printf("(barobo) INFO: disconnecting %s\n", comms->serialID);
+  bInfo(stderr, "(barobo) INFO: disconnecting %s\n", comms->serialID);
 #ifndef _WIN32
   switch(comms->connectionMode) {
     case MOBOTCONNECT_BLUETOOTH:
@@ -1284,7 +1282,7 @@ int Mobot_disconnect(mobot_t* comms)
       /* Unpair all children */
       for(iter = comms->children; iter != NULL; iter = iter->next) {
         if(iter->mobot) {
-          fprintf(stderr, "(barobo) INFO: Disconnecting child %s.\n", iter->mobot->serialID);
+          bInfo(stderr, "(barobo) INFO: Disconnecting child %s.\n", iter->mobot->serialID);
           Mobot_disconnect(iter->mobot);
         }
       }
@@ -1340,7 +1338,7 @@ int Mobot_disconnect(mobot_t* comms)
       /* Unpair all children */
       for(iter = comms->children; iter != NULL; iter = iter->next) {
         if(iter->mobot) {
-          fprintf(stderr, "(barobo) INFO: Disconnecting child %s.\n", iter->mobot->serialID);
+          bInfo(stderr, "(barobo) INFO: Disconnecting child %s.\n", iter->mobot->serialID);
           Mobot_disconnect(iter->mobot);
         }
       }
@@ -2103,7 +2101,7 @@ void* commsEngine(void* arg)
   while(1) {
     if (MOBOTCONNECT_TTY == comms->connectionMode) {
       uint8_t buf[256];
-      ssize_t len = dongleRead(comms->dongle, buf, sizeof(buf));
+      long len = dongleRead(comms->dongle, buf, sizeof(buf));
       if (-1 == len) {
         break;
       }

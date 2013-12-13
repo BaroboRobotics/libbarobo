@@ -50,15 +50,9 @@ class CLinkbotI
    -6 : Protocol version mismatch
    */
     int connect();
-#ifndef _CH_
-    int connectWithAddress(const char address[], int channel = 1);
-    int connectWithBluetoothAddress(const char address[], int channel = 1);
-    int connectWithIPAddress(const char address[], const char port[] = "5768");
-#else
     int connectWithAddress(const char address[], ...);
     int connectWithBluetoothAddress(const char address[], ...);
     int connectWithIPAddress(const char address[], ...);
-#endif
 #ifndef _WIN32
     int connectWithTTY(const char ttyfilename[]);
 #endif
@@ -71,6 +65,7 @@ class CLinkbotI
     int driveTo(double angle1, double angle2, double angle3);
     int driveToDirectNB(double angle1, double angle2, double angle3);
     int driveToNB(double angle1, double angle2, double angle3);
+    int delaySeconds(int seconds);
     int enableButtonCallback(void (*buttonCallback)(CLinkbotI* mobot, int button, int buttonDown));
     int disableButtonCallback();
     int isConnected();
@@ -83,17 +78,9 @@ class CLinkbotI
     static const char* getConfigFilePath();
     int getID();
     int getJointAngle(robotJointId_t id, double &angle);
-#ifdef _CH_
     int getJointAngleAverage(robotJointId_t id, double &angle, ... );
-#else
-    int getJointAngleAverage(robotJointId_t id, double &angle, int numReadings=10);
-#endif
     int getJointAngles(double &angle1, double &angle2, double &angle3);
-#ifdef _CH_
     int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, ...);
-#else
-    int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, int numReadings=10);
-#endif
     int getJointMaxSpeed(robotJointId_t id, double &maxSpeed);
     int getJointSafetyAngle(double &angle);
     int getJointSafetyAngleTimeout(double &seconds);
@@ -134,7 +121,8 @@ class CLinkbotI
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
-#ifdef _CH_
+    int movexy(double x, double y, double radius, double trackwidth);
+    int movexyNB(double x, double y, double radius, double trackwidth);
     int recordAngle(robotJointId_t id, double time[:], double angle[:], int num, double seconds, ...);
     int recordAngles(double time[:], 
                      double angle1[:], 
@@ -143,40 +131,10 @@ class CLinkbotI
                      int num, 
                      double seconds,
                      ...);
-#else
-    int recordAngle(robotJointId_t id, double time[], double angle[], int num, double seconds, int shiftData = 1);
-    int recordAngles(double time[], 
-                     double angle1[], 
-                     double angle2[], 
-                     double angle3[], 
-                     int num, 
-                     double seconds,
-                     int shiftData = 1);
-#endif
-#ifndef _CH_
-    int recordAngleBegin(robotJointId_t id, robotRecordData_t &time, robotRecordData_t &angle, double seconds, int shiftData = 1);
-    int recordDistanceBegin(robotJointId_t id, robotRecordData_t &time, robotRecordData_t &distance, double radius, double seconds, int shiftData = 1);
-#else
     int recordAngleBegin(robotJointId_t id, robotRecordData_t &time, robotRecordData_t &angle, double seconds, ...);
     int recordDistanceBegin(robotJointId_t id, robotRecordData_t &time, robotRecordData_t &distance, double radius, double seconds, ...);
-#endif
     int recordAngleEnd(robotJointId_t id, int &num);
     int recordDistanceEnd(robotJointId_t id, int &num);
-#ifndef _CH_
-    int recordAnglesBegin(robotRecordData_t &time, 
-                          robotRecordData_t &angle1, 
-                          robotRecordData_t &angle2, 
-                          robotRecordData_t &angle3, 
-                          double seconds,
-                          int shiftData = 1);
-    int recordDistancesBegin(robotRecordData_t &time, 
-                          robotRecordData_t &distance1, 
-                          robotRecordData_t &distance2, 
-                          robotRecordData_t &distance3, 
-                          double radius,
-                          double seconds,
-                          int shiftData = 1);
-#else
     int recordAnglesBegin(robotRecordData_t &time, 
                           robotRecordData_t &angle1, 
                           robotRecordData_t &angle2, 
@@ -190,7 +148,6 @@ class CLinkbotI
                           double radius,
                           double seconds,
                           ...);
-#endif
     int recordAnglesEnd(int &num);
     int recordDistancesEnd(int &num);
     int recordWait();
@@ -246,6 +203,7 @@ class CLinkbotI
     int motionTurnLeftNB(double angle);
     int motionTurnRightNB(double angle);
     int motionWait();
+    int systemTime(double &time);
 
     /* Linkbot Only Functions */
     int connectWithSerialID(const char serialID[]);
@@ -370,6 +328,7 @@ class CLinkbotL
     int connectWithTTY(const char ttyfilename[]);
 #endif
     int connectWithSerialID(const char serialID[]);
+    int delaySeconds(int seconds);
     int disconnect();
     int driveJointToDirect(robotJointId_t id, double angle);
     int driveJointTo(robotJointId_t id, double angle);
@@ -529,6 +488,7 @@ class CLinkbotL
     int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
     int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
     int stopAllJoints();
+    int systemTime(double &time);
   private:
     void* memholder1;
     int memholder2;

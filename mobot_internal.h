@@ -130,6 +130,11 @@ void baswap(bdaddr_t *dst, const bdaddr_t *src);
 int str2ba(const char *str, bdaddr_t *ba);
 #endif
 
+
+int finishConnect (mobot_t* comms);
+int finishConnectWithoutCommsThread(mobot_t* comms);
+int getFormFactor(mobot_t* comms, int* form);
+
 /* Hide all of the C-style structs and API from CH */
 #ifndef C_ONLY
 #ifdef __cplusplus
