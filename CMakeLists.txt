@@ -19,12 +19,13 @@ include_directories(${CMAKE_INSTALL_PREFIX}/include)
 link_directories(${CMAKE_INSTALL_PREFIX}/lib)
 
 include_directories(${BAROBOCONFIGFILE_SOURCE_DIR})
-link_directories(${BAROBOCONFIGFILE_BINARY_DIR})
+#link_directories(${BAROBOCONFIGFILE_BINARY_DIR})
 
 include_directories(${MXML_SOURCE_DIR})
 link_directories(${MXML_BINARY_DIR})
 
 add_definitions(-DNONRELEASE)
+#add_definitions(-DVERBOSE -DDEBUG)
 
 if(NOT DEFINED $ENV{NOBLUETOOTH})
   message("enabling bluetooth")
@@ -65,12 +66,12 @@ set(SRCS
       dongle.c
       dongle_get_tty.c
       )
-set(HEADERS mobot.h ${BAROBOCONFIGFILE_SOURCE_DIR}/BaroboConfigFile.h)
+    set(HEADERS mobot.h donglefwd.h ${BAROBOCONFIGFILE_SOURCE_DIR}/BaroboConfigFile.h ${MXML_SOURCE_DIR}/mxml.h)
 
 add_library(baroboObjects OBJECT ${SRCS})
-add_library(barobo SHARED $<TARGET_OBJECTS:baroboObjects>)
+add_library(barobo SHARED $<TARGET_OBJECTS:baroboObjects> $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:mxmlObjects>)
 
-target_link_libraries(barobo sfp baroboconfigfile mxml)
+target_link_libraries(barobo sfp)
 
 install(TARGETS barobo RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
 install(FILES ${HEADERS} DESTINATION include)
@@ -122,7 +123,7 @@ else(CMAKE_HOST_WIN32)
     find_library(COREFOUNDATION_LIB CoreFoundation)
     find_library(IOKIT_LIB IOKit)
     target_link_libraries(barobo pthread ${IOKIT_LIB} ${COREFOUNDATION_LIB})
-  else(CMAKE_HOST_APPLE)
+  else()
     # Linux
 
     # hlh: See https://github.com/commontk/Log4Qt/blob/patched/CMakeLists.txt#L116
@@ -132,5 +133,5 @@ else(CMAKE_HOST_WIN32)
     endif()
 
     target_link_libraries(barobo bluetooth pthread rt)
-  endif(CMAKE_HOST_APPLE)
+  endif()
 endif(CMAKE_HOST_WIN32)

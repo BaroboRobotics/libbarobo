@@ -1,3 +1,4 @@
+#include "logging.h"
 #include "dongle.h"
 
 #ifdef _WIN32
@@ -23,35 +24,6 @@
 
 static void dongleInit (MOBOTdongle *dongle);
 static void dongleFini (MOBOTdongle *dongle);
-
-int bDebug(FILE *stream, const char* format, ...)
-{
-#ifdef DEBUG
-  va_list l;
-#ifndef _WIN32
-  return vfprintf(stream, format, l);
-#else
-  return _vftprintf(stream, format, l);
-#endif
-#else
-  return 0;
-#endif
-}
-
-int bInfo(FILE *stream, const char* format, ...)
-{
-#ifdef VERBOSE
-  va_list l;
-#ifndef _WIN32
-  return vfprintf(stream, format, l);
-#else
-  return _vftprintf(stream, format, l);
-#endif
-#else
-  return 0;
-#endif
-}
-
 
 /* NULL ms_delay means wait forever, otherwise it is a pointer to the number
  * of milliseconds to wait.

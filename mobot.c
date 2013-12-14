@@ -19,6 +19,7 @@
 
 //#define COMMSDEBUG
 
+#include "logging.h"
 #include "dongle.h"
 #include "libsfp/serial_framing_protocol.h"
 

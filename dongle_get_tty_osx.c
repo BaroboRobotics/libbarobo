@@ -1,3 +1,5 @@
+#include "logging.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
