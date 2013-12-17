@@ -1,7 +1,7 @@
 # Barobo Robot Communications library
 # Barobo, Inc.
 
-cmake_minimum_required(VERSION 2.8.8)
+cmake_minimum_required(VERSION 2.8.9)
 project(LIBIMOBOTCOMMS)
 
 # If you're on Windows, you can set the following paths to override the auto
@@ -15,8 +15,11 @@ project(LIBIMOBOTCOMMS)
 add_subdirectory(demos EXCLUDE_FROM_ALL)
 add_subdirectory(BaroboConfigFile)
 
-include_directories(${CMAKE_INSTALL_PREFIX}/include)
-link_directories(${CMAKE_INSTALL_PREFIX}/lib)
+#include_directories(${CMAKE_INSTALL_PREFIX}/include)
+#link_directories(${CMAKE_INSTALL_PREFIX}/lib)
+
+find_path(sfpinc serial_framing_protocol.h HINTS ${sfp_INCLUDE_DIRS})
+include_directories(${sfpinc})
 
 include_directories(${BAROBOCONFIGFILE_SOURCE_DIR})
 #link_directories(${BAROBOCONFIGFILE_BINARY_DIR})
