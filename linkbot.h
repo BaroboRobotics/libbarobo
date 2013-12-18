@@ -22,6 +22,81 @@
 
 #include "mobot.h"
 
+#ifndef _CH_
+class CLinkbot : public CMobot
+{
+  public:
+    int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
+    int driveToDirect(double angle1, double angle2, double angle3);
+    int driveTo(double angle1, double angle2, double angle3);
+    int driveToDirectNB(double angle1, double angle2, double angle3);
+    int driveToNB(double angle1, double angle2, double angle3);
+    int getBatteryVoltage(double &voltage);
+    int getColorRGB(int &r, int &g, int &b);
+    int getID();
+#ifdef SWIG
+    %apply double& OUTPUT {double &angle1, double &angle2, double &angle3};
+    void getJointAngles(double &angle1, double &angle2, double &angle3);
+#else
+    int getJointAngles(double &angle1, double &angle2, double &angle3);
+#endif
+    int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, int numReadings=10);
+    int getJointSpeeds(double &speed1, double &speed2, double &speed3);
+    int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3);
+    int move(double angle1, double angle2, double angle3);
+    int moveNB(double angle1, double angle2, double angle3);
+    int moveContinuousNB(robotJointState_t dir1, 
+                       robotJointState_t dir2, 
+                       robotJointState_t dir3);
+    int moveContinuousTime(robotJointState_t dir1, 
+                           robotJointState_t dir2, 
+                           robotJointState_t dir3, 
+                           double seconds);
+    int moveTo(double angle1, double angle2, double angle3);
+    int moveToDirect(double angle1, double angle2, double angle3);
+    int moveToNB(double angle1, double angle2, double angle3);
+    int moveToDirectNB(double angle1, double angle2, double angle3);
+    int recordAngles(double time[], 
+                     double angle1[], 
+                     double angle2[], 
+                     double angle3[], 
+                     int num, 
+                     double seconds,
+                     int shiftData = 1);
+    int recordAnglesBegin(robotRecordData_t &time, 
+                          robotRecordData_t &angle1, 
+                          robotRecordData_t &angle2, 
+                          robotRecordData_t &angle3, 
+                          double seconds,
+                          int shiftData = 1);
+    int recordDistancesBegin(robotRecordData_t &time, 
+                          robotRecordData_t &distance1, 
+                          robotRecordData_t &distance2, 
+                          robotRecordData_t &distance3, 
+                          double radius,
+                          double seconds,
+                          int shiftData = 1);
+    int setBuzzerFrequency(int frequency, double time);
+    int setBuzzerFrequencyOn(int frequency);
+    int setBuzzerFrequencyOff();
+    int setColorRGB(int r, int g, int b);
+    int setJointSpeeds(double speed1, double speed2, double speed3);
+    int setJointSpeedRatios(double ratios1, double ratios2, double ratios3);
+    int setMovementStateNB( robotJointState_t dir1,
+        robotJointState_t dir2,
+        robotJointState_t dir3);
+    int setMovementStateTime( robotJointState_t dir1,
+        robotJointState_t dir2,
+        robotJointState_t dir3,
+        double seconds);
+    int setMovementStateTimeNB( robotJointState_t dir1,
+        robotJointState_t dir2,
+        robotJointState_t dir3,
+        double seconds);
+
+};
+#endif
+
 #ifdef _CH_
 class CLinkbotI
 {
@@ -103,6 +178,7 @@ class CLinkbotI
     int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3);
     int getJointState(robotJointId_t id, robotJointState_t &state);
     mobot_t* getMobotObject();
+    int getVersion();
     int move(double angle1, double angle2, double angle3);
     int moveNB(double angle1, double angle2, double angle3);
     int moveBackward(double angle);
@@ -254,80 +330,13 @@ class CLinkbotI
     int memholder2;
 };
 #else
-class CLinkbotI : public CMobot 
+class CLinkbotI : public CLinkbot
 {
   public:
     CLinkbotI();
     ~CLinkbotI();
     int connect();
     int connectWithSerialID(const char serialID[]);
-    int driveToDirect(double angle1, double angle2, double angle3);
-    int driveTo(double angle1, double angle2, double angle3);
-    int driveToDirectNB(double angle1, double angle2, double angle3);
-    int driveToNB(double angle1, double angle2, double angle3);
-    int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
-    int getBatteryVoltage(double &voltage);
-    int getColorRGB(int &r, int &g, int &b);
-    int getID();
-#ifdef SWIG
-    %apply double& OUTPUT {double &angle1, double &angle2, double &angle3};
-    void getJointAngles(double &angle1, double &angle2, double &angle3);
-#else
-    int getJointAngles(double &angle1, double &angle2, double &angle3);
-#endif
-    int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, int numReadings=10);
-    int getJointSpeeds(double &speed1, double &speed2, double &speed3);
-    int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3);
-    int move(double angle1, double angle2, double angle3);
-    int moveNB(double angle1, double angle2, double angle3);
-    int moveContinuousNB(robotJointState_t dir1, 
-                       robotJointState_t dir2, 
-                       robotJointState_t dir3);
-    int moveContinuousTime(robotJointState_t dir1, 
-                           robotJointState_t dir2, 
-                           robotJointState_t dir3, 
-                           double seconds);
-    int moveTo(double angle1, double angle2, double angle3);
-    int moveToDirect(double angle1, double angle2, double angle3);
-    int moveToNB(double angle1, double angle2, double angle3);
-    int moveToDirectNB(double angle1, double angle2, double angle3);
-    int recordAngles(double time[], 
-                     double angle1[], 
-                     double angle2[], 
-                     double angle3[], 
-                     int num, 
-                     double seconds,
-                     int shiftData = 1);
-    int recordAnglesBegin(robotRecordData_t &time, 
-                          robotRecordData_t &angle1, 
-                          robotRecordData_t &angle2, 
-                          robotRecordData_t &angle3, 
-                          double seconds,
-                          int shiftData = 1);
-    int recordDistancesBegin(robotRecordData_t &time, 
-                          robotRecordData_t &distance1, 
-                          robotRecordData_t &distance2, 
-                          robotRecordData_t &distance3, 
-                          double radius,
-                          double seconds,
-                          int shiftData = 1);
-    int setBuzzerFrequency(int frequency, double time);
-    int setBuzzerFrequencyOn(int frequency);
-    int setBuzzerFrequencyOff();
-    int setColorRGB(int r, int g, int b);
-    int setJointSpeeds(double speed1, double speed2, double speed3);
-    int setJointSpeedRatios(double ratios1, double ratios2, double ratios3);
-    int setMovementStateNB( robotJointState_t dir1,
-        robotJointState_t dir2,
-        robotJointState_t dir3);
-    int setMovementStateTime( robotJointState_t dir1,
-        robotJointState_t dir2,
-        robotJointState_t dir3,
-        double seconds);
-    int setMovementStateTimeNB( robotJointState_t dir1,
-        robotJointState_t dir2,
-        robotJointState_t dir3,
-        double seconds);
 };
 #endif
 
@@ -409,6 +418,7 @@ class CLinkbotL
     int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3);
     int getJointState(robotJointId_t id, robotJointState_t &state);
     mobot_t* getMobotObject();
+    int getVersion();
     int getColorRGB(int &r, int &g, int &b);
     int move(double angle1, double angle2, double angle3);
     int moveNB(double angle1, double angle2, double angle3);
@@ -534,75 +544,13 @@ class CLinkbotL
     int memholder2;
 };
 #else
-class CLinkbotL : public CMobot
+class CLinkbotL : public CLinkbot
 {
   public:
     CLinkbotL();
     ~CLinkbotL();
     int connect();
     int connectWithSerialID(const char serialID[]);
-    int driveToDirect(double angle1, double angle2, double angle3);
-    int driveTo(double angle1, double angle2, double angle3);
-    int driveToDirectNB(double angle1, double angle2, double angle3);
-    int driveToNB(double angle1, double angle2, double angle3);
-    int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
-    int getBatteryVoltage(double &voltage);
-    int getID();
-    int getJointAngles(double &angle1, double &angle2, double &angle3);
-    int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, int numReadings=10);
-    int getJointSpeeds(double &speed1, double &speed2, double &speed3);
-    int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3);
-    int getColorRGB(int &r, int &g, int &b);
-    int move(double angle1, double angle2, double angle3);
-    int moveNB(double angle1, double angle2, double angle3);
-    int moveContinuousNB(robotJointState_t dir1, 
-                       robotJointState_t dir2, 
-                       robotJointState_t dir3);
-    int moveContinuousTime(robotJointState_t dir1, 
-                           robotJointState_t dir2, 
-                           robotJointState_t dir3, 
-                           double seconds);
-    int moveTo(double angle1, double angle2, double angle3);
-    int moveToDirect(double angle1, double angle2, double angle3);
-    int moveToNB(double angle1, double angle2, double angle3);
-    int moveToDirectNB(double angle1, double angle2, double angle3);
-    int recordAngles(double time[], 
-                     double angle1[], 
-                     double angle2[], 
-                     double angle3[], 
-                     int num, 
-                     double seconds,
-                     int shiftData = 1);
-    int recordAnglesBegin(robotRecordData_t &time, 
-                          robotRecordData_t &angle1, 
-                          robotRecordData_t &angle2, 
-                          robotRecordData_t &angle3, 
-                          double seconds,
-                          int shiftData = 1);
-    int recordDistancesBegin(robotRecordData_t &time, 
-                          robotRecordData_t &distance1, 
-                          robotRecordData_t &distance2, 
-                          robotRecordData_t &distance3, 
-                          double radius,
-                          double seconds,
-                          int shiftData = 1);
-    int setBuzzerFrequency(int frequency, double time);
-    int setBuzzerFrequencyOn(int frequency);
-    int setBuzzerFrequencyOff();
-    int setColorRGB(int r, int g, int b);
-    int setJointSpeeds(double speed1, double speed2, double speed3);
-    int setJointSpeedRatios(double ratios1, double ratios2, double ratios3);
-    int setMovementStateNB( robotJointState_t dir1,
-        robotJointState_t dir2,
-        robotJointState_t dir3);
-    int setMovementStateTime( robotJointState_t dir1,
-        robotJointState_t dir2,
-        robotJointState_t dir3,
-        double seconds);
-    int setMovementStateTimeNB( robotJointState_t dir1,
-        robotJointState_t dir2,
-        robotJointState_t dir3,
-        double seconds);
 };
 #endif
 

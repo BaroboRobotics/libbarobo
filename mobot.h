@@ -451,6 +451,7 @@ class CMobot
     int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3, double &ratio4);
     int getJointState(robotJointId_t id, robotJointState_t &state);
     mobot_t* getMobotObject();
+    int getVersion();
     int move(double angle1, double angle2, double angle3, double angle4);
     int moveNB(double angle1, double angle2, double angle3, double angle4);
     int moveBackward(double angle);
@@ -694,6 +695,7 @@ class CMobot
     int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3, double &ratio4);
     int getJointState(robotJointId_t id, robotJointState_t &state);
     mobot_t* getMobotObject();
+    int getVersion();
     int move(double angle1, double angle2, double angle3, double angle4);
     int moveNB(double angle1, double angle2, double angle3, double angle4);
     int moveBackward(double angle);
