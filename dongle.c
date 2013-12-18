@@ -109,10 +109,29 @@ static long dongleWriteRaw (MOBOTdongle *dongle, const uint8_t *buf, size_t len)
 
 /* WIN32 implementation of dongleTimedReadRaw. */
 
+/* FIXME This function suffers from a race condition that is nearly guaranteed
+ * to occur. Currently, only a dongleRead() function is exposed to the rest of
+ * libbarobo, which blocks until receiving a complete robot communications
+ * packet. Thus libbarobo's commsEngine thread uses this function, and
+ * terminates ungracefully, when the underlying ReadFile() operation errors
+ * out on the call to Mobot_disconnect(). Since Mobot_disconnect() calls
+ * dongleClose() calls dongleFini() which sets ovIncoming to NULL, this could
+ * easily lead to a segfault in dongleRead() (technically dongleTimedReadRaw(),
+ * which is used to implement dongleRead().
+ *
+ * The correct solution to this problem is to set up a kill signal system in
+ * mobot.c:commsEngine(), but this implies that a dongleTimedRead() function
+ * must be available. I (hlh) have not yet implemented this function, because
+ * it would require cross-platform timing support. C++11's std::chrono provides
+ * such support, but we aren't yet sure if we can switch to C++11 (due to Ch-
+ * related fucking bullshit), so I'm holding off on it. For now, we can just
+ * return if ovIncoming is ever NULL before we use it. This could still suffer
+ * an obvious race, but oh well -- it's far less likely. */
 static long dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, const long *ms_delay) {
   assert(dongle && buf);
 
   DWORD readbytes = 0;
+  if (!dongle->ovIncoming) { return -1; } // FIXME
   BOOL b = ReadFile(dongle->handle, buf, len, &readbytes, dongle->ovIncoming);
 
   if (b) {
@@ -127,6 +146,7 @@ static long dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, c
     return -1;
   }
 
+  if (!dongle->ovIncoming) { return -1; } // FIXME
   DWORD code = WaitForSingleObject(dongle->ovIncoming->hEvent, ms_delay ? *ms_delay : INFINITE);
 
   if (WAIT_TIMEOUT == code) {
@@ -146,12 +166,14 @@ static long dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, c
     assert(WAIT_OBJECT_0 == code);
   }
 
+  if (!dongle->ovIncoming) { return -1; } // FIXME
   if (!GetOverlappedResult(dongle->handle, dongle->ovIncoming, &readbytes, FALSE)) {
     win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
         "GetOverlappedResult()\n"), GetLastError());
     return -1;
   }
 
+  if (!dongle->ovIncoming) { return -1; } // FIXME
   if (!ResetEvent(dongle->ovIncoming->hEvent)) {
     win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
           "ResetEvent()\n"), GetLastError());
