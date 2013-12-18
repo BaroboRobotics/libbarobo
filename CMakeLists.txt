@@ -2,12 +2,18 @@
 # Barobo, Inc.
 
 cmake_minimum_required(VERSION 2.8.9)
-project(LIBIMOBOTCOMMS)
+project(LIBBAROBO C CXX)
+set(TARGET barobo)
 
 # If you're on Windows, you can set the following paths to override the auto
 # detection scripts for the Windows SDK and Visual Studio include paths.
 #set(WINSDK_INCLUDE_PATH "C:/Program Files/Microsoft SDKs/Windows/v6.0/Include")
 #set(MSVC_INCLUDE_PATH "C:/Program Files (x86)/Microsoft Visual Studio 9.0/VC/include")
+
+set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include
+  CACHE INTERNAL "${PROJECT_NAME}: public include directories" FORCE)
+
+include_directories(${${PROJECT_NAME}_INCLUDE_DIRS})
 
 ##############################################################################
 # Platform Independent Setup
@@ -18,8 +24,8 @@ add_subdirectory(BaroboConfigFile)
 #include_directories(${CMAKE_INSTALL_PREFIX}/include)
 #link_directories(${CMAKE_INSTALL_PREFIX}/lib)
 
-find_path(sfpinc serial_framing_protocol.h HINTS ${sfp_INCLUDE_DIRS})
-include_directories(${sfpinc})
+find_path(SFP_INC serial_framing_protocol.h HINTS ${LIBSFP_INCLUDE_DIRS})
+include_directories(${SFP_INC})
 
 include_directories(${BAROBOCONFIGFILE_SOURCE_DIR})
 #link_directories(${BAROBOCONFIGFILE_BINARY_DIR})
@@ -69,14 +75,18 @@ set(SRCS
       dongle.c
       dongle_get_tty.c
       )
-    set(HEADERS mobot.h donglefwd.h ${BAROBOCONFIGFILE_SOURCE_DIR}/BaroboConfigFile.h ${MXML_SOURCE_DIR}/mxml.h)
+    FILE(GLOB HEADERS include/*.h)
+    #set(HEADERS mobot.h donglefwd.h ${BAROBOCONFIGFILE_SOURCE_DIR}/BaroboConfigFile.h ${MXML_SOURCE_DIR}/mxml.h)
 
-add_library(baroboObjects OBJECT ${SRCS})
-add_library(barobo SHARED $<TARGET_OBJECTS:baroboObjects> $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:mxmlObjects>)
+add_library(${TARGET}-objs OBJECT ${SRCS})
+add_library(${TARGET} SHARED $<TARGET_OBJECTS:${TARGET}-objs> $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:mxmlObjects>)
 
-target_link_libraries(barobo sfp)
+target_link_libraries(${TARGET} sfp)
 
-install(TARGETS barobo RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
+install(TARGETS ${TARGET}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
 install(FILES ${HEADERS} DESTINATION include)
 
 ##############################################################################
@@ -98,17 +108,17 @@ if(CMAKE_HOST_WIN32)
       (CMAKE_GENERATOR MATCHES "NMake")
     )
     message(STATUS "Compiling for Visual Studio detected")
-    set_target_properties(baroboObjects PROPERTIES COMPILE_FLAGS "/GS- /QIfist /TP")
+    set_target_properties(${TARGET}-objs PROPERTIES COMPILE_FLAGS "/GS- /QIfist /TP")
   else()
     message(STATUS "Compiling for MinGW detected")
     # include_directories() only seems to be able to generate -I and -isystem
     # gcc flags. That won't do--we need -idirafter to avoid picking up all of
     # the Windows SDK and MSVC headers, only the ones we need.
-    set_target_properties(baroboObjects PROPERTIES COMPILE_FLAGS
+    set_target_properties(${TARGET}-objs PROPERTIES COMPILE_FLAGS
       "-idirafter \"${WINSDK_INCLUDE_PATH}\" -idirafter \"${MSVC_INCLUDE_PATH}\"")
   endif()
 
-  target_link_libraries(barobo Ws2_32 setupapi)
+  target_link_libraries(${TARGET} Ws2_32 setupapi)
 else(CMAKE_HOST_WIN32)
   # Non-Win32
 
@@ -125,16 +135,16 @@ else(CMAKE_HOST_WIN32)
 
     find_library(COREFOUNDATION_LIB CoreFoundation)
     find_library(IOKIT_LIB IOKit)
-    target_link_libraries(barobo pthread ${IOKIT_LIB} ${COREFOUNDATION_LIB})
+    target_link_libraries(${TARGET} pthread ${IOKIT_LIB} ${COREFOUNDATION_LIB})
   else()
     # Linux
 
     # hlh: See https://github.com/commontk/Log4Qt/blob/patched/CMakeLists.txt#L116
     # I had the same problem.
     if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-      set_target_properties(baroboObjects PROPERTIES COMPILE_FLAGS "-fPIC")
+      set_target_properties(${TARGET}-objs PROPERTIES COMPILE_FLAGS "-fPIC")
     endif()
 
-    target_link_libraries(barobo bluetooth pthread rt)
+    target_link_libraries(${TARGET} bluetooth pthread rt)
   endif()
 endif(CMAKE_HOST_WIN32)

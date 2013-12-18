@@ -7,6 +7,8 @@
 #else
 #define bDebug(...) fprintf(__VA_ARGS__)
 #endif
+#else
+#define bDebug(...) 0
 #endif
 
 #ifdef VERBOSE
@@ -15,6 +17,8 @@
 #else
 #define bInfo(...) fprintf(__VA_ARGS__)
 #endif
+#else
+#define bInfo(...) 0
 #endif
 
 #endif
