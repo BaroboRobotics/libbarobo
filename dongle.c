@@ -4,7 +4,7 @@
 #include "win32_error.h"
 #endif
 
-#include <stdint.h>
+//#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -58,12 +58,12 @@ int bInfo(FILE *stream, const char* format, ...)
  *
  * Returns 0 on timeout (or read() returning zero), -1 on error, number of
  * bytes read otherwise. */
-static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf,
+static long dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf,
     size_t len, const long *ms_delay);
 
-static ssize_t dongleWriteRaw (MOBOTdongle *dongle, const uint8_t *buf, size_t len) {
+static long dongleWriteRaw (MOBOTdongle *dongle, const uint8_t *buf, size_t len) {
   assert(dongle && buf);
-  ssize_t ret;
+  long ret;
 #ifdef _WIN32
   DWORD bytesWritten;
   BOOL b = WriteFile(dongle->handle, buf, len, &bytesWritten, dongle->ovOutgoing);
@@ -109,10 +109,29 @@ static ssize_t dongleWriteRaw (MOBOTdongle *dongle, const uint8_t *buf, size_t l
 
 /* WIN32 implementation of dongleTimedReadRaw. */
 
-static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, const long *ms_delay) {
+/* FIXME This function suffers from a race condition that is nearly guaranteed
+ * to occur. Currently, only a dongleRead() function is exposed to the rest of
+ * libbarobo, which blocks until receiving a complete robot communications
+ * packet. Thus libbarobo's commsEngine thread uses this function, and
+ * terminates ungracefully, when the underlying ReadFile() operation errors
+ * out on the call to Mobot_disconnect(). Since Mobot_disconnect() calls
+ * dongleClose() calls dongleFini() which sets ovIncoming to NULL, this could
+ * easily lead to a segfault in dongleRead() (technically dongleTimedReadRaw(),
+ * which is used to implement dongleRead().
+ *
+ * The correct solution to this problem is to set up a kill signal system in
+ * mobot.c:commsEngine(), but this implies that a dongleTimedRead() function
+ * must be available. I (hlh) have not yet implemented this function, because
+ * it would require cross-platform timing support. C++11's std::chrono provides
+ * such support, but we aren't yet sure if we can switch to C++11 (due to Ch-
+ * related fucking bullshit), so I'm holding off on it. For now, we can just
+ * return if ovIncoming is ever NULL before we use it. This could still suffer
+ * an obvious race, but oh well -- it's far less likely. */
+static long dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, const long *ms_delay) {
   assert(dongle && buf);
 
   DWORD readbytes = 0;
+  if (!dongle->ovIncoming) { return -1; } // FIXME
   BOOL b = ReadFile(dongle->handle, buf, len, &readbytes, dongle->ovIncoming);
 
   if (b) {
@@ -127,6 +146,7 @@ static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len
     return -1;
   }
 
+  if (!dongle->ovIncoming) { return -1; } // FIXME
   DWORD code = WaitForSingleObject(dongle->ovIncoming->hEvent, ms_delay ? *ms_delay : INFINITE);
 
   if (WAIT_TIMEOUT == code) {
@@ -146,12 +166,14 @@ static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len
     assert(WAIT_OBJECT_0 == code);
   }
 
+  if (!dongle->ovIncoming) { return -1; } // FIXME
   if (!GetOverlappedResult(dongle->handle, dongle->ovIncoming, &readbytes, FALSE)) {
     win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
         "GetOverlappedResult()\n"), GetLastError());
     return -1;
   }
 
+  if (!dongle->ovIncoming) { return -1; } // FIXME
   if (!ResetEvent(dongle->ovIncoming->hEvent)) {
     win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
           "ResetEvent()\n"), GetLastError());
@@ -165,7 +187,7 @@ static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len
 
 /* POSIX implementation of dongleTimedReadRaw. */
 
-static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, const long *ms_delay) {
+static long dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, const long *ms_delay) {
   fd_set rfds;
   FD_ZERO(&rfds);
   FD_SET(dongle->fd, &rfds);
@@ -223,7 +245,7 @@ static ssize_t dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len
 
 #endif
 
-static ssize_t dongleReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len) {
+static long dongleReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len) {
   return dongleTimedReadRaw(dongle, buf, len, NULL);
 }
 
@@ -239,7 +261,7 @@ static int dongleDetectFraming (MOBOTdongle *dongle) {
     0x7e  // flag--the old firmware never asserts that this has to be 0x00
   };
 
-  ssize_t err = dongleWriteRaw(dongle, detection, sizeof(detection));
+  long err = dongleWriteRaw(dongle, detection, sizeof(detection));
   if (-1 == err) {
     return -1;
   }
@@ -252,7 +274,7 @@ static int dongleDetectFraming (MOBOTdongle *dongle) {
   /* Give the dongle a little time to think about it. */
   long ms_delay = 1000;
   uint8_t response[256];
-  ssize_t bytesread = dongleTimedReadRaw(dongle, response, sizeof(response), &ms_delay);
+  long bytesread = dongleTimedReadRaw(dongle, response, sizeof(response), &ms_delay);
   if (!bytesread) {
     fprintf(stderr, "(barobo) ERROR: in dongleDetectFraming, timed out "
         "waiting for response.\n");
@@ -295,7 +317,7 @@ static void sfp_unlock (void *data) {
 /* Callback to be provided to libsfp. */
 static int sfp_write (uint8_t *octets, size_t len, size_t *outlen, void *data) {
   MOBOTdongle *dongle = (MOBOTdongle *)data;
-  ssize_t ret = dongleWriteRaw(dongle, octets, len);
+  long ret = dongleWriteRaw(dongle, octets, len);
   if (outlen && ret >= 0) {
     *outlen = ret;
     ret = 0;
@@ -303,7 +325,7 @@ static int sfp_write (uint8_t *octets, size_t len, size_t *outlen, void *data) {
   return ret;
 }
 
-ssize_t dongleWrite (MOBOTdongle *dongle, const uint8_t *buf, size_t len) {
+long dongleWrite (MOBOTdongle *dongle, const uint8_t *buf, size_t len) {
   assert(dongle);
   assert(buf);
 
@@ -319,7 +341,7 @@ ssize_t dongleWrite (MOBOTdongle *dongle, const uint8_t *buf, size_t len) {
 /* Block until a complete message from the dongle is received. Return the
  * message in the output parameter buf, bounded by size len. Returns -1 on
  * error, otherwise the number of bytes read. */
-ssize_t dongleRead (MOBOTdongle *dongle, uint8_t *buf, size_t len) {
+long dongleRead (MOBOTdongle *dongle, uint8_t *buf, size_t len) {
   assert(dongle);
   assert(buf);
 
@@ -366,7 +388,7 @@ static int dongleSetupSFP (MOBOTdongle *dongle) {
   MUTEX_NEW(dongle->sfpTxLock);
   MUTEX_INIT(dongle->sfpTxLock);
 
-  dongle->sfpContext = malloc(sizeof(SFPcontext));
+  dongle->sfpContext = (SFPcontext*)malloc(sizeof(SFPcontext));
   assert(dongle->sfpContext);
 
   sfpInit(dongle->sfpContext);
@@ -407,11 +429,11 @@ static void dongleInit (MOBOTdongle *dongle) {
   dongle->handle = NULL;
 
   /* Initialize overlapped communication shit */
-  dongle->ovIncoming = malloc(sizeof(OVERLAPPED));
+  dongle->ovIncoming = (OVERLAPPED*)malloc(sizeof(OVERLAPPED));
   memset(dongle->ovIncoming, 0, sizeof(OVERLAPPED));
   dongle->ovIncoming->hEvent = CreateEvent(0, 1, 0, 0);
 
-  dongle->ovOutgoing = malloc(sizeof(OVERLAPPED));
+  dongle->ovOutgoing = (OVERLAPPED*)malloc(sizeof(OVERLAPPED));
   memset(dongle->ovOutgoing, 0, sizeof(OVERLAPPED));
   dongle->ovOutgoing->hEvent = CreateEvent(0, 1, 0, 0);
 
@@ -462,7 +484,7 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
   /* Check the file name. If we receive something like "COM45", we want to
    * change it to "\\.\COM45" */
   char *tty;
-  tty = malloc((sizeof(char)*strlen(ttyfilename))+20);
+  tty = (char*)malloc((sizeof(char)*strlen(ttyfilename))+20);
   tty[0] = '\0';
   if(ttyfilename[0] != '\\') {
     strcpy(tty, "\\\\.\\");
@@ -488,7 +510,11 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
   FillMemory(&dcb, sizeof(dcb), 0);
   dcb.DCBlength = sizeof(dcb);
   char dcbconf[64];
+#if _MSC_VER
+  _snprintf(dcbconf, sizeof(dcbconf), "%lu,n,8,1", baud);
+#else
   snprintf(dcbconf, sizeof(dcbconf), "%lu,n,8,1", baud);
+#endif
   if (!BuildCommDCB(dcbconf, &dcb)) {
     win32_error(_T("(barobo) ERROR: in dongleOpen, BuildCommDCB()"), GetLastError());
     dongleClose(dongle);

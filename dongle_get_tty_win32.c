@@ -11,7 +11,8 @@
 
 #include <assert.h>
 #include <stdio.h>
-#include <stdint.h>
+//#include <stdint.h>
+#include "libsfp/net_byte_order.h"
 #include <stdlib.h>
 #include <ctype.h>
 
@@ -22,6 +23,10 @@
 /* One more SAL define is required for setupapi.h */
 #define __deref_out_range(a,b)
 #include <setupapi.h>
+
+#if _MSC_VER
+#define snprintf _snprintf
+#endif
 
 static void printPropUnicodeStringList (PBYTE buf, DWORD bufsize) {
     assert(!(bufsize & 1));
@@ -69,7 +74,7 @@ static PBYTE getPropertyBuf (HDEVINFO devices, PSP_DEVINFO_DATA dev,
         return NULL;
     }
 
-    PBYTE buf = malloc(sizeof(BYTE) * *size);
+    PBYTE buf = (PBYTE)malloc(sizeof(BYTE) * *size);
     assert(buf);
     memset(buf, 0, sizeof(BYTE) * *size);
 
@@ -85,7 +90,7 @@ static void dumpProperty (HDEVINFO devices, PSP_DEVINFO_DATA dev, DWORD key,
         PTCHAR keyname) {
     DWORD size = 0;
     DWORD type = 0;
-    char *buf = getPropertyBuf(devices, dev, key, &size, &type);
+    char *buf = (char*)getPropertyBuf(devices, dev, key, &size, &type);
     if (!buf) {
         exit(1);
     }
@@ -294,9 +299,8 @@ int Mobot_dongleGetTTY (char *tty, size_t len) {
     }
 
     /* Now iterate over each device in the COM port interface class. */
-    SP_DEVINFO_DATA dev = {
-        .cbSize = sizeof(SP_DEVINFO_DATA)
-    };
+    SP_DEVINFO_DATA dev;
+    dev.cbSize = sizeof(SP_DEVINFO_DATA);
     DWORD i = 0;
     BOOL b = SetupDiEnumDeviceInfo(devices, i, &dev);
     int ret = -1;

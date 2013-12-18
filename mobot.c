@@ -140,7 +140,7 @@ int Mobot_accelTimeNB(mobot_t* comms, double radius, double acceleration, double
   int i;
   int rc;
   for(i = 1; i < 4; i++) {
-    rc = Mobot_accelAngularTimeNB(comms, i, alpha, timeout);
+    rc = Mobot_accelAngularTimeNB(comms, (robotJointId_t)i, alpha, timeout);
     if(rc) return rc;
   }
   return 0;
@@ -154,7 +154,7 @@ int Mobot_accelToVelocityNB(mobot_t* comms, double radius, double acceleration, 
   int i;
   int rc = 0;
   for(i = 1; i < 4; i++) {
-    rc = Mobot_accelAngularTimeNB(comms, i, alpha, timeout);
+    rc = Mobot_accelAngularTimeNB(comms, (robotJointId_t)i, alpha, timeout);
     if(rc) return rc;
   }
   return 0;
@@ -166,7 +166,7 @@ int Mobot_accelToMaxSpeedNB(mobot_t* comms, double radius, double acceleration)
   int i;
   int rc;
   for(i = 1; i < 4; i++) {
-    rc = Mobot_accelAngularTimeNB(comms, i, alpha, 0);
+    rc = Mobot_accelAngularTimeNB(comms, (robotJointId_t)i, alpha, 0);
     if(rc) return rc;
   }
   return 0;
@@ -671,7 +671,7 @@ int Mobot_connectWithTTYBaud(mobot_t* comms, const char* ttyfilename, unsigned l
   }
 #endif
 
-  comms->dongle = malloc(sizeof(MOBOTdongle));
+  comms->dongle = (MOBOTdongle*)malloc(sizeof(MOBOTdongle));
   assert(comms->dongle);
 
   bInfo(stderr, "(barobo) INFO: calling dongleOpen()\n");
@@ -2101,7 +2101,7 @@ void* commsEngine(void* arg)
   while(1) {
     if (MOBOTCONNECT_TTY == comms->connectionMode) {
       uint8_t buf[256];
-      ssize_t len = dongleRead(comms->dongle, buf, sizeof(buf));
+      long len = dongleRead(comms->dongle, buf, sizeof(buf));
       if (-1 == len) {
         break;
       }

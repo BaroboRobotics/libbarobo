@@ -40,7 +40,7 @@ int Mobot_dongleGetTTY (char *buf, size_t len) {
 
     char* line = NULL;
     size_t n = 0;
-    ssize_t read;
+    long read;
 
     while (-1 != (read = getline(&line, &n, cmdstdout))) {
       line[read - 1] = '\0';  /* Overwrite newline */

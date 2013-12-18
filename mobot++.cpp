@@ -144,6 +144,7 @@ int CMobot::delaySeconds(int seconds)
 #else
   sleep(seconds);
 #endif
+  return 0;
 }
 
 int CMobot::enableButtonCallback(void (*buttonCallback)(CMobot* mobot, int button, int buttonDown))

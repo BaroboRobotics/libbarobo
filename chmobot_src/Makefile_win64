@@ -2,7 +2,7 @@ PACKAGE=chbarobo
 VERSION=0.1
 HEADERS=../mobot.h
 PKGDIR=$(PACKAGE)-$(VERSION)/$(PACKAGE)
-LIBDIR=lib32
+LIBDIR=lib64
 
 CFLAGS= -DNONRELEASE -DWIN32_LEAN_AND_MEAN -DWINVER=0x0502 -I./ -I../BaroboConfigFile/ -I../BaroboConfigFile/mxml-2.7/ /TP
 
@@ -42,7 +42,7 @@ OBJS= mobotgroup++.obj \
       dongle_get_tty.obj 
 
 libmobot.dl: $(OBJS)
-	ch dllink libmobot.dl cplusplus $(OBJS) ws2_32.lib shell32.lib setupapi.lib lib32/baroboconfigfile.lib lib32/mxml.lib lib32/sfp.lib
+	ch dllink libmobot.dl cplusplus $(OBJS) ws2_32.lib shell32.lib setupapi.lib lib64/baroboconfigfile.lib lib64/mxml.lib lib64/sfp.lib
 
 mobotgroup++.obj: ../mobotgroup++.cpp $(HEADERS)
 	ch dlcomp libmobotgroup.dl cplusplus $(CFLAGS) ../mobotgroup++.cpp
