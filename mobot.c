@@ -386,7 +386,11 @@ void Mobot_initDongle()
       }
     }
   }
-  Mobot_dongleGetTTY(buf, sizeof(buf));
+  if( -1 == Mobot_dongleGetTTY(buf, sizeof(buf)) ) {
+    fprintf(stderr, "(barobo) ERROR: in %s, no dongle found.\n", __func__);
+    return;
+  }
+  Mobot_connectWithTTY(g_dongleMobot, buf);
 }
 
 int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
