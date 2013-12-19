@@ -18,11 +18,11 @@ static const usb_dongle_id g_barobo_usb_dongle_ids[] = {
   (sizeof(g_barobo_usb_dongle_ids) / sizeof(g_barobo_usb_dongle_ids[0]))
 
 #ifdef _WIN32
-#include "dongle_get_tty_win32.c"
+#include "arch/dongle_get_tty_win32.c"
 #elif defined(__linux__)
-#include "dongle_get_tty_linux.c"
+#include "arch/dongle_get_tty_linux.c"
 #elif defined(__APPLE__) && defined(__MACH__)
-#include "dongle_get_tty_osx.c"
+#include "arch/dongle_get_tty_osx.c"
 #else
 #error No dongle_get_tty.c available for this platform.
 #endif

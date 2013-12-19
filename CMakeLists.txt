@@ -44,42 +44,19 @@ endif()
 ##############################################################################
 # Targets
 
-set(SRCS
-      mobot.c
-      mobot++.cpp
-      mobot_get_functions.c
-      mobot_get_functions++.cpp
-      mobotgroup++.cpp
-      mobotigroup++.cpp
-      mobotlgroup++.cpp
-      mobot_motion_functions.c
-      mobot_motion_functions++.cpp
-      mobot_movement_functions.c
-      mobot_movement_functions++.cpp
-      mobot_record_functions.c
-      mobot_record_functions++.cpp
-      mobot_set_functions.c
-      mobot_set_functions++.cpp
-      moboti++.cpp
-      moboti_get_functions++.cpp
-      moboti_motion_functions++.cpp
-      moboti_movement_functions++.cpp
-      moboti_record_functions++.cpp
-      moboti_set_functions++.cpp
-      mobotl++.cpp
-      mobotl_get_functions++.cpp
-      mobotl_motion_functions++.cpp
-      mobotl_movement_functions++.cpp
-      mobotl_record_functions++.cpp
-      mobotl_set_functions++.cpp
-      dongle.c
-      dongle_get_tty.c
-      )
-    FILE(GLOB HEADERS include/*.h)
-    #set(HEADERS mobot.h donglefwd.h ${BAROBOCONFIGFILE_SOURCE_DIR}/BaroboConfigFile.h ${MXML_SOURCE_DIR}/mxml.h)
+file(GLOB SOURCES_C src/*.c)
+file(GLOB SOURCES_CPP src/*.cpp)
+list(APPEND SOURCES ${SOURCES_C} ${SOURCES_CPP})
 
-add_library(${TARGET}-objs OBJECT ${SRCS})
+file(GLOB HEADERS include/*.h)
+
+include_directories(include)
+include_directories(src)
+
+add_library(${TARGET}-objs OBJECT ${SOURCES})
 add_library(${TARGET} SHARED $<TARGET_OBJECTS:${TARGET}-objs> $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:mxmlObjects>)
+
+set_target_properties(${TARGET}-objs PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 target_link_libraries(${TARGET} sfp)
 
@@ -138,13 +115,6 @@ else(CMAKE_HOST_WIN32)
     target_link_libraries(${TARGET} pthread ${IOKIT_LIB} ${COREFOUNDATION_LIB})
   else()
     # Linux
-
-    # hlh: See https://github.com/commontk/Log4Qt/blob/patched/CMakeLists.txt#L116
-    # I had the same problem.
-    if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-      set_target_properties(${TARGET}-objs PROPERTIES COMPILE_FLAGS "-fPIC")
-    endif()
-
     target_link_libraries(${TARGET} bluetooth pthread rt)
   endif()
 endif(CMAKE_HOST_WIN32)
