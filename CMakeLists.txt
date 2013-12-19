@@ -24,20 +24,11 @@ set(SRCS
       mobot_record_functions++.cpp
       mobot_set_functions.c
       mobot_set_functions++.cpp
-      moboti++.cpp
-      moboti_get_functions++.cpp
-      moboti_motion_functions++.cpp
-      moboti_movement_functions++.cpp
-      moboti_record_functions++.cpp
-      moboti_set_functions++.cpp
-      mobotl++.cpp
-      mobotl_get_functions++.cpp
-      mobotl_motion_functions++.cpp
-      mobotl_movement_functions++.cpp
-      mobotl_record_functions++.cpp
-      mobotl_set_functions++.cpp
+      linkboti++.cpp
+      linkbotl++.cpp
       dongle.c
       dongle_get_tty.c
+      linkbot++.cpp
       #     libsfp/serial_framing_protocol.c
       #      libsfp/net_byte_order.c
       )

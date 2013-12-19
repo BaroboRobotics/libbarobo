@@ -166,3 +166,7 @@ mobot_t* CMobot::getMobotObject()
   return _comms;
 }
 
+int CMobot::getVersion()
+{
+  return Mobot_getVersion(_comms);
+}
