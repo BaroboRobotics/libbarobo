@@ -20,18 +20,9 @@ OBJS= mobotgroup++.obj \
       mobot_movement_functions++.obj \
       mobot_record_functions++.obj \
       mobot_set_functions++.obj \
-      moboti++.obj \
-      moboti_get_functions++.obj \
-      moboti_motion_functions++.obj \
-      moboti_movement_functions++.obj \
-      moboti_record_functions++.obj \
-      moboti_set_functions++.obj \
-      mobotl++.obj \
-      mobotl_get_functions++.obj \
-      mobotl_motion_functions++.obj \
-      mobotl_movement_functions++.obj \
-      mobotl_record_functions++.obj \
-      mobotl_set_functions++.obj \
+      linkbot++.obj \
+      linkboti++.obj \
+      linkbotl++.obj \
       mobot.obj \
       mobot_get_functions.obj \
       mobot_motion_functions.obj \
@@ -97,44 +88,17 @@ mobot_record_functions++.obj: ../mobot_record_functions++.cpp $(HEADERS)
 mobot_set_functions++.obj: ../mobot_set_functions++.cpp $(HEADERS)
 	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_set_functions++.cpp
 
-# Mobot-I Files
-moboti++.obj: ../moboti++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../moboti++.cpp
+# Linkbot Files
+linkbot++.obj: ../linkbot++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../linkbot++.cpp
 
-moboti_get_functions++.obj: ../moboti_get_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../moboti_get_functions++.cpp
+# Linkbot-I Files
+linkboti++.obj: ../linkboti++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../linkboti++.cpp
 
-moboti_motion_functions++.obj: ../moboti_motion_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../moboti_motion_functions++.cpp
-
-moboti_movement_functions++.obj: ../moboti_movement_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../moboti_movement_functions++.cpp
-
-moboti_record_functions++.obj: ../moboti_record_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../moboti_record_functions++.cpp
-
-moboti_set_functions++.obj: ../moboti_set_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../moboti_set_functions++.cpp
-
-# Mobot-L Files
-mobotl++.obj: ../mobotl++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobotl++.cpp
-
-mobotl_get_functions++.obj: ../mobotl_get_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobotl_get_functions++.cpp
-
-mobotl_motion_functions++.obj: ../mobotl_motion_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobotl_motion_functions++.cpp
-
-mobotl_movement_functions++.obj: ../mobotl_movement_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobotl_movement_functions++.cpp
-
-mobotl_record_functions++.obj: ../mobotl_record_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobotl_record_functions++.cpp
-
-mobotl_set_functions++.obj: ../mobotl_set_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobotl_set_functions++.cpp
-
+# Linkbot-L Files
+linkbotl++.obj: ../linkbotl++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../linkbotl++.cpp
 
 chmobot_chdl.obj: chmobot_chdl.cpp $(HEADERS)
 	ch dlcomp libmobot.dl cplusplus $(CFLAGS) chmobot_chdl.cpp

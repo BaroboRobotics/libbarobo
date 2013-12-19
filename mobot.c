@@ -19,6 +19,10 @@
 
 //#define COMMSDEBUG
 
+#ifdef _MSC_VER
+#define __func__ __FUNCTION__
+#endif
+
 #include "dongle.h"
 #include "libsfp/serial_framing_protocol.h"
 
@@ -425,6 +429,7 @@ int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
     rc = Mobot_connectChildID(g_dongleMobot, comms, address);
     return rc;
   }
+  return 0;
 }
 
 int Mobot_connectWithSerialID(mobot_t* comms, const char address[])
@@ -1225,7 +1230,6 @@ int Mobot_setID(mobot_t* comms, const char* id)
 
 int Mobot_reboot(mobot_t* comms)
 {
-  int status;
   uint16_t addr;
   int i;
   uint8_t buf[8];
@@ -1242,7 +1246,6 @@ int Mobot_reboot(mobot_t* comms)
   }
   MUTEX_UNLOCK(comms->sendBuf_lock);
 #endif
-  if(status < 0) return status;
   return 0;
 }
 
@@ -2150,6 +2153,7 @@ void* commsEngine(void* arg)
       }
     }
   }
+  return NULL;
 }
 
 /* Formerly part of commsEngine */
