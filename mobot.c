@@ -386,15 +386,7 @@ void Mobot_initDongle()
       }
     }
   }
-  /* If we are still not connected to a dongle at this point, search through a
-   * bunch of dongles */
-  for(i = 0; i < 64; i++) {
-    sprintf(buf, "COM%d", i);
-    rc = Mobot_connectWithTTY(g_dongleMobot, buf);
-    if(rc == 0) {
-      return;
-    }
-  }
+  Mobot_dongleGetTTY(buf, sizeof(buf));
 }
 
 int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
