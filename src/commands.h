@@ -479,12 +479,12 @@ enum protocol_commands_e {
    Expected Response: [0x10] [size] [data] [0x11] */
   CMD_TWI_SENDRECV,
 
-/* 0x7F CMD_SET_ACCEL: Set a joint to move at a constant acceleration. Stops [79]
+/* 0x7F CMD_SET_ACCEL: Set a joint to move at a constant acceleration. Stops
  * accelerating at specified speed or the max speed. (all units in rads/sec)
  * Command Format: [CMD] [size] [1 byte id] [4 byte accel] [4 byte max speed] [4 bytes timeout millis MSB] [0x00] */
   CMD_SET_ACCEL,
 
-/* 0x80 CMD_SMOOTHMOVE: move a joint smoothly from its current position to a new position. [80]
+/* 0x80 CMD_SMOOTHMOVE: move a joint smoothly from its current position to a new position.
    Command format: 
       [CMD] 
       [size] 
@@ -497,34 +497,51 @@ enum protocol_commands_e {
       */
   CMD_SMOOTHMOVE,
 
-  CMD_PLACEHOLDER201306271044, //0x81  [81]
-  CMD_PLACEHOLDER201307101241, //0x82  [82]
+  /* 0x81 CMD_SETMOTORSTATES: Make all of the motors move simultaneously, //0x81  [81]
+     Command format:
+      [CMD 0x81]
+      [size] 23
+      [1*4 bytes directions]
+      [4*4 bytes speeds]
+      [0x00] */
+  CMD_SETMOTORSTATES, 
+
+  /* 0x82 CMD_SETGLOBALACCEL: Limit the maximum acceleration of all of the joints
+     at the beginning of each motion.
+     Command format:
+     [CMD] [size] [4byte alpha, rad/sec] [0x00] */
+  CMD_SETGLOBALACCEL, //0x82  [82]
   CMD_PLACEHOLDER201308300852, //0x83  [83]
 
-/* 0x7F CMD_GET_MASTER_ADDRESS: Get the zigbee address of the master [79]
+/* 0x84 CMD_GET_MASTER_ADDRESS: Get the zigbee address of the master [84]
    Command Format: [CMD] [size] [0x00]
    Expected Response: [0x10] [size] [addr high byte] [addr low byte] [0x11] */
   CMD_GET_MASTER_ADDRESS,
 
-/* 0x80 CMD_GET_NUM_SLAVES: Get the number of slaves in a group [80]
+/* 0x85 CMD_GET_NUM_SLAVES: Get the number of slaves in a group [85]
    Command Format: [CMD] [size] [0x00]
    Expected Response [0x10] [size] [1 byte size] [0x11] */
   CMD_GET_NUM_SLAVES,
 
-/* 0x81 CMD_GET_SLAVE_ADDR: Get the address of a group slave [81]
+/* 0x86 CMD_GET_SLAVE_ADDR: Get the address of a group slave [86]
    Command Format: [CMD] [size] [1 byte index] [0x00]
    Expected Response [0x10] [size] [2 byte address, msb first] [0x11] */
   CMD_GET_SLAVE_ADDR,
 
-/* 0x82 CMD_GET_NUM_POSES: Get the number of poses currently recorded [82]
+/* 0x87 CMD_GET_NUM_POSES: Get the number of poses currently recorded [87]
    Command Format: [CMD] [size] [0x00]
    Expected Response [0x10] [size] [1 byte num] [0x00] */
   CMD_GET_NUM_POSES,
 
-/* 0x83 CMD_GET_POSE_DATA: Get the angles for a certain pose [83]
+/* 0x88 CMD_GET_POSE_DATA: Get the angles for a certain pose [88]
    Command Format: [CMD] [size] [1 byte index] [0x00]
    Expected Response [0x10] [size] [4*4 byte float values] [0x00] */
   CMD_GET_POSE_DATA,
+
+/* 0x89 CMD_PING: Respond to a ping 
+   Command Format: [CMD] [size] [x bytes rand int] [0x00]
+   Expected response: [0x10] [size] [x bytes echo int] [0x011] */
+  CMD_PING,
 
   CMD_NUMCOMMANDS
 };
@@ -565,7 +582,7 @@ enum group_protocol_commands_e {
 
   /* 0xD3 GRP_CMD_SYNCSHOCK_SET_SLAVE: Synchronize a paired and unpaired
    * master, setting the unpaired robot to be a slave.
-   * Command Format: [CMD] [size] [4 bytes millis passed since shock] [2 byte group id] [3 byte RGB] [0x12]
+   * Command Format: [CMD] [size] [4 bytes millis passed since shock] [2 byte group id] [3 byte RGB] [2 byte master ZBaddr] [0x12]
    */
   GRP_CMD_SYNCSHOCK_SET_SLAVE,
 
