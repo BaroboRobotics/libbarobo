@@ -43,7 +43,10 @@ add_subdirectory(BaroboConfigFile)
 find_path(SFP_INC serial_framing_protocol.h HINTS ${LIBSFP_INCLUDE_DIRS})
 include_directories(${SFP_INC})
 
-if(NOT TARGET sfp)
+# Find libsfp itself, if it isn't a CMake target.
+if(TARGET sfp)
+  set(SFP sfp)
+else()
   find_library(SFP sfp)
 endif()
 
