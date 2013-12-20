@@ -27,6 +27,21 @@ int CLinkbot::getBatteryVoltage(double &voltage)
   return Mobot_getBatteryVoltage(_comms, &voltage);
 }
 
+int CLinkbot::getBreakoutADC(int adc, int & value)
+{
+  return Mobot_getBreakoutADC(_comms, adc, &value);
+}
+
+int CLinkbot::getBreakoutADCVolts(int adc, double & volts)
+{
+  return Mobot_getBreakoutADCVolts(_comms, adc, &volts);
+}
+
+int CLinkbot::getBreakoutDigitalPin(int pin, int & value)
+{
+  return Mobot_getBreakoutDigitalPin(_comms, pin, &value);
+}
+
 int CLinkbot::getJointAngles(
     double &angle1,
     double &angle2,
@@ -274,6 +289,26 @@ int CLinkbot::recordDistancesBegin(
     radius, 
     timeInterval,
     shiftData);
+}
+
+int CLinkbot::setBreakoutAnalogPin(int pin, int value)
+{
+  return Mobot_setBreakoutAnalogPin(_comms, pin, value);
+}
+
+int CLinkbot::setBreakoutAnalogRef(int ref)
+{
+  return Mobot_setBreakoutAnalogRef(_comms, ref);
+}
+
+int CLinkbot::setBreakoutDigitalPin(int pin, int value)
+{
+  return Mobot_setBreakoutDigitalPin(_comms, pin, value);
+}
+
+int CLinkbot::setBreakoutPinMode(int pin, int mode)
+{
+  return Mobot_setBreakoutPinMode(_comms, pin, mode);
 }
 
 int CLinkbot::setBuzzerFrequency(int frequency, double time)

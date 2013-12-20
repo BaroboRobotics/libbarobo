@@ -26,12 +26,15 @@
 class CLinkbot : public CMobot
 {
   public:
-    int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int driveToDirect(double angle1, double angle2, double angle3);
     int driveTo(double angle1, double angle2, double angle3);
     int driveToDirectNB(double angle1, double angle2, double angle3);
     int driveToNB(double angle1, double angle2, double angle3);
+    int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int getBatteryVoltage(double &voltage);
+    int getBreakoutADC(int adc, int & value);
+    int getBreakoutADCVolts(int adc, double & volts);
+    int getBreakoutDigitalPin(int pin, int & value);
     int getColorRGB(int &r, int &g, int &b);
     int getID();
 #ifdef SWIG
@@ -76,6 +79,10 @@ class CLinkbot : public CMobot
                           double radius,
                           double seconds,
                           int shiftData = 1);
+    int setBreakoutAnalogPin(int pin, int value);
+    int setBreakoutAnalogRef(int ref);
+    int setBreakoutDigitalPin(int pin, int value);
+    int setBreakoutPinMode(int pin, int mode);
     int setBuzzerFrequency(int frequency, double time);
     int setBuzzerFrequencyOn(int frequency);
     int setBuzzerFrequencyOff();
@@ -147,6 +154,9 @@ class CLinkbotI
     int isMoving();
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int getBatteryVoltage(double &voltage);
+    int getBreakoutADC(int adc, int & value);
+    int getBreakoutADCVolts(int adc, double & volts);
+    int getBreakoutDigitalPin(int pin, int & value);
     int getColorRGB(int &r, int &g, int &b);
     int getDistance(double &distance, double radius);
     int getFormFactor(int &formFactor);
@@ -233,6 +243,10 @@ class CLinkbotI
     int setBuzzerFrequency(int frequency, double time);
     int setBuzzerFrequencyOn(int frequency);
     int setBuzzerFrequencyOff();
+    int setBreakoutAnalogPin(int pin, int value);
+    int setBreakoutAnalogRef(int ref);
+    int setBreakoutDigitalPin(int pin, int value);
+    int setBreakoutPinMode(int pin, int mode);
     int setColorRGB(int r, int g, int b);
     int setExitState(robotJointState_t exitState);
     int setJointMovementStateNB(robotJointId_t id, robotJointState_t dir);
@@ -353,6 +367,9 @@ class CLinkbotL
     int isMoving();
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int getBatteryVoltage(double &voltage);
+    int getBreakoutADC(int adc, int & value);
+    int getBreakoutADCVolts(int adc, double & volts);
+    int getBreakoutDigitalPin(int pin, int & value);
     int getFormFactor(int &formFactor);
     static const char* getConfigFilePath();
     int getID();
@@ -467,6 +484,10 @@ class CLinkbotL
     int reset();
     int resetToZero();
     int resetToZeroNB();
+    int setBreakoutAnalogPin(int pin, int value);
+    int setBreakoutAnalogRef(int ref);
+    int setBreakoutDigitalPin(int pin, int value);
+    int setBreakoutPinMode(int pin, int mode);
     int setBuzzerFrequency(int frequency, double time);
     int setBuzzerFrequencyOn(int frequency);
     int setBuzzerFrequencyOff();
