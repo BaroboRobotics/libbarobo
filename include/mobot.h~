@@ -112,6 +112,17 @@ typedef unsigned short uint16_t;
 #endif
 #endif
 
+#if defined(_WIN32) && defined(__GNUC__) && !defined(strdup)
+#define strdup(x) mc_strdup(x)
+#ifdef __cplusplus
+extern "C" {
+#endif
+char* mc_strdup(const char* str);
+#ifdef __cplusplus
+}
+#endif
+#endif
+
 #ifndef _WIN32
 #ifndef _llvm_
 #include <stdint.h>
@@ -307,17 +318,6 @@ typedef struct mobotMelodyNote_s
 #ifdef NONRELEASE
 #ifndef _CH_
 #include "mobot_internal.h"
-#endif
-#endif
-
-#if defined(_WIN32) && defined(__GNUC__) && !defined(strdup)
-#define strdup(x) mc_strdup(x)
-#ifdef __cplusplus
-extern "C" {
-#endif
-DLLIMPORT char* mc_strdup(const char* str);
-#ifdef __cplusplus
-}
 #endif
 #endif
 

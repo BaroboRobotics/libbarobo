@@ -131,17 +131,22 @@ if(CMAKE_HOST_WIN32)
       (CMAKE_GENERATOR MATCHES "NMake")
     )
     message(STATUS "Compiling for Visual Studio detected")
-    set_target_properties(${TARGET}-objs PROPERTIES COMPILE_FLAGS "/GS- /QIfist /TP")
+    set_target_properties(${TARGET} PROPERTIES COMPILE_FLAGS "/GS- /QIfist /TP")
   else()
     message(STATUS "Compiling for MinGW detected")
     # include_directories() only seems to be able to generate -I and -isystem
     # gcc flags. That won't do--we need -idirafter to avoid picking up all of
     # the Windows SDK and MSVC headers, only the ones we need.
-    set_target_properties(${TARGET}-objs PROPERTIES COMPILE_FLAGS
+    #include_directories(AFTER SYSTEM "${WINSDK_INCLUDE_PATH}")
+    #include_directories(AFTER SYSTEM "${MSVC_INCLUDE_PATH}")
+    set_target_properties(${TARGET} PROPERTIES COMPILE_FLAGS
       "-idirafter \"${WINSDK_INCLUDE_PATH}\" -idirafter \"${MSVC_INCLUDE_PATH}\"")
   endif()
 
   target_link_libraries(${TARGET} Ws2_32 setupapi)
+  if(CMAKE_GENERATOR MATCHES "MSYS")
+    target_link_libraries(${TARGET} pthread)
+  endif()
 else()
   # Non-Win32
 
