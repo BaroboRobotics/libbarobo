@@ -2241,7 +2241,7 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
       }
     }
     if (!delivered_message) {
-      fprintf(stderr, "(barobo) ERROR: message received from disconnected robot, ignoring\n");
+      //fprintf(stderr, "(barobo) ERROR: message received from disconnected robot, ignoring\n");
     }
   }
   else if (EVENT_BUTTON == buf[0]
