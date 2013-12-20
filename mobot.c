@@ -382,14 +382,6 @@ void Mobot_initDongle()
     g_dongleMobot = (mobot_t*)malloc(sizeof(mobot_t));
     Mobot_init(g_dongleMobot);
   }
-  if(g_dongleMobot->connected == 0) {
-    for(i = 0; i < BCF_GetNumDongles(g_bcf); i++) {
-      rc = Mobot_connectWithTTY(g_dongleMobot, BCF_GetDongle(g_bcf, i));
-      if(rc == 0) {
-        return;
-      }
-    }
-  }
   if( -1 == Mobot_dongleGetTTY(buf, sizeof(buf)) ) {
     fprintf(stderr, "(barobo) ERROR: in %s, no dongle found.\n", __func__);
     return;
