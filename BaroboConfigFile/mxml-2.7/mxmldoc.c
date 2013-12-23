@@ -59,7 +59,12 @@
 #ifdef __APPLE__
 #  include <spawn.h>
 #  include <sys/wait.h>
+#ifdef HAVE_DECL_ENVIRON
 extern char **environ;
+#else
+#include <crt_externs.h>
+#define environ (_NSGetEnviron())
+#endif
 #endif /* __APPLE__ */
 
 

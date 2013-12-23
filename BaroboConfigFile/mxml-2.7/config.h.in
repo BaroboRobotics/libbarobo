@@ -38,6 +38,12 @@
 
 #define inline
 
+/*
+ * Is the environ symbol declared?
+ */
+
+#cmakedefine HAVE_DECL_ENVIRON
+
 
 /*
  * Long long support...

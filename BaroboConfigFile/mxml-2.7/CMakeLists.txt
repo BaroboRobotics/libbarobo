@@ -7,11 +7,15 @@ include (CheckIncludeFiles)
 include (CheckFunctionExists)
 include (CheckTypeSize)
 include (CheckLibraryExists)
+include (CheckCSourceCompiles)
 
 if(CMAKE_HOST_WIN32)
 else(CMAKE_HOST_WIN32)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 endif(CMAKE_HOST_WIN32)
+
+check_c_source_compiles("#include <unistd.h>
+extern char **environ;void a (){environ[0][0]=0;}" HAVE_DECL_ENVIRON)
 
 set(CMAKE_EXTRA_INCLUDE_FILES stdio.h)
 CHECK_TYPE_SIZE("long long" LONG_LONG)
