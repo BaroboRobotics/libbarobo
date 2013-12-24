@@ -288,7 +288,8 @@ typedef struct mobot_s
    * instance associated with the dongle in order to control it as a robot. */
   struct mobot_s* child; 
   struct mobotInfo_s* children;
-
+  MUTEX_T* scan_callback_lock;
+  void (*scan_callback) (const char* serialID);
 } mobot_t;
 #endif
 
@@ -1220,6 +1221,7 @@ DLLIMPORT int Mobot_recordDistancesBegin(mobot_t* comms,
                                int shiftData);
 DLLIMPORT int Mobot_recordDistancesEnd(mobot_t* comms, int *num);
 DLLIMPORT int Mobot_recordWait(mobot_t* comms);
+DLLIMPORT int Mobot_registerScanCallback(mobot_t* comms, void (*cb) (const char* id));
 DLLIMPORT int Mobot_reset(mobot_t* comms);
 DLLIMPORT int Mobot_resetToZero(mobot_t* comms);
 DLLIMPORT int Mobot_resetToZeroNB(mobot_t* comms);
