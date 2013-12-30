@@ -346,6 +346,57 @@ EXPORTCH int LinkbotL_getBatteryVoltage_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int LinkbotL_getBreakoutADC_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    int pin;
+    int * value;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    pin = Ch_VaArg(interp, ap, int );
+    value = Ch_VaArg(interp, ap, int *);
+    retval = mobot->getBreakoutADC(pin, *value);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_getBreakoutADCVolts_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    int pin;
+    double * value;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    pin = Ch_VaArg(interp, ap, int );
+    value = Ch_VaArg(interp, ap, double *);
+    retval = mobot->getBreakoutADCVolts(pin, *value);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_getBreakoutDigitalPin_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    int pin;
+    int * value;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    pin = Ch_VaArg(interp, ap, int );
+    value = Ch_VaArg(interp, ap, int *);
+    retval = mobot->getBreakoutDigitalPin(pin, *value);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int LinkbotL_getColorRGB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -1330,6 +1381,72 @@ EXPORTCH int LinkbotL_resetToZeroNB_chdl(void *varg) {
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
     retval = mobot->resetToZeroNB();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_setBreakoutAnalogPin_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    int pin;
+    int value;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    pin = Ch_VaArg(interp, ap, int);
+    value = Ch_VaArg(interp, ap, int);
+    retval = mobot->setBreakoutAnalogPin(pin, value);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_setBreakoutAnalogRef_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    int value;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    value = Ch_VaArg(interp, ap, int);
+    retval = mobot->setBreakoutAnalogRef(value);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_setBreakoutDigitalPin_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    int pin;
+    int value;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    pin = Ch_VaArg(interp, ap, int);
+    value = Ch_VaArg(interp, ap, int);
+    retval = mobot->setBreakoutDigitalPin(pin, value);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_setBreakoutPinMode_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    int pin;
+    int value;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    pin = Ch_VaArg(interp, ap, int);
+    value = Ch_VaArg(interp, ap, int);
+    retval = mobot->setBreakoutPinMode(pin, value);
     Ch_VaEnd(interp, ap);
     return retval;
 }
