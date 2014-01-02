@@ -6,50 +6,29 @@ project(LIBBAROBO C CXX)
 
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 0)
+set(VERSION_PATCH 0)
+
+# Boilerplate stuff
+string(TOLOWER ${PROJECT_NAME} project_name)
+set(EXPORT_TARGET_SET ${project_name}-targets)
 
 ##############################################################################
 # Headers
 
-# Install our public headers.
-file(GLOB HEADERS include/*)
-install(FILES ${HEADERS} DESTINATION include)
-
-# Expose our public headers to dependent sibling subprojects in CMake.
-set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include
-  CACHE INTERNAL "${PROJECT_NAME}: public headers" FORCE)
-
-include_directories(${${PROJECT_NAME}_INCLUDE_DIRS})
+set(INCLUDE_DIR include)
+install(DIRECTORY ${INCLUDE_DIR} DESTINATION .)
+include_directories(${INCLUDE_DIR})
 
 ##############################################################################
 # Setup
 
-# If you're on Windows, you can set the following paths to override the auto
-# detection scripts for the Windows SDK and Visual Studio include paths.
-#set(WINSDK_INCLUDE_PATH "C:/Program Files/Microsoft SDKs/Windows/v6.0/Include")
-#set(MSVC_INCLUDE_PATH "C:/Program Files (x86)/Microsoft Visual Studio 9.0/VC/include")
-
+find_package(LIBSFP)
 add_subdirectory(demos EXCLUDE_FROM_ALL)
 add_subdirectory(BaroboConfigFile)
 
-# Search for libsfp's public headers in the following locations, in order:
-#   - $ENV{CMAKE_PREFIX_PATH}/include
-#   - ${LIBSFP_INCLUDE_DIRS}
-#   - system include paths (e.g., /usr/include)
-# In other words, if we're building libbarobo individually, we'll find libsfp
-# in the system include path. If we're building libbarobo as a subproject,
-# we'll find libsfp in the libsfp sibling subproject. Both cases are
-# overrideable by setting the CMAKE_PREFIX_PATH environment variable to the
-# prefix to which libsfp is installed.
-#find_path(SFP_INC serial_framing_protocol.h HINTS ${LIBSFP_INCLUDE_DIRS})
-#include_directories(${SFP_INC})
-
-find_package(LIBSFP)
 include_directories(${LIBSFP_INCLUDE_DIRS})
-
 include_directories(${BAROBOCONFIGFILE_SOURCE_DIR})
 include_directories(${MXML_SOURCE_DIR})
-
-#link_directories(${MXML_BINARY_DIR})
 
 add_definitions(-DNONRELEASE)
 #add_definitions(-DVERBOSE -DDEBUG)
@@ -98,12 +77,13 @@ set(SOURCES
 option(BUILD_SHARED_LIBS "build shared libraries" ON)
 add_library(${TARGET} ${SOURCES} $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:mxmlObjects>)
 
-set_target_properties(${TARGET} PROPERTIES
-  VERSION ${VERSION_MAJOR}.${VERSION_MINOR} SOVERSION ${VERSION_MAJOR})
-
 target_link_libraries(${TARGET} ${LIBSFP_LIBRARIES})
 
-install(TARGETS ${TARGET}
+set_target_properties(${TARGET} PROPERTIES
+  VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
+  SOVERSION ${VERSION_MAJOR})
+
+install(TARGETS ${TARGET} EXPORT ${EXPORT_TARGET_SET}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
@@ -113,6 +93,11 @@ install(TARGETS ${TARGET}
 
 if(CMAKE_HOST_WIN32)
   # Win32
+
+  # If you're on Windows, you can set the following paths to override the auto
+  # detection scripts for the Windows SDK and Visual Studio include paths.
+  #set(WINSDK_INCLUDE_PATH "C:/Program Files/Microsoft SDKs/Windows/v6.0/Include")
+  #set(MSVC_INCLUDE_PATH "C:/Program Files (x86)/Microsoft Visual Studio 9.0/VC/include")
 
   if(NOT WINSDK_INCLUDE_PATH)
     include("findwindowssdk.cmake")
@@ -165,3 +150,38 @@ else()
     target_link_libraries(${TARGET} bluetooth pthread rt)
   endif()
 endif()
+
+##############################################################################
+# Configuration for dependent projects
+
+set(INSTALL_CMAKE_DIR lib/cmake/${project_name})
+
+include(CMakePackageConfigHelpers)
+
+write_basic_package_version_file(
+  "${PROJECT_BINARY_DIR}/${project_name}-config-version.cmake"
+  VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
+  COMPATIBILITY SameMajorVersion)
+
+# This must happen after INCLUDE_DIR and TARGET are set. The config file will
+# use these two variables.
+# Configure once for projects which are part of the same build as libsfp.
+configure_file(inbuildconfig.cmake.in
+  "${PROJECT_BINARY_DIR}/${project_name}-config.cmake" @ONLY)
+
+# Add ${PROJECT_BINARY_DIR} to the find_package config.cmake search path.
+export(PACKAGE ${PROJECT_NAME})
+
+# And configure again for the final installation directory.
+configure_package_config_file(config.cmake.in
+  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${project_name}-config.cmake"
+  INSTALL_DESTINATION "${INSTALL_CMAKE_DIR}"
+  PATH_VARS INCLUDE_DIR)
+
+install(FILES
+  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${project_name}-config.cmake"
+  "${PROJECT_BINARY_DIR}/${project_name}-config-version.cmake"
+  DESTINATION "${INSTALL_CMAKE_DIR}")
+
+# Generate a target export cmake script for the final installation directory.
+install(EXPORT ${EXPORT_TARGET_SET} DESTINATION "${INSTALL_CMAKE_DIR}")
