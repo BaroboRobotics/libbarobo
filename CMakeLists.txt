@@ -40,15 +40,11 @@ add_subdirectory(BaroboConfigFile)
 # we'll find libsfp in the libsfp sibling subproject. Both cases are
 # overrideable by setting the CMAKE_PREFIX_PATH environment variable to the
 # prefix to which libsfp is installed.
-find_path(SFP_INC serial_framing_protocol.h HINTS ${LIBSFP_INCLUDE_DIRS})
-include_directories(${SFP_INC})
+#find_path(SFP_INC serial_framing_protocol.h HINTS ${LIBSFP_INCLUDE_DIRS})
+#include_directories(${SFP_INC})
 
-# Find libsfp itself, if it isn't a CMake target.
-if(TARGET sfp)
-  set(SFP sfp)
-else()
-  find_library(SFP sfp)
-endif()
+find_package(LIBSFP)
+include_directories(${LIBSFP_INCLUDE_DIRS})
 
 include_directories(${BAROBOCONFIGFILE_SOURCE_DIR})
 include_directories(${MXML_SOURCE_DIR})
@@ -105,7 +101,7 @@ add_library(${TARGET} ${SOURCES} $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:m
 set_target_properties(${TARGET} PROPERTIES
   VERSION ${VERSION_MAJOR}.${VERSION_MINOR} SOVERSION ${VERSION_MAJOR})
 
-target_link_libraries(${TARGET} ${SFP})
+target_link_libraries(${TARGET} ${LIBSFP_LIBRARIES})
 
 install(TARGETS ${TARGET}
   ARCHIVE DESTINATION lib
