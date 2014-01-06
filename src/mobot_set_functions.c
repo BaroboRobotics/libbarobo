@@ -64,6 +64,63 @@
 #define DEPRECATED(from, to) \
   fprintf(stderr, "Warning: The function \"%s()\" is deprecated. Please use \"%s()\"\n" , from, to)
 
+int Mobot_setBreakoutAnalogPin(mobot_t* comms, int pin, int value)
+{
+  if( ! (
+        (pin == 3) ||
+        (pin == 5) ||
+        (pin == 6) ||
+        (pin == 9) ||
+        (pin == 10) ||
+        (pin == 11)
+        )
+    )
+  {
+    fprintf(stderr, "ERROR: in Mobot_setBreakoutAnalogPin: Pin %d does not support\nanalog output.\n", 
+        pin);
+    return -1;
+  }
+  if(value < 0 || value > 255) {
+    fprintf(stderr, "ERROR: in Mobot_setBreakoutAnalogPin: value must be between 0 and 255 inclusive.\n");
+    return -1;
+  }
+  uint8_t buf[32];
+  buf[0] = MSG_REGACCESS;
+  buf[1] = TWIMSG_ANALOGWRITEPIN;
+  buf[2] = (uint8_t)pin;
+  buf[3] = (uint8_t)value;
+  return Mobot_twiSend(comms, 0x02, buf, 4);
+}
+
+int Mobot_setBreakoutAnalogRef(mobot_t* comms, int ref)
+{
+  uint8_t buf[32];
+  buf[0] = MSG_REGACCESS;
+  buf[1] = TWIMSG_ANALOGREF;
+  buf[2] = (uint8_t)ref;
+  return Mobot_twiSend(comms, 0x02, buf, 3);
+}
+
+int Mobot_setBreakoutDigitalPin(mobot_t* comms, int pin, int value)
+{
+  uint8_t buf[32];
+  buf[0] = MSG_REGACCESS;
+  buf[1] = TWIMSG_DIGITALWRITEPIN;
+  buf[2] = (uint8_t)pin;
+  buf[3] = (uint8_t)value;
+  return Mobot_twiSend(comms, 0x02, buf, 4);
+}
+
+int Mobot_setBreakoutPinMode(mobot_t* comms, int pin, int mode)
+{
+  uint8_t buf[32];
+  buf[0] = MSG_REGACCESS;
+  buf[1] = TWIMSG_SETPINMODE;
+  buf[2] = (uint8_t)pin;
+  buf[3] = (uint8_t)mode;
+  return Mobot_twiSend(comms, 0x02, buf, 4);
+}
+
 int Mobot_setBuzzerFrequency(mobot_t* comms, unsigned int frequency, double time)
 {
   int rc;

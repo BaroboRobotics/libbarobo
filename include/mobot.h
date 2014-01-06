@@ -188,6 +188,17 @@ typedef enum mobotFormFactor_e
 }mobotFormFactor_t;
 #endif
 
+/* Defines for Breakout Board */
+#define AREF_DEFAULT  0x00
+#define AREF_INTERNAL  0x01
+#define AREF_INTERNAL1V1  0x02
+#define AREF_INTERNAL2V56  0x03
+#define AREF_EXTERNAL  0x04
+
+#define PINMODE_INPUT  0x00
+#define PINMODE_OUTPUT  0x01
+#define PINMODE_INPUTPULLUP  0x02
+
 #define SENDBUF_SIZE 512
 
 #ifndef BR_COMMS_S
@@ -444,6 +455,7 @@ class CMobot
     int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3, double &ratio4);
     int getJointState(robotJointId_t id, robotJointState_t &state);
     mobot_t* getMobotObject();
+    int getVersion();
     int move(double angle1, double angle2, double angle3, double angle4);
     int moveNB(double angle1, double angle2, double angle3, double angle4);
     int moveBackward(double angle);
@@ -648,6 +660,7 @@ class CMobot
     int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3, double &ratio4);
     int getJointState(robotJointId_t id, robotJointState_t &state);
     mobot_t* getMobotObject();
+    int getVersion();
     int move(double angle1, double angle2, double angle3, double angle4);
     int moveNB(double angle1, double angle2, double angle3, double angle4);
     int moveBackward(double angle);
@@ -1039,6 +1052,8 @@ DLLIMPORT int Mobot_protocolVersion();
 DLLIMPORT int Mobot_getAccelerometerData(mobot_t* comms, double *accel_x, double *accel_y, double *accel_z);
 DLLIMPORT int Mobot_getBatteryVoltage(mobot_t* comms, double *voltage);
 DLLIMPORT int Mobot_getBreakoutADC(mobot_t* comms, int adc, int* value);
+DLLIMPORT int Mobot_getBreakoutADCVolts(mobot_t* comms, int adc, double *volts);
+DLLIMPORT int Mobot_getBreakoutDigitalPin(mobot_t* comms, int pin, int *value);
 DLLIMPORT int Mobot_getButtonVoltage(mobot_t* comms, double *voltage);
 DLLIMPORT int Mobot_getChildrenInfo(mobot_t* comms, mobotInfo_t **mobotInfo, int *numChildren );
 DLLIMPORT int Mobot_getColorRGB(mobot_t* comms, int *r, int *g, int *b);
@@ -1225,6 +1240,10 @@ DLLIMPORT int Mobot_setExitState(mobot_t* comms, robotJointState_t exitState);
 DLLIMPORT int Mobot_setFourierCoefficients(mobot_t* comms, robotJointId_t id, double* a, double* b);
 DLLIMPORT int Mobot_beginFourierControl(mobot_t* comms, uint8_t motorMask);
 DLLIMPORT int Mobot_setHWRev(mobot_t* comms, uint8_t rev);
+DLLIMPORT int Mobot_setBreakoutAnalogPin(mobot_t* comms, int pin, int value);
+DLLIMPORT int Mobot_setBreakoutAnalogRef(mobot_t* comms, int ref);
+DLLIMPORT int Mobot_setBreakoutDigitalPin(mobot_t* comms, int pin, int value);
+DLLIMPORT int Mobot_setBreakoutPinMode(mobot_t* comms, int pin, int mode);
 DLLIMPORT int Mobot_setBuzzerFrequency(mobot_t* comms, unsigned int frequency, double time);
 DLLIMPORT int Mobot_setBuzzerFrequencyOn(mobot_t* comms, unsigned int frequency);
 DLLIMPORT int Mobot_setBuzzerFrequencyOff(mobot_t* comms);

@@ -47,29 +47,19 @@ set(SOURCES
   src/dongle.c
   src/dongle_get_tty.c
   src/mobot.c
-  src/mobot++.cpp
-  src/moboti++.cpp
-  src/mobotl++.cpp
+  src/linkbot++.cpp
+  src/linkboti++.cpp
+  src/linkbotl++.cpp
   src/mobot_get_functions.c
   src/mobot_get_functions++.cpp
-  src/moboti_get_functions++.cpp
-  src/mobotl_get_functions++.cpp
   src/mobot_motion_functions.c
   src/mobot_motion_functions++.cpp
-  src/moboti_motion_functions++.cpp
-  src/mobotl_motion_functions++.cpp
   src/mobot_movement_functions.c
   src/mobot_movement_functions++.cpp
-  src/moboti_movement_functions++.cpp
-  src/mobotl_movement_functions++.cpp
   src/mobot_record_functions.c
   src/mobot_record_functions++.cpp
-  src/moboti_record_functions++.cpp
-  src/mobotl_record_functions++.cpp
   src/mobot_set_functions.c
   src/mobot_set_functions++.cpp
-  src/moboti_set_functions++.cpp
-  src/mobotl_set_functions++.cpp
   src/mobotgroup++.cpp
   src/mobotigroup++.cpp
   src/mobotlgroup++.cpp)

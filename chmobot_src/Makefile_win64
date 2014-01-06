@@ -1,10 +1,10 @@
 PACKAGE=chbarobo
 VERSION=0.1
-HEADERS=../mobot.h
+HEADERS=../include/mobot.h
 PKGDIR=$(PACKAGE)-$(VERSION)/$(PACKAGE)
 LIBDIR=lib64
 
-CFLAGS= -DNONRELEASE -DWIN32_LEAN_AND_MEAN -DWINVER=0x0502 -I./ -I../BaroboConfigFile/ -I../BaroboConfigFile/mxml-2.7/ /TP
+CFLAGS= -DNONRELEASE -DWIN32_LEAN_AND_MEAN -DWINVER=0x0502 -I./ -I../include -I../src -I../../BaroboConfigFile -I../mxml-2.7 -I../../libsfp/include /TP
 
 target: libmobot.dl
 
@@ -20,18 +20,9 @@ OBJS= mobotgroup++.obj \
       mobot_movement_functions++.obj \
       mobot_record_functions++.obj \
       mobot_set_functions++.obj \
-      moboti++.obj \
-      moboti_get_functions++.obj \
-      moboti_motion_functions++.obj \
-      moboti_movement_functions++.obj \
-      moboti_record_functions++.obj \
-      moboti_set_functions++.obj \
-      mobotl++.obj \
-      mobotl_get_functions++.obj \
-      mobotl_motion_functions++.obj \
-      mobotl_movement_functions++.obj \
-      mobotl_record_functions++.obj \
-      mobotl_set_functions++.obj \
+      linkbot++.obj \
+      linkboti++.obj \
+      linkbotl++.obj \
       mobot.obj \
       mobot_get_functions.obj \
       mobot_motion_functions.obj \
@@ -44,96 +35,70 @@ OBJS= mobotgroup++.obj \
 libmobot.dl: $(OBJS)
 	ch dllink libmobot.dl cplusplus $(OBJS) ws2_32.lib shell32.lib setupapi.lib lib64/baroboconfigfile.lib lib64/mxml.lib lib64/sfp.lib
 
-mobotgroup++.obj: ../mobotgroup++.cpp $(HEADERS)
-	ch dlcomp libmobotgroup.dl cplusplus $(CFLAGS) ../mobotgroup++.cpp
+mobotgroup++.obj: ../src/mobotgroup++.cpp $(HEADERS)
+	ch dlcomp libmobotgroup.dl cplusplus $(CFLAGS) ../src/mobotgroup++.cpp
 
-mobotigroup++.obj: ../mobotigroup++.cpp $(HEADERS)
-	ch dlcomp libmobotigroup.dl cplusplus $(CFLAGS) ../mobotigroup++.cpp
+mobotigroup++.obj: ../src/mobotigroup++.cpp $(HEADERS)
+	ch dlcomp libmobotigroup.dl cplusplus $(CFLAGS) ../src/mobotigroup++.cpp
 
-mobotlgroup++.obj: ../mobotlgroup++.cpp $(HEADERS)
-	ch dlcomp libmobotlgroup.dl cplusplus $(CFLAGS) ../mobotlgroup++.cpp
+mobotlgroup++.obj: ../src/mobotlgroup++.cpp $(HEADERS)
+	ch dlcomp libmobotlgroup.dl cplusplus $(CFLAGS) ../src/mobotlgroup++.cpp
 
 # dongle files
 
-dongle.obj: ../dongle.c $(HEADERS)
-	ch dlcomp libdongle.dl cplusplus $(CFLAGS) ../dongle.c
-dongle_get_tty.obj: ../dongle_get_tty.c $(HEADERS)
-	ch dlcomp libdongle_get_tty.dl cplusplus $(CFLAGS) ../dongle_get_tty.c
+dongle.obj: ../src/dongle.c $(HEADERS)
+	ch dlcomp libdongle.dl cplusplus $(CFLAGS) ../src/dongle.c
+dongle_get_tty.obj: ../src/dongle_get_tty.c $(HEADERS)
+	ch dlcomp libdongle_get_tty.dl cplusplus $(CFLAGS) ../src/dongle_get_tty.c
 
 # Mobot Files
-mobot.obj: ../mobot.c $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot.c
+mobot.obj: ../src/mobot.c $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot.c
 
-mobot_get_functions.obj: ../mobot_get_functions.c $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_get_functions.c
+mobot_get_functions.obj: ../src/mobot_get_functions.c $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot_get_functions.c
 
-mobot_motion_functions.obj: ../mobot_motion_functions.c $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_motion_functions.c
+mobot_motion_functions.obj: ../src/mobot_motion_functions.c $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot_motion_functions.c
 
-mobot_movement_functions.obj: ../mobot_movement_functions.c $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_movement_functions.c
+mobot_movement_functions.obj: ../src/mobot_movement_functions.c $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot_movement_functions.c
 
-mobot_record_functions.obj: ../mobot_record_functions.c $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_record_functions.c
+mobot_record_functions.obj: ../src/mobot_record_functions.c $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot_record_functions.c
 
-mobot_set_functions.obj: ../mobot_set_functions.c $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_set_functions.c
+mobot_set_functions.obj: ../src/mobot_set_functions.c $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot_set_functions.c
 
-mobot++.obj: ../mobot++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot++.cpp
+mobot++.obj: ../src/mobot++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot++.cpp
 
-mobot_get_functions++.obj: ../mobot_get_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_get_functions++.cpp
+mobot_get_functions++.obj: ../src/mobot_get_functions++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot_get_functions++.cpp
 
-mobot_motion_functions++.obj: ../mobot_motion_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_motion_functions++.cpp
+mobot_motion_functions++.obj: ../src/mobot_motion_functions++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot_motion_functions++.cpp
 
-mobot_movement_functions++.obj: ../mobot_movement_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_movement_functions++.cpp
+mobot_movement_functions++.obj: ../src/mobot_movement_functions++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot_movement_functions++.cpp
 
-mobot_record_functions++.obj: ../mobot_record_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_record_functions++.cpp
+mobot_record_functions++.obj: ../src/mobot_record_functions++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot_record_functions++.cpp
 
-mobot_set_functions++.obj: ../mobot_set_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobot_set_functions++.cpp
+mobot_set_functions++.obj: ../src/mobot_set_functions++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot_set_functions++.cpp
 
-# Mobot-I Files
-moboti++.obj: ../moboti++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../moboti++.cpp
+# Linkbot Files
+linkbot++.obj: ../src/linkbot++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/linkbot++.cpp
 
-moboti_get_functions++.obj: ../moboti_get_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../moboti_get_functions++.cpp
+# Linkbot-I Files
+linkboti++.obj: ../src/linkboti++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/linkboti++.cpp
 
-moboti_motion_functions++.obj: ../moboti_motion_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../moboti_motion_functions++.cpp
-
-moboti_movement_functions++.obj: ../moboti_movement_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../moboti_movement_functions++.cpp
-
-moboti_record_functions++.obj: ../moboti_record_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../moboti_record_functions++.cpp
-
-moboti_set_functions++.obj: ../moboti_set_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../moboti_set_functions++.cpp
-
-# Mobot-L Files
-mobotl++.obj: ../mobotl++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobotl++.cpp
-
-mobotl_get_functions++.obj: ../mobotl_get_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobotl_get_functions++.cpp
-
-mobotl_motion_functions++.obj: ../mobotl_motion_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobotl_motion_functions++.cpp
-
-mobotl_movement_functions++.obj: ../mobotl_movement_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobotl_movement_functions++.cpp
-
-mobotl_record_functions++.obj: ../mobotl_record_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobotl_record_functions++.cpp
-
-mobotl_set_functions++.obj: ../mobotl_set_functions++.cpp $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../mobotl_set_functions++.cpp
+# Linkbot-L Files
+linkbotl++.obj: ../src/linkbotl++.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/linkbotl++.cpp
 
 
 chmobot_chdl.obj: chmobot_chdl.cpp $(HEADERS)

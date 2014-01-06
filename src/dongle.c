@@ -255,12 +255,14 @@ static int dongleDetectFraming (MOBOTdongle *dongle) {
 
   assert(bytesread <= sizeof(response));
 
-  fprintf(stderr, "(barobo) DEBUG: dongleDetectFraming received:");
+#ifdef DEBUG
+  bDebug(stderr, "(barobo) DEBUG: dongleDetectFraming received:");
   size_t i;
   for (i = 0; i < bytesread; ++i) {
     fprintf(stderr, " %02x", response[i]);
   }
   fprintf(stderr, "\n");
+#endif
 
   static const uint8_t old_response[]
     = { 0x10, 0x09, 0x00, 0x00, 0x01, 0x10, 0x03, 0x11, 0x11 };

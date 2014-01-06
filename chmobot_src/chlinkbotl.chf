@@ -333,6 +333,42 @@ int CLinkbotL::getBatteryVoltage(double & voltage) {
     dlrunfun(fptr, &retval, NULL, this, &voltage);
     return retval;
 }
+int CLinkbotL::getBreakoutADC(int adc, int & value) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_getBreakoutADC_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, adc, &value);
+    return retval;
+}
+int CLinkbotL::getBreakoutADCVolts(int adc, double & volts) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_getBreakoutADCVolts_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, adc, &volts);
+    return retval;
+}
+int CLinkbotL::getBreakoutDigitalPin(int pin, int & value) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_getBreakoutDigitalPin_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, pin, &value);
+    return retval;
+}
 int CLinkbotL::getColorRGB(int & r, int & g, int & b) {
     void *fptr;
     int retval;
@@ -1043,6 +1079,59 @@ int CLinkbotL::resetToZeroNB() {
     dlrunfun(fptr, &retval, resetToZeroNB, this);
     return retval;
 }
+
+int CLinkbotL::setBreakoutAnalogPin(int pin, int value) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_setBreakoutAnalogPin_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setBreakoutAnalogPin, this, pin, value);
+    return retval;
+}
+
+int CLinkbotL::setBreakoutAnalogRef(int ref) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_setBreakoutAnalogRef_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setBreakoutAnalogRef, this, ref);
+    return retval;
+}
+
+int CLinkbotL::setBreakoutDigitalPin(int pin, int value) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_setBreakoutDigitalPin_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setBreakoutDigitalPin, this, pin, value);
+    return retval;
+}
+
+int CLinkbotL::setBreakoutPinMode(int pin, int mode) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_setBreakoutPinMode_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setBreakoutPinMode, this, pin, mode);
+    return retval;
+}
+
 int CLinkbotL::setBuzzerFrequency(int frequency, double time) {
     void *fptr;
     int retval;

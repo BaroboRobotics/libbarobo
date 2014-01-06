@@ -1,4 +1,5 @@
 /* Welcome to the hack. */
+#include "mobot.h"
 
 typedef struct usb_dongle_id {
   const char *manufacturer;

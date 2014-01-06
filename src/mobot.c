@@ -20,6 +20,10 @@
 //#define COMMSDEBUG
 
 #include "logging.h"
+#ifdef _MSC_VER
+#define __func__ __FUNCTION__
+#endif
+
 #include "dongle.h"
 #include "serial_framing_protocol.h"
 
@@ -379,23 +383,11 @@ void Mobot_initDongle()
     g_dongleMobot = (mobot_t*)malloc(sizeof(mobot_t));
     Mobot_init(g_dongleMobot);
   }
-  if(g_dongleMobot->connected == 0) {
-    for(i = 0; i < BCF_GetNumDongles(g_bcf); i++) {
-      rc = Mobot_connectWithTTY(g_dongleMobot, BCF_GetDongle(g_bcf, i));
-      if(rc == 0) {
-        return;
-      }
-    }
+  if( -1 == Mobot_dongleGetTTY(buf, sizeof(buf)) ) {
+    fprintf(stderr, "(barobo) ERROR: in %s, no dongle found.\n", __func__);
+    return;
   }
-  /* If we are still not connected to a dongle at this point, search through a
-   * bunch of dongles */
-  for(i = 0; i < 64; i++) {
-    sprintf(buf, "COM%d", i);
-    rc = Mobot_connectWithTTY(g_dongleMobot, buf);
-    if(rc == 0) {
-      return;
-    }
-  }
+  Mobot_connectWithTTY(g_dongleMobot, buf);
 }
 
 int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
@@ -430,6 +422,7 @@ int Mobot_connectWithAddress(mobot_t* comms, const char* address, int channel)
     rc = Mobot_connectChildID(g_dongleMobot, comms, address);
     return rc;
   }
+  return 0;
 }
 
 int Mobot_connectWithSerialID(mobot_t* comms, const char address[])
@@ -1230,7 +1223,6 @@ int Mobot_setID(mobot_t* comms, const char* id)
 
 int Mobot_reboot(mobot_t* comms)
 {
-  int status;
   uint16_t addr;
   int i;
   uint8_t buf[8];
@@ -1247,7 +1239,6 @@ int Mobot_reboot(mobot_t* comms)
   }
   MUTEX_UNLOCK(comms->sendBuf_lock);
 #endif
-  if(status < 0) return status;
   return 0;
 }
 
@@ -2155,6 +2146,7 @@ void* commsEngine(void* arg)
       }
     }
   }
+  return NULL;
 }
 
 /* Formerly part of commsEngine */
@@ -2250,7 +2242,7 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
       }
     }
     if (!delivered_message) {
-      fprintf(stderr, "(barobo) ERROR: message received from disconnected robot, ignoring\n");
+      //fprintf(stderr, "(barobo) ERROR: message received from disconnected robot, ignoring\n");
     }
   }
   else if (EVENT_BUTTON == buf[0]

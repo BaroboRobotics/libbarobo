@@ -1,4 +1,4 @@
-#include "../mobot.h"
+#include <mobot.h>
 #include <ch.h>
 
 EXPORTCH void CMobot_CMobot_chdl(void *varg) {
