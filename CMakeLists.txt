@@ -47,6 +47,7 @@ set(SOURCES
   src/dongle.c
   src/dongle_get_tty.c
   src/mobot.c
+  src/mobot++.cpp
   src/linkbot++.cpp
   src/linkboti++.cpp
   src/linkbotl++.cpp
