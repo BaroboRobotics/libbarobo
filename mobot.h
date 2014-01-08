@@ -796,6 +796,7 @@ class CMobot
     int motionUnstandNB();
     int motionWait();
     int systemTime(double &time);
+    int transactMessage(int cmd, void* buf, int size);
   protected:
     int getJointDirection(robotJointId_t id, robotJointState_t &dir);
     int setJointDirection(robotJointId_t id, robotJointState_t dir);
@@ -994,6 +995,7 @@ DLLIMPORT int Mobot_melodyAddNote(mobotMelodyNote_t* melody, const char* note, i
 DLLIMPORT int Mobot_loadMelody(mobot_t* comms, int id, mobotMelodyNote_t* melody);
 DLLIMPORT int Mobot_playMelody(mobot_t* comms, int id);
 DLLIMPORT int Mobot_getAddress(mobot_t* comms);
+DLLIMPORT mobot_t* Mobot_getDongle();
 DLLIMPORT int Mobot_queryAddresses(mobot_t* comms);
 DLLIMPORT int Mobot_clearQueriedAddresses(mobot_t* comms);
 DLLIMPORT int Mobot_getQueriedAddresses(mobot_t* comms);
@@ -1029,6 +1031,7 @@ DLLIMPORT int Mobot_driveToNB(mobot_t* comms,
 DLLIMPORT int Mobot_enableButtonCallback(mobot_t* comms, void* data, void (*buttonCallback)(void* mobot, int button, int buttonDown));
 DLLIMPORT int Mobot_disableButtonCallback(mobot_t* comms);
 DLLIMPORT int Mobot_init(mobot_t* comms);
+DLLIMPORT void Mobot_initDongle();
 DLLIMPORT int Mobot_isConnected(mobot_t* comms);
 DLLIMPORT int Mobot_isMoving(mobot_t* comms);
 DLLIMPORT int Mobot_pair(mobot_t* mobot);

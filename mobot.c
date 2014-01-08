@@ -384,6 +384,8 @@ void Mobot_initDongle()
   }
   if( -1 == Mobot_dongleGetTTY(buf, sizeof(buf)) ) {
     fprintf(stderr, "(barobo) ERROR: in %s, no dongle found.\n", __func__);
+    free(g_dongleMobot);
+    g_dongleMobot = NULL;
     return;
   }
   Mobot_connectWithTTY(g_dongleMobot, buf);
@@ -1186,6 +1188,11 @@ int Mobot_clearQueriedAddresses(mobot_t* comms)
     return -1;
   }
   return 0;
+}
+
+mobot_t* Mobot_getDongle()
+{
+  return g_dongleMobot;
 }
 
 int Mobot_setDongleMobot(mobot_t* comms)
@@ -2385,7 +2392,7 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
         comms->children = tmp;
         MUTEX_LOCK(comms->scan_callback_lock);
         if(comms->scan_callback) {
-          comms->scan_callback(iter->serialID);
+          comms->scan_callback(tmp->serialID);
         }
         MUTEX_UNLOCK(comms->scan_callback_lock);
       }
