@@ -186,6 +186,11 @@ int CMobot::systemTime(double &time)
   return 0;
 }
 
+int CMobot::transactMessage(int cmd, void* buf, int size)
+{
+  return MobotMsgTransaction(_comms, cmd, buf, size);
+}
+
 /* CMelody */
 CMelody::CMelody()
 {

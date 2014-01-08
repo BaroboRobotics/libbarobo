@@ -385,6 +385,8 @@ void Mobot_initDongle()
   }
   if( -1 == Mobot_dongleGetTTY(buf, sizeof(buf)) ) {
     fprintf(stderr, "(barobo) ERROR: in %s, no dongle found.\n", __func__);
+    free(g_dongleMobot);
+    g_dongleMobot = NULL;
     return;
   }
   Mobot_connectWithTTY(g_dongleMobot, buf);
@@ -1168,6 +1170,14 @@ int Mobot_queryAddresses(mobot_t* comms)
   return 0;
 }
 
+int Mobot_registerScanCallback(mobot_t* comms, void (*cb) (const char* id))
+{
+  MUTEX_LOCK(comms->scan_callback_lock);
+  comms->scan_callback = cb;
+  MUTEX_UNLOCK(comms->scan_callback_lock);
+  return 0;
+}
+
 int Mobot_clearQueriedAddresses(mobot_t* comms)
 {
   int status;
@@ -1179,6 +1189,11 @@ int Mobot_clearQueriedAddresses(mobot_t* comms)
     return -1;
   }
   return 0;
+}
+
+mobot_t* Mobot_getDongle()
+{
+  return g_dongleMobot;
 }
 
 int Mobot_setDongleMobot(mobot_t* comms)
@@ -1513,6 +1528,9 @@ int Mobot_init(mobot_t* comms)
   COND_INIT(comms->mobotTree_cond);
   comms->parent = NULL;
   comms->children = NULL;
+
+  MUTEX_NEW(comms->scan_callback_lock);
+  MUTEX_INIT(comms->scan_callback_lock);
 
   /* FIXME properly abstract links */
   comms->dongle = NULL;
@@ -2349,6 +2367,11 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
       mobotInfo_t* iter;
       for(iter = comms->children; iter != NULL; iter = iter->next) {
         if(!strncmp(iter->serialID, (const char*)&buf[4], 4)) {
+          MUTEX_LOCK(comms->scan_callback_lock);
+          if(comms->scan_callback) {
+            comms->scan_callback(iter->serialID);
+          }
+          MUTEX_UNLOCK(comms->scan_callback_lock);
           addressFound = 1;
           break;
         }
@@ -2368,6 +2391,11 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
         /* Stick it on the head of the list */
         tmp->next = comms->children;
         comms->children = tmp;
+        MUTEX_LOCK(comms->scan_callback_lock);
+        if(comms->scan_callback) {
+          comms->scan_callback(tmp->serialID);
+        }
+        MUTEX_UNLOCK(comms->scan_callback_lock);
       }
       COND_SIGNAL(comms->mobotTree_cond);
       MUTEX_UNLOCK(comms->mobotTree_lock);
