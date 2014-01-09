@@ -596,7 +596,7 @@ class CMobot
     static int g_chmobot_dlcount;
 };
 #else
-class CMobot 
+class DLLIMPORT CMobot 
 {
   public:
     CMobot();
