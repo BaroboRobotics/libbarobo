@@ -63,7 +63,8 @@ set(SOURCES
   src/mobot_set_functions++.cpp
   src/mobotgroup++.cpp
   src/mobotigroup++.cpp
-  src/mobotlgroup++.cpp)
+  src/mobotlgroup++.cpp
+  src/rgbhashtable.c)
 
 option(BUILD_SHARED_LIBS "build shared libraries" ON)
 add_library(${TARGET} ${SOURCES} $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:mxmlObjects>)

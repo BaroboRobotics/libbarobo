@@ -381,6 +381,26 @@ int CLinkbotL::getColorRGB(int & r, int & g, int & b) {
     dlrunfun(fptr, &retval, NULL, this, &r, &g, &b);
     return retval;
 }
+int CLinkbotL::getColor(string_t & color) { 
+	int retval; 
+	char color1[25];
+	
+	retval = getColorName(color1);
+	color = color1; 
+	return retval; 
+} 
+int CLinkbotL::getColorName(char color[]) { 
+	void *fptr; 
+	int retval; 
+
+	fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_getColorName_chdl"); 
+	if(fptr == NULL) { 
+		fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror()); 
+		return -1; 
+	}    
+	dlrunfun(fptr, &retval, NULL, this, color); 
+	return retval; 
+}
 int CLinkbotL::getFormFactor(int & formFactor) {
     void *fptr;
     int retval;
@@ -1179,6 +1199,18 @@ int CLinkbotL::setColorRGB(int r, int g, int b) {
     }
     dlrunfun(fptr, &retval, setColorRGB, this, r, g, b);
     return retval;
+}
+int CLinkbotL::setColor(char color[]) { 
+	void *fptr; 
+	int retval; 
+
+	fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_setColor_chdl"); 
+	if(fptr == NULL) { 
+		fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror()); 
+		return -1; 
+	}    
+	dlrunfun(fptr, &retval, setColor, this, color); 
+	return retval; 
 }
 int CLinkbotL::setExitState(int exitState) {
     void *fptr;

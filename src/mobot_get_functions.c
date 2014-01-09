@@ -62,6 +62,8 @@
 
 #include "commands.h"
 
+#include "rgbhashtable.h"
+
 #define ABS(x) ((x)<0?-(x):(x))
 
 #define DEPRECATED(from, to) \
@@ -761,6 +763,33 @@ int Mobot_getColorRGB(mobot_t* comms, int *r, int *g, int *b)
   *g = buf[3];
   *b = buf[4];
   return 0;
+}
+
+int Mobot_getColor(mobot_t* comms, char color[])
+{
+  uint8_t buf[32];
+  float f;
+  int status;
+  int getRGB[3];
+  int retval;
+  rgbHashTable * rgbTable = NULL;
+
+  status = MobotMsgTransaction(comms, BTCMD(CMD_GETRGB), buf, 0);
+  if(status < 0) return status;
+  /* Make sure the data size is correct */
+  if(buf[1] != 6){
+	return -1;
+  }
+
+  getRGB[0] = buf[2];
+  getRGB[1] = buf[3]; 
+  getRGB[2] = buf[4];
+
+  rgbTable = HT_Create();
+  retval = HT_GetKey(rgbTable, getRGB, color);
+  HT_Destroy(rgbTable);
+  
+  return retval; //will be either 0 or -1, depending on if there is a valid hash table
 }
 
 int Mobot_getStatus(mobot_t* comms)

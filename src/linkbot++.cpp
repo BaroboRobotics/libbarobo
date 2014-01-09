@@ -111,6 +111,11 @@ int CLinkbot::getColorRGB(int &r, int &g, int &b)
   return Mobot_getColorRGB(_comms, &r, &g, &b);
 }
 
+int CLinkbot::getColorName(char color[]) //C++ compatible version of getColor()
+{
+  return Mobot_getColor(_comms, color);
+}
+
 int CLinkbot::driveToDirect( double angle1,
                           double angle2,
                           double angle3)
@@ -329,6 +334,11 @@ int CLinkbot::setBuzzerFrequencyOff()
 int CLinkbot::setColorRGB(int r, int g, int b)
 {
   return Mobot_setColorRGB(_comms, r, g, b);
+}
+
+int CLinkbot::setColor(char* color)
+{
+  return Mobot_setColor(_comms, color);
 }
 
 int CLinkbot::setJointSpeeds(double speed1, double speed2, double speed3)
