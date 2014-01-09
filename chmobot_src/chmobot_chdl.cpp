@@ -1212,6 +1212,21 @@ EXPORTCH int recordDistanceEnd_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int recordDistanceOffset_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    double offset;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    offset = Ch_VaArg(interp, ap, double);
+    retval = mobot->recordDistanceOffset(offset);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int recordDistancesBegin_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

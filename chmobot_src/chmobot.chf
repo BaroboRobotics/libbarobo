@@ -1211,6 +1211,18 @@ int CMobot::recordDistanceEnd(int id, int &num) {
     dlrunfun(fptr, &retval, NULL, this, id, &num);
     return retval;
 }
+int CMobot::recordDistanceOffset(double distance) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "recordDistanceOffset_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, distance);
+    return retval;
+}
 int CMobot::recordDistancesBegin(
     double* &time, 
     double* &distance1, 
