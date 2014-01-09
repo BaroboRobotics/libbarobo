@@ -1453,6 +1453,8 @@ int Mobot_init(mobot_t* comms)
     comms->maxSpeed[i] = DEF_MOTOR_MAXSPEED;
   }
   comms->exitState = ROBOT_NEUTRAL;
+  comms->wheelRadius = 0;
+  comms->distanceOffset = 0;
   comms->thread = (THREAD_T*)malloc(sizeof(THREAD_T));
   comms->commsThread = (THREAD_T*)malloc(sizeof(THREAD_T));
   THREAD_CREATE(comms->thread, nullThread, NULL);

@@ -85,6 +85,11 @@ int CMobot::recordDistanceEnd( robotJointId_t id, int &num)
   return Mobot_recordDistanceEnd(_comms, id, &num);
 }
 
+int CMobot::recordDistanceOffset(double distance)
+{
+  return Mobot_recordDistanceOffset(_comms, distance);
+}
+
 int CMobot::recordDistancesBegin(
     double* &time,
     double* &distance1,

@@ -226,6 +226,7 @@ typedef struct mobot_s
   double maxSpeed[4];
   robotJointState_t exitState;
   double wheelRadius;
+  double distanceOffset;
   THREAD_T* thread;
   MUTEX_T* commsLock;
   int motionInProgress;
@@ -505,6 +506,7 @@ class CMobot
     int recordDistanceBegin(robotJointId_t id, robotRecordData_t &time, robotRecordData_t &distance, double radius, double seconds, ...);
     int recordAngleEnd(robotJointId_t id, int &num);
     int recordDistanceEnd(robotJointId_t id, int &num);
+    int recordDistanceOffset(double distance);
     int recordAnglesBegin(robotRecordData_t &time, 
                           robotRecordData_t &angle1, 
                           robotRecordData_t &angle2, 
@@ -710,6 +712,7 @@ class CMobot
     int recordDistanceBegin(robotJointId_t id, robotRecordData_t &time, robotRecordData_t &distance, double radius, double seconds, int shiftData = 1);
     int recordAngleEnd(robotJointId_t id, int &num);
     int recordDistanceEnd(robotJointId_t id, int &num);
+    int recordDistanceOffset(double distance);
     int recordAnglesBegin(robotRecordData_t &time, 
                           robotRecordData_t &angle1, 
                           robotRecordData_t &angle2, 
@@ -1226,6 +1229,7 @@ DLLIMPORT int Mobot_recordDistanceBegin(mobot_t* comms,
                                      double timeInterval, 
                                      int shiftData);
 DLLIMPORT int Mobot_recordDistanceEnd(mobot_t* comms, robotJointId_t id, int *num);
+DLLIMPORT int Mobot_recordDistanceOffset(mobot_t* comms, double distance);
 DLLIMPORT int Mobot_recordDistancesBegin(mobot_t* comms,
                                double **time,
                                double **distance1,

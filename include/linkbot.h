@@ -221,6 +221,7 @@ class CLinkbotI
     int recordDistanceBegin(robotJointId_t id, robotRecordData_t &time, robotRecordData_t &distance, double radius, double seconds, ...);
     int recordAngleEnd(robotJointId_t id, int &num);
     int recordDistanceEnd(robotJointId_t id, int &num);
+    int recordDistanceOffset(double distance);
     int recordAnglesBegin(robotRecordData_t &time, 
                           robotRecordData_t &angle1, 
                           robotRecordData_t &angle2, 
@@ -480,6 +481,7 @@ class CLinkbotL
 #endif
     int recordAnglesEnd(int &num);
     int recordDistancesEnd(int &num);
+    int recordDistanceOffset(double distance);
     int recordWait();
     int reset();
     int resetToZero();
