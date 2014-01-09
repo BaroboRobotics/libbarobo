@@ -1,10 +1,10 @@
 PACKAGE=chbarobo
 VERSION=0.1
-HEADERS=../mobot.h
+HEADERS=../include/mobot.h
 PKGDIR=$(PACKAGE)-$(VERSION)/$(PACKAGE)
 LIBDIR=lib32
 
-CFLAGS= -DNONRELEASE -DWIN32_LEAN_AND_MEAN -DWINVER=0x0502 -I./ -I../BaroboConfigFile/ -I../BaroboConfigFile/mxml-2.7/ /TP
+CFLAGS= -DNONRELEASE -DWIN32_LEAN_AND_MEAN -DWINVER=0x0502 -I./ -I../../BaroboConfigFile/ -I../../mxml-2.7/ -I../../libsfp/include -I../include /TP
 
 target: libmobot.dl
 
@@ -138,7 +138,7 @@ createpkg: libmobot.dl
 	cp delay.chf $(PKGDIR)/lib
 	cp libmobot.dl $(PKGDIR)/dl
 	cp ../include/mobot.h $(PKGDIR)/include
-	cp ../src/linkbot.h $(PKGDIR)/include
+	cp ../include/linkbot.h $(PKGDIR)/include
 	cp ../docs/mobot.pdf $(PKGDIR)/docs
 	cp ../demos/chdemos/*.ch $(PKGDIR)/demos
 	cp Makefile_win32 $(PACKAGE)-$(VERSION)/Makefile
