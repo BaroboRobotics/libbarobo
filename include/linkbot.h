@@ -22,8 +22,15 @@
 
 #include "mobot.h"
 
+#ifndef NONRELEASE
+#ifdef DLLIMPORT
+#undef DLLIMPORT
+#endif
+#define DLLIMPORT
+#endif
+
 #ifndef _CH_
-class CLinkbot : public CMobot
+class DLLIMPORT CLinkbot : public CMobot
 {
   public:
     int driveToDirect(double angle1, double angle2, double angle3);
@@ -303,7 +310,7 @@ class CLinkbotI
     int memholder2;
 };
 #else
-class CLinkbotI : public CLinkbot
+class DLLIMPORT CLinkbotI : public CLinkbot
 {
   public:
     CLinkbotI();
@@ -527,7 +534,7 @@ class CLinkbotL
     int memholder2;
 };
 #else
-class CLinkbotL : public CLinkbot
+class DLLIMPORT CLinkbotL : public CLinkbot
 {
   public:
     CLinkbotL();
