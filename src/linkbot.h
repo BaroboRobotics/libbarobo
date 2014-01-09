@@ -36,6 +36,7 @@ class CLinkbot : public CMobot
     int getBreakoutADCVolts(int adc, double & volts);
     int getBreakoutDigitalPin(int pin, int & value);
     int getColorRGB(int &r, int &g, int &b);
+	int getColorName(char color[]);		
     int getID();
 #ifdef SWIG
     %apply double& OUTPUT {double &angle1, double &angle2, double &angle3};
@@ -87,6 +88,7 @@ class CLinkbot : public CMobot
     int setBuzzerFrequencyOn(int frequency);
     int setBuzzerFrequencyOff();
     int setColorRGB(int r, int g, int b);
+	int setColor(char * color);		
     int setJointSpeeds(double speed1, double speed2, double speed3);
     int setJointSpeedRatios(double ratios1, double ratios2, double ratios3);
     int setMovementStateNB( robotJointState_t dir1,
@@ -158,6 +160,8 @@ class CLinkbotI
     int getBreakoutADCVolts(int adc, double & volts);
     int getBreakoutDigitalPin(int pin, int & value);
     int getColorRGB(int &r, int &g, int &b);
+	int getColorName(char color[]);
+	int getColor(string_t & color);		
     int getDistance(double &distance, double radius);
     int getFormFactor(int &formFactor);
     static const char* getConfigFilePath();
@@ -248,6 +252,7 @@ class CLinkbotI
     int setBreakoutDigitalPin(int pin, int value);
     int setBreakoutPinMode(int pin, int mode);
     int setColorRGB(int r, int g, int b);
+	int setColor(char * color);		
     int setExitState(robotJointState_t exitState);
     int setJointMovementStateNB(robotJointId_t id, robotJointState_t dir);
     int setJointMovementStateTime(robotJointId_t id, robotJointState_t dir, double seconds);
@@ -396,6 +401,10 @@ class CLinkbotL
     mobot_t* getMobotObject();
     int getVersion();
     int getColorRGB(int &r, int &g, int &b);
+	int getColorName(char color[]);
+#ifdef _CH_
+    int getColor(string_t & color);		
+#endif
     int move(double angle1, double angle2, double angle3);
     int moveNB(double angle1, double angle2, double angle3);
     int moveContinuousNB(robotJointState_t dir1, 
@@ -492,6 +501,7 @@ class CLinkbotL
     int setBuzzerFrequencyOn(int frequency);
     int setBuzzerFrequencyOff();
     int setColorRGB(int r, int g, int b);
+	int setColor(char * color);		
     int setExitState(robotJointState_t exitState);
     int setJointMovementStateNB(robotJointId_t id, robotJointState_t dir);
     int setJointMovementStateTime(robotJointId_t id, robotJointState_t dir, double seconds);

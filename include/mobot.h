@@ -1057,6 +1057,7 @@ DLLIMPORT int Mobot_getBreakoutDigitalPin(mobot_t* comms, int pin, int *value);
 DLLIMPORT int Mobot_getButtonVoltage(mobot_t* comms, double *voltage);
 DLLIMPORT int Mobot_getChildrenInfo(mobot_t* comms, mobotInfo_t **mobotInfo, int *numChildren );
 DLLIMPORT int Mobot_getColorRGB(mobot_t* comms, int *r, int *g, int *b);
+DLLIMPORT int Mobot_getColor(mobot_t* comms, char color[]);		/* Added by Dawn 1/7/2014 */
 DLLIMPORT const char* Mobot_getConfigFilePath();
 DLLIMPORT int Mobot_getDistance(mobot_t* comms, double *distance, double radius);
 DLLIMPORT int Mobot_getEncoderVoltage(mobot_t* comms, int pinNumber, double *voltage);
@@ -1289,6 +1290,7 @@ DLLIMPORT int Mobot_setMovementStateTimeNB(mobot_t* comms,
                                   robotJointState_t dir4,
                                   double seconds);
 DLLIMPORT int Mobot_setColorRGB(mobot_t* comms, int r, int g, int b);
+DLLIMPORT int Mobot_setColor(mobot_t* comms, char * color);		/* Added by Dawn 1/7/2014 */
 DLLIMPORT int Mobot_setTwoWheelRobotSpeed(mobot_t* comms, double speed, double radius);
 DLLIMPORT int Mobot_smoothMoveToNB(
     mobot_t* comms, 

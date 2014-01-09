@@ -61,6 +61,8 @@
 
 #include "commands.h"
 
+#include "rgbhashtable.h"
+
 #define DEPRECATED(from, to) \
   fprintf(stderr, "Warning: The function \"%s()\" is deprecated. Please use \"%s()\"\n" , from, to)
 
@@ -471,6 +473,39 @@ int Mobot_setColorRGB(mobot_t* comms, int r, int g, int b)
     return -1;
   }
   return 0;
+}
+
+int Mobot_setColor(mobot_t* comms, char * color)
+{
+  uint8_t buf[32];
+  int status;
+  int htRetval;
+  int getRGB[3];
+  rgbHashTable * rgbTable = HT_Create();
+
+  htRetval = HT_Get(rgbTable, color, getRGB);
+
+  HT_Destroy(rgbTable);
+
+  if(htRetval > 0) //HT_Get() will return 1 if the color is in the hash table, otherwise -1 is returned.
+  {
+	buf[0] = 0xff;
+	buf[1] = 0xff;
+	buf[2] = 0xff;
+	buf[3] = (uint8_t)getRGB[0];
+	buf[4] = (uint8_t)getRGB[1];
+	buf[5] = (uint8_t)getRGB[2];
+
+	status = MobotMsgTransaction(comms, BTCMD(CMD_RGBLED), buf, 6);
+	if(status < 0) return status;
+	/* Make sure the data size is correct */
+	if(buf[1] != 3){
+	  return -1;
+	}
+	return 0;
+  }else{
+	return htRetval;
+  }
 }
 
 int Mobot_setTwoWheelRobotSpeed(mobot_t* comms, double speed, double radius)

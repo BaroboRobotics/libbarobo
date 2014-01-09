@@ -2691,3 +2691,4 @@ int CMobotGroup::turnRightNB(double angle, double radius, double tracklength) {
     dlrunfun(fptr, &retval, turnRightNB, this, angle, radius, tracklength);
     return retval;
 }
+

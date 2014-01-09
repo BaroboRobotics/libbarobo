@@ -414,6 +414,21 @@ EXPORTCH int LinkbotL_getColorRGB_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int LinkbotL_getColorName_chdl(void *varg) { 
+	ChInterp_t interp; 
+	ChVaList_t ap; 
+	class CLinkbot *mobot; 
+	char * color; 
+	int retval; 
+
+	Ch_VaStart(interp, ap, varg); 
+	mobot = Ch_VaArg(interp, ap, class CLinkbot *); 
+	color = Ch_VaArg(interp, ap, char *); 
+	retval = mobot->getColorName(color); 
+	Ch_VaEnd(interp, ap); 
+	return retval; 
+} 
+
 EXPORTCH int LinkbotL_getFormFactor_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -1511,6 +1526,21 @@ EXPORTCH int LinkbotL_setColorRGB_chdl(void *varg) {
     retval = mobot->setColorRGB(r, g, b);
     Ch_VaEnd(interp, ap);
     return retval;
+}
+
+EXPORTCH int LinkbotL_setColor_chdl(void *varg) { 
+	ChInterp_t interp; 
+	ChVaList_t ap; 
+	class CLinkbotL *mobot; 
+	char *color; 
+	int retval; 
+
+	Ch_VaStart(interp, ap, varg); 
+	mobot = Ch_VaArg(interp, ap, class CLinkbotL *); 
+	color = Ch_VaArg(interp, ap, char *);  
+	retval = mobot->setColor(color); 
+	Ch_VaEnd(interp, ap); 
+	return retval; 
 }
 
 EXPORTCH int LinkbotL_setExitState_chdl(void *varg) {
