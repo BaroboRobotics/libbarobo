@@ -53,7 +53,7 @@ else()
       chmoboti_chdl.cpp
       chmobotl_chdl.cpp
 	  )
-	target_link_libraries(mobot baroboStatic bluetooth pthread rt baroboconfigfile mxml chsdk)
+	target_link_libraries(mobot baroboStatic bluetooth pthread rt chsdk ${LIBBAROBO_LIBRARIES})
   set_target_properties(mobot PROPERTIES SUFFIX .dl)
 endif(CMAKE_HOST_WIN32)
 

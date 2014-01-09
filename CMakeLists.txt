@@ -79,6 +79,7 @@ install(TARGETS ${TARGET} EXPORT ${EXPORT_TARGET_SET}
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
 
+add_library(${TARGET}Static STATIC ${SOURCES} $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:mxmlObjects>)
 ##############################################################################
 # Platform Specific Setup
 
@@ -122,7 +123,7 @@ if(CMAKE_HOST_WIN32)
 else()
   # Non-Win32
 
-  if(DEFINED $ENV{CHHOME})
+  if(DEFINED ENV{CHHOME})
     add_subdirectory(chmobot_src)
   else()
     message(WARNING "CHHOME environment variable not found -- CH support disabled")
@@ -139,6 +140,7 @@ else()
   else()
     # Linux
     target_link_libraries(${TARGET} bluetooth pthread rt)
+    set_target_properties(${TARGET}Static PROPERTIES COMPILE_FLAGS "-fPIC")
   endif()
 endif()
 
