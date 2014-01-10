@@ -21,6 +21,16 @@
 #include "mobot.h"
 #include "mobot_internal.h"
 
+int CMobot::enableRecordDataShift()
+{
+  return Mobot_enableRecordDataShift(_comms);
+}
+
+int CMobot::disableRecordDataShift()
+{
+  return Mobot_disableRecordDataShift(_comms);
+}
+
 int CMobot::recordAngle(robotJointId_t id, double* time, double* angle, int num, double seconds, int shiftTime)
 {
   return Mobot_recordAngle(_comms, id, time, angle, num, seconds, shiftTime);

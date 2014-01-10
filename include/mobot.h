@@ -239,6 +239,8 @@ typedef struct mobot_s
   double** recordedAngles[4];
   double** recordedTimes;
   int shiftData;
+  int shiftDataGlobalEnable;
+  int shiftDataGlobal;
 
   THREAD_T* commsThread;
   uint8_t recvBuf[256];
@@ -439,6 +441,8 @@ class CMobot
     int driveToNB(double angle1, double angle2, double angle3, double angle4);
     int enableButtonCallback(void (*buttonCallback)(CMobot* mobot, int button, int buttonDown));
     int disableButtonCallback();
+    int enableRecordDataShift();
+    int disableRecordDataShift();
     int isConnected();
     int isMoving();
     int getDistance(double &distance, double radius);
@@ -641,6 +645,8 @@ class DLLIMPORT CMobot
     int driveToNB(double angle1, double angle2, double angle3, double angle4);
     int enableButtonCallback(void (*buttonCallback)(CMobot* mobot, int button, int buttonDown));
     int disableButtonCallback();
+    int enableRecordDataShift();
+    int disableRecordDataShift();
     int isConnected();
     int isMoving();
     int getFormFactor(int &formFactor);
@@ -1033,6 +1039,8 @@ DLLIMPORT int Mobot_driveToNB(mobot_t* comms,
                                double angle4);
 DLLIMPORT int Mobot_enableButtonCallback(mobot_t* comms, void* data, void (*buttonCallback)(void* mobot, int button, int buttonDown));
 DLLIMPORT int Mobot_disableButtonCallback(mobot_t* comms);
+DLLIMPORT int Mobot_enableRecordDataShift(mobot_t* comms);
+DLLIMPORT int Mobot_disableRecordDataShift(mobot_t* comms);
 DLLIMPORT int Mobot_init(mobot_t* comms);
 DLLIMPORT void Mobot_initDongle();
 DLLIMPORT int Mobot_isConnected(mobot_t* comms);
@@ -1359,6 +1367,7 @@ DLLIMPORT int Mobot_motionTurnLeftNB(mobot_t* comms, double angle);
 DLLIMPORT int Mobot_motionTurnRightNB(mobot_t* comms, double angle);
 DLLIMPORT int Mobot_motionUnstandNB(mobot_t* comms);
 DLLIMPORT int Mobot_motionWait(mobot_t* comms);
+int shiftDataIsEnabled(mobot_t* comms);
 DLLIMPORT double systemTime();
 #ifdef __cplusplus
 }

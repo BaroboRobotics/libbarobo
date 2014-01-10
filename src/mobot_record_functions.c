@@ -96,6 +96,20 @@ unsigned int diff_msecs(struct timespec t1, struct timespec t2)
 }
 #endif
 
+int Mobot_enableRecordDataShift(mobot_t* comms)
+{
+  comms->shiftDataGlobalEnable = 1;
+  comms->shiftDataGlobal = 1;
+  return 0;
+}
+
+int Mobot_disableRecordDataShift(mobot_t* comms)
+{
+  comms->shiftDataGlobalEnable = 1;
+  comms->shiftDataGlobal = 0;
+  return 0;
+}
+
 void* Mobot_recordAngleThread(void* arg)
 {
   double angles[4];
@@ -196,7 +210,7 @@ void* Mobot_recordAngleThread(void* arg)
 #endif
   double shiftTime;
   int shiftTimeIndex;
-  if(rArg->comms->shiftData) {
+  if( shiftDataIsEnabled(rArg->comms) ) {
     for(i = 0; i < rArg->num; i++) {
       if( isMoving[i] )
       {
@@ -299,7 +313,7 @@ void* Mobot_recordAngleBeginThread(void* arg)
     if(dt < (rArg->msecs)) {
       usleep(rArg->msecs*1000 - dt*1000);
     }
-    if(!isMoving && rArg->comms->shiftData) {
+    if(!isMoving && shiftDataIsEnabled(rArg->comms)) {
       i--;
     }
     MUTEX_LOCK(rArg->comms->recordingLock);
@@ -355,7 +369,7 @@ void* Mobot_recordAngleBeginThread(void* arg)
     if(dt < (rArg->msecs)) {
       Sleep(rArg->msecs - dt);
     }
-    if(!isMoving && rArg->comms->shiftData) {
+    if(!isMoving && shiftDataIsEnabled(rArg->comms)) {
       i--;
     }
     MUTEX_UNLOCK(rArg->comms->recordingLock);
@@ -595,7 +609,7 @@ void* recordAnglesThread(void* arg)
   int shiftTimeIndex;
   int j;
   int done = 0;
-  if(rArg->comms->shiftData) {
+  if(shiftDataIsEnabled(rArg->comms)) {
     rArg->comms->recordedAngles[0] = &rArg->angle;
     rArg->comms->recordedAngles[1] = &rArg->angle2;
     rArg->comms->recordedAngles[2] = &rArg->angle3;

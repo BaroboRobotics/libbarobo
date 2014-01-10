@@ -159,6 +159,8 @@ class CLinkbotI
     int delaySeconds(int seconds);
     int enableButtonCallback(void (*buttonCallback)(CLinkbotI* mobot, int button, int buttonDown));
     int disableButtonCallback();
+    int enableRecordDataShift();
+    int disableRecordDataShift();
     int isConnected();
     int isMoving();
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
@@ -376,6 +378,8 @@ class CLinkbotL
     int driveToNB(double angle1, double angle2, double angle3);
     int enableButtonCallback(void (*buttonCallback)(CLinkbotL* mobot, int button, int buttonDown));
     int disableButtonCallback();
+    int enableRecordDataShift();
+    int disableRecordDataShift();
     int isConnected();
     int isMoving();
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);

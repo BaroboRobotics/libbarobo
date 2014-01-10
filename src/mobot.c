@@ -1452,6 +1452,8 @@ int Mobot_init(mobot_t* comms)
     /* Set the default maximum speed to something reasonable */
     comms->maxSpeed[i] = DEF_MOTOR_MAXSPEED;
   }
+  comms->shiftDataGlobalEnable = 0;
+  comms->shiftDataGlobal = 0;
   comms->exitState = ROBOT_NEUTRAL;
   comms->wheelRadius = 0;
   comms->distanceOffset = 0;
@@ -2528,6 +2530,17 @@ void* callbackThread(void* arg)
       cbArg->buttonDown );
   free(cbArg);
   return NULL;
+}
+
+int shiftDataIsEnabled(mobot_t* comms)
+{
+  if(comms->shiftData && !comms->shiftDataGlobalEnable) {
+    return 1;
+  } else if (comms->shiftDataGlobalEnable && comms->shiftDataGlobal) {
+    return 1;
+  } else {
+    return 0;
+  }
 }
 
 double systemTime()
