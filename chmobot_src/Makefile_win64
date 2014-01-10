@@ -142,7 +142,7 @@ createpkg: libmobot.dl
 	cp ../src/linkbot.h $(PKGDIR)/include
 	cp ../docs/mobot.pdf $(PKGDIR)/docs
 	cp ../demos/chdemos/*.ch $(PKGDIR)/demos
-	cp Makefile_win32 $(PACKAGE)-$(VERSION)/Makefile
+	cp Makefile_win64 $(PACKAGE)-$(VERSION)/Makefile
 	cp Readme.txt $(PACKAGE)-$(VERSION)
 	zip -rq $(PACKAGE)-$(VERSION).zip $(PACKAGE)-$(VERSION)
 	

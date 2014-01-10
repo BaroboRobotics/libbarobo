@@ -504,6 +504,7 @@ int Mobot_setColor(mobot_t* comms, char * color)
 	}
 	return 0;
   }else{
+	printf("Error: color '%s' is undefined.\n", color);
 	return htRetval;
   }
 }
