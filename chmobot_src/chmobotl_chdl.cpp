@@ -288,6 +288,32 @@ EXPORTCH int LinkbotL_enableButtonCallback_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int LinkbotL_enableRecordDataShift_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    retval = mobot->enableRecordDataShift();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_disableRecordDataShift_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    retval = mobot->disableRecordDataShift();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int LinkbotL_isConnected_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

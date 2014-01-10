@@ -168,6 +168,18 @@ int CMobot::disableButtonCallback() {
     dlrunfun(fptr, &retval, NULL, this);
     return retval;
 }
+int CMobot::disableRecordDataShift() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "disableRecordDataShift_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this);
+    return retval;
+}
 int CMobot::driveToDirect(double angle1, double angle2, double angle3, double angle4) {
     void *fptr;
     int retval;
@@ -226,6 +238,18 @@ int CMobot::enableButtonCallback(void (*buttonCallback)(CMobot* robot, int butto
         return -1;
     }
     dlrunfun(fptr, &retval, NULL, this, buttonCallback);
+    return retval;
+}
+int CMobot::enableRecordDataShift() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "enableRecordDataShift_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this);
     return retval;
 }
 int CMobot::getJointAngle(int id, double & angle) {

@@ -173,6 +173,32 @@ EXPORTCH int enableButtonCallback_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int enableRecordDataShift_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    retval = mobot->enableRecordDataShift();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int disableRecordDataShift_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    retval = mobot->disableRecordDataShift();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int isConnected_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
