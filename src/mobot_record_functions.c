@@ -458,6 +458,7 @@ int Mobot_recordDistanceEnd(mobot_t* comms, robotJointId_t id, int *num)
   Mobot_recordAngleEnd(comms, id, num);
   for(i = 0; i < *num; i++){ 
     (*comms->recordedAngles[0])[i] = DEG2RAD((*comms->recordedAngles[0])[i]) * comms->wheelRadius;
+    (*comms->recordedAngles[0])[i] += comms->distanceOffset;
   }
   return 0;
 }
