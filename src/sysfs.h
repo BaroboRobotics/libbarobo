@@ -47,7 +47,7 @@
  *             SELECTUP: select devices in superdirectories
  *             AND:      select current device
  *
- * Filters <- SubsystemFilter / SysAttrFilter
+ * Filter <- SubsystemFilter / SysAttrFilter
  *
  * SubsystemFilter <- 'SUBSYSTEM' '(' Subsystem ')'
  * SysAttrFilter <- 'SYSATTR' '(' SysAttrKey ',' SysAttrValue ')'
