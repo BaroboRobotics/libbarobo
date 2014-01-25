@@ -68,6 +68,10 @@ set(SOURCES
   src/mobotlgroup++.cpp
   src/rgbhashtable.c)
 
+if(UNIX)
+  list(APPEND SOURCES src/popen3.c)
+endif()
+
 option(BUILD_SHARED_LIBS "build shared libraries" ON)
 add_library(${TARGET} ${SOURCES} $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:mxmlObjects>)
 
