@@ -1,5 +1,6 @@
 #include "logging.h"
 #include "popen3.h"
+#include "sysfs.h"
 
 #include <assert.h>
 #include <stdio.h>
@@ -20,16 +21,14 @@ int Mobot_dongleGetTTY (char *buf, size_t len) {
   for (i = 0; !dongle_found && i < NUM_BAROBO_USB_DONGLE_IDS; ++i) {
     char cmd[1024];
 
-    snprintf(cmd, sizeof(cmd), "find -O3 %s/devices -type f -name manufacturer -print0"
-      " | xargs -0 grep -lZ '^%s$'"
-      " | xargs -0 dirname -z"
-      " | xargs -0 -I{} find -O3 '{}' -maxdepth 1 -type f -name product -print0"
-      " | xargs -0 grep -lZ '^%s$'"
-      " | xargs -0 dirname -z"
-      " | xargs -0 -I{} find -O3 '{}' -type l -name subsystem -lname '*/tty' -print0"
-      " | xargs -0 dirname -z"
-      " | xargs -0 -I{} grep DEVNAME '{}'/uevent"
-      " | cut -d= -f2",
+    snprintf(cmd, sizeof(cmd),
+            /* Generate a list of all dongles. */
+            FROM("%s/devices") SELECT SYSATTRF("manufacturer", "%s")
+                               AND SYSATTRF("product", "%s")
+                               SELECT SUBSYSTEMF("tty")
+            /* Look up the dongles' /dev/tty* path. */
+            " | xargs -0 -I{} grep DEVNAME '{}'/uevent"
+            " | cut -d= -f2",
       sysfs, g_barobo_usb_dongle_ids[i].manufacturer, g_barobo_usb_dongle_ids[i].product);
 
     /* Using popen3() so that stderr is suppressed upon failure. */
