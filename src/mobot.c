@@ -801,6 +801,10 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
     parent = g_dongleMobot;
   } else {
   }
+  /* If parent is still NULL, return error */
+  if(parent == NULL) {
+    return -2;
+  }
   /* First, check to see if it is our ID */
   if(!strcmp(parent->serialID, _childSerialID)) {
     /* FIXME dammit, this and the code in the if(idFound) block below needs
