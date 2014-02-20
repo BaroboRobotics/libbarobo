@@ -273,6 +273,10 @@ typedef struct mobot_s
   MUTEX_T* callback_lock;
   int callbackEnabled;
   void (*buttonCallback)(void* mobot, int button, int buttonDown);
+  void (*jointCallback)(int, double, double, double, double, void*);
+  void* jointCallbackData;
+  void (*accelCallback)(int, double, double, double, void*);
+  void* accelCallbackData;
   void* mobot;
   char* configFilePath;
   void* itemsToFreeOnExit[64];
@@ -988,6 +992,8 @@ DLLIMPORT int Mobot_connectWithAddress(
     mobot_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_connectWithBluetoothAddress(
     mobot_t* comms, const char* address, int channel);
+DLLIMPORT int Mobot_disableJointEventCallback(mobot_t* comms);
+DLLIMPORT int Mobot_disableAccelEventCallback(mobot_t* comms);
 /* Find the serial device the robot is plugged into. The device's
  * fully-qualified path is stored in the tty output parameter as a
  * null-terminated string. Example device paths for various OSes are
@@ -998,6 +1004,10 @@ DLLIMPORT int Mobot_connectWithBluetoothAddress(
  * terminating null byte. Returns -1 on error, 0 on success. */
 DLLIMPORT int Mobot_dongleGetTTY(char* tty, size_t len);
 DLLIMPORT int Mobot_connectWithZigbeeAddress(mobot_t* comms, uint16_t addr);
+DLLIMPORT int Mobot_enableAccelEventCallback(mobot_t* comms, void* data,
+    void (*accelCallback)(int millis, double x, double y, double z, void* data));
+DLLIMPORT int Mobot_enableJointEventCallback(mobot_t* comms, void* data, 
+    void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, void* data));
 DLLIMPORT int Mobot_findMobot(mobot_t* parent, const char* childSerialID);
 DLLIMPORT mobotMelodyNote_t* Mobot_createMelody(int tempo);
 DLLIMPORT int Mobot_melodyAddNote(mobotMelodyNote_t* melody, const char* note, int divider);

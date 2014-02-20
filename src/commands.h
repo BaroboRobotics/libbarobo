@@ -40,19 +40,24 @@
    send([0x22] [reg addr] [maybe write bytes]) + maybe_recv([data])
  */
 #define MSG_REGACCESS 0x22
-#define TWIMSG_REGACCESS 0x01
-#define TWIMSG_SETPINMODE  0x02
-#define TWIMSG_DIGITALWRITEPIN  0x03
-#define TWIMSG_DIGITALREADPIN  0x04
-#define TWIMSG_ANALOGWRITEPIN  0x05
-#define TWIMSG_ANALOGREADPIN  0x06
-#define TWIMSG_ANALOGREF  0x07
 
 /* General message to cause a debugging message to be printed on the PC side 
 Format:
   [0x23] [size] [message] [0x00]
   */
 #define EVENT_DEBUG_MSG 0x23
+
+/* Motor Angle Changed event.
+Format:
+[0x24] [23] [4 byte timestamp][4x4 bytes motor angles] [0x00]
+*/
+#define EVENT_JOINT_MOVED 0x24
+
+/* Accelerometer Changed Event.
+Format:
+[0x25] [13] [4 byte timestamp] [3x2 byte accelerometer values] [0x00]
+*/
+#define EVENT_ACCEL_CHANGED 0x25
 
 #define CMD_START 0x30
 #define CMD_IDLE  0x01
@@ -549,6 +554,37 @@ enum protocol_commands_e {
    Command Format: [CMD] [size] [x bytes rand int] [0x00]
    Expected response: [0x10] [size] [x bytes echo int] [0x011] */
   CMD_PING,
+
+/* 0x8A CMD_GET_HW_REV: Get the hw revision
+   Command Format: [CMD] [0x03] [0x00]
+   Expected Response: [0x10] [size] [HWREV MAJOR] [MINOR] [MICRO] [0x11] */
+  CMD_GET_HW_REV,
+
+/* 0x8B CMD_SET_HW_REV: Set the hw revision
+   Command Format: [CMD] [size] [MAJOR] [MINOR] [MICRO] [0x00]
+   Expected Response: [0x10] [3] [0x11] */
+  CMD_SET_HW_REV,
+
+/* 0x8C CMD_SET_JOINT_EVENT_THRESHOLD: Set the threshold for reporting joint motion events.
+   Command Format: [CMD] [size] [4 bytes float] [0x00]
+   Expected Response: [0x10] [3] [0x11] */
+  CMD_SET_JOINT_EVENT_THRESHOLD,
+
+/* 0x8D CMD_SET_ENABLE_JOINT_EVENT: Enable reporting of joint events 
+   Command Format: [CMD] [0x04] [enable mask] [0x00]
+   Expected Response: [0x10] [3] [0x11] */
+  CMD_SET_ENABLE_JOINT_EVENT,
+
+/* 0x8E CMD_SET_ACCEL_EVENT_THRESHOLD:
+   Command Format: [CMD] [size] [2 bytes value, high byte first] [0x00]
+   Expected Response: [0x10] [3] [0x11] */
+  CMD_SET_ACCEL_EVENT_THRESHOLD,
+
+/* 0x8F CMD_SET_ENABLE_ACCEL_EVENT:
+   Command Format: [CMD] [0x04] [enable mask] [0x00]
+   Expected Response: [0x10] [3] [0x11] */
+  CMD_SET_ENABLE_ACCEL_EVENT,
+
 
   CMD_NUMCOMMANDS
 };

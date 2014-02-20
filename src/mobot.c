@@ -1384,7 +1384,8 @@ int Mobot_disconnect(mobot_t* comms)
   return rc;
 }
 
-int Mobot_enableButtonCallback(mobot_t* comms, void* data, void (*buttonCallback)(void* data, int button, int buttonDown))
+int Mobot_enableButtonCallback(mobot_t* comms, void* data, 
+    void (*buttonCallback)(void* data, int button, int buttonDown))
 {
   uint8_t buf[16];
   int status;
@@ -1406,6 +1407,92 @@ int Mobot_enableButtonCallback(mobot_t* comms, void* data, void (*buttonCallback
   comms->callbackEnabled = 1;
   comms->mobot = data;
   MUTEX_UNLOCK(comms->callback_lock);
+  return 0;
+}
+
+int Mobot_enableJointEventCallback(mobot_t* comms, void* data, 
+    void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, void* data))
+{
+  uint8_t buf[24];
+  buf[0] = 7;
+  MUTEX_LOCK(comms->callback_lock);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SET_ENABLE_JOINT_EVENT), buf, 1);
+  if(status < 0) {
+    MUTEX_UNLOCK(comms->callback_lock);
+    return status;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 0x03) {
+    MUTEX_UNLOCK(comms->callback_lock);
+    return -1;
+  }
+  comms->jointCallback = jointCallback;
+  comms->jointCallbackData = data;
+
+  return 0;
+}
+
+int Mobot_disableJointEventCallback(mobot_t* comms)
+{
+  uint8_t buf[24];
+  buf[0] = 0;
+  MUTEX_LOCK(comms->callback_lock);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SET_ENABLE_JOINT_EVENT), buf, 1);
+  if(status < 0) {
+    MUTEX_UNLOCK(comms->callback_lock);
+    return status;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 0x03) {
+    MUTEX_UNLOCK(comms->callback_lock);
+    return -1;
+  }
+  comms->jointCallback = NULL;
+  comms->jointCallbackData = NULL;
+
+  return 0;
+}
+
+int Mobot_enableAccelEventCallback(mobot_t* comms, void* data,
+    void (*accelCallback)(int millis, double x, double y, double z, void* data))
+{
+  uint8_t buf[24];
+  buf[0] = 7;
+  MUTEX_LOCK(comms->callback_lock);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SET_ACCEL_JOINT_EVENT), buf, 1);
+  if(status < 0) {
+    MUTEX_UNLOCK(comms->callback_lock);
+    return status;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 0x03) {
+    MUTEX_UNLOCK(comms->callback_lock);
+    return -1;
+  }
+  comms->accelCallback = accelCallback;
+  comms->accelCallbackData = data;
+
+  return 0;
+}
+
+int Mobot_disableAccelEventCallback(mobot_t* comms)
+{ 
+  uint8_t buf[24];
+  buf[0] = 7;
+  MUTEX_LOCK(comms->callback_lock);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SET_ACCEL_JOINT_EVENT), buf, 1);
+  if(status < 0) {
+    MUTEX_UNLOCK(comms->callback_lock);
+    return status;
+  }
+  /* Make sure the data size is correct */
+  if(buf[1] != 0x03) {
+    MUTEX_UNLOCK(comms->callback_lock);
+    return -1;
+  }
+  comms->accelCallback = NULL;
+  comms->accelCallbackData = NULL;
+
   return 0;
 }
 
@@ -1539,6 +1626,8 @@ int Mobot_init(mobot_t* comms)
 
   MUTEX_NEW(comms->scan_callback_lock);
   MUTEX_INIT(comms->scan_callback_lock);
+  comms->jointCallback = NULL;
+  comms->accelCallback = NULL;
 
   /* FIXME properly abstract links */
   comms->dongle = NULL;
