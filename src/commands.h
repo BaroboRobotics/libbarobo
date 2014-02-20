@@ -40,6 +40,13 @@
    send([0x22] [reg addr] [maybe write bytes]) + maybe_recv([data])
  */
 #define MSG_REGACCESS 0x22
+#define TWIMSG_REGACCESS 0x01
+#define TWIMSG_SETPINMODE  0x02
+#define TWIMSG_DIGITALWRITEPIN  0x03
+#define TWIMSG_DIGITALREADPIN  0x04
+#define TWIMSG_ANALOGWRITEPIN  0x05
+#define TWIMSG_ANALOGREADPIN  0x06
+#define TWIMSG_ANALOGREF  0x07
 
 /* General message to cause a debugging message to be printed on the PC side 
 Format:

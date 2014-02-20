@@ -48,7 +48,8 @@ set(TARGET barobo)
 set(SOURCES
   src/dongle.c
   src/dongle_get_tty.c
-  src/mobot.c
+  src/eventqueue.cpp
+  src/mobot.cpp
   src/mobot++.cpp
   src/linkbot++.cpp
   src/linkboti++.cpp
