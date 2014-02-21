@@ -9,19 +9,25 @@ typedef struct event_s
 {
   int event;
   uint32_t millis;
-  union data {
+  uint16_t address;
+  union {
     struct {
       uint8_t event_mask;
       uint8_t down_mask;
       uint8_t up_mask;
     } button_data;
+
+    struct {
+      uint16_t address;
+      char serialID[5];
+    } reportAddress;
   
     char * debug_data;
 
-    double joint_data[4];
+    float joint_data[4];
 
     uint16_t accel_data[3];
-  };
+  }data;
 } event_t;
 
 template <class T>
@@ -31,11 +37,12 @@ class RingBuf
     RingBuf(int maxElements = 64);
     ~RingBuf();
     T pop();
-    void push(T elem);
     void lock();
+    int num() {return num_;};
+    void push(T elem);
+    void signal();
     void unlock();
     void wait();
-    void signal();
     
   private:
     MUTEX_T* lock_;

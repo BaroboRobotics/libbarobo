@@ -9,6 +9,10 @@
  * - All motor id's are zero-based indices
  *   */
 
+/* Link Layer encapsulation 
+0     1      2           3          4         5     6
+[CMD] [size] [addr_high] [addr_low] [channel] [CMD] [size] ...
+
 /* General messages */
 #define MSG_SENDEND 0x00
 

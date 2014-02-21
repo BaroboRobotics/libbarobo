@@ -35,10 +35,18 @@ struct MOBOTdongle {
   MUTEX_T *sfpTxLock;
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud);
 void dongleClose (MOBOTdongle *dongle);
 
 long dongleRead (MOBOTdongle *dongle, uint8_t *buf, size_t len);
 long dongleWrite (MOBOTdongle *dongle, const uint8_t *buf, size_t len);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

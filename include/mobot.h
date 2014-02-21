@@ -300,11 +300,12 @@ typedef struct mobot_s
   struct mobotInfo_s* children;
   MUTEX_T* scan_callback_lock;
   void (*scan_callback) (const char* serialID);
-#ifdef __cplusplus
+#if defined (__cplusplus) && defined (NONRELEASE)
   RingBuf<event_t*> *eventqueue;
 #else
   void *eventqueue;
 #endif
+  THREAD_T *eventthread;
 } mobot_t;
 #endif
 

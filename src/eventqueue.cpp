@@ -28,9 +28,10 @@ RingBuf<T>::~RingBuf()
 template <class T>
 T RingBuf<T>::pop()
 {
-  return elements_[ index_%max_ ];
+  T elem = elements_[ index_%max_ ];
   index_++;
   num_--;
+  return elem;
 }
 
 template <class T>
@@ -63,3 +64,5 @@ void RingBuf<T>::signal()
 {
   COND_SIGNAL(cond_);
 }
+
+template class RingBuf<event_t*>;
