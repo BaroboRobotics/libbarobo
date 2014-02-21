@@ -27,7 +27,7 @@ int Mobot_dongleGetTTY (char *buf, size_t len) {
                                AND SYSATTRF("product", "%s")
                                SELECT SUBSYSTEMF("tty")
             /* Look up the dongles' /dev/tty* path. */
-            " | xargs -0 -I{} grep DEVNAME '{}'/uevent"
+            " | xargs -I{} grep DEVNAME '{}'/uevent"
             " | cut -d= -f2",
       sysfs, g_barobo_usb_dongle_ids[i].manufacturer, g_barobo_usb_dongle_ids[i].product);
 

@@ -69,15 +69,15 @@
  *                 value to match with the data in an attribute file
  */
 
-#define FROM(x)       " find " x " -maxdepth 0 -print0 "
-#define SELECT        " | xargs -0 -I}{ find '}{' "
+#define FROM(x)       " find " x " -maxdepth 0 -print "
+#define SELECT        " | xargs -I}{ find '}{' "
 #define AND           SELECT " -maxdepth 1 "
-#define SUBSYSTEM(x)  " -type l -name subsystem -lname \\*/" x " -printf '%h\\0' "
-#define SUBSYSTEMF(x) " -type l -name subsystem -lname \\*/" x " -printf '%%h\\0' "
-#define SYSATTR(x,y)  " -type f -name " x " -execdir grep -q " y " '{}' \\; -printf '%h\\0' "
-#define SYSATTRF(x,y) " -type f -name " x " -execdir grep -q " y " '{}' \\; -printf '%%h\\0' "
+#define SUBSYSTEM(x)  " -type l -name subsystem -lname \\*/" x " -printf '%h\\n' "
+#define SUBSYSTEMF(x) " -type l -name subsystem -lname \\*/" x " -printf '%%h\\n' "
+#define SYSATTR(x,y)  " -type f -name " x " -execdir grep -q " y " '{}' \\; -printf '%h\\n' "
+#define SYSATTRF(x,y) " -type f -name " x " -execdir grep -q " y " '{}' \\; -printf '%%h\\n' "
 #define FIRST         " -quit "
 
-#define SELECTUP      " | xargs -0 -I}{ sh -c 'x=\"}{\"; while [ \"/\" != \"$x\" ]; do dirname -z \"$x\"; x=$(dirname -z \"$x\"); done' " AND
+#define SELECTUP      " | xargs -I}{ sh -c 'x=\"}{\"; while [ \"/\" != \"$x\" ]; do dirname \"$x\"; x=$(dirname \"$x\"); done' " AND
 
 #endif
