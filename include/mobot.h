@@ -59,6 +59,9 @@
 
 #if defined (NONRELEASE) || defined (SWIG)
 #ifndef _CH_
+#ifdef __cplusplus
+#include "eventqueue.h"
+#endif
 #ifndef _WIN32
 #include <unistd.h>
 #include <sys/types.h>
@@ -297,6 +300,11 @@ typedef struct mobot_s
   struct mobotInfo_s* children;
   MUTEX_T* scan_callback_lock;
   void (*scan_callback) (const char* serialID);
+#ifdef __cplusplus
+  RingBuf<event_t*> *eventqueue;
+#else
+  void *eventqueue;
+#endif
 } mobot_t;
 #endif
 

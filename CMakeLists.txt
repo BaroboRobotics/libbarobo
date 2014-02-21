@@ -17,7 +17,7 @@ set(EXPORT_TARGET_SET ${project_name}-targets)
 ##############################################################################
 # Headers
 
-set(INCLUDE_DIR include)
+set(INCLUDE_DIR include src)
 install(DIRECTORY ${INCLUDE_DIR} DESTINATION .)
 include_directories(${INCLUDE_DIR})
 
