@@ -147,6 +147,20 @@ int CMobot::delaySeconds(int seconds)
   return 0;
 }
 
+int CMobot::enableAccelEventCallback(void *userdata, 
+    void(*accelCallback)(int millis, double x, double y, double z, void* userdata))
+{
+  return Mobot_enableAccelEventCallback(
+      _comms,
+      userdata,
+      accelCallback);
+}
+
+int CMobot::disableAccelEventCallback()
+{
+  return Mobot_disableAccelEventCallback(_comms);
+}
+
 int CMobot::enableButtonCallback(void (*buttonCallback)(CMobot* mobot, int button, int buttonDown))
 {
   return Mobot_enableButtonCallback(
@@ -158,6 +172,17 @@ int CMobot::enableButtonCallback(void (*buttonCallback)(CMobot* mobot, int butto
 int CMobot::disableButtonCallback()
 {
   return Mobot_disableButtonCallback(_comms);
+}
+
+int CMobot::enableJointEventCallback(void *userdata, 
+    void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, void *userdata))
+{
+  return Mobot_enableJointEventCallback(_comms, userdata, jointCallback);
+}
+
+int CMobot::disableJointEventCallback()
+{
+  return Mobot_disableJointEventCallback(_comms);
 }
 
 int CMobot::isConnected()
