@@ -11,7 +11,8 @@ typedef struct usb_dongle_id {
  * finding the dongle. Update this list as necessary. */
 static const usb_dongle_id g_barobo_usb_dongle_ids[] = {
   { "Barobo, Inc.", "Mobot USB-Serial Adapter" },
-  { "Barobo, Inc.", "Linkbot USB-Serial Adapter" }
+  { "Barobo, Inc.", "Linkbot USB-Serial Adapter" },
+  { "Barobo, Inc.", "Barobo USB-Serial Adapter" }
 };
 
 /* For convenience. */
