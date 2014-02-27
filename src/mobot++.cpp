@@ -205,6 +205,16 @@ int CMobot::resetToZeroNB()
   return Mobot_resetToZeroNB(_comms);
 }
 
+int CMobot::setAccelEventThreshold(double threshold)
+{
+  return Mobot_setAccelEventThreshold(_comms, threshold);
+}
+
+int CMobot::setJointEventThreshold(double threshold)
+{
+  return Mobot_setJointEventThreshold(_comms, DEG2RAD(threshold));
+}
+
 int CMobot::systemTime(double &time)
 {
   time = ::systemTime();

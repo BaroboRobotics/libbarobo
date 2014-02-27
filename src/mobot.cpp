@@ -1726,6 +1726,37 @@ int Mobot_resetToZeroNB(mobot_t* comms) {
   return Mobot_moveToZeroNB(comms);
 }
 
+int Mobot_setAccelEventThreshold(mobot_t* comms, double threshold)
+{
+  uint8_t buf[32];
+  uint16_t thresh = threshold * 16384.0;
+  int status;
+  buf[0] = thresh >> 8;
+  buf[1] = thresh & 0x00ff;
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SET_ACCEL_EVENT_THRESHOLD), buf, 2);
+  if(status < 0) return status;
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
+  return 0;
+}
+
+int Mobot_setJointEventThreshold(mobot_t* comms, double threshold)
+{
+  uint8_t buf[32];
+  float thresh = threshold;
+  int status;
+  memcpy(buf, &thresh, 4);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SET_JOINT_EVENT_THRESHOLD), buf, 4);
+  if(status < 0) return status;
+  /* Make sure the data size is correct */
+  if(buf[1] != 3) {
+    return -1;
+  }
+  return 0;
+}
+
 int Mobot_setFourierCoefficients(mobot_t* comms, robotJointId_t id, double* a, double* b)
 {
   uint8_t buf[32];
