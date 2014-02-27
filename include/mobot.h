@@ -452,7 +452,7 @@ class CMobot
     int driveTo(double angle1, double angle2, double angle3, double angle4);
     int driveToDirectNB(double angle1, double angle2, double angle3, double angle4);
     int driveToNB(double angle1, double angle2, double angle3, double angle4);
-    int enableButtonCallback(void (*buttonCallback)(CMobot* mobot, int button, int buttonDown));
+    int enableButtonCallback(void (*buttonCallback)(void* data, int button, int buttonDown));
     int disableButtonCallback();
     int enableRecordDataShift();
     int disableRecordDataShift();
@@ -659,7 +659,7 @@ class DLLIMPORT CMobot
     int enableAccelEventCallback(void *userdata, 
         void (*accelCallback)(int millis, double x, double y, double z, void *userdata));
     int disableAccelEventCallback();
-    int enableButtonCallback(void (*buttonCallback)(CMobot* mobot, int button, int buttonDown));
+    int enableButtonCallback(void (*buttonCallback)(void* data, int button, int buttonDown));
     int disableButtonCallback();
     int enableJointEventCallback(void *userdata,
         void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, void *userdata));

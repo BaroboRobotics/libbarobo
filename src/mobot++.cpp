@@ -161,7 +161,7 @@ int CMobot::disableAccelEventCallback()
   return Mobot_disableAccelEventCallback(_comms);
 }
 
-int CMobot::enableButtonCallback(void (*buttonCallback)(CMobot* mobot, int button, int buttonDown))
+int CMobot::enableButtonCallback(void (*buttonCallback)(void* data, int button, int buttonDown))
 {
   return Mobot_enableButtonCallback(
       _comms,

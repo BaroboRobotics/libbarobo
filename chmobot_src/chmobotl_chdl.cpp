@@ -277,12 +277,12 @@ EXPORTCH int LinkbotL_enableButtonCallback_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotL *mobot;
-    void (*cb)(CMobot*,int,int);
+    void (*cb)(void*,int,int);
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
-    cb = (void(*)(CMobot*,int,int))Ch_VaArg(interp, ap, void*);
+    cb = (void(*)(void*,int,int))Ch_VaArg(interp, ap, void*);
     retval = mobot->enableButtonCallback(cb);
     Ch_VaEnd(interp, ap);
     return retval;
