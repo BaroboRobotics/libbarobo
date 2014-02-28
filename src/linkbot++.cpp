@@ -4,9 +4,23 @@
 #define DEPRECATED(from, to) \
   fprintf(stderr, "Warning: The function \"%s()\" is deprecated. Please use \"%s()\"\n" , from, to)
 
-int CLinkbot::getID()
+int CLinkbot::enableAccelEventCallback(void *userdata, 
+    void(*accelCallback)(int millis, double x, double y, double z, void* userdata))
 {
-  return Mobot_getID(_comms);
+  return Mobot_enableAccelEventCallback(
+      _comms,
+      userdata,
+      accelCallback);
+}
+
+int CLinkbot::disableAccelEventCallback()
+{
+  return Mobot_disableAccelEventCallback(_comms);
+}
+
+const char* CLinkbot::getID()
+{
+  return _comms->serialID;
 }
 
 int CLinkbot::getAccelerometerData(double &accel_x, double &accel_y, double &accel_z)

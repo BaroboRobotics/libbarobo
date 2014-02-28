@@ -26,7 +26,7 @@ typedef struct event_s
 
     float joint_data[4];
 
-    uint16_t accel_data[3];
+    int16_t accel_data[3];
   }data;
 } event_t;
 

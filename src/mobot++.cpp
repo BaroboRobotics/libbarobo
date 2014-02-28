@@ -147,25 +147,11 @@ int CMobot::delaySeconds(int seconds)
   return 0;
 }
 
-int CMobot::enableAccelEventCallback(void *userdata, 
-    void(*accelCallback)(int millis, double x, double y, double z, void* userdata))
-{
-  return Mobot_enableAccelEventCallback(
-      _comms,
-      userdata,
-      accelCallback);
-}
-
-int CMobot::disableAccelEventCallback()
-{
-  return Mobot_disableAccelEventCallback(_comms);
-}
-
-int CMobot::enableButtonCallback(void (*buttonCallback)(void* data, int button, int buttonDown))
+int CMobot::enableButtonCallback(void* userdata, void (*buttonCallback)(void* data, int button, int buttonDown))
 {
   return Mobot_enableButtonCallback(
       _comms,
-      this,
+      userdata,
       (void(*)(void*,int,int))buttonCallback);
 }
 

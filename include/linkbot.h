@@ -37,6 +37,9 @@ class DLLIMPORT CLinkbot : public CMobot
     int driveTo(double angle1, double angle2, double angle3);
     int driveToDirectNB(double angle1, double angle2, double angle3);
     int driveToNB(double angle1, double angle2, double angle3);
+    int enableAccelEventCallback(void *userdata, 
+        void (*accelCallback)(int millis, double x, double y, double z, void *userdata));
+    int disableAccelEventCallback();
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int getBatteryVoltage(double &voltage);
     int getBreakoutADC(int adc, int & value);
@@ -44,7 +47,7 @@ class DLLIMPORT CLinkbot : public CMobot
     int getBreakoutDigitalPin(int pin, int & value);
     int getColorRGB(int &r, int &g, int &b);
 	int getColorName(char color[]);		
-    int getID();
+    const char* getID();
 #ifdef SWIG
     %apply double& OUTPUT {double &angle1, double &angle2, double &angle3};
     void getJointAngles(double &angle1, double &angle2, double &angle3);
