@@ -2559,11 +2559,56 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
     }
     /* Now put the event in the correct event queue */
     /* DEBUG */
-    if(event->address == 0) {
-      comms->eventqueue->lock();
-      comms->eventqueue->push(event);
-      comms->eventqueue->signal();
-      comms->eventqueue->unlock();
+    if( 
+        (event->address == 0 ) ||
+        (event->event == EVENT_REPORTADDRESS)
+      ) 
+    {
+      if(event->event == EVENT_REPORTADDRESS) {
+        /* Check the list to see if the reported address aready exists */
+        MUTEX_LOCK(comms->mobotTree_lock);
+        int addressFound = 0;
+        mobotInfo_t* iter;
+        for(iter = comms->children; iter != NULL; iter = iter->next) {
+          if(!strncmp(iter->serialID, (const char*)&buf[4], 4)) {
+            MUTEX_LOCK(comms->scan_callback_lock);
+            if(comms->scan_callback) {
+              comms->scan_callback(iter->serialID);
+            }
+            MUTEX_UNLOCK(comms->scan_callback_lock);
+            addressFound = 1;
+            break;
+          }
+        }
+        /* If the address is not found, add a new Mobot with that address to
+         * the head of the list */
+        if(!addressFound) {
+          mobotInfo_t* tmp = (mobotInfo_t*)malloc(sizeof(mobotInfo_t));
+          memset(tmp, 0, sizeof(mobotInfo_t));
+          /* Copy the zigbee address */
+          tmp->zigbeeAddr = buf[2] << 8;
+          tmp->zigbeeAddr |= buf[3] & 0x00ff;
+          /* Copy the serial number */
+          memcpy(tmp->serialID, &buf[4], 4);
+          /* Set the parent */
+          tmp->parent = comms;
+          /* Stick it on the head of the list */
+          tmp->next = comms->children;
+          comms->children = tmp;
+          MUTEX_LOCK(comms->scan_callback_lock);
+          if(comms->scan_callback) {
+            comms->scan_callback(tmp->serialID);
+          }
+          MUTEX_UNLOCK(comms->scan_callback_lock);
+        }
+        COND_SIGNAL(comms->mobotTree_cond);
+        MUTEX_UNLOCK(comms->mobotTree_lock);
+      } else {
+        comms->eventqueue->lock();
+        comms->eventqueue->push(event);
+        comms->eventqueue->signal();
+        comms->eventqueue->unlock();
+      }
     } else if ((comms->child != NULL) && (comms->child->zigbeeAddr == event->address)) {
       comms->child->eventqueue->lock();
       comms->child->eventqueue->push(event);
