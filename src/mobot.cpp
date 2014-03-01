@@ -2339,7 +2339,7 @@ void* eventThread(void* arg)
           int bit;
           for(bit = 0; bit < 2; bit++) {
             if(event->data.button_data.event_mask & (1<<bit)) {
-              comms->buttonCallback(comms, bit, (event->data.button_data.down_mask & (1<<bit)) ? 1 : 0);
+              comms->buttonCallback(comms->mobot, bit, (event->data.button_data.down_mask & (1<<bit)) ? 1 : 0);
             }
           }
         }
