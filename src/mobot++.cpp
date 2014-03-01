@@ -16,7 +16,6 @@
    You should have received a copy of the GNU General Public License
    along with BaroboLink.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 #include <stdlib.h>
 #include "mobot.h"
 #include "mobot_internal.h"

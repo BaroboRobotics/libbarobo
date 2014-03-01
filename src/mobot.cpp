@@ -2517,7 +2517,11 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
   } else {
     /* It was a user triggered event */
     /* First, we need to see which mobot initiated the button press */
+#ifdef _WIN32
+    event_t *event = static_cast<event_t*>(malloc(sizeof(event_t)));
+#else
     event_t *event = new event_t;
+#endif
     event->address = buf[2] << 8;
     event->address |= buf[3] & 0x00ff;
     event->event = buf[0];

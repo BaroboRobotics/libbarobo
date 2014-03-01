@@ -51,7 +51,7 @@ int BCF_Read(bcf_t* bcf, const char* filename)
   if(bcf->filename != NULL) {
     free(bcf->filename);
   }
-  bcf->filename = strdup(filename);
+  bcf->filename = BCF_strdup(filename);
 
   fp = fopen(filename, "r");
   if(fp == NULL) {
@@ -76,7 +76,7 @@ int BCF_Read(bcf_t* bcf, const char* filename)
      )
   {
     text = mxmlGetFirstChild(node);
-    bcf->entries[i] = strdup(mxmlGetText(text, NULL));
+    bcf->entries[i] = BCF_strdup(mxmlGetText(text, NULL));
   }
   bcf->num = i;
 
@@ -95,7 +95,7 @@ int BCF_Read(bcf_t* bcf, const char* filename)
      )
   {
     text = mxmlGetFirstChild(node);
-    bcf->dongles[i] = strdup(mxmlGetText(text, NULL));
+    bcf->dongles[i] = BCF_strdup(mxmlGetText(text, NULL));
   }
   bcf->numDongles = i;
 
@@ -190,14 +190,14 @@ int BCF_Prepend(bcf_t* bcf, const char* entry)
   {
     bcf->entries[i+1] = bcf->entries[i];
   }
-  bcf->entries[0] = strdup(entry);
+  bcf->entries[0] = BCF_strdup(entry);
   bcf->num++;
   return 0;
 }
 
 int BCF_Append(bcf_t* bcf, const char* entry)
 {
-  bcf->entries[bcf->num] = strdup(entry);
+  bcf->entries[bcf->num] = BCF_strdup(entry);
   bcf->num++;
   return 0;
 }
@@ -214,7 +214,7 @@ int BCF_Insert(bcf_t* bcf, const char* entry, int index)
   {
     bcf->entries[i+1] = bcf->entries[i];
   }
-  bcf->entries[index] = strdup(entry);
+  bcf->entries[index] = BCF_strdup(entry);
   bcf->num++;
   return 0;
 }
@@ -281,7 +281,7 @@ int BCF_PrependDongle(bcf_t* bcf, const char* entry)
   for(i = bcf->numDongles-1; i >= 0; i--) {
     bcf->dongles[i+1] = bcf->dongles[i];
   }
-  bcf->dongles[0] = strdup(entry);
+  bcf->dongles[0] = BCF_strdup(entry);
   bcf->numDongles++;
   return 0;
 }

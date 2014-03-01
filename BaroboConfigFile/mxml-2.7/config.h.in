@@ -77,7 +77,7 @@
 /*
  * Define prototypes for string functions as needed...
  */
-
+#undef HAVE_STRDUP
 #  ifndef HAVE_STRDUP
 extern char	*_mxml_strdup(const char *);
 #    define strdup _mxml_strdup

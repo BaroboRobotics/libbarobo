@@ -1,5 +1,8 @@
 #ifndef EVENT_QUEUE_H__
 #define EVENT_QUEUE_H__
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 #include <stdint.h>
 

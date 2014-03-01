@@ -17,7 +17,7 @@
 
 #include <windows.h>
 #include <tchar.h>
-#include <sal.h>
+//#include <sal.h>
 
 /* One more SAL define is required for setupapi.h */
 #define __deref_out_range(a,b)
