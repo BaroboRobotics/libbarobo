@@ -2337,7 +2337,7 @@ void* eventThread(void* arg)
         MUTEX_LOCK(comms->callback_lock);
         if(comms->callbackEnabled && comms->buttonCallback) {
           int bit;
-          for(bit = 0; bit < 2; bit++) {
+          for(bit = 0; bit < 3; bit++) {
             if(event->data.button_data.event_mask & (1<<bit)) {
               comms->buttonCallback(comms->mobot, bit, (event->data.button_data.down_mask & (1<<bit)) ? 1 : 0);
             }
