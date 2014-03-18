@@ -1534,6 +1534,21 @@ int Mobot_disableButtonCallback(mobot_t* comms)
   return 0;
 }
 
+int Mobot_enableEventCallback(mobot_t* comms, 
+    void (*eventCallback)(const uint8_t* buf, int size, void* userdata), void* data)
+{
+  comms->eventCallback = eventCallback;
+  comms->eventCallbackData = data;
+  return 0;
+}
+
+int Mobot_disableEventCallback(mobot_t* comms)
+{
+  comms->eventCallback = NULL;
+  comms->eventCallbackData = NULL;
+  return 0;
+}
+
 int Mobot_init(mobot_t* comms)
 {
   int i;
@@ -1643,6 +1658,8 @@ int Mobot_init(mobot_t* comms)
   MUTEX_INIT(comms->scan_callback_lock);
   comms->jointCallback = NULL;
   comms->accelCallback = NULL;
+  comms->eventCallback = NULL;
+  comms->eventCallbackData = NULL;
 
   /* FIXME properly abstract links */
   comms->dongle = NULL;
@@ -2608,12 +2625,18 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
         comms->eventqueue->push(event);
         comms->eventqueue->signal();
         comms->eventqueue->unlock();
+        if(comms->eventCallback) {
+          comms->eventCallback(&buf[5], buf[6], comms->eventCallbackData);
+        }
       }
     } else if ((comms->child != NULL) && (comms->child->zigbeeAddr == event->address)) {
       comms->child->eventqueue->lock();
       comms->child->eventqueue->push(event);
       comms->child->eventqueue->signal();
       comms->child->eventqueue->unlock();
+      if(comms->child->eventCallback) {
+        comms->child->eventCallback(&buf[5], buf[6], comms->child->eventCallbackData);
+      }
     } else {
       /* See if it is one of the connected children */
       bool success = false;
@@ -2623,6 +2646,9 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
           iter->mobot->eventqueue->push(event);
           iter->mobot->eventqueue->signal();
           iter->mobot->eventqueue->unlock();
+          if(iter->mobot->eventCallback) {
+            iter->mobot->eventCallback(&buf[5], buf[6], iter->mobot->eventCallbackData);
+          }
           success = true;
           break;
         }
