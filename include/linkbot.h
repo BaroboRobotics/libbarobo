@@ -42,9 +42,9 @@ class DLLIMPORT CLinkbot : public CMobot
     int disableAccelEventCallback();
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int getBatteryVoltage(double &voltage);
-    int getBreakoutADC(int adc, int & value);
-    int getBreakoutADCVolts(int adc, double & volts);
-    int getBreakoutDigitalPin(int pin, int & value);
+    int LinkPodAnalogRead(int adc, int & value);
+    int LinkPodAnalogReadVolts(int adc, double & volts);
+    int LinkPodDigitalRead(int pin, int & value);
     int getColorRGB(int &r, int &g, int &b);
 	int getColorName(char color[]);		
     const char* getID();
@@ -90,10 +90,10 @@ class DLLIMPORT CLinkbot : public CMobot
                           double radius,
                           double seconds,
                           int shiftData = 1);
-    int setBreakoutAnalogPin(int pin, int value);
-    int setBreakoutAnalogRef(int ref);
-    int setBreakoutDigitalPin(int pin, int value);
-    int setBreakoutPinMode(int pin, int mode);
+    int LinkPodAnalogWrite(int pin, int value);
+    int LinkPodAnalogReference(int ref);
+    int LinkPodDigitalWrite(int pin, int value);
+    int LinkPodPinMode(int pin, int mode);
     int setBuzzerFrequency(int frequency, double time);
     int setBuzzerFrequencyOn(int frequency);
     int setBuzzerFrequencyOff();
@@ -168,9 +168,9 @@ class CLinkbotI
     int isMoving();
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int getBatteryVoltage(double &voltage);
-    int getBreakoutADC(int adc, int & value);
-    int getBreakoutADCVolts(int adc, double & volts);
-    int getBreakoutDigitalPin(int pin, int & value);
+    int LinkPodAnalogRead(int adc, int & value);
+    int LinkPodAnalogReadVolts(int adc, double & volts);
+    int LinkPodDigitalRead(int pin, int & value);
     int getColorRGB(int &r, int &g, int &b);
 	int getColorName(char color[]);
 	int getColor(string_t & color);		
@@ -260,10 +260,10 @@ class CLinkbotI
     int setBuzzerFrequency(int frequency, double time);
     int setBuzzerFrequencyOn(int frequency);
     int setBuzzerFrequencyOff();
-    int setBreakoutAnalogPin(int pin, int value);
-    int setBreakoutAnalogRef(int ref);
-    int setBreakoutDigitalPin(int pin, int value);
-    int setBreakoutPinMode(int pin, int mode);
+    int LinkPodAnalogWrite(int pin, int value);
+    int LinkPodAnalogReference(int ref);
+    int LinkPodDigitalWrite(int pin, int value);
+    int LinkPodPinMode(int pin, int mode);
     int setColorRGB(int r, int g, int b);
 	int setColor(char * color);		
     int setExitState(robotJointState_t exitState);
@@ -387,9 +387,9 @@ class CLinkbotL
     int isMoving();
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int getBatteryVoltage(double &voltage);
-    int getBreakoutADC(int adc, int & value);
-    int getBreakoutADCVolts(int adc, double & volts);
-    int getBreakoutDigitalPin(int pin, int & value);
+    int LinkPodAnalogRead(int adc, int & value);
+    int LinkPodAnalogReadVolts(int adc, double & volts);
+    int LinkPodDigitalRead(int pin, int & value);
     int getFormFactor(int &formFactor);
     static const char* getConfigFilePath();
     int getID();
@@ -509,10 +509,10 @@ class CLinkbotL
     int reset();
     int resetToZero();
     int resetToZeroNB();
-    int setBreakoutAnalogPin(int pin, int value);
-    int setBreakoutAnalogRef(int ref);
-    int setBreakoutDigitalPin(int pin, int value);
-    int setBreakoutPinMode(int pin, int mode);
+    int LinkPodAnalogWrite(int pin, int value);
+    int LinkPodAnalogReference(int ref);
+    int LinkPodDigitalWrite(int pin, int value);
+    int LinkPodPinMode(int pin, int mode);
     int setBuzzerFrequency(int frequency, double time);
     int setBuzzerFrequencyOn(int frequency);
     int setBuzzerFrequencyOff();
