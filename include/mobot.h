@@ -281,6 +281,8 @@ typedef struct mobot_s
   void (*accelCallback)(int, double, double, double, void*);
   void* accelCallbackData;
   void* mobot;
+  void (*eventCallback)(const uint8_t* buf, int size, void* userdata);
+  void* eventCallbackData;
   char* configFilePath;
   void* itemsToFreeOnExit[64];
   int numItemsToFreeOnExit;
@@ -661,6 +663,9 @@ class DLLIMPORT CMobot
     int enableJointEventCallback(void *userdata,
         void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, void *userdata));
     int disableJointEventCallback();
+    int enableEventCallback(void (*eventCallback)(const uint8_t *buf, int size, void* userdata),
+        void* userdata);
+    int disableEventCallback();
     int enableRecordDataShift();
     int disableRecordDataShift();
     int isConnected();
@@ -1063,6 +1068,9 @@ DLLIMPORT int Mobot_driveToNB(mobot_t* comms,
                                double angle4);
 DLLIMPORT int Mobot_enableButtonCallback(mobot_t* comms, void* data, void (*buttonCallback)(void* mobot, int button, int buttonDown));
 DLLIMPORT int Mobot_disableButtonCallback(mobot_t* comms);
+DLLIMPORT int Mobot_enableEventCallback(mobot_t* comms, 
+    void (*eventCallback)(const uint8_t* buf, int size, void* userdata), void* data);
+DLLIMPORT int Mobot_disableEventCallback(mobot_t* comms);
 DLLIMPORT int Mobot_enableRecordDataShift(mobot_t* comms);
 DLLIMPORT int Mobot_disableRecordDataShift(mobot_t* comms);
 DLLIMPORT int Mobot_init(mobot_t* comms);

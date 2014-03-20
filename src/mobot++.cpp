@@ -170,6 +170,17 @@ int CMobot::disableJointEventCallback()
   return Mobot_disableJointEventCallback(_comms);
 }
 
+int CMobot::enableEventCallback(void (*eventCallback)(const uint8_t *buf, int size, void* userdata),
+        void* userdata)
+{
+  return Mobot_enableEventCallback(_comms, eventCallback, userdata);
+}
+
+int CMobot::disableEventCallback()
+{
+  return Mobot_disableEventCallback(_comms);
+}
+
 int CMobot::isConnected()
 {
   return Mobot_isConnected(_comms);
