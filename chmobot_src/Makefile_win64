@@ -4,7 +4,7 @@ HEADERS=../include/mobot.h
 PKGDIR=$(PACKAGE)-$(VERSION)/$(PACKAGE)
 LIBDIR=lib64
 
-CFLAGS= -DNONRELEASE -DWIN32_LEAN_AND_MEAN -DWINVER=0x0502 -I./ -I../include -I../src -I../../BaroboConfigFile -I../mxml-2.7 -I../../libsfp/include /TP
+CFLAGS= -DNONRELEASE -DWIN32_LEAN_AND_MEAN -DWINVER=0x0502 -I./ -I../../BaroboConfigFile/ -I../../mxml-2.7/ -I../../libsfp/include -I../include -I../src /TP
 
 target: libmobot.dl
 
@@ -31,7 +31,8 @@ OBJS= mobotgroup++.obj \
       mobot_set_functions.obj \
       dongle.obj \
       dongle_get_tty.obj \
-	  rgbhashtable.obj
+      rgbhashtable.obj \
+      eventqueue.obj
 
 libmobot.dl: $(OBJS)
 	ch dllink libmobot.dl cplusplus $(OBJS) ws2_32.lib shell32.lib setupapi.lib lib64/baroboconfigfile.lib lib64/mxml.lib lib64/sfp.lib
@@ -53,8 +54,11 @@ dongle_get_tty.obj: ../src/dongle_get_tty.c $(HEADERS)
 	ch dlcomp libdongle_get_tty.dl cplusplus $(CFLAGS) ../src/dongle_get_tty.c
 
 # Mobot Files
-mobot.obj: ../src/mobot.c $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot.c
+mobot.obj: ../src/mobot.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot.cpp
+
+eventqueue.obj: ../src/eventqueue.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/eventqueue.cpp
 
 mobot_get_functions.obj: ../src/mobot_get_functions.c $(HEADERS)
 	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot_get_functions.c
@@ -105,7 +109,6 @@ linkboti++.obj: ../src/linkboti++.cpp $(HEADERS)
 linkbotl++.obj: ../src/linkbotl++.cpp $(HEADERS)
 	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/linkbotl++.cpp
 
-
 chmobot_chdl.obj: chmobot_chdl.cpp $(HEADERS)
 	ch dlcomp libmobot.dl cplusplus $(CFLAGS) chmobot_chdl.cpp
 
@@ -139,10 +142,10 @@ createpkg: libmobot.dl
 	cp delay.chf $(PKGDIR)/lib
 	cp libmobot.dl $(PKGDIR)/dl
 	cp ../include/mobot.h $(PKGDIR)/include
-	cp ../src/linkbot.h $(PKGDIR)/include
+	cp ../include/linkbot.h $(PKGDIR)/include
 	cp ../docs/mobot.pdf $(PKGDIR)/docs
 	cp ../demos/chdemos/*.ch $(PKGDIR)/demos
-	cp Makefile_win64 $(PACKAGE)-$(VERSION)/Makefile
+	cp Makefile_win32 $(PACKAGE)-$(VERSION)/Makefile
 	cp Readme.txt $(PACKAGE)-$(VERSION)
 	zip -rq $(PACKAGE)-$(VERSION).zip $(PACKAGE)-$(VERSION)
 	
