@@ -374,7 +374,7 @@ EXPORTCH int LinkbotI_getBatteryVoltage_chdl(void *varg) {
     return retval;
 }
 
-EXPORTCH int LinkbotI_getBreakoutADC_chdl(void *varg) {
+EXPORTCH int LinkbotI_LinkPodAnalogRead_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
@@ -386,12 +386,12 @@ EXPORTCH int LinkbotI_getBreakoutADC_chdl(void *varg) {
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     pin = Ch_VaArg(interp, ap, int );
     value = Ch_VaArg(interp, ap, int *);
-    retval = mobot->getBreakoutADC(pin, *value);
+    retval = mobot->LinkPodAnalogRead(pin, *value);
     Ch_VaEnd(interp, ap);
     return retval;
 }
 
-EXPORTCH int LinkbotI_getBreakoutADCVolts_chdl(void *varg) {
+EXPORTCH int LinkbotI_LinkPodAnalogReadVolts_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
@@ -403,12 +403,12 @@ EXPORTCH int LinkbotI_getBreakoutADCVolts_chdl(void *varg) {
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     pin = Ch_VaArg(interp, ap, int );
     value = Ch_VaArg(interp, ap, double *);
-    retval = mobot->getBreakoutADCVolts(pin, *value);
+    retval = mobot->LinkPodAnalogReadVolts(pin, *value);
     Ch_VaEnd(interp, ap);
     return retval;
 }
 
-EXPORTCH int LinkbotI_getBreakoutDigitalPin_chdl(void *varg) {
+EXPORTCH int LinkbotI_LinkPodDigitalRead_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
@@ -420,7 +420,7 @@ EXPORTCH int LinkbotI_getBreakoutDigitalPin_chdl(void *varg) {
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     pin = Ch_VaArg(interp, ap, int );
     value = Ch_VaArg(interp, ap, int *);
-    retval = mobot->getBreakoutDigitalPin(pin, *value);
+    retval = mobot->LinkPodDigitalRead(pin, *value);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -1590,7 +1590,7 @@ EXPORTCH int LinkbotI_resetToZeroNB_chdl(void *varg) {
     return retval;
 }
 
-EXPORTCH int LinkbotI_setBreakoutAnalogPin_chdl(void *varg) {
+EXPORTCH int LinkbotI_LinkPodAnalogWrite_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
@@ -1602,12 +1602,12 @@ EXPORTCH int LinkbotI_setBreakoutAnalogPin_chdl(void *varg) {
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     pin = Ch_VaArg(interp, ap, int);
     value = Ch_VaArg(interp, ap, int);
-    retval = mobot->setBreakoutAnalogPin(pin, value);
+    retval = mobot->LinkPodAnalogWrite(pin, value);
     Ch_VaEnd(interp, ap);
     return retval;
 }
 
-EXPORTCH int LinkbotI_setBreakoutAnalogRef_chdl(void *varg) {
+EXPORTCH int LinkbotI_LinkPodAnalogReference_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
@@ -1617,29 +1617,12 @@ EXPORTCH int LinkbotI_setBreakoutAnalogRef_chdl(void *varg) {
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     value = Ch_VaArg(interp, ap, int);
-    retval = mobot->setBreakoutAnalogRef(value);
+    retval = mobot->LinkPodAnalogReference(value);
     Ch_VaEnd(interp, ap);
     return retval;
 }
 
-EXPORTCH int LinkbotI_setBreakoutDigitalPin_chdl(void *varg) {
-    ChInterp_t interp;
-    ChVaList_t ap;
-    class CLinkbotI *mobot;
-    int pin;
-    int value;
-    int retval;
-
-    Ch_VaStart(interp, ap, varg);
-    mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
-    pin = Ch_VaArg(interp, ap, int);
-    value = Ch_VaArg(interp, ap, int);
-    retval = mobot->setBreakoutDigitalPin(pin, value);
-    Ch_VaEnd(interp, ap);
-    return retval;
-}
-
-EXPORTCH int LinkbotI_setBreakoutPinMode_chdl(void *varg) {
+EXPORTCH int LinkbotI_LinkPodDigitalWrite_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
@@ -1651,7 +1634,24 @@ EXPORTCH int LinkbotI_setBreakoutPinMode_chdl(void *varg) {
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     pin = Ch_VaArg(interp, ap, int);
     value = Ch_VaArg(interp, ap, int);
-    retval = mobot->setBreakoutPinMode(pin, value);
+    retval = mobot->LinkPodDigitalWrite(pin, value);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotI_LinkPodPinMode_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotI *mobot;
+    int pin;
+    int value;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
+    pin = Ch_VaArg(interp, ap, int);
+    value = Ch_VaArg(interp, ap, int);
+    retval = mobot->LinkPodPinMode(pin, value);
     Ch_VaEnd(interp, ap);
     return retval;
 }

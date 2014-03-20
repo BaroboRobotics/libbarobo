@@ -41,19 +41,19 @@ int CLinkbot::getBatteryVoltage(double &voltage)
   return Mobot_getBatteryVoltage(_comms, &voltage);
 }
 
-int CLinkbot::getBreakoutADC(int adc, int & value)
+int CLinkbot::LinkPodAnalogRead(int adc, int & value)
 {
-  return Mobot_getBreakoutADC(_comms, adc, &value);
+  return Mobot_LinkPodAnalogRead(_comms, adc, &value);
 }
 
-int CLinkbot::getBreakoutADCVolts(int adc, double & volts)
+int CLinkbot::LinkPodAnalogReadVolts(int adc, double & volts)
 {
-  return Mobot_getBreakoutADCVolts(_comms, adc, &volts);
+  return Mobot_LinkPodAnalogReadVolts(_comms, adc, &volts);
 }
 
-int CLinkbot::getBreakoutDigitalPin(int pin, int & value)
+int CLinkbot::LinkPodDigitalRead(int pin, int & value)
 {
-  return Mobot_getBreakoutDigitalPin(_comms, pin, &value);
+  return Mobot_LinkPodDigitalRead(_comms, pin, &value);
 }
 
 int CLinkbot::getJointAngles(
@@ -310,24 +310,24 @@ int CLinkbot::recordDistancesBegin(
     shiftData);
 }
 
-int CLinkbot::setBreakoutAnalogPin(int pin, int value)
+int CLinkbot::LinkPodAnalogWrite(int pin, int value)
 {
-  return Mobot_setBreakoutAnalogPin(_comms, pin, value);
+  return Mobot_LinkPodAnalogWrite(_comms, pin, value);
 }
 
-int CLinkbot::setBreakoutAnalogRef(int ref)
+int CLinkbot::LinkPodAnalogReference(int ref)
 {
-  return Mobot_setBreakoutAnalogRef(_comms, ref);
+  return Mobot_LinkPodAnalogReference(_comms, ref);
 }
 
-int CLinkbot::setBreakoutDigitalPin(int pin, int value)
+int CLinkbot::LinkPodDigitalWrite(int pin, int value)
 {
-  return Mobot_setBreakoutDigitalPin(_comms, pin, value);
+  return Mobot_LinkPodDigitalWrite(_comms, pin, value);
 }
 
-int CLinkbot::setBreakoutPinMode(int pin, int mode)
+int CLinkbot::LinkPodPinMode(int pin, int mode)
 {
-  return Mobot_setBreakoutPinMode(_comms, pin, mode);
+  return Mobot_LinkPodPinMode(_comms, pin, mode);
 }
 
 int CLinkbot::setBuzzerFrequency(int frequency, double time)
