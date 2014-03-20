@@ -228,7 +228,7 @@ int CMobot::driveToNB(double angle1, double angle2, double angle3, double angle4
     dlrunfun(fptr, &retval, driveToNB, this, angle1, angle2, angle3, angle4);
     return retval;
 }
-int CMobot::enableButtonCallback(void (*buttonCallback)(CMobot* robot, int button, int buttonDown)) {
+int CMobot::enableButtonCallback(void* userdata, void (*buttonCallback)(void* data, int button, int buttonDown)) {
     void *fptr;
     int retval;
 
@@ -237,7 +237,7 @@ int CMobot::enableButtonCallback(void (*buttonCallback)(CMobot* robot, int butto
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, NULL, this, buttonCallback);
+    dlrunfun(fptr, &retval, NULL, this, userdata, buttonCallback);
     return retval;
 }
 int CMobot::enableRecordDataShift() {

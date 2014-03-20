@@ -309,7 +309,7 @@ int CLinkbotL::driveToNB(double angle1, double angle2, double angle3) {
     dlrunfun(fptr, &retval, driveToNB, this, angle1, angle2, angle3);
     return retval;
 }
-int CLinkbotL::enableButtonCallback(void (*buttonCallback)(CLinkbotL* robot, int button, int buttonDown)) {
+int CLinkbotL::enableButtonCallback(void* userdata, void (*buttonCallback)(void* userdata, int button, int buttonDown)) {
     void *fptr;
     int retval;
 
@@ -318,7 +318,7 @@ int CLinkbotL::enableButtonCallback(void (*buttonCallback)(CLinkbotL* robot, int
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, NULL, this, buttonCallback);
+    dlrunfun(fptr, &retval, NULL, this, userdata, buttonCallback);
     return retval;
 }
 int CLinkbotL::enableRecordDataShift() {

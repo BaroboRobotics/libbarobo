@@ -110,9 +110,6 @@ if (!test){ \
   ResetEvent( *cond ); \
 action; \
 WaitForSingleObject( *cond, INFINITE)
-#define SIGNAL(cond, mutex, action) \
-  action; \
-SetEvent( *cond )
 #define COND_BROADCAST(cond) \
   PulseEvent(*cond)
 #define COND_SIGNAL(cond) \
@@ -248,11 +245,6 @@ if (!test) { \
 printf("pthread lock error: %s:%d\n", __FILE__, __LINE__); \
 action; \
 pthread_cond_wait( cond, mutex ); 
-#define SIGNAL(cond, mutex, action) \
-  pthread_mutex_lock( mutex ); \
-action; \
-pthread_cond_signal( cond ); \
-pthread_mutex_unlock( mutex )
 #define COND_BROADCAST(cond) \
   pthread_cond_broadcast( cond )
 #define COND_SIGNAL(cond) \
