@@ -13,6 +13,10 @@
 #ifndef RGBHASHTABLE_H
 #define RGBHASHTABLE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define MAX_TABLE_SIZE 150
 #define MAX_KEYLEN 25
 #define RGB_LEN 3
@@ -37,5 +41,9 @@ int HT_Get(rgbHashTable * rgbHT, char * key, int * rgbArray);            // retr
 void HT_Add(rgbHashTable * rgbHT, char * key, int values[]);  // store entry 
 void HT_Remove(rgbHashTable * rgbHT, char * key);          // remove entry
 int HT_GetKey(rgbHashTable * rgbHT, int values[], char color[]); //reverse look-up
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* RGBHASHTABLE_H */
