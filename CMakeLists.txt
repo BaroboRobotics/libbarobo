@@ -87,8 +87,6 @@ install(TARGETS ${TARGET}
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
 
-add_library(${TARGET}Static STATIC ${SOURCES} $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:mxmlObjects>)
-
 ##############################################################################
 # Platform Specific Setup
 
@@ -149,7 +147,6 @@ else()
   else()
     # Linux
     target_link_libraries(${TARGET} bluetooth pthread rt)
-    set_target_properties(${TARGET}Static PROPERTIES COMPILE_FLAGS "-fPIC")
   endif()
 endif()
 
