@@ -9,22 +9,18 @@ add_subdirectory(../libsfp libsfp)
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 0)
 set(VERSION_PATCH 0)
-
-# Boilerplate stuff
-string(TOLOWER ${PROJECT_NAME} project_name)
-set(EXPORT_TARGET_SET ${project_name}-targets)
+set(VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
 ##############################################################################
 # Headers
 
-set(INCLUDE_DIR include src)
-install(DIRECTORY ${INCLUDE_DIR} DESTINATION .)
-include_directories(${INCLUDE_DIR})
+set(PUBLIC_INCLUDE_DIR include src)
+install(DIRECTORY ${PUBLIC_INCLUDE_DIR} DESTINATION .)
+include_directories(${PUBLIC_INCLUDE_DIR})
 
 ##############################################################################
 # Setup
 
-find_package(LIBSFP)
 add_subdirectory(demos EXCLUDE_FROM_ALL)
 add_subdirectory(BaroboConfigFile)
 
@@ -79,15 +75,16 @@ add_library(${TARGET} ${SOURCES} $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:m
 target_link_libraries(${TARGET} ${LIBSFP_LIBRARIES})
 
 set_target_properties(${TARGET} PROPERTIES
-  VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
+  VERSION ${VERSION}
   SOVERSION ${VERSION_MAJOR})
 
-install(TARGETS ${TARGET} EXPORT ${EXPORT_TARGET_SET}
+install(TARGETS ${TARGET}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
 
 add_library(${TARGET}Static STATIC ${SOURCES} $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:mxmlObjects>)
+
 ##############################################################################
 # Platform Specific Setup
 
@@ -155,34 +152,6 @@ endif()
 ##############################################################################
 # Configuration for dependent projects
 
-set(INSTALL_CMAKE_DIR lib/cmake/${project_name})
-
-include(CMakePackageConfigHelpers)
-
-write_basic_package_version_file(
-  "${PROJECT_BINARY_DIR}/${project_name}-config-version.cmake"
-  VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
-  COMPATIBILITY SameMajorVersion)
-
-# This must happen after INCLUDE_DIR and TARGET are set. The config file will
-# use these two variables.
-# Configure once for projects which are part of the same build as libsfp.
-configure_file(inbuildconfig.cmake.in
-  "${PROJECT_BINARY_DIR}/${project_name}-config.cmake" @ONLY)
-
-# Add ${PROJECT_BINARY_DIR} to the find_package config.cmake search path.
-export(PACKAGE ${PROJECT_NAME})
-
-# And configure again for the final installation directory.
-configure_package_config_file(config.cmake.in
-  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${project_name}-config.cmake"
-  INSTALL_DESTINATION "${INSTALL_CMAKE_DIR}"
-  PATH_VARS INCLUDE_DIR)
-
-install(FILES
-  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${project_name}-config.cmake"
-  "${PROJECT_BINARY_DIR}/${project_name}-config-version.cmake"
-  DESTINATION "${INSTALL_CMAKE_DIR}")
-
-# Generate a target export cmake script for the final installation directory.
-install(EXPORT ${EXPORT_TARGET_SET} DESTINATION "${INSTALL_CMAKE_DIR}")
+get_filename_component(${PROJECT_NAME}_INCLUDE_DIRS ${PUBLIC_INCLUDE_DIR} ABSOLUTE CACHE)
+set(${PROJECT_NAME}_LIBRARIES ${TARGET} CACHE INTERNAL "")
+set(${PROJECT_NAME}_VERSION ${VERSION} CACHE INTERNAL "")
