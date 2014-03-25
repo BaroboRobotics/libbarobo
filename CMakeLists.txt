@@ -4,8 +4,6 @@
 cmake_minimum_required(VERSION 2.8.9)
 project(LIBBAROBO C CXX)
 
-add_subdirectory(../libsfp libsfp)
-
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 1)
 set(VERSION_PATCH 0)
@@ -20,6 +18,12 @@ include_directories(${PUBLIC_INCLUDE_DIR})
 
 ##############################################################################
 # Setup
+
+set(required_libsfp_version 0.1.1)
+add_subdirectory(../libsfp libsfp)
+if(NOT LIBSFP_VERSION VERSION_EQUAL ${required_libsfp_version})
+  message(FATAL_ERROR "libbarobo requires libsfp version ${required_libsfp_version}")
+endif()
 
 add_subdirectory(demos EXCLUDE_FROM_ALL)
 add_subdirectory(BaroboConfigFile)
