@@ -14,7 +14,7 @@ set(VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 ##############################################################################
 # Headers
 
-set(PUBLIC_INCLUDE_DIR include src)
+set(PUBLIC_INCLUDE_DIR include)
 install(DIRECTORY ${PUBLIC_INCLUDE_DIR} DESTINATION .)
 include_directories(${PUBLIC_INCLUDE_DIR})
 
