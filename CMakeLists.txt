@@ -7,14 +7,14 @@ project(LIBBAROBO C CXX)
 add_subdirectory(../libsfp libsfp)
 
 set(VERSION_MAJOR 0)
-set(VERSION_MINOR 0)
+set(VERSION_MINOR 1)
 set(VERSION_PATCH 0)
 set(VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
 ##############################################################################
 # Headers
 
-set(PUBLIC_INCLUDE_DIR include src)
+set(PUBLIC_INCLUDE_DIR include)
 install(DIRECTORY ${PUBLIC_INCLUDE_DIR} DESTINATION .)
 include_directories(${PUBLIC_INCLUDE_DIR})
 
