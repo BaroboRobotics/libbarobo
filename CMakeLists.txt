@@ -140,6 +140,7 @@ else()
     # OSX
 
     set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+    set_target_properties(barobo PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 
     find_library(COREFOUNDATION_LIB CoreFoundation)
     find_library(IOKIT_LIB IOKit)
