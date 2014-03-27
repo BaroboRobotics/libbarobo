@@ -13,7 +13,6 @@ set(VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 # Headers
 
 set(PUBLIC_INCLUDE_DIR include)
-install(DIRECTORY ${PUBLIC_INCLUDE_DIR} DESTINATION .)
 include_directories(${PUBLIC_INCLUDE_DIR})
 
 ##############################################################################
@@ -82,11 +81,6 @@ set_target_properties(${TARGET} PROPERTIES
   VERSION ${VERSION}
   SOVERSION ${VERSION_MAJOR})
 
-install(TARGETS ${TARGET}
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin)
-
 ##############################################################################
 # Platform Specific Setup
 
@@ -149,6 +143,25 @@ else()
     target_link_libraries(${TARGET} bluetooth pthread rt)
   endif()
 endif()
+
+##############################################################################
+# Installation
+
+if(UNIX)
+  set(INSTALL_LIB_DIR lib)
+  set(INSTALL_BIN_DIR bin)
+else()
+  set(INSTALL_LIB_DIR .)
+  set(INSTALL_BIN_DIR .)
+endif()
+
+install(TARGETS ${TARGET}
+  #ARCHIVE DESTINATION ${INSTALL_LIB_DIR}
+  LIBRARY DESTINATION ${INSTALL_LIB_DIR}
+  RUNTIME DESTINATION ${INSTALL_BIN_DIR})
+
+# TODO figure out what to do with the headers on install?
+#install(DIRECTORY ${PUBLIC_INCLUDE_DIR} DESTINATION .)
 
 ##############################################################################
 # Configuration for dependent projects
