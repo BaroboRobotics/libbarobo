@@ -51,6 +51,10 @@
 #include <shlobj.h>
 #endif
 
+#ifdef __APPLE__
+char** environ;
+#endif
+
 #ifdef _CH_
 #include <stdarg.h>
 #endif
