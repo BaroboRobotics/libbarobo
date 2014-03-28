@@ -33,82 +33,82 @@
 class DLLIMPORT CLinkbot : public CMobot
 {
   public:
-    int driveToDirect(double angle1, double angle2, double angle3);
-    int driveTo(double angle1, double angle2, double angle3);
-    int driveToDirectNB(double angle1, double angle2, double angle3);
-    int driveToNB(double angle1, double angle2, double angle3);
-    int enableAccelEventCallback(void *userdata, 
+    virtual int driveToDirect(double angle1, double angle2, double angle3);
+    virtual int driveTo(double angle1, double angle2, double angle3);
+    virtual int driveToDirectNB(double angle1, double angle2, double angle3);
+    virtual int driveToNB(double angle1, double angle2, double angle3);
+    virtual int enableAccelEventCallback(void *userdata, 
         void (*accelCallback)(int millis, double x, double y, double z, void *userdata));
-    int disableAccelEventCallback();
-    int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
-    int getBatteryVoltage(double &voltage);
-    int LinkPodAnalogRead(int adc, int & value);
-    int LinkPodAnalogReadVolts(int adc, double & volts);
-    int LinkPodDigitalRead(int pin, int & value);
-    int getColorRGB(int &r, int &g, int &b);
-	int getColorName(char color[]);		
-    const char* getID();
+    virtual int disableAccelEventCallback();
+    virtual int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
+    virtual int getBatteryVoltage(double &voltage);
+    virtual int LinkPodAnalogRead(int adc, int & value);
+    virtual int LinkPodAnalogReadVolts(int adc, double & volts);
+    virtual int LinkPodDigitalRead(int pin, int & value);
+    virtual int getColorRGB(int &r, int &g, int &b);
+	virtual int getColorName(char color[]);		
+    virtual const char* getID();
 #ifdef SWIG
     %apply double& OUTPUT {double &angle1, double &angle2, double &angle3};
     void getJointAngles(double &angle1, double &angle2, double &angle3);
 #else
-    int getJointAngles(double &angle1, double &angle2, double &angle3);
+    virtual int getJointAngles(double &angle1, double &angle2, double &angle3);
 #endif
-    int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, int numReadings=10);
-    int getJointSpeeds(double &speed1, double &speed2, double &speed3);
-    int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3);
-    int move(double angle1, double angle2, double angle3);
-    int moveNB(double angle1, double angle2, double angle3);
-    int moveContinuousNB(robotJointState_t dir1, 
+    virtual int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, int numReadings=10);
+    virtual int getJointSpeeds(double &speed1, double &speed2, double &speed3);
+    virtual int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3);
+    virtual int move(double angle1, double angle2, double angle3);
+    virtual int moveNB(double angle1, double angle2, double angle3);
+    virtual int moveContinuousNB(robotJointState_t dir1, 
                        robotJointState_t dir2, 
                        robotJointState_t dir3);
-    int moveContinuousTime(robotJointState_t dir1, 
+    virtual int moveContinuousTime(robotJointState_t dir1, 
                            robotJointState_t dir2, 
                            robotJointState_t dir3, 
                            double seconds);
-    int moveTo(double angle1, double angle2, double angle3);
-    int moveToDirect(double angle1, double angle2, double angle3);
-    int moveToNB(double angle1, double angle2, double angle3);
-    int moveToDirectNB(double angle1, double angle2, double angle3);
-    int recordAngles(double time[], 
+    virtual int moveTo(double angle1, double angle2, double angle3);
+    virtual int moveToDirect(double angle1, double angle2, double angle3);
+    virtual int moveToNB(double angle1, double angle2, double angle3);
+    virtual int moveToDirectNB(double angle1, double angle2, double angle3);
+    virtual int recordAngles(double time[], 
                      double angle1[], 
                      double angle2[], 
                      double angle3[], 
                      int num, 
                      double seconds,
                      int shiftData = 1);
-    int recordAnglesBegin(robotRecordData_t &time, 
+    virtual int recordAnglesBegin(robotRecordData_t &time, 
                           robotRecordData_t &angle1, 
                           robotRecordData_t &angle2, 
                           robotRecordData_t &angle3, 
                           double seconds,
                           int shiftData = 1);
-    int recordDistancesBegin(robotRecordData_t &time, 
+    virtual int recordDistancesBegin(robotRecordData_t &time, 
                           robotRecordData_t &distance1, 
                           robotRecordData_t &distance2, 
                           robotRecordData_t &distance3, 
                           double radius,
                           double seconds,
                           int shiftData = 1);
-    int LinkPodAnalogWrite(int pin, int value);
-    int LinkPodAnalogReference(int ref);
-    int LinkPodDigitalWrite(int pin, int value);
-    int LinkPodPinMode(int pin, int mode);
-    int setBuzzerFrequency(int frequency, double time);
-    int setBuzzerFrequencyOn(int frequency);
-    int setBuzzerFrequencyOff();
-    int setColorRGB(int r, int g, int b);
-	int setColor(char * color);		
-    int setJointSpeeds(double speed1, double speed2, double speed3);
-    int setJointSpeedRatios(double ratios1, double ratios2, double ratios3);
-    int setMovementStateNB( robotJointState_t dir1,
+    virtual int LinkPodAnalogWrite(int pin, int value);
+    virtual int LinkPodAnalogReference(int ref);
+    virtual int LinkPodDigitalWrite(int pin, int value);
+    virtual int LinkPodPinMode(int pin, int mode);
+    virtual int setBuzzerFrequency(int frequency, double time);
+    virtual int setBuzzerFrequencyOn(int frequency);
+    virtual int setBuzzerFrequencyOff();
+    virtual int setColorRGB(int r, int g, int b);
+	  virtual int setColor(char * color);		
+    virtual int setJointSpeeds(double speed1, double speed2, double speed3);
+    virtual int setJointSpeedRatios(double ratios1, double ratios2, double ratios3);
+    virtual int setMovementStateNB( robotJointState_t dir1,
         robotJointState_t dir2,
         robotJointState_t dir3);
-    int setMovementStateTime( robotJointState_t dir1,
+    virtual int setMovementStateTime( robotJointState_t dir1,
         robotJointState_t dir2,
         robotJointState_t dir3,
         double seconds);
-    int setMovementStateTimeNB( robotJointState_t dir1,
+    virtual int setMovementStateTimeNB( robotJointState_t dir1,
         robotJointState_t dir2,
         robotJointState_t dir3,
         double seconds);
@@ -325,8 +325,8 @@ class DLLIMPORT CLinkbotI : public CLinkbot
   public:
     CLinkbotI();
     ~CLinkbotI();
-    int connect();
-    int connectWithSerialID(const char serialID[]);
+    virtual int connect();
+    virtual int connectWithSerialID(const char serialID[]);
 };
 #endif
 
@@ -556,8 +556,8 @@ class DLLIMPORT CLinkbotL : public CLinkbot
   public:
     CLinkbotL();
     ~CLinkbotL();
-    int connect();
-    int connectWithSerialID(const char serialID[]);
+    virtual int connect();
+    virtual int connectWithSerialID(const char serialID[]);
 };
 #endif
 
