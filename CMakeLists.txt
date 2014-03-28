@@ -84,20 +84,26 @@ set_target_properties(${TARGET} PROPERTIES
 ##############################################################################
 # Platform Specific Setup
 
-if(CMAKE_HOST_WIN32)
-  # Win32
+if(WIN32)
+  include("findwindowssdk.cmake")
+  if(NOT WINSDK_VERSION)
+    message(FATAL_ERROR "libbarobo requires the Windows SDK")
+  endif()
 
-  # If you're on Windows, you can set the following paths to override the auto
-  # detection scripts for the Windows SDK and Visual Studio include paths.
-  #set(WINSDK_INCLUDE_PATH "C:/Program Files/Microsoft SDKs/Windows/v6.0/Include")
-  #set(MSVC_INCLUDE_PATH "C:/Program Files (x86)/Microsoft Visual Studio 9.0/VC/include")
+  # Prior to Windows SDK 8.0, there was only a single flat Include directory.
+  # Thereafter, the headers were broken out into three separate directories:
+  # winrt (Windows Store API), shared, and um (user mode). User mode is the
+  # one which contains the classic headers we care about, like windows.h and
+  # ws2bth.h. This command will figure out which one we're dealing with.
+  find_path(WINSDK_UM_INCLUDE_DIR Windows.h
+    PATHS "${WINSDK_INSTALL_DIR}/Include"
+          "${WINSDK_INSTALL_DIR}/Include/um"
+    NO_DEFAULT_PATH)
 
-  if(NOT WINSDK_INCLUDE_PATH)
-    include("findwindowssdk.cmake")
-  endif(NOT WINSDK_INCLUDE_PATH)
-  if(NOT MSVC_INCLUDE_PATH)
-    include("findmsvc.cmake")
-  endif(NOT MSVC_INCLUDE_PATH)
+  if(NOT WINSDK_UM_INCLUDE_DIR)
+    message(FATAL_ERROR "Unable to find Windows SDK user mode headers")
+  endif()
+  #include("findmsvs.cmake")
 
   add_definitions(-D_WIN32_WINNT=0x502 -DWIN32_LEAN_AND_MEAN)
   if( 
@@ -111,10 +117,8 @@ if(CMAKE_HOST_WIN32)
     # include_directories() only seems to be able to generate -I and -isystem
     # gcc flags. That won't do--we need -idirafter to avoid picking up all of
     # the Windows SDK and MSVC headers, only the ones we need.
-    #include_directories(AFTER SYSTEM "${WINSDK_INCLUDE_PATH}")
-    #include_directories(AFTER SYSTEM "${MSVC_INCLUDE_PATH}")
     set_target_properties(${TARGET} PROPERTIES COMPILE_FLAGS
-      "-idirafter \"${WINSDK_INCLUDE_PATH}\" -idirafter \"${MSVC_INCLUDE_PATH}\"")
+      "-idirafter \"${WINSDK_UM_INCLUDE_DIR}\"")# -idirafter \"${MSVC_INCLUDE_DIR}\"")
   endif()
 
   target_link_libraries(${TARGET} Ws2_32 setupapi)

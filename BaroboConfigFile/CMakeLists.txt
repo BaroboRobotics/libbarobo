@@ -26,17 +26,26 @@ add_definitions(-DNONRELEASE)
 
 add_library(bcfObjects OBJECT BaroboConfigFile.c)
 
-if(CMAKE_HOST_WIN32)
+if(WIN32)
   add_definitions(-DWIN32_LEAN_AND_MEAN -D_WIN32_WINNT=0x0502 -DWINVER=0x0502)
-  if(NOT WINSDK_INCLUDE_PATH)
-    include("../findwindowssdk.cmake")
-  endif(NOT WINSDK_INCLUDE_PATH)
-  if(NOT MSVC_INCLUDE_PATH)
-    include("../findmsvc.cmake")
-  endif(NOT MSVC_INCLUDE_PATH)
-  #include_directories(AFTER SYSTEM "${WINSDK_INCLUDE_PATH}")
-  #include_directories(AFTER SYSTEM "${MSVC_INCLUDE_PATH}")
+
+  include("../findwindowssdk.cmake")
+  if(NOT WINSDK_VERSION)
+    message(FATAL_ERROR "libbarobo requires the Windows SDK")
+  endif()
+
+  find_path(WINSDK_UM_INCLUDE_DIR Windows.h
+    PATHS "${WINSDK_INSTALL_DIR}/Include"
+          "${WINSDK_INSTALL_DIR}/Include/um"
+    NO_DEFAULT_PATH)
+
+  if(NOT WINSDK_UM_INCLUDE_DIR)
+    message(FATAL_ERROR "Unable to find Windows SDK user mode headers")
+  endif()
+  #if(NOT MSVC_INCLUDE_PATH)
+  #  include("../findmsvc.cmake")
+  #endif(NOT MSVC_INCLUDE_PATH)
   set_target_properties(bcfObjects PROPERTIES COMPILE_FLAGS
-    "-idirafter \"${WINSDK_INCLUDE_PATH}\" -idirafter \"${MSVC_INCLUDE_PATH}\"")
+    "-idirafter \"${WINSDK_UM_INCLUDE_DIR}\"")# -idirafter \"${MSVC_INCLUDE_PATH}\"")
 endif()
 
