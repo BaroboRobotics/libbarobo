@@ -13,11 +13,8 @@ if(WIN32)
     message(FATAL_ERROR "Unable to find Windows SDK user mode headers")
   endif()
 
-  #if(NOT MSVC_INCLUDE_PATH)
-  #  include("../findmsvc.cmake")
-  #endif(NOT MSVC_INCLUDE_PATH)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -idirafter \"${WINSDK_UM_INCLUDE_DIR}\"")# -idirafter \"${MSVC_INCLUDE_PATH}\"")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -idirafter \"${WINSDK_UM_INCLUDE_DIR}\"")# -idirafter \"${MSVC_INCLUDE_PATH}\"")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -idirafter \"${WINSDK_UM_INCLUDE_DIR}\"")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -idirafter \"${WINSDK_UM_INCLUDE_DIR}\"")
 endif()
 
 add_subdirectory(simple)

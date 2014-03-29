@@ -103,7 +103,6 @@ if(WIN32)
   if(NOT WINSDK_UM_INCLUDE_DIR)
     message(FATAL_ERROR "Unable to find Windows SDK user mode headers")
   endif()
-  #include("findmsvs.cmake")
 
   add_definitions(-D_WIN32_WINNT=0x502 -DWIN32_LEAN_AND_MEAN)
   if( 
@@ -118,7 +117,7 @@ if(WIN32)
     # gcc flags. That won't do--we need -idirafter to avoid picking up all of
     # the Windows SDK and MSVC headers, only the ones we need.
     set_target_properties(${TARGET} PROPERTIES COMPILE_FLAGS
-      "-idirafter \"${WINSDK_UM_INCLUDE_DIR}\"")# -idirafter \"${MSVC_INCLUDE_DIR}\"")
+      "-idirafter \"${WINSDK_UM_INCLUDE_DIR}\"")
   endif()
 
   target_link_libraries(${TARGET} Ws2_32 setupapi)

@@ -42,10 +42,8 @@ if(WIN32)
   if(NOT WINSDK_UM_INCLUDE_DIR)
     message(FATAL_ERROR "Unable to find Windows SDK user mode headers")
   endif()
-  #if(NOT MSVC_INCLUDE_PATH)
-  #  include("../findmsvc.cmake")
-  #endif(NOT MSVC_INCLUDE_PATH)
+
   set_target_properties(bcfObjects PROPERTIES COMPILE_FLAGS
-    "-idirafter \"${WINSDK_UM_INCLUDE_DIR}\"")# -idirafter \"${MSVC_INCLUDE_PATH}\"")
+    "-idirafter \"${WINSDK_UM_INCLUDE_DIR}\"")
 endif()
 
