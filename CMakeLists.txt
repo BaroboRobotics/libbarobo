@@ -4,22 +4,25 @@
 cmake_minimum_required(VERSION 2.8.9)
 project(LIBBAROBO C CXX)
 
-add_subdirectory(../libsfp libsfp)
-
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 1)
-set(VERSION_PATCH 0)
+set(VERSION_PATCH 1)
 set(VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
 ##############################################################################
 # Headers
 
 set(PUBLIC_INCLUDE_DIR include)
-install(DIRECTORY ${PUBLIC_INCLUDE_DIR} DESTINATION .)
 include_directories(${PUBLIC_INCLUDE_DIR})
 
 ##############################################################################
 # Setup
+
+set(required_libsfp_version 0.1.1)
+add_subdirectory(../libsfp libsfp)
+if(NOT LIBSFP_VERSION VERSION_EQUAL ${required_libsfp_version})
+  message(FATAL_ERROR "libbarobo requires libsfp version ${required_libsfp_version}")
+endif()
 
 add_subdirectory(demos EXCLUDE_FROM_ALL)
 add_subdirectory(BaroboConfigFile)
@@ -78,30 +81,28 @@ set_target_properties(${TARGET} PROPERTIES
   VERSION ${VERSION}
   SOVERSION ${VERSION_MAJOR})
 
-install(TARGETS ${TARGET}
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin)
-
-add_library(${TARGET}Static STATIC ${SOURCES} $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:mxmlObjects>)
-
 ##############################################################################
 # Platform Specific Setup
 
-if(CMAKE_HOST_WIN32)
-  # Win32
+if(WIN32)
+  include("findwindowssdk.cmake")
+  if(NOT WINSDK_VERSION)
+    message(FATAL_ERROR "libbarobo requires the Windows SDK")
+  endif()
 
-  # If you're on Windows, you can set the following paths to override the auto
-  # detection scripts for the Windows SDK and Visual Studio include paths.
-  #set(WINSDK_INCLUDE_PATH "C:/Program Files/Microsoft SDKs/Windows/v6.0/Include")
-  #set(MSVC_INCLUDE_PATH "C:/Program Files (x86)/Microsoft Visual Studio 9.0/VC/include")
+  # Prior to Windows SDK 8.0, there was only a single flat Include directory.
+  # Thereafter, the headers were broken out into three separate directories:
+  # winrt (Windows Store API), shared, and um (user mode). User mode is the
+  # one which contains the classic headers we care about, like windows.h and
+  # ws2bth.h. This command will figure out which one we're dealing with.
+  find_path(WINSDK_UM_INCLUDE_DIR Windows.h
+    PATHS "${WINSDK_INSTALL_DIR}/Include"
+          "${WINSDK_INSTALL_DIR}/Include/um"
+    NO_DEFAULT_PATH)
 
-  if(NOT WINSDK_INCLUDE_PATH)
-    include("findwindowssdk.cmake")
-  endif(NOT WINSDK_INCLUDE_PATH)
-  if(NOT MSVC_INCLUDE_PATH)
-    include("findmsvc.cmake")
-  endif(NOT MSVC_INCLUDE_PATH)
+  if(NOT WINSDK_UM_INCLUDE_DIR)
+    message(FATAL_ERROR "Unable to find Windows SDK user mode headers")
+  endif()
 
   add_definitions(-D_WIN32_WINNT=0x502 -DWIN32_LEAN_AND_MEAN)
   if( 
@@ -115,10 +116,8 @@ if(CMAKE_HOST_WIN32)
     # include_directories() only seems to be able to generate -I and -isystem
     # gcc flags. That won't do--we need -idirafter to avoid picking up all of
     # the Windows SDK and MSVC headers, only the ones we need.
-    #include_directories(AFTER SYSTEM "${WINSDK_INCLUDE_PATH}")
-    #include_directories(AFTER SYSTEM "${MSVC_INCLUDE_PATH}")
     set_target_properties(${TARGET} PROPERTIES COMPILE_FLAGS
-      "-idirafter \"${WINSDK_INCLUDE_PATH}\" -idirafter \"${MSVC_INCLUDE_PATH}\"")
+      "-idirafter \"${WINSDK_UM_INCLUDE_DIR}\"")
   endif()
 
   target_link_libraries(${TARGET} Ws2_32 setupapi)
@@ -145,9 +144,27 @@ else()
   else()
     # Linux
     target_link_libraries(${TARGET} bluetooth pthread rt)
-    set_target_properties(${TARGET}Static PROPERTIES COMPILE_FLAGS "-fPIC")
   endif()
 endif()
+
+##############################################################################
+# Installation
+
+if(UNIX)
+  set(INSTALL_LIB_DIR lib)
+  set(INSTALL_BIN_DIR bin)
+else()
+  set(INSTALL_LIB_DIR .)
+  set(INSTALL_BIN_DIR .)
+endif()
+
+install(TARGETS ${TARGET}
+  #ARCHIVE DESTINATION ${INSTALL_LIB_DIR}
+  LIBRARY DESTINATION ${INSTALL_LIB_DIR}
+  RUNTIME DESTINATION ${INSTALL_BIN_DIR})
+
+# TODO figure out what to do with the headers on install?
+#install(DIRECTORY ${PUBLIC_INCLUDE_DIR} DESTINATION .)
 
 ##############################################################################
 # Configuration for dependent projects
