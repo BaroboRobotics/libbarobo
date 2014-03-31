@@ -6,7 +6,7 @@ project(LIBBAROBO C CXX)
 
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 1)
-set(VERSION_PATCH 1)
+set(VERSION_PATCH 2)
 set(VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
 ##############################################################################
@@ -18,11 +18,7 @@ include_directories(${PUBLIC_INCLUDE_DIR})
 ##############################################################################
 # Setup
 
-set(required_libsfp_version 0.1.1)
 add_subdirectory(../libsfp libsfp)
-if(NOT LIBSFP_VERSION VERSION_EQUAL ${required_libsfp_version})
-  message(FATAL_ERROR "libbarobo requires libsfp version ${required_libsfp_version}")
-endif()
 
 add_subdirectory(demos EXCLUDE_FROM_ALL)
 add_subdirectory(BaroboConfigFile)
