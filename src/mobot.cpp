@@ -439,18 +439,6 @@ int Mobot_connectWithZigbeeAddress(mobot_t* comms, uint16_t addr)
   int rc;
   int form;
   if(g_dongleMobot == NULL) {
-    if(g_bcf == NULL) {
-      g_bcf = BCF_New();
-      if(BCF_Read(g_bcf, comms->configFilePath)) {
-        fprintf(stderr, 
-            "ERROR: Your Barobo configuration file does not exist.\n"
-            "Please create one by opening the MoBot remote control, clicking on\n"
-            "the 'Robot' menu entry, and selecting 'Configure Robot Bluetooth'.\n");
-        BCF_Destroy(g_bcf);
-        g_bcf = NULL;
-        return -1;
-      }
-    }
     Mobot_initDongle();
   }
   if(
@@ -786,19 +774,6 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
   }
   /* If a parent was specified, use it as a dongle */
   if(parent == NULL) {
-    if(g_bcf == NULL) {
-      g_bcf = BCF_New();
-      if(BCF_Read(g_bcf, child->configFilePath)) {
-        fprintf(stderr, 
-            "ERROR: Your Barobo configuration file does not exist.\n"
-            "Please create one by opening the MoBot remote control, clicking on\n"
-            "the 'Robot' menu entry, and selecting 'Configure Robot Bluetooth'.\n");
-        BCF_Destroy(g_bcf);
-        g_bcf = NULL;
-        free(_childSerialID);
-        return -1;
-      }
-    }
     Mobot_initDongle();
     parent = g_dongleMobot;
   } else {
