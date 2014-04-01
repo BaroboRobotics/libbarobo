@@ -36,7 +36,7 @@ if(CMAKE_HOST_WIN32)
       )
   set_target_properties(mobot PROPERTIES PREFIX lib)
   set_target_properties(mobot PROPERTIES SUFFIX .dl)
-  target_link_libraries(mobot baroboStatic Ws2_32 baroboconfigfile mxml chsdk ch)
+  target_link_libraries(mobot barobo Ws2_32 baroboconfigfile mxml chsdk ch)
 elseif(CMAKE_HOST_APPLE)
   add_definitions(-DENABLE_BLUETOOTH -DDARWIN -D_REENTRANT -DNeedFunctionPrototypes)
 	add_library(mobot SHARED 
@@ -44,7 +44,7 @@ elseif(CMAKE_HOST_APPLE)
       chmoboti_chdl.cpp
       chmobotl_chdl.cpp
 	  )
-	target_link_libraries(mobot baroboStatic pthread baroboconfigfile mxml chsdk embedch)
+	target_link_libraries(mobot barobo pthread baroboconfigfile mxml chsdk embedch)
   set_target_properties(mobot PROPERTIES SUFFIX .dl)
 else()
   add_definitions(-DENABLE_BLUETOOTH -DLINUX -D_REENTRANT -DNeedFunctionPrototypes)
@@ -53,7 +53,7 @@ else()
       chmoboti_chdl.cpp
       chmobotl_chdl.cpp
 	  )
-	target_link_libraries(mobot baroboStatic bluetooth pthread rt chsdk ${LIBBAROBO_LIBRARIES})
+	target_link_libraries(mobot barobo bluetooth pthread rt chsdk ${LIBBAROBO_LIBRARIES})
   set_target_properties(mobot PROPERTIES SUFFIX .dl)
 endif(CMAKE_HOST_WIN32)
 
