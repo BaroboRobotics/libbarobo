@@ -160,7 +160,7 @@ int CMobot::disableButtonCallback()
 }
 
 int CMobot::enableJointEventCallback(void *userdata, 
-    void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, void *userdata))
+    void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, int mask, void *userdata))
 {
   return Mobot_enableJointEventCallback(_comms, userdata, jointCallback);
 }

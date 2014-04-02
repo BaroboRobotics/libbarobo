@@ -5,10 +5,10 @@
 
 #define NUMBOTS 1
 
-void jointcb(int millis, double j1, double j2, double j3, double j4, void* data)
+void jointcb(int millis, double j1, double j2, double j3, double j4, int mask, void* data)
 {
-  printf("Joint event %d: %lf %lf %lf %lf\n",
-      millis, j1, j2, j3, j4);
+  printf("Joint event %d: %lf %lf %lf %lf %d\n",
+      millis, j1, j2, j3, j4, mask);
 }
 
 void accelcb(int millis, double x, double y, double z, void* data)
@@ -21,7 +21,7 @@ int main()
 {
   int i = 0;
   CLinkbot l;
-  l.connectWithAddress("S3S3", 1);
+  l.connectWithAddress("SVZX", 1);
   l.enableJointEventCallback(NULL, jointcb);
   l.enableAccelEventCallback(NULL, accelcb);
   printf("Press enter to quit.\n");

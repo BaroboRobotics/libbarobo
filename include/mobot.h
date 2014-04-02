@@ -276,7 +276,7 @@ typedef struct mobot_s
   MUTEX_T* callback_lock;
   int callbackEnabled;
   void (*buttonCallback)(void* mobot, int button, int buttonDown);
-  void (*jointCallback)(int, double, double, double, double, void*);
+  void (*jointCallback)(int, double, double, double, double, int, void*);
   void* jointCallbackData;
   void (*accelCallback)(int, double, double, double, void*);
   void* accelCallbackData;
@@ -661,7 +661,7 @@ class DLLIMPORT CMobot
     virtual int enableButtonCallback(void* userdata, void (*buttonCallback)(void* data, int button, int buttonDown));
     virtual int disableButtonCallback();
     virtual int enableJointEventCallback(void *userdata,
-        void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, void *userdata));
+        void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, int mask, void *userdata));
     virtual int disableJointEventCallback();
     virtual int enableEventCallback(void (*eventCallback)(const uint8_t *buf, int size, void* userdata),
         void* userdata);
@@ -1026,7 +1026,7 @@ DLLIMPORT int Mobot_connectWithZigbeeAddress(mobot_t* comms, uint16_t addr);
 DLLIMPORT int Mobot_enableAccelEventCallback(mobot_t* comms, void* data,
     void (*accelCallback)(int millis, double x, double y, double z, void* data));
 DLLIMPORT int Mobot_enableJointEventCallback(mobot_t* comms, void* data, 
-    void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, void* data));
+    void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, int mask, void* data));
 DLLIMPORT int Mobot_findMobot(mobot_t* parent, const char* childSerialID);
 DLLIMPORT mobotMelodyNote_t* Mobot_createMelody(int tempo);
 DLLIMPORT int Mobot_melodyAddNote(mobotMelodyNote_t* melody, const char* note, int divider);
