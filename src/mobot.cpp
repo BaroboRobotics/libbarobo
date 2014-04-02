@@ -1391,7 +1391,7 @@ int Mobot_enableButtonCallback(mobot_t* comms, void* data,
 }
 
 int Mobot_enableJointEventCallback(mobot_t* comms, void* userdata,
-    void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, void* data)
+    void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, int mask, void* data)
     )
 {
   int status;
@@ -2385,10 +2385,11 @@ void* eventThread(void* arg)
         if(comms->jointCallback) {
           comms->jointCallback(
               event->millis,
-              event->data.joint_data[0],
-              event->data.joint_data[1],
-              event->data.joint_data[2],
-              event->data.joint_data[3],
+              event->data.joint_data.angles[0],
+              event->data.joint_data.angles[1],
+              event->data.joint_data.angles[2],
+              event->data.joint_data.angles[3],
+              event->data.joint_data.mask,
               comms->jointCallbackData);
         }
         MUTEX_UNLOCK(comms->callback_lock);
@@ -2529,10 +2530,11 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
         break;
       case EVENT_JOINT_MOVED:
         memcpy(&event->millis, &buf[7], 4);
-        memcpy(&event->data.joint_data[0], &buf[11], 16);
+        memcpy(&event->data.joint_data.angles[0], &buf[11], 16);
         for(int i = 0; i < 4; i++) {
-          event->data.joint_data[i] = RAD2DEG(event->data.joint_data[i]);
+          event->data.joint_data.angles[i] = RAD2DEG(event->data.joint_data.angles[i]);
         }
+        event->data.joint_data.mask = buf[27];
         break;
       case EVENT_ACCEL_CHANGED:
         memcpy(&event->millis, &buf[7], 4);

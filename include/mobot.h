@@ -276,7 +276,7 @@ typedef struct mobot_s
   MUTEX_T* callback_lock;
   int callbackEnabled;
   void (*buttonCallback)(void* mobot, int button, int buttonDown);
-  void (*jointCallback)(int, double, double, double, double, void*);
+  void (*jointCallback)(int, double, double, double, double, int, void*);
   void* jointCallbackData;
   void (*accelCallback)(int, double, double, double, void*);
   void* accelCallbackData;

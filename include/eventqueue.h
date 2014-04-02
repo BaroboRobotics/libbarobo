@@ -26,8 +26,10 @@ typedef struct event_s
     } reportAddress;
   
     char * debug_data;
-
-    float joint_data[4];
+    struct {
+      float angles[4];
+      uint8_t mask;
+    }joint_data;
 
     int16_t accel_data[3];
   }data;
