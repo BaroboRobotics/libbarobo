@@ -206,9 +206,9 @@ int CMobot::setAccelEventThreshold(double threshold)
   return Mobot_setAccelEventThreshold(_comms, threshold);
 }
 
-int CMobot::setJointEventThreshold(double threshold)
+int CMobot::setJointEventThreshold(int joint, double threshold)
 {
-  return Mobot_setJointEventThreshold(_comms, DEG2RAD(threshold));
+  return Mobot_setJointEventThreshold(_comms, joint, DEG2RAD(threshold));
 }
 
 int CMobot::systemTime(double &time)

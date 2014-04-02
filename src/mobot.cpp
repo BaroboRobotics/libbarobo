@@ -1734,13 +1734,14 @@ int Mobot_setAccelEventThreshold(mobot_t* comms, double threshold)
   return 0;
 }
 
-int Mobot_setJointEventThreshold(mobot_t* comms, double threshold)
+int Mobot_setJointEventThreshold(mobot_t* comms, int joint, double threshold)
 {
   uint8_t buf[32];
   float thresh = threshold;
   int status;
-  memcpy(buf, &thresh, 4);
-  status = MobotMsgTransaction(comms, BTCMD(CMD_SET_JOINT_EVENT_THRESHOLD), buf, 4);
+  buf[0] = joint;
+  memcpy(&buf[1], &thresh, 4);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SET_JOINT_EVENT_THRESHOLD), buf, 5);
   if(status < 0) return status;
   /* Make sure the data size is correct */
   if(buf[1] != 3) {

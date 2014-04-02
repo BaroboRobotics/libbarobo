@@ -762,7 +762,7 @@ class DLLIMPORT CMobot
     virtual int resetToZero();
     virtual int resetToZeroNB();
     virtual int setAccelEventThreshold(double threshold);
-    virtual int setJointEventThreshold(double threshold);
+    virtual int setJointEventThreshold(int joint, double threshold);
     virtual int setExitState(robotJointState_t exitState);
     virtual int setJointMovementStateNB(robotJointId_t id, robotJointState_t dir);
     virtual int setJointMovementStateTime(robotJointId_t id, robotJointState_t dir, double seconds);
@@ -1287,7 +1287,7 @@ DLLIMPORT int Mobot_reset(mobot_t* comms);
 DLLIMPORT int Mobot_resetToZero(mobot_t* comms);
 DLLIMPORT int Mobot_resetToZeroNB(mobot_t* comms);
 DLLIMPORT int Mobot_setAccelEventThreshold(mobot_t* comms, double threshold);
-DLLIMPORT int Mobot_setJointEventThreshold(mobot_t* comms, double threshold);
+DLLIMPORT int Mobot_setJointEventThreshold(mobot_t* comms, int joint, double threshold);
 DLLIMPORT int Mobot_setExitState(mobot_t* comms, robotJointState_t exitState);
 DLLIMPORT int Mobot_setFourierCoefficients(mobot_t* comms, robotJointId_t id, double* a, double* b);
 DLLIMPORT int Mobot_beginFourierControl(mobot_t* comms, uint8_t motorMask);
