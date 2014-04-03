@@ -1739,7 +1739,10 @@ int Mobot_setJointEventThreshold(mobot_t* comms, int joint, double threshold)
   uint8_t buf[32];
   float thresh = threshold;
   int status;
-  buf[0] = joint;
+  if( (joint < 1) || (joint > 4) ) {
+    return -1;
+  }
+  buf[0] = joint-1;
   memcpy(&buf[1], &thresh, 4);
   status = MobotMsgTransaction(comms, BTCMD(CMD_SET_JOINT_EVENT_THRESHOLD), buf, 5);
   if(status < 0) return status;
