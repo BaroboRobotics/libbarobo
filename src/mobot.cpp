@@ -2411,7 +2411,7 @@ void* eventThread(void* arg)
         MUTEX_UNLOCK(comms->callback_lock);
         break;
     }
-    //delete event;
+    delete event;
   }
   return NULL;
 }
