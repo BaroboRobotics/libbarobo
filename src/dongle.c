@@ -108,60 +108,68 @@ static long dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, c
   *timed_out = false;
 
   DWORD readbytes = 0;
-  if (!dongle->ovIncoming) { return -1; } // FIXME
-  BOOL b = ReadFile(dongle->handle, buf, len, &readbytes, dongle->ovIncoming);
+  do {
+    if (!dongle->ovIncoming) { return -1; } // FIXME
+    BOOL b = ReadFile(dongle->handle, buf, len, &readbytes, dongle->ovIncoming);
 
-  if (b) {
-    /* ReadFile completed synchronously. */
-    return readbytes;
-  }
+    if (b) {
+      /* ReadFile completed synchronously. */
+      return readbytes;
+    }
 
-  DWORD err = GetLastError();
-  if (ERROR_IO_PENDING != err) {
-    win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
-          "ReadFile()"), err);
-    return -1;
-  }
-
-  if (!dongle->ovIncoming) { return -1; } // FIXME
-  DWORD code = WaitForSingleObject(dongle->ovIncoming->hEvent, ms_delay ? *ms_delay : INFINITE);
-
-  if (WAIT_TIMEOUT == code) {
-    if (!CancelIo(dongle->handle)) {
+    DWORD err = GetLastError();
+    if (ERROR_IO_PENDING != err) {
       win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
-            "CancelIo()"), GetLastError());
+            "ReadFile()"), err);
       return -1;
     }
-    *timed_out = true;
-    return 0;
-  }
-  else if (WAIT_FAILED == code) {
-    win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
-          "WaitForSingleObject()"), GetLastError());
-    return -1;
-  }
-  else {
-    assert(WAIT_OBJECT_0 == code);
-  }
 
-  if (!dongle->ovIncoming) { return -1; } // FIXME
-  if (!GetOverlappedResult(dongle->handle, dongle->ovIncoming, &readbytes, FALSE)) {
-    win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
-        "GetOverlappedResult()\n"), GetLastError());
-    return -1;
-  }
+    if (!dongle->ovIncoming) { return -1; } // FIXME
+    DWORD code = WaitForSingleObject(dongle->ovIncoming->hEvent, ms_delay ? *ms_delay : INFINITE);
 
-  if (!dongle->ovIncoming) { return -1; } // FIXME
-  if (!ResetEvent(dongle->ovIncoming->hEvent)) {
-    win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
-          "ResetEvent()\n"), GetLastError());
-    return -1;
-  }
+    if (WAIT_TIMEOUT == code) {
+      if (!CancelIo(dongle->handle)) {
+        win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
+              "CancelIo()"), GetLastError());
+        return -1;
+      }
+      *timed_out = true;
+      return 0;
+    }
+    else if (WAIT_FAILED == code) {
+      win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
+            "WaitForSingleObject()"), GetLastError());
+      return -1;
+    }
+    else {
+      assert(WAIT_OBJECT_0 == code);
+    }
 
+    if (!dongle->ovIncoming) { return -1; } // FIXME
+    if (!GetOverlappedResult(dongle->handle, dongle->ovIncoming, &readbytes, FALSE)) {
+      if (GetLastError() == ERROR_HANDLE_EOF) {
+        return 0;
+      }
+      win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
+          "GetOverlappedResult()\n"), GetLastError());
+      return -1;
+    }
+
+    if (!dongle->ovIncoming) { return -1; } // FIXME
+    if (!ResetEvent(dongle->ovIncoming->hEvent)) {
+      win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
+            "ResetEvent()\n"), GetLastError());
+      return -1;
+    }
+    if (readbytes == 0) {
+      printf("  WHAT ARE YOU DOIIINNG, READBYTES? %d\n", readbytes);
+    }
+
+  } while (readbytes == 0);
   return readbytes;
 }
 
-#else /* _WIN32 */
+#else /* not _WIN32 */
 
 /* POSIX implementation of dongleTimedReadRaw. */
 
@@ -214,12 +222,13 @@ static long dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, c
        * on OS X. So instead, let's just claim to have timed out--this case
        * should be exceedingly rare and probably harmless, anyway. */
       err = 0;
+      *timed_out = true;
       fprintf(stderr, "(barobo) WARNING: in dongleTimedReadRaw, select() returned false positive\n");
     }
     else {
       char errbuf[256];
       strerror_r(errno, errbuf, sizeof(errbuf));
-      fprintf(stderr, "(barobo) ERROR: in dongleReadRaw, read(): %s\n", errbuf);
+      fprintf(stderr, "(barobo) ERROR: in dongleTimedReadRaw, read(): %s\n", errbuf);
     }
   }
 
