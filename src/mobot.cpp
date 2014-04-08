@@ -2253,7 +2253,8 @@ void* commsEngine(void* arg)
     if (MOBOTCONNECT_TTY == comms->connectionMode) {
       uint8_t buf[256];
       long len = dongleRead(comms->dongle, buf, sizeof(buf));
-      if (-1 == len) {
+      /* Either error or EOF. */
+      if (len <= 0) {
         break;
       }
 #ifdef COMMSDEBUG
@@ -2313,6 +2314,7 @@ void* commsEngine(void* arg)
       }
     }
   }
+  Mobot_disconnect(comms);
   return NULL;
 }
 
