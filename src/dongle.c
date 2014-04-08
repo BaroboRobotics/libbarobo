@@ -161,11 +161,20 @@ static long dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, c
             "ResetEvent()\n"), GetLastError());
       return -1;
     }
-    if (readbytes == 0) {
-      printf("  WHAT ARE YOU DOIIINNG, READBYTES? %d\n", readbytes);
-    }
 
-  } while (readbytes == 0);
+    /* Sometimes the read operation will complete, but readbytes is zero, with
+     * no error reported. This seems to happen predominantly when dongleRead()
+     * and dongleWrite() are called simultaneously from different threads. The
+     * MSDN docs do mention that read and write operations must be serialized
+     * for synchronous I/O, but we're using asynchronous (overlapped), so I
+     * don't know what the problem is. For now, just iterate, if we were not
+     * using a timeout. */
+  } while (!ms_delay && readbytes == 0);
+
+  // If we were in timed mode, present a null read as a timeout to the caller.
+  if (ms_delay && 0 == readbytes) {
+    *timed_out = true;
+  }
   return readbytes;
 }
 
