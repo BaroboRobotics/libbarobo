@@ -122,12 +122,16 @@ int Mobot_waitForReportedSerialID(mobot_t* comms, char* id);
 #endif /* Not _CH_ */
 
 #ifdef _WIN32
-typedef struct bdaddr_s {
-  UINT8 b[6];
-} bdaddr_t;
+#include "bdaddr.h"
+#if __cplusplus
+extern "C" {
+#endif
 int str2ba(const char *str, bdaddr_t *ba);
 void baswap(bdaddr_t *dst, const bdaddr_t *src);
 int str2ba(const char *str, bdaddr_t *ba);
+#if __cplusplus
+}
+#endif
 #endif
 
 

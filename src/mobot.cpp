@@ -1887,6 +1887,7 @@ int Mobot_waitForReportedSerialID(mobot_t* comms, char* id)
   }
 }
 
+#if 0
 #ifdef _WIN32
 void baswap(bdaddr_t *dst, const bdaddr_t *src)
 {
@@ -1915,6 +1916,7 @@ int str2ba(const char *str, bdaddr_t *ba)
 
 	return 0;
 }
+#endif
 #endif
 
 /* This function does a complete message transaction with a Mobot, including

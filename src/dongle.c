@@ -592,6 +592,9 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
     }
   }
 
+  assert(strlen(ttyfilename) < sizeof(dongle->ttyfilename));
+  strcpy(dongle->ttyfilename, ttyfilename);
+
   return 0;
 }
 
@@ -772,6 +775,9 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
 
   //dongle->status = MOBOT_LINK_STATUS_UP;
 
+  assert(strlen(ttyfilename) < sizeof(dongle->ttyfilename));
+  strcpy(dongle->ttyfilename, ttyfilename);
+
   return 0;
 }
 
@@ -804,4 +810,17 @@ void dongleClose (MOBOTdongle *dongle) {
 #endif
 
   dongleFini(dongle);
+}
+
+int dongleGetTTYFilename (MOBOTdongle* dongle, char* buf, size_t len) {
+  if (!dongle) {
+    return -1;
+  }
+
+  if (strlen(dongle->ttyfilename) >= len) {
+    return -1;
+  }
+
+  strcpy(buf, dongle->ttyfilename);
+  return 0;
 }

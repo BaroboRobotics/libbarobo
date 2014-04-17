@@ -1013,6 +1013,7 @@ DLLIMPORT int Mobot_connectWithBluetoothAddress(
     mobot_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_disableJointEventCallback(mobot_t* comms);
 DLLIMPORT int Mobot_disableAccelEventCallback(mobot_t* comms);
+
 /* Find the serial device the robot is plugged into. The device's
  * fully-qualified path is stored in the tty output parameter as a
  * null-terminated string. Example device paths for various OSes are
@@ -1022,6 +1023,22 @@ DLLIMPORT int Mobot_disableAccelEventCallback(mobot_t* comms);
  * Mobot_dongleGetTTY will write at most len bytes to tty, including the
  * terminating null byte. Returns -1 on error, 0 on success. */
 DLLIMPORT int Mobot_dongleGetTTY(char* tty, size_t len);
+
+/* True if it is possible to flash this robot's firmware, false otherwise.
+ * Under the hood, this checks to see if the robot is connected via TTY (i.e.,
+ * USB). */
+DLLIMPORT int Mobot_canFlashFirmware (mobot_t* comms);
+
+/* Begin flashing the firmware of a robot connected by TTY. Parameters include
+ * the hexfile filename (not the raw data), and two callbacks. Where progress
+ * is measured from 0.0 to 1.0, the thread on which the flash operation runs
+ * will call progressCallback every time there is a change in progress. Once
+ * the operation is complete, completionCallback is called with the value of
+ * 1. */
+DLLIMPORT int Mobot_flashFirmwareAsync (mobot_t* comms, const char* hexfile,
+    void (*progressCallback)(double progress),
+    void (*completionCallback)(int complete));
+
 DLLIMPORT int Mobot_connectWithZigbeeAddress(mobot_t* comms, uint16_t addr);
 DLLIMPORT int Mobot_enableAccelEventCallback(mobot_t* comms, void* data,
     void (*accelCallback)(int millis, double x, double y, double z, void* data));

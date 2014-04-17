@@ -1,6 +1,8 @@
 #ifndef _BAROBO_DONGLE_H_
 #define _BAROBO_DONGLE_H_
 
+#define MOBOT_DONGLE_TTYFILENAME_MAX_PATH 64
+
 #include "donglefwd.h"
 #include "thread_macros.h"
 #include "serial_framing_protocol.h"
@@ -33,6 +35,7 @@ struct MOBOTdongle {
   MOBOTdongleFraming framing;
   SFPcontext *sfpContext;
   MUTEX_T *sfpTxLock;
+  char ttyfilename[MOBOT_DONGLE_TTYFILENAME_MAX_PATH];
 };
 
 #ifdef __cplusplus
@@ -44,6 +47,8 @@ void dongleClose (MOBOTdongle *dongle);
 
 long dongleRead (MOBOTdongle *dongle, uint8_t *buf, size_t len);
 long dongleWrite (MOBOTdongle *dongle, const uint8_t *buf, size_t len);
+
+int dongleGetTTYFilename (MOBOTdongle* dongle, char* buf, size_t len);
 
 #ifdef __cplusplus
 }
