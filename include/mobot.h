@@ -1034,7 +1034,7 @@ DLLIMPORT int Mobot_canFlashFirmware (mobot_t* comms);
  * is measured from 0.0 to 1.0, the thread on which the flash operation runs
  * will call progressCallback every time there is a change in progress. Once
  * the operation is complete, completionCallback is called with the value of
- * 1. */
+ * 1 for success, 0 for failure. */
 DLLIMPORT int Mobot_flashFirmwareAsync (mobot_t* comms, const char* hexfile,
     void (*progressCallback)(double progress),
     void (*completionCallback)(int complete));

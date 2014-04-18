@@ -3,9 +3,23 @@
 #include "mobot.h"
 #include "dongle.h"
 
-#include <unistd.h>
-
 #include <string.h>
+
+#if _WIN32
+
+#include <windows.h>
+static void sleep_for_ms (int delay) {
+  Sleep(delay);
+}
+
+#else
+
+#include <unistd.h>
+static void sleep_for_ms (int delay) {
+  usleep(delay * 1000);
+}
+
+#endif
 
 /* Since robots can be connected multiple times if they are acting as a dongle,
  * this is a way to find a given robot's TTY alter ego. If the passed robot is
@@ -32,16 +46,28 @@ int Mobot_canFlashFirmware (mobot_t* comms) {
   return !!getFlashableMobotStruct(comms);
 }
 
-int Mobot_flashFirmwareAsync (mobot_t* comms, const char* hexfile,
-    void (*progressCallback)(double progress),
-    void (*completionCallback)(int status)) {
-  mobot_t* flashable = getFlashableMobotStruct(comms);
+struct FlashFirmwareThreadArgs {
+  mobot_t* flashable;
+  const char* hexfile;
+  stkComms_progressCallbackFunc progressCallback;
+  stkComms_completionCallbackFunc completionCallback;
+};
 
-  if (!flashable) {
-    return -1;
-  }
+void* flashFirmwareThread (void* a) {
+  FlashFirmwareThreadArgs* args = static_cast<FlashFirmwareThreadArgs*>(a);
 
+  assert(args);
+
+  mobot_t* flashable = args->flashable;
+  const char* hexfile = args->hexfile;
+  stkComms_progressCallbackFunc progressCallback = args->progressCallback;
+  stkComms_completionCallbackFunc completionCallback = args->completionCallback;
+
+  delete args;
+
+  assert(flashable);
   assert(flashable->dongle);
+  assert(hexfile);
 
   char tty[MOBOT_DONGLE_TTYFILENAME_MAX_PATH];
   dongleGetTTYFilename(flashable->dongle, tty, sizeof(tty));
@@ -49,21 +75,23 @@ int Mobot_flashFirmwareAsync (mobot_t* comms, const char* hexfile,
   Mobot_reboot(flashable);
   Mobot_disconnect(flashable);
 
-  /* I have tested with zero milliseconds (i.e., a sleep for the amount of time
-   * it takes to call a library function), and it worked, but I'll leave it at
-   * one just to be safe. If there is no delay here, the robot will not reboot. */
-#if _WIN32
-  //Sleep(1);
-#else
-  usleep(1000);
-#endif
+  sleep_for_ms(2000);
 
   CStkComms* stk = new CStkComms;
-  int rc = stk->connectWithTTY(tty);
+  const int maxTries = 30;
+  int rc = -1;
+  for (int i = 0; 0 != rc && i < maxTries; ++i) {
+    sleep_for_ms(100);
+    rc = stk->connectWithTTY(tty);
+  }
+
   if (-1 == rc) {
     fprintf(stderr, "(barobo) ERROR: in Mobot_flashFirmware, unable to "
         "connect to %s with the STK protocol.\n", tty);
-    return -1;
+    if (completionCallback) {
+      completionCallback(0);
+    }
+    return 0;
   }
 
   /* The CStkComms::DISCONNECT_AND_DELETE tells libstkcomms to clean up after
@@ -73,3 +101,25 @@ int Mobot_flashFirmwareAsync (mobot_t* comms, const char* hexfile,
 
   return 0;
 }
+
+int Mobot_flashFirmwareAsync (mobot_t* comms, const char* hexfile,
+    void (*progressCallback)(double progress),
+    void (*completionCallback)(int status)) {
+  mobot_t* flashable = getFlashableMobotStruct(comms);
+
+  if (!flashable) {
+    return -1;
+  }
+
+  THREAD_T thread;
+  /* The thread will delete this FlashFirmwareThreadArgs object for us. */
+  FlashFirmwareThreadArgs* args = new FlashFirmwareThreadArgs;
+  args->flashable = flashable;
+  args->hexfile = hexfile;
+  args->progressCallback = progressCallback;
+  args->completionCallback = completionCallback;
+  THREAD_CREATE(&thread, flashFirmwareThread, args);
+
+  return 0;
+}
+
