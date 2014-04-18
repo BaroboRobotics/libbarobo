@@ -635,6 +635,7 @@ class DLLIMPORT CMobot
         double vmax,
         double angle);
     virtual int blinkLED(double delay, int numBlinks);
+
 /* connect() Return Error Codes:
    -1 : General Error
    -2 : Lockfile Exists
@@ -1029,15 +1030,20 @@ DLLIMPORT int Mobot_dongleGetTTY(char* tty, size_t len);
  * USB). */
 DLLIMPORT int Mobot_canFlashFirmware (mobot_t* comms);
 
+typedef void (*Mobot_progressCallbackFunc)(double progress, void* user_data);
+typedef void (*Mobot_completionCallbackFunc)(int complete, void* user_data);
+
 /* Begin flashing the firmware of a robot connected by TTY. Parameters include
  * the hexfile filename (not the raw data), and two callbacks. Where progress
  * is measured from 0.0 to 1.0, the thread on which the flash operation runs
  * will call progressCallback every time there is a change in progress. Once
  * the operation is complete, completionCallback is called with the value of
- * 1 for success, 0 for failure. */
+ * 1 for success, 0 for failure. The user_data parameter gets passed to the
+ * user's callbacks. */
 DLLIMPORT int Mobot_flashFirmwareAsync (mobot_t* comms, const char* hexfile,
-    void (*progressCallback)(double progress),
-    void (*completionCallback)(int complete));
+    Mobot_progressCallbackFunc progressCallback,
+    Mobot_completionCallbackFunc completionCallback,
+    void* user_data);
 
 DLLIMPORT int Mobot_connectWithZigbeeAddress(mobot_t* comms, uint16_t addr);
 DLLIMPORT int Mobot_enableAccelEventCallback(mobot_t* comms, void* data,
