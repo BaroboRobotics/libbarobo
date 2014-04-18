@@ -121,20 +121,6 @@ void* callbackThread(void* arg);
 int Mobot_waitForReportedSerialID(mobot_t* comms, char* id);
 #endif /* Not _CH_ */
 
-#ifdef _WIN32
-#include "bdaddr.h"
-#if __cplusplus
-extern "C" {
-#endif
-int str2ba(const char *str, bdaddr_t *ba);
-void baswap(bdaddr_t *dst, const bdaddr_t *src);
-int str2ba(const char *str, bdaddr_t *ba);
-#if __cplusplus
-}
-#endif
-#endif
-
-
 int finishConnect (mobot_t* comms);
 int finishConnectWithoutCommsThread(mobot_t* comms);
 int getFormFactor(mobot_t* comms, int* form);
