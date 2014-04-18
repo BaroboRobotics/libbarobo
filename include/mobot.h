@@ -429,6 +429,7 @@ class CMobot
     CMobot();
     ~CMobot();
     int blinkLED(double delay, int numBlinks);
+    bool canFlashFirmware ();
 /* connect() Return Error Codes:
    -1 : General Error
    -2 : Lockfile Exists
@@ -635,6 +636,8 @@ class DLLIMPORT CMobot
         double vmax,
         double angle);
     virtual int blinkLED(double delay, int numBlinks);
+
+    virtual bool canFlashFirmware ();
 
 /* connect() Return Error Codes:
    -1 : General Error

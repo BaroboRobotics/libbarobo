@@ -222,6 +222,10 @@ int CMobot::transactMessage(int cmd, void* buf, int size)
   return MobotMsgTransaction(_comms, cmd, buf, size);
 }
 
+bool CMobot::canFlashFirmware () {
+  return Mobot_canFlashFirmware(_comms);
+}
+
 /* CMelody */
 CMelody::CMelody()
 {
@@ -249,4 +253,3 @@ void CMelody::addNote(const char* note, int divider)
 {
   Mobot_melodyAddNote(_head, note, divider);
 }
-
