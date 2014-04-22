@@ -10,7 +10,7 @@ if(WIN32)
     NO_DEFAULT_PATH)
 
   if(NOT WINSDK_UM_INCLUDE_DIR)
-    message(FATAL_ERROR "Unable to find Windows SDK user mode headers")
+    message(FATAL_ERROR "Unable to find Windows SDK user mode headers under ${WINSDK_INSTALL_DIR}")
   endif()
 
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -idirafter \"${WINSDK_UM_INCLUDE_DIR}\"")

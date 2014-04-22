@@ -400,7 +400,10 @@ static int dongleSetupSFP (MOBOTdongle *dongle) {
 
   sfpInit(dongle->sfpContext);
   
-  sfpSetWriteCallback(dongle->sfpContext, SFP_WRITE_MULTIPLE, sfp_write, dongle);
+  /* FIXME have to cast sfp_write to void* because libsfp needs to accept two
+   * different function prototypes--the fix should be a refactoring of libsfp */
+  sfpSetWriteCallback(dongle->sfpContext, SFP_WRITE_MULTIPLE,
+      reinterpret_cast<void*>(&sfp_write), dongle);
   /* We do not currently use the libsfp deliver callback in libbarobo, but
    * rather use sfpDeliverOctet's output parameters to get the complete
    * packets. */
@@ -592,6 +595,9 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
     }
   }
 
+  assert(strlen(ttyfilename) < sizeof(dongle->ttyfilename));
+  strcpy(dongle->ttyfilename, ttyfilename);
+
   return 0;
 }
 
@@ -772,6 +778,9 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
 
   //dongle->status = MOBOT_LINK_STATUS_UP;
 
+  assert(strlen(ttyfilename) < sizeof(dongle->ttyfilename));
+  strcpy(dongle->ttyfilename, ttyfilename);
+
   return 0;
 }
 
@@ -804,4 +813,17 @@ void dongleClose (MOBOTdongle *dongle) {
 #endif
 
   dongleFini(dongle);
+}
+
+int dongleGetTTYFilename (MOBOTdongle* dongle, char* buf, size_t len) {
+  if (!dongle) {
+    return -1;
+  }
+
+  if (strlen(dongle->ttyfilename) >= len) {
+    return -1;
+  }
+
+  strcpy(buf, dongle->ttyfilename);
+  return 0;
 }

@@ -19,11 +19,14 @@ include_directories(${PUBLIC_INCLUDE_DIR})
 # Setup
 
 add_subdirectory(../libsfp libsfp)
+add_subdirectory(../libstkcomms libstkcomms)
 
 add_subdirectory(demos EXCLUDE_FROM_ALL)
 add_subdirectory(BaroboConfigFile)
 
 include_directories(${LIBSFP_INCLUDE_DIRS})
+include_directories(${LIBSTKCOMMS_INCLUDE_DIRS})
+
 include_directories(${BAROBOCONFIGFILE_SOURCE_DIR})
 include_directories(${MXML_SOURCE_DIR})
 
@@ -41,23 +44,24 @@ endif()
 set(TARGET barobo)
 
 set(SOURCES
-  src/dongle.c
-  src/dongle_get_tty.c
+  src/dongle.cpp
+  src/dongle_get_tty.cpp
   src/eventqueue.cpp
+  src/flash.cpp
   src/mobot.cpp
   src/mobot++.cpp
   src/linkbot++.cpp
   src/linkboti++.cpp
   src/linkbotl++.cpp
-  src/mobot_get_functions.c
+  src/mobot_get_functions.cpp
   src/mobot_get_functions++.cpp
-  src/mobot_motion_functions.c
+  src/mobot_motion_functions.cpp
   src/mobot_motion_functions++.cpp
-  src/mobot_movement_functions.c
+  src/mobot_movement_functions.cpp
   src/mobot_movement_functions++.cpp
-  src/mobot_record_functions.c
+  src/mobot_record_functions.cpp
   src/mobot_record_functions++.cpp
-  src/mobot_set_functions.c
+  src/mobot_set_functions.cpp
   src/mobot_set_functions++.cpp
   src/mobotgroup++.cpp
   src/mobotigroup++.cpp
@@ -79,7 +83,7 @@ endif()
 option(BUILD_SHARED_LIBS "build shared libraries" ${DEF_BUILD_SHARED_LIBS})
 add_library(${TARGET} ${SOURCES} $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:mxmlObjects>)
 
-target_link_libraries(${TARGET} ${LIBSFP_LIBRARIES})
+target_link_libraries(${TARGET} ${LIBSFP_LIBRARIES} ${LIBSTKCOMMS_LIBRARIES})
 
 set_target_properties(${TARGET} PROPERTIES
   VERSION ${VERSION}
@@ -105,7 +109,7 @@ if(WIN32)
     NO_DEFAULT_PATH)
 
   if(NOT WINSDK_UM_INCLUDE_DIR)
-    message(FATAL_ERROR "Unable to find Windows SDK user mode headers")
+    message(FATAL_ERROR "Unable to find Windows SDK user mode headers under ${WINSDK_INSTALL_DIR}")
   endif()
 
   add_definitions(-D_WIN32_WINNT=0x502 -DWIN32_LEAN_AND_MEAN)
@@ -124,7 +128,7 @@ if(WIN32)
       "-idirafter \"${WINSDK_UM_INCLUDE_DIR}\"")
   endif()
 
-  target_link_libraries(${TARGET} Ws2_32 setupapi)
+  target_link_libraries(${TARGET} ws2_32 setupapi)
   if(CMAKE_GENERATOR MATCHES "MSYS")
     target_link_libraries(${TARGET} pthread)
   endif()

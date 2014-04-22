@@ -392,4 +392,3 @@ int CLinkbot::setMovementStateTimeNB( robotJointState_t dir1,
 {
   return Mobot_setMovementStateTimeNB(_comms, dir1, dir2, dir3, ROBOT_NEUTRAL, seconds);
 }
-
