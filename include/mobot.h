@@ -202,6 +202,10 @@ typedef enum mobotFormFactor_e
 #define PINMODE_OUTPUT  0x01
 #define PINMODE_INPUTPULLUP  0x02
 
+//new
+#define DIGITAL_LOW	  0x00
+#define DIGITAL_HIGH  0x01
+
 #define SENDBUF_SIZE 512
 
 #ifndef BR_COMMS_S
