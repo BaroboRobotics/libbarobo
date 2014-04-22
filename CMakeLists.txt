@@ -44,8 +44,8 @@ endif()
 set(TARGET barobo)
 
 set(SOURCES
-  src/dongle.c
-  src/dongle_get_tty.c
+  src/dongle.cpp
+  src/dongle_get_tty.cpp
   src/eventqueue.cpp
   src/flash.cpp
   src/mobot.cpp
@@ -53,15 +53,15 @@ set(SOURCES
   src/linkbot++.cpp
   src/linkboti++.cpp
   src/linkbotl++.cpp
-  src/mobot_get_functions.c
+  src/mobot_get_functions.cpp
   src/mobot_get_functions++.cpp
-  src/mobot_motion_functions.c
+  src/mobot_motion_functions.cpp
   src/mobot_motion_functions++.cpp
-  src/mobot_movement_functions.c
+  src/mobot_movement_functions.cpp
   src/mobot_movement_functions++.cpp
-  src/mobot_record_functions.c
+  src/mobot_record_functions.cpp
   src/mobot_record_functions++.cpp
-  src/mobot_set_functions.c
+  src/mobot_set_functions.cpp
   src/mobot_set_functions++.cpp
   src/mobotgroup++.cpp
   src/mobotigroup++.cpp

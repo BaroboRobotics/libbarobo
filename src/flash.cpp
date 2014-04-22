@@ -48,7 +48,7 @@ int Mobot_canFlashFirmware (mobot_t* comms) {
 
 struct FlashFirmwareThreadArgs {
   mobot_t* flashable;
-  const char* hexfile;
+  std::string hexfile;
   stkComms_progressCallbackFunc progressCallback;
   stkComms_completionCallbackFunc completionCallback;
   void* user_data;
@@ -60,7 +60,7 @@ void* flashFirmwareThread (void* a) {
   assert(args);
 
   mobot_t* flashable = args->flashable;
-  const char* hexfile = args->hexfile;
+  std::string hexfile = args->hexfile;
   stkComms_progressCallbackFunc progressCallback = args->progressCallback;
   stkComms_completionCallbackFunc completionCallback = args->completionCallback;
   void* user_data = args->user_data;
@@ -69,7 +69,6 @@ void* flashFirmwareThread (void* a) {
 
   assert(flashable);
   assert(flashable->dongle);
-  assert(hexfile);
 
   char tty[MOBOT_DONGLE_TTYFILENAME_MAX_PATH];
   dongleGetTTYFilename(flashable->dongle, tty, sizeof(tty));

@@ -20,6 +20,8 @@
 #ifndef _MOBOTCOMMS_H_
 #define _MOBOTCOMMS_H_
 
+#include <string>
+
 #ifdef SWIG
 #define DLLIMPORT
 %module mobot
@@ -206,6 +208,9 @@ typedef enum mobotFormFactor_e
 
 #ifndef BR_COMMS_S
 #define BR_COMMS_S
+
+typedef void (*Mobot_progressCallbackFunc)(double progress, void* user_data);
+typedef void (*Mobot_completionCallbackFunc)(int complete, void* user_data);
 
 struct mobot_s;
 typedef struct mobotInfo_s
@@ -430,6 +435,10 @@ class CMobot
     ~CMobot();
     int blinkLED(double delay, int numBlinks);
     bool canFlashFirmware ();
+    int flashFirmwareAsync (std::string hexfile,
+                            Mobot_progressCallbackFunc progressCallback,
+                            Mobot_completionCallbackFunc completionCallback,
+                            void* user_data);
 /* connect() Return Error Codes:
    -1 : General Error
    -2 : Lockfile Exists
@@ -638,6 +647,10 @@ class DLLIMPORT CMobot
     virtual int blinkLED(double delay, int numBlinks);
 
     virtual bool canFlashFirmware ();
+    virtual int flashFirmwareAsync (std::string hexfile,
+                                    Mobot_progressCallbackFunc progressCallback,
+                                    Mobot_completionCallbackFunc completionCallback,
+                                    void* user_data);
 
 /* connect() Return Error Codes:
    -1 : General Error
@@ -1032,9 +1045,6 @@ DLLIMPORT int Mobot_dongleGetTTY(char* tty, size_t len);
  * Under the hood, this checks to see if the robot is connected via TTY (i.e.,
  * USB). */
 DLLIMPORT int Mobot_canFlashFirmware (mobot_t* comms);
-
-typedef void (*Mobot_progressCallbackFunc)(double progress, void* user_data);
-typedef void (*Mobot_completionCallbackFunc)(int complete, void* user_data);
 
 /* Begin flashing the firmware of a robot connected by TTY. Parameters include
  * the hexfile filename (not the raw data), and two callbacks. Where progress

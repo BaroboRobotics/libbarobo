@@ -21,6 +21,8 @@
 #include "mobot_internal.h"
 #include "linkbot.h"
 
+#include <string>
+
 CMobot::CMobot()
 {
   _comms = (mobot_t*)malloc(sizeof(mobot_t));
@@ -224,6 +226,13 @@ int CMobot::transactMessage(int cmd, void* buf, int size)
 
 bool CMobot::canFlashFirmware () {
   return Mobot_canFlashFirmware(_comms);
+}
+
+int CMobot::flashFirmwareAsync (std::string hexfile,
+    Mobot_progressCallbackFunc progressCallback,
+    Mobot_completionCallbackFunc completionCallback,
+    void* user_data) {
+  return Mobot_flashFirmwareAsync(_comms, hexfile.c_str(), progressCallback, completionCallback, user_data);
 }
 
 /* CMelody */

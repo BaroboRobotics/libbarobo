@@ -400,7 +400,10 @@ static int dongleSetupSFP (MOBOTdongle *dongle) {
 
   sfpInit(dongle->sfpContext);
   
-  sfpSetWriteCallback(dongle->sfpContext, SFP_WRITE_MULTIPLE, sfp_write, dongle);
+  /* FIXME have to cast sfp_write to void* because libsfp needs to accept two
+   * different function prototypes--the fix should be a refactoring of libsfp */
+  sfpSetWriteCallback(dongle->sfpContext, SFP_WRITE_MULTIPLE,
+      reinterpret_cast<void*>(&sfp_write), dongle);
   /* We do not currently use the libsfp deliver callback in libbarobo, but
    * rather use sfpDeliverOctet's output parameters to get the complete
    * packets. */
