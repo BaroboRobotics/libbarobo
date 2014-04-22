@@ -51,7 +51,7 @@ struct FlashFirmwareThreadArgs {
   std::string hexfile;
   stkComms_progressCallbackFunc progressCallback;
   stkComms_completionCallbackFunc completionCallback;
-  void* user_data;
+  void* userData;
 };
 
 void* flashFirmwareThread (void* a) {
@@ -63,7 +63,7 @@ void* flashFirmwareThread (void* a) {
   std::string hexfile = args->hexfile;
   stkComms_progressCallbackFunc progressCallback = args->progressCallback;
   stkComms_completionCallbackFunc completionCallback = args->completionCallback;
-  void* user_data = args->user_data;
+  void* userData = args->userData;
 
   delete args;
 
@@ -90,7 +90,7 @@ void* flashFirmwareThread (void* a) {
     fprintf(stderr, "(barobo) ERROR: in Mobot_flashFirmware, unable to "
         "connect to %s with the STK protocol.\n", tty);
     if (completionCallback) {
-      completionCallback(0, user_data);
+      completionCallback(0, userData);
     }
     return 0;
   }
@@ -98,7 +98,7 @@ void* flashFirmwareThread (void* a) {
   /* The CStkComms::DISCONNECT_AND_DELETE tells libstkcomms to clean up after
    * itself--we no longer own the object. */
   stk->programAllAsync(hexfile, 0, progressCallback, completionCallback,
-      user_data, CStkComms::DISCONNECT_AND_DELETE);
+      userData, CStkComms::DISCONNECT_AND_DELETE);
 
   return 0;
 }
@@ -106,7 +106,7 @@ void* flashFirmwareThread (void* a) {
 int Mobot_flashFirmwareAsync (mobot_t* comms, const char* hexfile,
     Mobot_progressCallbackFunc progressCallback,
     Mobot_completionCallbackFunc completionCallback,
-    void* user_data) {
+    void* userData) {
   mobot_t* flashable = getFlashableMobotStruct(comms);
 
   if (!flashable) {
@@ -120,7 +120,7 @@ int Mobot_flashFirmwareAsync (mobot_t* comms, const char* hexfile,
   args->hexfile = hexfile;
   args->progressCallback = progressCallback;
   args->completionCallback = completionCallback;
-  args->user_data = user_data;
+  args->userData = userData;
   THREAD_CREATE(&thread, flashFirmwareThread, args);
 
   return 0;

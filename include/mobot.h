@@ -1056,7 +1056,7 @@ DLLIMPORT int Mobot_canFlashFirmware (mobot_t* comms);
 DLLIMPORT int Mobot_flashFirmwareAsync (mobot_t* comms, const char* hexfile,
     Mobot_progressCallbackFunc progressCallback,
     Mobot_completionCallbackFunc completionCallback,
-    void* user_data);
+    void* userData);
 
 DLLIMPORT int Mobot_connectWithZigbeeAddress(mobot_t* comms, uint16_t addr);
 DLLIMPORT int Mobot_enableAccelEventCallback(mobot_t* comms, void* data,
