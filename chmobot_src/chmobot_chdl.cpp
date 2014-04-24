@@ -132,6 +132,22 @@ EXPORTCH int delaySeconds_chdl(void *varg) {
     return retval;
 }
 
+//new
+EXPORTCH int delay_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CMobot *mobot;
+    unsigned int milliseconds;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CMobot *);
+    milliseconds = Ch_VaArg(interp, ap, unsigned int);
+    retval = mobot->delay(milliseconds);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int disconnect_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

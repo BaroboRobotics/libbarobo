@@ -449,6 +449,8 @@ class CMobot
     int connectWithTTY(const char ttyfilename[]);
 #endif
     int delaySeconds(int seconds);
+	//new
+	int delay(unsigned int milliseconds);
     int disconnect();
     int driveJointToDirect(robotJointId_t id, double angle);
     int driveJointTo(robotJointId_t id, double angle);
@@ -653,6 +655,7 @@ class DLLIMPORT CMobot
     virtual int connectWithIPAddress(const char address[], const char port[] = "5768");
     virtual int connectWithTTY(const char ttyfilename[]);
     virtual int delaySeconds(int seconds);
+	virtual int delay(unsigned int milliseconds);
     virtual int disconnect();
     virtual int driveJointToDirect(robotJointId_t id, double angle);
     virtual int driveJointTo(robotJointId_t id, double angle);

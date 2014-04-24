@@ -146,6 +146,17 @@ int CMobot::delaySeconds(int seconds)
   return 0;
 }
 
+//new
+int CMobot::delay(unsigned int milliseconds)
+{
+#ifdef _WIN32
+  Sleep(milliseconds);
+#else
+  usleep(milliseconds*1000);
+#endif
+  return 0;
+}
+
 int CMobot::enableButtonCallback(void* userdata, void (*buttonCallback)(void* data, int button, int buttonDown))
 {
   return Mobot_enableButtonCallback(

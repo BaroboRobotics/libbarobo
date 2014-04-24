@@ -170,6 +170,8 @@ class CLinkbotI
     int driveToDirectNB(double angle1, double angle2, double angle3);
     int driveToNB(double angle1, double angle2, double angle3);
     int delaySeconds(int seconds);
+	//new
+	int delay(unsigned int milliseconds);
     int enableButtonCallback(void* userdata, void (*buttonCallback)(void* userdata, int button, int buttonDown));
     int disableButtonCallback();
     int enableRecordDataShift();
@@ -388,6 +390,8 @@ class CLinkbotL
 #endif
     int connectWithSerialID(const char serialID[]);
     int delaySeconds(int seconds);
+	//new
+	int delay(unsigned int milliseconds);
     int disconnect();
     int driveJointToDirect(robotJointId_t id, double angle);
     int driveJointTo(robotJointId_t id, double angle);

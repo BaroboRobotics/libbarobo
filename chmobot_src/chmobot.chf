@@ -144,6 +144,21 @@ int CMobot::delaySeconds(int seconds) {
     dlrunfun(fptr, &retval, NULL, this, seconds);
     return retval;
 }
+
+//new
+int CMobot::delay(unsigned int milliseconds) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "delay_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, milliseconds);
+    return retval;
+}
+
 int CMobot::disconnect() {
     void *fptr;
     int retval;

@@ -225,6 +225,24 @@ int CLinkbotI::delaySeconds(int seconds) {
     dlrunfun(fptr, &retval, NULL, this, seconds);
     return retval;
 }
+
+//new
+
+int CLinkbotI::delay(unsigned int milliseconds) {
+    void *fptr;
+    int retval;
+    va_list ap;
+    char* port = NULL;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "delay_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, milliseconds);
+    return retval;
+}
+
 int CLinkbotI::disconnect() {
     void *fptr;
     int retval;
