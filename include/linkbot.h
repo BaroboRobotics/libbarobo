@@ -42,11 +42,17 @@ class DLLIMPORT CLinkbot : public CMobot
     virtual int disableAccelEventCallback();
     virtual int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     virtual int getBatteryVoltage(double &voltage);
-    virtual int LinkPodAnalogRead(int adc, int & value);
-    virtual int LinkPodAnalogReadVolts(int adc, double & volts);
-    virtual int LinkPodDigitalRead(int pin, int & value);
+    //virtual int LinkPodAnalogRead(int adc, int & value); prototype to restore 
+	virtual int LinkPodAnalogRead(int pin);
+    //virtual int LinkPodAnalogReadVolts(int adc, double & volts);
+	virtual double LinkPodAnalogReadVolts(int pin);
+    //virtual int LinkPodDigitalRead(int pin, int & value);
+	virtual int LinkPodDigitalRead(int pin);
     virtual int getColorRGB(int &r, int &g, int &b);
-	virtual int getColorName(char color[]);		
+	virtual int getColorName(char color[]);	
+	//new
+    virtual int getLEDColorRGB(int &r, int &g, int &b);
+	virtual int getLEDColorName(char color[]);
     virtual const char* getID();
 #ifdef SWIG
     %apply double& OUTPUT {double &angle1, double &angle2, double &angle3};
@@ -98,7 +104,11 @@ class DLLIMPORT CLinkbot : public CMobot
     virtual int setBuzzerFrequencyOn(int frequency);
     virtual int setBuzzerFrequencyOff();
     virtual int setColorRGB(int r, int g, int b);
-	  virtual int setColor(char * color);		
+	virtual int setColor(char * color);
+	//new
+    virtual int setLEDColorRGB(int r, int g, int b);
+	virtual int setLEDColor(char * color);
+
     virtual int setJointSpeeds(double speed1, double speed2, double speed3);
     virtual int setJointSpeedRatios(double ratios1, double ratios2, double ratios3);
     virtual int setMovementStateNB( robotJointState_t dir1,
@@ -168,12 +178,17 @@ class CLinkbotI
     int isMoving();
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int getBatteryVoltage(double &voltage);
-    int LinkPodAnalogRead(int adc, int & value);
-    int LinkPodAnalogReadVolts(int adc, double & volts);
-    int LinkPodDigitalRead(int pin, int & value);
+    int LinkPodAnalogRead(int pin); //new
+    //int LinkPodAnalogReadVolts(int adc, double & volts);
+	double LinkPodAnalogReadVolts(int pin);
+    int LinkPodDigitalRead(int pin);
     int getColorRGB(int &r, int &g, int &b);
 	int getColorName(char color[]);
-	int getColor(string_t & color);		
+	int getColor(string_t & color);
+	int getLEDColorRGB(int &r, int &g, int &b);
+	int getLEDColorName(char color[]);
+	int getLEDColor(string_t & color);
+			
     int getDistance(double &distance, double radius);
     int getFormFactor(int &formFactor);
     static const char* getConfigFilePath();
@@ -265,7 +280,10 @@ class CLinkbotI
     int LinkPodDigitalWrite(int pin, int value);
     int LinkPodPinMode(int pin, int mode);
     int setColorRGB(int r, int g, int b);
-	int setColor(char * color);		
+	int setColor(char * color);	
+	int setLEDColorRGB(int r, int g, int b);
+	int setLEDColor(char * color);
+
     int setExitState(robotJointState_t exitState);
     int setJointMovementStateNB(robotJointId_t id, robotJointState_t dir);
     int setJointMovementStateTime(robotJointId_t id, robotJointState_t dir, double seconds);
@@ -387,9 +405,10 @@ class CLinkbotL
     int isMoving();
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int getBatteryVoltage(double &voltage);
-    int LinkPodAnalogRead(int adc, int & value);
-    int LinkPodAnalogReadVolts(int adc, double & volts);
-    int LinkPodDigitalRead(int pin, int & value);
+    int LinkPodAnalogRead(int pin); //new
+    //int LinkPodAnalogReadVolts(int adc, double & volts);
+	double LinkPodAnalogReadVolts(int pin);
+    int LinkPodDigitalRead(int pin); //new
     int getFormFactor(int &formFactor);
     static const char* getConfigFilePath();
     int getID();
@@ -417,8 +436,12 @@ class CLinkbotL
     int getVersion();
     int getColorRGB(int &r, int &g, int &b);
 	int getColorName(char color[]);
+	//new
+	int getLEDColorRGB(int &r, int &g, int &b);
+	int getLEDColorName(char color[]);
 #ifdef _CH_
-    int getColor(string_t & color);		
+    int getColor(string_t & color);
+    int getLEDColor(string_t & color);
 #endif
     int move(double angle1, double angle2, double angle3);
     int moveNB(double angle1, double angle2, double angle3);
@@ -517,7 +540,11 @@ class CLinkbotL
     int setBuzzerFrequencyOn(int frequency);
     int setBuzzerFrequencyOff();
     int setColorRGB(int r, int g, int b);
-	int setColor(char * color);		
+	int setColor(char * color);	
+    //new
+	int setLEDColorRGB(int r, int g, int b);
+	int setLEDColor(char * color);
+
     int setExitState(robotJointState_t exitState);
     int setJointMovementStateNB(robotJointId_t id, robotJointState_t dir);
     int setJointMovementStateTime(robotJointId_t id, robotJointState_t dir, double seconds);

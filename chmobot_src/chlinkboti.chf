@@ -357,7 +357,7 @@ int CLinkbotI::getBatteryVoltage(double & voltage) {
     dlrunfun(fptr, &retval, NULL, this, &voltage);
     return retval;
 }
-int CLinkbotI::LinkPodAnalogRead(int adc, int & value) {
+int CLinkbotI::LinkPodAnalogRead(int pin) {
     void *fptr;
     int retval;
 
@@ -366,10 +366,10 @@ int CLinkbotI::LinkPodAnalogRead(int adc, int & value) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, NULL, this, adc, &value);
+    dlrunfun(fptr, &retval, NULL, this, pin);
     return retval;
 }
-int CLinkbotI::LinkPodAnalogReadVolts(int adc, double & volts) {
+/*int CLinkbotI::LinkPodAnalogReadVolts(int adc, double & volts) {
     void *fptr;
     int retval;
 
@@ -380,8 +380,21 @@ int CLinkbotI::LinkPodAnalogReadVolts(int adc, double & volts) {
     }
     dlrunfun(fptr, &retval, NULL, this, adc, &volts);
     return retval;
+}*/
+
+double CLinkbotI::LinkPodAnalogReadVolts(int pin) {
+    void *fptr;
+    double retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_LinkPodAnalogReadVolts_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, pin);
+    return retval;
 }
-int CLinkbotI::LinkPodDigitalRead(int pin, int & value) {
+/*int CLinkbotI::LinkPodDigitalRead(int pin, int & value) {
     void *fptr;
     int retval;
 
@@ -391,6 +404,19 @@ int CLinkbotI::LinkPodDigitalRead(int pin, int & value) {
         return -1;
     }
     dlrunfun(fptr, &retval, NULL, this, pin, &value);
+    return retval;
+}*/
+
+int CLinkbotI::LinkPodDigitalRead(int pin) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_LinkPodDigitalRead_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, pin);
     return retval;
 }
 int CLinkbotI::getColorRGB(int & r, int & g, int & b) {
@@ -425,6 +451,40 @@ int CLinkbotI::getColorName(char color[]) {
 	dlrunfun(fptr, &retval, NULL, this, color); 
 	return retval; 
 }
+//new
+int CLinkbotI::getLEDColorRGB(int & r, int & g, int & b) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_getLEDColorRGB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, &r, &g, &b);
+    return retval;
+}
+int CLinkbotI::getLEDColor(string_t & color) { 
+	int retval; 
+	char color1[25];
+	
+	retval = getLEDColorName(color1);
+	color = color1; 
+	return retval; 
+} 
+int CLinkbotI::getLEDColorName(char color[]) { 
+	void *fptr; 
+	int retval; 
+
+	fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_getLEDColorName_chdl"); 
+	if(fptr == NULL) { 
+		fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror()); 
+		return -1; 
+	}    
+	dlrunfun(fptr, &retval, NULL, this, color); 
+	return retval; 
+}
+//end new
 int CLinkbotI::getDistance(double &distance, double radius) {
     void *fptr;
     int retval;
@@ -1488,6 +1548,35 @@ int CLinkbotI::setColor(char color[]) {
 	dlrunfun(fptr, &retval, setColor, this, color); 
 	return retval; 
 }
+
+//new
+
+int CLinkbotI::setLEDColorRGB(int r, int g, int b) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_setLEDColorRGB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setColorRGB, this, r, g, b);
+    return retval;
+}
+int CLinkbotI::setLEDColor(char color[]) { 
+	void *fptr; 
+	int retval; 
+
+	fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_setLEDColor_chdl"); 
+	if(fptr == NULL) { 
+		fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror()); 
+		return -1; 
+	}    
+	dlrunfun(fptr, &retval, setColor, this, color); 
+	return retval; 
+}
+
+//end new
 int CLinkbotI::setExitState(int exitState) {
     void *fptr;
     int retval;
