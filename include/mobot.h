@@ -20,8 +20,6 @@
 #ifndef _MOBOTCOMMS_H_
 #define _MOBOTCOMMS_H_
 
-#include <string>
-
 #ifdef SWIG
 #define DLLIMPORT
 %module mobot
@@ -57,7 +55,40 @@
 #include <array.h>
 #endif
 
+/* 23 April 2014, hlh: Including MinGW C++ headers before stdio.h causes a
+ * crash in dongle_get_tty_win32.cpp upon the first call to
+ * SetupDiEnumDeviceInfo. Specifically, MinGW C++ headers include:
+ *   bits/c++config.h, which includes
+ *   bits/os_defines.h, which defines
+ *   ___USE_MINGW_ANSI_STDIO 1
+ *
+ * [This next paragraph is partly conjecture.]
+ *
+ * If __USE_MINGW_ANSI_STDIO is defined before stdio.h is included, then MinGW
+ * uses C99-conformant Standard I/O from libmingwex.a (see [1]). If not, then
+ * it uses Microsoft's non-C99-conformant MSVCRT runtime. Somehow, delay-loaded
+ * DLLs (i.e., setupapi.dll) get mixed up in this. If __USE_MINGW_ANSI_STDIO
+ * is defined, but a Standard I/O call is made inside Mobot_dongleGetTTY
+ * before the call to SetupDiEnumDeviceInfo, then Windows loads its libraries
+ * in the correct order and everything is fine.
+ *
+ * Solutions/Workarounds:
+ *   - Put a dummy printf in Mobot_dongleGetTTY.
+ *   - Ensure that no C++ headers are included before stdio.h.
+ *
+ * A couple other clues I picked up: when __USE_MINGW_ANSI_STDIO is 0 or
+ * undefined, setupapi.dll loads wintrust.dll, which has something to do with
+ * application privileges. When the symbol is 1, setupapi.dll does not load
+ * wintrust.dll, and the aforementioned crash occurs.
+ *
+ * [1] http://en.wikipedia.org/wiki/MinGW#Programming_language_support
+ */
+
 #include <stdio.h>
+
+#if __cplusplus
+#include <string>
+#endif
 
 #if defined (NONRELEASE) || defined (SWIG)
 #ifndef _CH_
