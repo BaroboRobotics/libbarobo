@@ -379,31 +379,33 @@ EXPORTCH int LinkbotI_LinkPodAnalogRead_chdl(void *varg) {
     ChVaList_t ap;
     class CLinkbotI *mobot;
     int pin;
-    int * value;
+    //int * value;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     pin = Ch_VaArg(interp, ap, int );
-    value = Ch_VaArg(interp, ap, int *);
-    retval = mobot->LinkPodAnalogRead(pin, *value);
+    //value = Ch_VaArg(interp, ap, int *);
+    //retval = mobot->LinkPodAnalogRead(pin, *value);
+	retval = mobot->LinkPodAnalogRead(pin);
     Ch_VaEnd(interp, ap);
     return retval;
 }
 
-EXPORTCH int LinkbotI_LinkPodAnalogReadVolts_chdl(void *varg) {
+EXPORTCH double LinkbotI_LinkPodAnalogReadVolts_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotI *mobot;
     int pin;
-    double * value;
-    int retval;
+    //double * value;
+    double retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     pin = Ch_VaArg(interp, ap, int );
-    value = Ch_VaArg(interp, ap, double *);
-    retval = mobot->LinkPodAnalogReadVolts(pin, *value);
+    //value = Ch_VaArg(interp, ap, double *);
+    //retval = mobot->LinkPodAnalogReadVolts(pin, *value);
+	retval = mobot->LinkPodAnalogReadVolts(pin);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -413,14 +415,15 @@ EXPORTCH int LinkbotI_LinkPodDigitalRead_chdl(void *varg) {
     ChVaList_t ap;
     class CLinkbotI *mobot;
     int pin;
-    int * value;
+    //int * value;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
     pin = Ch_VaArg(interp, ap, int );
-    value = Ch_VaArg(interp, ap, int *);
-    retval = mobot->LinkPodDigitalRead(pin, *value);
+    //value = Ch_VaArg(interp, ap, int *);
+    //retval = mobot->LinkPodDigitalRead(pin, *value);
+	retval = mobot->LinkPodDigitalRead(pin);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -456,6 +459,41 @@ EXPORTCH int LinkbotI_getColorName_chdl(void *varg) {
 	Ch_VaEnd(interp, ap); 
 	return retval; 
 }
+
+//new
+EXPORTCH int LinkbotI_getLEDColorRGB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotI *mobot;
+    int *r, *g, *b;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
+    r = Ch_VaArg(interp, ap, int *);
+    g = Ch_VaArg(interp, ap, int *);
+    b = Ch_VaArg(interp, ap, int *);
+    retval = mobot->getColorRGB(*r, *g, *b);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotI_getLEDColorName_chdl(void *varg) { 
+	ChInterp_t interp; 
+	ChVaList_t ap; 
+	class CLinkbot *mobot; 
+	char * color; 
+	int retval; 
+
+	Ch_VaStart(interp, ap, varg); 
+	mobot = Ch_VaArg(interp, ap, class CLinkbot *); 
+	color = Ch_VaArg(interp, ap, char *); 
+	retval = mobot->getColorName(color); 
+	Ch_VaEnd(interp, ap); 
+	return retval; 
+}
+
+//end new
 
 EXPORTCH int LinkbotI_getDistance_chdl(void *varg) {
     ChInterp_t interp;
@@ -1733,6 +1771,42 @@ EXPORTCH int LinkbotI_setColor_chdl(void *varg) {
 	return retval; 
 }
 
+
+//new
+
+EXPORTCH int LinkbotI_setLEDColorRGB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotI *mobot;
+    int r, g, b;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
+    r = Ch_VaArg(interp, ap, int);
+    g = Ch_VaArg(interp, ap, int);
+    b = Ch_VaArg(interp, ap, int);
+    retval = mobot->setColorRGB(r, g, b);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotI_setLEDColor_chdl(void *varg) { 
+	ChInterp_t interp; 
+	ChVaList_t ap; 
+	class CLinkbotI *mobot; 
+	char *color; 
+	int retval; 
+
+	Ch_VaStart(interp, ap, varg); 
+	mobot = Ch_VaArg(interp, ap, class CLinkbotI *); 
+	color = Ch_VaArg(interp, ap, char *);  
+	retval = mobot->setColor(color); 
+	Ch_VaEnd(interp, ap); 
+	return retval; 
+}
+
+//end new
 EXPORTCH int LinkbotI_setExitState_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

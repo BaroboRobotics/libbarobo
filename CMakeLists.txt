@@ -68,7 +68,15 @@ if(UNIX)
   list(APPEND SOURCES src/popen3.c)
 endif()
 
-option(BUILD_SHARED_LIBS "build shared libraries" ON)
+option(BAROBO_BUILD_CHMOBOT "build libbarobo for linking with Ch" OFF)
+
+if(BAROBO_BUILD_CHMOBOT)
+  set(DEF_BUILD_SHARED_LIBS OFF)
+else()
+  set(DEF_BUILD_SHARED_LIBS ON)
+endif()
+
+option(BUILD_SHARED_LIBS "build shared libraries" ${DEF_BUILD_SHARED_LIBS})
 add_library(${TARGET} ${SOURCES} $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:mxmlObjects>)
 
 target_link_libraries(${TARGET} ${LIBSFP_LIBRARIES})
@@ -123,10 +131,12 @@ if(WIN32)
 else()
   # Non-Win32
 
-  if(DEFINED ENV{CHHOME})
+  if(BAROBO_BUILD_CHMOBOT)
+    if(NOT DEFINED ENV{CHHOME})
+      message(FATAL_ERROR "BAROBO_BUILD_CHMOBOT set, but CHHOME envvar not found!")
+    endif()
+
     add_subdirectory(chmobot_src)
-  else()
-    message(WARNING "CHHOME environment variable not found -- CH support disabled")
   endif()
 
   if(CMAKE_HOST_APPLE)

@@ -160,7 +160,7 @@ int CMobot::disableButtonCallback()
 }
 
 int CMobot::enableJointEventCallback(void *userdata, 
-    void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, void *userdata))
+    void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, int mask, void *userdata))
 {
   return Mobot_enableJointEventCallback(_comms, userdata, jointCallback);
 }
@@ -206,9 +206,9 @@ int CMobot::setAccelEventThreshold(double threshold)
   return Mobot_setAccelEventThreshold(_comms, threshold);
 }
 
-int CMobot::setJointEventThreshold(double threshold)
+int CMobot::setJointEventThreshold(int joint, double threshold)
 {
-  return Mobot_setJointEventThreshold(_comms, DEG2RAD(threshold));
+  return Mobot_setJointEventThreshold(_comms, joint, DEG2RAD(threshold));
 }
 
 int CMobot::systemTime(double &time)

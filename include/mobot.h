@@ -202,6 +202,10 @@ typedef enum mobotFormFactor_e
 #define PINMODE_OUTPUT  0x01
 #define PINMODE_INPUTPULLUP  0x02
 
+//new
+#define DIGITAL_LOW	  0x00
+#define DIGITAL_HIGH  0x01
+
 #define SENDBUF_SIZE 512
 
 #ifndef BR_COMMS_S
@@ -276,7 +280,7 @@ typedef struct mobot_s
   MUTEX_T* callback_lock;
   int callbackEnabled;
   void (*buttonCallback)(void* mobot, int button, int buttonDown);
-  void (*jointCallback)(int, double, double, double, double, void*);
+  void (*jointCallback)(int, double, double, double, double, int, void*);
   void* jointCallbackData;
   void (*accelCallback)(int, double, double, double, void*);
   void* accelCallbackData;
@@ -661,7 +665,7 @@ class DLLIMPORT CMobot
     virtual int enableButtonCallback(void* userdata, void (*buttonCallback)(void* data, int button, int buttonDown));
     virtual int disableButtonCallback();
     virtual int enableJointEventCallback(void *userdata,
-        void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, void *userdata));
+        void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, int mask, void *userdata));
     virtual int disableJointEventCallback();
     virtual int enableEventCallback(void (*eventCallback)(const uint8_t *buf, int size, void* userdata),
         void* userdata);
@@ -762,7 +766,7 @@ class DLLIMPORT CMobot
     virtual int resetToZero();
     virtual int resetToZeroNB();
     virtual int setAccelEventThreshold(double threshold);
-    virtual int setJointEventThreshold(double threshold);
+    virtual int setJointEventThreshold(int joint, double threshold);
     virtual int setExitState(robotJointState_t exitState);
     virtual int setJointMovementStateNB(robotJointId_t id, robotJointState_t dir);
     virtual int setJointMovementStateTime(robotJointId_t id, robotJointState_t dir, double seconds);
@@ -1026,7 +1030,7 @@ DLLIMPORT int Mobot_connectWithZigbeeAddress(mobot_t* comms, uint16_t addr);
 DLLIMPORT int Mobot_enableAccelEventCallback(mobot_t* comms, void* data,
     void (*accelCallback)(int millis, double x, double y, double z, void* data));
 DLLIMPORT int Mobot_enableJointEventCallback(mobot_t* comms, void* data, 
-    void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, void* data));
+    void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, int mask, void* data));
 DLLIMPORT int Mobot_findMobot(mobot_t* parent, const char* childSerialID);
 DLLIMPORT mobotMelodyNote_t* Mobot_createMelody(int tempo);
 DLLIMPORT int Mobot_melodyAddNote(mobotMelodyNote_t* melody, const char* note, int divider);
@@ -1287,7 +1291,7 @@ DLLIMPORT int Mobot_reset(mobot_t* comms);
 DLLIMPORT int Mobot_resetToZero(mobot_t* comms);
 DLLIMPORT int Mobot_resetToZeroNB(mobot_t* comms);
 DLLIMPORT int Mobot_setAccelEventThreshold(mobot_t* comms, double threshold);
-DLLIMPORT int Mobot_setJointEventThreshold(mobot_t* comms, double threshold);
+DLLIMPORT int Mobot_setJointEventThreshold(mobot_t* comms, int joint, double threshold);
 DLLIMPORT int Mobot_setExitState(mobot_t* comms, robotJointState_t exitState);
 DLLIMPORT int Mobot_setFourierCoefficients(mobot_t* comms, robotJointId_t id, double* a, double* b);
 DLLIMPORT int Mobot_beginFourierControl(mobot_t* comms, uint8_t motorMask);

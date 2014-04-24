@@ -439,18 +439,6 @@ int Mobot_connectWithZigbeeAddress(mobot_t* comms, uint16_t addr)
   int rc;
   int form;
   if(g_dongleMobot == NULL) {
-    if(g_bcf == NULL) {
-      g_bcf = BCF_New();
-      if(BCF_Read(g_bcf, comms->configFilePath)) {
-        fprintf(stderr, 
-            "ERROR: Your Barobo configuration file does not exist.\n"
-            "Please create one by opening the MoBot remote control, clicking on\n"
-            "the 'Robot' menu entry, and selecting 'Configure Robot Bluetooth'.\n");
-        BCF_Destroy(g_bcf);
-        g_bcf = NULL;
-        return -1;
-      }
-    }
     Mobot_initDongle();
   }
   if(
@@ -786,19 +774,6 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
   }
   /* If a parent was specified, use it as a dongle */
   if(parent == NULL) {
-    if(g_bcf == NULL) {
-      g_bcf = BCF_New();
-      if(BCF_Read(g_bcf, child->configFilePath)) {
-        fprintf(stderr, 
-            "ERROR: Your Barobo configuration file does not exist.\n"
-            "Please create one by opening the MoBot remote control, clicking on\n"
-            "the 'Robot' menu entry, and selecting 'Configure Robot Bluetooth'.\n");
-        BCF_Destroy(g_bcf);
-        g_bcf = NULL;
-        free(_childSerialID);
-        return -1;
-      }
-    }
     Mobot_initDongle();
     parent = g_dongleMobot;
   } else {
@@ -1416,7 +1391,7 @@ int Mobot_enableButtonCallback(mobot_t* comms, void* data,
 }
 
 int Mobot_enableJointEventCallback(mobot_t* comms, void* userdata,
-    void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, void* data)
+    void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, int mask, void* data)
     )
 {
   int status;
@@ -1759,13 +1734,17 @@ int Mobot_setAccelEventThreshold(mobot_t* comms, double threshold)
   return 0;
 }
 
-int Mobot_setJointEventThreshold(mobot_t* comms, double threshold)
+int Mobot_setJointEventThreshold(mobot_t* comms, int joint, double threshold)
 {
   uint8_t buf[32];
   float thresh = threshold;
   int status;
-  memcpy(buf, &thresh, 4);
-  status = MobotMsgTransaction(comms, BTCMD(CMD_SET_JOINT_EVENT_THRESHOLD), buf, 4);
+  if( (joint < 1) || (joint > 4) ) {
+    return -1;
+  }
+  buf[0] = joint-1;
+  memcpy(&buf[1], &thresh, 4);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SET_JOINT_EVENT_THRESHOLD), buf, 5);
   if(status < 0) return status;
   /* Make sure the data size is correct */
   if(buf[1] != 3) {
@@ -2274,7 +2253,8 @@ void* commsEngine(void* arg)
     if (MOBOTCONNECT_TTY == comms->connectionMode) {
       uint8_t buf[256];
       long len = dongleRead(comms->dongle, buf, sizeof(buf));
-      if (-1 == len) {
+      /* Either error or EOF. */
+      if (len <= 0) {
         break;
       }
 #ifdef COMMSDEBUG
@@ -2334,6 +2314,7 @@ void* commsEngine(void* arg)
       }
     }
   }
+  Mobot_disconnect(comms);
   return NULL;
 }
 
@@ -2410,10 +2391,11 @@ void* eventThread(void* arg)
         if(comms->jointCallback) {
           comms->jointCallback(
               event->millis,
-              event->data.joint_data[0],
-              event->data.joint_data[1],
-              event->data.joint_data[2],
-              event->data.joint_data[3],
+              event->data.joint_data.angles[0],
+              event->data.joint_data.angles[1],
+              event->data.joint_data.angles[2],
+              event->data.joint_data.angles[3],
+              event->data.joint_data.mask,
               comms->jointCallbackData);
         }
         MUTEX_UNLOCK(comms->callback_lock);
@@ -2431,7 +2413,7 @@ void* eventThread(void* arg)
         MUTEX_UNLOCK(comms->callback_lock);
         break;
     }
-    //delete event;
+    delete event;
   }
   return NULL;
 }
@@ -2554,10 +2536,11 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
         break;
       case EVENT_JOINT_MOVED:
         memcpy(&event->millis, &buf[7], 4);
-        memcpy(&event->data.joint_data[0], &buf[11], 16);
+        memcpy(&event->data.joint_data.angles[0], &buf[11], 16);
         for(int i = 0; i < 4; i++) {
-          event->data.joint_data[i] = RAD2DEG(event->data.joint_data[i]);
+          event->data.joint_data.angles[i] = RAD2DEG(event->data.joint_data.angles[i]);
         }
+        event->data.joint_data.mask = buf[27];
         break;
       case EVENT_ACCEL_CHANGED:
         memcpy(&event->millis, &buf[7], 4);
