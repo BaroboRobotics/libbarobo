@@ -41,11 +41,6 @@ int CLinkbot::getBatteryVoltage(double &voltage)
   return Mobot_getBatteryVoltage(_comms, &voltage);
 }
 
-/*int CLinkbot::LinkPodAnalogRead(int adc, int &value)
-{
-  return Mobot_LinkPodAnalogRead(_comms, adc, &value);
-}*/
-
 int CLinkbot::LinkPodAnalogRead(int pin)
 {
     int value;
@@ -53,22 +48,12 @@ int CLinkbot::LinkPodAnalogRead(int pin)
 	return value;
 }
 
-/*int CLinkbot::LinkPodAnalogReadVolts(int adc, double & volts)
-{
-  return Mobot_LinkPodAnalogReadVolts(_comms, adc, &volts);
-}*/
-
 double CLinkbot::LinkPodAnalogReadVolts(int pin)
 {
     double volts;
 	Mobot_LinkPodAnalogReadVolts(_comms, pin, &volts);
 	return volts;
 }
-
-/*int CLinkbot::LinkPodDigitalRead(int pin, int & value)
-{
-  return Mobot_LinkPodDigitalRead(_comms, pin, &value);
-}*/
 
 int CLinkbot::LinkPodDigitalRead(int pin)
 {

@@ -3,12 +3,13 @@
 
 #ifdef _WIN32
 #include "win32_error.h"
+#else
+#include <stdint.h>
+#include <stdbool.h>
 #endif
 
-//#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-//#include <stdbool.h>
 #include <string.h>
 #include <errno.h>
 
