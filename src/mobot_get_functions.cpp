@@ -72,14 +72,15 @@
 int Mobot_LinkPodAnalogRead(mobot_t* comms, int adc, int* value)
 {
   uint8_t buf[32];
-  uint16_t incoming;
+  uint8_t incoming[2];
   int rc;
   buf[0] = MSG_REGACCESS;
   buf[1] = TWIMSG_ANALOGREADPIN;
   buf[2] = adc;
-  rc = Mobot_twiSendRecv(comms, 0x02, buf, 3, &incoming, 2);
+  rc = Mobot_twiSendRecv(comms, 0x02, buf, 3, &incoming[0], 2);
   if(rc) return rc;
-  *value = incoming; 
+  *value = incoming[0]<<8; 
+  *value |= incoming[1];
   return 0;
 }
 
