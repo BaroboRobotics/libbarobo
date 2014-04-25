@@ -2734,3 +2734,178 @@ int CLinkbotIGroup::turnRightNB(double angle, double radius, double tracklength)
     dlrunfun(fptr, &retval, turnRightNB, this, angle, radius, tracklength);
     return retval;
 }
+
+/*Functions for compatibilty with RoboSim*/
+int CLinkbotI::getxy(double & x, double & y) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_getxy_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, &x, &y);
+    return retval;
+}
+
+int CLinkbotI::line(double x1, double y1, double z1, double x2, double y2, double z2, 
+		     int linewidth, char color[]) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_line_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, x1, y1, z1, x2, y2, z2, linewidth, color);
+    return retval;
+}
+
+/*int CLinkbotI::movexy(double x, double y, double radius, double trackwidth) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_movexy_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, x, y, radius, trackwidth);
+    return retval;
+}*/
+
+int CLinkbotI::movexyExpr(double x0, double xf, int n, char expr[], double radius, double trackwidth) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_movexyExpr_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, x0, xf, n, expr, radius, trackwidth);
+    return retval;
+}
+
+int CLinkbotI::movexyFunc(double x0, double xf, int n, double(*func)(double x), double radius, double trackwidth) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_movexyFunc_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, x0, xf, n, func, radius, trackwidth);
+    return retval;
+}
+
+/*int CLinkbotI::movexyNB(double x, double y, double radius, double trackwidth) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_movexyNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, x, y, radius, trackwidth);
+    return retval;
+}*/
+
+int CLinkbotI::movexyWait(void) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_movexyWait_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this);
+    return retval;
+}
+
+int CLinkbotI::point(double x, double y, double z, int linewidth, char color[]) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_point_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, x, y, z, linewidth, color);
+    return retval;
+}
+
+int CLinkbotI::text(double x, double y, double z, char text[]) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_text_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, x, y, z, text);
+    return retval;
+}
+
+int CLinkbotI::traceOn(void) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_traceOn_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this);
+    return retval;
+}
+
+int CLinkbotI::traceOff(void) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_traceOff_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this);
+    return retval;
+}
+
+int CLinkbotI::recordxyBegin(double x, double y, double timeInterval) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_recordxyBegin_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, x, y, timeInterval);
+    return retval;
+}
+
+int CLinkbotI::recordxyEnd(int &numpoints) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_recordxyEnd_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, &numpoints);
+    return retval;
+}
+
+
+
+

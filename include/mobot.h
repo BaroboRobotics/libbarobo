@@ -618,6 +618,7 @@ class CMobot
     int motionUnstandNB();
     int motionWait();
     int systemTime(double &time);
+
   public:
     static void *g_chmobot_dlhandle;
     static int g_chmobot_dlcount;

@@ -2750,3 +2750,251 @@ EXPORTCH int CMGL_stopOneJoint_chdl(void *varg) {
     return retval;
 }
 
+/*Functions for compatibility with RoboSim*/
+EXPORTCH int LinkbotL_getxy_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    double *x, *y;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    x = Ch_VaArg(interp, ap, double *);
+	y = Ch_VaArg(interp, ap, double *);
+    retval = mobot->getxy(*x, *y);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_line_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    double x1, y1, z1;
+	double x2, y2, z2;
+	int linewidth;
+	char *color;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    x1 = Ch_VaArg(interp, ap, double);
+	y1 = Ch_VaArg(interp, ap, double);
+	z1 = Ch_VaArg(interp, ap, double);
+	x2 = Ch_VaArg(interp, ap, double);
+	y2 = Ch_VaArg(interp, ap, double);
+	z2 = Ch_VaArg(interp, ap, double);
+	linewidth = Ch_VaArg(interp, ap, int);
+	color = Ch_VaArg(interp, ap, char *);
+    retval = mobot->line(x1,y1,z1,x2,y2,z2,linewidth,color);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_movexy_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    double x, y;
+	double radius, trackwidth;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    x = Ch_VaArg(interp, ap, double);
+	y = Ch_VaArg(interp, ap, double);
+	radius = Ch_VaArg(interp, ap, double);
+	trackwidth = Ch_VaArg(interp, ap, double);
+    retval = mobot->movexy(x, y, radius, trackwidth);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_movexyExpr_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    double x0, xf;
+	double radius, trackwidth;
+	int n;
+	char *expr;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    x0 = Ch_VaArg(interp, ap, double);
+	xf = Ch_VaArg(interp, ap, double);
+	n = Ch_VaArg(interp, ap, int);
+	expr = Ch_VaArg(interp, ap, char *);
+	radius = Ch_VaArg(interp, ap, double);
+	trackwidth = Ch_VaArg(interp, ap, double);
+    retval = mobot->movexyExpr(x0, xf, n, expr, radius, trackwidth);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+typedef double (*ImovexyFuncHandle)(double);
+static ChInterp_t interpI;
+static double ImovexyFunc_chdl_funarg(double x);
+static void *ImovexyFunc_chdl_funptr;
+EXPORTCH int CLinkbotL_movexyFunc_chdl(void *varg) {
+    ChVaList_t ap;
+    class CLinkbotL *robot;
+    double x0;
+    double xf;
+    int n;
+    ImovexyFuncHandle handle_ch, handle_c = NULL;
+    double radius;
+    double trackwidth;
+    int retval;
+
+    Ch_VaStart(interpI, ap, varg);
+    robot = Ch_VaArg(interpI, ap, class CLinkbotL *);
+    x0 = Ch_VaArg(interpI, ap, double);
+    xf = Ch_VaArg(interpI, ap, double);
+    n = Ch_VaArg(interpI, ap, int);
+    handle_ch = Ch_VaArg(interpI, ap, ImovexyFuncHandle);
+    ImovexyFunc_chdl_funptr = (void *)handle_ch;
+    if (handle_ch != NULL) {
+        handle_c = (ImovexyFuncHandle)ImovexyFunc_chdl_funarg;
+    }    
+    radius = Ch_VaArg(interpI, ap, double);
+    trackwidth = Ch_VaArg(interpI, ap, double);
+    retval = robot->movexyFunc(x0, xf, n, handle_c, radius, trackwidth);
+    Ch_VaEnd(interpI, ap); 
+    return retval;
+}
+static double ImovexyFunc_chdl_funarg(double x) { 
+    double retval;
+    Ch_CallFuncByAddr(interpI, ImovexyFunc_chdl_funptr, &retval, x);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_movexyNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    double x, y;
+	double radius, trackwidth;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    x = Ch_VaArg(interp, ap, double);
+	y = Ch_VaArg(interp, ap, double);
+	radius = Ch_VaArg(interp, ap, double);
+	trackwidth = Ch_VaArg(interp, ap, double);
+    retval = mobot->movexyNB(x, y, radius, trackwidth);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int LinkbotL_movexyWait_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    retval = mobot->movexyWait();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_point_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    double x, y, z;
+	int pointsize;
+	char *color;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    x = Ch_VaArg(interp, ap, double);
+	y = Ch_VaArg(interp, ap, double);
+	z = Ch_VaArg(interp, ap, double);
+	pointsize = Ch_VaArg(interp, ap, int);
+	color = Ch_VaArg(interp, ap, char *);
+    retval = mobot->point(x, y, z, pointsize, color);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_text_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    double x, y, z;
+	char *text;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    x = Ch_VaArg(interp, ap, double);
+	y = Ch_VaArg(interp, ap, double);
+	z = Ch_VaArg(interp, ap, double);
+	text = Ch_VaArg(interp, ap, char *);
+    retval = mobot->text(x, y, z, text);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_traceOn_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    retval = mobot->traceOn();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_traceOff_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    retval = mobot->traceOff();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_recordxyBegin_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    double x, y, timeInterval;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    x = Ch_VaArg(interp, ap, double);
+	y = Ch_VaArg(interp, ap, double);
+	timeInterval = Ch_VaArg(interp, ap, double);
+    retval = mobot->recordxyBegin(x, y, timeInterval);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_recordxyEnd_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    int *numpoints;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    numpoints = Ch_VaArg(interp, ap, int *);
+    retval = mobot->recordxyEnd(*numpoints);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
