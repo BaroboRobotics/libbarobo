@@ -17,7 +17,7 @@
    along with BaroboLink.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define COMMSDEBUG
+//#define COMMSDEBUG
 
 #include "logging.h"
 #ifdef _MSC_VER
