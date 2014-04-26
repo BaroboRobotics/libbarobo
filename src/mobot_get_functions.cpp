@@ -806,9 +806,6 @@ int Mobot_getStatus(mobot_t* comms)
   if(buf[1] != 3 ) {
     return -1;
   }
-  if(buf[2] != RESP_END) {
-    return -1;
-  }
   return 0;
 }
 
@@ -823,9 +820,6 @@ int Mobot_getVersion(mobot_t* comms)
     return -1;
   }
   if(buf[1] != 4 ) {
-    return -1;
-  }
-  if(buf[3] != RESP_END) {
     return -1;
   }
   version = buf[2];

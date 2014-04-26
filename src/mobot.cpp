@@ -17,7 +17,7 @@
    along with BaroboLink.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//#define COMMSDEBUG
+#define COMMSDEBUG
 
 #include "logging.h"
 #ifdef _MSC_VER
@@ -1675,6 +1675,8 @@ int Mobot_init(mobot_t* comms)
 
   comms->eventqueue = new RingBuf<event_t*>();
 
+  comms->packetSeqNum = 0x80;
+
   return 0;
 }
 
@@ -1980,7 +1982,11 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
     if(datasize > 0) {
       memcpy(&str[2], data, datasize);
     }
-    str[datasize+2] = MSG_SENDEND;
+    comms->packetSeqNum++;
+    if(comms->packetSeqNum > 0xff) {
+      comms->packetSeqNum = 0x80;
+    }
+    str[datasize+2] = comms->packetSeqNum;
     len = datasize + 3;
   } else {
     str[0] = cmd;
@@ -1997,7 +2003,11 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
     str[6] = datasize + 3;
 
     if(datasize > 0) memcpy(&str[7], data, datasize);
-    str[datasize+7] = MSG_SENDEND;
+    comms->packetSeqNum++;
+    if(comms->packetSeqNum > 0xff) {
+      comms->packetSeqNum = 0x80;
+    }
+    str[datasize+7] = comms->packetSeqNum;
     len = datasize + 8;
   }
 #if 0
@@ -2096,11 +2106,7 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
     ts.tv_nsec = mts.tv_nsec;
 #endif
     /* Add a timeout */
-    ts.tv_nsec += 700000000; // 100 ms
-    if(ts.tv_nsec > 1000000000) {
-      ts.tv_nsec -= 1000000000;
-      ts.tv_sec += 1;
-    }
+    ts.tv_sec += 10;
     rc = pthread_cond_timedwait(
       comms->recvBuf_cond, 
       comms->recvBuf_lock,
@@ -2125,6 +2131,14 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
       MUTEX_UNLOCK(comms->commsLock);
       //Mobot_disconnect(comms);
       return -2;
+    } else {
+      if(
+          (comms->recvBuf[comms->recvBuf_bytes-2] != comms->packetSeqNum) &&
+          (comms->recvBuf[comms->recvBuf_bytes-2] != RESP_END)
+        ) 
+      {
+        continue;
+      }
     }
 #else
     ResetEvent(*comms->recvBuf_cond);
@@ -2135,6 +2149,14 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
       MUTEX_UNLOCK(comms->commsLock);
       //Mobot_disconnect(comms);
       return -2;
+    } else {
+      if(
+          (comms->recvBuf[comms->recvBuf_bytes-2] != comms->packetSeqNum) &&
+          (comms->recvBuf[comms->recvBuf_bytes-2] != RESP_END)
+        ) 
+      {
+        continue;
+      }
     }
 #endif
   }
