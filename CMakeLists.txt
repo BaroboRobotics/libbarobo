@@ -4,6 +4,14 @@
 cmake_minimum_required(VERSION 2.8.9)
 project(LIBBAROBO C CXX)
 
+set(TARGET barobo)
+if(TARGET ${TARGET})
+  # FIXME make sure that the current target's version or configuration matches?
+  # this feels rather dangerous. find_package would solve this conundrum :/
+  message(STATUS "libbarobo already configured")
+  return()
+endif()
+
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 1)
 set(VERSION_PATCH 2)
@@ -40,8 +48,6 @@ endif()
 
 ##############################################################################
 # Targets
-
-set(TARGET barobo)
 
 set(SOURCES
   src/dongle.cpp
