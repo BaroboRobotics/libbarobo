@@ -344,6 +344,7 @@ typedef struct mobot_s
   void *eventqueue;
 #endif
   THREAD_T *eventthread;
+  int packetSeqNum;
 } mobot_t;
 #endif
 
