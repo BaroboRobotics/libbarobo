@@ -459,15 +459,21 @@ int CLinkbot::movexy(double x, double y, double radius, double trackwidth)
 	return 0;
 }
 
-int CLinkbot::movexyExpr(double x0, double xf, int n, char *expr, double radius, double trackwidth)
+int CLinkbot::movexyTo(double x, double y, double radius, double trackwidth)
 {
-    printf("Warning: function movexyExpr() not implemented on hardware robots\n");
+    printf("Warning: function movexyTo() not implemented on hardware robots\n");
 	return 0;
 }
 
-int CLinkbot::movexyFunc(double x0, double xf, int n, double (*func)(double x), double radius, double trackwidth)
+int CLinkbot::movexyToExpr(double x0, double xf, int n, char *expr, double radius, double trackwidth)
 {
-	printf("Warning: function movexyFunc() not implemented on hardware robots\n");
+    printf("Warning: function movexyToExpr() not implemented on hardware robots\n");
+	return 0;
+}
+
+int CLinkbot::movexyToFunc(double x0, double xf, int n, double (*func)(double x), double radius, double trackwidth)
+{
+	printf("Warning: function movexyToFunc() not implemented on hardware robots\n");
 	return 0;
 }
 
@@ -477,6 +483,11 @@ int CLinkbot::movexyNB(double x, double y, double radius, double trackwidth)
 	 return 0;
 }
 
+int CLinkbot::movexyToNB(double x, double y, double radius, double trackwidth)
+{
+	 printf("Warning: function movexyToNB() not implemented on hardware robots\n");
+	 return 0;
+}
 int CLinkbot::movexyWait(void)
 {
 	printf("Warning: function movexyWait() not implemented on hardware robots\n");

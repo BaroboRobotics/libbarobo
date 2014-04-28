@@ -127,11 +127,13 @@ class DLLIMPORT CLinkbot : public CMobot
 	virtual int line(double x1, double y1, double z1, double x2, double y2, double z2, 
 		     int linewidth, char *color);
 	virtual int movexy(double x, double y, double radius, double trackwidth);
-	virtual int movexyExpr(double x0, double xf, int n, char *expr, double radius,
+	virtual int movexyTo(double x, double y, double radius, double trackwidth);
+	virtual int movexyToExpr(double x0, double xf, int n, char *expr, double radius,
 		      double trackwidth);
-	virtual int movexyFunc(double x0, double xf, int n, double (*func)(double x), 
+	virtual int movexyToFunc(double x0, double xf, int n, double (*func)(double x), 
 		      double radius, double trackwidth);
 	virtual int movexyNB(double x, double y, double radius, double trackwidth);
+	virtual int movexyToNB(double x, double y, double radius, double trackwidth);
 	virtual int movexyWait(void);
 	virtual int point(double x, double y, double z, int pointsize, char *color);
 	virtual int text(double x, double y, double z, char *text); 
@@ -358,11 +360,13 @@ class CLinkbotI
 	int line(double x1, double y1, double z1, double x2, double y2, double z2, 
 		     int linewidth, char *color);
 	int movexy(double x, double y, double radius, double trackwidth);
-	int movexyExpr(double x0, double xf, int n, char *expr, double radius,
+	int movexyTo(double x, double y, double radius, double trackwidth);
+	int movexyToExpr(double x0, double xf, int n, char *expr, double radius,
 		      double trackwidth);
-	int movexyFunc(double x0, double xf, int n, double (*func)(double x), 
+	int movexyToFunc(double x0, double xf, int n, double (*func)(double x), 
 		      double radius, double trackwidth);
 	int movexyNB(double x, double y, double radius, double trackwidth);
+	int movexyToNB(double x, double y, double radius, double trackwidth);
 	int movexyWait(void);
 	int point(double x, double y, double z, int pointsize, char *color);
 	int text(double x, double y, double z, char *text); 
@@ -619,11 +623,13 @@ class CLinkbotL
 	int line(double x1, double y1, double z1, double x2, double y2, double z2, 
 		     int linewidth, char *color);
 	int movexy(double x, double y, double radius, double trackwidth);
-	int movexyExpr(double x0, double xf, int n, char *expr, double radius,
+	int movexyTo(double x, double y, double radius, double trackwidth);
+	int movexyToExpr(double x0, double xf, int n, char *expr, double radius,
 		      double trackwidth);
-	int movexyFunc(double x0, double xf, int n, double (*func)(double x), 
+	int movexyToFunc(double x0, double xf, int n, double (*func)(double x), 
 		      double radius, double trackwidth);
 	int movexyNB(double x, double y, double radius, double trackwidth);
+	int movexyToNB(double x, double y, double radius, double trackwidth);
 	int movexyWait(void);
 	int point(double x, double y, double z, int pointsize, char *color);
 	int text(double x, double y, double z, char *text); 

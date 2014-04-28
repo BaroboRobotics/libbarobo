@@ -2811,7 +2811,26 @@ EXPORTCH int LinkbotL_movexy_chdl(void *varg) {
     return retval;
 }
 
-EXPORTCH int LinkbotL_movexyExpr_chdl(void *varg) {
+EXPORTCH int LinkbotL_movexyTo_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    double x, y;
+	double radius, trackwidth;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    x = Ch_VaArg(interp, ap, double);
+	y = Ch_VaArg(interp, ap, double);
+	radius = Ch_VaArg(interp, ap, double);
+	trackwidth = Ch_VaArg(interp, ap, double);
+    retval = mobot->movexyTo(x, y, radius, trackwidth);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_movexyToExpr_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotL *mobot;
@@ -2829,21 +2848,21 @@ EXPORTCH int LinkbotL_movexyExpr_chdl(void *varg) {
 	expr = Ch_VaArg(interp, ap, char *);
 	radius = Ch_VaArg(interp, ap, double);
 	trackwidth = Ch_VaArg(interp, ap, double);
-    retval = mobot->movexyExpr(x0, xf, n, expr, radius, trackwidth);
+    retval = mobot->movexyToExpr(x0, xf, n, expr, radius, trackwidth);
     Ch_VaEnd(interp, ap);
     return retval;
 }
-typedef double (*ImovexyFuncHandle)(double);
+typedef double (*ImovexyToFuncHandle)(double);
 static ChInterp_t interpI;
-static double ImovexyFunc_chdl_funarg(double x);
-static void *ImovexyFunc_chdl_funptr;
-EXPORTCH int CLinkbotL_movexyFunc_chdl(void *varg) {
+static double ImovexyToFunc_chdl_funarg(double x);
+static void *ImovexyToFunc_chdl_funptr;
+EXPORTCH int LinkbotL_movexyToFunc_chdl(void *varg) {
     ChVaList_t ap;
     class CLinkbotL *robot;
     double x0;
     double xf;
     int n;
-    ImovexyFuncHandle handle_ch, handle_c = NULL;
+    ImovexyToFuncHandle handle_ch, handle_c = NULL;
     double radius;
     double trackwidth;
     int retval;
@@ -2853,20 +2872,20 @@ EXPORTCH int CLinkbotL_movexyFunc_chdl(void *varg) {
     x0 = Ch_VaArg(interpI, ap, double);
     xf = Ch_VaArg(interpI, ap, double);
     n = Ch_VaArg(interpI, ap, int);
-    handle_ch = Ch_VaArg(interpI, ap, ImovexyFuncHandle);
-    ImovexyFunc_chdl_funptr = (void *)handle_ch;
+    handle_ch = Ch_VaArg(interpI, ap, ImovexyToFuncHandle);
+    ImovexyToFunc_chdl_funptr = (void *)handle_ch;
     if (handle_ch != NULL) {
-        handle_c = (ImovexyFuncHandle)ImovexyFunc_chdl_funarg;
+        handle_c = (ImovexyToFuncHandle)ImovexyToFunc_chdl_funarg;
     }    
     radius = Ch_VaArg(interpI, ap, double);
     trackwidth = Ch_VaArg(interpI, ap, double);
-    retval = robot->movexyFunc(x0, xf, n, handle_c, radius, trackwidth);
+    retval = robot->movexyToFunc(x0, xf, n, handle_c, radius, trackwidth);
     Ch_VaEnd(interpI, ap); 
     return retval;
 }
-static double ImovexyFunc_chdl_funarg(double x) { 
+static double ImovexyToFunc_chdl_funarg(double x) { 
     double retval;
-    Ch_CallFuncByAddr(interpI, ImovexyFunc_chdl_funptr, &retval, x);
+    Ch_CallFuncByAddr(interpI, ImovexyToFunc_chdl_funptr, &retval, x);
     return retval;
 }
 
@@ -2885,6 +2904,25 @@ EXPORTCH int LinkbotL_movexyNB_chdl(void *varg) {
 	radius = Ch_VaArg(interp, ap, double);
 	trackwidth = Ch_VaArg(interp, ap, double);
     retval = mobot->movexyNB(x, y, radius, trackwidth);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_movexyToNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    double x, y;
+	double radius, trackwidth;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    x = Ch_VaArg(interp, ap, double);
+	y = Ch_VaArg(interp, ap, double);
+	radius = Ch_VaArg(interp, ap, double);
+	trackwidth = Ch_VaArg(interp, ap, double);
+    retval = mobot->movexyToNB(x, y, radius, trackwidth);
     Ch_VaEnd(interp, ap);
     return retval;
 }

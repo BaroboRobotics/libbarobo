@@ -2209,11 +2209,25 @@ int CLinkbotL::movexy(double x, double y, double radius, double trackwidth) {
     return retval;
 }
 
-int CLinkbotL::movexyExpr(double x0, double xf, int n, char expr[], double radius, double trackwidth) {
+int CLinkbotL::movexyTo(double x, double y, double radius, double trackwidth) {
     void *fptr;
     int retval;
 
-    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_movexyExpr_chdl");
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_movexyTo_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, x, y, radius, trackwidth);
+    return retval;
+}
+
+
+int CLinkbotL::movexyToExpr(double x0, double xf, int n, char expr[], double radius, double trackwidth) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_movexyToExpr_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
@@ -2222,11 +2236,11 @@ int CLinkbotL::movexyExpr(double x0, double xf, int n, char expr[], double radiu
     return retval;
 }
 
-int CLinkbotL::movexyFunc(double x0, double xf, int n, double(*func)(double x), double radius, double trackwidth) {
+int CLinkbotL::movexyToFunc(double x0, double xf, int n, double(*func)(double x), double radius, double trackwidth) {
     void *fptr;
     int retval;
 
-    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_movexyFunc_chdl");
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_movexyToFunc_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
@@ -2240,6 +2254,19 @@ int CLinkbotL::movexyNB(double x, double y, double radius, double trackwidth) {
     int retval;
 
     fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_movexyNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, x, y, radius, trackwidth);
+    return retval;
+}
+
+int CLinkbotL::movexyToNB(double x, double y, double radius, double trackwidth) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_movexyToNB_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
