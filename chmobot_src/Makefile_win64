@@ -4,7 +4,7 @@ HEADERS=../include/mobot.h
 PKGDIR=$(PACKAGE)-$(VERSION)/$(PACKAGE)
 LIBDIR=lib64
 
-CFLAGS= -DNONRELEASE -DWIN32_LEAN_AND_MEAN -DWINVER=0x0502 -I./ -I../../BaroboConfigFile/ -I../../mxml-2.7/ -I../../libsfp/include -I../include -I../src /TP
+CFLAGS= -DNONRELEASE -DWIN32_LEAN_AND_MEAN -DWINVER=0x0502 -DENABLE_BLUETOOTH -I./ -I../../BaroboConfigFile/ -I../../mxml-2.7/ -I../../libsfp/include -I../include -I../src /TP
 
 target: libmobot.dl
 
