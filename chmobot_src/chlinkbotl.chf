@@ -357,7 +357,7 @@ int CLinkbotL::getBatteryVoltage(double & voltage) {
     dlrunfun(fptr, &retval, NULL, this, &voltage);
     return retval;
 }
-int CLinkbotL::LinkPodAnalogRead(int adc, int & value) {
+int CLinkbotL::LinkPodAnalogRead(int pin) {
     void *fptr;
     int retval;
 
@@ -366,10 +366,10 @@ int CLinkbotL::LinkPodAnalogRead(int adc, int & value) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, NULL, this, adc, &value);
+    dlrunfun(fptr, &retval, NULL, this, pin);
     return retval;
 }
-int CLinkbotL::LinkPodAnalogReadVolts(int adc, double & volts) {
+/*int CLinkbotL::LinkPodAnalogReadVolts(int adc, double & volts) {
     void *fptr;
     int retval;
 
@@ -380,8 +380,21 @@ int CLinkbotL::LinkPodAnalogReadVolts(int adc, double & volts) {
     }
     dlrunfun(fptr, &retval, NULL, this, adc, &volts);
     return retval;
+}*/
+
+double CLinkbotL::LinkPodAnalogReadVolts(int pin) {
+    void *fptr;
+    double retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_LinkPodAnalogReadVolts_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, pin);
+    return retval;
 }
-int CLinkbotL::LinkPodDigitalRead(int pin, int & value) {
+int CLinkbotL::LinkPodDigitalRead(int pin) {
     void *fptr;
     int retval;
 
@@ -390,7 +403,7 @@ int CLinkbotL::LinkPodDigitalRead(int pin, int & value) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, NULL, this, pin, &value);
+    dlrunfun(fptr, &retval, NULL, this, pin);
     return retval;
 }
 int CLinkbotL::getColorRGB(int & r, int & g, int & b) {
@@ -425,6 +438,43 @@ int CLinkbotL::getColorName(char color[]) {
 	dlrunfun(fptr, &retval, NULL, this, color); 
 	return retval; 
 }
+
+//new
+
+int CLinkbotL::getLEDColorRGB(int & r, int & g, int & b) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_getLEDColorRGB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, &r, &g, &b);
+    return retval;
+}
+int CLinkbotL::getLEDColor(string_t & color) { 
+	int retval; 
+	char color1[25];
+	
+	retval = getLEDColorName(color1);
+	color = color1; 
+	return retval; 
+} 
+int CLinkbotL::getLEDColorName(char color[]) { 
+	void *fptr; 
+	int retval; 
+
+	fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_getLEDColorName_chdl"); 
+	if(fptr == NULL) { 
+		fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror()); 
+		return -1; 
+	}    
+	dlrunfun(fptr, &retval, NULL, this, color); 
+	return retval; 
+}
+
+//end new
 int CLinkbotL::getFormFactor(int & formFactor) {
     void *fptr;
     int retval;
@@ -1236,6 +1286,35 @@ int CLinkbotL::setColor(char color[]) {
 	dlrunfun(fptr, &retval, setColor, this, color); 
 	return retval; 
 }
+
+//new
+
+int CLinkbotL::setLEDColorRGB(int r, int g, int b) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_setLEDColorRGB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setColorRGB, this, r, g, b);
+    return retval;
+}
+int CLinkbotL::setLEDColor(char color[]) { 
+	void *fptr; 
+	int retval; 
+
+	fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_setLEDColor_chdl"); 
+	if(fptr == NULL) { 
+		fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror()); 
+		return -1; 
+	}    
+	dlrunfun(fptr, &retval, setColor, this, color); 
+	return retval; 
+}
+
+//end new
 int CLinkbotL::setExitState(int exitState) {
     void *fptr;
     int retval;

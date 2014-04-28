@@ -41,19 +41,25 @@ int CLinkbot::getBatteryVoltage(double &voltage)
   return Mobot_getBatteryVoltage(_comms, &voltage);
 }
 
-int CLinkbot::LinkPodAnalogRead(int adc, int & value)
+int CLinkbot::LinkPodAnalogRead(int pin)
 {
-  return Mobot_LinkPodAnalogRead(_comms, adc, &value);
+    int value;
+	Mobot_LinkPodAnalogRead(_comms, pin, &value);
+	return value;
 }
 
-int CLinkbot::LinkPodAnalogReadVolts(int adc, double & volts)
+double CLinkbot::LinkPodAnalogReadVolts(int pin)
 {
-  return Mobot_LinkPodAnalogReadVolts(_comms, adc, &volts);
+    double volts;
+	Mobot_LinkPodAnalogReadVolts(_comms, pin, &volts);
+	return volts;
 }
 
-int CLinkbot::LinkPodDigitalRead(int pin, int & value)
+int CLinkbot::LinkPodDigitalRead(int pin)
 {
-  return Mobot_LinkPodDigitalRead(_comms, pin, &value);
+    int value;
+	Mobot_LinkPodDigitalRead(_comms, pin, &value);
+	return value;
 }
 
 int CLinkbot::getJointAngles(
@@ -129,6 +135,19 @@ int CLinkbot::getColorName(char color[]) //C++ compatible version of getColor()
 {
   return Mobot_getColor(_comms, color);
 }
+
+//new functions start
+int CLinkbot::getLEDColorRGB(int &r, int &g, int &b)
+{
+  return Mobot_getColorRGB(_comms, &r, &g, &b);
+}
+
+
+int CLinkbot::getLEDColorName(char color[]) //C++ compatible version of getColor()
+{
+  return Mobot_getColor(_comms, color);
+}
+//new functions end
 
 int CLinkbot::driveToDirect( double angle1,
                           double angle2,
@@ -354,6 +373,19 @@ int CLinkbot::setColor(char* color)
 {
   return Mobot_setColor(_comms, color);
 }
+
+//new begin
+int CLinkbot::setLEDColorRGB(int r, int g, int b)
+{
+  return Mobot_setColorRGB(_comms, r, g, b);
+}
+
+int CLinkbot::setLEDColor(char* color)
+{
+  return Mobot_setColor(_comms, color);
+}
+//new end
+
 
 int CLinkbot::setJointSpeeds(double speed1, double speed2, double speed3)
 {
