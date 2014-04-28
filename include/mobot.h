@@ -470,11 +470,6 @@ class CMobot
     CMobot();
     ~CMobot();
     int blinkLED(double delay, int numBlinks);
-    bool canFlashFirmware ();
-    int flashFirmwareAsync (std::string hexfile,
-                            Mobot_progressCallbackFunc progressCallback,
-                            Mobot_completionCallbackFunc completionCallback,
-                            void* user_data);
 /* connect() Return Error Codes:
    -1 : General Error
    -2 : Lockfile Exists
