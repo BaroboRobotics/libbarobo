@@ -424,3 +424,93 @@ int CLinkbot::setMovementStateTimeNB( robotJointState_t dir1,
 {
   return Mobot_setMovementStateTimeNB(_comms, dir1, dir2, dir3, ROBOT_NEUTRAL, seconds);
 }
+
+/*Functions for compatibility with RoboSim*/
+int CLinkbot::getxy(double &x, double &y)
+{
+	printf("Warning: function getxy() not implemented on hardware robots\n");
+	return 0;
+}
+
+int CLinkbot::line(double x1, double y1, double z1, double x2, double y2, double z2, int linewidth, char *color)
+{
+	printf("Warning: function line()not implemented on hardware robots\n");
+	return 0;
+}
+
+int CLinkbot::movexy(double x, double y, double radius, double trackwidth)
+{
+    printf("Warning: function movexy() not implemented on hardware robots\n");
+	return 0;
+}
+
+int CLinkbot::movexyTo(double x, double y, double radius, double trackwidth)
+{
+    printf("Warning: function movexyTo() not implemented on hardware robots\n");
+	return 0;
+}
+
+int CLinkbot::movexyToExpr(double x0, double xf, int n, char *expr, double radius, double trackwidth)
+{
+    printf("Warning: function movexyToExpr() not implemented on hardware robots\n");
+	return 0;
+}
+
+int CLinkbot::movexyToFunc(double x0, double xf, int n, double (*func)(double x), double radius, double trackwidth)
+{
+	printf("Warning: function movexyToFunc() not implemented on hardware robots\n");
+	return 0;
+}
+
+int CLinkbot::movexyNB(double x, double y, double radius, double trackwidth)
+{
+	 printf("Warning: function movexyNB() not implemented on hardware robots\n");
+	 return 0;
+}
+
+int CLinkbot::movexyToNB(double x, double y, double radius, double trackwidth)
+{
+	 printf("Warning: function movexyToNB() not implemented on hardware robots\n");
+	 return 0;
+}
+int CLinkbot::movexyWait(void)
+{
+	printf("Warning: function movexyWait() not implemented on hardware robots\n");
+	return 0;
+}
+
+int CLinkbot::point(double x, double y, double z, int pointsize, char *color)
+{
+	printf("Warning: function point()not implemented on hardware robots\n");
+	return 0;
+}
+
+int CLinkbot::text(double x, double y, double z, char *text)
+{
+	printf("Warning: function text() not implemented on hardware robots\n");
+	return 0;
+}
+
+int CLinkbot::traceOn(void)
+{
+	printf("Warning: function traceOn() not implemented on hardware robots\n");
+	return 0;
+}
+
+int CLinkbot::traceOff(void)
+{
+	printf("Warning: function traceOff() not implemented on hardware robots\n");
+	return 0;
+}
+
+int CLinkbot::recordxyBegin(double x, double y, double timeInterval)
+{
+	printf("Warning: function recordxyBegin() not implemented on hardware robots\n");
+	return 0;
+}
+
+int CLinkbot::recordxyEnd(int &numpoints)
+{
+	printf("Warning: function recordxyEnd() not implemented on hardware robots\n");
+	return 0;
+}
