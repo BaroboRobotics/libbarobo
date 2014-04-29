@@ -20,6 +20,8 @@
 #ifndef _MOBOTCOMMS_H_
 #define _MOBOTCOMMS_H_
 
+#define FIRMWARE_VERSION 0x030004
+
 #ifdef SWIG
 #define DLLIMPORT
 %module mobot
@@ -748,6 +750,7 @@ class DLLIMPORT CMobot
     virtual int getJointState(robotJointId_t id, robotJointState_t &state);
     virtual mobot_t* getMobotObject();
     virtual int getVersion();
+    virtual int getVersions(unsigned int &version);
     virtual int move(double angle1, double angle2, double angle3, double angle4);
     virtual int moveNB(double angle1, double angle2, double angle3, double angle4);
     virtual int moveBackward(double angle);
@@ -1241,6 +1244,7 @@ DLLIMPORT int Mobot_getNumSlaves(mobot_t* comms, int* num);
 DLLIMPORT int Mobot_getSlaveAddr(mobot_t* comms, uint8_t index, uint16_t* addr);
 DLLIMPORT int Mobot_getStatus(mobot_t* comms);
 DLLIMPORT int Mobot_getVersion(mobot_t* comms);
+DLLIMPORT int Mobot_getVersions(mobot_t* comms, unsigned int *version);
 DLLIMPORT int Mobot_move(mobot_t* comms,
                                double angle1,
                                double angle2,

@@ -826,3 +826,18 @@ int Mobot_getVersion(mobot_t* comms)
   return version;
 }
 
+int Mobot_getVersions(mobot_t* comms, unsigned int* version)
+{
+  uint8_t buf[16];
+  int rc;
+  rc = MobotMsgTransaction(comms, BTCMD(CMD_GETVERSIONS), buf, 0);
+  if((rc) || (buf[0] != RESP_OK)) {
+    int v = Mobot_getVersion(comms);
+    *version = (unsigned int)v;
+  } else {
+    *version = buf[2] << 16;
+    *version |= buf[3] << 8;
+    *version |= buf[4];
+  }
+  return 0;
+}
