@@ -956,17 +956,23 @@ int finishConnectWithoutCommsThread(mobot_t* comms)
       numJoints = 0;
   }
   /* Get the protocol version; make sure it matches ours */
-  int version;
-  version = Mobot_getVersion(comms); 
+  unsigned int version;
+  Mobot_getVersions(comms, &version); 
   if(version < 0) {
     fprintf(stderr, "(barobo) ERROR: Mobot_getVersion() returned something not good.\n");
     Mobot_disconnect(comms);
     return version;
   }
-  if(version < CMD_NUMCOMMANDS) {
+  if(version < FIRMWARE_VERSION) {
     fprintf(stderr, "Warning. Communications protocol version mismatch.\n");
-    fprintf(stderr, "Robot Firmware Protocol Version: %d\n", version);
-    fprintf(stderr, "CMobot Library Protocol Version: %d\n", CMD_NUMCOMMANDS);
+    fprintf(stderr, "Robot Firmware Protocol Version: %d.%d.%d\n", 
+        (version>>16)&0xff,
+        (version>>8)&0xff,
+        version&0xff);
+    fprintf(stderr, "CMobot Library Protocol Version: %d.%d.%d\n", 
+        (FIRMWARE_VERSION>>16)&0xff,
+        (FIRMWARE_VERSION>>8)&0xff,
+        FIRMWARE_VERSION&0xff);
   }
   /* Get the joint max speeds */
   /* DEBUG */
@@ -1694,7 +1700,7 @@ int Mobot_isConnected(mobot_t* comms)
 
 int Mobot_protocolVersion()
 {
-  return CMD_NUMCOMMANDS;
+  return FIRMWARE_VERSION;
 }
 
 int Mobot_pair(mobot_t* mobot)
