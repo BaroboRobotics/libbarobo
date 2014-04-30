@@ -351,6 +351,10 @@ typedef struct mobot_s
 #endif
   THREAD_T *eventthread;
   int packetSeqNum;
+
+  int rawStreamMode;
+  void* rawStreamUserData;
+  void (*rawStreamDataCallback)(const uint8_t* buf, size_t size, void* userdata);
 } mobot_t;
 #endif
 
@@ -1478,6 +1482,13 @@ DLLIMPORT int Mobot_motionUnstandNB(mobot_t* comms);
 DLLIMPORT int Mobot_motionWait(mobot_t* comms);
 int shiftDataIsEnabled(mobot_t* comms);
 DLLIMPORT double systemTime();
+
+DLLIMPORT int Mobot_sendRawStream(mobot_t *comms, const void *data, int size);
+DLLIMPORT int Mobot_enableRawStream(
+    mobot_t *comms, 
+    void (*rawStreamDataCallback)(const uint8_t* buf, size_t size, void* userdata),
+    void *userdata);
+DLLIMPORT int Mobot_disableRawStream(mobot_t *comms);
 #ifdef __cplusplus
 }
 #endif

@@ -17,7 +17,7 @@
    along with BaroboLink.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//#define COMMSDEBUG
+#define COMMSDEBUG
 
 #include "logging.h"
 #ifdef _MSC_VER
@@ -1683,6 +1683,10 @@ int Mobot_init(mobot_t* comms)
 
   comms->packetSeqNum = 0x80;
 
+  comms->rawStreamMode = 0;
+  comms->rawStreamUserData = NULL;
+  comms->rawStreamDataCallback = NULL;
+
   return 0;
 }
 
@@ -1927,6 +1931,45 @@ int Mobot_waitForReportedSerialID(mobot_t* comms, char* id)
     }
 #endif
   }
+}
+
+int Mobot_sendRawStream(mobot_t* comms, const void* data, int size)
+{
+  if(comms->connectionMode == MOBOTCONNECT_ZIGBEE) {
+    assert(MOBOTCONNECT_TTY == comms->parent->connectionMode);
+
+    /* Send the message out on the parent's dongle. */
+    if (-1 == dongleWrite(comms->parent->dongle, (const uint8_t*)data, size)) {
+      return -1;
+    }
+  } else if (comms->connectionMode == MOBOTCONNECT_TTY) {
+    /* Send the message out on our dongle. */
+    if (-1 == dongleWrite(comms->dongle, (const uint8_t*)data, size)) {
+      return -1;
+    }
+  } else {
+    return -2;
+  }
+  return 0;
+}
+
+int Mobot_enableRawStream(
+    mobot_t *comms, 
+    void (*rawStreamDataCallback)(const uint8_t* buf, size_t size, void* userdata),
+    void *userdata)
+{
+  comms->rawStreamDataCallback = rawStreamDataCallback;
+  comms->rawStreamUserData = userdata;
+  comms->rawStreamMode = 1;
+  return 0;
+}
+
+int Mobot_disableRawStream(mobot_t* comms)
+{
+  comms->rawStreamDataCallback = NULL;
+  comms->rawStreamUserData = NULL;
+  comms->rawStreamMode = 0;
+  return 0;
 }
 
 /* This function does a complete message transaction with a Mobot, including
@@ -2297,9 +2340,12 @@ void* commsEngine(void* arg)
       }
       printf("\n");
 #endif
-      Mobot_processMessage(comms, buf, len);
-    }
-    else {
+      if(comms->rawStreamMode) {
+        comms->rawStreamDataCallback(buf, len, comms->rawStreamUserData);
+      } else {
+        Mobot_processMessage(comms, buf, len);
+      }
+    } else {
       /* Try and receive a byte */
 #ifndef _WIN32
       err = read(comms->socket, &byte, 1);
