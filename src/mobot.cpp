@@ -1933,8 +1933,9 @@ int Mobot_waitForReportedSerialID(mobot_t* comms, char* id)
   }
 }
 
-int Mobot_sendRawStream(mobot_t* comms, const void* data, int size)
+int Mobot_sendRawStream(const void* data, int size)
 {
+  mobot_t* comms = g_dongleMobot;
   if(comms->connectionMode == MOBOTCONNECT_ZIGBEE) {
     assert(MOBOTCONNECT_TTY == comms->parent->connectionMode);
 
@@ -1954,21 +1955,23 @@ int Mobot_sendRawStream(mobot_t* comms, const void* data, int size)
 }
 
 int Mobot_enableRawStream(
-    mobot_t *comms, 
     void (*rawStreamDataCallback)(const uint8_t* buf, size_t size, void* userdata),
     void *userdata)
 {
-  comms->rawStreamDataCallback = rawStreamDataCallback;
-  comms->rawStreamUserData = userdata;
-  comms->rawStreamMode = 1;
+  if(g_dongleMobot == NULL) {
+    Mobot_initDongle();
+  }
+  g_dongleMobot->rawStreamDataCallback = rawStreamDataCallback;
+  g_dongleMobot->rawStreamUserData = userdata;
+  g_dongleMobot->rawStreamMode = 1;
   return 0;
 }
 
-int Mobot_disableRawStream(mobot_t* comms)
+int Mobot_disableRawStream()
 {
-  comms->rawStreamDataCallback = NULL;
-  comms->rawStreamUserData = NULL;
-  comms->rawStreamMode = 0;
+  g_dongleMobot->rawStreamDataCallback = NULL;
+  g_dongleMobot->rawStreamUserData = NULL;
+  g_dongleMobot->rawStreamMode = 0;
   return 0;
 }
 

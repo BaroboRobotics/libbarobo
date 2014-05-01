@@ -20,12 +20,8 @@ int main()
 {
   int i = 0;
   uint8_t buf[10];
-  mobot_t mobot;
-  Mobot_init(&mobot);
-  Mobot_connectWithAddress(&mobot, "D6ZD", 1);
   //Mobot_connectWithTTY(&mobot, "/dev/ttyACM0");
-  Mobot_enableButtonCallback(&mobot, NULL, buttonCB);
-  Mobot_enableRawStream(&mobot, rawStreamCB, NULL);
+  Mobot_enableRawStream(rawStreamCB, NULL);
 
   buf[0] = 0x30;
   buf[1] = 0x08;
@@ -37,7 +33,7 @@ int main()
   buf[7] = 0x00;
   while(1) {
     sleep(2);
-    Mobot_sendRawStream(&mobot, (void*)buf, 9);
+    Mobot_sendRawStream((void*)buf, 9);
   }
 
   return 0;
