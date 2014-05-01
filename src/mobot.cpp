@@ -1961,6 +1961,10 @@ int Mobot_enableRawStream(
   if(g_dongleMobot == NULL) {
     Mobot_initDongle();
   }
+  /* if the dongle is still null, return error */
+  if(g_dongleMobot == NULL) {
+    return -1;
+  }
   g_dongleMobot->rawStreamDataCallback = rawStreamDataCallback;
   g_dongleMobot->rawStreamUserData = userdata;
   g_dongleMobot->rawStreamMode = 1;
