@@ -821,6 +821,7 @@ class DLLIMPORT CMobot
     virtual int resetToZero();
     virtual int resetToZeroNB();
     virtual int setAccelEventThreshold(double threshold);
+    virtual int setBuzzerFrequencyOn (double freq);
     virtual int setJointEventThreshold(int joint, double threshold);
     virtual int setExitState(robotJointState_t exitState);
     virtual int setJointMovementStateNB(robotJointId_t id, robotJointState_t dir);
