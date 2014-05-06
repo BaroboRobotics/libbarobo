@@ -2199,7 +2199,7 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
 #else
     ResetEvent(*comms->recvBuf_cond);
     ReleaseMutex(*comms->recvBuf_lock);
-    rc = WaitForSingleObject(*comms->recvBuf_cond, 700);
+    rc = WaitForSingleObject(*comms->recvBuf_cond, 10000);
     if(rc == WAIT_TIMEOUT) {
       MUTEX_UNLOCK(comms->recvBuf_lock);
       MUTEX_UNLOCK(comms->commsLock);
