@@ -20,7 +20,7 @@
 #ifndef _MOBOTCOMMS_H_
 #define _MOBOTCOMMS_H_
 
-#define FIRMWARE_VERSION 0x030004
+#define FIRMWARE_VERSION 0x030005
 
 #ifdef SWIG
 #define DLLIMPORT
