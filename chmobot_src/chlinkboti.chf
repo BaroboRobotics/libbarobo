@@ -713,6 +713,22 @@ int CLinkbotI::isMoving() {
     dlrunfun(fptr, &retval, isMoving, this);
     return retval;
 }
+
+
+int CLinkbotI::isNotMoving() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_isMoving_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, isMoving, this);
+    return !retval;
+    
+}
+
 int CLinkbotI::motionDistance(double distance, double radius) {
     void *fptr;
     int retval;
@@ -2038,6 +2054,20 @@ int CLinkbotIGroup::isMoving() {
     dlrunfun(fptr, &retval, isMoving, this);
     return retval;
 }
+
+int CLinkbotIGroup::isNotMoving() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGI_isMoving_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, isMoving, this);
+    return !retval;
+}
+
 int CLinkbotIGroup::motionDistance(double distance, double radius) {
     void *fptr;
     int retval;

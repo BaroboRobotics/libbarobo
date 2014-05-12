@@ -197,6 +197,7 @@ class CLinkbotI
     int disableRecordDataShift();
     int isConnected();
     int isMoving();
+	int isNotMoving();
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int getBatteryVoltage(double &voltage);
     int LinkPodAnalogRead(int pin); //new
@@ -447,6 +448,7 @@ class CLinkbotL
     int disableRecordDataShift();
     int isConnected();
     int isMoving();
+	int isNotMoving();
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int getBatteryVoltage(double &voltage);
     int LinkPodAnalogRead(int pin); //new
@@ -671,6 +673,7 @@ class CLinkbotIGroup
     int driveToDirectNB(double angle1, double angle2, double angle3);
     int driveToNB(double angle1, double angle2, double angle3);
     int isMoving();
+	int isNotMoving();
     int move(double angle1, double angle2, double angle3);
     int moveNB(double angle1, double angle2, double angle3);
     int moveBackward(double angle);
@@ -838,6 +841,7 @@ class CLinkbotLGroup
     int driveToDirectNB(double angle1, double angle2, double angle3);
     int driveToNB(double angle1, double angle2, double angle3);
     int isMoving();
+	int isNotMoving();
     int move(double angle1, double angle2, double angle3);
     int moveNB(double angle1, double angle2, double angle3);
     int moveContinuousNB(robotJointState_t dir1, 
