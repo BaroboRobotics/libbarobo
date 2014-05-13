@@ -170,3 +170,8 @@ int CMobot::getVersion()
 {
   return Mobot_getVersion(_comms);
 }
+
+int CMobot::getVersions(unsigned int &version)
+{
+  return Mobot_getVersions(_comms, &version);
+}

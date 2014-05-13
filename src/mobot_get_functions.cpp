@@ -72,14 +72,15 @@
 int Mobot_LinkPodAnalogRead(mobot_t* comms, int adc, int* value)
 {
   uint8_t buf[32];
-  uint16_t incoming;
+  uint8_t incoming[2];
   int rc;
   buf[0] = MSG_REGACCESS;
   buf[1] = TWIMSG_ANALOGREADPIN;
   buf[2] = adc;
-  rc = Mobot_twiSendRecv(comms, 0x02, buf, 3, &incoming, 2);
+  rc = Mobot_twiSendRecv(comms, 0x02, buf, 3, &incoming[0], 2);
   if(rc) return rc;
-  *value = incoming; 
+  *value = incoming[0]<<8; 
+  *value |= incoming[1];
   return 0;
 }
 
@@ -805,9 +806,6 @@ int Mobot_getStatus(mobot_t* comms)
   if(buf[1] != 3 ) {
     return -1;
   }
-  if(buf[2] != RESP_END) {
-    return -1;
-  }
   return 0;
 }
 
@@ -824,10 +822,22 @@ int Mobot_getVersion(mobot_t* comms)
   if(buf[1] != 4 ) {
     return -1;
   }
-  if(buf[3] != RESP_END) {
-    return -1;
-  }
   version = buf[2];
   return version;
 }
 
+int Mobot_getVersions(mobot_t* comms, unsigned int* version)
+{
+  uint8_t buf[16];
+  int rc;
+  rc = MobotMsgTransaction(comms, BTCMD(CMD_GETVERSIONS), buf, 0);
+  if((rc) || (buf[0] != RESP_OK)) {
+    int v = Mobot_getVersion(comms);
+    *version = (unsigned int)v;
+  } else {
+    *version = buf[2] << 16;
+    *version |= buf[3] << 8;
+    *version |= buf[4];
+  }
+  return 0;
+}

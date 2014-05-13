@@ -1,6 +1,10 @@
 #ifndef POPEN3_H
 #define POPEN3_H
 
+#if __cplusplus
+extern "C" {
+#endif
+
 #include <stdio.h>
 #include <unistd.h>
 
@@ -23,5 +27,9 @@ typedef struct {
  */
 process_t popen3 (const char* cmd);
 int pclose3 (process_t proc);
+
+#if __cplusplus
+}
+#endif
 
 #endif

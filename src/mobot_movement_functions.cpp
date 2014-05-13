@@ -373,9 +373,9 @@ int Mobot_moveJointWait(mobot_t* comms, robotJointId_t id)
       return 0;
     } else {
 #ifndef _WIN32
-      usleep(200000);
+      usleep(500000);
 #else
-      Sleep(200);
+      Sleep(500);
 #endif
     }
   }

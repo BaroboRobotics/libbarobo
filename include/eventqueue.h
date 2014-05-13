@@ -4,7 +4,15 @@
 #include <windows.h>
 #endif
 
+#ifdef _MSC_VER
+typedef unsigned __int8 uint8_t;
+typedef unsigned __int16 uint16_t;
+typedef __int16 int16_t;
+typedef unsigned __int32 uint32_t;
+typedef unsigned __int64 uint64_t;
+#else
 #include <stdint.h>
+#endif
 
 #include "thread_macros.h"
 
@@ -26,8 +34,10 @@ typedef struct event_s
     } reportAddress;
   
     char * debug_data;
-
-    float joint_data[4];
+    struct {
+      float angles[4];
+      uint8_t mask;
+    }joint_data;
 
     int16_t accel_data[3];
   }data;

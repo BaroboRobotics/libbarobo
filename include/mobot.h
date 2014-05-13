@@ -20,6 +20,8 @@
 #ifndef _MOBOTCOMMS_H_
 #define _MOBOTCOMMS_H_
 
+#define FIRMWARE_VERSION 0x030005
+
 #ifdef SWIG
 #define DLLIMPORT
 %module mobot
@@ -55,7 +57,40 @@
 #include <array.h>
 #endif
 
+/* 23 April 2014, hlh: Including MinGW C++ headers before stdio.h causes a
+ * crash in dongle_get_tty_win32.cpp upon the first call to
+ * SetupDiEnumDeviceInfo. Specifically, MinGW C++ headers include:
+ *   bits/c++config.h, which includes
+ *   bits/os_defines.h, which defines
+ *   ___USE_MINGW_ANSI_STDIO 1
+ *
+ * [This next paragraph is partly conjecture.]
+ *
+ * If __USE_MINGW_ANSI_STDIO is defined before stdio.h is included, then MinGW
+ * uses C99-conformant Standard I/O from libmingwex.a (see [1]). If not, then
+ * it uses Microsoft's non-C99-conformant MSVCRT runtime. Somehow, delay-loaded
+ * DLLs (i.e., setupapi.dll) get mixed up in this. If __USE_MINGW_ANSI_STDIO
+ * is defined, but a Standard I/O call is made inside Mobot_dongleGetTTY
+ * before the call to SetupDiEnumDeviceInfo, then Windows loads its libraries
+ * in the correct order and everything is fine.
+ *
+ * Solutions/Workarounds:
+ *   - Put a dummy printf in Mobot_dongleGetTTY.
+ *   - Ensure that no C++ headers are included before stdio.h.
+ *
+ * A couple other clues I picked up: when __USE_MINGW_ANSI_STDIO is 0 or
+ * undefined, setupapi.dll loads wintrust.dll, which has something to do with
+ * application privileges. When the symbol is 1, setupapi.dll does not load
+ * wintrust.dll, and the aforementioned crash occurs.
+ *
+ * [1] http://en.wikipedia.org/wiki/MinGW#Programming_language_support
+ */
+
 #include <stdio.h>
+
+#if __cplusplus
+#include <string>
+#endif
 
 #if defined (NONRELEASE) || defined (SWIG)
 #ifndef _CH_
@@ -202,10 +237,17 @@ typedef enum mobotFormFactor_e
 #define PINMODE_OUTPUT  0x01
 #define PINMODE_INPUTPULLUP  0x02
 
+//new
+#define DIGITAL_LOW	  0x00
+#define DIGITAL_HIGH  0x01
+
 #define SENDBUF_SIZE 512
 
 #ifndef BR_COMMS_S
 #define BR_COMMS_S
+
+typedef void (*Mobot_progressCallbackFunc)(double progress, void* user_data);
+typedef void (*Mobot_completionCallbackFunc)(int complete, void* user_data);
 
 struct mobot_s;
 typedef struct mobotInfo_s
@@ -276,7 +318,7 @@ typedef struct mobot_s
   MUTEX_T* callback_lock;
   int callbackEnabled;
   void (*buttonCallback)(void* mobot, int button, int buttonDown);
-  void (*jointCallback)(int, double, double, double, double, void*);
+  void (*jointCallback)(int, double, double, double, double, int, void*);
   void* jointCallbackData;
   void (*accelCallback)(int, double, double, double, void*);
   void* accelCallbackData;
@@ -308,6 +350,11 @@ typedef struct mobot_s
   void *eventqueue;
 #endif
   THREAD_T *eventthread;
+  int packetSeqNum;
+
+  int rawStreamMode;
+  void* rawStreamUserData;
+  void (*rawStreamDataCallback)(const uint8_t* buf, size_t size, void* userdata);
 } mobot_t;
 #endif
 
@@ -445,6 +492,8 @@ class CMobot
     int connectWithTTY(const char ttyfilename[]);
 #endif
     int delaySeconds(int seconds);
+	//new
+	int delay(unsigned int milliseconds);
     int disconnect();
     int driveJointToDirect(robotJointId_t id, double angle);
     int driveJointTo(robotJointId_t id, double angle);
@@ -612,6 +661,7 @@ class CMobot
     int motionUnstandNB();
     int motionWait();
     int systemTime(double &time);
+
   public:
     static void *g_chmobot_dlhandle;
     static int g_chmobot_dlcount;
@@ -622,19 +672,26 @@ class DLLIMPORT CMobot
   public:
     CMobot();
     virtual ~CMobot();
-    int accelTimeNB(double radius, double acceleration, double time);
-    int accelToVelocityNB(double radius, double acceleration, double velocity);
-    int accelToMaxSpeedNB(double radius, double acceleration);
-    int accelAngularTimeNB(robotJointId_t id, double acceleration, double time);
-    int accelAngularToVelocityNB(robotJointId_t id, double acceleration, double speed);
-    int accelAngularAngleNB(robotJointId_t id, double acceleration, double angle);
-    int smoothMoveToNB(
+    virtual int accelTimeNB(double radius, double acceleration, double time);
+    virtual int accelToVelocityNB(double radius, double acceleration, double velocity);
+    virtual int accelToMaxSpeedNB(double radius, double acceleration);
+    virtual int accelAngularTimeNB(robotJointId_t id, double acceleration, double time);
+    virtual int accelAngularToVelocityNB(robotJointId_t id, double acceleration, double speed);
+    virtual int accelAngularAngleNB(robotJointId_t id, double acceleration, double angle);
+    virtual int smoothMoveToNB(
         robotJointId_t id,
         double accel0,
         double accelf,
         double vmax,
         double angle);
-    int blinkLED(double delay, int numBlinks);
+    virtual int blinkLED(double delay, int numBlinks);
+
+    virtual bool canFlashFirmware ();
+    virtual int flashFirmwareAsync (std::string hexfile,
+                                    Mobot_progressCallbackFunc progressCallback,
+                                    Mobot_completionCallbackFunc completionCallback,
+                                    void* user_data);
+
 /* connect() Return Error Codes:
    -1 : General Error
    -2 : Lockfile Exists
@@ -643,91 +700,93 @@ class DLLIMPORT CMobot
    -5 : Bluetooth device not found
    -6 : Protocol version mismatch
    */
-    int connect();
-    int connectWithAddress(const char address[], int channel = 1);
-    int connectWithBluetoothAddress(const char address[], int channel = 1);
-    int connectWithIPAddress(const char address[], const char port[] = "5768");
-    int connectWithTTY(const char ttyfilename[]);
-    int delaySeconds(int seconds);
-    int disconnect();
-    int driveJointToDirect(robotJointId_t id, double angle);
-    int driveJointTo(robotJointId_t id, double angle);
-    int driveJointToDirectNB(robotJointId_t id, double angle);
-    int driveJointToNB(robotJointId_t id, double angle);
-    int driveToDirect(double angle1, double angle2, double angle3, double angle4);
-    int driveTo(double angle1, double angle2, double angle3, double angle4);
-    int driveToDirectNB(double angle1, double angle2, double angle3, double angle4);
-    int driveToNB(double angle1, double angle2, double angle3, double angle4);
-    int enableButtonCallback(void* userdata, void (*buttonCallback)(void* data, int button, int buttonDown));
-    int disableButtonCallback();
-    int enableJointEventCallback(void *userdata,
-        void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, void *userdata));
-    int disableJointEventCallback();
-    int enableEventCallback(void (*eventCallback)(const uint8_t *buf, int size, void* userdata),
+    virtual int connect();
+    virtual int connectWithAddress(const char address[], int channel = 1);
+    virtual int connectWithBluetoothAddress(const char address[], int channel = 1);
+    virtual int connectWithIPAddress(const char address[], const char port[] = "5768");
+    virtual int connectWithTTY(const char ttyfilename[]);
+    virtual int delaySeconds(int seconds);
+	virtual int delay(unsigned int milliseconds);
+    virtual int disconnect();
+    virtual int driveJointToDirect(robotJointId_t id, double angle);
+    virtual int driveJointTo(robotJointId_t id, double angle);
+    virtual int driveJointToDirectNB(robotJointId_t id, double angle);
+    virtual int driveJointToNB(robotJointId_t id, double angle);
+    virtual int driveToDirect(double angle1, double angle2, double angle3, double angle4);
+    virtual int driveTo(double angle1, double angle2, double angle3, double angle4);
+    virtual int driveToDirectNB(double angle1, double angle2, double angle3, double angle4);
+    virtual int driveToNB(double angle1, double angle2, double angle3, double angle4);
+    virtual int enableButtonCallback(void* userdata, void (*buttonCallback)(void* data, int button, int buttonDown));
+    virtual int disableButtonCallback();
+    virtual int enableJointEventCallback(void *userdata,
+        void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, int mask, void *userdata));
+    virtual int disableJointEventCallback();
+    virtual int enableEventCallback(void (*eventCallback)(const uint8_t *buf, int size, void* userdata),
         void* userdata);
-    int disableEventCallback();
-    int enableRecordDataShift();
-    int disableRecordDataShift();
-    int isConnected();
-    int isMoving();
-    int getFormFactor(int &formFactor);
+    virtual int disableEventCallback();
+    virtual int enableRecordDataShift();
+    virtual int disableRecordDataShift();
+    virtual int isConnected();
+    virtual int isMoving();
+    virtual int getFormFactor(int &formFactor);
     static const char* getConfigFilePath();
-    int getDistance(double &distance, double radius);
+    virtual int getDistance(double &distance, double radius);
 #ifndef SWIG
     int getJointAngle(robotJointId_t id, double &angle);
 #else
-    void getJointAngle(robotJointId_t id, double &angle);
+    virtual void getJointAngle(robotJointId_t id, double &angle);
 #endif
-    int getJointAngles(double &angle1, double &angle2, double &angle3, double &angle4);
-    int getJointAngleAverage(robotJointId_t id, double &angle, int numReadings=10);
-    int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, double &angle4, int numReadings=10);
-    int getJointMaxSpeed(robotJointId_t id, double &maxSpeed);
-    int getJointSafetyAngle(double &angle);
-    int getJointSafetyAngleTimeout(double &seconds);
-    int getJointSpeed(robotJointId_t id, double &speed);
-    int getJointSpeedRatio(robotJointId_t id, double &ratio);
-    int getJointSpeeds(double &speed1, double &speed2, double &speed3, double &speed4);
-    int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3, double &ratio4);
-    int getJointState(robotJointId_t id, robotJointState_t &state);
-    mobot_t* getMobotObject();
-    int getVersion();
-    int move(double angle1, double angle2, double angle3, double angle4);
-    int moveNB(double angle1, double angle2, double angle3, double angle4);
-    int moveBackward(double angle);
-    int moveBackwardNB(double angle);
-    int moveContinuousNB(robotJointState_t dir1, 
+    virtual int getJointAngles(double &angle1, double &angle2, double &angle3, double &angle4);
+    virtual int getJointAngleAverage(robotJointId_t id, double &angle, int numReadings=10);
+    virtual int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, double &angle4, int numReadings=10);
+    virtual int getJointMaxSpeed(robotJointId_t id, double &maxSpeed);
+    virtual int getJointSafetyAngle(double &angle);
+    virtual int getJointSafetyAngleTimeout(double &seconds);
+    virtual int getJointSpeed(robotJointId_t id, double &speed);
+    virtual int getJointSpeedRatio(robotJointId_t id, double &ratio);
+    virtual int getJointSpeeds(double &speed1, double &speed2, double &speed3, double &speed4);
+    virtual int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3, double &ratio4);
+    virtual int getJointState(robotJointId_t id, robotJointState_t &state);
+    virtual mobot_t* getMobotObject();
+    virtual int getVersion();
+    virtual int getVersions(unsigned int &version);
+    virtual int move(double angle1, double angle2, double angle3, double angle4);
+    virtual int moveNB(double angle1, double angle2, double angle3, double angle4);
+    virtual int moveBackward(double angle);
+    virtual int moveBackwardNB(double angle);
+    virtual int moveContinuousNB(robotJointState_t dir1, 
                        robotJointState_t dir2, 
                        robotJointState_t dir3, 
                        robotJointState_t dir4);
-    int moveContinuousTime(robotJointState_t dir1, 
+    virtual int moveContinuousTime(robotJointState_t dir1, 
                            robotJointState_t dir2, 
                            robotJointState_t dir3, 
                            robotJointState_t dir4, 
                            double seconds);
-    int moveDistance(double distance, double radius);
-    int moveDistanceNB(double distance, double radius);
-    int moveForward(double angle);
-    int moveForwardNB(double angle);
-    int moveJointContinuousNB(robotJointId_t id, robotJointState_t dir);
-    int moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, double seconds);
-    int moveJoint(robotJointId_t id, double angle);
-    int moveJointNB(robotJointId_t id, double angle);
-    int moveJointTo(robotJointId_t id, double angle);
-    int moveJointToDirect(robotJointId_t id, double angle);
-    int moveJointToNB(robotJointId_t id, double angle);
-    int moveJointToDirectNB(robotJointId_t id, double angle);
-    int moveJointWait(robotJointId_t id);
-    int moveTo(double angle1, double angle2, double angle3, double angle4);
-    int moveToDirect(double angle1, double angle2, double angle3, double angle4);
-    int moveToNB(double angle1, double angle2, double angle3, double angle4);
-    int moveToDirectNB(double angle1, double angle2, double angle3, double angle4);
-    int moveWait();
-    int moveToZero();
-    int moveToZeroNB();
-    int movexy(double x, double y, double radius, double trackwidth);
-    int movexyNB(double x, double y, double radius, double trackwidth);
-    int recordAngle(robotJointId_t id, double time[], double angle[], int num, double seconds, int shiftData = 1);
-    int recordAngles(double time[], 
+    virtual int moveDistance(double distance, double radius);
+    virtual int moveDistanceNB(double distance, double radius);
+    virtual int moveForward(double angle);
+    virtual int moveForwardNB(double angle);
+    virtual int moveJointContinuousNB(robotJointId_t id, robotJointState_t dir);
+    virtual int moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, double seconds);
+    virtual int moveJoint(robotJointId_t id, double angle);
+    virtual int moveJointNB(robotJointId_t id, double angle);
+    virtual int moveJointTo(robotJointId_t id, double angle);
+    virtual int moveJointToDirect(robotJointId_t id, double angle);
+    virtual int moveJointToNB(robotJointId_t id, double angle);
+    virtual int moveJointToDirectNB(robotJointId_t id, double angle);
+    virtual int moveJointWait(robotJointId_t id);
+    virtual int moveTo(double angle1, double angle2, double angle3, double angle4);
+    virtual int moveToDirect(double angle1, double angle2, double angle3, double angle4);
+    virtual int moveToNB(double angle1, double angle2, double angle3, double angle4);
+    virtual int moveToDirectNB(double angle1, double angle2, double angle3, double angle4);
+    virtual int moveWait();
+    virtual int moveToZero();
+    virtual int moveToZeroNB();
+    virtual int movexy(double x, double y, double radius, double trackwidth);
+    virtual int movexyNB(double x, double y, double radius, double trackwidth);
+    virtual int recordAngle(robotJointId_t id, double time[], double angle[], int num, double seconds, int shiftData = 1);
+    virtual int recordAngles(double time[], 
                      double angle1[], 
                      double angle2[], 
                      double angle3[], 
@@ -735,19 +794,19 @@ class DLLIMPORT CMobot
                      int num, 
                      double seconds,
                      int shiftData = 1);
-    int recordAngleBegin(robotJointId_t id, robotRecordData_t &time, robotRecordData_t &angle, double seconds, int shiftData = 1);
-    int recordDistanceBegin(robotJointId_t id, robotRecordData_t &time, robotRecordData_t &distance, double radius, double seconds, int shiftData = 1);
-    int recordAngleEnd(robotJointId_t id, int &num);
-    int recordDistanceEnd(robotJointId_t id, int &num);
-    int recordDistanceOffset(double distance);
-    int recordAnglesBegin(robotRecordData_t &time, 
+    virtual int recordAngleBegin(robotJointId_t id, robotRecordData_t &time, robotRecordData_t &angle, double seconds, int shiftData = 1);
+    virtual int recordDistanceBegin(robotJointId_t id, robotRecordData_t &time, robotRecordData_t &distance, double radius, double seconds, int shiftData = 1);
+    virtual int recordAngleEnd(robotJointId_t id, int &num);
+    virtual int recordDistanceEnd(robotJointId_t id, int &num);
+    virtual int recordDistanceOffset(double distance);
+    virtual int recordAnglesBegin(robotRecordData_t &time, 
                           robotRecordData_t &angle1, 
                           robotRecordData_t &angle2, 
                           robotRecordData_t &angle3, 
                           robotRecordData_t &angle4, 
                           double seconds,
                           int shiftData = 1);
-    int recordDistancesBegin(robotRecordData_t &time, 
+    virtual int recordDistancesBegin(robotRecordData_t &time, 
                           robotRecordData_t &distance1, 
                           robotRecordData_t &distance2, 
                           robotRecordData_t &distance3, 
@@ -755,79 +814,80 @@ class DLLIMPORT CMobot
                           double radius,
                           double seconds,
                           int shiftData = 1);
-    int recordAnglesEnd(int &num);
-    int recordDistancesEnd(int &num);
-    int recordWait();
-    int reset();
-    int resetToZero();
-    int resetToZeroNB();
-    int setAccelEventThreshold(double threshold);
-    int setJointEventThreshold(double threshold);
-    int setExitState(robotJointState_t exitState);
-    int setJointMovementStateNB(robotJointId_t id, robotJointState_t dir);
-    int setJointMovementStateTime(robotJointId_t id, robotJointState_t dir, double seconds);
-    int setJointSafetyAngle(double angle);
-    int setJointSafetyAngleTimeout(double seconds);
-    int setJointSpeed(robotJointId_t id, double speed);
-    int setJointSpeeds(double speed1, double speed2, double speed3, double speed4);
-    int setJointSpeedRatio(robotJointId_t id, double ratio);
-    int setJointSpeedRatios(double ratios1, double ratios2, double ratios3, double ratios4);
-    int setMotorPower(robotJointId_t id, int power);
-    int setMovementStateNB( robotJointState_t dir1,
+    virtual int recordAnglesEnd(int &num);
+    virtual int recordDistancesEnd(int &num);
+    virtual int recordWait();
+    virtual int reset();
+    virtual int resetToZero();
+    virtual int resetToZeroNB();
+    virtual int setAccelEventThreshold(double threshold);
+    virtual int setBuzzerFrequencyOn (double freq);
+    virtual int setJointEventThreshold(int joint, double threshold);
+    virtual int setExitState(robotJointState_t exitState);
+    virtual int setJointMovementStateNB(robotJointId_t id, robotJointState_t dir);
+    virtual int setJointMovementStateTime(robotJointId_t id, robotJointState_t dir, double seconds);
+    virtual int setJointSafetyAngle(double angle);
+    virtual int setJointSafetyAngleTimeout(double seconds);
+    virtual int setJointSpeed(robotJointId_t id, double speed);
+    virtual int setJointSpeeds(double speed1, double speed2, double speed3, double speed4);
+    virtual int setJointSpeedRatio(robotJointId_t id, double ratio);
+    virtual int setJointSpeedRatios(double ratios1, double ratios2, double ratios3, double ratios4);
+    virtual int setMotorPower(robotJointId_t id, int power);
+    virtual int setMovementStateNB( robotJointState_t dir1,
         robotJointState_t dir2,
         robotJointState_t dir3,
         robotJointState_t dir4);
-    int setMovementStateTime( robotJointState_t dir1,
+    virtual int setMovementStateTime( robotJointState_t dir1,
         robotJointState_t dir2,
         robotJointState_t dir3,
         robotJointState_t dir4,
         double seconds);
-    int setMovementStateTimeNB( robotJointState_t dir1,
+    virtual int setMovementStateTimeNB( robotJointState_t dir1,
         robotJointState_t dir2,
         robotJointState_t dir3,
         robotJointState_t dir4,
         double seconds);
-    int setTwoWheelRobotSpeed(double speed, double radius);
-    int stop();
-    int stopOneJoint(robotJointId_t id);
-    int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
-    int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
-    int stopAllJoints();
-    int turnLeft(double angle, double radius, double tracklength);
-    int turnLeftNB(double angle, double radius, double tracklength);
-    int turnRight(double angle, double radius, double tracklength);
-    int turnRightNB(double angle, double radius, double tracklength);
+    virtual int setTwoWheelRobotSpeed(double speed, double radius);
+    virtual int stop();
+    virtual int stopOneJoint(robotJointId_t id);
+    virtual int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
+    virtual int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
+    virtual int stopAllJoints();
+    virtual int turnLeft(double angle, double radius, double tracklength);
+    virtual int turnLeftNB(double angle, double radius, double tracklength);
+    virtual int turnRight(double angle, double radius, double tracklength);
+    virtual int turnRightNB(double angle, double radius, double tracklength);
 
-    int motionArch(double angle);
-    int motionDistance(double distance, double radius);
-    int motionInchwormLeft(int num);
-    int motionInchwormRight(int num);
-    int motionRollBackward(double angle);
-    int motionRollForward(double angle);
-    int motionSkinny(double angle);
-    int motionStand();
-    int motionTurnLeft(double angle);
-    int motionTurnRight(double angle);
-    int motionTumbleRight(int num);
-    int motionTumbleLeft(int num);
-    int motionUnstand();
+    virtual int motionArch(double angle);
+    virtual int motionDistance(double distance, double radius);
+    virtual int motionInchwormLeft(int num);
+    virtual int motionInchwormRight(int num);
+    virtual int motionRollBackward(double angle);
+    virtual int motionRollForward(double angle);
+    virtual int motionSkinny(double angle);
+    virtual int motionStand();
+    virtual int motionTurnLeft(double angle);
+    virtual int motionTurnRight(double angle);
+    virtual int motionTumbleRight(int num);
+    virtual int motionTumbleLeft(int num);
+    virtual int motionUnstand();
 
     /* Non-Blocking motion functions */
-    int motionArchNB(double angle);
-    int motionDistanceNB(double distance, double radius);
-    int motionInchwormLeftNB(int num);
-    int motionInchwormRightNB(int num);
-    int motionRollBackwardNB(double angle);
-    int motionRollForwardNB(double angle);
-    int motionSkinnyNB(double angle);
-    int motionStandNB();
-    int motionTurnLeftNB(double angle);
-    int motionTurnRightNB(double angle);
-    int motionTumbleRightNB(int num);
-    int motionTumbleLeftNB(int num);
-    int motionUnstandNB();
-    int motionWait();
-    int systemTime(double &time);
+    virtual int motionArchNB(double angle);
+    virtual int motionDistanceNB(double distance, double radius);
+    virtual int motionInchwormLeftNB(int num);
+    virtual int motionInchwormRightNB(int num);
+    virtual int motionRollBackwardNB(double angle);
+    virtual int motionRollForwardNB(double angle);
+    virtual int motionSkinnyNB(double angle);
+    virtual int motionStandNB();
+    virtual int motionTurnLeftNB(double angle);
+    virtual int motionTurnRightNB(double angle);
+    virtual int motionTumbleRightNB(int num);
+    virtual int motionTumbleLeftNB(int num);
+    virtual int motionUnstandNB();
+    virtual int motionWait();
+    virtual int systemTime(double &time);
     int transactMessage(int cmd, void* buf, int size);
   protected:
     int getJointDirection(robotJointId_t id, robotJointState_t &dir);
@@ -1013,6 +1073,7 @@ DLLIMPORT int Mobot_connectWithBluetoothAddress(
     mobot_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_disableJointEventCallback(mobot_t* comms);
 DLLIMPORT int Mobot_disableAccelEventCallback(mobot_t* comms);
+
 /* Find the serial device the robot is plugged into. The device's
  * fully-qualified path is stored in the tty output parameter as a
  * null-terminated string. Example device paths for various OSes are
@@ -1022,11 +1083,29 @@ DLLIMPORT int Mobot_disableAccelEventCallback(mobot_t* comms);
  * Mobot_dongleGetTTY will write at most len bytes to tty, including the
  * terminating null byte. Returns -1 on error, 0 on success. */
 DLLIMPORT int Mobot_dongleGetTTY(char* tty, size_t len);
+
+/* True if it is possible to flash this robot's firmware, false otherwise.
+ * Under the hood, this checks to see if the robot is connected via TTY (i.e.,
+ * USB). */
+DLLIMPORT int Mobot_canFlashFirmware (mobot_t* comms);
+
+/* Begin flashing the firmware of a robot connected by TTY. Parameters include
+ * the hexfile filename (not the raw data), and two callbacks. Where progress
+ * is measured from 0.0 to 1.0, the thread on which the flash operation runs
+ * will call progressCallback every time there is a change in progress. Once
+ * the operation is complete, completionCallback is called with the value of
+ * 1 for success, 0 for failure. The user_data parameter gets passed to the
+ * user's callbacks. */
+DLLIMPORT int Mobot_flashFirmwareAsync (mobot_t* comms, const char* hexfile,
+    Mobot_progressCallbackFunc progressCallback,
+    Mobot_completionCallbackFunc completionCallback,
+    void* userData);
+
 DLLIMPORT int Mobot_connectWithZigbeeAddress(mobot_t* comms, uint16_t addr);
 DLLIMPORT int Mobot_enableAccelEventCallback(mobot_t* comms, void* data,
     void (*accelCallback)(int millis, double x, double y, double z, void* data));
 DLLIMPORT int Mobot_enableJointEventCallback(mobot_t* comms, void* data, 
-    void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, void* data));
+    void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, int mask, void* data));
 DLLIMPORT int Mobot_findMobot(mobot_t* parent, const char* childSerialID);
 DLLIMPORT mobotMelodyNote_t* Mobot_createMelody(int tempo);
 DLLIMPORT int Mobot_melodyAddNote(mobotMelodyNote_t* melody, const char* note, int divider);
@@ -1165,6 +1244,7 @@ DLLIMPORT int Mobot_getNumSlaves(mobot_t* comms, int* num);
 DLLIMPORT int Mobot_getSlaveAddr(mobot_t* comms, uint8_t index, uint16_t* addr);
 DLLIMPORT int Mobot_getStatus(mobot_t* comms);
 DLLIMPORT int Mobot_getVersion(mobot_t* comms);
+DLLIMPORT int Mobot_getVersions(mobot_t* comms, unsigned int *version);
 DLLIMPORT int Mobot_move(mobot_t* comms,
                                double angle1,
                                double angle2,
@@ -1287,7 +1367,7 @@ DLLIMPORT int Mobot_reset(mobot_t* comms);
 DLLIMPORT int Mobot_resetToZero(mobot_t* comms);
 DLLIMPORT int Mobot_resetToZeroNB(mobot_t* comms);
 DLLIMPORT int Mobot_setAccelEventThreshold(mobot_t* comms, double threshold);
-DLLIMPORT int Mobot_setJointEventThreshold(mobot_t* comms, double threshold);
+DLLIMPORT int Mobot_setJointEventThreshold(mobot_t* comms, int joint, double threshold);
 DLLIMPORT int Mobot_setExitState(mobot_t* comms, robotJointState_t exitState);
 DLLIMPORT int Mobot_setFourierCoefficients(mobot_t* comms, robotJointId_t id, double* a, double* b);
 DLLIMPORT int Mobot_beginFourierControl(mobot_t* comms, uint8_t motorMask);
@@ -1403,6 +1483,12 @@ DLLIMPORT int Mobot_motionUnstandNB(mobot_t* comms);
 DLLIMPORT int Mobot_motionWait(mobot_t* comms);
 int shiftDataIsEnabled(mobot_t* comms);
 DLLIMPORT double systemTime();
+
+DLLIMPORT int Mobot_sendRawStream(const void *data, int size);
+DLLIMPORT int Mobot_enableRawStream(
+    void (*rawStreamDataCallback)(const uint8_t* buf, size_t size, void* userdata),
+    void *userdata);
+DLLIMPORT int Mobot_disableRawStream();
 #ifdef __cplusplus
 }
 #endif

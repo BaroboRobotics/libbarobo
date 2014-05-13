@@ -439,18 +439,6 @@ int Mobot_connectWithZigbeeAddress(mobot_t* comms, uint16_t addr)
   int rc;
   int form;
   if(g_dongleMobot == NULL) {
-    if(g_bcf == NULL) {
-      g_bcf = BCF_New();
-      if(BCF_Read(g_bcf, comms->configFilePath)) {
-        fprintf(stderr, 
-            "ERROR: Your Barobo configuration file does not exist.\n"
-            "Please create one by opening the MoBot remote control, clicking on\n"
-            "the 'Robot' menu entry, and selecting 'Configure Robot Bluetooth'.\n");
-        BCF_Destroy(g_bcf);
-        g_bcf = NULL;
-        return -1;
-      }
-    }
     Mobot_initDongle();
   }
   if(
@@ -511,6 +499,40 @@ int Mobot_connectWithZigbeeAddress(mobot_t* comms, uint16_t addr)
 }
 
 #ifdef ENABLE_BLUETOOTH
+#if _WIN32
+typedef struct bdaddr_s {
+  UINT8 b[6];
+} bdaddr_t;
+
+static void baswap(bdaddr_t *dst, const bdaddr_t *src)
+{
+	register unsigned char *d = (unsigned char *) dst;
+	register const unsigned char *s = (const unsigned char *) src;
+	register int i;
+
+	for (i = 0; i < 6; i++)
+		d[i] = s[5-i];
+}
+
+static int str2ba(const char *str, bdaddr_t *ba)
+{
+	UINT8 b[6];
+	const char *ptr = str;
+	int i;
+
+	for (i = 0; i < 6; i++) {
+		b[i] = (UINT8) strtol(ptr, NULL, 16);
+		if (i != 5 && !(ptr = strchr(ptr, ':')))
+			ptr = ":00:00:00:00:00";
+		ptr++;
+	}
+
+	baswap(ba, (bdaddr_t *) b);
+
+	return 0;
+}
+#endif
+
 int Mobot_connectWithBluetoothAddress(mobot_t* comms, const char* address, int channel)
 {
   int err = -1;
@@ -786,19 +808,6 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
   }
   /* If a parent was specified, use it as a dongle */
   if(parent == NULL) {
-    if(g_bcf == NULL) {
-      g_bcf = BCF_New();
-      if(BCF_Read(g_bcf, child->configFilePath)) {
-        fprintf(stderr, 
-            "ERROR: Your Barobo configuration file does not exist.\n"
-            "Please create one by opening the MoBot remote control, clicking on\n"
-            "the 'Robot' menu entry, and selecting 'Configure Robot Bluetooth'.\n");
-        BCF_Destroy(g_bcf);
-        g_bcf = NULL;
-        free(_childSerialID);
-        return -1;
-      }
-    }
     Mobot_initDongle();
     parent = g_dongleMobot;
   } else {
@@ -947,17 +956,23 @@ int finishConnectWithoutCommsThread(mobot_t* comms)
       numJoints = 0;
   }
   /* Get the protocol version; make sure it matches ours */
-  int version;
-  version = Mobot_getVersion(comms); 
+  unsigned int version;
+  Mobot_getVersions(comms, &version); 
   if(version < 0) {
     fprintf(stderr, "(barobo) ERROR: Mobot_getVersion() returned something not good.\n");
     Mobot_disconnect(comms);
     return version;
   }
-  if(version < CMD_NUMCOMMANDS) {
+  if(version < FIRMWARE_VERSION) {
     fprintf(stderr, "Warning. Communications protocol version mismatch.\n");
-    fprintf(stderr, "Robot Firmware Protocol Version: %d\n", version);
-    fprintf(stderr, "CMobot Library Protocol Version: %d\n", CMD_NUMCOMMANDS);
+    fprintf(stderr, "Robot Firmware Protocol Version: %d.%d.%d\n", 
+        (version>>16)&0xff,
+        (version>>8)&0xff,
+        version&0xff);
+    fprintf(stderr, "CMobot Library Protocol Version: %d.%d.%d\n", 
+        (FIRMWARE_VERSION>>16)&0xff,
+        (FIRMWARE_VERSION>>8)&0xff,
+        FIRMWARE_VERSION&0xff);
   }
   /* Get the joint max speeds */
   /* DEBUG */
@@ -1416,7 +1431,7 @@ int Mobot_enableButtonCallback(mobot_t* comms, void* data,
 }
 
 int Mobot_enableJointEventCallback(mobot_t* comms, void* userdata,
-    void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, void* data)
+    void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, int mask, void* data)
     )
 {
   int status;
@@ -1666,6 +1681,12 @@ int Mobot_init(mobot_t* comms)
 
   comms->eventqueue = new RingBuf<event_t*>();
 
+  comms->packetSeqNum = 0x80;
+
+  comms->rawStreamMode = 0;
+  comms->rawStreamUserData = NULL;
+  comms->rawStreamDataCallback = NULL;
+
   return 0;
 }
 
@@ -1683,7 +1704,7 @@ int Mobot_isConnected(mobot_t* comms)
 
 int Mobot_protocolVersion()
 {
-  return CMD_NUMCOMMANDS;
+  return FIRMWARE_VERSION;
 }
 
 int Mobot_pair(mobot_t* mobot)
@@ -1759,13 +1780,17 @@ int Mobot_setAccelEventThreshold(mobot_t* comms, double threshold)
   return 0;
 }
 
-int Mobot_setJointEventThreshold(mobot_t* comms, double threshold)
+int Mobot_setJointEventThreshold(mobot_t* comms, int joint, double threshold)
 {
   uint8_t buf[32];
   float thresh = threshold;
   int status;
-  memcpy(buf, &thresh, 4);
-  status = MobotMsgTransaction(comms, BTCMD(CMD_SET_JOINT_EVENT_THRESHOLD), buf, 4);
+  if( (joint < 1) || (joint > 4) ) {
+    return -1;
+  }
+  buf[0] = joint-1;
+  memcpy(&buf[1], &thresh, 4);
+  status = MobotMsgTransaction(comms, BTCMD(CMD_SET_JOINT_EVENT_THRESHOLD), buf, 5);
   if(status < 0) return status;
   /* Make sure the data size is correct */
   if(buf[1] != 3) {
@@ -1908,35 +1933,51 @@ int Mobot_waitForReportedSerialID(mobot_t* comms, char* id)
   }
 }
 
-#ifdef _WIN32
-void baswap(bdaddr_t *dst, const bdaddr_t *src)
+int Mobot_sendRawStream(const void* data, int size)
 {
-	register unsigned char *d = (unsigned char *) dst;
-	register const unsigned char *s = (const unsigned char *) src;
-	register int i;
+  mobot_t* comms = g_dongleMobot;
+  if(comms->connectionMode == MOBOTCONNECT_ZIGBEE) {
+    assert(MOBOTCONNECT_TTY == comms->parent->connectionMode);
 
-	for (i = 0; i < 6; i++)
-		d[i] = s[5-i];
+    /* Send the message out on the parent's dongle. */
+    if (-1 == dongleWrite(comms->parent->dongle, (const uint8_t*)data, size)) {
+      return -1;
+    }
+  } else if (comms->connectionMode == MOBOTCONNECT_TTY) {
+    /* Send the message out on our dongle. */
+    if (-1 == dongleWrite(comms->dongle, (const uint8_t*)data, size)) {
+      return -1;
+    }
+  } else {
+    return -2;
+  }
+  return 0;
 }
 
-int str2ba(const char *str, bdaddr_t *ba)
+int Mobot_enableRawStream(
+    void (*rawStreamDataCallback)(const uint8_t* buf, size_t size, void* userdata),
+    void *userdata)
 {
-	UINT8 b[6];
-	const char *ptr = str;
-	int i;
-
-	for (i = 0; i < 6; i++) {
-		b[i] = (UINT8) strtol(ptr, NULL, 16);
-		if (i != 5 && !(ptr = strchr(ptr, ':')))
-			ptr = ":00:00:00:00:00";
-		ptr++;
-	}
-
-	baswap(ba, (bdaddr_t *) b);
-
-	return 0;
+  if(g_dongleMobot == NULL) {
+    Mobot_initDongle();
+  }
+  /* if the dongle is still null, return error */
+  if(g_dongleMobot == NULL) {
+    return -1;
+  }
+  g_dongleMobot->rawStreamDataCallback = rawStreamDataCallback;
+  g_dongleMobot->rawStreamUserData = userdata;
+  g_dongleMobot->rawStreamMode = 1;
+  return 0;
 }
-#endif
+
+int Mobot_disableRawStream()
+{
+  g_dongleMobot->rawStreamDataCallback = NULL;
+  g_dongleMobot->rawStreamUserData = NULL;
+  g_dongleMobot->rawStreamMode = 0;
+  return 0;
+}
 
 /* This function does a complete message transaction with a Mobot, including
  * sending the message, waiting for a response, and resending the message in
@@ -1997,7 +2038,11 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
     if(datasize > 0) {
       memcpy(&str[2], data, datasize);
     }
-    str[datasize+2] = MSG_SENDEND;
+    comms->packetSeqNum++;
+    if(comms->packetSeqNum > 0xff) {
+      comms->packetSeqNum = 0x80;
+    }
+    str[datasize+2] = comms->packetSeqNum;
     len = datasize + 3;
   } else {
     str[0] = cmd;
@@ -2014,7 +2059,11 @@ int SendToIMobot(mobot_t* comms, uint8_t cmd, const void* data, int datasize)
     str[6] = datasize + 3;
 
     if(datasize > 0) memcpy(&str[7], data, datasize);
-    str[datasize+7] = MSG_SENDEND;
+    comms->packetSeqNum++;
+    if(comms->packetSeqNum > 0xff) {
+      comms->packetSeqNum = 0x80;
+    }
+    str[datasize+7] = comms->packetSeqNum;
     len = datasize + 8;
   }
 #if 0
@@ -2113,11 +2162,7 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
     ts.tv_nsec = mts.tv_nsec;
 #endif
     /* Add a timeout */
-    ts.tv_nsec += 700000000; // 100 ms
-    if(ts.tv_nsec > 1000000000) {
-      ts.tv_nsec -= 1000000000;
-      ts.tv_sec += 1;
-    }
+    ts.tv_sec += 10;
     rc = pthread_cond_timedwait(
       comms->recvBuf_cond, 
       comms->recvBuf_lock,
@@ -2142,16 +2187,32 @@ int RecvFromIMobot(mobot_t* comms, uint8_t* buf, int size)
       MUTEX_UNLOCK(comms->commsLock);
       //Mobot_disconnect(comms);
       return -2;
+    } else {
+      if(
+          (comms->recvBuf[comms->recvBuf_bytes-2] != comms->packetSeqNum) &&
+          (comms->recvBuf[comms->recvBuf_bytes-2] != RESP_END)
+        ) 
+      {
+        continue;
+      }
     }
 #else
     ResetEvent(*comms->recvBuf_cond);
     ReleaseMutex(*comms->recvBuf_lock);
-    rc = WaitForSingleObject(*comms->recvBuf_cond, 700);
+    rc = WaitForSingleObject(*comms->recvBuf_cond, 10000);
     if(rc == WAIT_TIMEOUT) {
       MUTEX_UNLOCK(comms->recvBuf_lock);
       MUTEX_UNLOCK(comms->commsLock);
       //Mobot_disconnect(comms);
       return -2;
+    } else {
+      if(
+          (comms->recvBuf[comms->recvBuf_bytes-2] != comms->packetSeqNum) &&
+          (comms->recvBuf[comms->recvBuf_bytes-2] != RESP_END)
+        ) 
+      {
+        continue;
+      }
     }
 #endif
   }
@@ -2274,7 +2335,8 @@ void* commsEngine(void* arg)
     if (MOBOTCONNECT_TTY == comms->connectionMode) {
       uint8_t buf[256];
       long len = dongleRead(comms->dongle, buf, sizeof(buf));
-      if (-1 == len) {
+      /* Either error or EOF. */
+      if (len <= 0) {
         break;
       }
 #ifdef COMMSDEBUG
@@ -2285,9 +2347,12 @@ void* commsEngine(void* arg)
       }
       printf("\n");
 #endif
-      Mobot_processMessage(comms, buf, len);
-    }
-    else {
+      if(comms->rawStreamMode) {
+        comms->rawStreamDataCallback(buf, len, comms->rawStreamUserData);
+      } else {
+        Mobot_processMessage(comms, buf, len);
+      }
+    } else {
       /* Try and receive a byte */
 #ifndef _WIN32
       err = read(comms->socket, &byte, 1);
@@ -2334,6 +2399,7 @@ void* commsEngine(void* arg)
       }
     }
   }
+  Mobot_disconnect(comms);
   return NULL;
 }
 
@@ -2410,10 +2476,11 @@ void* eventThread(void* arg)
         if(comms->jointCallback) {
           comms->jointCallback(
               event->millis,
-              event->data.joint_data[0],
-              event->data.joint_data[1],
-              event->data.joint_data[2],
-              event->data.joint_data[3],
+              event->data.joint_data.angles[0],
+              event->data.joint_data.angles[1],
+              event->data.joint_data.angles[2],
+              event->data.joint_data.angles[3],
+              event->data.joint_data.mask,
               comms->jointCallbackData);
         }
         MUTEX_UNLOCK(comms->callback_lock);
@@ -2431,7 +2498,7 @@ void* eventThread(void* arg)
         MUTEX_UNLOCK(comms->callback_lock);
         break;
     }
-    //delete event;
+    delete event;
   }
   return NULL;
 }
@@ -2554,10 +2621,11 @@ static void Mobot_processMessage (mobot_t *comms, uint8_t *buf, size_t len) {
         break;
       case EVENT_JOINT_MOVED:
         memcpy(&event->millis, &buf[7], 4);
-        memcpy(&event->data.joint_data[0], &buf[11], 16);
+        memcpy(&event->data.joint_data.angles[0], &buf[11], 16);
         for(int i = 0; i < 4; i++) {
-          event->data.joint_data[i] = RAD2DEG(event->data.joint_data[i]);
+          event->data.joint_data.angles[i] = RAD2DEG(event->data.joint_data.angles[i]);
         }
+        event->data.joint_data.mask = buf[27];
         break;
       case EVENT_ACCEL_CHANGED:
         memcpy(&event->millis, &buf[7], 4);

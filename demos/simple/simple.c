@@ -9,8 +9,8 @@ int main()
   int i = 0;
   mobot_t mobot;
   Mobot_init(&mobot);
-  Mobot_connectWithAddress(&mobot, "LQLX", 1);
-  Mobot_move(&mobot, 90, 90, 90, 90);
+  Mobot_connectWithAddress(&mobot, "P4SP", 1);
+  Mobot_move(&mobot, 1, 1, 1, 1);
 
   return 0;
 }

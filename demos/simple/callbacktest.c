@@ -4,10 +4,10 @@
 
 #define NUMBOTS 1
 
-void jointcb(int millis, double j1, double j2, double j3, double j4, void* data)
+void jointcb(int millis, double j1, double j2, double j3, double j4, int mask, void* data)
 {
-  printf("Joint event %d: %lf %lf %lf %lf\n",
-      millis, j1, j2, j3, j4);
+  printf("Joint event %d: %lf %lf %lf %lf %d\n",
+      millis, j1, j2, j3, j4, mask);
 }
 
 void accelcb(int millis, double x, double y, double z, void* data)
@@ -22,7 +22,7 @@ int main()
   mobot_t mobot;
   Mobot_init(&mobot);
   //Mobot_connectWithAddress(&mobot, "LQLX", 1);
-  Mobot_connectWithAddress(&mobot, "S3S3", 1);
+  Mobot_connectWithAddress(&mobot, "SVZX", 1);
   Mobot_enableJointEventCallback(&mobot, NULL, jointcb);
   Mobot_enableAccelEventCallback(&mobot, NULL, accelcb);
   printf("Press enter to quit.\n");

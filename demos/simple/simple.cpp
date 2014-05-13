@@ -3,19 +3,29 @@
 #include <mobot.h>
 #include <linkbot.h>
 #include <stdlib.h>
+#include <iostream>
 
-#define NUMBOTS 3
-
+using namespace std;
 int main()
 {
-  int i;
-  CLinkbotI mobot[NUMBOTS];
-  CLinkbotIGroup group;
-  for(i = 0; i < NUMBOTS; i++) {
-    mobot[i].connect();
-    group.addRobot(mobot[i]);
-  }
-  group.move(45, 0, 45);
+  char color[20],color2[20]="red";
+  int r, g, b;
+  int pin=2;
+  CLinkbotL robot;
+  
+  robot.connect();
+  robot.getLEDColorName(color);
+  cout<<color<<endl;
+  robot.setLEDColor(color2);
+  robot.getLEDColorName(color);
+  cout<<color<<endl;
+  robot.setLEDColorRGB(100,20,200);
+  robot.getLEDColorRGB(r,g,b);
+  cout<<r<<" "<<g<<" "<<b<<endl;
+  
+  robot.LinkPodPinMode(pin, 1);
+  robot.LinkPodDigitalWrite(pin, 0x1);
+  //robot.LinkPodDigitalWrite(pin, 0x0);
 
   return 0;
 }
