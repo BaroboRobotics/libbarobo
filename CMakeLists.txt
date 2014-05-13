@@ -34,6 +34,7 @@ add_subdirectory(BaroboConfigFile)
 
 include_directories(${LIBSFP_INCLUDE_DIRS})
 include_directories(${LIBSTKCOMMS_INCLUDE_DIRS})
+include_directories(${LIBSTKCOMMS_SOURCE_DIR})
 
 include_directories(${BAROBOCONFIGFILE_SOURCE_DIR})
 include_directories(${MXML_SOURCE_DIR})

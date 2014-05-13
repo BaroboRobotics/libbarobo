@@ -37,7 +37,7 @@ int Mobot_dongleGetTTY (char *buf, size_t len) {
       continue;
     }
     const char *usb_vendor_name
-      = CFStringGetCStringPtr(vend_cont, kCFStringEncodingMacRoman);
+      = CFStringGetCStringPtr(static_cast<CFStringRef>(vend_cont), kCFStringEncodingMacRoman);
 
     prod_cont = get_string_prop(device, "USB Product Name");
     if (!prod_cont) {
@@ -45,7 +45,7 @@ int Mobot_dongleGetTTY (char *buf, size_t len) {
       continue;
     }
     const char *usb_product_name
-      = CFStringGetCStringPtr(prod_cont, kCFStringEncodingMacRoman);
+      = CFStringGetCStringPtr(static_cast<CFStringRef>(prod_cont), kCFStringEncodingMacRoman);
 
     int i;
     for (i = 0; i < NUM_BAROBO_USB_DONGLE_IDS; ++i) {
@@ -76,13 +76,13 @@ int Mobot_dongleGetTTY (char *buf, size_t len) {
 
   /* Put the device path into buf */
   /* TODO figure out if CFStringGetLength() includes a null-terminator or not */
-  CFIndex ttylen = CFStringGetLength(tty_cont);
+  CFIndex ttylen = CFStringGetLength(static_cast<CFStringRef>(tty_cont));
   if (ttylen >= len) {
     fprintf(stderr, "(barobo) ERROR: buffer overflow in Mobot_dongleGetTTY()\n");
     return -1;
   }
-  CFStringGetBytes(tty_cont, CFRangeMake(0, ttylen),
-      kCFStringEncodingMacRoman, 0, false, buf, len, NULL);
+  CFStringGetBytes(static_cast<CFStringRef>(tty_cont), CFRangeMake(0, ttylen),
+      kCFStringEncodingMacRoman, 0, false, (UInt8*)buf, len, NULL);
   buf[ttylen] = 0;
   CFRelease(tty_cont);
 
