@@ -7,7 +7,7 @@ OBJS= chmobot_chdl.o \
       chmoboti_chdl.o \
       chmobotl_chdl.o 
 
-CFLAGS="-I/usr/local/ch/extern/include"
+CFLAGS="-I/usr/local/ch/extern/include -I../include"
 
 LFLAGS=-L../ -L../BaroboConfigFile -L../BaroboConfigFile/mxml-2.7
 

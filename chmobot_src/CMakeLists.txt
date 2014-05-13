@@ -44,7 +44,9 @@ elseif(CMAKE_HOST_APPLE)
       chmoboti_chdl.cpp
       chmobotl_chdl.cpp
 	  )
-	target_link_libraries(mobot barobo pthread baroboconfigfile mxml chsdk embedch)
+    find_library(COREFOUNDATION_LIB CoreFoundation)
+    find_library(IOKIT_LIB IOKit)
+	target_link_libraries(mobot chsdk embedch barobo pthread ${LIBBAROBO_LIBRARIES} ${IOKIT_LIB} ${COREFOUNDATION_LIB} sfp )
   set_target_properties(mobot PROPERTIES SUFFIX .dl)
 else()
   add_definitions(-DENABLE_BLUETOOTH -DLINUX -D_REENTRANT -DNeedFunctionPrototypes)

@@ -34,6 +34,7 @@ add_subdirectory(BaroboConfigFile)
 
 include_directories(${LIBSFP_INCLUDE_DIRS})
 include_directories(${LIBSTKCOMMS_INCLUDE_DIRS})
+include_directories(${LIBSTKCOMMS_SOURCE_DIR})
 
 include_directories(${BAROBOCONFIGFILE_SOURCE_DIR})
 include_directories(${MXML_SOURCE_DIR})
@@ -153,6 +154,7 @@ else()
     # OSX
 
     set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+    set_target_properties(barobo PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 
     find_library(COREFOUNDATION_LIB CoreFoundation)
     find_library(IOKIT_LIB IOKit)

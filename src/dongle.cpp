@@ -22,6 +22,7 @@
 #endif
 
 #ifdef __MACH__
+#include <sys/ioctl.h>
 #include <IOKit/serial/ioss.h>
 #endif
 
