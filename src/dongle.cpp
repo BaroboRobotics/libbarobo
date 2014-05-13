@@ -3,15 +3,18 @@
 
 #ifdef _WIN32
 #include "win32_error.h"
+#else
+#include <stdint.h>
+#include <stdbool.h>
 #endif
 
-//#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 
 #ifndef _WIN32
+#include <stdbool.h>
 #include <unistd.h>
 #include <termios.h>
 #include <sys/stat.h>
@@ -28,10 +31,13 @@ static void dongleFini (MOBOTdongle *dongle);
 /* NULL ms_delay means wait forever, otherwise it is a pointer to the number
  * of milliseconds to wait.
  *
- * Returns 0 on timeout (or read() returning zero), -1 on error, number of
- * bytes read otherwise. */
+ * Return -1 on error, otherwise the number of bytes read. If this number is
+ * zero, it could signify either EOF or a timeout. This is distinguished by
+ * the output parameter timed_out. The value of timed_out is true in case of a
+ * timeout, false otherwise.
+ */
 static long dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf,
-    size_t len, const long *ms_delay);
+    size_t len, const long *ms_delay, bool* timed_out);
 
 static long dongleWriteRaw (MOBOTdongle *dongle, const uint8_t *buf, size_t len) {
   assert(dongle && buf);
@@ -99,67 +105,89 @@ static long dongleWriteRaw (MOBOTdongle *dongle, const uint8_t *buf, size_t len)
  * related fucking bullshit), so I'm holding off on it. For now, we can just
  * return if ovIncoming is ever NULL before we use it. This could still suffer
  * an obvious race, but oh well -- it's far less likely. */
-static long dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, const long *ms_delay) {
-  assert(dongle && buf);
+static long dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, const long *ms_delay, bool* timed_out) {
+  assert(dongle && buf && timed_out);
+  *timed_out = false;
 
   DWORD readbytes = 0;
-  if (!dongle->ovIncoming) { return -1; } // FIXME
-  BOOL b = ReadFile(dongle->handle, buf, len, &readbytes, dongle->ovIncoming);
+  do {
+    if (!dongle->ovIncoming) { return -1; } // FIXME
+    BOOL b = ReadFile(dongle->handle, buf, len, &readbytes, dongle->ovIncoming);
 
-  if (b) {
-    /* ReadFile completed synchronously. */
-    return readbytes;
-  }
+    if (b) {
+      /* ReadFile completed synchronously. */
+      return readbytes;
+    }
 
-  DWORD err = GetLastError();
-  if (ERROR_IO_PENDING != err) {
-    win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
-          "ReadFile()"), err);
-    return -1;
-  }
-
-  if (!dongle->ovIncoming) { return -1; } // FIXME
-  DWORD code = WaitForSingleObject(dongle->ovIncoming->hEvent, ms_delay ? *ms_delay : INFINITE);
-
-  if (WAIT_TIMEOUT == code) {
-    if (!CancelIo(dongle->handle)) {
+    DWORD err = GetLastError();
+    if (ERROR_IO_PENDING != err) {
       win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
-            "CancelIo()"), GetLastError());
+            "ReadFile()"), err);
       return -1;
     }
-    return 0;
-  }
-  else if (WAIT_FAILED == code) {
-    win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
-          "WaitForSingleObject()"), GetLastError());
-    return -1;
-  }
-  else {
-    assert(WAIT_OBJECT_0 == code);
-  }
 
-  if (!dongle->ovIncoming) { return -1; } // FIXME
-  if (!GetOverlappedResult(dongle->handle, dongle->ovIncoming, &readbytes, FALSE)) {
-    win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
-        "GetOverlappedResult()\n"), GetLastError());
-    return -1;
-  }
+    if (!dongle->ovIncoming) { return -1; } // FIXME
+    DWORD code = WaitForSingleObject(dongle->ovIncoming->hEvent, ms_delay ? *ms_delay : INFINITE);
 
-  if (!dongle->ovIncoming) { return -1; } // FIXME
-  if (!ResetEvent(dongle->ovIncoming->hEvent)) {
-    win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
-          "ResetEvent()\n"), GetLastError());
-    return -1;
-  }
+    if (WAIT_TIMEOUT == code) {
+      if (!CancelIo(dongle->handle)) {
+        win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
+              "CancelIo()"), GetLastError());
+        return -1;
+      }
+      *timed_out = true;
+      return 0;
+    }
+    else if (WAIT_FAILED == code) {
+      win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
+            "WaitForSingleObject()"), GetLastError());
+      return -1;
+    }
+    else {
+      assert(WAIT_OBJECT_0 == code);
+    }
 
+    if (!dongle->ovIncoming) { return -1; } // FIXME
+    if (!GetOverlappedResult(dongle->handle, dongle->ovIncoming, &readbytes, FALSE)) {
+      if (GetLastError() == ERROR_HANDLE_EOF) {
+        return 0;
+      }
+      win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
+          "GetOverlappedResult()\n"), GetLastError());
+      return -1;
+    }
+
+    if (!dongle->ovIncoming) { return -1; } // FIXME
+    if (!ResetEvent(dongle->ovIncoming->hEvent)) {
+      win32_error(_T("(barobo) ERROR: in dongleTimedReadRaw, "
+            "ResetEvent()\n"), GetLastError());
+      return -1;
+    }
+
+    /* Sometimes the read operation will complete, but readbytes is zero, with
+     * no error reported. This seems to happen predominantly when dongleRead()
+     * and dongleWrite() are called simultaneously from different threads. The
+     * MSDN docs do mention that read and write operations must be serialized
+     * for synchronous I/O, but we're using asynchronous (overlapped), so I
+     * don't know what the problem is. For now, just iterate, if we were not
+     * using a timeout. */
+  } while (!ms_delay && readbytes == 0);
+
+  // If we were in timed mode, present a null read as a timeout to the caller.
+  if (ms_delay && 0 == readbytes) {
+    *timed_out = true;
+  }
   return readbytes;
 }
 
-#else /* _WIN32 */
+#else /* not _WIN32 */
 
 /* POSIX implementation of dongleTimedReadRaw. */
 
-static long dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, const long *ms_delay) {
+static long dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, const long *ms_delay, bool* timed_out) {
+  assert(dongle && buf && timed_out);
+  *timed_out = false;
+
   fd_set rfds;
   FD_ZERO(&rfds);
   FD_SET(dongle->fd, &rfds);
@@ -176,6 +204,7 @@ static long dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, c
     ptimeout = &timeout;
   }
 
+  // FIXME check for EINTR
   int err = select(dongle->fd + 1, &rfds, NULL, NULL, ptimeout);
 
   if (-1 == err) {
@@ -187,6 +216,7 @@ static long dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, c
 
   if (!err || !FD_ISSET(dongle->fd, &rfds)) {
     /* We timed out. */
+    *timed_out = true;
     return 0;
   }
 
@@ -203,12 +233,13 @@ static long dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, c
        * on OS X. So instead, let's just claim to have timed out--this case
        * should be exceedingly rare and probably harmless, anyway. */
       err = 0;
+      *timed_out = true;
       fprintf(stderr, "(barobo) WARNING: in dongleTimedReadRaw, select() returned false positive\n");
     }
     else {
       char errbuf[256];
       strerror_r(errno, errbuf, sizeof(errbuf));
-      fprintf(stderr, "(barobo) ERROR: in dongleReadRaw, read(): %s\n", errbuf);
+      fprintf(stderr, "(barobo) ERROR: in dongleTimedReadRaw, read(): %s\n", errbuf);
     }
   }
 
@@ -218,7 +249,10 @@ static long dongleTimedReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len, c
 #endif
 
 static long dongleReadRaw (MOBOTdongle *dongle, uint8_t *buf, size_t len) {
-  return dongleTimedReadRaw(dongle, buf, len, NULL);
+  bool timed_out = false;
+  long nbytes = dongleTimedReadRaw(dongle, buf, len, NULL, &timed_out);
+  assert(!timed_out);
+  return nbytes;
 }
 
 static int dongleDetectFraming (MOBOTdongle *dongle) {
@@ -246,8 +280,9 @@ static int dongleDetectFraming (MOBOTdongle *dongle) {
   /* Give the dongle a little time to think about it. */
   long ms_delay = 1000;
   uint8_t response[256];
-  long bytesread = dongleTimedReadRaw(dongle, response, sizeof(response), &ms_delay);
-  if (!bytesread) {
+  bool timed_out = false;
+  long bytesread = dongleTimedReadRaw(dongle, response, sizeof(response), &ms_delay, &timed_out);
+  if (timed_out) {
     fprintf(stderr, "(barobo) ERROR: in dongleDetectFraming, timed out "
         "waiting for response.\n");
     return -1;
@@ -314,22 +349,22 @@ long dongleWrite (MOBOTdongle *dongle, const uint8_t *buf, size_t len) {
 
 /* Block until a complete message from the dongle is received. Return the
  * message in the output parameter buf, bounded by size len. Returns -1 on
- * error, otherwise the number of bytes read. */
+ * error, otherwise the number of bytes read (0 means EOF). */
 long dongleRead (MOBOTdongle *dongle, uint8_t *buf, size_t len) {
-  assert(dongle);
-  assert(buf);
+  assert(dongle && buf);
 
   size_t i = 0;
 
   while (1) {
     uint8_t byte;
     int err = dongleReadRaw(dongle, &byte, 1);
-    if (-1 == err) {
-      return -1;
+
+    /* Either EOF or error. */
+    if (err <= 0) {
+      return err;
     }
-    if (1 != err) {
-      continue;
-    }
+
+    assert(1 == err);
 
     if (MOBOT_DONGLE_FRAMING_SFP == dongle->framing) {
       size_t outlen = 0;
@@ -367,7 +402,10 @@ static int dongleSetupSFP (MOBOTdongle *dongle) {
 
   sfpInit(dongle->sfpContext);
   
-  sfpSetWriteCallback(dongle->sfpContext, SFP_WRITE_MULTIPLE, sfp_write, dongle);
+  /* FIXME have to cast sfp_write to void* because libsfp needs to accept two
+   * different function prototypes--the fix should be a refactoring of libsfp */
+  sfpSetWriteCallback(dongle->sfpContext, SFP_WRITE_MULTIPLE,
+      reinterpret_cast<void*>(&sfp_write), dongle);
   /* We do not currently use the libsfp deliver callback in libbarobo, but
    * rather use sfpDeliverOctet's output parameters to get the complete
    * packets. */
@@ -380,7 +418,8 @@ static int dongleSetupSFP (MOBOTdongle *dongle) {
     // nasty hax, this could block or die :(
     uint8_t byte;
     long delay = 1000;
-    int err = dongleTimedReadRaw(dongle, &byte, 1, &delay);
+    bool timed_out = false;
+    int err = dongleTimedReadRaw(dongle, &byte, 1, &delay, &timed_out);
     if (1 != err) {
       /* Either we hit an error, or there's nothing to read. If there's
        * nothing to read, the remote end is probably not actually using SFP. */
@@ -557,6 +596,9 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
       return -1;
     }
   }
+
+  assert(strlen(ttyfilename) < sizeof(dongle->ttyfilename));
+  strcpy(dongle->ttyfilename, ttyfilename);
 
   return 0;
 }
@@ -738,6 +780,9 @@ int dongleOpen (MOBOTdongle *dongle, const char *ttyfilename, unsigned long baud
 
   //dongle->status = MOBOT_LINK_STATUS_UP;
 
+  assert(strlen(ttyfilename) < sizeof(dongle->ttyfilename));
+  strcpy(dongle->ttyfilename, ttyfilename);
+
   return 0;
 }
 
@@ -770,4 +815,17 @@ void dongleClose (MOBOTdongle *dongle) {
 #endif
 
   dongleFini(dongle);
+}
+
+int dongleGetTTYFilename (MOBOTdongle* dongle, char* buf, size_t len) {
+  if (!dongle) {
+    return -1;
+  }
+
+  if (strlen(dongle->ttyfilename) >= len) {
+    return -1;
+  }
+
+  strcpy(buf, dongle->ttyfilename);
+  return 0;
 }

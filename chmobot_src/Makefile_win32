@@ -4,7 +4,7 @@ HEADERS=../include/mobot.h
 PKGDIR=$(PACKAGE)-$(VERSION)/$(PACKAGE)
 LIBDIR=lib32
 
-CFLAGS= -DNONRELEASE -DWIN32_LEAN_AND_MEAN -DWINVER=0x0502 -I./ -I../../BaroboConfigFile/ -I../../mxml-2.7/ -I../../libsfp/include -I../include -I../src /TP
+CFLAGS= -DNONRELEASE -DWIN32_LEAN_AND_MEAN -DWINVER=0x0502 -DENABLE_BLUETOOTH -I./ -I../../BaroboConfigFile/ -I../../mxml-2.7/ -I../../libsfp/include -I../include -I../src /TP
 
 target: libmobot.dl
 
@@ -48,10 +48,10 @@ mobotlgroup++.obj: ../src/mobotlgroup++.cpp $(HEADERS)
 
 # dongle files
 
-dongle.obj: ../src/dongle.c $(HEADERS)
-	ch dlcomp libdongle.dl cplusplus $(CFLAGS) ../src/dongle.c
-dongle_get_tty.obj: ../src/dongle_get_tty.c $(HEADERS)
-	ch dlcomp libdongle_get_tty.dl cplusplus $(CFLAGS) ../src/dongle_get_tty.c
+dongle.obj: ../src/dongle.cpp $(HEADERS)
+	ch dlcomp libdongle.dl cplusplus $(CFLAGS) ../src/dongle.cpp
+dongle_get_tty.obj: ../src/dongle_get_tty.cpp $(HEADERS)
+	ch dlcomp libdongle_get_tty.dl cplusplus $(CFLAGS) ../src/dongle_get_tty.cpp
 
 # Mobot Files
 mobot.obj: ../src/mobot.cpp $(HEADERS)
@@ -60,20 +60,20 @@ mobot.obj: ../src/mobot.cpp $(HEADERS)
 eventqueue.obj: ../src/eventqueue.cpp $(HEADERS)
 	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/eventqueue.cpp
 
-mobot_get_functions.obj: ../src/mobot_get_functions.c $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot_get_functions.c
+mobot_get_functions.obj: ../src/mobot_get_functions.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot_get_functions.cpp
 
-mobot_motion_functions.obj: ../src/mobot_motion_functions.c $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot_motion_functions.c
+mobot_motion_functions.obj: ../src/mobot_motion_functions.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot_motion_functions.cpp
 
-mobot_movement_functions.obj: ../src/mobot_movement_functions.c $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot_movement_functions.c
+mobot_movement_functions.obj: ../src/mobot_movement_functions.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot_movement_functions.cpp
 
-mobot_record_functions.obj: ../src/mobot_record_functions.c $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot_record_functions.c
+mobot_record_functions.obj: ../src/mobot_record_functions.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot_record_functions.cpp
 
-mobot_set_functions.obj: ../src/mobot_set_functions.c $(HEADERS)
-	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot_set_functions.c
+mobot_set_functions.obj: ../src/mobot_set_functions.cpp $(HEADERS)
+	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot_set_functions.cpp
 
 mobot++.obj: ../src/mobot++.cpp $(HEADERS)
 	ch dlcomp libmobot.dl cplusplus $(CFLAGS) ../src/mobot++.cpp

@@ -60,7 +60,7 @@ Format:
 
 /* Motor Angle Changed event.
 Format:
-[0x24] [23] [4 byte timestamp][4x4 bytes motor angles] [0x00]
+[0x24] [23] [4 byte timestamp][4x4 bytes motor angles] [1byte mask of which motors triggered event] [0x00]
 */
 #define EVENT_JOINT_MOVED 0x24
 
@@ -427,8 +427,10 @@ enum protocol_commands_e {
    */
   CMD_GETRGB,
 
-/* 0x6E Placeholder to increase version number [62] */
-  CMD_PLACEHOLDER201303291416,
+/* 0x6E CMD_GETVERSIONS: Get a complete major-minor-patch version for the
+   robot's firmware. 
+   Expected Response: [0x10] [6] [1byte maj] [1byte min] [1byte patch] [0x11]*/
+  CMD_GETVERSIONS,
 
 /* 0x6F Placeholder to increase version number [63] */
   CMD_PLACEHOLDER201304121823,
@@ -502,12 +504,12 @@ enum protocol_commands_e {
    Expected Response: [0x10] [size] [data] [0x11] */
   CMD_TWI_SENDRECV,
 
-/* 0x7F CMD_SET_ACCEL: Set a joint to move at a constant acceleration. Stops
+/* 0x7F CMD_SET_ACCEL: Set a joint to move at a constant acceleration. Stops [79]
  * accelerating at specified speed or the max speed. (all units in rads/sec)
  * Command Format: [CMD] [size] [1 byte id] [4 byte accel] [4 byte max speed] [4 bytes timeout millis MSB] [0x00] */
   CMD_SET_ACCEL,
 
-/* 0x80 CMD_SMOOTHMOVE: move a joint smoothly from its current position to a new position.
+/* 0x80 CMD_SMOOTHMOVE: move a joint smoothly from its current position to a new position. [80]
    Command format: 
       [CMD] 
       [size] 
@@ -529,7 +531,7 @@ enum protocol_commands_e {
       [0x00] */
   CMD_SETMOTORSTATES, 
 
-  /* 0x82 CMD_SETGLOBALACCEL: Limit the maximum acceleration of all of the joints
+  /* 0x82 CMD_SETGLOBALACCEL: Limit the maximum acceleration of all of the joints 
      at the beginning of each motion.
      Command format:
      [CMD] [size] [4byte alpha, rad/sec] [0x00] */
@@ -561,37 +563,37 @@ enum protocol_commands_e {
    Expected Response [0x10] [size] [4*4 byte float values] [0x00] */
   CMD_GET_POSE_DATA,
 
-/* 0x89 CMD_PING: Respond to a ping 
+/* 0x89 CMD_PING: Respond to a ping [89]
    Command Format: [CMD] [size] [x bytes rand int] [0x00]
    Expected response: [0x10] [size] [x bytes echo int] [0x011] */
   CMD_PING,
 
-/* 0x8A CMD_GET_HW_REV: Get the hw revision
+/* 0x8A CMD_GET_HW_REV: Get the hw revision [90]
    Command Format: [CMD] [0x03] [0x00]
    Expected Response: [0x10] [size] [HWREV MAJOR] [MINOR] [MICRO] [0x11] */
   CMD_GET_HW_REV,
 
-/* 0x8B CMD_SET_HW_REV: Set the hw revision
+/* 0x8B CMD_SET_HW_REV: Set the hw revision [91]
    Command Format: [CMD] [size] [MAJOR] [MINOR] [MICRO] [0x00]
    Expected Response: [0x10] [3] [0x11] */
   CMD_SET_HW_REV,
 
-/* 0x8C CMD_SET_JOINT_EVENT_THRESHOLD: Set the threshold for reporting joint motion events.
-   Command Format: [CMD] [size] [4 bytes float] [0x00]
+/* 0x8C CMD_SET_JOINT_EVENT_THRESHOLD: Set the threshold for reporting joint motion events. [92]
+   Command Format: [CMD] [size] [1byte joint id] [4 bytes float] [0x00]
    Expected Response: [0x10] [3] [0x11] */
   CMD_SET_JOINT_EVENT_THRESHOLD,
 
-/* 0x8D CMD_SET_ENABLE_JOINT_EVENT: Enable reporting of joint events 
+/* 0x8D CMD_SET_ENABLE_JOINT_EVENT: Enable reporting of joint events [93]
    Command Format: [CMD] [0x04] [enable mask] [0x00]
    Expected Response: [0x10] [3] [0x11] */
   CMD_SET_ENABLE_JOINT_EVENT,
 
-/* 0x8E CMD_SET_ACCEL_EVENT_THRESHOLD:
+/* 0x8E CMD_SET_ACCEL_EVENT_THRESHOLD: [94]
    Command Format: [CMD] [size] [2 bytes value, high byte first] [0x00]
    Expected Response: [0x10] [3] [0x11] */
   CMD_SET_ACCEL_EVENT_THRESHOLD,
 
-/* 0x8F CMD_SET_ENABLE_ACCEL_EVENT:
+/* 0x8F CMD_SET_ENABLE_ACCEL_EVENT: [95]
    Command Format: [CMD] [0x04] [enable mask] [0x00]
    Expected Response: [0x10] [3] [0x11] */
   CMD_SET_ENABLE_ACCEL_EVENT,

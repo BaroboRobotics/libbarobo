@@ -23,6 +23,11 @@
 #define DEPRECATED(from, to) \
   fprintf(stderr, "Warning: The function \"%s()\" is deprecated. Please use \"%s()\"\n" , from, to)
 
+int CMobot::setBuzzerFrequencyOn (double freq)
+{
+  return Mobot_setBuzzerFrequencyOn(_comms, freq);
+}
+
 int CMobot::setExitState(robotJointState_t exitState)
 {
   return Mobot_setExitState(_comms, exitState);

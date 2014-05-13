@@ -21,6 +21,8 @@
 #include "mobot_internal.h"
 #include "linkbot.h"
 
+#include <string>
+
 CMobot::CMobot()
 {
   _comms = (mobot_t*)malloc(sizeof(mobot_t));
@@ -146,6 +148,17 @@ int CMobot::delaySeconds(int seconds)
   return 0;
 }
 
+//new
+int CMobot::delay(unsigned int milliseconds)
+{
+#ifdef _WIN32
+  Sleep(milliseconds);
+#else
+  usleep(milliseconds*1000);
+#endif
+  return 0;
+}
+
 int CMobot::enableButtonCallback(void* userdata, void (*buttonCallback)(void* data, int button, int buttonDown))
 {
   return Mobot_enableButtonCallback(
@@ -160,7 +173,7 @@ int CMobot::disableButtonCallback()
 }
 
 int CMobot::enableJointEventCallback(void *userdata, 
-    void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, void *userdata))
+    void (*jointCallback)(int millis, double j1, double j2, double j3, double j4, int mask, void *userdata))
 {
   return Mobot_enableJointEventCallback(_comms, userdata, jointCallback);
 }
@@ -206,9 +219,9 @@ int CMobot::setAccelEventThreshold(double threshold)
   return Mobot_setAccelEventThreshold(_comms, threshold);
 }
 
-int CMobot::setJointEventThreshold(double threshold)
+int CMobot::setJointEventThreshold(int joint, double threshold)
 {
-  return Mobot_setJointEventThreshold(_comms, DEG2RAD(threshold));
+  return Mobot_setJointEventThreshold(_comms, joint, DEG2RAD(threshold));
 }
 
 int CMobot::systemTime(double &time)
@@ -220,6 +233,17 @@ int CMobot::systemTime(double &time)
 int CMobot::transactMessage(int cmd, void* buf, int size)
 {
   return MobotMsgTransaction(_comms, cmd, buf, size);
+}
+
+bool CMobot::canFlashFirmware () {
+  return Mobot_canFlashFirmware(_comms);
+}
+
+int CMobot::flashFirmwareAsync (std::string hexfile,
+    Mobot_progressCallbackFunc progressCallback,
+    Mobot_completionCallbackFunc completionCallback,
+    void* user_data) {
+  return Mobot_flashFirmwareAsync(_comms, hexfile.c_str(), progressCallback, completionCallback, user_data);
 }
 
 /* CMelody */
@@ -249,4 +273,3 @@ void CMelody::addNote(const char* note, int divider)
 {
   Mobot_melodyAddNote(_head, note, divider);
 }
-

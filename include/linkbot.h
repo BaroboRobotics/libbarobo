@@ -33,85 +33,114 @@
 class DLLIMPORT CLinkbot : public CMobot
 {
   public:
-    int driveToDirect(double angle1, double angle2, double angle3);
-    int driveTo(double angle1, double angle2, double angle3);
-    int driveToDirectNB(double angle1, double angle2, double angle3);
-    int driveToNB(double angle1, double angle2, double angle3);
-    int enableAccelEventCallback(void *userdata, 
+    virtual int driveToDirect(double angle1, double angle2, double angle3);
+    virtual int driveTo(double angle1, double angle2, double angle3);
+    virtual int driveToDirectNB(double angle1, double angle2, double angle3);
+    virtual int driveToNB(double angle1, double angle2, double angle3);
+    virtual int enableAccelEventCallback(void *userdata, 
         void (*accelCallback)(int millis, double x, double y, double z, void *userdata));
-    int disableAccelEventCallback();
-    int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
-    int getBatteryVoltage(double &voltage);
-    int LinkPodAnalogRead(int adc, int & value);
-    int LinkPodAnalogReadVolts(int adc, double & volts);
-    int LinkPodDigitalRead(int pin, int & value);
-    int getColorRGB(int &r, int &g, int &b);
-	int getColorName(char color[]);		
-    const char* getID();
+    virtual int disableAccelEventCallback();
+    virtual int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
+    virtual int getBatteryVoltage(double &voltage);
+    //virtual int LinkPodAnalogRead(int adc, int & value); prototype to restore 
+	virtual int LinkPodAnalogRead(int pin);
+    //virtual int LinkPodAnalogReadVolts(int adc, double & volts);
+	virtual double LinkPodAnalogReadVolts(int pin);
+    //virtual int LinkPodDigitalRead(int pin, int & value);
+	virtual int LinkPodDigitalRead(int pin);
+    virtual int getColorRGB(int &r, int &g, int &b);
+	virtual int getColorName(char color[]);	
+	//new
+    virtual int getLEDColorRGB(int &r, int &g, int &b);
+	virtual int getLEDColorName(char color[]);
+    virtual const char* getID();
 #ifdef SWIG
     %apply double& OUTPUT {double &angle1, double &angle2, double &angle3};
     void getJointAngles(double &angle1, double &angle2, double &angle3);
 #else
-    int getJointAngles(double &angle1, double &angle2, double &angle3);
+    virtual int getJointAngles(double &angle1, double &angle2, double &angle3);
 #endif
-    int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, int numReadings=10);
-    int getJointSpeeds(double &speed1, double &speed2, double &speed3);
-    int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3);
-    int move(double angle1, double angle2, double angle3);
-    int moveNB(double angle1, double angle2, double angle3);
-    int moveContinuousNB(robotJointState_t dir1, 
+    virtual int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, int numReadings=10);
+    virtual int getJointSpeeds(double &speed1, double &speed2, double &speed3);
+    virtual int getJointSpeedRatios(double &ratio1, double &ratio2, double &ratio3);
+    virtual int move(double angle1, double angle2, double angle3);
+    virtual int moveNB(double angle1, double angle2, double angle3);
+    virtual int moveContinuousNB(robotJointState_t dir1, 
                        robotJointState_t dir2, 
                        robotJointState_t dir3);
-    int moveContinuousTime(robotJointState_t dir1, 
+    virtual int moveContinuousTime(robotJointState_t dir1, 
                            robotJointState_t dir2, 
                            robotJointState_t dir3, 
                            double seconds);
-    int moveTo(double angle1, double angle2, double angle3);
-    int moveToDirect(double angle1, double angle2, double angle3);
-    int moveToNB(double angle1, double angle2, double angle3);
-    int moveToDirectNB(double angle1, double angle2, double angle3);
-    int recordAngles(double time[], 
+    virtual int moveTo(double angle1, double angle2, double angle3);
+    virtual int moveToDirect(double angle1, double angle2, double angle3);
+    virtual int moveToNB(double angle1, double angle2, double angle3);
+    virtual int moveToDirectNB(double angle1, double angle2, double angle3);
+    virtual int recordAngles(double time[], 
                      double angle1[], 
                      double angle2[], 
                      double angle3[], 
                      int num, 
                      double seconds,
                      int shiftData = 1);
-    int recordAnglesBegin(robotRecordData_t &time, 
+    virtual int recordAnglesBegin(robotRecordData_t &time, 
                           robotRecordData_t &angle1, 
                           robotRecordData_t &angle2, 
                           robotRecordData_t &angle3, 
                           double seconds,
                           int shiftData = 1);
-    int recordDistancesBegin(robotRecordData_t &time, 
+    virtual int recordDistancesBegin(robotRecordData_t &time, 
                           robotRecordData_t &distance1, 
                           robotRecordData_t &distance2, 
                           robotRecordData_t &distance3, 
                           double radius,
                           double seconds,
                           int shiftData = 1);
-    int LinkPodAnalogWrite(int pin, int value);
-    int LinkPodAnalogReference(int ref);
-    int LinkPodDigitalWrite(int pin, int value);
-    int LinkPodPinMode(int pin, int mode);
-    int setBuzzerFrequency(int frequency, double time);
-    int setBuzzerFrequencyOn(int frequency);
-    int setBuzzerFrequencyOff();
-    int setColorRGB(int r, int g, int b);
-	int setColor(char * color);		
-    int setJointSpeeds(double speed1, double speed2, double speed3);
-    int setJointSpeedRatios(double ratios1, double ratios2, double ratios3);
-    int setMovementStateNB( robotJointState_t dir1,
+    virtual int LinkPodAnalogWrite(int pin, int value);
+    virtual int LinkPodAnalogReference(int ref);
+    virtual int LinkPodDigitalWrite(int pin, int value);
+    virtual int LinkPodPinMode(int pin, int mode);
+    virtual int setBuzzerFrequency(int frequency, double time);
+    virtual int setBuzzerFrequencyOn(int frequency);
+    virtual int setBuzzerFrequencyOff();
+    virtual int setColorRGB(int r, int g, int b);
+	virtual int setColor(char * color);
+	//new
+    virtual int setLEDColorRGB(int r, int g, int b);
+	virtual int setLEDColor(char * color);
+
+    virtual int setJointSpeeds(double speed1, double speed2, double speed3);
+    virtual int setJointSpeedRatios(double ratios1, double ratios2, double ratios3);
+    virtual int setMovementStateNB( robotJointState_t dir1,
         robotJointState_t dir2,
         robotJointState_t dir3);
-    int setMovementStateTime( robotJointState_t dir1,
+    virtual int setMovementStateTime( robotJointState_t dir1,
         robotJointState_t dir2,
         robotJointState_t dir3,
         double seconds);
-    int setMovementStateTimeNB( robotJointState_t dir1,
+    virtual int setMovementStateTimeNB( robotJointState_t dir1,
         robotJointState_t dir2,
         robotJointState_t dir3,
         double seconds);
+	/*Functions for compatibility with RoboSim*/
+	virtual int getxy(double &x, double &y);
+	virtual int line(double x1, double y1, double z1, double x2, double y2, double z2, 
+		     int linewidth, char *color);
+	virtual int movexy(double x, double y, double radius, double trackwidth);
+	virtual int movexyTo(double x, double y, double radius, double trackwidth);
+	virtual int movexyToExpr(double x0, double xf, int n, char *expr, double radius,
+		      double trackwidth);
+	virtual int movexyToFunc(double x0, double xf, int n, double (*func)(double x), 
+		      double radius, double trackwidth);
+	virtual int movexyNB(double x, double y, double radius, double trackwidth);
+	virtual int movexyToNB(double x, double y, double radius, double trackwidth);
+	virtual int movexyWait(void);
+	virtual int point(double x, double y, double z, int pointsize, char *color);
+	virtual int text(double x, double y, double z, char *text); 
+	virtual int traceOn(void);
+	virtual int traceOff(void);
+	virtual int recordxyBegin(double x, double y, double timeInterval);
+	virtual int recordxyEnd(int &numpoints);
 
 };
 #endif
@@ -160,6 +189,8 @@ class CLinkbotI
     int driveToDirectNB(double angle1, double angle2, double angle3);
     int driveToNB(double angle1, double angle2, double angle3);
     int delaySeconds(int seconds);
+	//new
+	int delay(unsigned int milliseconds);
     int enableButtonCallback(void* userdata, void (*buttonCallback)(void* userdata, int button, int buttonDown));
     int disableButtonCallback();
     int enableRecordDataShift();
@@ -168,12 +199,17 @@ class CLinkbotI
     int isMoving();
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int getBatteryVoltage(double &voltage);
-    int LinkPodAnalogRead(int adc, int & value);
-    int LinkPodAnalogReadVolts(int adc, double & volts);
-    int LinkPodDigitalRead(int pin, int & value);
+    int LinkPodAnalogRead(int pin); //new
+    //int LinkPodAnalogReadVolts(int adc, double & volts);
+	double LinkPodAnalogReadVolts(int pin);
+    int LinkPodDigitalRead(int pin);
     int getColorRGB(int &r, int &g, int &b);
 	int getColorName(char color[]);
-	int getColor(string_t & color);		
+	int getColor(string_t & color);
+	int getLEDColorRGB(int &r, int &g, int &b);
+	int getLEDColorName(char color[]);
+	int getLEDColor(string_t & color);
+			
     int getDistance(double &distance, double radius);
     int getFormFactor(int &formFactor);
     static const char* getConfigFilePath();
@@ -265,7 +301,10 @@ class CLinkbotI
     int LinkPodDigitalWrite(int pin, int value);
     int LinkPodPinMode(int pin, int mode);
     int setColorRGB(int r, int g, int b);
-	int setColor(char * color);		
+	int setColor(char * color);	
+	int setLEDColorRGB(int r, int g, int b);
+	int setLEDColor(char * color);
+
     int setExitState(robotJointState_t exitState);
     int setJointMovementStateNB(robotJointId_t id, robotJointState_t dir);
     int setJointMovementStateTime(robotJointId_t id, robotJointState_t dir, double seconds);
@@ -315,6 +354,27 @@ class CLinkbotI
 
     /* Linkbot Only Functions */
     int connectWithSerialID(const char serialID[]);
+
+	/*Functions for compatibility with RoboSim*/
+	int getxy(double &x, double &y);
+	int line(double x1, double y1, double z1, double x2, double y2, double z2, 
+		     int linewidth, char *color);
+	int movexy(double x, double y, double radius, double trackwidth);
+	int movexyTo(double x, double y, double radius, double trackwidth);
+	int movexyToExpr(double x0, double xf, int n, char *expr, double radius,
+		      double trackwidth);
+	int movexyToFunc(double x0, double xf, int n, double (*func)(double x), 
+		      double radius, double trackwidth);
+	int movexyNB(double x, double y, double radius, double trackwidth);
+	int movexyToNB(double x, double y, double radius, double trackwidth);
+	int movexyWait(void);
+	int point(double x, double y, double z, int pointsize, char *color);
+	int text(double x, double y, double z, char *text); 
+	int traceOn(void);
+	int traceOff(void);
+	int recordxyBegin(double x, double y, double timeInterval);
+	int recordxyEnd(int &numpoints);
+
   private:
     void* memholder1;
     int memholder2;
@@ -325,8 +385,8 @@ class DLLIMPORT CLinkbotI : public CLinkbot
   public:
     CLinkbotI();
     ~CLinkbotI();
-    int connect();
-    int connectWithSerialID(const char serialID[]);
+    virtual int connect();
+    virtual int connectWithSerialID(const char serialID[]);
 };
 #endif
 
@@ -370,6 +430,8 @@ class CLinkbotL
 #endif
     int connectWithSerialID(const char serialID[]);
     int delaySeconds(int seconds);
+	//new
+	int delay(unsigned int milliseconds);
     int disconnect();
     int driveJointToDirect(robotJointId_t id, double angle);
     int driveJointTo(robotJointId_t id, double angle);
@@ -387,9 +449,10 @@ class CLinkbotL
     int isMoving();
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int getBatteryVoltage(double &voltage);
-    int LinkPodAnalogRead(int adc, int & value);
-    int LinkPodAnalogReadVolts(int adc, double & volts);
-    int LinkPodDigitalRead(int pin, int & value);
+    int LinkPodAnalogRead(int pin); //new
+    //int LinkPodAnalogReadVolts(int adc, double & volts);
+	double LinkPodAnalogReadVolts(int pin);
+    int LinkPodDigitalRead(int pin); //new
     int getFormFactor(int &formFactor);
     static const char* getConfigFilePath();
     int getID();
@@ -417,8 +480,12 @@ class CLinkbotL
     int getVersion();
     int getColorRGB(int &r, int &g, int &b);
 	int getColorName(char color[]);
+	//new
+	int getLEDColorRGB(int &r, int &g, int &b);
+	int getLEDColorName(char color[]);
 #ifdef _CH_
-    int getColor(string_t & color);		
+    int getColor(string_t & color);
+    int getLEDColor(string_t & color);
 #endif
     int move(double angle1, double angle2, double angle3);
     int moveNB(double angle1, double angle2, double angle3);
@@ -517,7 +584,11 @@ class CLinkbotL
     int setBuzzerFrequencyOn(int frequency);
     int setBuzzerFrequencyOff();
     int setColorRGB(int r, int g, int b);
-	int setColor(char * color);		
+	int setColor(char * color);	
+    //new
+	int setLEDColorRGB(int r, int g, int b);
+	int setLEDColor(char * color);
+
     int setExitState(robotJointState_t exitState);
     int setJointMovementStateNB(robotJointId_t id, robotJointState_t dir);
     int setJointMovementStateTime(robotJointId_t id, robotJointState_t dir, double seconds);
@@ -546,6 +617,27 @@ class CLinkbotL
     int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
     int stopAllJoints();
     int systemTime(double &time);
+
+    /*Functions for compatibility with RoboSim*/
+	int getxy(double &x, double &y);
+	int line(double x1, double y1, double z1, double x2, double y2, double z2, 
+		     int linewidth, char *color);
+	int movexy(double x, double y, double radius, double trackwidth);
+	int movexyTo(double x, double y, double radius, double trackwidth);
+	int movexyToExpr(double x0, double xf, int n, char *expr, double radius,
+		      double trackwidth);
+	int movexyToFunc(double x0, double xf, int n, double (*func)(double x), 
+		      double radius, double trackwidth);
+	int movexyNB(double x, double y, double radius, double trackwidth);
+	int movexyToNB(double x, double y, double radius, double trackwidth);
+	int movexyWait(void);
+	int point(double x, double y, double z, int pointsize, char *color);
+	int text(double x, double y, double z, char *text); 
+	int traceOn(void);
+	int traceOff(void);
+	int recordxyBegin(double x, double y, double timeInterval);
+	int recordxyEnd(int &numpoints);
+
   private:
     void* memholder1;
     int memholder2;
@@ -556,8 +648,8 @@ class DLLIMPORT CLinkbotL : public CLinkbot
   public:
     CLinkbotL();
     ~CLinkbotL();
-    int connect();
-    int connectWithSerialID(const char serialID[]);
+    virtual int connect();
+    virtual int connectWithSerialID(const char serialID[]);
 };
 #endif
 
