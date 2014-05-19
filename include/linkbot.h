@@ -376,6 +376,11 @@ class CLinkbotI
 	int recordxyBegin(double x, double y, double timeInterval);
 	int recordxyEnd(int &numpoints);
 
+	/*Gripper functions*/
+	int openGripper(double angle);
+	int openGripperNB(double angle);
+	int closeGripper(void);
+
   private:
     void* memholder1;
     int memholder2;
@@ -639,6 +644,11 @@ class CLinkbotL
 	int traceOff(void);
 	int recordxyBegin(double x, double y, double timeInterval);
 	int recordxyEnd(int &numpoints);
+
+	/*Gripper functions*/
+	int openGripper(double angle);
+	int openGripperNB(double angle);
+	int closeGripper(void);
 
   private:
     void* memholder1;

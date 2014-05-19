@@ -2394,5 +2394,35 @@ int CLinkbotL::recordxyEnd(int &numpoints) {
     return retval;
 }
 
+/*Gripper functions*/
+int CLinkbotL::openGripper(double angle)
+{
+    return moveJointTo(ROBOT_JOINT1, -angle);
+}
+
+int CLinkbotL::openGripperNB(double angle) {
+    
+    return moveJointToNB(ROBOT_JOINT1, -angle);
+}
+
+int CLinkbotL::closeGripper(void) {
+    double gripperAngleOld= 0;
+    double gripperAngleNew;
+    int retval;
+
+    retval = getJointAngle(ROBOT_JOINT1, gripperAngleNew); // get the new position
+    /* Close the gripper to grab an object */
+    while(fabs(gripperAngleNew - gripperAngleOld) > 0.1) {
+        gripperAngleOld = gripperAngleNew;    // update the old position
+        retval = retval || moveJointNB(ROBOT_JOINT1, 8); // move 8 degrees 
+        delaySeconds(1);              // closing for 1 second
+        retval = retval || getJointAngle(ROBOT_JOINT1, gripperAngleNew); // get the new position
+    }
+    retval = retval || moveJointNB(ROBOT_JOINT1, 8); // try to move another 8 degrees 
+    delaySeconds(1);              // closing for 1 second
+    retval = retval || setJointMovementStateNB(ROBOT_JOINT1, ROBOT_HOLD); // hold the object
+    return retval;
+}
+
 
 
