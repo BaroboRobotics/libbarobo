@@ -146,8 +146,16 @@ int Mobot_accelTimeNB(mobot_t* comms, double radius, double acceleration, double
   double alpha = acceleration/radius;
   int i;
   int rc;
-  for(i = 1; i < 4; i++) {
-    rc = Mobot_accelAngularTimeNB(comms, (robotJointId_t)i, alpha, timeout);
+  for(i = 1; i < 4; i++) { //make the robot roll not spin on itself
+	  if(i == 1)
+	  {
+		  rc = Mobot_accelAngularTimeNB(comms, (robotJointId_t)i, alpha, timeout);
+	  }
+	  else
+	  {
+		  rc = Mobot_accelAngularTimeNB(comms, (robotJointId_t)i, -alpha, timeout);
+	  }
+
     if(rc) return rc;
   }
   return 0;
@@ -160,8 +168,15 @@ int Mobot_accelToVelocityNB(mobot_t* comms, double radius, double acceleration, 
   double alpha = acceleration/radius;
   int i;
   int rc = 0;
-  for(i = 1; i < 4; i++) {
-    rc = Mobot_accelAngularTimeNB(comms, (robotJointId_t)i, alpha, timeout);
+  for(i = 1; i < 4; i++) { //make the robot roll not spin on itself
+	  if(i == 1)
+	  {
+		  rc = Mobot_accelAngularTimeNB(comms, (robotJointId_t)i, alpha, timeout);
+	  }
+	  else
+	  {
+		  rc = Mobot_accelAngularTimeNB(comms, (robotJointId_t)i, -alpha, timeout);
+	  }
     if(rc) return rc;
   }
   return 0;
@@ -172,8 +187,15 @@ int Mobot_accelToMaxSpeedNB(mobot_t* comms, double radius, double acceleration)
   double alpha = acceleration/radius;
   int i;
   int rc;
-  for(i = 1; i < 4; i++) {
-    rc = Mobot_accelAngularTimeNB(comms, (robotJointId_t)i, alpha, 0);
+  for(i = 1; i < 4; i++) { //make the robot roll not spin on itself
+	  if(i == 1)
+	  {
+		  rc = Mobot_accelAngularTimeNB(comms, (robotJointId_t)i, alpha, 0);
+	  }
+	  else
+	  {
+		  rc = Mobot_accelAngularTimeNB(comms, (robotJointId_t)i, -alpha, 0);
+	  }
     if(rc) return rc;
   }
   return 0;
