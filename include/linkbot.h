@@ -197,6 +197,7 @@ class CLinkbotI
     int disableRecordDataShift();
     int isConnected();
     int isMoving();
+	int isNotMoving();
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int getBatteryVoltage(double &voltage);
     int LinkPodAnalogRead(int pin); //new
@@ -375,6 +376,11 @@ class CLinkbotI
 	int recordxyBegin(double x, double y, double timeInterval);
 	int recordxyEnd(int &numpoints);
 
+	/*Gripper functions*/
+	int openGripper(double angle);
+	int openGripperNB(double angle);
+	int closeGripper(void);
+
   private:
     void* memholder1;
     int memholder2;
@@ -447,6 +453,7 @@ class CLinkbotL
     int disableRecordDataShift();
     int isConnected();
     int isMoving();
+	int isNotMoving();
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int getBatteryVoltage(double &voltage);
     int LinkPodAnalogRead(int pin); //new
@@ -638,6 +645,11 @@ class CLinkbotL
 	int recordxyBegin(double x, double y, double timeInterval);
 	int recordxyEnd(int &numpoints);
 
+	/*Gripper functions*/
+	int openGripper(double angle);
+	int openGripperNB(double angle);
+	int closeGripper(void);
+
   private:
     void* memholder1;
     int memholder2;
@@ -671,6 +683,7 @@ class CLinkbotIGroup
     int driveToDirectNB(double angle1, double angle2, double angle3);
     int driveToNB(double angle1, double angle2, double angle3);
     int isMoving();
+	int isNotMoving();
     int move(double angle1, double angle2, double angle3);
     int moveNB(double angle1, double angle2, double angle3);
     int moveBackward(double angle);
@@ -838,6 +851,7 @@ class CLinkbotLGroup
     int driveToDirectNB(double angle1, double angle2, double angle3);
     int driveToNB(double angle1, double angle2, double angle3);
     int isMoving();
+	int isNotMoving();
     int move(double angle1, double angle2, double angle3);
     int moveNB(double angle1, double angle2, double angle3);
     int moveContinuousNB(robotJointState_t dir1, 
