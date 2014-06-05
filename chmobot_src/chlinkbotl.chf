@@ -690,6 +690,20 @@ int CLinkbotL::isMoving() {
     dlrunfun(fptr, &retval, isMoving, this);
     return retval;
 }
+
+int CLinkbotL::isNotMoving() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_isMoving_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, isMoving, this);
+    return !retval;
+}
+
 int CLinkbotL::move(double angle1, double angle2, double angle3) {
     void *fptr;
     int retval;
@@ -1723,6 +1737,20 @@ int CLinkbotLGroup::isMoving() {
     dlrunfun(fptr, &retval, isMoving, this);
     return retval;
 }
+
+int CLinkbotLGroup::isNotMoving() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGL_isMoving_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, isMoving, this);
+    return !retval;
+}
+
 int CLinkbotLGroup::move(double angle1, double angle2, double angle3) {
     void *fptr;
     int retval;
@@ -2363,6 +2391,36 @@ int CLinkbotL::recordxyEnd(int &numpoints) {
         return -1;
     }
     dlrunfun(fptr, &retval, NULL, this, &numpoints);
+    return retval;
+}
+
+/*Gripper functions*/
+int CLinkbotL::openGripper(double angle)
+{
+    return moveJointTo(ROBOT_JOINT1, -angle);
+}
+
+int CLinkbotL::openGripperNB(double angle) {
+    
+    return moveJointToNB(ROBOT_JOINT1, -angle);
+}
+
+int CLinkbotL::closeGripper(void) {
+    double gripperAngleOld= 0;
+    double gripperAngleNew;
+    int retval;
+
+    retval = getJointAngle(ROBOT_JOINT1, gripperAngleNew); // get the new position
+    /* Close the gripper to grab an object */
+    while(fabs(gripperAngleNew - gripperAngleOld) > 0.1) {
+        gripperAngleOld = gripperAngleNew;    // update the old position
+        retval = retval || moveJointNB(ROBOT_JOINT1, 8); // move 8 degrees 
+        delaySeconds(1);              // closing for 1 second
+        retval = retval || getJointAngle(ROBOT_JOINT1, gripperAngleNew); // get the new position
+    }
+    retval = retval || moveJointNB(ROBOT_JOINT1, 8); // try to move another 8 degrees 
+    delaySeconds(1);              // closing for 1 second
+    retval = retval || setJointMovementStateNB(ROBOT_JOINT1, ROBOT_HOLD); // hold the object
     return retval;
 }
 
