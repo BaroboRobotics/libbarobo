@@ -832,6 +832,8 @@ int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSeria
     child->connectionMode = MOBOTCONNECT_ZIGBEE;
     child->parent = parent;
     parent->child = child;
+    fprintf(stderr, "Connecting to child, setting connectionMode to tty.\n");
+    parent->connectionMode = MOBOTCONNECT_TTY;
 
     rc = Mobot_pair(child);
     if (rc) {
@@ -1339,6 +1341,8 @@ int Mobot_disconnect(mobot_t* comms)
       if(comms == comms->parent->child) {
         comms->parent->child = NULL;
       }
+      comms->connected = 0;
+      comms->connectionMode = MOBOTCONNECT_NONE;
       break;
     default:
       rc = 0;

@@ -503,8 +503,10 @@ int Mobot_getJointAnglesTimeIsMoving(mobot_t* comms,
   }
   *isMoving = 0;
   for(i = 0; i < 4; i++) {
-    if(states[i] == ROBOT_FORWARD ||
-        states[i] == ROBOT_BACKWARD)
+    if(
+        (states[i] != ROBOT_NEUTRAL) && 
+        (statis[i] != ROBOT_HOLD)
+      )
     {
       *isMoving = 1;
     }
