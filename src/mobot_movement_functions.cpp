@@ -144,7 +144,6 @@ int Mobot_moveBackward(mobot_t* comms, double angle)
 {
   int rc;
   rc = Mobot_moveBackwardNB(comms, angle);
-  if(rc) return rc;
   return Mobot_moveWait(comms);
 }
 
@@ -178,7 +177,6 @@ int Mobot_moveForward(mobot_t* comms, double angle)
 {
   int rc;
   rc = Mobot_moveForwardNB(comms, angle);
-  if(rc) return rc;
   return Mobot_moveWait(comms);
 }
 
@@ -671,7 +669,7 @@ int Mobot_turnLeft(mobot_t* comms, double angle, double radius, double trackleng
 {
   int rc;
   if(rc = Mobot_turnLeftNB(comms, angle, radius, tracklength)) {
-    return rc;
+    //return rc;
   }
   return Mobot_moveWait(comms);
 }
@@ -694,7 +692,7 @@ int Mobot_turnRight(mobot_t* comms, double angle, double radius, double tracklen
 {
   int rc;
   if(rc = Mobot_turnRightNB(comms, angle, radius, tracklength)) {
-    return rc;
+    //return rc;
   }
   return Mobot_moveWait(comms);
 }
