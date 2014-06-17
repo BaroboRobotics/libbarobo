@@ -163,6 +163,8 @@ class CLinkbotI
         double accelf,
         double vmax,
         double angle);
+	/*Cycloidal acceleration profile*/
+	int accelAngularCycloidNB(robotJointId_t id, double radius, double distance, double time);
     int blinkLED(double delay, int numBlinks);
 /* connect() Return Error Codes:
    -1 : General Error

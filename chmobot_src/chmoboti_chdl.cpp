@@ -44,6 +44,28 @@ EXPORTCH int LinkbotI_accelTimeNB_chdl(void *varg) {
     return retval;
 }
 
+/*cycloidal acceleration profile*/
+EXPORTCH int LinkbotI_accelAngularCycloidNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotI *mobot;
+	int id;
+    double radius;
+    double distance;
+    double timeout;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
+	id = Ch_VaArg(interp, ap, int); 
+    radius = Ch_VaArg(interp, ap, double);
+    distance = Ch_VaArg(interp, ap, double);
+    timeout = Ch_VaArg(interp, ap, double);
+    retval = mobot->accelAngularCycloidNB((robotJointId_t)id, radius, distance, timeout);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int LinkbotI_accelToVelocityNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

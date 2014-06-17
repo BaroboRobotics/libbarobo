@@ -685,6 +685,8 @@ class DLLIMPORT CMobot
         double vmax,
         double angle);
     virtual int blinkLED(double delay, int numBlinks);
+	/*Cycloidal acceleration profile*/
+	virtual int accelAngularCycloidNB(robotJointId_t id, double radius, double distance, double time);
 
     virtual bool canFlashFirmware ();
     virtual int flashFirmwareAsync (std::string hexfile,
@@ -1057,6 +1059,9 @@ DLLIMPORT int Mobot_accelToMaxSpeedNB(mobot_t* comms, double radius, double acce
 DLLIMPORT int Mobot_accelAngularTimeNB(mobot_t* comms, robotJointId_t id, double acceleration, double time);
 DLLIMPORT int Mobot_accelAngularToVelocityNB(mobot_t* comms, robotJointId_t id, double acceleration, double speed);
 DLLIMPORT int Mobot_accelAngularAngleNB(mobot_t* comms, robotJointId_t id, double acceleration, double angle);
+
+DLLIMPORT int Mobot_accelAngularCycloidNB(mobot_t* comms, robotJointId_t id, double radius, double distance, double time);
+
 DLLIMPORT int Mobot_blinkLED(mobot_t* comms, double delay, int numBlinks);
 DLLIMPORT int Mobot_connect(mobot_t* comms);
 DLLIMPORT int Mobot_connectWithTCP(mobot_t* comms);
@@ -1073,6 +1078,8 @@ DLLIMPORT int Mobot_connectWithBluetoothAddress(
     mobot_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_disableJointEventCallback(mobot_t* comms);
 DLLIMPORT int Mobot_disableAccelEventCallback(mobot_t* comms);
+
+
 
 /* Find the serial device the robot is plugged into. The device's
  * fully-qualified path is stored in the tty output parameter as a
