@@ -1514,6 +1514,18 @@ int CLinkbotL::setTwoWheelRobotSpeed(double speed, double radius) {
     dlrunfun(fptr, &retval, setTwoWheelRobotSpeed, this, speed, radius);
     return retval;
 }
+int CLinkbotL::setSpeed(double speed, double radius) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_setSpeed_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setTwoWheelRobotSpeed, this, speed, radius);
+    return retval;
+}
 int CLinkbotL::stop() {
     void *fptr;
     int retval;
@@ -2437,11 +2449,38 @@ int CLinkbotL::moveTime(double time) {
     return retval;
 }
 
+int CLinkbotL::moveTimeNB(double time) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_moveTimeNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, time);
+    return retval;
+}
+
+
 int CLinkbotL::moveJointTime(int id, double time) {
     void *fptr;
     int retval;
 
     fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_moveJointTime_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, time);
+    return retval;
+}
+
+int CLinkbotL::moveJointTimeNB(int id, double time) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_moveJointTimeNB_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;

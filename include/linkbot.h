@@ -330,6 +330,7 @@ class CLinkbotI
         robotJointState_t dir3,
         double seconds);
     int setTwoWheelRobotSpeed(double speed, double radius);
+	int setSpeed(double speed, double radius);
     int stop();
     int stopOneJoint(robotJointId_t id);
     int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
@@ -347,7 +348,9 @@ class CLinkbotI
     int motionTurnRight(double angle);
 
 	int moveTime(double time);
+	int moveTimeNB(double time);
 	int moveJointTime(robotJointId_t id, double time);
+	int moveJointTimeNB(robotJointId_t id, double time);
 
     /* Non-Blocking motion functions */
     int motionDistanceNB(double distance, double radius);
@@ -623,6 +626,7 @@ class CLinkbotL
         robotJointState_t dir3,
         double seconds);
     int setTwoWheelRobotSpeed(double speed, double radius);
+	int setSpeed(double speed, double radius);
     int stop();
     int stopOneJoint(robotJointId_t id);
     int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
@@ -631,7 +635,9 @@ class CLinkbotL
     int systemTime(double &time);
 
 	int moveJointTime(robotJointId_t id, double time);
+	int moveJointTimeNB(robotJointId_t id, double time);
 	int moveTime(double time);
+	int moveTimeNB(double time);
 
     /*Functions for compatibility with RoboSim*/
 	int getxy(double &x, double &y);
@@ -746,6 +752,7 @@ class CLinkbotIGroup
         robotJointState_t dir3, 
         double seconds);
     int setTwoWheelRobotSpeed(double speed, double radius);
+	int setSpeed(double speed, double radius);
     int stopAllJoints();
     int stopOneJoint(robotJointId_t id);
     int turnLeft(double angle, double radius, double tracklength);
@@ -908,6 +915,7 @@ class CLinkbotLGroup
         robotJointState_t dir3, 
         double seconds);
     int setTwoWheelRobotSpeed(double speed, double radius);
+	int setSpeed(double speed, double radius);
     int stopAllJoints();
     int stopOneJoint(robotJointId_t id);
 

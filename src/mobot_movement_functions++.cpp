@@ -350,6 +350,56 @@ int CMobot::moveTime(double time)
 		switch(dir)
 	   {
 		case ROBOT_FORWARD:
+		    Mobot_setMovementStateTimeNB(_comms, ROBOT_FORWARD, ROBOT_FORWARD, ROBOT_NEUTRAL, ROBOT_NEUTRAL, time);
+			return Mobot_moveWait(_comms);
+		    break;
+		
+		case ROBOT_BACKWARD:
+		    Mobot_setMovementStateTimeNB(_comms, ROBOT_BACKWARD, ROBOT_BACKWARD, ROBOT_NEUTRAL, ROBOT_NEUTRAL, time);
+			return Mobot_moveWait(_comms);
+		    break;
+		
+		default:
+		    Mobot_setMovementStateTimeNB(_comms, ROBOT_FORWARD, ROBOT_FORWARD, ROBOT_NEUTRAL, ROBOT_NEUTRAL, time);
+			return Mobot_moveWait(_comms);
+		    break;
+	     }
+	}
+
+	else
+	{
+		switch(dir)
+	    {
+		case ROBOT_FORWARD:
+		    Mobot_setMovementStateTimeNB(_comms, ROBOT_FORWARD, ROBOT_NEUTRAL, ROBOT_FORWARD, ROBOT_NEUTRAL, time);
+			return Mobot_moveWait(_comms);
+		    break;
+		
+		case ROBOT_BACKWARD:
+		    Mobot_setMovementStateTimeNB(_comms, ROBOT_BACKWARD, ROBOT_NEUTRAL, ROBOT_BACKWARD, ROBOT_NEUTRAL, time);
+			return Mobot_moveWait(_comms);
+		    break;
+		
+		default:
+		    Mobot_setMovementStateTimeNB(_comms, ROBOT_FORWARD, ROBOT_NEUTRAL, ROBOT_FORWARD, ROBOT_NEUTRAL, time);
+			return Mobot_moveWait(_comms);
+		    break;
+	    }
+	}
+}
+
+int CMobot::moveTimeNB(double time)
+{
+	robotJointState_t dir;
+	int form;
+	Mobot_getJointDirection(_comms, ROBOT_JOINT1, &dir);
+	Mobot_getFormFactor(_comms, &form);
+
+	if(form == MOBOTFORM_L) 
+	{
+		switch(dir)
+	   {
+		case ROBOT_FORWARD:
 		    return Mobot_setMovementStateTimeNB(_comms, ROBOT_FORWARD, ROBOT_FORWARD, ROBOT_NEUTRAL, ROBOT_NEUTRAL, time);
 		    break;
 		
@@ -382,7 +432,8 @@ int CMobot::moveTime(double time)
 	}
 }
 
-int CMobot::moveJointTime(robotJointId_t id, double time)
+
+int CMobot::moveJointTimeNB(robotJointId_t id, double time)
 {
 	robotJointState_t dir, dirs[4];
 	int i, ret, form;
@@ -413,6 +464,40 @@ int CMobot::moveJointTime(robotJointId_t id, double time)
 	}
 
 	return Mobot_setMovementStateTimeNB(_comms, dirs[0], dirs[1], dirs[2], dirs[3], time);
+}
+
+int CMobot::moveJointTime(robotJointId_t id, double time)
+{
+	robotJointState_t dir, dirs[4];
+	int i, ret, form;
+    
+	ret=Mobot_getJointDirection(_comms, id, &dir);
+	if (ret == 0)
+	{
+		if(dir == ROBOT_HOLD)
+		{
+			dir = ROBOT_FORWARD;
+		}
+		for (i=1; i<5; i++)
+		{
+			if (i == id)
+			{
+				dirs[i-1]=dir;
+			}
+			else
+			{
+				dirs[i-1]=ROBOT_HOLD;
+			}
+		}
+
+	}
+	else 
+	{
+		dirs[id-1]=ROBOT_FORWARD;
+	}
+
+	Mobot_setMovementStateTimeNB(_comms, dirs[0], dirs[1], dirs[2], dirs[3], time);
+	return Mobot_moveWait(_comms);
 }
 
 

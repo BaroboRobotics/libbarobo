@@ -850,6 +850,7 @@ class DLLIMPORT CMobot
         robotJointState_t dir4,
         double seconds);
     virtual int setTwoWheelRobotSpeed(double speed, double radius);
+	virtual int setSpeed(double speed, double radius);
     virtual int stop();
     virtual int stopOneJoint(robotJointId_t id);
     virtual int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
@@ -875,7 +876,9 @@ class DLLIMPORT CMobot
     virtual int motionUnstand();
 
 	virtual int moveTime(double time);
+	virtual int moveTimeNB(double time);
 	virtual int moveJointTime(robotJointId_t id, double time);
+	virtual int moveJointTimeNB(robotJointId_t id, double time);
 
     /* Non-Blocking motion functions */
     virtual int motionArchNB(double angle);
@@ -982,6 +985,7 @@ class CMobotGroup
         robotJointState_t dir4, 
         double seconds);
     int setTwoWheelRobotSpeed(double speed, double radius);
+	int setSpeed(double speed, double radius);
     int stopAllJoints();
     int stopOneJoint(robotJointId_t id);
     int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);

@@ -68,29 +68,7 @@ int CMobot::setJointSpeed(robotJointId_t id, double speed)
 {
     robotJointState_t dir;
 	Mobot_getJointDirection(_comms, id, &dir);
-		printf("dir %d\n", dir);
 	Mobot_setJointSpeed(_comms, id, DEG2RAD(speed));
-	id=(id-1);
-	if(speed > 0)
-	{
-		printf("speed > 0\n");
-		Mobot_setJointDirection(_comms, id, ROBOT_FORWARD);
-		Mobot_getJointDirection(_comms, id, &dir);
-		printf("dir %d\n", dir);
-	}
-	else if(speed < 0)
-	{
-		printf("speed < 0\n");
-		Mobot_setJointDirection(_comms, id, ROBOT_BACKWARD);
-		Mobot_getJointDirection(_comms, id, &dir);
-		printf("dir %d\n", dir);
-	}
-	else
-	{
-		Mobot_setJointDirection(_comms, id, ROBOT_NEUTRAL);
-		Mobot_getJointDirection(_comms, id, &dir);
-		printf("dir %d\n", dir);
-	}
 	return 0;
 
 }
@@ -154,20 +132,25 @@ int CMobot::setMovementStateTimeNB( robotJointState_t dir1,
 
 int CMobot::setTwoWheelRobotSpeed(double speed, double radius)
 {
-	if(speed > 0)
+	int form;
+	Mobot_getFormFactor(_comms, &form);
+	if (form == MOBOTFORM_L)
 	{
-		Mobot_setMovementStateNB(_comms, ROBOT_FORWARD, ROBOT_NEUTRAL, ROBOT_FORWARD, ROBOT_NEUTRAL);
+		printf("Function setTwoWheelRobotSpeed() not applicable to Linkbot L\n");
+		return 0;
 	}
-	else if(speed < 0)
+	return Mobot_setTwoWheelRobotSpeed(_comms, speed, radius);
+}
+
+int CMobot::setSpeed(double speed, double radius)
+{
+	int form;
+	Mobot_getFormFactor(_comms, &form);
+	if (form == MOBOTFORM_L)
 	{
-		Mobot_setMovementStateNB(_comms, ROBOT_BACKWARD, ROBOT_NEUTRAL, ROBOT_BACKWARD, ROBOT_NEUTRAL);
+		printf("Function setSpeed() not applicable to Linkbot L\n");
+		return 0;
 	}
-	else
-	{
-		Mobot_setMovementStateNB(_comms, ROBOT_NEUTRAL, ROBOT_NEUTRAL, ROBOT_NEUTRAL, ROBOT_NEUTRAL);
-	}
-  
-	
 	return Mobot_setTwoWheelRobotSpeed(_comms, speed, radius);
 }
 
