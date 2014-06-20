@@ -1905,6 +1905,33 @@ int CLinkbotI::turnRightNB(double angle, double radius, double tracklength) {
     dlrunfun(fptr, &retval, turnRightNB, this, angle, radius, tracklength);
     return retval;
 }
+
+int CLinkbotI::moveForeverNB() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_moveForeverNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this);
+    return retval;
+}
+
+int CLinkbotI::moveJointForeverNB(int id) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_moveJointForeverNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id);
+    return retval;
+}
+
 /* CLinkbotIGroup */
 
 
@@ -2254,6 +2281,33 @@ int CLinkbotIGroup::moveNB(double angle1, double angle2, double angle3) {
     dlrunfun(fptr, &retval, moveNB, this, angle1, angle2, angle3);
     return retval;
 }
+
+int CLinkbotIGroup::moveForeverNB() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGI_moveForeverNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this);
+    return retval;
+}
+
+int CLinkbotIGroup::moveJointForeverNB(int id) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGI_moveJointForeverNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id);
+    return retval;
+}
+
 int CLinkbotIGroup::moveBackward(double angle) {
     void *fptr;
     int retval;

@@ -1575,6 +1575,32 @@ int CLinkbotL::systemTime(double &time) {
     return retval;
 }
 
+int CLinkbotL::moveForeverNB() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_moveForeverNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this);
+    return retval;
+}
+
+int CLinkbotL::moveJointForeverNB(int id) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_moveJointForeverNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id);
+    return retval;
+}
+
 /* CLinkbotLGroup */
 
 
@@ -1787,6 +1813,33 @@ int CLinkbotLGroup::moveNB(double angle1, double angle2, double angle3) {
     dlrunfun(fptr, &retval, moveNB, this, angle1, angle2, angle3);
     return retval;
 }
+
+int CLinkbotLGroup::moveForeverNB() {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGL_moveForeverNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this);
+    return retval;
+}
+
+int CLinkbotLGroup::moveJointForeverNB(int id) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGL_moveJointForeverNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id);
+    return retval;
+}
+
 int CLinkbotLGroup::moveContinuousNB(int dir1, int dir2, int dir3) {
     void *fptr;
     int retval;

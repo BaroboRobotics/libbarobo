@@ -880,6 +880,9 @@ class DLLIMPORT CMobot
 	virtual int moveJointTime(robotJointId_t id, double time);
 	virtual int moveJointTimeNB(robotJointId_t id, double time);
 
+	virtual int moveForeverNB();
+	virtual int moveJointForeverNB(robotJointId_t id);
+
     /* Non-Blocking motion functions */
     virtual int motionArchNB(double angle);
     virtual int motionDistanceNB(double distance, double radius);
@@ -1035,6 +1038,9 @@ class CMobotGroup
     int motionUnstandNB();
     static void* motionUnstandThread(void*);
     int motionWait();
+
+	int moveForeverNB();
+	int moveJointForeverNB(robotJointId_t id);
 
   protected:
     CMobot **_robots;

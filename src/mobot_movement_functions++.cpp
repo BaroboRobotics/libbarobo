@@ -500,6 +500,39 @@ int CMobot::moveJointTime(robotJointId_t id, double time)
 	return Mobot_moveWait(_comms);
 }
 
+int CMobot::moveForeverNB()
+{
+	robotJointState_t dirs[4];
+	int i;
+
+	for (i=0; i<4; i++)
+	{
+		Mobot_getJointDirection(_comms, (robotJointId_t)(i+1), &dirs[i]);
+		if (dirs[i] == ROBOT_HOLD || dirs[i] == ROBOT_NEUTRAL)
+		{
+			dirs[i]=ROBOT_FORWARD;
+		}
+	}
+
+	return Mobot_setMovementStateNB(_comms, dirs[0], dirs[1], dirs[2], dirs[3]);
+}
+
+int CMobot::moveJointForeverNB(robotJointId_t id)
+{
+	robotJointState_t dir;
+	int i;
+
+	Mobot_getJointDirection(_comms, id, &dir);
+	if (dir == ROBOT_HOLD || dir == ROBOT_NEUTRAL)
+	{
+		dir = ROBOT_FORWARD;
+	}
+	return Mobot_setJointMovementStateNB(_comms, id, dir);
+}
+
+	
+
+
 
 	
 		

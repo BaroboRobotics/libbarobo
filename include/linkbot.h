@@ -262,6 +262,10 @@ class CLinkbotI
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
+
+    int moveForeverNB();
+	int moveJointForeverNB(robotJointId_t id);
+
     int movexy(double x, double y, double radius, double trackwidth);
     int movexyNB(double x, double y, double radius, double trackwidth);
     int recordAngle(robotJointId_t id, double time[:], double angle[:], int num, double seconds, ...);
@@ -527,6 +531,9 @@ class CLinkbotL
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
+
+	int moveForeverNB();
+	int moveJointForeverNB(robotJointId_t id);
 #ifdef _CH_
     int recordAngle(robotJointId_t id, double time[:], double angle[:], int num, double seconds, ...);
     int recordAngles(double time[:], 
@@ -727,6 +734,10 @@ class CLinkbotIGroup
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
+
+    int moveForeverNB();
+	int moveJointForeverNB(robotJointId_t id);
+
     int reset();
     int resetToZero();
     int resetToZeroNB();
@@ -812,6 +823,11 @@ class CLinkbotIGroup : public CMobotGroup
                            robotJointState_t dir2, 
                            robotJointState_t dir3, 
                            double seconds);
+
+
+	int moveForeverNB();
+	int moveJointForeverNB(robotJointId_t id);
+
     int moveTo(double angle1, double angle2, double angle3);
     int moveToDirect(double angle1, double angle2, double angle3);
     int moveToNB(double angle1, double angle2, double angle3);
@@ -890,6 +906,10 @@ class CLinkbotLGroup
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
+
+	int moveForeverNB();
+	int moveJointForeverNB(robotJointId_t id);
+
     int reset();
     int resetToZero();
     int resetToZeroNB();
