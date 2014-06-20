@@ -57,3 +57,18 @@ int CLinkbotLGroup::connect()
   return 0;
 }
 
+int CLinkbotLGroup::moveForeverNB()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveForeverNB();
+  }
+  return 0;
+} 
+
+int CLinkbotLGroup::moveJointForeverNB(robotJointId_t id)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveJointForeverNB(id);
+  }
+  return 0;
+} 

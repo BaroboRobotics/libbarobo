@@ -961,6 +961,8 @@ class CLinkbotLGroup : public CLinkbotIGroup
     int addRobot(CLinkbotL& mobot);
     int addRobots(CLinkbotL robots[], int numRobots);
     int connect();
+	int moveForeverNB();
+	int moveJointForeverNB(robotJointId_t id);
 };
 #endif
 

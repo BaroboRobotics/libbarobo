@@ -102,6 +102,7 @@ int CLinkbotIGroup::moveNB(double angle1, double angle2, double angle3)
   return 0;
 } 
 
+
 int CLinkbotIGroup::moveContinuousNB(robotJointState_t dir1, 
                        robotJointState_t dir2, 
                        robotJointState_t dir3)
@@ -206,3 +207,19 @@ int CLinkbotIGroup::setMovementStateTimeNB(robotJointState_t dir1,
   return 0;
 }
 
+
+int CLinkbotIGroup::moveForeverNB()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveForeverNB();
+  }
+  return 0;
+} 
+
+int CLinkbotIGroup::moveJointForeverNB(robotJointId_t id)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveJointForeverNB(id);
+  }
+  return 0;
+} 
