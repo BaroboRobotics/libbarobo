@@ -3753,3 +3753,36 @@ EXPORTCH int LinkbotI_recordxyEnd_chdl(void *varg) {
     Ch_VaEnd(interp, ap);
     return retval;
 }
+
+EXPORTCH int LinkbotI_moveTime_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotI *mobot;
+    double time;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
+    time = Ch_VaArg(interp, ap, double);
+    retval = mobot->moveTime(time);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotI_moveJointTime_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotI *mobot;
+	robotJointId_t id;
+    double time;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
+	id = Ch_VaArg(interp, ap, robotJointId_t);
+    time = Ch_VaArg(interp, ap, double);
+    retval = mobot->moveJointTime(id,time);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+

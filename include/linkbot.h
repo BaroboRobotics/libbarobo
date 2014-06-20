@@ -346,6 +346,9 @@ class CLinkbotI
     int motionTurnLeft(double angle);
     int motionTurnRight(double angle);
 
+	int moveTime(double time);
+	int moveJointTime(robotJointId_t id, double time);
+
     /* Non-Blocking motion functions */
     int motionDistanceNB(double distance, double radius);
     int motionRollBackwardNB(double angle);
@@ -626,6 +629,9 @@ class CLinkbotL
     int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
     int stopAllJoints();
     int systemTime(double &time);
+
+	int moveJointTime(robotJointId_t id, double time);
+	int moveTime(double time);
 
     /*Functions for compatibility with RoboSim*/
 	int getxy(double &x, double &y);

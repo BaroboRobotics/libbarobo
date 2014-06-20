@@ -874,6 +874,9 @@ class DLLIMPORT CMobot
     virtual int motionTumbleLeft(int num);
     virtual int motionUnstand();
 
+	virtual int moveTime(double time);
+	virtual int moveJointTime(robotJointId_t id, double time);
+
     /* Non-Blocking motion functions */
     virtual int motionArchNB(double angle);
     virtual int motionDistanceNB(double distance, double radius);

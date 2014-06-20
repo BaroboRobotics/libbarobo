@@ -59,10 +59,42 @@ int CMobot::setJointMovementStateTime(robotJointId_t id, robotJointState_t dir, 
   return Mobot_setJointMovementStateTime(_comms, id, dir, seconds);
 }
 
-int CMobot::setJointSpeed(robotJointId_t id, double speed)
+/*int CMobot::setJointSpeed(robotJointId_t id, double speed)
 {
   return Mobot_setJointSpeed(_comms, id, DEG2RAD(speed));
+}*/
+
+int CMobot::setJointSpeed(robotJointId_t id, double speed)
+{
+    robotJointState_t dir;
+	Mobot_getJointDirection(_comms, id, &dir);
+		printf("dir %d\n", dir);
+	Mobot_setJointSpeed(_comms, id, DEG2RAD(speed));
+	id=(id-1);
+	if(speed > 0)
+	{
+		printf("speed > 0\n");
+		Mobot_setJointDirection(_comms, id, ROBOT_FORWARD);
+		Mobot_getJointDirection(_comms, id, &dir);
+		printf("dir %d\n", dir);
+	}
+	else if(speed < 0)
+	{
+		printf("speed < 0\n");
+		Mobot_setJointDirection(_comms, id, ROBOT_BACKWARD);
+		Mobot_getJointDirection(_comms, id, &dir);
+		printf("dir %d\n", dir);
+	}
+	else
+	{
+		Mobot_setJointDirection(_comms, id, ROBOT_NEUTRAL);
+		Mobot_getJointDirection(_comms, id, &dir);
+		printf("dir %d\n", dir);
+	}
+	return 0;
+
 }
+
 
 int CMobot::setJointSpeeds(double speed1, double speed2, double speed3, double speed4)
 {
@@ -115,8 +147,29 @@ int CMobot::setMovementStateTimeNB( robotJointState_t dir1,
   return Mobot_setMovementStateTimeNB(_comms, dir1, dir2, dir3, dir4, seconds);
 }
 
-int CMobot::setTwoWheelRobotSpeed(double speed, double radius)
+/*int CMobot::setTwoWheelRobotSpeed(double speed, double radius)
 {
   return Mobot_setTwoWheelRobotSpeed(_comms, speed, radius);
+}*/
+
+int CMobot::setTwoWheelRobotSpeed(double speed, double radius)
+{
+	if(speed > 0)
+	{
+		Mobot_setMovementStateNB(_comms, ROBOT_FORWARD, ROBOT_NEUTRAL, ROBOT_FORWARD, ROBOT_NEUTRAL);
+	}
+	else if(speed < 0)
+	{
+		Mobot_setMovementStateNB(_comms, ROBOT_BACKWARD, ROBOT_NEUTRAL, ROBOT_BACKWARD, ROBOT_NEUTRAL);
+	}
+	else
+	{
+		Mobot_setMovementStateNB(_comms, ROBOT_NEUTRAL, ROBOT_NEUTRAL, ROBOT_NEUTRAL, ROBOT_NEUTRAL);
+	}
+  
+	
+	return Mobot_setTwoWheelRobotSpeed(_comms, speed, radius);
 }
+
+
 
