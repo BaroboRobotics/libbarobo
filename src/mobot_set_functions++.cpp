@@ -154,5 +154,9 @@ int CMobot::setSpeed(double speed, double radius)
 	return Mobot_setTwoWheelRobotSpeed(_comms, speed, radius);
 }
 
+int CMobot::holdJointsAtExit()
+{
+  return Mobot_setExitState(_comms, ROBOT_HOLD);
+}
 
 

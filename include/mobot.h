@@ -427,6 +427,11 @@ typedef enum robotJoints_e {
   ROBOT_JOINT4,
   ROBOT_NUM_JOINTS = 4
 } robotJointId_t;
+
+#define JOINT1 ROBOT_JOINT1
+#define JOINT2 ROBOT_JOINT2
+#define JOINT3 ROBOT_JOINT3
+
 #endif
 
 #ifndef _CH_
@@ -883,6 +888,12 @@ class DLLIMPORT CMobot
 	virtual int moveForeverNB();
 	virtual int moveJointForeverNB(robotJointId_t id);
 
+	virtual int holdJoint(robotJointId_t id);
+	virtual int holdJoints();
+	virtual int holdJointsAtExit();
+	virtual int relaxJoint(robotJointId_t id);
+	virtual int relaxJoints();
+
     /* Non-Blocking motion functions */
     virtual int motionArchNB(double angle);
     virtual int motionDistanceNB(double distance, double radius);
@@ -1041,6 +1052,11 @@ class CMobotGroup
 
 	int moveForeverNB();
 	int moveJointForeverNB(robotJointId_t id);
+	int holdJoint(robotJointId_t id);
+	int holdJoints();
+	int holdJointsAtExit();
+	int relaxJoint(robotJointId_t id);
+	int relaxJoints();
 
   protected:
     CMobot **_robots;

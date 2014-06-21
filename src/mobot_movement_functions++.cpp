@@ -474,7 +474,7 @@ int CMobot::moveJointTime(robotJointId_t id, double time)
 	ret=Mobot_getJointDirection(_comms, id, &dir);
 	if (ret == 0)
 	{
-		if(dir == ROBOT_HOLD)
+		if(dir == ROBOT_HOLD || dir == ROBOT_NEUTRAL)
 		{
 			dir = ROBOT_FORWARD;
 		}
@@ -529,6 +529,28 @@ int CMobot::moveJointForeverNB(robotJointId_t id)
 	}
 	return Mobot_setJointMovementStateNB(_comms, id, dir);
 }
+
+int CMobot::holdJoints()
+{
+  return Mobot_stopAllJoints(_comms);
+}
+
+int CMobot::holdJoint(robotJointId_t id)
+{
+  return Mobot_stopOneJoint(_comms, id);
+}
+
+int CMobot::relaxJoints()
+{
+  return Mobot_setMovementStateNB(_comms, ROBOT_NEUTRAL, ROBOT_NEUTRAL, ROBOT_NEUTRAL, ROBOT_NEUTRAL);
+}
+
+int CMobot::relaxJoint(robotJointId_t id)
+{
+  return Mobot_setJointMovementStateNB(_comms, id, ROBOT_NEUTRAL);
+}
+
+
 
 	
 

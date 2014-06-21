@@ -340,6 +340,13 @@ class CLinkbotI
     int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
     int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
     int stopAllJoints();
+
+	int holdJoint(robotJointId_t id);
+	int holdJoints();
+	int holdJointsAtExit();
+	int relaxJoint(robotJointId_t id);
+	int relaxJoints();
+
     int turnLeft(double angle, double radius, double tracklength);
     int turnLeftNB(double angle, double radius, double tracklength);
     int turnRight(double angle, double radius, double tracklength);
@@ -639,6 +646,13 @@ class CLinkbotL
     int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
     int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
     int stopAllJoints();
+
+    int holdJoint(robotJointId_t id);
+	int holdJoints();
+	int holdJointsAtExit();
+	int relaxJoint(robotJointId_t id);
+	int relaxJoints();
+
     int systemTime(double &time);
 
 	int moveJointTime(robotJointId_t id, double time);
@@ -766,6 +780,13 @@ class CLinkbotIGroup
 	int setSpeed(double speed, double radius);
     int stopAllJoints();
     int stopOneJoint(robotJointId_t id);
+
+    int holdJoint(robotJointId_t id);
+	int holdJoints();
+	int holdJointsAtExit();
+	int relaxJoint(robotJointId_t id);
+	int relaxJoints();
+
     int turnLeft(double angle, double radius, double tracklength);
     int turnLeftNB(double angle, double radius, double tracklength);
     int turnRight(double angle, double radius, double tracklength);
@@ -827,6 +848,12 @@ class CLinkbotIGroup : public CMobotGroup
 
 	int moveForeverNB();
 	int moveJointForeverNB(robotJointId_t id);
+
+	int holdJoint(robotJointId_t id);
+	int holdJoints();
+	int holdJointsAtExit();
+	int relaxJoint(robotJointId_t id);
+	int relaxJoints();
 
     int moveTo(double angle1, double angle2, double angle3);
     int moveToDirect(double angle1, double angle2, double angle3);
@@ -909,6 +936,11 @@ class CLinkbotLGroup
 
 	int moveForeverNB();
 	int moveJointForeverNB(robotJointId_t id);
+	int holdJoint(robotJointId_t id);
+	int holdJoints();
+	int holdJointsAtExit();
+	int relaxJoint(robotJointId_t id);
+	int relaxJoints();
 
     int reset();
     int resetToZero();
@@ -963,6 +995,12 @@ class CLinkbotLGroup : public CLinkbotIGroup
     int connect();
 	int moveForeverNB();
 	int moveJointForeverNB(robotJointId_t id);
+
+	int holdJoint(robotJointId_t id);
+	int holdJoints();
+	int holdJointsAtExit();
+	int relaxJoint(robotJointId_t id);
+	int relaxJoints();
 };
 #endif
 

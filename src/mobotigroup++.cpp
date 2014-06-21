@@ -223,3 +223,43 @@ int CLinkbotIGroup::moveJointForeverNB(robotJointId_t id)
   }
   return 0;
 } 
+
+int CLinkbotIGroup::holdJoints()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->holdJoints();
+  }
+  return 0;
+}
+
+int CLinkbotIGroup::holdJoint(robotJointId_t id)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->holdJoint(id);
+  }
+  return 0;
+}
+
+int CLinkbotIGroup::relaxJoints()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->relaxJoints();
+  }
+  return 0;
+}
+
+int CLinkbotIGroup::relaxJoint(robotJointId_t id)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->relaxJoint(id);
+  }
+  return 0;
+}
+
+int CLinkbotIGroup::holdJointsAtExit()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->holdJointsAtExit();
+  }
+  return 0;
+}
