@@ -297,7 +297,10 @@ int Mobot_setJointSpeed(mobot_t* comms, robotJointId_t id, double speed)
 
 int Mobot_setJointSpeedRatio(mobot_t* comms, robotJointId_t id, double ratio)
 {
-  if((ratio < 0) || (ratio > 1)) {
+  /*if((ratio < 0) || (ratio > 1)) {
+    return -1;
+  }*/
+  if(ratio > 1) {
     return -1;
   }
   return Mobot_setJointSpeed(comms, id, ratio * comms->maxSpeed[(int)id-1]);

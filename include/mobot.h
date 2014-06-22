@@ -427,6 +427,11 @@ typedef enum robotJoints_e {
   ROBOT_JOINT4,
   ROBOT_NUM_JOINTS = 4
 } robotJointId_t;
+
+#define JOINT1 ROBOT_JOINT1
+#define JOINT2 ROBOT_JOINT2
+#define JOINT3 ROBOT_JOINT3
+
 #endif
 
 #ifndef _CH_
@@ -685,6 +690,8 @@ class DLLIMPORT CMobot
         double vmax,
         double angle);
     virtual int blinkLED(double delay, int numBlinks);
+	/*Cycloidal acceleration profile*/
+	virtual int accelAngularCycloidNB(robotJointId_t id, double radius, double distance, double time);
 
     virtual bool canFlashFirmware ();
     virtual int flashFirmwareAsync (std::string hexfile,
@@ -848,6 +855,7 @@ class DLLIMPORT CMobot
         robotJointState_t dir4,
         double seconds);
     virtual int setTwoWheelRobotSpeed(double speed, double radius);
+	virtual int setSpeed(double speed, double radius);
     virtual int stop();
     virtual int stopOneJoint(robotJointId_t id);
     virtual int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
@@ -871,6 +879,20 @@ class DLLIMPORT CMobot
     virtual int motionTumbleRight(int num);
     virtual int motionTumbleLeft(int num);
     virtual int motionUnstand();
+
+	virtual int moveTime(double time);
+	virtual int moveTimeNB(double time);
+	virtual int moveJointTime(robotJointId_t id, double time);
+	virtual int moveJointTimeNB(robotJointId_t id, double time);
+
+	virtual int moveForeverNB();
+	virtual int moveJointForeverNB(robotJointId_t id);
+
+	virtual int holdJoint(robotJointId_t id);
+	virtual int holdJoints();
+	virtual int holdJointsAtExit();
+	virtual int relaxJoint(robotJointId_t id);
+	virtual int relaxJoints();
 
     /* Non-Blocking motion functions */
     virtual int motionArchNB(double angle);
@@ -977,6 +999,7 @@ class CMobotGroup
         robotJointState_t dir4, 
         double seconds);
     int setTwoWheelRobotSpeed(double speed, double radius);
+	int setSpeed(double speed, double radius);
     int stopAllJoints();
     int stopOneJoint(robotJointId_t id);
     int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
@@ -1027,6 +1050,14 @@ class CMobotGroup
     static void* motionUnstandThread(void*);
     int motionWait();
 
+	int moveForeverNB();
+	int moveJointForeverNB(robotJointId_t id);
+	int holdJoint(robotJointId_t id);
+	int holdJoints();
+	int holdJointsAtExit();
+	int relaxJoint(robotJointId_t id);
+	int relaxJoints();
+
   protected:
     CMobot **_robots;
     int _numRobots;
@@ -1057,6 +1088,9 @@ DLLIMPORT int Mobot_accelToMaxSpeedNB(mobot_t* comms, double radius, double acce
 DLLIMPORT int Mobot_accelAngularTimeNB(mobot_t* comms, robotJointId_t id, double acceleration, double time);
 DLLIMPORT int Mobot_accelAngularToVelocityNB(mobot_t* comms, robotJointId_t id, double acceleration, double speed);
 DLLIMPORT int Mobot_accelAngularAngleNB(mobot_t* comms, robotJointId_t id, double acceleration, double angle);
+
+DLLIMPORT int Mobot_accelAngularCycloidNB(mobot_t* comms, robotJointId_t id, double radius, double distance, double time);
+
 DLLIMPORT int Mobot_blinkLED(mobot_t* comms, double delay, int numBlinks);
 DLLIMPORT int Mobot_connect(mobot_t* comms);
 DLLIMPORT int Mobot_connectWithTCP(mobot_t* comms);
@@ -1073,6 +1107,8 @@ DLLIMPORT int Mobot_connectWithBluetoothAddress(
     mobot_t* comms, const char* address, int channel);
 DLLIMPORT int Mobot_disableJointEventCallback(mobot_t* comms);
 DLLIMPORT int Mobot_disableAccelEventCallback(mobot_t* comms);
+
+
 
 /* Find the serial device the robot is plugged into. The device's
  * fully-qualified path is stored in the tty output parameter as a

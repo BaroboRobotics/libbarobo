@@ -59,10 +59,20 @@ int CMobot::setJointMovementStateTime(robotJointId_t id, robotJointState_t dir, 
   return Mobot_setJointMovementStateTime(_comms, id, dir, seconds);
 }
 
-int CMobot::setJointSpeed(robotJointId_t id, double speed)
+/*int CMobot::setJointSpeed(robotJointId_t id, double speed)
 {
   return Mobot_setJointSpeed(_comms, id, DEG2RAD(speed));
+}*/
+
+int CMobot::setJointSpeed(robotJointId_t id, double speed)
+{
+    robotJointState_t dir;
+	Mobot_getJointDirection(_comms, id, &dir);
+	Mobot_setJointSpeed(_comms, id, DEG2RAD(speed));
+	return 0;
+
 }
+
 
 int CMobot::setJointSpeeds(double speed1, double speed2, double speed3, double speed4)
 {
@@ -115,8 +125,38 @@ int CMobot::setMovementStateTimeNB( robotJointState_t dir1,
   return Mobot_setMovementStateTimeNB(_comms, dir1, dir2, dir3, dir4, seconds);
 }
 
-int CMobot::setTwoWheelRobotSpeed(double speed, double radius)
+/*int CMobot::setTwoWheelRobotSpeed(double speed, double radius)
 {
   return Mobot_setTwoWheelRobotSpeed(_comms, speed, radius);
+}*/
+
+int CMobot::setTwoWheelRobotSpeed(double speed, double radius)
+{
+	int form;
+	Mobot_getFormFactor(_comms, &form);
+	if (form == MOBOTFORM_L)
+	{
+		printf("Function setTwoWheelRobotSpeed() not applicable to Linkbot L\n");
+		return 0;
+	}
+	return Mobot_setTwoWheelRobotSpeed(_comms, speed, radius);
 }
+
+int CMobot::setSpeed(double speed, double radius)
+{
+	int form;
+	Mobot_getFormFactor(_comms, &form);
+	if (form == MOBOTFORM_L)
+	{
+		printf("Function setSpeed() not applicable to Linkbot L\n");
+		return 0;
+	}
+	return Mobot_setTwoWheelRobotSpeed(_comms, speed, radius);
+}
+
+int CMobot::holdJointsAtExit()
+{
+  return Mobot_setExitState(_comms, ROBOT_HOLD);
+}
+
 

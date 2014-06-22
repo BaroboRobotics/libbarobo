@@ -57,3 +57,58 @@ int CLinkbotLGroup::connect()
   return 0;
 }
 
+int CLinkbotLGroup::moveForeverNB()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveForeverNB();
+  }
+  return 0;
+} 
+
+int CLinkbotLGroup::moveJointForeverNB(robotJointId_t id)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveJointForeverNB(id);
+  }
+  return 0;
+} 
+
+int CLinkbotLGroup::holdJoints()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->holdJoints();
+  }
+  return 0;
+}
+
+int CLinkbotLGroup::holdJoint(robotJointId_t id)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->holdJoint(id);
+  }
+  return 0;
+}
+
+int CLinkbotLGroup::relaxJoints()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->relaxJoints();
+  }
+  return 0;
+}
+
+int CLinkbotLGroup::relaxJoint(robotJointId_t id)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->relaxJoint(id);
+  }
+  return 0;
+}
+
+int CLinkbotLGroup::holdJointsAtExit()
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->holdJointsAtExit();
+  }
+  return 0;
+}

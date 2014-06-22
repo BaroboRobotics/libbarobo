@@ -92,6 +92,13 @@ int CMobot::smoothMoveToNB(
       deg2rad(angle));
 }
 
+
+/*Cycloidal acceleration profile*/
+int CMobot::accelAngularCycloidNB(robotJointId_t id, double radius, double distance, double time)
+{
+	return Mobot_accelAngularCycloidNB(_comms, id, radius, distance, time);
+}
+
 int CMobot::blinkLED(double delay, int numBlinks)
 {
   return Mobot_blinkLED(_comms, delay, numBlinks);

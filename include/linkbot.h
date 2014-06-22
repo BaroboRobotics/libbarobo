@@ -163,6 +163,8 @@ class CLinkbotI
         double accelf,
         double vmax,
         double angle);
+	/*Cycloidal acceleration profile*/
+	int accelAngularCycloidNB(robotJointId_t id, double radius, double distance, double time);
     int blinkLED(double delay, int numBlinks);
 /* connect() Return Error Codes:
    -1 : General Error
@@ -260,6 +262,10 @@ class CLinkbotI
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
+
+    int moveForeverNB();
+	int moveJointForeverNB(robotJointId_t id);
+
     int movexy(double x, double y, double radius, double trackwidth);
     int movexyNB(double x, double y, double radius, double trackwidth);
     int recordAngle(robotJointId_t id, double time[:], double angle[:], int num, double seconds, ...);
@@ -328,11 +334,19 @@ class CLinkbotI
         robotJointState_t dir3,
         double seconds);
     int setTwoWheelRobotSpeed(double speed, double radius);
+	int setSpeed(double speed, double radius);
     int stop();
     int stopOneJoint(robotJointId_t id);
     int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
     int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
     int stopAllJoints();
+
+	int holdJoint(robotJointId_t id);
+	int holdJoints();
+	int holdJointsAtExit();
+	int relaxJoint(robotJointId_t id);
+	int relaxJoints();
+
     int turnLeft(double angle, double radius, double tracklength);
     int turnLeftNB(double angle, double radius, double tracklength);
     int turnRight(double angle, double radius, double tracklength);
@@ -343,6 +357,11 @@ class CLinkbotI
     int motionRollForward(double angle);
     int motionTurnLeft(double angle);
     int motionTurnRight(double angle);
+
+	int moveTime(double time);
+	int moveTimeNB(double time);
+	int moveJointTime(robotJointId_t id, double time);
+	int moveJointTimeNB(robotJointId_t id, double time);
 
     /* Non-Blocking motion functions */
     int motionDistanceNB(double distance, double radius);
@@ -519,6 +538,9 @@ class CLinkbotL
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
+
+	int moveForeverNB();
+	int moveJointForeverNB(robotJointId_t id);
 #ifdef _CH_
     int recordAngle(robotJointId_t id, double time[:], double angle[:], int num, double seconds, ...);
     int recordAngles(double time[:], 
@@ -618,12 +640,25 @@ class CLinkbotL
         robotJointState_t dir3,
         double seconds);
     int setTwoWheelRobotSpeed(double speed, double radius);
+	int setSpeed(double speed, double radius);
     int stop();
     int stopOneJoint(robotJointId_t id);
     int stopTwoJoints(robotJointId_t id1, robotJointId_t id2);
     int stopThreeJoints(robotJointId_t id1, robotJointId_t id2, robotJointId_t id3);
     int stopAllJoints();
+
+    int holdJoint(robotJointId_t id);
+	int holdJoints();
+	int holdJointsAtExit();
+	int relaxJoint(robotJointId_t id);
+	int relaxJoints();
+
     int systemTime(double &time);
+
+	int moveJointTime(robotJointId_t id, double time);
+	int moveJointTimeNB(robotJointId_t id, double time);
+	int moveTime(double time);
+	int moveTimeNB(double time);
 
     /*Functions for compatibility with RoboSim*/
 	int getxy(double &x, double &y);
@@ -713,6 +748,10 @@ class CLinkbotIGroup
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
+
+    int moveForeverNB();
+	int moveJointForeverNB(robotJointId_t id);
+
     int reset();
     int resetToZero();
     int resetToZeroNB();
@@ -738,8 +777,16 @@ class CLinkbotIGroup
         robotJointState_t dir3, 
         double seconds);
     int setTwoWheelRobotSpeed(double speed, double radius);
+	int setSpeed(double speed, double radius);
     int stopAllJoints();
     int stopOneJoint(robotJointId_t id);
+
+    int holdJoint(robotJointId_t id);
+	int holdJoints();
+	int holdJointsAtExit();
+	int relaxJoint(robotJointId_t id);
+	int relaxJoints();
+
     int turnLeft(double angle, double radius, double tracklength);
     int turnLeftNB(double angle, double radius, double tracklength);
     int turnRight(double angle, double radius, double tracklength);
@@ -797,6 +844,17 @@ class CLinkbotIGroup : public CMobotGroup
                            robotJointState_t dir2, 
                            robotJointState_t dir3, 
                            double seconds);
+
+
+	int moveForeverNB();
+	int moveJointForeverNB(robotJointId_t id);
+
+	int holdJoint(robotJointId_t id);
+	int holdJoints();
+	int holdJointsAtExit();
+	int relaxJoint(robotJointId_t id);
+	int relaxJoints();
+
     int moveTo(double angle1, double angle2, double angle3);
     int moveToDirect(double angle1, double angle2, double angle3);
     int moveToNB(double angle1, double angle2, double angle3);
@@ -875,6 +933,15 @@ class CLinkbotLGroup
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
+
+	int moveForeverNB();
+	int moveJointForeverNB(robotJointId_t id);
+	int holdJoint(robotJointId_t id);
+	int holdJoints();
+	int holdJointsAtExit();
+	int relaxJoint(robotJointId_t id);
+	int relaxJoints();
+
     int reset();
     int resetToZero();
     int resetToZeroNB();
@@ -900,6 +967,7 @@ class CLinkbotLGroup
         robotJointState_t dir3, 
         double seconds);
     int setTwoWheelRobotSpeed(double speed, double radius);
+	int setSpeed(double speed, double radius);
     int stopAllJoints();
     int stopOneJoint(robotJointId_t id);
 
@@ -925,6 +993,14 @@ class CLinkbotLGroup : public CLinkbotIGroup
     int addRobot(CLinkbotL& mobot);
     int addRobots(CLinkbotL robots[], int numRobots);
     int connect();
+	int moveForeverNB();
+	int moveJointForeverNB(robotJointId_t id);
+
+	int holdJoint(robotJointId_t id);
+	int holdJoints();
+	int holdJointsAtExit();
+	int relaxJoint(robotJointId_t id);
+	int relaxJoints();
 };
 #endif
 
