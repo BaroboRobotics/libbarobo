@@ -252,10 +252,6 @@ int Mobot_accelAngularCycloidNB(mobot_t* comms, robotJointId_t id, double radius
     return 0;
 }
 
-
-
-
-
 int Mobot_accelAngularToVelocityNB(mobot_t* comms, robotJointId_t id, double acceleration, double speed)
 {
   double timeout = speed/acceleration;

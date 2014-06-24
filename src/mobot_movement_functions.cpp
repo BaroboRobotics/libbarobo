@@ -106,7 +106,6 @@ int Mobot_moveNB(mobot_t* comms,
                                double angle4)
 {
   double angles[4];
-  double curAngles[4];
   int i;
   double time;
   uint8_t buf[32];
@@ -115,22 +114,12 @@ int Mobot_moveNB(mobot_t* comms,
   angles[1] = angle2;
   angles[2] = angle3;
   angles[3] = angle4;
-  /* Get the current joint angles */
-  Mobot_getJointAnglesTime(comms, &time, 
-      &curAngles[0],
-      &curAngles[1],
-      &curAngles[2],
-      &curAngles[3] );
-  /* Calculate new angles */
-  for(i = 0; i < 4; i++) {
-    angles[i] = curAngles[i] + angles[i];
-  }
   /* Set up message buffer */
   for(i = 0; i < 4; i++) {
     f = angles[i];
     memcpy(&buf[i*4], &f, 4);
   }
-  if(MobotMsgTransaction(comms, BTCMD(CMD_SETMOTORANGLESABS), buf, 4*4)) {
+  if(MobotMsgTransaction(comms, BTCMD(CMD_MOVE_MOTORS), buf, 4*4)) {
     return -1;
   }
   /* Make sure the data size is correct */
