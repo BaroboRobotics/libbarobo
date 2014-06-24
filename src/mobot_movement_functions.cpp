@@ -212,20 +212,35 @@ int Mobot_moveJointContinuousTime(mobot_t* comms, robotJointId_t id, robotJointS
 
 int Mobot_moveJoint(mobot_t* comms, robotJointId_t id, double angle)
 {
-  double curAngle;
-  if(Mobot_getJointAngle(comms, id, &curAngle)) {
-    return -1;
-  }
-  return Mobot_moveJointTo(comms, id, curAngle + angle);
+  Mobot_moveJointNB(comms, id, angle);
+  return Mobot_moveWait(comms);
 }
 
 int Mobot_moveJointNB(mobot_t* comms, robotJointId_t id, double angle)
 {
-  double curAngle;
-  if(Mobot_getJointAngle(comms, id, &curAngle)) {
+  double angles[4];
+  int i;
+  double time;
+  uint8_t buf[32];
+  float f;
+  angles[0] = 0;
+  angles[1] = 0;
+  angles[2] = 0;
+  angles[3] = 0;
+  angles[id-1] = angle;
+  /* Set up message buffer */
+  for(i = 0; i < 4; i++) {
+    f = angles[i];
+    memcpy(&buf[i*4], &f, 4);
+  }
+  if(MobotMsgTransaction(comms, BTCMD(CMD_MOVE_MOTORS), buf, 4*4)) {
     return -1;
   }
-  return Mobot_moveJointToNB(comms, id, curAngle + angle);
+  /* Make sure the data size is correct */
+  if(buf[1] != 0x03) {
+    return -1;
+  }
+  return 0;
 }
 
 int Mobot_moveJointTo(mobot_t* comms, robotJointId_t id, double angle)
