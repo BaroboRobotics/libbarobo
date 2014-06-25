@@ -692,7 +692,9 @@ class DLLIMPORT CMobot
         double angle);
     virtual int blinkLED(double delay, int numBlinks);
 	/*Cycloidal acceleration profile*/
-	virtual int accelAngularCycloidNB(robotJointId_t id, double radius, double distance, double time);
+	//virtual int accelAngularCycloidNB(robotJointId_t id, double radius, double distance, double time);
+	virtual int accelAngularCycloidNB(robotJointId_t id, double angle, double time);
+	virtual int accelCycloidNB(double radius, double distance, double time);
 	
 
     virtual bool canFlashFirmware ();
@@ -1092,7 +1094,8 @@ DLLIMPORT int Mobot_accelAngularTimeNB(mobot_t* comms, robotJointId_t id, double
 DLLIMPORT int Mobot_accelAngularToVelocityNB(mobot_t* comms, robotJointId_t id, double acceleration, double speed);
 DLLIMPORT int Mobot_accelAngularAngleNB(mobot_t* comms, robotJointId_t id, double acceleration, double angle);
 
-DLLIMPORT int Mobot_accelAngularCycloidNB(mobot_t* comms, robotJointId_t id, double radius, double distance, double time);
+DLLIMPORT int Mobot_accelAngularCycloidNB(mobot_t* comms, robotJointId_t id, double angle, double time);
+DLLIMPORT int Mobot_accelCycloidNB(mobot_t* comms, double radius, double distance, double time);
 
 DLLIMPORT int Mobot_blinkLED(mobot_t* comms, double delay, int numBlinks);
 DLLIMPORT int Mobot_connect(mobot_t* comms);
