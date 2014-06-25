@@ -80,6 +80,25 @@ EXPORTCH int LinkbotL_accelToMaxSpeedNB_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int LinkbotL_accelDistanceNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    double radius;
+    double acceleration;
+	double distance;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    radius = Ch_VaArg(interp, ap, double);
+    acceleration = Ch_VaArg(interp, ap, double);
+	distance = Ch_VaArg(interp, ap, double);
+    retval = mobot->accelDistanceNB(radius, acceleration, distance);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int LinkbotL_accelAngularTimeNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

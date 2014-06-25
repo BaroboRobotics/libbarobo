@@ -205,6 +205,29 @@ int Mobot_accelToMaxSpeedNB(mobot_t* comms, double radius, double acceleration)
   return 0;
 }
 
+int Mobot_accelDistanceNB(mobot_t* comms, double radius, double acceleration, double distance)
+{
+	int rc, i;
+	double angle, alpha;
+	angle = (distance/radius);
+	alpha = (acceleration/radius);
+
+	for( i=0; i<4; i++)
+	{
+		if (i == 3)
+		{
+			rc = Mobot_accelAngularAngleNB(comms, (robotJointId_t)i, -angle, -alpha);
+		}
+		else
+		{
+			rc = Mobot_accelAngularAngleNB(comms, (robotJointId_t)i, angle, alpha);
+		}
+
+		if (rc) return rc;
+	}
+	return 0;
+}
+
 int Mobot_accelAngularTimeNB(mobot_t* comms, robotJointId_t id, double acceleration, double time)
 {
   uint8_t buf[32];

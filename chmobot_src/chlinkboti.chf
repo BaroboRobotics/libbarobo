@@ -99,6 +99,20 @@ int CLinkbotI::accelToMaxSpeedNB(double radius, double acceleration) {
     dlrunfun(fptr, &retval, NULL, this, radius, acceleration);
     return retval;
 }
+
+int CLinkbotI::accelDistanceNB(double radius, double acceleration, double distance) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_accelDistanceNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, radius, acceleration, distance);
+    return retval;
+}
+
 int CLinkbotI::accelAngularTimeNB(int id, double acceleration, double time) {
     void *fptr;
     int retval;

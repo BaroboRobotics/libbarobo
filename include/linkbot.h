@@ -154,6 +154,7 @@ class CLinkbotI
     int accelTimeNB(double radius, double acceleration, double time);
     int accelToVelocityNB(double radius, double acceleration, double velocity);
     int accelToMaxSpeedNB(double radius, double acceleration);
+	int accelDistanceNB(double radius, double acceleration, double distance);
     int accelAngularTimeNB(robotJointId_t id, double acceleration, double time);
     int accelAngularToVelocityNB(robotJointId_t id, double acceleration, double speed);
     int accelAngularAngleNB(robotJointId_t id, double acceleration, double angle);
@@ -424,6 +425,7 @@ class CLinkbotL
     int accelTimeNB(double radius, double acceleration, double time);
     int accelToVelocityNB(double radius, double acceleration, double velocity);
     int accelToMaxSpeedNB(double radius, double acceleration);
+	int accelDistanceNB(double radius, double acceleration, double distance);
     int accelAngularTimeNB(robotJointId_t id, double acceleration, double time);
     int accelAngularToVelocityNB(robotJointId_t id, double acceleration, double speed);
     int accelAngularAngleNB(robotJointId_t id, double acceleration, double angle);

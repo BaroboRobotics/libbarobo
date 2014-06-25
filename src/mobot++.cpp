@@ -61,6 +61,11 @@ int CMobot::accelToMaxSpeedNB(double radius, double acceleration)
   return Mobot_accelToMaxSpeedNB(_comms, radius, deg2rad(acceleration));
 }
 
+int CMobot::accelDistanceNB(double radius, double acceleration, double distance)
+{
+  return Mobot_accelDistanceNB(_comms, radius, deg2rad(acceleration), distance);
+}
+
 int CMobot::accelAngularTimeNB(robotJointId_t id, double acceleration, double time)
 {
   return Mobot_accelAngularTimeNB(_comms, id, deg2rad(acceleration), time);
