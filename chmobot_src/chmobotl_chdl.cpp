@@ -80,25 +80,6 @@ EXPORTCH int LinkbotL_accelToMaxSpeedNB_chdl(void *varg) {
     return retval;
 }
 
-EXPORTCH int LinkbotL_accelDistanceNB_chdl(void *varg) {
-    ChInterp_t interp;
-    ChVaList_t ap;
-    class CLinkbotL *mobot;
-    double radius;
-    double acceleration;
-	double distance;
-    int retval;
-
-    Ch_VaStart(interp, ap, varg);
-    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
-    radius = Ch_VaArg(interp, ap, double);
-    acceleration = Ch_VaArg(interp, ap, double);
-	distance = Ch_VaArg(interp, ap, double);
-    retval = mobot->accelDistanceNB(radius, acceleration, distance);
-    Ch_VaEnd(interp, ap);
-    return retval;
-}
-
 EXPORTCH int LinkbotL_accelAngularTimeNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -172,25 +153,6 @@ EXPORTCH int LinkbotL_accelAngularCycloidNB_chdl(void *varg) {
     angle = Ch_VaArg(interp, ap, double);
     timeout = Ch_VaArg(interp, ap, double);
     retval = mobot->accelAngularCycloidNB((robotJointId_t)id, angle, timeout);
-    Ch_VaEnd(interp, ap);
-    return retval;
-}
-
-EXPORTCH int LinkbotL_accelCycloidNB_chdl(void *varg) {
-    ChInterp_t interp;
-    ChVaList_t ap;
-    class CLinkbotL *mobot;
-    double radius;
-    double distance;
-    double timeout;
-    int retval;
-
-    Ch_VaStart(interp, ap, varg);
-    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
-    radius = Ch_VaArg(interp, ap, double);
-    distance = Ch_VaArg(interp, ap, double);
-    timeout = Ch_VaArg(interp, ap, double);
-    retval = mobot->accelCycloidNB(radius, distance, timeout);
     Ch_VaEnd(interp, ap);
     return retval;
 }

@@ -250,30 +250,6 @@ int Mobot_accelAngularTimeNB(mobot_t* comms, robotJointId_t id, double accelerat
 }
 
 /*Cycloidal acceleration profile*/
-/*int Mobot_accelAngularCycloidNB(mobot_t* comms, robotJointId_t id, double radius, double distance, double time)
-{
-	uint8_t buf[32];
-	uint32_t millis;
-	double angle;
-	float a;
-	int status;
-
-	angle=(distance/radius); //2*pi*n number of full rotations
-	a=angle;
-
-	buf[0]=(uint8_t)id-1;
-	memcpy(&buf[1], &a, 4);
-	millis=time*1000;
-	millis=htonl(millis);
-	memcpy(&buf[5], &millis, 4);
-	status=MobotMsgTransaction(comms, BTCMD(CMD_CYCLO_ACCEL), buf, 13);
-	if (status < 0) return status;*/
-	/* Make sure the data size is correct */
-    /*if(buf[1] != 3) {
-       return -1;
-    }
-    return 0;
-}*/
 
 int Mobot_accelAngularCycloidNB(mobot_t* comms, robotJointId_t id, double angle, double time)
 {
