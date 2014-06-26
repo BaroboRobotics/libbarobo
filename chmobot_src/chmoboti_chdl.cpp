@@ -83,6 +83,45 @@ EXPORTCH int LinkbotI_accelCycloidNB_chdl(void *varg) {
     return retval;
 }
 
+/*harmonic acceleration profile*/
+EXPORTCH int LinkbotI_accelAngularHarmonicNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotI *mobot;
+	int id;
+    double angle;
+    double timeout;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
+	id = Ch_VaArg(interp, ap, int); 
+    angle = Ch_VaArg(interp, ap, double);
+    timeout = Ch_VaArg(interp, ap, double);
+    retval = mobot->accelAngularHarmonicNB((robotJointId_t)id, angle, timeout);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotI_accelHarmonicNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotI *mobot;
+    double radius;
+    double distance;
+    double timeout;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
+    radius = Ch_VaArg(interp, ap, double);
+    distance = Ch_VaArg(interp, ap, double);
+    timeout = Ch_VaArg(interp, ap, double);
+    retval = mobot->accelHarmonicNB(radius, distance, timeout);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int LinkbotI_accelToVelocityNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

@@ -168,6 +168,9 @@ class CLinkbotI
 	int accelAngularCycloidNB(robotJointId_t id, double angle, double time);
 	int accelCycloidNB(double radius, double distance, double time);
 
+	int accelAngularHarmonicNB(robotJointId_t id, double angle, double time);
+	int accelHarmonicNB(double radius, double distance, double time);
+
     int blinkLED(double delay, int numBlinks);
 /* connect() Return Error Codes:
    -1 : General Error
@@ -440,6 +443,9 @@ class CLinkbotL
 
     int accelAngularCycloidNB(robotJointId_t id, double angle, double time);
 	int accelCycloidNB(double radius, double distance, double time);
+
+	int accelAngularHarmonicNB(robotJointId_t id, double angle, double time);
+	int accelHarmonicNB(double radius, double distance, double time);
 
     int blinkLED(double delay, int numBlinks);
 /* connect() Return Error Codes:

@@ -86,6 +86,34 @@ int CLinkbotI::accelCycloidNB(double radius, double distance, double time) {
     return retval;
 }
 
+/*Harmonic acceleration*/
+int CLinkbotI::accelAngularHarmonicNB(int id, double angle, double time) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_accelAngularHarmonicNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, angle, time);
+    return retval;
+}
+
+int CLinkbotI::accelHarmonicNB(double radius, double distance, double time) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_accelHarmonicNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, radius, distance, time);
+    return retval;
+}
+
+
 int CLinkbotI::accelToVelocityNB(double radius, double acceleration, double velocity) {
     void *fptr;
     int retval;

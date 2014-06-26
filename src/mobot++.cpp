@@ -109,6 +109,18 @@ int CMobot::accelCycloidNB(double radius, double distance, double time)
 	return Mobot_accelCycloidNB(_comms, radius, distance, time);
 }
 
+/*Harmonic acceleration profile*/
+int CMobot::accelAngularHarmonicNB(robotJointId_t id, double angle, double time)
+{
+	return Mobot_accelAngularHarmonicNB(_comms, id, deg2rad(angle), time);
+}
+
+int CMobot::accelHarmonicNB(double radius, double distance, double time)
+{
+	return Mobot_accelHarmonicNB(_comms, radius, distance, time);
+}
+
+
 int CMobot::blinkLED(double delay, int numBlinks)
 {
   return Mobot_blinkLED(_comms, delay, numBlinks);
