@@ -209,6 +209,8 @@ int Mobot_setJointDirection(mobot_t* comms, robotJointId_t id, robotJointState_t
         buf[1] = dir;
     }
   } else {
+    if(dir == ROBOT_POSITIVE) dir = ROBOT_FORWARD;
+    if(dir == ROBOT_NEGATIVE) dir = ROBOT_BACKWARD;
     buf[1] = (uint8_t) dir;
   }
   status = MobotMsgTransaction(comms, BTCMD(CMD_SETMOTORDIR), buf, 2);
@@ -373,6 +375,8 @@ int Mobot_setMovementStateNB(mobot_t* comms,
     }
   }
   for(i = 0; i < 4; i++) {
+    if(dirs[i] == ROBOT_POSITIVE) dirs[i] = ROBOT_FORWARD;
+    if(dirs[i] == ROBOT_NEGATIVE) dirs[i] = ROBOT_BACKWARD;
     buf[i*6 + 1] = dirs[i];
     buf[i*6 + 2] = ROBOT_HOLD;
     memcpy(&buf[i*6 + 3], &msecs, 4);
@@ -444,6 +448,8 @@ int Mobot_setMovementStateTimeNB(mobot_t* comms,
   }
   buf[0] = 0x0F;
   for(i = 0; i < 4; i++) {
+    if(dirs[i] == ROBOT_POSITIVE) dirs[i] = ROBOT_FORWARD;
+    if(dirs[i] == ROBOT_NEGATIVE) dirs[i] = ROBOT_BACKWARD;
     buf[i*6 + 1] = dirs[i];
     buf[i*6 + 2] = ROBOT_HOLD;
     memcpy(&buf[i*6 + 3], &msecs, 4);
