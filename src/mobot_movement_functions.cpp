@@ -115,9 +115,10 @@ int Mobot_moveNB(mobot_t* comms,
   angles[2] = angle3;
   angles[3] = angle4;
   /* Set up message buffer */
+  buf[0] = 0xff;
   for(i = 0; i < 4; i++) {
     f = angles[i];
-    memcpy(&buf[i*4], &f, 4);
+    memcpy(&buf[i*4+1], &f, 4);
   }
   if(MobotMsgTransaction(comms, BTCMD(CMD_MOVE_MOTORS), buf, 4*4)) {
     return -1;
@@ -229,9 +230,10 @@ int Mobot_moveJointNB(mobot_t* comms, robotJointId_t id, double angle)
   angles[3] = 0;
   angles[id-1] = angle;
   /* Set up message buffer */
+  buf[0] = 1<<(id-1);
   for(i = 0; i < 4; i++) {
     f = angles[i];
-    memcpy(&buf[i*4], &f, 4);
+    memcpy(&buf[i*4+1], &f, 4);
   }
   if(MobotMsgTransaction(comms, BTCMD(CMD_MOVE_MOTORS), buf, 4*4)) {
     return -1;
