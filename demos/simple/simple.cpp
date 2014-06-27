@@ -4,6 +4,7 @@
 #include <linkbot.h>
 #include <stdlib.h>
 #include <iostream>
+#include <unistd.h>
 
 using namespace std;
 int main()
@@ -11,21 +12,53 @@ int main()
   char color[20],color2[20]="red";
   int r, g, b;
   int pin=2;
-  CLinkbotL robot;
+  CLinkbotI robot;
   
-  robot.connect();
-  robot.getLEDColorName(color);
-  cout<<color<<endl;
-  robot.setLEDColor(color2);
-  robot.getLEDColorName(color);
-  cout<<color<<endl;
-  robot.setLEDColorRGB(100,20,200);
-  robot.getLEDColorRGB(r,g,b);
-  cout<<r<<" "<<g<<" "<<b<<endl;
-  
-  robot.LinkPodPinMode(pin, 1);
-  robot.LinkPodDigitalWrite(pin, 0x1);
-  //robot.LinkPodDigitalWrite(pin, 0x0);
+  robot.connectWithAddress("XM8V");
+  robot.setJointSpeeds(-90, -90, -90);
+  robot.moveJoint(ROBOT_JOINT1, 90);
+  robot.setJointSpeeds(90,90, 90);
+  robot.moveJoint(ROBOT_JOINT1, 90);
+  /*
+  robot.move(90, 90, 90);
+  robot.setJointSpeeds(-90, -90, -90);
+  robot.move(90, 90, 90);
+  */
+  /*
+  robot.accelAngularToVelocityNB(ROBOT_JOINT1, 45, 180);
+  double speed;
+  for(int i = 0; i < 50; i++) {
+    robot.getJointSpeed(ROBOT_JOINT1, speed);
+    cout << speed << endl;
+    usleep(100000);
+  }
+  */
+  /*
+  cout << "forward" << endl;
+  robot.moveTime(3);
+  robot.setJointSpeeds(-90,-90,-90);
+  cout << "backward" << endl;
+  robot.moveTime(3);
+  cout << "backward" << endl;
+  robot.moveTime(3);
+  robot.setJointSpeeds(90,90,90);
+  cout << "forward" << endl;
+  robot.moveTime(3);
+  */
+  /*
+  robot.setJointSpeeds(-90,-90,-90);
+  cout << "backward" << endl;
+  robot.moveJointForeverNB(ROBOT_JOINT1);
+  sleep(2);
+  cout << "backward" << endl;
+  robot.moveJointForeverNB(ROBOT_JOINT1);
+  sleep(2);
+  robot.setJointSpeeds(90,90,90);
+  cout << "forward" << endl;
+  robot.moveJointForeverNB(ROBOT_JOINT1);
+  sleep(2);
+  robot.stop();
+  */
 
   return 0;
 }

@@ -347,8 +347,8 @@ int CMobot::moveTime(double time)
 
 int CMobot::moveTimeNB(double time)
 {
-    return Mobot_setMovementStateTimeNB(_comms, ROBOT_FORWARD, ROBOT_FORWARD,
-        ROBOT_FORWARD, ROBOT_NEUTRAL, time);
+    return Mobot_setMovementStateTimeNB(_comms, ROBOT_POSITIVE, ROBOT_POSITIVE,
+        ROBOT_POSITIVE, ROBOT_NEUTRAL, time);
 }
 
 
@@ -361,7 +361,7 @@ int CMobot::moveJointTimeNB(robotJointId_t id, double time)
     millis = time * 1000;
     i = ((int)id)-1;
     buf[0] = 1<<i;
-    buf[1] = ROBOT_FORWARD;
+    buf[1] = ROBOT_POSITIVE;
     buf[2] = ROBOT_HOLD;
     memcpy(&buf[3], &millis, 4);
     return MobotMsgTransaction(_comms, BTCMD(CMD_TIMEDACTION), buf, 7);
@@ -376,10 +376,10 @@ int CMobot::moveJointTime(robotJointId_t id, double time)
 int CMobot::moveForeverNB()
 {
 	return Mobot_setMovementStateNB(_comms, 
-        ROBOT_FORWARD,
-        ROBOT_FORWARD,
-        ROBOT_FORWARD,
-        ROBOT_FORWARD);
+        ROBOT_POSITIVE,
+        ROBOT_POSITIVE,
+        ROBOT_POSITIVE,
+        ROBOT_POSITIVE);
 }
 
 int CMobot::moveJointForeverNB(robotJointId_t id)
@@ -391,7 +391,7 @@ int CMobot::moveJointForeverNB(robotJointId_t id)
     millis = -1;
     i = id-1;
     buf[0] = 1<<i;
-    buf[1] = ROBOT_FORWARD;
+    buf[1] = ROBOT_POSITIVE;
     buf[2] = ROBOT_HOLD;
     memcpy(&buf[3], &millis, 4);
     return MobotMsgTransaction(_comms, BTCMD(CMD_TIMEDACTION), buf, 7);
