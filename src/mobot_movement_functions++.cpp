@@ -348,7 +348,7 @@ int CMobot::moveTime(double time)
 int CMobot::moveTimeNB(double time)
 {
     return Mobot_setMovementStateTimeNB(_comms, ROBOT_POSITIVE, ROBOT_POSITIVE,
-        ROBOT_POSITIVE, ROBOT_NEUTRAL, time);
+        ROBOT_FORWARD, ROBOT_NEUTRAL, time);
 }
 
 
@@ -378,7 +378,7 @@ int CMobot::moveForeverNB()
 	return Mobot_setMovementStateNB(_comms, 
         ROBOT_POSITIVE,
         ROBOT_POSITIVE,
-        ROBOT_POSITIVE,
+        ROBOT_FORWARD,
         ROBOT_POSITIVE);
 }
 
