@@ -361,7 +361,11 @@ int CMobot::moveJointTimeNB(robotJointId_t id, double time)
     millis = time * 1000;
     i = ((int)id)-1;
     buf[0] = 1<<i;
-    buf[1] = ROBOT_POSITIVE;
+    if(id == ROBOT_JOINT3) {
+        buf[1] = ROBOT_POSITIVE;
+    } else {
+        buf[1] = ROBOT_FORWARD;
+    }
     buf[2] = ROBOT_HOLD;
     memcpy(&buf[3], &millis, 4);
     return MobotMsgTransaction(_comms, BTCMD(CMD_TIMEDACTION), buf, 7);
@@ -391,7 +395,11 @@ int CMobot::moveJointForeverNB(robotJointId_t id)
     millis = -1;
     i = id-1;
     buf[0] = 1<<i;
-    buf[1] = ROBOT_POSITIVE;
+    if(id == ROBOT_JOINT3) {
+        buf[1] = ROBOT_POSITIVE;
+    } else {
+        buf[1] = ROBOT_FORWARD;
+    }
     buf[2] = ROBOT_HOLD;
     memcpy(&buf[3], &millis, 4);
     return MobotMsgTransaction(_comms, BTCMD(CMD_TIMEDACTION), buf, 7);

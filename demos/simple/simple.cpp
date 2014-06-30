@@ -14,11 +14,11 @@ int main()
   int pin=2;
   CLinkbotI robot;
   
-  robot.connectWithAddress("XM8V");
+  robot.connectWithAddress("QCT7");
   robot.setJointSpeeds(-90, -90, -90);
-  robot.moveJoint(ROBOT_JOINT1, 90);
+  robot.moveTime(3);
   robot.setJointSpeeds(90,90, 90);
-  robot.moveJoint(ROBOT_JOINT1, 90);
+  robot.moveTime(3);
   /*
   robot.move(90, 90, 90);
   robot.setJointSpeeds(-90, -90, -90);
