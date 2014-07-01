@@ -205,6 +205,29 @@ int Mobot_accelToMaxSpeedNB(mobot_t* comms, double radius, double acceleration)
   return 0;
 }
 
+int Mobot_accelDistanceNB(mobot_t* comms, double radius, double acceleration, double distance)
+{
+	int rc, i;
+	double angle, alpha;
+	angle = (distance/radius);
+	alpha = (acceleration/radius);
+
+	for( i=0; i<4; i++)
+	{
+		if (i == 3)
+		{
+			rc = Mobot_accelAngularAngleNB(comms, (robotJointId_t)i, -angle, -alpha);
+		}
+		else
+		{
+			rc = Mobot_accelAngularAngleNB(comms, (robotJointId_t)i, angle, alpha);
+		}
+
+		if (rc) return rc;
+	}
+	return 0;
+}
+
 int Mobot_accelAngularTimeNB(mobot_t* comms, robotJointId_t id, double acceleration, double time)
 {
   uint8_t buf[32];
@@ -227,15 +250,14 @@ int Mobot_accelAngularTimeNB(mobot_t* comms, robotJointId_t id, double accelerat
 }
 
 /*Cycloidal acceleration profile*/
-int Mobot_accelAngularCycloidNB(mobot_t* comms, robotJointId_t id, double radius, double distance, double time)
+
+int Mobot_accelAngularCycloidNB(mobot_t* comms, robotJointId_t id, double angle, double time)
 {
 	uint8_t buf[32];
 	uint32_t millis;
-	double angle;
 	float a;
 	int status;
 
-	angle=(distance/radius); //2*pi*n number of full rotations
 	a=angle;
 
 	buf[0]=(uint8_t)id-1;
@@ -249,6 +271,82 @@ int Mobot_accelAngularCycloidNB(mobot_t* comms, robotJointId_t id, double radius
     if(buf[1] != 3) {
        return -1;
     }
+    return 0;
+}
+
+int Mobot_accelCycloidNB(mobot_t* comms, double radius, double distance, double time)
+{
+	uint8_t buf[32];
+	uint32_t millis;
+	double angle;
+	float a;
+	int status, i;
+    
+	angle = distance/radius;
+	a=angle;
+
+	for (i=0; i<4; i++)
+	{
+		if ( i == 3)
+		{
+			status = Mobot_accelAngularCycloidNB(comms, (robotJointId_t)i, -angle , time);
+		}
+		else
+		{
+			status = Mobot_accelAngularCycloidNB(comms, (robotJointId_t)i, angle , time);
+		}
+		if (status) return status;
+	}
+    return 0;
+}
+
+/*Harmonic acceleration profile*/
+int Mobot_accelAngularHarmonicNB(mobot_t* comms, robotJointId_t id, double angle, double time)
+{
+	uint8_t buf[32];
+	uint32_t millis;
+	float a;
+	int status;
+
+	a=angle;
+
+	buf[0]=(uint8_t)id-1;
+	memcpy(&buf[1], &a, 4);
+	millis=time*1000;
+	millis=htonl(millis);
+	memcpy(&buf[5], &millis, 4);
+	status=MobotMsgTransaction(comms, BTCMD(CMD_HARM_ACCEL), buf, 13);
+	if (status < 0) return status;
+	/* Make sure the data size is correct */
+    if(buf[1] != 3) {
+       return -1;
+    }
+    return 0;
+}
+
+int Mobot_accelHarmonicNB(mobot_t* comms, double radius, double distance, double time)
+{
+	uint8_t buf[32];
+	uint32_t millis;
+	double angle;
+	float a;
+	int status, i;
+    
+	angle = distance/radius;
+	a=angle;
+
+	for (i=0; i<4; i++)
+	{
+		if ( i == 3)
+		{
+			status = Mobot_accelAngularHarmonicNB(comms, (robotJointId_t)i, -angle , time);
+		}
+		else
+		{
+			status = Mobot_accelAngularHarmonicNB(comms, (robotJointId_t)i, angle , time);
+		}
+		if (status) return status;
+	}
     return 0;
 }
 

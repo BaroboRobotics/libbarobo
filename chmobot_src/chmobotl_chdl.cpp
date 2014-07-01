@@ -137,6 +137,45 @@ EXPORTCH int LinkbotL_accelAngularAngleNB_chdl(void *varg) {
     return retval;
 }
 
+
+EXPORTCH int LinkbotL_accelAngularCycloidNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+	int id;
+    double angle;
+    double timeout;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+	id = Ch_VaArg(interp, ap, int); 
+    angle = Ch_VaArg(interp, ap, double);
+    timeout = Ch_VaArg(interp, ap, double);
+    retval = mobot->accelAngularCycloidNB((robotJointId_t)id, angle, timeout);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_accelAngularHarmonicNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+	int id;
+    double angle;
+    double timeout;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+	id = Ch_VaArg(interp, ap, int); 
+    angle = Ch_VaArg(interp, ap, double);
+    timeout = Ch_VaArg(interp, ap, double);
+    retval = mobot->accelAngularHarmonicNB((robotJointId_t)id, angle, timeout);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int LinkbotL_smoothMoveToNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

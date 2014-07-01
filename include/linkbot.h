@@ -154,6 +154,7 @@ class CLinkbotI
     int accelTimeNB(double radius, double acceleration, double time);
     int accelToVelocityNB(double radius, double acceleration, double velocity);
     int accelToMaxSpeedNB(double radius, double acceleration);
+	int accelDistanceNB(double radius, double acceleration, double distance);
     int accelAngularTimeNB(robotJointId_t id, double acceleration, double time);
     int accelAngularToVelocityNB(robotJointId_t id, double acceleration, double speed);
     int accelAngularAngleNB(robotJointId_t id, double acceleration, double angle);
@@ -164,7 +165,12 @@ class CLinkbotI
         double vmax,
         double angle);
 	/*Cycloidal acceleration profile*/
-	int accelAngularCycloidNB(robotJointId_t id, double radius, double distance, double time);
+	int accelAngularCycloidNB(robotJointId_t id, double angle, double time);
+	int accelCycloidNB(double radius, double distance, double time);
+
+	int accelAngularHarmonicNB(robotJointId_t id, double angle, double time);
+	int accelHarmonicNB(double radius, double distance, double time);
+
     int blinkLED(double delay, int numBlinks);
 /* connect() Return Error Codes:
    -1 : General Error
@@ -424,6 +430,7 @@ class CLinkbotL
     int accelTimeNB(double radius, double acceleration, double time);
     int accelToVelocityNB(double radius, double acceleration, double velocity);
     int accelToMaxSpeedNB(double radius, double acceleration);
+	int accelDistanceNB(double radius, double acceleration, double distance);
     int accelAngularTimeNB(robotJointId_t id, double acceleration, double time);
     int accelAngularToVelocityNB(robotJointId_t id, double acceleration, double speed);
     int accelAngularAngleNB(robotJointId_t id, double acceleration, double angle);
@@ -433,6 +440,13 @@ class CLinkbotL
         double accelf,
         double vmax,
         double angle);
+
+    int accelAngularCycloidNB(robotJointId_t id, double angle, double time);
+	int accelCycloidNB(double radius, double distance, double time);
+
+	int accelAngularHarmonicNB(robotJointId_t id, double angle, double time);
+	int accelHarmonicNB(double radius, double distance, double time);
+
     int blinkLED(double delay, int numBlinks);
 /* connect() Return Error Codes:
    -1 : General Error

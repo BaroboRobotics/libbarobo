@@ -600,8 +600,13 @@ enum protocol_commands_e {
 
  /* 0x90 CMD_CYCLO_ACCEL: Set a joint to move with cycloidal acceleration. Stops [96]
  * accelerating at with a cycloidal profile for the specified time and distance. (all units in rads/sec)
- * Command Format: [CMD] [size] [1 byte id] [4 byte angle] [4 byte max speed] [4 bytes timeout millis MSB] [0x00] */
+ * Command Format: [CMD] [size] [1 byte id] [4 byte angle][4 bytes timeout millis MSB] [0x00] */
   CMD_CYCLO_ACCEL,
+
+ /* 0x91 CMD_HARM_ACCEL: Set a joint to move with harmonic acceleration. Stops [97]
+ * accelerating at with an harmonic profile for the specified time and distance. (all units in rads/sec)
+ * Command Format: [CMD] [size] [1 byte id] [4 byte angle][4 bytes timeout millis MSB] [0x00] */
+  CMD_HARM_ACCEL,
 
 
   CMD_NUMCOMMANDS

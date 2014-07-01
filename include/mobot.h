@@ -680,6 +680,7 @@ class DLLIMPORT CMobot
     virtual int accelTimeNB(double radius, double acceleration, double time);
     virtual int accelToVelocityNB(double radius, double acceleration, double velocity);
     virtual int accelToMaxSpeedNB(double radius, double acceleration);
+	virtual int accelDistanceNB(double radius, double acceleration, double distance);
     virtual int accelAngularTimeNB(robotJointId_t id, double acceleration, double time);
     virtual int accelAngularToVelocityNB(robotJointId_t id, double acceleration, double speed);
     virtual int accelAngularAngleNB(robotJointId_t id, double acceleration, double angle);
@@ -691,7 +692,12 @@ class DLLIMPORT CMobot
         double angle);
     virtual int blinkLED(double delay, int numBlinks);
 	/*Cycloidal acceleration profile*/
-	virtual int accelAngularCycloidNB(robotJointId_t id, double radius, double distance, double time);
+	virtual int accelAngularCycloidNB(robotJointId_t id, double angle, double time);
+	virtual int accelCycloidNB(double radius, double distance, double time);
+
+	/*Harmonic acceleration profile*/
+	virtual int accelAngularHarmonicNB(robotJointId_t id, double angle, double time);
+	virtual int accelHarmonicNB(double radius, double distance, double time);
 
     virtual bool canFlashFirmware ();
     virtual int flashFirmwareAsync (std::string hexfile,
@@ -1092,11 +1098,16 @@ extern int g_numConnected;
 DLLIMPORT int Mobot_accelTimeNB(mobot_t* comms, double radius, double acceleration, double time);
 DLLIMPORT int Mobot_accelToVelocityNB(mobot_t* comms, double radius, double acceleration, double velocity);
 DLLIMPORT int Mobot_accelToMaxSpeedNB(mobot_t* comms, double radius, double acceleration);
+DLLIMPORT int Mobot_accelDistanceNB(mobot_t* comms, double radius, double acceleration, double distance);
 DLLIMPORT int Mobot_accelAngularTimeNB(mobot_t* comms, robotJointId_t id, double acceleration, double time);
 DLLIMPORT int Mobot_accelAngularToVelocityNB(mobot_t* comms, robotJointId_t id, double acceleration, double speed);
 DLLIMPORT int Mobot_accelAngularAngleNB(mobot_t* comms, robotJointId_t id, double acceleration, double angle);
 
-DLLIMPORT int Mobot_accelAngularCycloidNB(mobot_t* comms, robotJointId_t id, double radius, double distance, double time);
+DLLIMPORT int Mobot_accelAngularCycloidNB(mobot_t* comms, robotJointId_t id, double angle, double time);
+DLLIMPORT int Mobot_accelCycloidNB(mobot_t* comms, double radius, double distance, double time);
+
+DLLIMPORT int Mobot_accelAngularHarmonicNB(mobot_t* comms, robotJointId_t id, double angle, double time);
+DLLIMPORT int Mobot_accelHarmonicNB(mobot_t* comms, double radius, double distance, double time);
 
 DLLIMPORT int Mobot_blinkLED(mobot_t* comms, double delay, int numBlinks);
 DLLIMPORT int Mobot_connect(mobot_t* comms);
