@@ -752,6 +752,14 @@ class CLinkbotIGroup
     int moveForeverNB();
 	int moveJointForeverNB(robotJointId_t id);
 
+	int moveJoint(robotJointId_t id, double angle);
+	int moveJointNB(robotJointId_t id, double angle);
+	int moveTime(double time);
+	int moveTimeNB(double time);
+	int moveJointTime(robotJointId_t id, double time);
+	int moveJointTimeNB(robotJointId_t id, double time);
+	int setSpeed(double speed, double radius);
+
     int reset();
     int resetToZero();
     int resetToZeroNB();
@@ -855,6 +863,14 @@ class CLinkbotIGroup : public CMobotGroup
 	int relaxJoint(robotJointId_t id);
 	int relaxJoints();
 
+	int moveJoint(robotJointId_t id, double angle);
+	int moveJointNB(robotJointId_t id, double angle);
+	int moveTime(double time);
+	int moveTimeNB(double time);
+	int moveJointTime(robotJointId_t id, double time);
+	int moveJointTimeNB(robotJointId_t id, double time);
+	int setSpeed(double speed, double radius);
+
     int moveTo(double angle1, double angle2, double angle3);
     int moveToDirect(double angle1, double angle2, double angle3);
     int moveToNB(double angle1, double angle2, double angle3);
@@ -942,6 +958,14 @@ class CLinkbotLGroup
 	int relaxJoint(robotJointId_t id);
 	int relaxJoints();
 
+	int moveJoint(robotJointId_t id, double angle);
+	int moveJointNB(robotJointId_t id, double angle);
+	int moveTime(double time);
+	int moveTimeNB(double time);
+	int moveJointTime(robotJointId_t id, double time);
+	int moveJointTimeNB(robotJointId_t id, double time);
+	int setSpeed(double speed, double radius);
+
     int reset();
     int resetToZero();
     int resetToZeroNB();
@@ -1001,6 +1025,14 @@ class CLinkbotLGroup : public CLinkbotIGroup
 	int holdJointsAtExit();
 	int relaxJoint(robotJointId_t id);
 	int relaxJoints();
+
+	int moveJoint(robotJointId_t id, double angle);
+	int moveJointNB(robotJointId_t id, double angle);
+	int moveTime(double time);
+	int moveTimeNB(double time);
+	int moveJointTime(robotJointId_t id, double time);
+	int moveJointTimeNB(robotJointId_t id, double time);
+	int setSpeed(double speed, double radius);
 };
 #endif
 

@@ -112,3 +112,53 @@ int CLinkbotLGroup::holdJointsAtExit()
   }
   return 0;
 }
+
+int CLinkbotLGroup::moveJoint(robotJointId_t id, double angle)
+{
+  moveJointNB(id, angle);
+  return moveWait();
+}
+
+int CLinkbotLGroup::moveJointNB(robotJointId_t id, double angle)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveJointNB(id, angle);
+  }
+  return 0;
+}
+
+int CLinkbotLGroup::moveTime(double time)
+{
+  moveTimeNB(time);
+  return moveWait();
+}
+
+int CLinkbotLGroup::moveTimeNB(double time)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveTimeNB(time);
+  }
+  return 0;
+}
+
+int CLinkbotLGroup::moveJointTime(robotJointId_t id, double time)
+{
+  moveJointTimeNB(id, time);
+  return moveWait();
+}
+
+int CLinkbotLGroup::moveJointTimeNB(robotJointId_t id, double time)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveJointTimeNB(id, time);
+  }
+  return 0;
+}
+
+int CLinkbotLGroup::setSpeed(double speed, double radius)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->setSpeed(speed, radius);
+  }
+  return 0;
+}

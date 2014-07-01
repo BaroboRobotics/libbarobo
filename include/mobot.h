@@ -1057,6 +1057,13 @@ class CMobotGroup
 	int holdJointsAtExit();
 	int relaxJoint(robotJointId_t id);
 	int relaxJoints();
+	int moveJoint(robotJointId_t id, double angle);
+	int moveJointNB(robotJointId_t id, double angle);
+	int moveTime(double time);
+	int moveTimeNB(double time);
+	int moveJointTime(robotJointId_t id, double time);
+	int moveJointTimeNB(robotJointId_t id, double time);
+	//int setSpeed(double speed, double radius);
 
   protected:
     CMobot **_robots;
