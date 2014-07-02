@@ -38,7 +38,7 @@ int CMobot::recordAngle(robotJointId_t id, double* time, double* angle, int num,
 
 int CMobot::recordAngleBegin(robotJointId_t id, double* &time, double* &angle, double seconds, int shiftData)
 {
-return Mobot_recordAngleBegin(_comms, id, &time, &angle, seconds, shiftData);
+  return Mobot_recordAngleBegin(_comms, id, &time, &angle, seconds, shiftData);
 }
 
 int CMobot::recordAngleEnd(robotJointId_t id, int &num)
