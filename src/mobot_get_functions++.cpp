@@ -39,15 +39,7 @@ int CMobot::getFormFactor(int &formFactor)
   return Mobot_getFormFactor(_comms, &formFactor);
 }
 
-int CMobot::getJointAngle(robotJointId_t id, double &angle)
-{
-  int err;
-  err = Mobot_getJointAngle(_comms, id, &angle);
-  angle = RAD2DEG(angle);
-  return err;
-}
-
-int CMobot::getJointAngleAverage(robotJointId_t id, double &angle, int numReadings)
+int CMobot::getJointAngle(robotJointId_t id, double &angle, int numReadings)
 {
   int err;
   err = Mobot_getJointAngleAverage(_comms, id, &angle, numReadings);
@@ -55,7 +47,45 @@ int CMobot::getJointAngleAverage(robotJointId_t id, double &angle, int numReadin
   return err;
 }
 
+int CMobot::getJointAngleAverage(robotJointId_t id, double &angle, int numReadings)
+{
+  int err;
+  DEPRECATED("getJointAngleAverage", "getJointAngle");
+  err = Mobot_getJointAngleAverage(_comms, id, &angle, numReadings);
+  angle = RAD2DEG(angle);
+  return err;
+}
+int CMobot::getJointAngleInstant(robotJointId_t id, double &angle)
+{
+  int err;
+  err = Mobot_getJointAngle(_comms, id, &angle);
+  angle = RAD2DEG(angle);
+  return err;
+}
+
 int CMobot::getJointAngles(
+    double &angle1,
+    double &angle2,
+    double &angle3,
+    double &angle4,
+	int numReadings)
+{
+  int err;
+  err = Mobot_getJointAnglesAverage(
+      _comms, 
+      &angle1,
+      &angle2,
+      &angle3,
+      &angle4,
+      numReadings);
+  if(err) return err;
+  angle1 = RAD2DEG(angle1);
+  angle2 = RAD2DEG(angle2);
+  angle3 = RAD2DEG(angle3);
+  angle4 = RAD2DEG(angle4);
+  return 0;
+}
+int CMobot::getJointAnglesInstant(
     double &angle1,
     double &angle2,
     double &angle3,
@@ -78,6 +108,7 @@ int CMobot::getJointAngles(
   return 0;
 }
 
+
 int CMobot::getJointAnglesAverage(
     double &angle1,
     double &angle2,
@@ -86,6 +117,7 @@ int CMobot::getJointAnglesAverage(
     int numReadings)
 {
   int err;
+  DEPRECATED("getJointAnglesAverage", "getJointAngles");
   err = Mobot_getJointAnglesAverage(
       _comms, 
       &angle1,

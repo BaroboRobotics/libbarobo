@@ -349,6 +349,18 @@ int CLinkbotL::driveTo(double angle1, double angle2, double angle3) {
     dlrunfun(fptr, &retval, driveTo, this, angle1, angle2, angle3);
     return retval;
 }
+int CLinkbotL::jumpTo(double angle1, double angle2, double angle3) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_jumpTo_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, angle1, angle2, angle3);
+    return retval;
+}
 int CLinkbotL::driveToDirectNB(double angle1, double angle2, double angle3) {
     void *fptr;
     int retval;
@@ -371,6 +383,42 @@ int CLinkbotL::driveToNB(double angle1, double angle2, double angle3) {
         return -1;
     }
     dlrunfun(fptr, &retval, driveToNB, this, angle1, angle2, angle3);
+    return retval;
+}
+int CLinkbotL::jumpToNB(double angle1, double angle2, double angle3) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_jumpToNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, angle1, angle2, angle3);
+    return retval;
+}
+int CLinkbotL::jumpJointTo(int id, double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_jumpJointTo_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, angle);
+    return retval;
+}
+int CLinkbotL::jumpJointToNB(int id, double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_jumpJointToNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, angle);
     return retval;
 }
 int CLinkbotL::enableButtonCallback(void* userdata, void (*buttonCallback)(void* userdata, int button, int buttonDown)) {
@@ -551,11 +599,32 @@ int CLinkbotL::getFormFactor(int & formFactor) {
     dlrunfun(fptr, &retval, NULL, this, &formFactor);
     return retval;
 }
-int CLinkbotL::getJointAngle(int id, double & angle) {
+int CLinkbotL::getJointAngle(int id, double & angle, ...) {
+    void *fptr;
+    int retval;
+    int numReadings;
+    va_list ap;
+    va_start(ap, angle);
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_getJointAngle_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    if(va_count(ap) == 1) {
+      numReadings = va_arg(ap, int);
+      dlrunfun(fptr, &retval, NULL, this, id, &angle, numReadings);
+    } else {
+      dlrunfun(fptr, &retval, NULL, this, id, &angle);
+    }
+    va_end(ap);
+    return retval;
+}
+int CLinkbotL::getJointAngleInstant(int id, double & angle) {
     void *fptr;
     int retval;
 
-    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_getJointAngle_chdl");
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_getJointAngleInstant_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
@@ -584,11 +653,32 @@ int CLinkbotL::getJointAngleAverage(int id, double & angle, ...) {
     va_end(ap);
     return retval;
 }
-int CLinkbotL::getJointAngles(double &angle1, double &angle2, double &angle3) {
+int CLinkbotL::getJointAngles(double &angle1, double &angle2, double &angle3, ...) {
+    void *fptr;
+    int retval;
+    va_list ap;
+    int numReadings;
+    va_start(ap, angle3);
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_getJointAngles_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    if(va_count(ap) == 1) {
+      numReadings = va_arg(ap, int);
+      dlrunfun(fptr, &retval, NULL, this, &angle1, &angle2, &angle3, numReadings);
+    } else {
+      dlrunfun(fptr, &retval, NULL, this, &angle1, &angle2, &angle3);
+    }
+    va_end(ap);
+    return retval;
+}
+int CLinkbotL::getJointAnglesInstant(double &angle1, double &angle2, double &angle3) {
     void *fptr;
     int retval;
 
-    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_getJointAngles_chdl");
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotL_getJointAnglesInstant_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
@@ -1821,6 +1911,30 @@ int CLinkbotLGroup::driveJointToDirectNB(int id, double angle) {
     dlrunfun(fptr, &retval, driveJointToDirectNB, this, id, angle);
     return retval;
 }
+int CLinkbotLGroup::jumpJointTo(int id, double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGL_jumpJointTo_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, angle);
+    return retval;
+}
+int CLinkbotLGroup::jumpJointToNB(int id, double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGL_jumpJointToNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, angle);
+    return retval;
+}
 int CLinkbotLGroup::driveToDirect(double angle1, double angle2, double angle3) {
     void *fptr;
     int retval;
@@ -1843,6 +1957,30 @@ int CLinkbotLGroup::driveTo(double angle1, double angle2, double angle3) {
         return -1;
     }
     dlrunfun(fptr, &retval, driveTo, this, angle1, angle2, angle3);
+    return retval;
+}
+int CLinkbotLGroup::jumpTo(double angle1, double angle2, double angle3) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGL_jumpTo_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, angle1, angle2, angle3);
+    return retval;
+}
+int CLinkbotLGroup::jumpToNB(double angle1, double angle2, double angle3) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGL_jumpToNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, angle1, angle2, angle3);
     return retval;
 }
 int CLinkbotLGroup::driveToDirectNB(double angle1, double angle2, double angle3) {

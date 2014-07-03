@@ -162,3 +162,32 @@ int CLinkbotLGroup::setSpeed(double speed, double radius)
   }
   return 0;
 }
+
+int CLinkbotLGroup::jumpTo(double angle1, double angle2, double angle3)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->jumpToNB(angle1, angle2, angle3);
+  }
+  return moveWait();
+}
+int CLinkbotLGroup::jumpToNB(double angle1, double angle2, double angle3)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->jumpToNB(angle1, angle2, angle3);
+  }
+  return 0;
+}
+int CLinkbotLGroup::jumpJointTo(robotJointId_t id, double angle)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->jumpJointToNB(id, angle);
+  }
+  return moveWait();
+}
+int CLinkbotLGroup::jumpJointToNB(robotJointId_t id, double angle)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->jumpJointToNB(id, angle);
+  }
+  return 0;
+}

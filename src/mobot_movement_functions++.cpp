@@ -32,7 +32,8 @@ int CMobot::driveJointToDirect(robotJointId_t id, double angle)
 
 int CMobot::driveJointTo(robotJointId_t id, double angle)
 {
-  return Mobot_driveJointToDirect(_comms, id, DEG2RAD(angle));
+    DEPRECATED("driveJointTo", "jumpJointTo");
+	return Mobot_driveJointToDirect(_comms, id, DEG2RAD(angle));
 }
 
 int CMobot::driveJointToDirectNB(robotJointId_t id, double angle)
@@ -42,7 +43,8 @@ int CMobot::driveJointToDirectNB(robotJointId_t id, double angle)
 
 int CMobot::driveJointToNB(robotJointId_t id, double angle)
 {
-  return Mobot_driveJointToDirectNB(_comms, id, DEG2RAD(angle));
+    DEPRECATED("driveJointToNB", "jumpJointToNB");
+	return Mobot_driveJointToDirectNB(_comms, id, DEG2RAD(angle));
 }
 
 int CMobot::driveToDirect( double angle1,
@@ -63,7 +65,8 @@ int CMobot::driveTo( double angle1,
                           double angle3,
                           double angle4)
 {
-  return Mobot_driveToDirect(
+  DEPRECATED("driveTo", "jumpTo");
+	return Mobot_driveToDirect(
       _comms, 
       DEG2RAD(angle1), 
       DEG2RAD(angle2), 
@@ -89,7 +92,8 @@ int CMobot::driveToNB( double angle1,
                           double angle3,
                           double angle4)
 {
-  return Mobot_driveToDirectNB(
+  DEPRECATED("driveToNB", "jumpToNB");
+	return Mobot_driveToDirectNB(
       _comms, 
       DEG2RAD(angle1), 
       DEG2RAD(angle2), 
@@ -130,12 +134,14 @@ int CMobot::moveNB( double angle1,
 
 int CMobot::moveBackward(double angle)
 {
-  return Mobot_moveBackward(_comms, DEG2RAD(angle));
+    DEPRECATED("moveBackward", "driveBackward");
+	return Mobot_moveBackward(_comms, DEG2RAD(angle));
 }
 
 int CMobot::moveBackwardNB(double angle)
 {
-  return Mobot_moveBackwardNB(_comms, DEG2RAD(angle));
+    DEPRECATED("moveBackwardNB", "driveBackwardNB");
+	return Mobot_moveBackwardNB(_comms, DEG2RAD(angle));
 }
 
 int CMobot::moveContinuousNB( robotJointState_t dir1, robotJointState_t dir2, robotJointState_t dir3, robotJointState_t dir4)
@@ -152,22 +158,26 @@ int CMobot::moveContinuousTime( robotJointState_t dir1, robotJointState_t dir2, 
 
 int CMobot::moveDistance(double distance, double radius)
 {
-  return Mobot_moveDistance(_comms, distance, radius);
+    DEPRECATED("moveDistance", "driveDistance");
+	return Mobot_moveDistance(_comms, distance, radius);
 }
 
 int CMobot::moveDistanceNB(double distance, double radius)
 {
-  return Mobot_moveDistanceNB(_comms, distance, radius);
+    DEPRECATED("moveDistanceNB", "driveDistanceNB");
+	return Mobot_moveDistanceNB(_comms, distance, radius);
 }
 
 int CMobot::moveForward(double angle)
 {
-  return Mobot_moveForward(_comms, DEG2RAD(angle));
+  DEPRECATED("moveForward", "driveForward");
+	return Mobot_moveForward(_comms, DEG2RAD(angle));
 }
 
 int CMobot::moveForwardNB(double angle)
 {
-  return Mobot_moveForwardNB(_comms, DEG2RAD(angle));
+    DEPRECATED("moveForwardNB", "driveForwardNB");
+	return Mobot_moveForwardNB(_comms, DEG2RAD(angle));
 }
 
 int CMobot::moveJointContinuousNB(robotJointId_t id, robotJointState_t dir)
@@ -286,12 +296,14 @@ int CMobot::moveToZeroNB()
 
 int CMobot::movexy(double x, double y, double radius, double trackwidth)
 {
-  return Mobot_movexy(_comms, x, y, radius, trackwidth);
+    DEPRECATED("movexy", "drivexy");
+	return Mobot_movexy(_comms, x, y, radius, trackwidth);
 }
 
 int CMobot::movexyNB(double x, double y, double radius, double trackwidth)
 {
-  return Mobot_movexyNB(_comms, x, y, radius, trackwidth);
+    DEPRECATED("movexyNB", "drivexyNB");
+	return Mobot_movexyNB(_comms, x, y, radius, trackwidth);
 }
 
 int CMobot::stop()
@@ -341,13 +353,15 @@ int CMobot::turnRightNB(double angle, double radius, double tracklength)
 
 int CMobot::moveTime(double time)
 {
-    moveTimeNB(time);
+    DEPRECATED("moveTime", "driveTime");
+	moveTimeNB(time);
     return Mobot_moveWait(_comms);
 }
 
 int CMobot::moveTimeNB(double time)
 {
-    return Mobot_setMovementStateTimeNB(_comms, ROBOT_POSITIVE, ROBOT_POSITIVE,
+    DEPRECATED("moveTimeNB", "driveTimeNB");
+	return Mobot_setMovementStateTimeNB(_comms, ROBOT_POSITIVE, ROBOT_POSITIVE,
         ROBOT_FORWARD, ROBOT_NEUTRAL, time);
 }
 
@@ -379,6 +393,7 @@ int CMobot::moveJointTime(robotJointId_t id, double time)
 
 int CMobot::moveForeverNB()
 {
+	DEPRECATED("moveForever", "driveForever");
 	return Mobot_setMovementStateNB(_comms, 
         ROBOT_POSITIVE,
         ROBOT_POSITIVE,
@@ -425,6 +440,95 @@ int CMobot::relaxJoint(robotJointId_t id)
   return Mobot_setJointMovementStateNB(_comms, id, ROBOT_NEUTRAL);
 }
 
+
+/*Two wheel car functions*/
+int CMobot::driveBackward(double angle)
+{
+	return Mobot_driveBackward(_comms, DEG2RAD(angle));
+}
+int CMobot::driveBackwardNB(double angle)
+{
+	return Mobot_driveBackwardNB(_comms, DEG2RAD(angle));
+}
+int CMobot::driveDistance(double distance, double radius)
+{
+	return Mobot_driveDistance(_comms, distance, radius);
+}
+int CMobot::driveDistanceNB(double distance, double radius)
+{
+	return Mobot_driveDistanceNB(_comms, distance, radius);
+}
+int CMobot::driveForeverNB()
+{
+	return Mobot_setMovementStateNB(_comms, 
+        ROBOT_POSITIVE,
+        ROBOT_POSITIVE,
+        ROBOT_FORWARD,
+        ROBOT_POSITIVE);
+}
+int CMobot::driveForward(double angle)
+{
+	return Mobot_moveForward(_comms, DEG2RAD(angle));
+}
+int CMobot::driveForwardNB(double angle)
+{
+	return Mobot_moveForwardNB(_comms, DEG2RAD(angle));
+}
+int CMobot::driveTime(double time)
+{
+	driveTimeNB(time);
+    return Mobot_moveWait(_comms);
+}
+
+int CMobot::driveTimeNB(double time)
+{
+	return Mobot_setMovementStateTimeNB(_comms, ROBOT_POSITIVE, ROBOT_POSITIVE,
+        ROBOT_FORWARD, ROBOT_NEUTRAL, time);
+}
+int CMobot::drivexy(double x, double y, double radius, double trackwidth)
+{
+	return Mobot_drivexy(_comms, x, y, radius, trackwidth);
+}
+
+int CMobot::drivexyNB(double x, double y, double radius, double trackwidth)
+{
+	return Mobot_drivexyNB(_comms, x, y, radius, trackwidth);
+}
+int CMobot::jumpTo( double angle1,
+                          double angle2,
+                          double angle3,
+                          double angle4)
+{
+	return Mobot_driveToDirect(
+      _comms, 
+      DEG2RAD(angle1), 
+      DEG2RAD(angle2), 
+      DEG2RAD(angle3), 
+      DEG2RAD(angle4));
+}
+
+int CMobot::jumpToNB( double angle1,
+                          double angle2,
+                          double angle3,
+                          double angle4)
+{
+	return Mobot_driveToDirectNB(
+      _comms, 
+      DEG2RAD(angle1), 
+      DEG2RAD(angle2), 
+      DEG2RAD(angle3), 
+      DEG2RAD(angle4));
+}
+
+int CMobot::jumpJointTo(robotJointId_t id, double angle)
+{
+	return Mobot_driveJointToDirect(_comms, id, DEG2RAD(angle));
+}
+
+int CMobot::jumpJointToNB(robotJointId_t id, double angle)
+{
+	return Mobot_driveJointToDirectNB(_comms, id, DEG2RAD(angle));
+}
 
 
 	

@@ -65,6 +65,28 @@ int CLinkbot::LinkPodDigitalRead(int pin)
 int CLinkbot::getJointAngles(
     double &angle1,
     double &angle2,
+    double &angle3,
+	int numReadings)
+{
+  int err;
+  double angle4;
+  err = Mobot_getJointAnglesAverage(
+      _comms, 
+      &angle1,
+      &angle2,
+      &angle3,
+      &angle4,
+      numReadings);
+  if(err) return err;
+  angle1 = RAD2DEG(angle1);
+  angle2 = RAD2DEG(angle2);
+  angle3 = RAD2DEG(angle3);
+  angle4 = RAD2DEG(angle4);
+  return 0;
+}
+int CLinkbot::getJointAnglesInstant(
+    double &angle1,
+    double &angle2,
     double &angle3)
 {
   double time;
@@ -85,6 +107,7 @@ int CLinkbot::getJointAngles(
   return 0;
 }
 
+
 int CLinkbot::getJointAnglesAverage(
     double &angle1,
     double &angle2,
@@ -93,6 +116,7 @@ int CLinkbot::getJointAnglesAverage(
 {
   int err;
   double angle4;
+  DEPRECATED("getJointAnglesAverage", "getJointAngles");
   err = Mobot_getJointAnglesAverage(
       _comms, 
       &angle1,
@@ -165,7 +189,8 @@ int CLinkbot::driveTo( double angle1,
                           double angle2,
                           double angle3)
 {
-  return Mobot_driveToDirect(
+  DEPRECATED("driveTo", "jumpTo"); 
+	return Mobot_driveToDirect(
       _comms, 
       DEG2RAD(angle1), 
       DEG2RAD(angle2), 
@@ -189,7 +214,8 @@ int CLinkbot::driveToNB( double angle1,
                           double angle2,
                           double angle3)
 {
-  return Mobot_driveToDirectNB(
+   DEPRECATED("driveToNB", "jumpToNB");
+	return Mobot_driveToDirectNB(
       _comms, 
       DEG2RAD(angle1), 
       DEG2RAD(angle2), 
@@ -513,4 +539,71 @@ int CLinkbot::recordxyEnd(int &numpoints)
 {
 	printf("Warning: function recordxyEnd() not implemented on hardware robots\n");
 	return 0;
+}
+
+int CLinkbot::drivexy(double x, double y, double radius, double trackwidth)
+{
+    printf("Warning: function drivexy() not implemented on hardware robots\n");
+	return 0;
+}
+
+int CLinkbot::drivexyTo(double x, double y, double radius, double trackwidth)
+{
+    printf("Warning: function drivexyTo() not implemented on hardware robots\n");
+	return 0;
+}
+
+int CLinkbot::drivexyToExpr(double x0, double xf, int n, char *expr, double radius, double trackwidth)
+{
+    printf("Warning: function drivexyToExpr() not implemented on hardware robots\n");
+	return 0;
+}
+
+int CLinkbot::drivexyToFunc(double x0, double xf, int n, double (*func)(double x), double radius, double trackwidth)
+{
+	printf("Warning: function drivexyToFunc() not implemented on hardware robots\n");
+	return 0;
+}
+
+int CLinkbot::drivexyNB(double x, double y, double radius, double trackwidth)
+{
+	 printf("Warning: function drivexyNB() not implemented on hardware robots\n");
+	 return 0;
+}
+
+int CLinkbot::drivexyToNB(double x, double y, double radius, double trackwidth)
+{
+	 printf("Warning: function drivexyToNB() not implemented on hardware robots\n");
+	 return 0;
+}
+int CLinkbot::jumpTo( double angle1,
+                          double angle2,
+                          double angle3)
+{
+  return Mobot_driveToDirect(
+      _comms, 
+      DEG2RAD(angle1), 
+      DEG2RAD(angle2), 
+      DEG2RAD(angle3), 
+      DEG2RAD(0));
+}
+int CLinkbot::jumpToNB( double angle1,
+                          double angle2,
+                          double angle3)
+{
+  return Mobot_driveToDirectNB(
+      _comms, 
+      DEG2RAD(angle1), 
+      DEG2RAD(angle2), 
+      DEG2RAD(angle3), 
+      DEG2RAD(0));
+}
+int CLinkbot::jumpJointTo(robotJointId_t id, double angle)
+{
+	return Mobot_driveJointToDirect(_comms, id, DEG2RAD(angle));
+}
+
+int CLinkbot::jumpJointToNB(robotJointId_t id, double angle)
+{
+	return Mobot_driveJointToDirectNB(_comms, id, DEG2RAD(angle));
 }

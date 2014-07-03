@@ -590,6 +590,7 @@ int CMobotGroup::moveNB(double angle1, double angle2, double angle3, double angl
 int CMobotGroup::moveBackward(double angle)
 {
   int rc;
+  DEPRECATED("moveBackward", "driveBackward");
   rc = moveBackwardNB(angle);
   if(rc) return rc;
   return moveWait();
@@ -597,7 +598,8 @@ int CMobotGroup::moveBackward(double angle)
 
 int CMobotGroup::moveBackwardNB(double angle)
 {
-  for(int i = 0; i < _numRobots; i++) {
+    DEPRECATED("moveBackwardNB", "driveBackwardNB");
+	for(int i = 0; i < _numRobots; i++) {
     _robots[i]->moveBackwardNB(angle);
   }
   return 0;
@@ -625,6 +627,7 @@ int CMobotGroup::moveContinuousTime(robotJointState_t dir1,
 int CMobotGroup::moveDistance(double distance, double radius)
 {
   int rc;
+  DEPRECATED("moveDistance", "driveDistance");
   rc = moveDistanceNB(distance, radius);
   if(rc) return rc;
   return moveWait();
@@ -632,7 +635,8 @@ int CMobotGroup::moveDistance(double distance, double radius)
 
 int CMobotGroup::moveDistanceNB(double distance, double radius)
 {
-  for(int i = 0; i < _numRobots; i++) {
+    DEPRECATED("moveDistanceNB", "driveDistanceNB");
+	for(int i = 0; i < _numRobots; i++) {
     _robots[i]->moveDistanceNB(distance, radius);
   }
   return 0;
@@ -641,6 +645,7 @@ int CMobotGroup::moveDistanceNB(double distance, double radius)
 int CMobotGroup::moveForward(double angle)
 {
   int rc;
+  DEPRECATED("moveForward", "driveForward");
   rc = moveForwardNB(angle);
   if(rc) return rc;
   return moveWait();
@@ -648,7 +653,8 @@ int CMobotGroup::moveForward(double angle)
 
 int CMobotGroup::moveForwardNB(double angle)
 {
-  for(int i = 0; i < _numRobots; i++) {
+    DEPRECATED("moveForwardNB", "driveForwardNB");
+	for(int i = 0; i < _numRobots; i++) {
     _robots[i]->moveForwardNB(angle);
   }
   return 0;
@@ -959,4 +965,48 @@ int CMobotGroup::turnRightNB(double angle, double radius, double tracklength)
   }
   return 0;
 }
+int CMobotGroup::driveDistance(double distance, double radius)
+{
+  int rc;
+  rc = driveDistanceNB(distance, radius);
+  if(rc) return rc;
+  return moveWait();
+}
 
+int CMobotGroup::driveDistanceNB(double distance, double radius)
+{
+	for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->driveDistanceNB(distance, radius);
+  }
+  return 0;
+}
+int CMobotGroup::driveForward(double angle)
+{
+  int rc;
+  rc = driveForwardNB(angle);
+  if(rc) return rc;
+  return moveWait();
+}
+
+int CMobotGroup::driveForwardNB(double angle)
+{
+	for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->driveForwardNB(angle);
+  }
+  return 0;
+}
+int CMobotGroup::driveBackward(double angle)
+{
+  int rc;
+  rc = driveBackwardNB(angle);
+  if(rc) return rc;
+  return moveWait();
+}
+
+int CMobotGroup::driveBackwardNB(double angle)
+{
+	for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->driveBackwardNB(angle);
+  }
+  return 0;
+}

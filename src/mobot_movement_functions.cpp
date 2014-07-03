@@ -716,3 +716,91 @@ int Mobot_turnRightNB(mobot_t* comms, double angle, double radius, double trackl
       return -1;
   }
 }
+
+/*Car functions*/
+int Mobot_driveBackwardNB(mobot_t* comms, double angle)
+{
+  switch(comms->formFactor) {
+    case MOBOTFORM_ORIGINAL:
+      return Mobot_moveNB(comms, -angle, 0, 0, -angle);
+    case MOBOTFORM_I:
+      return Mobot_moveNB(comms, -angle, 0, angle, 0);
+    default:
+      return -1;
+  }
+}
+
+int Mobot_driveBackward(mobot_t* comms, double angle)
+{
+  int rc;
+  rc = Mobot_driveBackwardNB(comms, angle);
+  return Mobot_moveWait(comms);
+}
+
+int Mobot_driveDistance(mobot_t* comms, double distance, double radius)
+{
+  double theta;
+  theta = distance/radius;
+  return Mobot_driveForward(comms, theta);
+}
+
+int Mobot_driveDistanceNB(mobot_t* comms, double distance, double radius)
+{
+  double theta;
+  theta = distance/radius;
+  return Mobot_driveForwardNB(comms, theta);
+}
+int Mobot_driveForward(mobot_t* comms, double angle)
+{
+  int rc;
+  rc = Mobot_driveForwardNB(comms, angle);
+  return Mobot_moveWait(comms);
+}
+
+int Mobot_driveForwardNB(mobot_t* comms, double angle)
+{
+  switch(comms->formFactor) {
+    case MOBOTFORM_ORIGINAL:
+      return Mobot_moveNB(comms, angle, 0, 0, angle);
+    case MOBOTFORM_I:
+      return Mobot_moveNB(comms, angle, 0, -angle, 0);
+    default:
+      return -1;
+  }
+}
+int Mobot_drivexy(mobot_t* comms, double x, double y, double radius, double trackwidth)
+{
+  /* First, turn the robot to face the goal position */
+  double angle;
+  angle = atan2(y, x);
+  if(angle > 0) {
+    Mobot_turnLeft(comms, angle, radius, trackwidth);
+  } else {
+    Mobot_turnRight(comms, -angle, radius, trackwidth);
+  }
+  /* Go forward the correct amount of distance */
+  double distance;
+  distance = sqrt( x*x + y*y );
+  Mobot_driveDistance(comms, distance, radius);
+  return 0;
+}
+
+int Mobot_drivexyNB(mobot_t* comms, double x, double y, double radius, double trackwidth)
+{
+  static void* args[5];
+  static double _x, _y, _r, _t;
+  _x = x;
+  _y = y;
+  _r = radius;
+  _t = trackwidth;
+  args[0] = (void*)comms;
+  args[1] = (void*)&_x;
+  args[2] = (void*)&_y;
+  args[3] = (void*)&_r;
+  args[4] = (void*)&_t;
+  comms->motionInProgress++;
+  THREAD_CREATE(comms->thread, Mobot_movexyThread, args);
+  return 0;
+}
+
+

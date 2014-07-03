@@ -555,16 +555,39 @@ EXPORTCH int LinkbotL_getJointAngle_chdl(void *varg) {
     class CLinkbotL *mobot;
     int id;
     double* angle;
+    int numReadings;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
     id = Ch_VaArg(interp, ap, int);
     angle = Ch_VaArg(interp, ap, double *);
-    retval = mobot->getJointAngle((robotJointId_t)id, *angle);
+    if(Ch_VaCount(interp, ap) == 1) {
+      numReadings = Ch_VaArg(interp, ap, int);
+      retval = mobot->getJointAngle((robotJointId_t)id, *angle, numReadings);
+    } else {
+      retval = mobot->getJointAngle((robotJointId_t)id, *angle);
+    }
     Ch_VaEnd(interp, ap);
     return retval;
 }
+EXPORTCH int LinkbotL_getJointAngleInstant_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    int id;
+    double* angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    id = Ch_VaArg(interp, ap, int);
+    angle = Ch_VaArg(interp, ap, double *);
+    retval = mobot->getJointAngleInstant((robotJointId_t)id, *angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 
 EXPORTCH int LinkbotL_getJointAngleAverage_chdl(void *varg) {
     ChInterp_t interp;
@@ -596,6 +619,7 @@ EXPORTCH int LinkbotL_getJointAngles_chdl(void *varg) {
     double* angle1;
     double* angle2;
     double* angle3;
+    int numReadings;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
@@ -603,7 +627,30 @@ EXPORTCH int LinkbotL_getJointAngles_chdl(void *varg) {
     angle1 = Ch_VaArg(interp, ap, double *);
     angle2 = Ch_VaArg(interp, ap, double *);
     angle3 = Ch_VaArg(interp, ap, double *);
-    retval = mobot->getJointAngles(*angle1, *angle2, *angle3);
+    if(Ch_VaCount(interp ,ap) == 1) {
+      numReadings = Ch_VaArg(interp, ap, int);
+      retval = mobot->getJointAngles(*angle1, *angle2, *angle3, numReadings);
+    } else {
+      retval = mobot->getJointAngles(*angle1, *angle2, *angle3);
+    }
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int LinkbotL_getJointAnglesInstant_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    double* angle1;
+    double* angle2;
+    double* angle3;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    angle1 = Ch_VaArg(interp, ap, double *);
+    angle2 = Ch_VaArg(interp, ap, double *);
+    angle3 = Ch_VaArg(interp, ap, double *);
+    retval = mobot->getJointAnglesInstant(*angle1, *angle2, *angle3);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -1074,6 +1121,56 @@ EXPORTCH int LinkbotL_driveTo_chdl(void *varg) {
     Ch_VaEnd(interp, ap);
     return retval;
 }
+EXPORTCH int LinkbotL_jumpTo_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    double angle1;
+    double angle2;
+    double angle3;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    angle1 = Ch_VaArg(interp, ap, double);
+    angle2 = Ch_VaArg(interp, ap, double);
+    angle3 = Ch_VaArg(interp, ap, double);
+    retval = mobot->jumpTo(angle1, angle2, angle3);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int LinkbotL_jumpJointTo_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    robotJointId_t id;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->jumpJointTo(id, angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int LinkbotL_jumpJointToNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    robotJointId_t id;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->jumpJointToNB(id, angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
 
 EXPORTCH int LinkbotL_moveToNB_chdl(void *varg) {
     ChInterp_t interp;
@@ -1149,7 +1246,24 @@ EXPORTCH int LinkbotL_driveToNB_chdl(void *varg) {
     Ch_VaEnd(interp, ap);
     return retval;
 }
+EXPORTCH int LinkbotL_jumpToNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    double angle1;
+    double angle2;
+    double angle3;
+    int retval;
 
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    angle1 = Ch_VaArg(interp, ap, double);
+    angle2 = Ch_VaArg(interp, ap, double);
+    angle3 = Ch_VaArg(interp, ap, double);
+    retval = mobot->jumpToNB(angle1, angle2, angle3);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
 EXPORTCH int LinkbotL_moveWait_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -2111,7 +2225,24 @@ EXPORTCH int CMGL_driveTo_chdl(void *varg) {
     Ch_VaEnd(interp, ap);
     return retval;
 }
+EXPORTCH int CMGL_jumpTo_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotLGroup *mobot;
+    double angle1;
+    double angle2;
+    double angle3;
+    int retval;
 
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotLGroup *);
+    angle1 = Ch_VaArg(interp, ap, double);
+    angle2 = Ch_VaArg(interp, ap, double);
+    angle3 = Ch_VaArg(interp, ap, double);
+    retval = mobot->jumpTo(angle1, angle2, angle3);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
 EXPORTCH int CMGL_driveToDirectNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -2148,6 +2279,24 @@ EXPORTCH int CMGL_driveToNB_chdl(void *varg) {
     Ch_VaEnd(interp, ap);
     return retval;
 }
+EXPORTCH int CMGL_jumpToNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotLGroup *mobot;
+    double angle1;
+    double angle2;
+    double angle3;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotLGroup *);
+    angle1 = Ch_VaArg(interp, ap, double);
+    angle2 = Ch_VaArg(interp, ap, double);
+    angle3 = Ch_VaArg(interp, ap, double);
+    retval = mobot->jumpToNB(angle1, angle2, angle3);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
 
 EXPORTCH int CMGL_driveJointToDirectNB_chdl(void *varg) {
     ChInterp_t interp;
@@ -2162,6 +2311,38 @@ EXPORTCH int CMGL_driveJointToDirectNB_chdl(void *varg) {
     id = Ch_VaArg(interp, ap, robotJointId_t);
     angle = Ch_VaArg(interp, ap, double);
     retval = mobot->driveJointToDirectNB(id, angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int CMGL_jumpJointTo_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotLGroup *mobot;
+    robotJointId_t id;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotLGroup *);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->jumpJointTo(id, angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int CMGL_jumpJointToNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotLGroup *mobot;
+    robotJointId_t id;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotLGroup *);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->jumpJointToNB(id, angle);
     Ch_VaEnd(interp, ap);
     return retval;
 }

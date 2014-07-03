@@ -68,8 +68,28 @@ int CLinkbotIGroup::driveToDirect(double angle1, double angle2, double angle3)
 
 int CLinkbotIGroup::driveTo(double angle1, double angle2, double angle3)
 {
+  DEPRECATED("driveTo", "jumpTo");
   driveToDirectNB(angle1, angle2, angle3);
   return moveWait();
+}
+int CLinkbotIGroup::jumpTo(double angle1, double angle2, double angle3)
+{
+  driveToDirectNB(angle1, angle2, angle3);
+  return moveWait();
+}
+int CLinkbotIGroup::jumpJointTo(robotJointId_t id, double angle)
+{
+   for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->jumpJointToNB(id, angle);
+  }
+  return moveWait();
+}
+int CLinkbotIGroup::jumpJointToNB(robotJointId_t id, double angle)
+{
+   for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->jumpJointToNB(id, angle);
+  }
+  return 0;
 }
 
 int CLinkbotIGroup::driveToDirectNB(double angle1, double angle2, double angle3)
@@ -82,7 +102,15 @@ int CLinkbotIGroup::driveToDirectNB(double angle1, double angle2, double angle3)
 
 int CLinkbotIGroup::driveToNB(double angle1, double angle2, double angle3)
 {
-  for(int i = 0; i < _numRobots; i++) {
+  DEPRECATED("driveToNB", "jumpToNB");
+	for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->driveToDirectNB(angle1, angle2, angle3);
+  }
+  return 0;
+}
+int CLinkbotIGroup::jumpToNB(double angle1, double angle2, double angle3)
+{
+	for(int i = 0; i < _numRobots; i++) {
     _robots[i]->driveToDirectNB(angle1, angle2, angle3);
   }
   return 0;
@@ -210,7 +238,8 @@ int CLinkbotIGroup::setMovementStateTimeNB(robotJointState_t dir1,
 
 int CLinkbotIGroup::moveForeverNB()
 {
-  for(int i = 0; i < _numRobots; i++) {
+  DEPRECATED("moveForeverNB", "driveForeverNB");
+	for(int i = 0; i < _numRobots; i++) {
     _robots[i]->moveForeverNB();
   }
   return 0;
@@ -313,3 +342,23 @@ int CLinkbotIGroup::setSpeed(double speed, double radius)
   }
   return 0;
 }
+int CLinkbotIGroup::driveTime(double time)
+{
+  driveTimeNB(time);
+  return moveWait();
+}
+
+int CLinkbotIGroup::driveTimeNB(double time)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->driveTimeNB(time);
+  }
+  return 0;
+}
+int CLinkbotIGroup::driveForeverNB()
+{
+	for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->driveForeverNB();
+  }
+  return 0;
+} 

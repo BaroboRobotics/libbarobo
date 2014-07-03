@@ -729,6 +729,20 @@ class DLLIMPORT CMobot
     virtual int driveTo(double angle1, double angle2, double angle3, double angle4);
     virtual int driveToDirectNB(double angle1, double angle2, double angle3, double angle4);
     virtual int driveToNB(double angle1, double angle2, double angle3, double angle4);
+
+	/*Car functions*/
+	virtual int driveBackward(double angle);
+    virtual int driveBackwardNB(double angle);
+	virtual int driveDistance(double distance, double radius);
+    virtual int driveDistanceNB(double distance, double radius);
+	virtual int driveForeverNB();
+	virtual int driveForward(double angle);
+    virtual int driveForwardNB(double angle);
+	virtual int driveTime(double time);
+	virtual int driveTimeNB(double time);
+	virtual int drivexy(double x, double y, double radius, double trackwidth);
+    virtual int drivexyNB(double x, double y, double radius, double trackwidth);
+
     virtual int enableButtonCallback(void* userdata, void (*buttonCallback)(void* data, int button, int buttonDown));
     virtual int disableButtonCallback();
     virtual int enableJointEventCallback(void *userdata,
@@ -745,13 +759,15 @@ class DLLIMPORT CMobot
     static const char* getConfigFilePath();
     virtual int getDistance(double &distance, double radius);
 #ifndef SWIG
-    int getJointAngle(robotJointId_t id, double &angle);
+	int getJointAngleInstant(robotJointId_t id, double &angle);
 #else
-    virtual void getJointAngle(robotJointId_t id, double &angle);
+	virtual int getJointAngleInstant(robotJointId_t id, double &angle);
 #endif
-    virtual int getJointAngles(double &angle1, double &angle2, double &angle3, double &angle4);
+	virtual int getJointAnglesInstant(double &angle1, double &angle2, double &angle3, double &angle4);
     virtual int getJointAngleAverage(robotJointId_t id, double &angle, int numReadings=10);
+	virtual int getJointAngle(robotJointId_t id, double &angle, int numReadings=10);
     virtual int getJointAnglesAverage(double &angle1, double &angle2, double &angle3, double &angle4, int numReadings=10);
+	virtual int getJointAngles(double &angle1, double &angle2, double &angle3, double &angle4, int numReadings=10);
     virtual int getJointMaxSpeed(robotJointId_t id, double &maxSpeed);
     virtual int getJointSafetyAngle(double &angle);
     virtual int getJointSafetyAngleTimeout(double &seconds);
@@ -763,6 +779,10 @@ class DLLIMPORT CMobot
     virtual mobot_t* getMobotObject();
     virtual int getVersion();
     virtual int getVersions(unsigned int &version);
+	virtual int jumpTo(double angle1, double angle2, double angle3, double angle4);
+	virtual int jumpToNB(double angle1, double angle2, double angle3, double angle4);
+	virtual int jumpJointTo(robotJointId_t id, double angle);
+	virtual int jumpJointToNB(robotJointId_t id, double angle);
     virtual int move(double angle1, double angle2, double angle3, double angle4);
     virtual int moveNB(double angle1, double angle2, double angle3, double angle4);
     virtual int moveBackward(double angle);
@@ -1070,6 +1090,12 @@ class CMobotGroup
 	int moveJointTime(robotJointId_t id, double time);
 	int moveJointTimeNB(robotJointId_t id, double time);
 	//int setSpeed(double speed, double radius);
+	int driveBackward(double angle);
+    int driveBackwardNB(double angle);
+	int driveDistance(double distance, double radius);
+    int driveDistanceNB(double distance, double radius);
+	int driveForward(double angle);
+    int driveForwardNB(double angle);
 
   protected:
     CMobot **_robots;
@@ -1199,6 +1225,15 @@ DLLIMPORT int Mobot_driveToNB(mobot_t* comms,
                                double angle2,
                                double angle3,
                                double angle4);
+/*Car functions*/
+DLLIMPORT int Mobot_driveBackward(mobot_t* comms,double angle);
+DLLIMPORT int Mobot_driveBackwardNB(mobot_t* comms, double angle);
+DLLIMPORT int Mobot_driveDistance(mobot_t* comms, double distance, double radius);
+DLLIMPORT int Mobot_driveDistanceNB(mobot_t* comms, double distance, double radius);
+DLLIMPORT int Mobot_driveForward(mobot_t* comms, double angle);
+DLLIMPORT int Mobot_driveForwardNB(mobot_t* comms, double angle);
+DLLIMPORT int Mobot_drivexy(mobot_t* comms, double x, double y, double radius, double trackwidth);
+DLLIMPORT int Mobot_drivexyNB(mobot_t* comms, double x, double y, double radius, double trackwidth);
 DLLIMPORT int Mobot_enableButtonCallback(mobot_t* comms, void* data, void (*buttonCallback)(void* mobot, int button, int buttonDown));
 DLLIMPORT int Mobot_disableButtonCallback(mobot_t* comms);
 DLLIMPORT int Mobot_enableEventCallback(mobot_t* comms, 
