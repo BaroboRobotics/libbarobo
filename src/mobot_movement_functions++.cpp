@@ -353,16 +353,14 @@ int CMobot::turnRightNB(double angle, double radius, double tracklength)
 
 int CMobot::moveTime(double time)
 {
-    DEPRECATED("moveTime", "driveTime");
 	moveTimeNB(time);
     return Mobot_moveWait(_comms);
 }
 
 int CMobot::moveTimeNB(double time)
 {
-    DEPRECATED("moveTimeNB", "driveTimeNB");
 	return Mobot_setMovementStateTimeNB(_comms, ROBOT_POSITIVE, ROBOT_POSITIVE,
-        ROBOT_FORWARD, ROBOT_NEUTRAL, time);
+        ROBOT_BACKWARD, ROBOT_NEUTRAL, time);
 }
 
 
@@ -393,11 +391,10 @@ int CMobot::moveJointTime(robotJointId_t id, double time)
 
 int CMobot::moveForeverNB()
 {
-	DEPRECATED("moveForever", "driveForever");
 	return Mobot_setMovementStateNB(_comms, 
         ROBOT_POSITIVE,
         ROBOT_POSITIVE,
-        ROBOT_FORWARD,
+        ROBOT_BACKWARD,
         ROBOT_POSITIVE);
 }
 
