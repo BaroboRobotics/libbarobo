@@ -976,12 +976,6 @@ class CLinkbotIGroup : public CMobotGroup
         robotJointState_t dir2, 
         robotJointState_t dir3, 
         double seconds);
-	int driveBackward(double angle);
-    int driveBackwardNB(double angle);
-	int driveDistance(double distance, double radius);
-    int driveDistanceNB(double distance, double radius);
-	int driveForward(double angle);
-    int driveForwardNB(double angle);
     /* All of these private members should be inherited from CMobotGroup */
   protected:
     CLinkbotI **_robots;
