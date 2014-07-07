@@ -46,49 +46,59 @@ CMobot::~CMobot()
   }
 }
 
-int CMobot::accelTimeNB(double radius, double acceleration, double time)
+int CMobot::driveAccelTimeNB(double radius, double acceleration, double time)
 {
-  return Mobot_accelTimeNB(_comms, radius, deg2rad(acceleration), time);
+  return Mobot_driveAccelTimeNB(_comms, radius, deg2rad(acceleration), time);
 }
 
-int CMobot::accelToVelocityNB(double radius, double acceleration, double velocity)
+int CMobot::driveAccelToVelocityNB(double radius, double acceleration, double velocity)
 {
-  return Mobot_accelToVelocityNB(_comms, radius, deg2rad(acceleration), deg2rad(velocity));
+  return Mobot_driveAccelToVelocityNB(_comms, radius, deg2rad(acceleration), deg2rad(velocity));
 }
 
-int CMobot::accelToMaxSpeedNB(double radius, double acceleration)
+int CMobot::driveAccelToMaxSpeedNB(double radius, double acceleration)
 {
-  return Mobot_accelToMaxSpeedNB(_comms, radius, deg2rad(acceleration));
+  return Mobot_driveAccelToMaxSpeedNB(_comms, radius, deg2rad(acceleration));
 }
 
-int CMobot::accelDistanceNB(double radius, double acceleration, double distance)
+int CMobot::driveAccelDistanceNB(double radius, double acceleration, double distance)
 {
-  return Mobot_accelDistanceNB(_comms, radius, deg2rad(acceleration), distance);
+  return Mobot_driveAccelDistanceNB(_comms, radius, deg2rad(acceleration), distance);
 }
 
-int CMobot::accelAngularTimeNB(robotJointId_t id, double acceleration, double time)
+int CMobot::driveAccelSmoothNB(double radius, double accel0, double accelf, double vmax, double distance)
 {
-  return Mobot_accelAngularTimeNB(_comms, id, deg2rad(acceleration), time);
+	return Mobot_driveAccelSmoothNB(_comms, radius, accel0, accelf, vmax, distance);
 }
 
-int CMobot::accelAngularToVelocityNB(robotJointId_t id, double acceleration, double speed)
+int CMobot::accelJointTimeNB(robotJointId_t id, double acceleration, double time)
 {
-  return Mobot_accelAngularToVelocityNB(_comms, id, deg2rad(acceleration), deg2rad(speed));
+  return Mobot_accelJointTimeNB(_comms, id, deg2rad(acceleration), time);
 }
 
-int CMobot::accelAngularAngleNB(robotJointId_t id, double acceleration, double angle)
+int CMobot::accelJointToVelocityNB(robotJointId_t id, double acceleration, double speed)
 {
-  return Mobot_accelAngularAngleNB(_comms, id, deg2rad(acceleration), deg2rad(angle));
+  return Mobot_accelJointToVelocityNB(_comms, id, deg2rad(acceleration), deg2rad(speed));
 }
 
-int CMobot::smoothMoveToNB(
+int CMobot::accelJointToMaxSpeedNB(robotJointId_t id, double acceleration)
+{
+	return Mobot_accelJointToMaxSpeedNB(_comms, id, deg2rad(acceleration));
+}
+
+int CMobot::accelJointAngleNB(robotJointId_t id, double acceleration, double angle)
+{
+  return Mobot_accelJointAngleNB(_comms, id, deg2rad(acceleration), deg2rad(angle));
+}
+
+int CMobot::accelJointSmoothNB(
     robotJointId_t id,
     double accel0,
     double accelf,
     double vmax,
     double angle)
 {
-  return Mobot_smoothMoveToNB(
+  return Mobot_accelJointSmoothNB(
       _comms,
       id,
       deg2rad(accel0),
@@ -99,25 +109,25 @@ int CMobot::smoothMoveToNB(
 
 
 /*Cycloidal acceleration profile*/
-int CMobot::accelAngularCycloidNB(robotJointId_t id, double angle, double time)
+int CMobot::accelJointCycloidalNB(robotJointId_t id, double angle, double time)
 {
-	return Mobot_accelAngularCycloidNB(_comms, id, deg2rad(angle), time);
+	return Mobot_accelJointCycloidalNB(_comms, id, deg2rad(angle), time);
 }
 
-int CMobot::accelCycloidNB(double radius, double distance, double time)
+int CMobot::driveAccelCycloidalNB(double radius, double distance, double time)
 {
-	return Mobot_accelCycloidNB(_comms, radius, distance, time);
+	return Mobot_driveAccelCycloidalNB(_comms, radius, distance, time);
 }
 
 /*Harmonic acceleration profile*/
-int CMobot::accelAngularHarmonicNB(robotJointId_t id, double angle, double time)
+int CMobot::accelJointHarmonicNB(robotJointId_t id, double angle, double time)
 {
-	return Mobot_accelAngularHarmonicNB(_comms, id, deg2rad(angle), time);
+	return Mobot_accelJointHarmonicNB(_comms, id, deg2rad(angle), time);
 }
 
-int CMobot::accelHarmonicNB(double radius, double distance, double time)
+int CMobot::driveAccelHarmonicNB(double radius, double distance, double time)
 {
-	return Mobot_accelHarmonicNB(_comms, radius, distance, time);
+	return Mobot_driveAccelHarmonicNB(_comms, radius, distance, time);
 }
 
 

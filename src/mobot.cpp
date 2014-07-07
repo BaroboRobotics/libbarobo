@@ -145,7 +145,7 @@ void *get_in_addr(struct sockaddr *sa)
     return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
-int Mobot_accelTimeNB(mobot_t* comms, double radius, double acceleration, double timeout)
+int Mobot_driveAccelTimeNB(mobot_t* comms, double radius, double acceleration, double timeout)
 {
   double alpha = acceleration/radius;
   int i;
@@ -153,11 +153,11 @@ int Mobot_accelTimeNB(mobot_t* comms, double radius, double acceleration, double
   for(i = 1; i < 4; i++) { //make the robot roll not spin on itself
 	  if(i == 1)
 	  {
-		  rc = Mobot_accelAngularTimeNB(comms, (robotJointId_t)i, alpha, timeout);
+		  rc = Mobot_accelJointTimeNB(comms, (robotJointId_t)i, alpha, timeout);
 	  }
 	  else
 	  {
-		  rc = Mobot_accelAngularTimeNB(comms, (robotJointId_t)i, -alpha, timeout);
+		  rc = Mobot_accelJointTimeNB(comms, (robotJointId_t)i, -alpha, timeout);
 	  }
 
     if(rc) return rc;
@@ -165,7 +165,7 @@ int Mobot_accelTimeNB(mobot_t* comms, double radius, double acceleration, double
   return 0;
 }
 
-int Mobot_accelToVelocityNB(mobot_t* comms, double radius, double acceleration, double velocity)
+int Mobot_driveAccelToVelocityNB(mobot_t* comms, double radius, double acceleration, double velocity)
 {
   double timeout;
   timeout = velocity/acceleration;
@@ -175,18 +175,18 @@ int Mobot_accelToVelocityNB(mobot_t* comms, double radius, double acceleration, 
   for(i = 1; i < 4; i++) { //make the robot roll not spin on itself
 	  if(i == 1)
 	  {
-		  rc = Mobot_accelAngularTimeNB(comms, (robotJointId_t)i, alpha, timeout);
+		  rc = Mobot_accelJointTimeNB(comms, (robotJointId_t)i, alpha, timeout);
 	  }
 	  else
 	  {
-		  rc = Mobot_accelAngularTimeNB(comms, (robotJointId_t)i, -alpha, timeout);
+		  rc = Mobot_accelJointTimeNB(comms, (robotJointId_t)i, -alpha, timeout);
 	  }
     if(rc) return rc;
   }
   return 0;
 }
 
-int Mobot_accelToMaxSpeedNB(mobot_t* comms, double radius, double acceleration)
+int Mobot_driveAccelToMaxSpeedNB(mobot_t* comms, double radius, double acceleration)
 {
   double alpha = acceleration/radius;
   int i;
@@ -194,18 +194,18 @@ int Mobot_accelToMaxSpeedNB(mobot_t* comms, double radius, double acceleration)
   for(i = 1; i < 4; i++) { //make the robot roll not spin on itself
 	  if(i == 1)
 	  {
-		  rc = Mobot_accelAngularTimeNB(comms, (robotJointId_t)i, alpha, 0);
+		  rc = Mobot_accelJointTimeNB(comms, (robotJointId_t)i, alpha, 0);
 	  }
 	  else
 	  {
-		  rc = Mobot_accelAngularTimeNB(comms, (robotJointId_t)i, -alpha, 0);
+		  rc = Mobot_accelJointTimeNB(comms, (robotJointId_t)i, -alpha, 0);
 	  }
     if(rc) return rc;
   }
   return 0;
 }
 
-int Mobot_accelDistanceNB(mobot_t* comms, double radius, double acceleration, double distance)
+int Mobot_driveAccelDistanceNB(mobot_t* comms, double radius, double acceleration, double distance)
 {
 	int rc, i;
 	double angle, alpha;
@@ -216,11 +216,11 @@ int Mobot_accelDistanceNB(mobot_t* comms, double radius, double acceleration, do
 	{
 		if (i == 3)
 		{
-			rc = Mobot_accelAngularAngleNB(comms, (robotJointId_t)i, -angle, -alpha);
+			rc = Mobot_accelJointAngleNB(comms, (robotJointId_t)i, -angle, -alpha);
 		}
 		else
 		{
-			rc = Mobot_accelAngularAngleNB(comms, (robotJointId_t)i, angle, alpha);
+			rc = Mobot_accelJointAngleNB(comms, (robotJointId_t)i, angle, alpha);
 		}
 
 		if (rc) return rc;
@@ -228,7 +228,7 @@ int Mobot_accelDistanceNB(mobot_t* comms, double radius, double acceleration, do
 	return 0;
 }
 
-int Mobot_accelAngularTimeNB(mobot_t* comms, robotJointId_t id, double acceleration, double time)
+int Mobot_accelJointTimeNB(mobot_t* comms, robotJointId_t id, double acceleration, double time)
 {
   uint8_t buf[32];
   uint32_t millis;
@@ -251,7 +251,7 @@ int Mobot_accelAngularTimeNB(mobot_t* comms, robotJointId_t id, double accelerat
 
 /*Cycloidal acceleration profile*/
 
-int Mobot_accelAngularCycloidNB(mobot_t* comms, robotJointId_t id, double angle, double time)
+int Mobot_accelJointCycloidalNB(mobot_t* comms, robotJointId_t id, double angle, double time)
 {
 	uint8_t buf[32];
 	uint32_t millis;
@@ -274,7 +274,7 @@ int Mobot_accelAngularCycloidNB(mobot_t* comms, robotJointId_t id, double angle,
     return 0;
 }
 
-int Mobot_accelCycloidNB(mobot_t* comms, double radius, double distance, double time)
+int Mobot_driveAccelCycloidalNB(mobot_t* comms, double radius, double distance, double time)
 {
 	uint8_t buf[32];
 	uint32_t millis;
@@ -289,11 +289,11 @@ int Mobot_accelCycloidNB(mobot_t* comms, double radius, double distance, double 
 	{
 		if ( i == 3)
 		{
-			status = Mobot_accelAngularCycloidNB(comms, (robotJointId_t)i, -angle , time);
+			status = Mobot_accelJointCycloidalNB(comms, (robotJointId_t)i, -angle , time);
 		}
 		else
 		{
-			status = Mobot_accelAngularCycloidNB(comms, (robotJointId_t)i, angle , time);
+			status = Mobot_accelJointCycloidalNB(comms, (robotJointId_t)i, angle , time);
 		}
 		if (status) return status;
 	}
@@ -301,7 +301,7 @@ int Mobot_accelCycloidNB(mobot_t* comms, double radius, double distance, double 
 }
 
 /*Harmonic acceleration profile*/
-int Mobot_accelAngularHarmonicNB(mobot_t* comms, robotJointId_t id, double angle, double time)
+int Mobot_accelJointHarmonicNB(mobot_t* comms, robotJointId_t id, double angle, double time)
 {
 	uint8_t buf[32];
 	uint32_t millis;
@@ -324,7 +324,7 @@ int Mobot_accelAngularHarmonicNB(mobot_t* comms, robotJointId_t id, double angle
     return 0;
 }
 
-int Mobot_accelHarmonicNB(mobot_t* comms, double radius, double distance, double time)
+int Mobot_driveAccelHarmonicNB(mobot_t* comms, double radius, double distance, double time)
 {
 	uint8_t buf[32];
 	uint32_t millis;
@@ -339,30 +339,57 @@ int Mobot_accelHarmonicNB(mobot_t* comms, double radius, double distance, double
 	{
 		if ( i == 3)
 		{
-			status = Mobot_accelAngularHarmonicNB(comms, (robotJointId_t)i, -angle , time);
+			status = Mobot_accelJointHarmonicNB(comms, (robotJointId_t)i, -angle , time);
 		}
 		else
 		{
-			status = Mobot_accelAngularHarmonicNB(comms, (robotJointId_t)i, angle , time);
+			status = Mobot_accelJointHarmonicNB(comms, (robotJointId_t)i, angle , time);
 		}
 		if (status) return status;
 	}
     return 0;
 }
 
-int Mobot_accelAngularToVelocityNB(mobot_t* comms, robotJointId_t id, double acceleration, double speed)
+int Mobot_accelJointToVelocityNB(mobot_t* comms, robotJointId_t id, double acceleration, double speed)
 {
   double timeout = speed/acceleration;
-  return Mobot_accelAngularTimeNB(comms, id, acceleration, timeout);
+  return Mobot_accelJointTimeNB(comms, id, acceleration, timeout);
 }
 
-int Mobot_accelAngularAngleNB(mobot_t* comms, robotJointId_t id, double acceleration, double angle)
+int Mobot_accelJointAngleNB(mobot_t* comms, robotJointId_t id, double acceleration, double angle)
 {
   double timeout = sqrt(2*angle/acceleration);
-  return Mobot_accelAngularTimeNB(comms, id, acceleration, timeout);
+  return Mobot_accelJointTimeNB(comms, id, acceleration, timeout);
 }
 
-int Mobot_smoothMoveToNB(
+int Mobot_accelJointToMaxSpeedNB(mobot_t* comms, robotJointId_t id, double acceleration)
+{
+	return Mobot_accelJointTimeNB(comms, id, acceleration, 0);
+ 
+}
+int Mobot_driveAccelSmoothNB(mobot_t* comms, double radius, double accel0, double accelf, double vmax, double distance)
+{
+	double angle = distance/radius;
+	double alpha0 = accel0/radius;
+	double alphaf = accelf/radius;
+	double speedmax = vmax/radius;
+	int status, i;
+	for (i=0; i<4; i++)
+	{
+		if ( i == 3)
+		{
+			status = Mobot_accelJointSmoothNB(comms, (robotJointId_t)i, alpha0, alphaf, speedmax , -angle);
+		}
+		else
+		{
+			status = Mobot_accelJointSmoothNB(comms, (robotJointId_t)i, alpha0, alphaf, speedmax , angle);
+		}
+		if (status) return status;
+	}
+    return 0;
+
+}
+int Mobot_accelJointSmoothNB(
     mobot_t* comms, 
     robotJointId_t id, 
     double accel0, 

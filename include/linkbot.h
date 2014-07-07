@@ -164,25 +164,27 @@ class CLinkbotI
   public:
     CLinkbotI();
     ~CLinkbotI();
-    int accelTimeNB(double radius, double acceleration, double time);
-    int accelToVelocityNB(double radius, double acceleration, double velocity);
-    int accelToMaxSpeedNB(double radius, double acceleration);
-	int accelDistanceNB(double radius, double acceleration, double distance);
-    int accelAngularTimeNB(robotJointId_t id, double acceleration, double time);
-    int accelAngularToVelocityNB(robotJointId_t id, double acceleration, double speed);
-    int accelAngularAngleNB(robotJointId_t id, double acceleration, double angle);
-    int smoothMoveToNB(
+    int driveAccelTimeNB(double radius, double acceleration, double time);
+    int driveAccelToVelocityNB(double radius, double acceleration, double velocity);
+    int driveAccelToMaxSpeedNB(double radius, double acceleration);
+	int driveAccelDistanceNB(double radius, double acceleration, double distance);
+	int driveAccelSmoothNB(double radius, double accel0, double accelf, double vmax, double distance);
+    int accelJointTimeNB(robotJointId_t id, double acceleration, double time);
+    int accelJointToVelocityNB(robotJointId_t id, double acceleration, double speed);
+    int accelJointAngleNB(robotJointId_t id, double acceleration, double angle);
+	int accelJointToMaxSpeedNB(robotJointId_t id, double acceleration);
+    int accelJointSmoothNB(
         robotJointId_t id,
         double accel0,
         double accelf,
         double vmax,
         double angle);
 	/*Cycloidal acceleration profile*/
-	int accelAngularCycloidNB(robotJointId_t id, double angle, double time);
-	int accelCycloidNB(double radius, double distance, double time);
+	int accelJointCycloidalNB(robotJointId_t id, double angle, double time);
+	int driveAccelCycloidalNB(double radius, double distance, double time);
 
-	int accelAngularHarmonicNB(robotJointId_t id, double angle, double time);
-	int accelHarmonicNB(double radius, double distance, double time);
+	int accelJointHarmonicNB(robotJointId_t id, double angle, double time);
+	int driveAccelHarmonicNB(double radius, double distance, double time);
 
     int blinkLED(double delay, int numBlinks);
 /* connect() Return Error Codes:
@@ -469,25 +471,19 @@ class CLinkbotL
   public:
     CLinkbotL();
     ~CLinkbotL();
-    int accelTimeNB(double radius, double acceleration, double time);
-    int accelToVelocityNB(double radius, double acceleration, double velocity);
-    int accelToMaxSpeedNB(double radius, double acceleration);
-	int accelDistanceNB(double radius, double acceleration, double distance);
-    int accelAngularTimeNB(robotJointId_t id, double acceleration, double time);
-    int accelAngularToVelocityNB(robotJointId_t id, double acceleration, double speed);
-    int accelAngularAngleNB(robotJointId_t id, double acceleration, double angle);
-    int smoothMoveToNB(
+    int accelJointTimeNB(robotJointId_t id, double acceleration, double time);
+    int accelJointToVelocityNB(robotJointId_t id, double acceleration, double speed);
+    int accelJointAngleNB(robotJointId_t id, double acceleration, double angle);
+	int accelJointToMaxSpeedNB(robotJointId_t id, double acceleration);
+    int accelJointSmoothNB(
         robotJointId_t id,
         double accel0,
         double accelf,
         double vmax,
         double angle);
 
-    int accelAngularCycloidNB(robotJointId_t id, double angle, double time);
-	int accelCycloidNB(double radius, double distance, double time);
-
-	int accelAngularHarmonicNB(robotJointId_t id, double angle, double time);
-	int accelHarmonicNB(double radius, double distance, double time);
+    int accelJointCycloidalNB(robotJointId_t id, double angle, double time);
+	int accelJointHarmonicNB(robotJointId_t id, double angle, double time);
 
     int blinkLED(double delay, int numBlinks);
 /* connect() Return Error Codes:

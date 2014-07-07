@@ -677,27 +677,27 @@ class DLLIMPORT CMobot
   public:
     CMobot();
     virtual ~CMobot();
-    virtual int accelTimeNB(double radius, double acceleration, double time);
-    virtual int accelToVelocityNB(double radius, double acceleration, double velocity);
-    virtual int accelToMaxSpeedNB(double radius, double acceleration);
-	virtual int accelDistanceNB(double radius, double acceleration, double distance);
-    virtual int accelAngularTimeNB(robotJointId_t id, double acceleration, double time);
-    virtual int accelAngularToVelocityNB(robotJointId_t id, double acceleration, double speed);
-    virtual int accelAngularAngleNB(robotJointId_t id, double acceleration, double angle);
-    virtual int smoothMoveToNB(
+    virtual int driveAccelTimeNB(double radius, double acceleration, double time);
+    virtual int driveAccelToVelocityNB(double radius, double acceleration, double velocity);
+    virtual int driveAccelToMaxSpeedNB(double radius, double acceleration);
+	virtual int driveAccelDistanceNB(double radius, double acceleration, double distance);
+	virtual int driveAccelSmoothNB(double radius, double accel0, double accelf, double vmax, double distance);
+	virtual int driveAccelCycloidalNB(double radius, double distance, double time);
+	virtual int driveAccelHarmonicNB(double radius, double distance, double time);
+    virtual int accelJointTimeNB(robotJointId_t id, double acceleration, double time);
+    virtual int accelJointToVelocityNB(robotJointId_t id, double acceleration, double speed);
+	virtual int accelJointToMaxSpeedNB(robotJointId_t id, double acceleration);
+    virtual int accelJointAngleNB(robotJointId_t id, double acceleration, double angle);
+    virtual int accelJointSmoothNB(
         robotJointId_t id,
         double accel0,
         double accelf,
         double vmax,
         double angle);
-    virtual int blinkLED(double delay, int numBlinks);
-	/*Cycloidal acceleration profile*/
-	virtual int accelAngularCycloidNB(robotJointId_t id, double angle, double time);
-	virtual int accelCycloidNB(double radius, double distance, double time);
-
-	/*Harmonic acceleration profile*/
-	virtual int accelAngularHarmonicNB(robotJointId_t id, double angle, double time);
-	virtual int accelHarmonicNB(double radius, double distance, double time);
+	virtual int accelJointCycloidalNB(robotJointId_t id, double angle, double time);
+	virtual int accelJointHarmonicNB(robotJointId_t id, double angle, double time);
+    
+	virtual int blinkLED(double delay, int numBlinks);
 
     virtual bool canFlashFirmware ();
     virtual int flashFirmwareAsync (std::string hexfile,
@@ -1121,19 +1121,21 @@ extern "C" {
 
 extern int g_numConnected;
 
-DLLIMPORT int Mobot_accelTimeNB(mobot_t* comms, double radius, double acceleration, double time);
-DLLIMPORT int Mobot_accelToVelocityNB(mobot_t* comms, double radius, double acceleration, double velocity);
-DLLIMPORT int Mobot_accelToMaxSpeedNB(mobot_t* comms, double radius, double acceleration);
-DLLIMPORT int Mobot_accelDistanceNB(mobot_t* comms, double radius, double acceleration, double distance);
-DLLIMPORT int Mobot_accelAngularTimeNB(mobot_t* comms, robotJointId_t id, double acceleration, double time);
-DLLIMPORT int Mobot_accelAngularToVelocityNB(mobot_t* comms, robotJointId_t id, double acceleration, double speed);
-DLLIMPORT int Mobot_accelAngularAngleNB(mobot_t* comms, robotJointId_t id, double acceleration, double angle);
+DLLIMPORT int Mobot_driveAccelTimeNB(mobot_t* comms, double radius, double acceleration, double time);
+DLLIMPORT int Mobot_driveAccelToVelocityNB(mobot_t* comms, double radius, double acceleration, double velocity);
+DLLIMPORT int Mobot_driveAccelToMaxSpeedNB(mobot_t* comms, double radius, double acceleration);
+DLLIMPORT int Mobot_driveAccelDistanceNB(mobot_t* comms, double radius, double acceleration, double distance);
+DLLIMPORT int Mobot_driveAccelSmoothNB(mobot_t* comms, double radius, double accel0, double accelf, double vmax, double distance);
+DLLIMPORT int Mobot_accelJointToMaxSpeedNB(mobot_t* comms, robotJointId_t id, double acceleration);
+DLLIMPORT int Mobot_accelJointTimeNB(mobot_t* comms, robotJointId_t id, double acceleration, double time);
+DLLIMPORT int Mobot_accelJointToVelocityNB(mobot_t* comms, robotJointId_t id, double acceleration, double speed);
+DLLIMPORT int Mobot_accelJointAngleNB(mobot_t* comms, robotJointId_t id, double acceleration, double angle);
 
-DLLIMPORT int Mobot_accelAngularCycloidNB(mobot_t* comms, robotJointId_t id, double angle, double time);
-DLLIMPORT int Mobot_accelCycloidNB(mobot_t* comms, double radius, double distance, double time);
+DLLIMPORT int Mobot_accelJointCycloidalNB(mobot_t* comms, robotJointId_t id, double angle, double time);
+DLLIMPORT int Mobot_driveAccelCycloidalNB(mobot_t* comms, double radius, double distance, double time);
 
-DLLIMPORT int Mobot_accelAngularHarmonicNB(mobot_t* comms, robotJointId_t id, double angle, double time);
-DLLIMPORT int Mobot_accelHarmonicNB(mobot_t* comms, double radius, double distance, double time);
+DLLIMPORT int Mobot_accelJointHarmonicNB(mobot_t* comms, robotJointId_t id, double angle, double time);
+DLLIMPORT int Mobot_driveAccelHarmonicNB(mobot_t* comms, double radius, double distance, double time);
 
 DLLIMPORT int Mobot_blinkLED(mobot_t* comms, double delay, int numBlinks);
 DLLIMPORT int Mobot_connect(mobot_t* comms);
@@ -1512,7 +1514,7 @@ DLLIMPORT int Mobot_setMovementStateTimeNB(mobot_t* comms,
 DLLIMPORT int Mobot_setColorRGB(mobot_t* comms, int r, int g, int b);
 DLLIMPORT int Mobot_setColor(mobot_t* comms, char * color);		/* Added by Dawn 1/7/2014 */
 DLLIMPORT int Mobot_setTwoWheelRobotSpeed(mobot_t* comms, double speed, double radius);
-DLLIMPORT int Mobot_smoothMoveToNB(
+DLLIMPORT int Mobot_accelJointSmoothNB(
     mobot_t* comms, 
     robotJointId_t id, 
     double accel0, 
