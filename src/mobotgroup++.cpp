@@ -1010,3 +1010,35 @@ int CMobotGroup::driveBackwardNB(double angle)
   }
   return 0;
 }
+
+int CMobotGroup::openGripperNB(double angle)
+{
+	for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->openGripperNB(angle);
+  }
+  return 0;
+}
+
+int CMobotGroup::openGripper(double angle)
+{
+	for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->openGripperNB(angle);
+  }
+  return moveWait();
+}
+
+int CMobotGroup::closeGripper()
+{
+	for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->closeGripperNB();
+  }
+  return moveWait();
+}
+
+int CMobotGroup::closeGripperNB()
+{
+	for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->closeGripperNB();
+  }
+  return 0;
+}

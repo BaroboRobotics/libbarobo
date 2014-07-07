@@ -447,6 +447,7 @@ class CLinkbotI
 	int openGripper(double angle);
 	int openGripperNB(double angle);
 	int closeGripper(void);
+	int closeGripperNB(void);
 
   private:
     void* memholder1;
@@ -750,6 +751,7 @@ class CLinkbotL
 	int openGripper(double angle);
 	int openGripperNB(double angle);
 	int closeGripper(void);
+	int closeGripperNB(void);
 
   private:
     void* memholder1;
@@ -897,6 +899,11 @@ class CLinkbotIGroup
     int motionTurnRightNB(double angle);
     static void* motionTurnRightThread(void*);
     int motionWait();
+
+	int openGripper(double angle);
+	int openGripperNB(double angle);
+	int closeGripper(void);
+	int closeGripperNB(void);
 
     CMobot **_robots2;
     int _numRobots;

@@ -302,3 +302,40 @@ void CMelody::addNote(const char* note, int divider)
 {
   Mobot_melodyAddNote(_head, note, divider);
 }
+
+/*Gripper functions*/
+int CMobot::openGripper(double angle)
+{
+	return Mobot_moveTo(_comms, -angle/2, 0, -angle/2, 0);
+}
+
+int CMobot::openGripperNB(double angle)
+{
+	return Mobot_moveToNB(_comms, -angle/2, 0, -angle/2, 0);
+}
+
+int CMobot::closeGripper(void)
+{
+    double gripperAngleOld= 0;
+    double gripperAngleNew;
+    int retval;
+
+	retval = CMobot::getJointAngleInstant(ROBOT_JOINT1, gripperAngleNew); // get the new position
+    /* Close the gripper to grab an object */
+    while(fabs(gripperAngleNew - gripperAngleOld) > 0.1) {
+        gripperAngleOld = gripperAngleNew;    // update the old position
+        retval = retval || CMobot::getJointAngleInstant(ROBOT_JOINT1, gripperAngleNew); // get the new position
+		retval = retval || Mobot_moveNB(_comms, 8, 0, 8, 0); // move 8 degrees
+        delaySeconds(1);              // closing for 1 second
+        retval = retval || CMobot::getJointAngleInstant(ROBOT_JOINT1, gripperAngleNew); // get the new position
+    }
+	retval = retval || Mobot_moveNB(_comms, 8, 0, 8, 0);            // try to move another 8 degrees 
+    delaySeconds(1);              // closing for 1 second
+	retval = retval || CMobot::holdJoints();//setMovementStateNB(ROBOT_HOLD, NaN, ROBOT_HOLD); // hold the object
+    return retval;
+}
+
+int CMobot::closeGripperNB(void)
+{
+    return 0;
+}

@@ -2563,7 +2563,58 @@ EXPORTCH int LinkbotI_motionWait_chdl(void *varg) {
     Ch_VaEnd(interp, ap);
     return retval;
 }
+EXPORTCH int LinkbotI_openGripperNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotI *mobot;
+	double angle;
+    int retval;
 
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
+	angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->openGripperNB(angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int LinkbotI_openGripper_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotI *mobot;
+	double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
+	angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->openGripper(angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int LinkbotI_closeGripper_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotI *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
+    retval = mobot->closeGripper();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int LinkbotI_closeGripperNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotI *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotI *);
+    retval = mobot->closeGripperNB();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
 /* CLinkbotIGroup functions */
 
 EXPORTCH void CLinkbotIGroup_CLinkbotIGroup_chdl(void *varg) {
@@ -4119,6 +4170,58 @@ EXPORTCH int CMGI_driveForeverNB_chdl(void *varg) {
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
     retval = mobot->driveForeverNB();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int CMGI_openGripperNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotIGroup *mobot;
+	double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
+	angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->openGripperNB(angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int CMGI_openGripper_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotIGroup *mobot;
+	double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
+	angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->openGripper(angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int CMGI_closeGripper_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotIGroup *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
+    retval = mobot->closeGripper();
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int CMGI_closeGripperNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotIGroup *mobot;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
+    retval = mobot->closeGripperNB();
     Ch_VaEnd(interp, ap);
     return retval;
 }

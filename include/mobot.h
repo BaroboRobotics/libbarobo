@@ -935,6 +935,13 @@ class DLLIMPORT CMobot
     virtual int motionTumbleLeftNB(int num);
     virtual int motionUnstandNB();
     virtual int motionWait();
+
+	/*gripper functions*/
+	virtual int openGripper(double angle);
+	virtual int openGripperNB(double angle);
+	virtual int closeGripper(void);
+	virtual int closeGripperNB(void);
+
     virtual int systemTime(double &time);
     int transactMessage(int cmd, void* buf, int size);
   protected:
@@ -1096,6 +1103,12 @@ class CMobotGroup
     int driveDistanceNB(double distance, double radius);
 	int driveForward(double angle);
     int driveForwardNB(double angle);
+
+	/*gripper functions*/
+    int openGripper(double angle);
+	int openGripperNB(double angle);
+	int closeGripper(void);
+	int closeGripperNB(void);
 
   protected:
     CMobot **_robots;
