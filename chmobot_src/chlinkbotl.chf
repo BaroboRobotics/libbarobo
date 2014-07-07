@@ -2606,7 +2606,95 @@ int CLinkbotLGroup::relaxJoint(int id) {
     dlrunfun(fptr, &retval, NULL, this, id);
     return retval;
 }
+int CLinkbotLGroup::accelJointTimeNB(int id, double acceleration, double time) {
+    void *fptr;
+    int retval;
 
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGL_accelJointTimeNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, acceleration, time);
+    return retval;
+}
+int CLinkbotLGroup::accelJointToVelocityNB(int id, double acceleration, double speed) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGL_accelJointToVelocityNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, acceleration, speed);
+    return retval;
+}
+int CLinkbotLGroup::accelJointToMaxSpeedNB(int id, double acceleration) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGL_accelJointToMaxSpeedNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, acceleration);
+    return retval;
+}
+int CLinkbotLGroup::accelJointAngleNB(int id, double acceleration, double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGL_accelJointAngleNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, acceleration, angle);
+    return retval;
+}
+
+/*Cycloid acceleration profile*/
+int CLinkbotLGroup::accelJointCycloidalNB(int id, double angle, double time) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGL_accelJointCycloidalNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, angle, time);
+    return retval;
+}
+
+/*Harmonic acceleration profile*/
+int CLinkbotLGroup::accelJointHarmonicNB(int id, double angle, double time) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGL_accelJointHarmonicNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, angle, time);
+    return retval;
+}
+
+int CLinkbotLGroup::accelJointSmoothNB(int id, double accel0, double accelf, double vmax, double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGL_accelJointSmoothNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, accel0, accelf, vmax, angle);
+    return retval;
+}
 
 /*Functions for compatibilty with RoboSim*/
 int CLinkbotL::getxy(double & x, double & y) {

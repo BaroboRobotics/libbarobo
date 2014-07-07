@@ -1010,3 +1010,115 @@ int CMobotGroup::driveBackwardNB(double angle)
   }
   return 0;
 }
+
+int CMobotGroup::driveAccelTimeNB(double radius, double acceleration, double time)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->driveAccelTimeNB(radius, acceleration, time);
+  }
+  return 0;
+}
+
+int CMobotGroup::driveAccelToVelocityNB(double radius, double acceleration, double velocity)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->driveAccelToVelocityNB(radius, acceleration, velocity);
+  }
+  return 0;
+}
+
+int CMobotGroup::driveAccelToMaxSpeedNB(double radius, double acceleration)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->driveAccelToMaxSpeedNB(radius, acceleration);
+  }
+  return 0;
+}
+
+int CMobotGroup::driveAccelDistanceNB(double radius, double acceleration, double distance)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->driveAccelDistanceNB(radius, acceleration, distance);
+  }
+  return 0;
+}
+
+int CMobotGroup::driveAccelSmoothNB(double radius, double accel0, double accelf, double vmax, double distance)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->driveAccelSmoothNB(radius, accel0, accelf, vmax, distance);
+  }
+  return 0;
+}
+
+int CMobotGroup::driveAccelCycloidalNB(double radius, double distance, double time)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->driveAccelCycloidalNB(radius, distance, time);
+  }
+  return 0;
+}
+
+int CMobotGroup::driveAccelHarmonicNB(double radius, double distance, double time)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->driveAccelHarmonicNB(radius, distance, time);
+  }
+  return 0;
+}
+
+int CMobotGroup::accelJointTimeNB(robotJointId_t id, double acceleration, double time)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->accelJointTimeNB(id, acceleration, time);
+  }
+  return 0;
+}
+
+int CMobotGroup::accelJointToVelocityNB(robotJointId_t id, double acceleration, double velocity)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->accelJointTimeNB(id, acceleration, velocity);
+  }
+  return 0;
+}
+
+int CMobotGroup::accelJointToMaxSpeedNB(robotJointId_t id, double acceleration)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->accelJointToMaxSpeedNB(id, acceleration);
+  }
+  return 0;
+}
+
+int CMobotGroup::accelJointAngleNB(robotJointId_t id, double acceleration, double angle)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->accelJointAngleNB(id, acceleration, angle);
+  }
+  return 0;
+}
+
+int CMobotGroup::accelJointSmoothNB(robotJointId_t id, double accel0, double accelf, double vmax, double angle)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->accelJointSmoothNB(id, accel0, accelf, vmax, angle);
+  }
+  return 0;
+}
+
+int CMobotGroup::accelJointCycloidalNB(robotJointId_t id, double angle, double time)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->accelJointCycloidalNB(id, angle, time);
+  }
+  return 0;
+}
+
+int CMobotGroup::accelJointHarmonicNB(robotJointId_t id, double angle, double time)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->accelJointHarmonicNB(id, angle, time);
+  }
+  return 0;
+}

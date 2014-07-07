@@ -1097,6 +1097,27 @@ class CMobotGroup
 	int driveForward(double angle);
     int driveForwardNB(double angle);
 
+	/*acceleration functions*/
+	int driveAccelTimeNB(double radius, double acceleration, double time);
+    int driveAccelToVelocityNB(double radius, double acceleration, double velocity);
+    int driveAccelToMaxSpeedNB(double radius, double acceleration);
+	int driveAccelDistanceNB(double radius, double acceleration, double distance);
+	int driveAccelSmoothNB(double radius, double accel0, double accelf, double vmax, double distance);
+	int driveAccelCycloidalNB(double radius, double distance, double time);
+	int driveAccelHarmonicNB(double radius, double distance, double time);
+    int accelJointTimeNB(robotJointId_t id, double acceleration, double time);
+    int accelJointToVelocityNB(robotJointId_t id, double acceleration, double speed);
+	int accelJointToMaxSpeedNB(robotJointId_t id, double acceleration);
+    int accelJointAngleNB(robotJointId_t id, double acceleration, double angle);
+    int accelJointSmoothNB(
+        robotJointId_t id,
+        double accel0,
+        double accelf,
+        double vmax,
+        double angle);
+	int accelJointCycloidalNB(robotJointId_t id, double angle, double time);
+	int accelJointHarmonicNB(robotJointId_t id, double angle, double time);
+
   protected:
     CMobot **_robots;
     int _numRobots;

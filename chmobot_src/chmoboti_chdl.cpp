@@ -4161,6 +4161,275 @@ EXPORTCH int CMGI_driveForeverNB_chdl(void *varg) {
     Ch_VaEnd(interp, ap);
     return retval;
 }
+EXPORTCH int CMGI_driveAccelTimeNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotIGroup *mobot;
+    double radius;
+    double acceleration;
+    double timeout;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
+    radius = Ch_VaArg(interp, ap, double);
+    acceleration = Ch_VaArg(interp, ap, double);
+    timeout = Ch_VaArg(interp, ap, double);
+    retval = mobot->driveAccelTimeNB(radius, acceleration, timeout);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMGI_accelJointCycloidalNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotIGroup *mobot;
+	int id;
+    double angle;
+    double timeout;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
+	id = Ch_VaArg(interp, ap, int); 
+    angle = Ch_VaArg(interp, ap, double);
+    timeout = Ch_VaArg(interp, ap, double);
+    retval = mobot->accelJointCycloidalNB((robotJointId_t)id, angle, timeout);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMGI_driveAccelCycloidalNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotIGroup *mobot;
+    double radius;
+    double distance;
+    double timeout;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
+    radius = Ch_VaArg(interp, ap, double);
+    distance = Ch_VaArg(interp, ap, double);
+    timeout = Ch_VaArg(interp, ap, double);
+    retval = mobot->driveAccelCycloidalNB(radius, distance, timeout);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+/*harmonic acceleration profile*/
+EXPORTCH int CMGI_accelJointHarmonicNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotIGroup *mobot;
+	int id;
+    double angle;
+    double timeout;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
+	id = Ch_VaArg(interp, ap, int); 
+    angle = Ch_VaArg(interp, ap, double);
+    timeout = Ch_VaArg(interp, ap, double);
+    retval = mobot->accelJointHarmonicNB((robotJointId_t)id, angle, timeout);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMGI_driveAccelHarmonicNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotIGroup *mobot;
+    double radius;
+    double distance;
+    double timeout;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
+    radius = Ch_VaArg(interp, ap, double);
+    distance = Ch_VaArg(interp, ap, double);
+    timeout = Ch_VaArg(interp, ap, double);
+    retval = mobot->driveAccelHarmonicNB(radius, distance, timeout);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMGI_driveAccelToVelocityNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotIGroup *mobot;
+    double radius;
+    double acceleration;
+    double v;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
+    radius = Ch_VaArg(interp, ap, double);
+    acceleration = Ch_VaArg(interp, ap, double);
+    v = Ch_VaArg(interp, ap, double);
+    retval = mobot->driveAccelToVelocityNB(radius, acceleration, v);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMGI_driveAccelToMaxSpeedNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotIGroup *mobot;
+    double radius;
+    double acceleration;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
+    radius = Ch_VaArg(interp, ap, double);
+    acceleration = Ch_VaArg(interp, ap, double);
+    retval = mobot->driveAccelToMaxSpeedNB(radius, acceleration);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMGI_driveAccelDistanceNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotIGroup *mobot;
+    double radius;
+    double acceleration;
+	double distance;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
+    radius = Ch_VaArg(interp, ap, double);
+    acceleration = Ch_VaArg(interp, ap, double);
+	distance = Ch_VaArg(interp, ap, double);
+    retval = mobot->driveAccelDistanceNB(radius, acceleration, distance);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMGI_accelJointTimeNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotIGroup *mobot;
+    int id;
+    double acceleration;
+    double time;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
+    id = Ch_VaArg(interp, ap, int);
+    acceleration = Ch_VaArg(interp, ap, double);
+    time = Ch_VaArg(interp, ap, double);
+    retval = mobot->accelJointTimeNB((robotJointId_t)id, acceleration, time);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMGI_accelJointToVelocityNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotIGroup *mobot;
+    int id;
+    double acceleration;
+    double v;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
+    id = Ch_VaArg(interp, ap, int);
+    acceleration = Ch_VaArg(interp, ap, double);
+    v = Ch_VaArg(interp, ap, double);
+    retval = mobot->accelJointToVelocityNB((robotJointId_t)id, acceleration, v);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int CMGI_accelJointToMaxSpeedNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotIGroup *mobot;
+    int id;
+    double acceleration;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
+    id = Ch_VaArg(interp, ap, int);
+    acceleration = Ch_VaArg(interp, ap, double);
+	
+    retval = mobot->accelJointToMaxSpeedNB((robotJointId_t)id, acceleration);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMGI_accelJointAngleNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotIGroup *mobot;
+    int id;
+    double acceleration;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
+    id = Ch_VaArg(interp, ap, int);
+    acceleration = Ch_VaArg(interp, ap, double);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->accelJointAngleNB((robotJointId_t)id, acceleration, angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMGI_accelJointSmoothNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotIGroup *mobot;
+    int id;
+    double accel0;
+    double accelf;
+    double vmax;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
+    id = Ch_VaArg(interp, ap, int);
+    accel0 = Ch_VaArg(interp, ap, double);
+    accelf = Ch_VaArg(interp, ap, double);
+    vmax = Ch_VaArg(interp, ap, double);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->accelJointSmoothNB((robotJointId_t)id, accel0, accelf, vmax, angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int CMGI_driveAccelSmoothNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotIGroup *mobot;
+    double radius;
+    double accel0;
+    double accelf;
+    double vmax;
+    double distance;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
+    radius = Ch_VaArg(interp, ap, double);
+    accel0 = Ch_VaArg(interp, ap, double);
+    accelf = Ch_VaArg(interp, ap, double);
+    vmax = Ch_VaArg(interp, ap, double);
+    distance = Ch_VaArg(interp, ap, double);
+    retval = mobot->driveAccelSmoothNB(radius, accel0, accelf, vmax, distance);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
 /*Functions for compatibility with RoboSim*/
 EXPORTCH int LinkbotI_getxy_chdl(void *varg) {
     ChInterp_t interp;

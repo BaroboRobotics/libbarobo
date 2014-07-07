@@ -894,6 +894,28 @@ class CLinkbotIGroup
     static void* motionTurnRightThread(void*);
     int motionWait();
 
+	/*Acceleration functions*/
+	int driveAccelTimeNB(double radius, double acceleration, double time);
+    int driveAccelToVelocityNB(double radius, double acceleration, double velocity);
+    int driveAccelToMaxSpeedNB(double radius, double acceleration);
+	int driveAccelDistanceNB(double radius, double acceleration, double distance);
+	int driveAccelSmoothNB(double radius, double accel0, double accelf, double vmax, double distance);
+	int driveAccelCycloidalNB(double radius, double distance, double time);
+	int driveAccelHarmonicNB(double radius, double distance, double time);
+    int accelJointTimeNB(robotJointId_t id, double acceleration, double time);
+    int accelJointToVelocityNB(robotJointId_t id, double acceleration, double speed);
+	int accelJointToMaxSpeedNB(robotJointId_t id, double acceleration);
+    int accelJointAngleNB(robotJointId_t id, double acceleration, double angle);
+    int accelJointSmoothNB(
+        robotJointId_t id,
+        double accel0,
+        double accelf,
+        double vmax,
+        double angle);
+	int accelJointCycloidalNB(robotJointId_t id, double angle, double time);
+	int accelJointHarmonicNB(robotJointId_t id, double angle, double time);
+
+
     CMobot **_robots2;
     int _numRobots;
     int argInt;
@@ -1082,6 +1104,21 @@ class CLinkbotLGroup
 	int setSpeed(double speed, double radius);
     int stopAllJoints();
     int stopOneJoint(robotJointId_t id);
+
+	/*Acceleration functions*/
+    int accelJointTimeNB(robotJointId_t id, double acceleration, double time);
+    int accelJointToVelocityNB(robotJointId_t id, double acceleration, double speed);
+	int accelJointToMaxSpeedNB(robotJointId_t id, double acceleration);
+    int accelJointAngleNB(robotJointId_t id, double acceleration, double angle);
+    int accelJointSmoothNB(
+        robotJointId_t id,
+        double accel0,
+        double accelf,
+        double vmax,
+        double angle);
+	int accelJointCycloidalNB(robotJointId_t id, double angle, double time);
+	int accelJointHarmonicNB(robotJointId_t id, double angle, double time);
+
 
     CMobot **_robots2;
     int _numRobots;
