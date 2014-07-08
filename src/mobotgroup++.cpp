@@ -1030,6 +1030,7 @@ int CMobotGroup::openGripper(double angle)
 int CMobotGroup::closeGripper()
 {
 	for(int i = 0; i < _numRobots; i++) {
+	printf("Hello!\n");
     _robots[i]->closeGripperNB();
   }
   return moveWait();

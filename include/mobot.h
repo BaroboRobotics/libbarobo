@@ -1149,6 +1149,10 @@ DLLIMPORT int Mobot_accelAngularHarmonicNB(mobot_t* comms, robotJointId_t id, do
 DLLIMPORT int Mobot_accelHarmonicNB(mobot_t* comms, double radius, double distance, double time);
 
 DLLIMPORT int Mobot_blinkLED(mobot_t* comms, double delay, int numBlinks);
+/*Gripper functions*/
+DLLIMPORT int Mobot_closeGripper(mobot_t* comms);
+DLLIMPORT void* Mobot_closeGripperThread(void*);
+DLLIMPORT int Mobot_closeGripperNB(mobot_t* comms);
 DLLIMPORT int Mobot_connect(mobot_t* comms);
 DLLIMPORT int Mobot_connectWithTCP(mobot_t* comms);
 DLLIMPORT int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], const char port[]);
