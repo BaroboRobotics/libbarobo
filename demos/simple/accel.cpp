@@ -15,7 +15,7 @@ int main()
 
   robot.setJointSpeed(ROBOT_JOINT1, 120);
   robot.setJointMovementStateNB(ROBOT_JOINT1, ROBOT_BACKWARD);
-  robot.accelAngularTimeNB(ROBOT_JOINT1, 60, 4);
+  robot.accelJointTimeNB(ROBOT_JOINT1, 60, 4);
   sleep(5);
   return 0;
 }
