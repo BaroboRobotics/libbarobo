@@ -1915,7 +1915,7 @@ int CLinkbotI::setMotorPower(int id, int power) {
     dlrunfun(fptr, &retval, setMotorPower, this, id, power);
     return retval;
 }
-int CLinkbotI::setJointPower(int id, int power) {
+int CLinkbotI::setJointPower(int id, double power) {
     void *fptr;
     int retval;
 

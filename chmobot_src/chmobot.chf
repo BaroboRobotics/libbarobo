@@ -1487,7 +1487,7 @@ int CMobot::setMotorPower(int id, int power) {
     dlrunfun(fptr, &retval, setMotorPower, this, id, power);
     return retval;
 }
-int CMobot::setJointPower(int id, int power) {
+int CMobot::setJointPower(int id, double power) {
     void *fptr;
     int retval;
 
