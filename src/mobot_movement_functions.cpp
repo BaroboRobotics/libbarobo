@@ -803,4 +803,52 @@ int Mobot_drivexyNB(mobot_t* comms, double x, double y, double radius, double tr
   return 0;
 }
 
+int Mobot_closeGripper(mobot_t* comms)
+{
+   double gripperAngleOld= 0;
+   double gripperAngleNew;
+   int retval;
+   
+   retval = Mobot_getJointAngle(comms, ROBOT_JOINT1, &gripperAngleNew); // get the new position
+   
+    /* Close the gripper to grab an object */
+    while(fabs(gripperAngleNew - gripperAngleOld) > 0.1) {
+        gripperAngleOld = gripperAngleNew;    // update the old position
+        retval = retval || Mobot_getJointAngle(comms, ROBOT_JOINT1, &gripperAngleNew); // get the new position
+		
+		retval = retval || Mobot_moveNB(comms, 8, 0, 8, 0); // move 8 degrees
+        #ifndef _WIN32
+        usleep(1000000);
+        #else
+        Sleep(1000);
+        #endif
+        retval = retval || Mobot_getJointAngle(comms, ROBOT_JOINT1, &gripperAngleNew); // get the new position
+		
+    }
+	retval = retval || Mobot_moveNB(comms, 8, 0, 8, 0);            // try to move another 8 degrees 
+    #ifndef _WIN32
+        usleep(1000000);
+    #else
+        Sleep(1000);
+    #endif            // closing for 1 second
+	retval = retval || Mobot_setMovementStateNB(comms, ROBOT_HOLD, ROBOT_HOLD, ROBOT_HOLD, ROBOT_HOLD); // hold the object
+	    return retval;
+}
+
+void* Mobot_closeGripperThread(void* arg)
+{
+  mobot_t* args = (mobot_t*)arg;
+  Mobot_closeGripper(args);
+  args->motionInProgress--;
+  return NULL;
+}
+
+int Mobot_closeGripperNB(mobot_t* comms)
+{
+  static void* args;
+  args = (void*)comms;
+  comms->motionInProgress++;
+  THREAD_CREATE(comms->thread, Mobot_closeGripperThread, args);
+  return 0;
+}
 

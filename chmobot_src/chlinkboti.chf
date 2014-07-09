@@ -3563,6 +3563,7 @@ int CLinkbotIGroup::driveForeverNB() {
     dlrunfun(fptr, &retval, NULL, this);
     return retval;
 }
+<<<<<<< HEAD
 int CLinkbotIGroup::driveAccelTimeNB(double radius, double acceleration, double time) {
     void *fptr;
     int retval;
@@ -3742,6 +3743,63 @@ int CLinkbotIGroup::driveAccelSmoothNB(double radius, double accel0, double acce
     return retval;
 }
 
+=======
+int CLinkbotIGroup::openGripper(double angle) //angle is in degrees
+{
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGI_openGripper_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, angle);
+    return retval;
+}
+
+int CLinkbotIGroup::openGripperNB(double angle) 
+{
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGI_openGripperNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, angle);
+    return retval;
+}
+
+int CLinkbotIGroup::closeGripper(void) 
+{
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGI_closeGripper_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this);
+    return retval;
+}
+
+int CLinkbotIGroup::closeGripperNB(void) 
+{
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGI_closeGripperNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this);
+    return retval;
+}
+>>>>>>> alex/f/gripperGroup
 
 /*Functions for compatibilty with RoboSim*/
 int CLinkbotI::getxy(double & x, double & y) {
@@ -3917,32 +3975,57 @@ int CLinkbotI::recordxyEnd(int &numpoints) {
 /*Gripper functions. Oly for Ch*/
 int CLinkbotI::openGripper(double angle) //angle is in degrees
 {
-    return moveTo(-angle/2, NaN, -angle/2);
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_openGripper_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, angle);
+    return retval;
 }
 
 int CLinkbotI::openGripperNB(double angle) 
 {
-    return moveToNB(-angle/2, NaN, -angle/2);
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_openGripperNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, angle);
+    return retval;
 }
 
 int CLinkbotI::closeGripper(void) 
 {
-    double gripperAngleOld= 0;
-    double gripperAngleNew;
+    void *fptr;
     int retval;
 
-    retval = getJointAngle(ROBOT_JOINT1, gripperAngleNew); // get the new position
-    /* Close the gripper to grab an object */
-    while(fabs(gripperAngleNew - gripperAngleOld) > 0.1) {
-        gripperAngleOld = gripperAngleNew;    // update the old position
-        retval = retval || getJointAngle(ROBOT_JOINT1, gripperAngleNew); // get the new position
-        retval = retval || moveNB(8, NaN, 8); // move 8 degrees
-        delaySeconds(1);              // closing for 1 second
-        retval = retval || getJointAngle(ROBOT_JOINT1, gripperAngleNew); // get the new position
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_closeGripper_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
     }
-    retval = retval || moveNB(8, NaN, 8);            // try to move another 8 degrees 
-    delaySeconds(1);              // closing for 1 second
-    retval = retval || setMovementStateNB(ROBOT_HOLD, NaN, ROBOT_HOLD); // hold the object
+    dlrunfun(fptr, &retval, NULL, this);
+    return retval;
+}
+
+int CLinkbotI::closeGripperNB(void) 
+{
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_closeGripperNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this);
     return retval;
 }
 

@@ -527,6 +527,27 @@ int CMobot::jumpJointToNB(robotJointId_t id, double angle)
 	return Mobot_driveJointToDirectNB(_comms, id, DEG2RAD(angle));
 }
 
+/*Gripper functions*/
+int CMobot::openGripper(double angle)
+{
+	return moveTo(-angle/2.0, 0, -angle/2.0, 0);
+}
+
+int CMobot::openGripperNB(double angle)
+{
+	return moveToNB(-angle/2.0, 0, -angle/2.0, 0);
+}
+
+int CMobot::closeGripper(void)
+{
+	
+	return Mobot_closeGripper(_comms);
+}
+
+int CMobot::closeGripperNB(void)
+{
+	return Mobot_closeGripperNB(_comms);
+}
 
 	
 

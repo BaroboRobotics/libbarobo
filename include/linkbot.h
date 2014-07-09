@@ -449,6 +449,7 @@ class CLinkbotI
 	int openGripper(double angle);
 	int openGripperNB(double angle);
 	int closeGripper(void);
+	int closeGripperNB(void);
 
   private:
     void* memholder1;
@@ -746,6 +747,7 @@ class CLinkbotL
 	int openGripper(double angle);
 	int openGripperNB(double angle);
 	int closeGripper(void);
+	int closeGripperNB(void);
 
   private:
     void* memholder1;
@@ -915,6 +917,10 @@ class CLinkbotIGroup
 	int accelJointCycloidalNB(robotJointId_t id, double angle, double time);
 	int accelJointHarmonicNB(robotJointId_t id, double angle, double time);
 
+	int openGripper(double angle);
+	int openGripperNB(double angle);
+	int closeGripper(void);
+	int closeGripperNB(void);
 
     CMobot **_robots2;
     int _numRobots;

@@ -935,6 +935,13 @@ class DLLIMPORT CMobot
     virtual int motionTumbleLeftNB(int num);
     virtual int motionUnstandNB();
     virtual int motionWait();
+
+	/*gripper functions*/
+	virtual int openGripper(double angle);
+	virtual int openGripperNB(double angle);
+	virtual int closeGripper(void);
+	virtual int closeGripperNB(void);
+
     virtual int systemTime(double &time);
     int transactMessage(int cmd, void* buf, int size);
   protected:
@@ -1118,6 +1125,12 @@ class CMobotGroup
 	int accelJointCycloidalNB(robotJointId_t id, double angle, double time);
 	int accelJointHarmonicNB(robotJointId_t id, double angle, double time);
 
+	/*gripper functions*/
+    int openGripper(double angle);
+	int openGripperNB(double angle);
+	int closeGripper(void);
+	int closeGripperNB(void);
+
   protected:
     CMobot **_robots;
     int _numRobots;
@@ -1159,6 +1172,10 @@ DLLIMPORT int Mobot_accelJointHarmonicNB(mobot_t* comms, robotJointId_t id, doub
 DLLIMPORT int Mobot_driveAccelHarmonicNB(mobot_t* comms, double radius, double distance, double time);
 
 DLLIMPORT int Mobot_blinkLED(mobot_t* comms, double delay, int numBlinks);
+/*Gripper functions*/
+DLLIMPORT int Mobot_closeGripper(mobot_t* comms);
+DLLIMPORT void* Mobot_closeGripperThread(void*);
+DLLIMPORT int Mobot_closeGripperNB(mobot_t* comms);
 DLLIMPORT int Mobot_connect(mobot_t* comms);
 DLLIMPORT int Mobot_connectWithTCP(mobot_t* comms);
 DLLIMPORT int Mobot_connectWithIPAddress(mobot_t* comms, const char address[], const char port[]);

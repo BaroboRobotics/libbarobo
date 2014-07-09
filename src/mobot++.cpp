@@ -312,3 +312,5 @@ void CMelody::addNote(const char* note, int divider)
 {
   Mobot_melodyAddNote(_head, note, divider);
 }
+
+
