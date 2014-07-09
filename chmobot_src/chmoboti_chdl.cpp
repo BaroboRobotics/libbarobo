@@ -4229,7 +4229,6 @@ EXPORTCH int CMGI_driveForeverNB_chdl(void *varg) {
     Ch_VaEnd(interp, ap);
     return retval;
 }
-<<<<<<< HEAD
 EXPORTCH int CMGI_driveAccelTimeNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -4237,22 +4236,29 @@ EXPORTCH int CMGI_driveAccelTimeNB_chdl(void *varg) {
     double radius;
     double acceleration;
     double timeout;
-=======
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
+    radius = Ch_VaArg(interp, ap, double);
+    acceleration = Ch_VaArg(interp, ap, double);
+    timeout = Ch_VaArg(interp, ap, double);
+    retval = mobot->driveAccelTimeNB(radius, acceleration, timeout);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
 EXPORTCH int CMGI_openGripperNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
 	double angle;
->>>>>>> alex/f/gripperGroup
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-<<<<<<< HEAD
-    radius = Ch_VaArg(interp, ap, double);
-    acceleration = Ch_VaArg(interp, ap, double);
-    timeout = Ch_VaArg(interp, ap, double);
-    retval = mobot->driveAccelTimeNB(radius, acceleration, timeout);
+	angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->openGripperNB(angle);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -4359,23 +4365,7 @@ EXPORTCH int CMGI_driveAccelToMaxSpeedNB_chdl(void *varg) {
     class CLinkbotIGroup *mobot;
     double radius;
     double acceleration;
-=======
-	angle = Ch_VaArg(interp, ap, double);
-    retval = mobot->openGripperNB(angle);
-    Ch_VaEnd(interp, ap);
-    return retval;
-}
-EXPORTCH int CMGI_openGripper_chdl(void *varg) {
-    ChInterp_t interp;
-    ChVaList_t ap;
-    class CLinkbotIGroup *mobot;
-	double angle;
->>>>>>> alex/f/gripperGroup
     int retval;
-
-    Ch_VaStart(interp, ap, varg);
-    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-<<<<<<< HEAD
     radius = Ch_VaArg(interp, ap, double);
     acceleration = Ch_VaArg(interp, ap, double);
     retval = mobot->driveAccelToMaxSpeedNB(radius, acceleration);
@@ -4383,6 +4373,20 @@ EXPORTCH int CMGI_openGripper_chdl(void *varg) {
     return retval;
 }
 
+EXPORTCH int CMGI_openGripper_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotIGroup *mobot;
+	double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
+	angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->openGripper(angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
 EXPORTCH int CMGI_driveAccelDistanceNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -4485,9 +4489,13 @@ EXPORTCH int CMGI_accelJointSmoothNB_chdl(void *varg) {
     double accelf;
     double vmax;
     double angle;
-=======
-	angle = Ch_VaArg(interp, ap, double);
-    retval = mobot->openGripper(angle);
+    int retval;
+    id = Ch_VaArg(interp, ap, int);
+    accel0 = Ch_VaArg(interp, ap, double);
+    accelf = Ch_VaArg(interp, ap, double);
+    vmax = Ch_VaArg(interp, ap, double);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->accelJointSmoothNB((robotJointId_t)id, accel0, accelf, vmax, angle);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -4495,18 +4503,11 @@ EXPORTCH int CMGI_closeGripper_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotIGroup *mobot;
->>>>>>> alex/f/gripperGroup
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-<<<<<<< HEAD
-    id = Ch_VaArg(interp, ap, int);
-    accel0 = Ch_VaArg(interp, ap, double);
-    accelf = Ch_VaArg(interp, ap, double);
-    vmax = Ch_VaArg(interp, ap, double);
-    angle = Ch_VaArg(interp, ap, double);
-    retval = mobot->accelJointSmoothNB((robotJointId_t)id, accel0, accelf, vmax, angle);
+    retval = mobot->closeGripper();
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -4519,30 +4520,28 @@ EXPORTCH int CMGI_driveAccelSmoothNB_chdl(void *varg) {
     double accelf;
     double vmax;
     double distance;
-=======
-    retval = mobot->closeGripper();
-    Ch_VaEnd(interp, ap);
-    return retval;
-}
-EXPORTCH int CMGI_closeGripperNB_chdl(void *varg) {
-    ChInterp_t interp;
-    ChVaList_t ap;
-    class CLinkbotIGroup *mobot;
->>>>>>> alex/f/gripperGroup
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
-<<<<<<< HEAD
     radius = Ch_VaArg(interp, ap, double);
     accel0 = Ch_VaArg(interp, ap, double);
     accelf = Ch_VaArg(interp, ap, double);
     vmax = Ch_VaArg(interp, ap, double);
     distance = Ch_VaArg(interp, ap, double);
     retval = mobot->driveAccelSmoothNB(radius, accel0, accelf, vmax, distance);
-=======
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int CMGI_closeGripperNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotIGroup *mobot;
+    int retval;
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotIGroup *);
     retval = mobot->closeGripperNB();
->>>>>>> alex/f/gripperGroup
     Ch_VaEnd(interp, ap);
     return retval;
 }
