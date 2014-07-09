@@ -3563,7 +3563,7 @@ int CLinkbotIGroup::driveForeverNB() {
     dlrunfun(fptr, &retval, NULL, this);
     return retval;
 }
-<<<<<<< HEAD
+
 int CLinkbotIGroup::driveAccelTimeNB(double radius, double acceleration, double time) {
     void *fptr;
     int retval;
@@ -3743,7 +3743,6 @@ int CLinkbotIGroup::driveAccelSmoothNB(double radius, double accel0, double acce
     return retval;
 }
 
-=======
 int CLinkbotIGroup::openGripper(double angle) //angle is in degrees
 {
     void *fptr;
@@ -3799,7 +3798,6 @@ int CLinkbotIGroup::closeGripperNB(void)
     dlrunfun(fptr, &retval, NULL, this);
     return retval;
 }
->>>>>>> alex/f/gripperGroup
 
 /*Functions for compatibilty with RoboSim*/
 int CLinkbotI::getxy(double & x, double & y) {
