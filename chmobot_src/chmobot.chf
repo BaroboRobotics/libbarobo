@@ -1487,6 +1487,18 @@ int CMobot::setMotorPower(int id, int power) {
     dlrunfun(fptr, &retval, setMotorPower, this, id, power);
     return retval;
 }
+int CMobot::setJointPower(int id, int power) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(g_chmobot_dlhandle, "setJointPower_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, setJointPower, this, id, power);
+    return retval;
+}
 int CMobot::setMovementStateNB(int dir1, int dir2, int dir3, int dir4) {
     void *fptr;
     int retval;

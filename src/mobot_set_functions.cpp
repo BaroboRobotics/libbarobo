@@ -343,6 +343,11 @@ int Mobot_setMotorPower(mobot_t* comms, robotJointId_t id, int power)
   return 0;
 }
 
+int Mobot_setJointPower(mobot_t* comms, robotJointId_t id, double power)
+{
+    return Mobot_setMotorPower(comms, id, power*255/100);
+}
+
 int Mobot_setMovementStateNB(mobot_t* comms,
                                   robotJointState_t dir1,
                                   robotJointState_t dir2,

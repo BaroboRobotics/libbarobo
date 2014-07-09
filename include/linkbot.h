@@ -372,6 +372,7 @@ class CLinkbotI
     int setJointSpeedRatio(robotJointId_t id, double ratio);
     int setJointSpeedRatios(double ratios1, double ratios2, double ratios3);
     int setMotorPower(robotJointId_t id, int power);
+    int setJointPower(robotJointId_t id, double power);
     int setMovementStateNB( robotJointState_t dir1,
         robotJointState_t dir2,
         robotJointState_t dir3);
@@ -691,6 +692,7 @@ class CLinkbotL
     int setJointSpeedRatio(robotJointId_t id, double ratio);
     int setJointSpeedRatios(double ratios1, double ratios2, double ratios3);
     int setMotorPower(robotJointId_t id, int power);
+    int setJointPower(robotJointId_t id, double power);
     int setMovementStateNB( robotJointState_t dir1,
         robotJointState_t dir2,
         robotJointState_t dir3);

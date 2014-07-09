@@ -611,6 +611,7 @@ class CMobot
     int setJointSpeedRatio(robotJointId_t id, double ratio);
     int setJointSpeedRatios(double ratios1, double ratios2, double ratios3, double ratios4);
     int setMotorPower(robotJointId_t id, int power);
+    int setJointPower(robotJointId_t id, double power);
     int setMovementStateNB( robotJointState_t dir1,
         robotJointState_t dir2,
         robotJointState_t dir3,
@@ -866,6 +867,7 @@ class DLLIMPORT CMobot
     virtual int setJointSpeedRatio(robotJointId_t id, double ratio);
     virtual int setJointSpeedRatios(double ratios1, double ratios2, double ratios3, double ratios4);
     virtual int setMotorPower(robotJointId_t id, int power);
+    virtual int setJointPower(robotJointId_t id, double power);
     virtual int setMovementStateNB( robotJointState_t dir1,
         robotJointState_t dir2,
         robotJointState_t dir3,
@@ -1532,6 +1534,7 @@ DLLIMPORT int Mobot_getJointSpeeds(mobot_t* comms,
                                    double *speed3, 
                                    double *speed4);
 DLLIMPORT int Mobot_setMotorPower(mobot_t* comms, robotJointId_t id, int power);
+DLLIMPORT int Mobot_setJointPower(mobot_t* comms, robotJointId_t id, double power);
 DLLIMPORT int Mobot_setMovementStateNB(mobot_t* comms,
                                   robotJointState_t dir1,
                                   robotJointState_t dir2,
