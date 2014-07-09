@@ -1013,24 +1013,17 @@ int CMobotGroup::driveBackwardNB(double angle)
 
 int CMobotGroup::openGripperNB(double angle)
 {
-	for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->openGripperNB(angle);
-  }
-  return 0;
+	return CMobotGroup::moveToNB(-angle/2.0, 0, -angle/2.0, 0);
 }
 
 int CMobotGroup::openGripper(double angle)
 {
-	for(int i = 0; i < _numRobots; i++) {
-    _robots[i]->openGripperNB(angle);
-  }
-  return moveWait();
+  return CMobotGroup::moveTo(-angle/2.0, 0, -angle/2.0, 0);
 }
 
 int CMobotGroup::closeGripper()
 {
 	for(int i = 0; i < _numRobots; i++) {
-	printf("Hello!\n");
     _robots[i]->closeGripperNB();
   }
   return moveWait();
