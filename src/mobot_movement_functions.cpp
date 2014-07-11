@@ -214,7 +214,7 @@ int Mobot_moveJointContinuousTime(mobot_t* comms, robotJointId_t id, robotJointS
 int Mobot_moveJoint(mobot_t* comms, robotJointId_t id, double angle)
 {
   Mobot_moveJointNB(comms, id, angle);
-  return Mobot_moveWait(comms);
+  return Mobot_moveJointWait(comms, id);
 }
 
 int Mobot_moveJointNB(mobot_t* comms, robotJointId_t id, double angle)
