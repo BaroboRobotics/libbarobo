@@ -89,6 +89,7 @@ endif()
 
 option(BUILD_SHARED_LIBS "build shared libraries" ${DEF_BUILD_SHARED_LIBS})
 add_library(${TARGET} ${SOURCES} $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:mxmlObjects>)
+add_library(${TARGET}Static STATIC ${SOURCES} $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:mxmlObjects>)
 
 target_link_libraries(${TARGET} ${LIBSFP_LIBRARIES} ${LIBSTKCOMMS_LIBRARIES})
 
@@ -171,9 +172,11 @@ endif()
 if(UNIX)
   set(INSTALL_LIB_DIR lib)
   set(INSTALL_BIN_DIR bin)
+  set(INSTALL_INCLUDE_DIR include)
 else()
   set(INSTALL_LIB_DIR .)
   set(INSTALL_BIN_DIR .)
+  set(INSTALL_INCLUDE_DIR .)
 endif()
 
 set(install_args)
@@ -184,7 +187,22 @@ endif()
 install(TARGETS ${TARGET}
   ${install_args}
   LIBRARY DESTINATION ${INSTALL_LIB_DIR}
-  RUNTIME DESTINATION ${INSTALL_BIN_DIR})
+  RUNTIME DESTINATION ${INSTALL_BIN_DIR}
+  )
+
+install(
+  FILES 
+  ${PROJECT_SOURCE_DIR}/include/BaroboConfigFile.h
+  ${PROJECT_SOURCE_DIR}/include/bdaddr.h
+  ${PROJECT_SOURCE_DIR}/include/donglefwd.h
+  ${PROJECT_SOURCE_DIR}/include/eventqueue.h
+  ${PROJECT_SOURCE_DIR}/include/linkbot.h
+  ${PROJECT_SOURCE_DIR}/include/mobot.h
+  ${PROJECT_SOURCE_DIR}/include/mobot_internal.h
+  ${PROJECT_SOURCE_DIR}/include/mxml.h
+  ${PROJECT_SOURCE_DIR}/include/thread_macros.h
+  DESTINATION ${INSTALL_INCLUDE_DIR}
+  )
 
 # TODO figure out what to do with the headers on install?
 #install(DIRECTORY ${PUBLIC_INCLUDE_DIR} DESTINATION .)

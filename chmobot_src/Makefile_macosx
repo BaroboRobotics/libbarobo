@@ -11,7 +11,7 @@ CFLAGS="-I/usr/local/ch/extern/include -I../include"
 
 LFLAGS=-L../ -L../BaroboConfigFile -L../BaroboConfigFile/mxml-2.7
 
-LIBS=-lbaroboStatic -lpthread -lbaroboconfigfile -lmxml -lchsdk
+LIBS=-lbaroboStatic -lpthread -lchsdk -framework CoreFoundation -framework IOKit
 
 
 target: libmobot.dl
