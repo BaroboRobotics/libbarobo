@@ -445,6 +445,54 @@ int CLinkbotI::jumpJointToNB(int id, double angle) {
     dlrunfun(fptr, &retval, NULL, this, id, angle);
     return retval;
 }
+int CLinkbotI::moveToByTrackPos(double angle1, double angle2, double angle3) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_moveToByTrackPos_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, angle1, angle2, angle3);
+    return retval;
+}
+int CLinkbotI::moveToByTrackPosNB(double angle1, double angle2, double angle3) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_moveToByTrackPosNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, angle1, angle2, angle3);
+    return retval;
+}
+int CLinkbotI::moveJointToByTrackPos(int id, double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_moveJointToByTrackPos_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, angle);
+    return retval;
+}
+int CLinkbotI::moveJointToByTrackPosNB(int id, double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_moveJointToByTrackPosNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, angle);
+    return retval;
+}
 int CLinkbotI::driveToDirectNB(double angle1, double angle2, double angle3) {
     void *fptr;
     int retval;
@@ -1927,6 +1975,18 @@ int CLinkbotI::setJointPower(int id, double power) {
     dlrunfun(fptr, &retval, setJointPower, this, id, power);
     return retval;
 }
+int CLinkbotI::moveJointByPowerNB(int id, double power) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_moveJointByPowerNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveJointByPowerNB, this, id, power);
+    return retval;
+}
 int CLinkbotI::setMovementStateNB(int dir1, int dir2, int dir3) {
     void *fptr;
     int retval;
@@ -2541,6 +2601,66 @@ int CLinkbotIGroup::jumpJointToNB(int id, double angle) {
     int retval;
 
     fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGI_jumpJointToNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, angle);
+    return retval;
+}
+int CLinkbotIGroup::moveToByTrackPos(double angle1, double angle2, double angle3) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGI_moveToByTrackPos_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, angle1, angle2, angle3);
+    return retval;
+}
+int CLinkbotIGroup::moveToByTrackPosNB(double angle1, double angle2, double angle3) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGI_moveToByTrackPosNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, angle1, angle2, angle3);
+    return retval;
+}
+int CLinkbotIGroup::moveJointByPowerNB(int id, double power) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGI_moveJointByPowerNB_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, moveJointByPowerNB, this, id, power);
+    return retval;
+}
+int CLinkbotIGroup::moveJointToByTrackPos(int id, double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGI_moveJointToByTrackPos_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, NULL, this, id, angle);
+    return retval;
+}
+int CLinkbotIGroup::moveJointToByTrackPosNB(int id, double angle) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "CMGI_moveJointToByTrackPosNB_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;

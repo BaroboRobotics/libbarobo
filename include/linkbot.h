@@ -296,6 +296,7 @@ class CLinkbotI
     int moveDistanceNB(double distance, double radius);
     int moveForward(double angle);
     int moveForwardNB(double angle);
+	int moveJointByPowerNB(robotJointId_t id, double power);
     int moveJointContinuousNB(robotJointId_t id, robotJointState_t dir);
     int moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, double seconds);
     int moveJoint(robotJointId_t id, double angle);
@@ -309,6 +310,12 @@ class CLinkbotI
     int moveToDirect(double angle1, double angle2, double angle3);
     int moveToNB(double angle1, double angle2, double angle3);
     int moveToDirectNB(double angle1, double angle2, double angle3);
+	/*Functions with the same functionality as jump()*/
+	int moveToByTrackPos(double angle1, double angle2, double angle3);
+	int moveToByTrackPosNB(double angle1, double angle2, double angle3);
+	int moveJointToByTrackPos(robotJointId_t id, double angle);
+	int moveJointToByTrackPosNB(robotJointId_t id, double angle);
+    /*end*/
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
@@ -586,6 +593,7 @@ class CLinkbotL
                            robotJointState_t dir2, 
                            robotJointState_t dir3, 
                            double seconds);
+	int moveJointByPowerNB(robotJointId_t id, double power);
     int moveJointContinuousNB(robotJointId_t id, robotJointState_t dir);
     int moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, double seconds);
     int moveJoint(robotJointId_t id, double angle);
@@ -599,6 +607,10 @@ class CLinkbotL
     int moveToDirect(double angle1, double angle2, double angle3);
     int moveToNB(double angle1, double angle2, double angle3);
     int moveToDirectNB(double angle1, double angle2, double angle3);
+	int moveToByTrackPos(double angle1, double angle2, double angle3);
+	int moveToByTrackPosNB(double angle1, double angle2, double angle3);
+	int moveJointToByTrackPos(robotJointId_t id, double angle);
+	int moveJointToByTrackPosNB(robotJointId_t id, double angle);
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
@@ -815,6 +827,7 @@ class CLinkbotIGroup
     int moveDistanceNB(double distance, double radius);
     int moveForward(double angle);
     int moveForwardNB(double angle);
+	int moveJointByPowerNB(robotJointId_t id, double power);
     int moveJointContinuousNB(robotJointId_t id, robotJointState_t dir);
     int moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, double seconds);
     int moveJointTo(robotJointId_t id, double angle);
@@ -826,6 +839,10 @@ class CLinkbotIGroup
     int moveToDirect(double angle1, double angle2, double angle3);
     int moveToNB(double angle1, double angle2, double angle3);
     int moveToDirectNB(double angle1, double angle2, double angle3);
+	int moveToByTrackPos(double angle1, double angle2, double angle3);
+	int moveToByTrackPosNB(double angle1, double angle2, double angle3);
+	int moveJointToByTrackPos(robotJointId_t id, double angle);
+	int moveJointToByTrackPosNB(robotJointId_t id, double angle);
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
@@ -956,6 +973,12 @@ class CLinkbotIGroup : public CMobotGroup
 	int jumpJointToNB(robotJointId_t id, double angle);
     int move(double angle1, double angle2, double angle3);
     int moveNB(double angle1, double angle2, double angle3);
+	/*rename of jump functions*/
+	int moveToByTrackPos(double angle1, double angle2, double angle3);
+	int moveToByTrackPosNB(double angle1, double angle2, double angle3);
+	int moveJointToByTrackPos(robotJointId_t id, double angle);
+	int moveJointToByTrackPosNB(robotJointId_t id, double angle);
+	int moveJointByPowerNB(robotJointId_t id, double power);
     int moveContinuousNB(robotJointState_t dir1, 
                        robotJointState_t dir2, 
                        robotJointState_t dir3);
@@ -1046,6 +1069,7 @@ class CLinkbotLGroup
 	int jumpJointToNB(robotJointId_t id, double angle);
     int move(double angle1, double angle2, double angle3);
     int moveNB(double angle1, double angle2, double angle3);
+	int moveJointByPowerNB(robotJointId_t id, double power);
     int moveContinuousNB(robotJointState_t dir1, 
                        robotJointState_t dir2, 
                        robotJointState_t dir3);
@@ -1064,6 +1088,10 @@ class CLinkbotLGroup
     int moveToDirect(double angle1, double angle2, double angle3);
     int moveToNB(double angle1, double angle2, double angle3);
     int moveToDirectNB(double angle1, double angle2, double angle3);
+	int moveToByTrackPos(double angle1, double angle2, double angle3);
+	int moveToByTrackPosNB(double angle1, double angle2, double angle3);
+	int moveJointToByTrackPos(robotJointId_t id, double angle);
+	int moveJointToByTrackPosNB(robotJointId_t id, double angle);
     int moveWait();
     int moveToZero();
     int moveToZeroNB();

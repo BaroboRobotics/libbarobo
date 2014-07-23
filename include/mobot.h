@@ -801,6 +801,7 @@ class DLLIMPORT CMobot
     virtual int moveDistanceNB(double distance, double radius);
     virtual int moveForward(double angle);
     virtual int moveForwardNB(double angle);
+	virtual int moveJointByPowerNB(robotJointId_t id, double power);
     virtual int moveJointContinuousNB(robotJointId_t id, robotJointState_t dir);
     virtual int moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, double seconds);
     virtual int moveJoint(robotJointId_t id, double angle);
@@ -817,6 +818,12 @@ class DLLIMPORT CMobot
     virtual int moveWait();
     virtual int moveToZero();
     virtual int moveToZeroNB();
+	/*Functions with the same functionality as jump()*/
+	virtual int moveToByTrackPos(double angle1, double angle2, double angle3, double angle4);
+	virtual int moveToByTrackPosNB(double angle1, double angle2, double angle3, double angle4);
+	virtual int moveJointToByTrackPos(robotJointId_t id, double angle);
+	virtual int moveJointToByTrackPosNB(robotJointId_t id, double angle);
+    /*end*/
     virtual int movexy(double x, double y, double radius, double trackwidth);
     virtual int movexyNB(double x, double y, double radius, double trackwidth);
     virtual int recordAngle(robotJointId_t id, double time[], double angle[], int num, double seconds, int shiftData = 1);
@@ -1132,6 +1139,7 @@ class CMobotGroup
 	int openGripperNB(double angle);
 	int closeGripper(void);
 	int closeGripperNB(void);
+    
 
   protected:
     CMobot **_robots;
