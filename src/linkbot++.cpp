@@ -41,24 +41,24 @@ int CLinkbot::getBatteryVoltage(double &voltage)
   return Mobot_getBatteryVoltage(_comms, &voltage);
 }
 
-int CLinkbot::LinkPodAnalogRead(int pin)
+int CLinkbot::analogRead(int pin)
 {
     int value;
-	Mobot_LinkPodAnalogRead(_comms, pin, &value);
+	Mobot_analogRead(_comms, pin, &value);
 	return value;
 }
 
-double CLinkbot::LinkPodAnalogReadVolts(int pin)
+double CLinkbot::analogReadVolts(int pin)
 {
     double volts;
-	Mobot_LinkPodAnalogReadVolts(_comms, pin, &volts);
+	Mobot_analogReadVolts(_comms, pin, &volts);
 	return volts;
 }
 
-int CLinkbot::LinkPodDigitalRead(int pin)
+int CLinkbot::digitalRead(int pin)
 {
     int value;
-	Mobot_LinkPodDigitalRead(_comms, pin, &value);
+	Mobot_digitalRead(_comms, pin, &value);
 	return value;
 }
 
@@ -355,24 +355,24 @@ int CLinkbot::recordDistancesBegin(
     shiftData);
 }
 
-int CLinkbot::LinkPodAnalogWrite(int pin, int value)
+int CLinkbot::analogWrite(int pin, int value)
 {
-  return Mobot_LinkPodAnalogWrite(_comms, pin, value);
+  return Mobot_analogWrite(_comms, pin, value);
 }
 
-int CLinkbot::LinkPodAnalogReference(int ref)
+int CLinkbot::analogReference(int ref)
 {
-  return Mobot_LinkPodAnalogReference(_comms, ref);
+  return Mobot_analogReference(_comms, ref);
 }
 
-int CLinkbot::LinkPodDigitalWrite(int pin, int value)
+int CLinkbot::digitalWrite(int pin, int value)
 {
-  return Mobot_LinkPodDigitalWrite(_comms, pin, value);
+  return Mobot_digitalWrite(_comms, pin, value);
 }
 
-int CLinkbot::LinkPodPinMode(int pin, int mode)
+int CLinkbot::pinMode(int pin, int mode)
 {
-  return Mobot_LinkPodPinMode(_comms, pin, mode);
+  return Mobot_pinMode(_comms, pin, mode);
 }
 
 int CLinkbot::setBuzzerFrequency(int frequency, double time)

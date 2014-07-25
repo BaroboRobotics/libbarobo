@@ -69,7 +69,7 @@
 #define DEPRECATED(from, to) \
   fprintf(stderr, "Warning: The function \"%s()\" is deprecated. Please use \"%s()\"\n" , from, to)
 
-int Mobot_LinkPodAnalogRead(mobot_t* comms, int adc, int* value)
+int Mobot_analogRead(mobot_t* comms, int adc, int* value)
 {
   uint8_t buf[32];
   uint8_t incoming[2];
@@ -84,17 +84,17 @@ int Mobot_LinkPodAnalogRead(mobot_t* comms, int adc, int* value)
   return 0;
 }
 
-int Mobot_LinkPodAnalogReadVolts(mobot_t* comms, int adc, double *volts)
+int Mobot_analogReadVolts(mobot_t* comms, int adc, double *volts)
 {
   int value;
   int rc;
-  rc = Mobot_LinkPodAnalogRead(comms, adc, &value);
+  rc = Mobot_analogRead(comms, adc, &value);
   if(rc) return rc;
   *volts = ((double)value)/1024.0 * 5.0;
   return 0;
 }
 
-int Mobot_LinkPodDigitalRead(mobot_t* comms, int pin, int *value)
+int Mobot_digitalRead(mobot_t* comms, int pin, int *value)
 {
   uint8_t incoming;
   uint8_t buf[32];

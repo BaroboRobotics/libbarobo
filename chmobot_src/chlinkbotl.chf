@@ -427,11 +427,11 @@ int CLinkbotL::getBatteryVoltage(double & voltage) {
     dlrunfun(fptr, &retval, NULL, this, &voltage);
     return retval;
 }
-int CLinkbotL::LinkPodAnalogRead(int pin) {
+int CLinkbotL::analogRead(int pin) {
     void *fptr;
     int retval;
 
-    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_LinkPodAnalogRead_chdl");
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_analogRead_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
@@ -439,24 +439,12 @@ int CLinkbotL::LinkPodAnalogRead(int pin) {
     dlrunfun(fptr, &retval, NULL, this, pin);
     return retval;
 }
-/*int CLinkbotL::LinkPodAnalogReadVolts(int adc, double & volts) {
-    void *fptr;
-    int retval;
 
-    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_LinkPodAnalogReadVolts_chdl");
-    if(fptr == NULL) {
-        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
-        return -1;
-    }
-    dlrunfun(fptr, &retval, NULL, this, adc, &volts);
-    return retval;
-}*/
-
-double CLinkbotL::LinkPodAnalogReadVolts(int pin) {
+double CLinkbotL::analogReadVolts(int pin) {
     void *fptr;
     double retval;
 
-    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_LinkPodAnalogReadVolts_chdl");
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_analogReadVolts_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
@@ -464,11 +452,11 @@ double CLinkbotL::LinkPodAnalogReadVolts(int pin) {
     dlrunfun(fptr, &retval, NULL, this, pin);
     return retval;
 }
-int CLinkbotL::LinkPodDigitalRead(int pin) {
+int CLinkbotL::digitalRead(int pin) {
     void *fptr;
     int retval;
 
-    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_LinkPodDigitalRead_chdl");
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_digitalRead_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
@@ -1300,55 +1288,55 @@ int CLinkbotL::resetToZeroNB() {
     return retval;
 }
 
-int CLinkbotL::LinkPodAnalogWrite(int pin, int value) {
+int CLinkbotL::analogWrite(int pin, int value) {
     void *fptr;
     int retval;
 
-    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_LinkPodAnalogWrite_chdl");
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_analogWrite_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, LinkPodAnalogWrite, this, pin, value);
+    dlrunfun(fptr, &retval, analogWrite, this, pin, value);
     return retval;
 }
 
-int CLinkbotL::LinkPodAnalogReference(int ref) {
+int CLinkbotL::analogReference(int ref) {
     void *fptr;
     int retval;
 
-    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_LinkPodAnalogReference_chdl");
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_analogReference_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, LinkPodAnalogReference, this, ref);
+    dlrunfun(fptr, &retval, analogReference, this, ref);
     return retval;
 }
 
-int CLinkbotL::LinkPodDigitalWrite(int pin, int value) {
+int CLinkbotL::digitalWrite(int pin, int value) {
     void *fptr;
     int retval;
 
-    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_LinkPodDigitalWrite_chdl");
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_digitalWrite_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, LinkPodDigitalWrite, this, pin, value);
+    dlrunfun(fptr, &retval, digitalWrite, this, pin, value);
     return retval;
 }
 
-int CLinkbotL::LinkPodPinMode(int pin, int mode) {
+int CLinkbotL::pinMode(int pin, int mode) {
     void *fptr;
     int retval;
 
-    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_LinkPodPinMode_chdl");
+    fptr = dlsym(CMobot::g_chmobot_dlhandle, "LinkbotI_pinMode_chdl");
     if(fptr == NULL) {
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, LinkPodPinMode, this, pin, mode);
+    dlrunfun(fptr, &retval, pinMode, this, pin, mode);
     return retval;
 }
 
