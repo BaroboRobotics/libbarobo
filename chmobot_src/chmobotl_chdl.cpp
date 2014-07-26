@@ -375,56 +375,47 @@ EXPORTCH int LinkbotL_getBatteryVoltage_chdl(void *varg) {
     return retval;
 }
 
-EXPORTCH int LinkbotL_LinkPodAnalogRead_chdl(void *varg) {
+EXPORTCH int LinkbotL_analogRead_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotL *mobot;
     int pin;
-    //int * value;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
     pin = Ch_VaArg(interp, ap, int );
-    //value = Ch_VaArg(interp, ap, int *);
-    //retval = mobot->LinkPodAnalogRead(pin, *value);
-	retval = mobot->LinkPodAnalogRead(pin);
+	retval = mobot->analogRead(pin);
     Ch_VaEnd(interp, ap);
     return retval;
 }
 
-EXPORTCH double LinkbotL_LinkPodAnalogReadVolts_chdl(void *varg) {
+EXPORTCH double LinkbotL_analogReadVolts_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotL *mobot;
     int pin;
-    //double * value;
     double retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
     pin = Ch_VaArg(interp, ap, int );
-    //value = Ch_VaArg(interp, ap, double *);
-    //retval = mobot->LinkPodAnalogReadVolts(pin, *value);
-	retval = mobot->LinkPodAnalogReadVolts(pin);
+	retval = mobot->analogReadVolts(pin);
     Ch_VaEnd(interp, ap);
     return retval;
 }
 
-EXPORTCH int LinkbotL_LinkPodDigitalRead_chdl(void *varg) {
+EXPORTCH int LinkbotL_digitalRead_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotL *mobot;
     int pin;
-    //int * value;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
     pin = Ch_VaArg(interp, ap, int );
-    //value = Ch_VaArg(interp, ap, int *);
-    //retval = mobot->LinkPodDigitalRead(pin, *value);
-	retval = mobot->LinkPodDigitalRead(pin);
+	retval = mobot->digitalRead(pin);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -1133,6 +1124,74 @@ EXPORTCH int LinkbotL_jumpJointToNB_chdl(void *varg) {
     Ch_VaEnd(interp, ap);
     return retval;
 }
+EXPORTCH int LinkbotL_moveToByTrackPos_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    double angle1;
+    double angle2;
+    double angle3;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    angle1 = Ch_VaArg(interp, ap, double);
+    angle2 = Ch_VaArg(interp, ap, double);
+    angle3 = Ch_VaArg(interp, ap, double);
+    retval = mobot->moveToByTrackPos(angle1, angle2, angle3, 0);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int LinkbotL_moveToByTrackPosNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    double angle1;
+    double angle2;
+    double angle3;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    angle1 = Ch_VaArg(interp, ap, double);
+    angle2 = Ch_VaArg(interp, ap, double);
+    angle3 = Ch_VaArg(interp, ap, double);
+    retval = mobot->moveToByTrackPosNB(angle1, angle2, angle3, 0);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int LinkbotL_moveJointToByTrackPos_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    robotJointId_t id;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->moveJointToByTrackPos(id, angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int LinkbotL_moveJointToByTrackPosNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    robotJointId_t id;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->moveJointToByTrackPosNB(id, angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
 
 EXPORTCH int LinkbotL_moveToNB_chdl(void *varg) {
     ChInterp_t interp;
@@ -1581,7 +1640,7 @@ EXPORTCH int LinkbotL_resetToZeroNB_chdl(void *varg) {
     return retval;
 }
 
-EXPORTCH int LinkbotL_LinkPodAnalogWrite_chdl(void *varg) {
+EXPORTCH int LinkbotL_analogWrite_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotL *mobot;
@@ -1593,12 +1652,12 @@ EXPORTCH int LinkbotL_LinkPodAnalogWrite_chdl(void *varg) {
     mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
     pin = Ch_VaArg(interp, ap, int);
     value = Ch_VaArg(interp, ap, int);
-    retval = mobot->LinkPodAnalogWrite(pin, value);
+    retval = mobot->analogWrite(pin, value);
     Ch_VaEnd(interp, ap);
     return retval;
 }
 
-EXPORTCH int LinkbotL_LinkPodAnalogReference_chdl(void *varg) {
+EXPORTCH int LinkbotL_analogReference_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotL *mobot;
@@ -1608,29 +1667,12 @@ EXPORTCH int LinkbotL_LinkPodAnalogReference_chdl(void *varg) {
     Ch_VaStart(interp, ap, varg);
     mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
     value = Ch_VaArg(interp, ap, int);
-    retval = mobot->LinkPodAnalogReference(value);
+    retval = mobot->analogReference(value);
     Ch_VaEnd(interp, ap);
     return retval;
 }
 
-EXPORTCH int LinkbotL_LinkPodDigitalWrite_chdl(void *varg) {
-    ChInterp_t interp;
-    ChVaList_t ap;
-    class CLinkbotL *mobot;
-    int pin;
-    int value;
-    int retval;
-
-    Ch_VaStart(interp, ap, varg);
-    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
-    pin = Ch_VaArg(interp, ap, int);
-    value = Ch_VaArg(interp, ap, int);
-    retval = mobot->LinkPodDigitalWrite(pin, value);
-    Ch_VaEnd(interp, ap);
-    return retval;
-}
-
-EXPORTCH int LinkbotL_LinkPodPinMode_chdl(void *varg) {
+EXPORTCH int LinkbotL_digitalWrite_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
     class CLinkbotL *mobot;
@@ -1642,7 +1684,24 @@ EXPORTCH int LinkbotL_LinkPodPinMode_chdl(void *varg) {
     mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
     pin = Ch_VaArg(interp, ap, int);
     value = Ch_VaArg(interp, ap, int);
-    retval = mobot->LinkPodPinMode(pin, value);
+    retval = mobot->digitalWrite(pin, value);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+
+EXPORTCH int LinkbotL_pinMode_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    int pin;
+    int value;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    pin = Ch_VaArg(interp, ap, int);
+    value = Ch_VaArg(interp, ap, int);
+    retval = mobot->pinMode(pin, value);
     Ch_VaEnd(interp, ap);
     return retval;
 }
@@ -1944,6 +2003,22 @@ EXPORTCH int LinkbotL_setJointPower_chdl(void *varg) {
     Ch_VaEnd(interp, ap);
     return retval;
 }
+EXPORTCH int LinkbotL_moveJointByPowerNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotL *mobot;
+    robotJointId_t id;
+    double power;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotL *);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
+    power = Ch_VaArg(interp, ap, double);
+    retval = mobot->moveJointByPowerNB(id, power);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
 
 EXPORTCH int LinkbotL_setMovementStateNB_chdl(void *varg) {
     ChInterp_t interp;
@@ -2222,6 +2297,42 @@ EXPORTCH int CMGL_jumpTo_chdl(void *varg) {
     Ch_VaEnd(interp, ap);
     return retval;
 }
+EXPORTCH int CMGL_moveToByTrackPos_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotLGroup *mobot;
+    double angle1;
+    double angle2;
+    double angle3;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotLGroup *);
+    angle1 = Ch_VaArg(interp, ap, double);
+    angle2 = Ch_VaArg(interp, ap, double);
+    angle3 = Ch_VaArg(interp, ap, double);
+    retval = mobot->moveToByTrackPos(angle1, angle2, angle3);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int CMGL_moveToByTrackPosNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotLGroup *mobot;
+    double angle1;
+    double angle2;
+    double angle3;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotLGroup *);
+    angle1 = Ch_VaArg(interp, ap, double);
+    angle2 = Ch_VaArg(interp, ap, double);
+    angle3 = Ch_VaArg(interp, ap, double);
+    retval = mobot->moveToByTrackPosNB(angle1, angle2, angle3);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
 EXPORTCH int CMGL_driveToDirectNB_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;
@@ -2325,7 +2436,54 @@ EXPORTCH int CMGL_jumpJointToNB_chdl(void *varg) {
     Ch_VaEnd(interp, ap);
     return retval;
 }
+EXPORTCH int CMGL_moveJointToByTrackPos_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotLGroup *mobot;
+    robotJointId_t id;
+    double angle;
+    int retval;
 
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotLGroup *);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->moveJointToByTrackPos(id, angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int CMGL_moveJointToByTrackPosNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotLGroup *mobot;
+    robotJointId_t id;
+    double angle;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotLGroup *);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
+    angle = Ch_VaArg(interp, ap, double);
+    retval = mobot->moveJointToByTrackPosNB(id, angle);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
+EXPORTCH int CMGL_moveJointByPowerNB_chdl(void *varg) {
+    ChInterp_t interp;
+    ChVaList_t ap;
+    class CLinkbotLGroup *mobot;
+    robotJointId_t id;
+    double power;
+    int retval;
+
+    Ch_VaStart(interp, ap, varg);
+    mobot = Ch_VaArg(interp, ap, class CLinkbotLGroup *);
+    id = Ch_VaArg(interp, ap, robotJointId_t);
+    power = Ch_VaArg(interp, ap, double);
+    retval = mobot->moveJointByPowerNB(id, power);
+    Ch_VaEnd(interp, ap);
+    return retval;
+}
 EXPORTCH int CMGL_isMoving_chdl(void *varg) {
     ChInterp_t interp;
     ChVaList_t ap;

@@ -74,19 +74,22 @@ int CLinkbotIGroup::driveTo(double angle1, double angle2, double angle3)
 }
 int CLinkbotIGroup::jumpTo(double angle1, double angle2, double angle3)
 {
+  DEPRECATED("jumpTo", "moveToByTrackPos");
   driveToDirectNB(angle1, angle2, angle3);
   return moveWait();
 }
 int CLinkbotIGroup::jumpJointTo(robotJointId_t id, double angle)
 {
-   for(int i = 0; i < _numRobots; i++) {
+  DEPRECATED("jumpJointTo", "moveJointToByTrackPos"); 
+  for(int i = 0; i < _numRobots; i++) {
     _robots[i]->jumpJointToNB(id, angle);
   }
   return moveWait();
 }
 int CLinkbotIGroup::jumpJointToNB(robotJointId_t id, double angle)
 {
-   for(int i = 0; i < _numRobots; i++) {
+   DEPRECATED("jumpJointToNB", "moveJointToByTrackPosNB");
+	for(int i = 0; i < _numRobots; i++) {
     _robots[i]->jumpJointToNB(id, angle);
   }
   return 0;
@@ -110,6 +113,7 @@ int CLinkbotIGroup::driveToNB(double angle1, double angle2, double angle3)
 }
 int CLinkbotIGroup::jumpToNB(double angle1, double angle2, double angle3)
 {
+	DEPRECATED("jumpToNB", "moveToByTrackPosNB");
 	for(int i = 0; i < _numRobots; i++) {
     _robots[i]->driveToDirectNB(angle1, angle2, angle3);
   }
@@ -362,3 +366,38 @@ int CLinkbotIGroup::driveForeverNB()
   }
   return 0;
 } 
+
+int CLinkbotIGroup::moveToByTrackPos(double angle1, double angle2, double angle3)
+{
+  driveToDirectNB(angle1, angle2, angle3);
+  return moveWait();
+}
+int CLinkbotIGroup::moveToByTrackPosNB(double angle1, double angle2, double angle3)
+{
+  driveToDirectNB(angle1, angle2, angle3);
+  return 0;
+}
+int CLinkbotIGroup::moveJointToByTrackPos(robotJointId_t id, double angle)
+{
+  for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->jumpJointToNB(id, angle);
+  }
+  return moveWait();
+}
+int CLinkbotIGroup::moveJointToByTrackPosNB(robotJointId_t id, double angle)
+{
+	for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->jumpJointToNB(id, angle);
+  }
+  return 0;
+}
+
+int CLinkbotIGroup::moveJointByPowerNB(robotJointId_t id, double power)
+{
+	for(int i = 0; i < _numRobots; i++) {
+    _robots[i]->moveJointByPowerNB(id, power);
+  }
+  return 0;
+}
+
+

@@ -233,13 +233,13 @@ typedef enum mobotFormFactor_e
 #define AREF_INTERNAL2V56  0x03
 #define AREF_EXTERNAL  0x04
 
-#define PINMODE_INPUT  0x00
-#define PINMODE_OUTPUT  0x01
-#define PINMODE_INPUTPULLUP  0x02
+#define INPUT  0x00
+#define OUTPUT  0x01
+#define INPUTPULLUP  0x02
 
 //new
-#define DIGITAL_LOW	  0x00
-#define DIGITAL_HIGH  0x01
+#define LOW	  0x00
+#define HIGH  0x01
 
 #define SENDBUF_SIZE 512
 
@@ -801,6 +801,7 @@ class DLLIMPORT CMobot
     virtual int moveDistanceNB(double distance, double radius);
     virtual int moveForward(double angle);
     virtual int moveForwardNB(double angle);
+	virtual int moveJointByPowerNB(robotJointId_t id, double power);
     virtual int moveJointContinuousNB(robotJointId_t id, robotJointState_t dir);
     virtual int moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, double seconds);
     virtual int moveJoint(robotJointId_t id, double angle);
@@ -817,6 +818,12 @@ class DLLIMPORT CMobot
     virtual int moveWait();
     virtual int moveToZero();
     virtual int moveToZeroNB();
+	/*Functions with the same functionality as jump()*/
+	virtual int moveToByTrackPos(double angle1, double angle2, double angle3, double angle4);
+	virtual int moveToByTrackPosNB(double angle1, double angle2, double angle3, double angle4);
+	virtual int moveJointToByTrackPos(robotJointId_t id, double angle);
+	virtual int moveJointToByTrackPosNB(robotJointId_t id, double angle);
+    /*end*/
     virtual int movexy(double x, double y, double radius, double trackwidth);
     virtual int movexyNB(double x, double y, double radius, double trackwidth);
     virtual int recordAngle(robotJointId_t id, double time[], double angle[], int num, double seconds, int shiftData = 1);
@@ -1132,6 +1139,7 @@ class CMobotGroup
 	int openGripperNB(double angle);
 	int closeGripper(void);
 	int closeGripperNB(void);
+    
 
   protected:
     CMobot **_robots;
@@ -1308,9 +1316,9 @@ DLLIMPORT int Mobot_protocolVersion();
 #endif
 DLLIMPORT int Mobot_getAccelerometerData(mobot_t* comms, double *accel_x, double *accel_y, double *accel_z);
 DLLIMPORT int Mobot_getBatteryVoltage(mobot_t* comms, double *voltage);
-DLLIMPORT int Mobot_LinkPodAnalogRead(mobot_t* comms, int adc, int* value);
-DLLIMPORT int Mobot_LinkPodAnalogReadVolts(mobot_t* comms, int adc, double *volts);
-DLLIMPORT int Mobot_LinkPodDigitalRead(mobot_t* comms, int pin, int *value);
+DLLIMPORT int Mobot_analogRead(mobot_t* comms, int adc, int* value);
+DLLIMPORT int Mobot_analogReadVolts(mobot_t* comms, int adc, double *volts);
+DLLIMPORT int Mobot_digitalRead(mobot_t* comms, int pin, int *value);
 DLLIMPORT int Mobot_getButtonVoltage(mobot_t* comms, double *voltage);
 DLLIMPORT int Mobot_getChildrenInfo(mobot_t* comms, mobotInfo_t **mobotInfo, int *numChildren );
 DLLIMPORT int Mobot_getColorRGB(mobot_t* comms, int *r, int *g, int *b);
@@ -1503,10 +1511,10 @@ DLLIMPORT int Mobot_setExitState(mobot_t* comms, robotJointState_t exitState);
 DLLIMPORT int Mobot_setFourierCoefficients(mobot_t* comms, robotJointId_t id, double* a, double* b);
 DLLIMPORT int Mobot_beginFourierControl(mobot_t* comms, uint8_t motorMask);
 DLLIMPORT int Mobot_setHWRev(mobot_t* comms, uint8_t rev);
-DLLIMPORT int Mobot_LinkPodAnalogWrite(mobot_t* comms, int pin, int value);
-DLLIMPORT int Mobot_LinkPodAnalogReference(mobot_t* comms, int ref);
-DLLIMPORT int Mobot_LinkPodDigitalWrite(mobot_t* comms, int pin, int value);
-DLLIMPORT int Mobot_LinkPodPinMode(mobot_t* comms, int pin, int mode);
+DLLIMPORT int Mobot_analogWrite(mobot_t* comms, int pin, int value);
+DLLIMPORT int Mobot_analogReference(mobot_t* comms, int ref);
+DLLIMPORT int Mobot_digitalWrite(mobot_t* comms, int pin, int value);
+DLLIMPORT int Mobot_pinMode(mobot_t* comms, int pin, int mode);
 DLLIMPORT int Mobot_setBuzzerFrequency(mobot_t* comms, unsigned int frequency, double time);
 DLLIMPORT int Mobot_setBuzzerFrequencyOn(mobot_t* comms, unsigned int frequency);
 DLLIMPORT int Mobot_setBuzzerFrequencyOff(mobot_t* comms);

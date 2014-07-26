@@ -496,6 +496,7 @@ int CMobot::jumpTo( double angle1,
                           double angle3,
                           double angle4)
 {
+	DEPRECATED("jumpTo", "moveToByTrackPos");
 	return Mobot_driveToDirect(
       _comms, 
       DEG2RAD(angle1), 
@@ -509,6 +510,7 @@ int CMobot::jumpToNB( double angle1,
                           double angle3,
                           double angle4)
 {
+	DEPRECATED("jumpToNB", "moveToByTrackPosNB");
 	return Mobot_driveToDirectNB(
       _comms, 
       DEG2RAD(angle1), 
@@ -519,11 +521,13 @@ int CMobot::jumpToNB( double angle1,
 
 int CMobot::jumpJointTo(robotJointId_t id, double angle)
 {
+	DEPRECATED("jumpJointTo", "moveJointToByTrackPos");
 	return Mobot_driveJointToDirect(_comms, id, DEG2RAD(angle));
 }
 
 int CMobot::jumpJointToNB(robotJointId_t id, double angle)
 {
+	DEPRECATED("jumpJointToNB", "moveJointToByTrackPosNB");
 	return Mobot_driveJointToDirectNB(_comms, id, DEG2RAD(angle));
 }
 
@@ -547,6 +551,43 @@ int CMobot::closeGripper(void)
 int CMobot::closeGripperNB(void)
 {
 	return Mobot_closeGripperNB(_comms);
+}
+
+/*rename of jump functions*/
+int CMobot::moveToByTrackPos( double angle1,
+                          double angle2,
+                          double angle3,
+                          double angle4)
+{
+	return Mobot_driveToDirect(
+      _comms, 
+      DEG2RAD(angle1), 
+      DEG2RAD(angle2), 
+      DEG2RAD(angle3), 
+      DEG2RAD(angle4));
+}
+
+int CMobot::moveToByTrackPosNB( double angle1,
+                          double angle2,
+                          double angle3,
+                          double angle4)
+{
+	return Mobot_driveToDirectNB(
+      _comms, 
+      DEG2RAD(angle1), 
+      DEG2RAD(angle2), 
+      DEG2RAD(angle3), 
+      DEG2RAD(angle4));
+}
+
+int CMobot::moveJointToByTrackPos(robotJointId_t id, double angle)
+{
+	return Mobot_driveJointToDirect(_comms, id, DEG2RAD(angle));
+}
+
+int CMobot::moveJointToByTrackPosNB(robotJointId_t id, double angle)
+{
+	return Mobot_driveJointToDirectNB(_comms, id, DEG2RAD(angle));
 }
 
 	

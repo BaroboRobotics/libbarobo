@@ -42,12 +42,9 @@ class DLLIMPORT CLinkbot : public CMobot
     virtual int disableAccelEventCallback();
     virtual int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     virtual int getBatteryVoltage(double &voltage);
-    //virtual int LinkPodAnalogRead(int adc, int & value); prototype to restore 
-	virtual int LinkPodAnalogRead(int pin);
-    //virtual int LinkPodAnalogReadVolts(int adc, double & volts);
-	virtual double LinkPodAnalogReadVolts(int pin);
-    //virtual int LinkPodDigitalRead(int pin, int & value);
-	virtual int LinkPodDigitalRead(int pin);
+	virtual int analogRead(int pin);
+	virtual double analogReadVolts(int pin);
+	virtual int digitalRead(int pin);
     virtual int getColorRGB(int &r, int &g, int &b);
 	virtual int getColorName(char color[]);	
 	//new
@@ -97,10 +94,10 @@ class DLLIMPORT CLinkbot : public CMobot
                           double radius,
                           double seconds,
                           int shiftData = 1);
-    virtual int LinkPodAnalogWrite(int pin, int value);
-    virtual int LinkPodAnalogReference(int ref);
-    virtual int LinkPodDigitalWrite(int pin, int value);
-    virtual int LinkPodPinMode(int pin, int mode);
+    virtual int analogWrite(int pin, int value);
+    virtual int analogReference(int ref);
+    virtual int digitalWrite(int pin, int value);
+    virtual int pinMode(int pin, int mode);
     virtual int setBuzzerFrequency(int frequency, double time);
     virtual int setBuzzerFrequencyOn(int frequency);
     virtual int setBuzzerFrequencyOff();
@@ -250,10 +247,9 @@ class CLinkbotI
     int jumpJointToNB(robotJointId_t id, double angle);
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int getBatteryVoltage(double &voltage);
-    int LinkPodAnalogRead(int pin); //new
-    //int LinkPodAnalogReadVolts(int adc, double & volts);
-	double LinkPodAnalogReadVolts(int pin);
-    int LinkPodDigitalRead(int pin);
+    int analogRead(int pin); 
+	double analogReadVolts(int pin);
+    int digitalRead(int pin);
     int getColorRGB(int &r, int &g, int &b);
 	int getColorName(char color[]);
 	int getColor(string_t & color);
@@ -296,6 +292,7 @@ class CLinkbotI
     int moveDistanceNB(double distance, double radius);
     int moveForward(double angle);
     int moveForwardNB(double angle);
+	int moveJointByPowerNB(robotJointId_t id, double power);
     int moveJointContinuousNB(robotJointId_t id, robotJointState_t dir);
     int moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, double seconds);
     int moveJoint(robotJointId_t id, double angle);
@@ -309,6 +306,12 @@ class CLinkbotI
     int moveToDirect(double angle1, double angle2, double angle3);
     int moveToNB(double angle1, double angle2, double angle3);
     int moveToDirectNB(double angle1, double angle2, double angle3);
+	/*Functions with the same functionality as jump()*/
+	int moveToByTrackPos(double angle1, double angle2, double angle3);
+	int moveToByTrackPosNB(double angle1, double angle2, double angle3);
+	int moveJointToByTrackPos(robotJointId_t id, double angle);
+	int moveJointToByTrackPosNB(robotJointId_t id, double angle);
+    /*end*/
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
@@ -353,10 +356,10 @@ class CLinkbotI
     int setBuzzerFrequency(int frequency, double time);
     int setBuzzerFrequencyOn(int frequency);
     int setBuzzerFrequencyOff();
-    int LinkPodAnalogWrite(int pin, int value);
-    int LinkPodAnalogReference(int ref);
-    int LinkPodDigitalWrite(int pin, int value);
-    int LinkPodPinMode(int pin, int mode);
+    int analogWrite(int pin, int value);
+    int analogReference(int ref);
+    int digitalWrite(int pin, int value);
+    int pinMode(int pin, int mode);
     int setColorRGB(int r, int g, int b);
 	int setColor(char * color);	
 	int setLEDColorRGB(int r, int g, int b);
@@ -533,10 +536,9 @@ class CLinkbotL
     int jumpJointToNB(robotJointId_t id, double angle);
     int getAccelerometerData(double &accel_x, double &accel_y, double &accel_z);
     int getBatteryVoltage(double &voltage);
-    int LinkPodAnalogRead(int pin); //new
-    //int LinkPodAnalogReadVolts(int adc, double & volts);
-	double LinkPodAnalogReadVolts(int pin);
-    int LinkPodDigitalRead(int pin); //new
+    int analogRead(int pin);
+	double analogReadVolts(int pin);
+    int digitalRead(int pin); //new
     int getFormFactor(int &formFactor);
     static const char* getConfigFilePath();
     int getID();
@@ -586,6 +588,7 @@ class CLinkbotL
                            robotJointState_t dir2, 
                            robotJointState_t dir3, 
                            double seconds);
+	int moveJointByPowerNB(robotJointId_t id, double power);
     int moveJointContinuousNB(robotJointId_t id, robotJointState_t dir);
     int moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, double seconds);
     int moveJoint(robotJointId_t id, double angle);
@@ -599,6 +602,10 @@ class CLinkbotL
     int moveToDirect(double angle1, double angle2, double angle3);
     int moveToNB(double angle1, double angle2, double angle3);
     int moveToDirectNB(double angle1, double angle2, double angle3);
+	int moveToByTrackPos(double angle1, double angle2, double angle3);
+	int moveToByTrackPosNB(double angle1, double angle2, double angle3);
+	int moveJointToByTrackPos(robotJointId_t id, double angle);
+	int moveJointToByTrackPosNB(robotJointId_t id, double angle);
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
@@ -669,10 +676,10 @@ class CLinkbotL
     int reset();
     int resetToZero();
     int resetToZeroNB();
-    int LinkPodAnalogWrite(int pin, int value);
-    int LinkPodAnalogReference(int ref);
-    int LinkPodDigitalWrite(int pin, int value);
-    int LinkPodPinMode(int pin, int mode);
+    int analogWrite(int pin, int value);
+    int analogReference(int ref);
+    int digitalWrite(int pin, int value);
+    int pinMode(int pin, int mode);
     int setBuzzerFrequency(int frequency, double time);
     int setBuzzerFrequencyOn(int frequency);
     int setBuzzerFrequencyOff();
@@ -815,6 +822,7 @@ class CLinkbotIGroup
     int moveDistanceNB(double distance, double radius);
     int moveForward(double angle);
     int moveForwardNB(double angle);
+	int moveJointByPowerNB(robotJointId_t id, double power);
     int moveJointContinuousNB(robotJointId_t id, robotJointState_t dir);
     int moveJointContinuousTime(robotJointId_t id, robotJointState_t dir, double seconds);
     int moveJointTo(robotJointId_t id, double angle);
@@ -826,6 +834,10 @@ class CLinkbotIGroup
     int moveToDirect(double angle1, double angle2, double angle3);
     int moveToNB(double angle1, double angle2, double angle3);
     int moveToDirectNB(double angle1, double angle2, double angle3);
+	int moveToByTrackPos(double angle1, double angle2, double angle3);
+	int moveToByTrackPosNB(double angle1, double angle2, double angle3);
+	int moveJointToByTrackPos(robotJointId_t id, double angle);
+	int moveJointToByTrackPosNB(robotJointId_t id, double angle);
     int moveWait();
     int moveToZero();
     int moveToZeroNB();
@@ -956,6 +968,12 @@ class CLinkbotIGroup : public CMobotGroup
 	int jumpJointToNB(robotJointId_t id, double angle);
     int move(double angle1, double angle2, double angle3);
     int moveNB(double angle1, double angle2, double angle3);
+	/*rename of jump functions*/
+	int moveToByTrackPos(double angle1, double angle2, double angle3);
+	int moveToByTrackPosNB(double angle1, double angle2, double angle3);
+	int moveJointToByTrackPos(robotJointId_t id, double angle);
+	int moveJointToByTrackPosNB(robotJointId_t id, double angle);
+	int moveJointByPowerNB(robotJointId_t id, double power);
     int moveContinuousNB(robotJointState_t dir1, 
                        robotJointState_t dir2, 
                        robotJointState_t dir3);
@@ -1046,6 +1064,7 @@ class CLinkbotLGroup
 	int jumpJointToNB(robotJointId_t id, double angle);
     int move(double angle1, double angle2, double angle3);
     int moveNB(double angle1, double angle2, double angle3);
+	int moveJointByPowerNB(robotJointId_t id, double power);
     int moveContinuousNB(robotJointState_t dir1, 
                        robotJointState_t dir2, 
                        robotJointState_t dir3);
@@ -1064,6 +1083,10 @@ class CLinkbotLGroup
     int moveToDirect(double angle1, double angle2, double angle3);
     int moveToNB(double angle1, double angle2, double angle3);
     int moveToDirectNB(double angle1, double angle2, double angle3);
+	int moveToByTrackPos(double angle1, double angle2, double angle3);
+	int moveToByTrackPosNB(double angle1, double angle2, double angle3);
+	int moveJointToByTrackPos(robotJointId_t id, double angle);
+	int moveJointToByTrackPosNB(robotJointId_t id, double angle);
     int moveWait();
     int moveToZero();
     int moveToZeroNB();

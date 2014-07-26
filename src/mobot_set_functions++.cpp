@@ -104,6 +104,11 @@ int CMobot::setJointPower(robotJointId_t id, double power)
     return Mobot_setJointPower(_comms, id, power);
 }
 
+int CMobot::moveJointByPowerNB(robotJointId_t id, double power)
+{
+    DEPRECATED("setJointPower", "moveJointByPowerNB");
+	return Mobot_setJointPower(_comms, id, power);
+}
 int CMobot::setMovementStateNB( robotJointState_t dir1,
                                 robotJointState_t dir2,
                                 robotJointState_t dir3,
