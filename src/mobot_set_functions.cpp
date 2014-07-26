@@ -66,7 +66,7 @@
 #define DEPRECATED(from, to) \
   fprintf(stderr, "Warning: The function \"%s()\" is deprecated. Please use \"%s()\"\n" , from, to)
 
-int Mobot_LinkPodAnalogWrite(mobot_t* comms, int pin, int value)
+int Mobot_analogWrite(mobot_t* comms, int pin, int value)
 {
   if( ! (
         (pin == 3) ||
@@ -78,12 +78,12 @@ int Mobot_LinkPodAnalogWrite(mobot_t* comms, int pin, int value)
         )
     )
   {
-    fprintf(stderr, "ERROR: in Mobot_LinkPodAnalogWrite: Pin %d does not support\nanalog output.\n", 
+    fprintf(stderr, "ERROR: in Mobot_analogWrite: Pin %d does not support\nanalog output.\n", 
         pin);
     return -1;
   }
   if(value < 0 || value > 255) {
-    fprintf(stderr, "ERROR: in Mobot_LinkPodAnalogWrite: value must be between 0 and 255 inclusive.\n");
+    fprintf(stderr, "ERROR: in Mobot_analogWrite: value must be between 0 and 255 inclusive.\n");
     return -1;
   }
   uint8_t buf[32];
@@ -94,7 +94,7 @@ int Mobot_LinkPodAnalogWrite(mobot_t* comms, int pin, int value)
   return Mobot_twiSend(comms, 0x02, buf, 4);
 }
 
-int Mobot_LinkPodAnalogReference(mobot_t* comms, int ref)
+int Mobot_analogReference(mobot_t* comms, int ref)
 {
   uint8_t buf[32];
   buf[0] = MSG_REGACCESS;
@@ -103,7 +103,7 @@ int Mobot_LinkPodAnalogReference(mobot_t* comms, int ref)
   return Mobot_twiSend(comms, 0x02, buf, 3);
 }
 
-int Mobot_LinkPodDigitalWrite(mobot_t* comms, int pin, int value)
+int Mobot_digitalWrite(mobot_t* comms, int pin, int value)
 {
   uint8_t buf[32];
   buf[0] = MSG_REGACCESS;
@@ -113,7 +113,7 @@ int Mobot_LinkPodDigitalWrite(mobot_t* comms, int pin, int value)
   return Mobot_twiSend(comms, 0x02, buf, 4);
 }
 
-int Mobot_LinkPodPinMode(mobot_t* comms, int pin, int mode)
+int Mobot_pinMode(mobot_t* comms, int pin, int mode)
 {
   uint8_t buf[32];
   buf[0] = MSG_REGACCESS;
