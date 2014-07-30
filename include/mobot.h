@@ -227,6 +227,9 @@ typedef enum mobotFormFactor_e
 #endif
 
 /* Defines for Breakout Board */
+/* Unfortunately, some of these defines conflict with definitions in windows.h.
+We'll just make all of them Ch specific */
+#ifdef _CH_
 #define AREF_DEFAULT  0x00
 #define AREF_INTERNAL  0x01
 #define AREF_INTERNAL1V1  0x02
@@ -240,6 +243,7 @@ typedef enum mobotFormFactor_e
 //new
 #define LOW	  0x00
 #define HIGH  0x01
+#endif
 
 #define SENDBUF_SIZE 512
 
