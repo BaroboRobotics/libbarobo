@@ -101,6 +101,7 @@ int CMobot::setMotorPower(robotJointId_t id, int power)
 
 int CMobot::setJointPower(robotJointId_t id, double power)
 {
+    DEPRECATED("setJointPower", "moveJointByPowerNB");
     return Mobot_setJointPower(_comms, id, power);
 }
 
