@@ -14,6 +14,7 @@ add_subdirectory(mxml-2.7)
 
 #include_directories(${MXML_INCLUDE_DIRS})
 include_directories(${MXML_SOURCE_DIR})
+include_directories(../include) # Gets BaroboConfigFile.h
 #link_directories(${MXML_LIBRARY_DIRS})
 #link_directories(${MXML_BINARY_DIR})
 
