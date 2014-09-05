@@ -11,7 +11,6 @@
 
 #include <assert.h>
 #include <stdio.h>
-#include <net_byte_order.h>
 #include <stdlib.h>
 #include <ctype.h>
 
