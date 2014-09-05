@@ -94,7 +94,7 @@ option(BUILD_SHARED_LIBS "build shared libraries" ${DEF_BUILD_SHARED_LIBS})
 add_library(${TARGET} ${SOURCES} $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:mxmlObjects>)
 #add_library(${TARGET}Static STATIC ${SOURCES} $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:mxmlObjects>)
 
-target_link_libraries(${TARGET} ${SFP_LIBRARIES} ${LIBSTKCOMMS_LIBRARIES})
+target_link_libraries(${TARGET} sfp stkcomms)
 
 set_target_properties(${TARGET} PROPERTIES
   VERSION ${VERSION}
