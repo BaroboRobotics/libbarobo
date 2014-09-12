@@ -80,7 +80,7 @@ if(UNIX)
 endif()
 
 set_source_files_properties(${SOURCES} PROPERTIES
-  COMPILE_FLAGS "-std=c++11 -Wno-write-strings"
+  COMPILE_FLAGS "-std=gnu++11 -Wno-write-strings"
 )
 option(BAROBO_BUILD_CHMOBOT "build libbarobo for linking with Ch" OFF)
 
