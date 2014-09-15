@@ -2,7 +2,7 @@
 # Barobo, Inc.
 
 cmake_minimum_required(VERSION 2.8.9)
-project(LIBBAROBO C CXX)
+project(LIBBAROBO CXX)
 
 set(TARGET barobo)
 if(TARGET ${TARGET})
@@ -18,22 +18,22 @@ set(VERSION_PATCH 3)
 set(VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
 ##############################################################################
-# Headers
-
-set(PUBLIC_INCLUDE_DIR include)
-include_directories(${PUBLIC_INCLUDE_DIR})
-
-##############################################################################
 # Setup
 
-add_subdirectory(../libsfp libsfp)
+# Not happy with this; libsfp already exists because it was included
+# earlier in the grand LinkbotLabs/CMakeLists heirarchy. Weird?
+# add_subdirectory(${DEPS_ROOT}/libsfp libsfp)
+set_target_properties(sfp PROPERTIES
+  COMPILE_FLAGS "-std=c++11"
+)
 add_subdirectory(../libstkcomms libstkcomms)
 
 add_subdirectory(demos EXCLUDE_FROM_ALL)
 add_subdirectory(BaroboConfigFile)
 
-include_directories(${LIBSFP_INCLUDE_DIRS})
-include_directories(${LIBSTKCOMMS_INCLUDE_DIRS})
+include_directories($<TARGET_PROPERTY:sfp,INCLUDE_DIRECTORIES>)
+include_directories($<TARGET_PROPERTY:stkcomms,INCLUDE_DIRECTORIES>)
+
 include_directories(${LIBSTKCOMMS_SOURCE_DIR})
 
 include_directories(${BAROBOCONFIGFILE_SOURCE_DIR})
@@ -73,12 +73,15 @@ set(SOURCES
   src/mobotgroup++.cpp
   src/mobotigroup++.cpp
   src/mobotlgroup++.cpp
-  src/rgbhashtable.c)
+  src/rgbhashtable.cpp)
 
 if(UNIX)
-  list(APPEND SOURCES src/popen3.c)
+  list(APPEND SOURCES src/popen3.cpp)
 endif()
 
+set_source_files_properties(${SOURCES} PROPERTIES
+  COMPILE_FLAGS "-std=gnu++11 -Wno-write-strings"
+)
 option(BAROBO_BUILD_CHMOBOT "build libbarobo for linking with Ch" OFF)
 
 if(BAROBO_BUILD_CHMOBOT)
@@ -89,13 +92,20 @@ endif()
 
 option(BUILD_SHARED_LIBS "build shared libraries" ${DEF_BUILD_SHARED_LIBS})
 add_library(${TARGET} ${SOURCES} $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:mxmlObjects>)
-add_library(${TARGET}Static STATIC ${SOURCES} $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:mxmlObjects>)
+#add_library(${TARGET}Static STATIC ${SOURCES} $<TARGET_OBJECTS:bcfObjects> $<TARGET_OBJECTS:mxmlObjects>)
 
-target_link_libraries(${TARGET} ${LIBSFP_LIBRARIES} ${LIBSTKCOMMS_LIBRARIES})
+target_link_libraries(${TARGET} sfp stkcomms)
 
 set_target_properties(${TARGET} PROPERTIES
   VERSION ${VERSION}
   SOVERSION ${VERSION_MAJOR})
+
+
+##############################################################################
+# Headers
+
+set(PUBLIC_INCLUDE_DIR include)
+target_include_directories(${TARGET} PUBLIC ${PUBLIC_INCLUDE_DIR})
 
 ##############################################################################
 # Platform Specific Setup
