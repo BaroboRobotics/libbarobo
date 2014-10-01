@@ -194,7 +194,9 @@ class CLinkbotI
    */
     int connect();
     int connectWithAddress(const char address[], ...);
+#ifdef ENABLE_BLUETOOTH
     int connectWithBluetoothAddress(const char address[], ...);
+#endif
     int connectWithIPAddress(const char address[], ...);
 #ifndef _WIN32
     int connectWithTTY(const char ttyfilename[]);

@@ -491,7 +491,9 @@ class CMobot
    */
     int connect();
     int connectWithAddress(const char address[], ...);
+#ifdef ENABLE_BLUETOOTH
     int connectWithBluetoothAddress(const char address[], ...);
+#endif
     int connectWithIPAddress(const char address[], ...);
 #ifndef _WIN32
     int connectWithTTY(const char ttyfilename[]);
@@ -716,7 +718,9 @@ class DLLIMPORT CMobot
    */
     virtual int connect();
     virtual int connectWithAddress(const char address[], int channel = 1);
+#ifdef ENABLE_BLUETOOTH
     virtual int connectWithBluetoothAddress(const char address[], int channel = 1);
+#endif
     virtual int connectWithIPAddress(const char address[], const char port[] = "5768");
     virtual int connectWithTTY(const char ttyfilename[]);
     virtual int delaySeconds(int seconds);
@@ -1197,8 +1201,10 @@ DLLIMPORT int Mobot_connectChild(mobot_t* parent, mobot_t* child);
 DLLIMPORT int Mobot_connectChildID(mobot_t* parent, mobot_t* child, const char* childSerialID);
 DLLIMPORT int Mobot_connectWithAddress(
     mobot_t* comms, const char* address, int channel);
+#ifdef ENABLE_BLUETOOTH
 DLLIMPORT int Mobot_connectWithBluetoothAddress(
     mobot_t* comms, const char* address, int channel);
+#endif
 DLLIMPORT int Mobot_disableJointEventCallback(mobot_t* comms);
 DLLIMPORT int Mobot_disableAccelEventCallback(mobot_t* comms);
 

@@ -44,7 +44,7 @@ add_definitions(-DNONRELEASE)
 
 if(NOT DEFINED $ENV{NOBLUETOOTH})
   message("enabling bluetooth")
-  add_definitions(-DENABLE_BLUETOOTH)
+  #add_definitions(-DENABLE_BLUETOOTH)
 endif()
 
 ##############################################################################
@@ -161,7 +161,7 @@ else()
     target_link_libraries(${TARGET} pthread ${IOKIT_LIB} ${COREFOUNDATION_LIB})
   else()
     # Linux
-    target_link_libraries(${TARGET} bluetooth pthread rt)
+    target_link_libraries(${TARGET} pthread rt)
   endif()
 endif()
 
