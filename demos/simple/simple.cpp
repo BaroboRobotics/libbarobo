@@ -13,12 +13,21 @@ int main()
   int r, g, b;
   int pin=2;
   CLinkbotI robot;
+  CLinkbotI robot2;
   
-  robot.connectWithAddress("13Z8");
+  robot.connectWithTTY("/dev/ttyACM0");
+  robot2.connectWithTTY("/dev/ttyACM1");
+
   robot.setJointSpeeds(-90, -90, -90);
   robot.moveTime(3);
   robot.setJointSpeeds(90,90, 90);
   robot.moveTime(3);
+
+  robot2.setJointSpeeds(-90, -90, -90);
+  robot2.moveTime(3);
+  robot2.setJointSpeeds(90,90, 90);
+  robot2.moveTime(3);
+
   /*
   robot.move(90, 90, 90);
   robot.setJointSpeeds(-90, -90, -90);
