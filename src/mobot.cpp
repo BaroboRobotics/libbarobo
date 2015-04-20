@@ -25,7 +25,7 @@
 #endif
 
 #include "dongle.h"
-#include "serial_framing_protocol.h"
+#include "sfp/serial_framing_protocol.h"
 
 #include <stdio.h>
 #include <string.h>

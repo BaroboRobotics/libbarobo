@@ -14,7 +14,7 @@ int main()
   int pin=2;
   CLinkbotI robot;
   
-  robot.connectWithAddress("13Z8");
+  robot.connect();
   robot.setJointSpeeds(-90, -90, -90);
   robot.moveTime(3);
   robot.setJointSpeeds(90,90, 90);

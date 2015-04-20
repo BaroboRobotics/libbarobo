@@ -5,7 +5,7 @@
 
 #include "donglefwd.h"
 #include "thread_macros.h"
-#include "serial_framing_protocol.h"
+#include "sfp/serial_framing_protocol.h"
 
 #include <sys/types.h>
 
