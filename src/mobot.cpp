@@ -1750,8 +1750,8 @@ int Mobot_init(mobot_t* comms)
   int i;
   memset(comms, 0, sizeof(mobot_t));
 #ifndef __MACH__
-  comms->addr = (sockaddr_t*)malloc(sizeof(sockaddr_t));
-  memset(comms->addr, 0, sizeof(sockaddr_t));
+  //comms->addr = (sockaddr_t*)malloc(sizeof(sockaddr_t));
+  //memset(comms->addr, 0, sizeof(sockaddr_t));
 #endif
   comms->connected = 0;
   comms->connectionMode = MOBOTCONNECT_NONE;

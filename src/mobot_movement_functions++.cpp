@@ -21,6 +21,7 @@
 #include "mobot.h"
 #include "mobot_internal.h"
 #include "commands.h"
+#include <string.h>
 
 #define DEPRECATED(from, to) \
   fprintf(stderr, "Warning: The function \"%s()\" is deprecated. Please use \"%s()\"\n" , from, to)

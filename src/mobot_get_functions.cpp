@@ -135,9 +135,11 @@ int Mobot_getID(mobot_t* comms)
   status = MobotMsgTransaction(comms, BTCMD(CMD_GETSERIALID), buf, 0);
   if(status < 0) return status;
   /* Make sure the buf size is correct */
+  /*
   if(buf[1] != 7) {
     return -1;
   }
+  */
   memcpy(comms->serialID, &buf[2], 4);
   return 0;
 }
